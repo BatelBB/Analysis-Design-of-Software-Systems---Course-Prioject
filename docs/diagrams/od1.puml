@@ -1,0 +1,74 @@
+@startuml
+	object "LoremStuff : Supplier" as Supplier {
+		ppn: 1
+		bankNumber: 1
+		name: "LoremStuff"
+		isDelivering: true
+		paymentCondition: Credit
+		regularSupplyingDays?: null
+	}
+	
+	object "John Lorem : Contact" as Contact {
+		name: "John Lorem"
+		email: "john@lorem.ipsum"
+		phoneNumber: "555-1234"
+	}
+	
+	object Order {
+		ordered: 17/04/2022
+		provided: 20/04/2022
+		totalPrice: 800.0
+	}
+	
+	object "ItemOrder" as ItemOrder {
+		quantity: 100
+	}
+	
+	object "ItemOrder" as ItemOrder2 {
+		quantity: 50
+	}
+	
+	object "milk: Item" as Item {
+		catalogNumber: 1
+		name: "regular milk (1L)"
+		category: "dairy"
+		price: 5.0
+	}
+	
+	object "bread: Item" as Item2 {
+		catalogNumber: 2
+		name: "whole bread"
+		category: "bread"
+		price: 6.0
+	}
+	
+	Supplier "1" -- "1" Contact: "contacted via"
+	
+	ItemOrder "*" --* "1" Item: ordered
+	ItemOrder "*" *-- "1" Order: ordering
+	
+	ItemOrder2 "*" --* "1" Item2: ordered
+	ItemOrder2 "*" *-- "1" Order: ordering
+	
+	Supplier "1" -- "*" Item: supplied
+	
+	Order -- Supplier
+
+    object SupplierController {
+	
+	}
+	
+	object OrderController {
+	
+	}
+	
+	object ItemController {
+	
+	}
+	
+	SupplierController --o Supplier
+	ItemController --o Item
+	OrderController --o Order
+
+
+@enduml

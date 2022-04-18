@@ -1,0 +1,110 @@
+@startuml
+
+title Relationships - Class Diagram
+
+package presentationLayer {
+	class PresentationController
+	class UserInput 
+	class UserOutput
+	class Menu
+	
+	PresentationController -- UserInput
+	PresentationController -- UserOutput
+	PresentationController "1" -- "*" Menu
+	Menu "*" -- "1" Menu
+	
+}
+
+package domainLayer {
+	
+	package domainLayer.entity as entity {
+		enum PaymentCondition {
+			DirectDebit
+			Credit
+		}
+	
+		class Supplier {
+			ppn: int
+			bankNumber: int
+			name: string
+			isDelivering: boolean
+			paymentCondition: PaymentCondition
+			regularSupplyingDays?: List<Weekday>
+		}
+		
+		' note left of Supplier: "notice regularSupplyingDays is optional" '
+		
+		class Contact {
+			name: string
+			email: string
+			phoneNumber: string
+		}
+		
+		class Order {
+			ordered: Date
+			provided: Date
+			totalPrice: float
+		}
+		
+		class ItemOrder {
+			quantity: int
+		}
+		
+		class Item {
+			catalogNumber: int
+			name: string
+			category: string
+			price: float
+		}
+		
+		class QuantityDiscount {
+			quantity: int
+			discount: float
+		}
+		
+		Supplier "has" ..  PaymentCondition
+		Supplier "1" -- "1" Contact: "contacted via"
+		
+		QuantityDiscount "*" -- "1" Item: "is for"
+		QuantityDiscount "*" -- "1" Supplier: "given by"
+		
+		ItemOrder "*" *-- "1" Item: ordered
+		ItemOrder "*" *-- "1" Order: ordering
+		
+		Supplier "1" -- "*" Item: supplied
+	}
+	
+	package domainLayer.controller as ctrl {
+		class SupplierController {
+		
+		}
+		
+		class OrderController {
+		
+		}
+		
+		class ItemController {
+		
+		}
+		
+		SupplierController --o Supplier
+		ItemController --o Item
+		OrderController --o Order
+	}
+	
+	package domainLayer.service {
+		class Service
+		
+		Service "1" -- "1" SupplierController
+		Service "1" -- "1" OrderController
+		Service "1" -- "1" ItemController
+	}
+	
+	ctrl --[hidden]-> entity
+}
+
+
+	presentationLayer -[hidden]-> domainLayer
+	PresentationController -d- Service
+
+@enduml
