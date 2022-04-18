@@ -1,2 +1,5 @@
-package BusinessLayer;public enum Area {
+package BusinessLayer;
+
+public enum Area {
+    south,north,center;
 }
