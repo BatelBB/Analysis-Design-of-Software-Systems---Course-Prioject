@@ -1,52 +1,43 @@
 package BusinessLayer;
 
+import jdk.jshell.spi.ExecutionControl;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TruckingsBoard {
 
-    private List<Driver> drivers ;
-    private List<Trucking> truckings;
-    private List<Truck> trucks;
+    private ConcurrentHashMap<Integer, Trucking> truckings;
+    private final TruckManager truckManager;
+    private int idCounter;
 
-    public List<Trucking> getTruckings() {
-        return truckings;
+    public TruckingsBoard(TruckManager truckManager) {
+        this.truckManager = truckManager;
+        this.idCounter = 1;
     }
 
-    public List<Driver> getDrivers() {
-        return drivers;
-    }
-
-    public List<Truck> getTrucks() {
-        return trucks;
-    }
-
-    public void  addTruck(Truck truck)
-    {
-        trucks.add(truck);
-    }
-
-    public void  addDriver(Driver driver)
-    {
-        drivers.add(driver);
-    }
-
-    public void addTrucking(Trucking trucking) {
-        truckings.add(trucking);
-    }
-
-    public void addTruckingToDriverList(String driverId,Trucking trucking)
-    {
-        for(Driver driver : drivers)
-        {
-            if(driverId == driver.getId() ) driver.addTrucking(trucking);
+    public synchronized void addTrucking(Trucking trucking) throws Exception {
+        synchronized (trucking.getDriver()) {
+            truckings.put(new Integer(idCounter), trucking);
+            idCounter++;
+            //give a id-truck
+            //add to driver's future trucking
         }
     }
 
-    public void addTruckingToTruckList(String plateNumber,Trucking trucking)
-    {
-        for(Truck truck : trucks)
-        {
-            if(plateNumber == truck.getRegistationPlate() ) truck.addTrucking(trucking);
-        }
+    public String printBoard() {
+        return "not implemented yet";
     }
+
+    public String printDoneTruckings() {
+        return "not implemented yet";
+    }
+
+    public String printFutureTruckings() {
+        return "not implemented yet";
+    }
+
 }

@@ -3,7 +3,7 @@ package BusinessLayer;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Truck {
+public class Vehicle {
     private DLicense lisence;
     private String registationPlate;
     private String model;
@@ -12,7 +12,7 @@ public class Truck {
     private List<Trucking> futureTruckings;
 
 
-    public Truck(DLicense lisence, String registationPlate, String model, int weight, int maxWeight) {
+    public Vehicle(DLicense lisence, String registationPlate, String model, int weight, int maxWeight) {
         this.lisence = lisence;
         this.registationPlate = registationPlate;
         this.maxWeight = maxWeight;
