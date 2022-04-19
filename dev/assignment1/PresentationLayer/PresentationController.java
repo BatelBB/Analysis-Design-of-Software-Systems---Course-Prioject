@@ -1,34 +1,97 @@
 package assignment1.PresentationLayer;
 
 import java.util.Scanner;
-import java.util.Stack;
 
 public class PresentationController {
-    //** THIS IS A DEMO JUST TO SEE THE PROCESS **//
     private Scanner sc = new Scanner(System.in);
-    public static void main(String args){
+    private static Menu menu = new Menu();
+    private static UserInput input = UserInput.getInstance();
+    private static UserOutput output = UserOutput.getInstance();
+    public static void main(String[] args){
+        output.println("Welcome to the supplier module! What would you like to do?");
 
-        Stack<Menu> navigation = new Stack<>();
-        Menu mainMenu = createMainMenu();
-        navigation.push(mainMenu);
-
-        while(!navigation.isEmpty()) {
-            int nextMenuResult = navigation.peek().run();
-            if(nextMenuResult == Menu.REMAIN_ON_SAME_MENU) {
-                // do nothing
-            } else if (nextMenuResult == Menu.GO_TO_PARENT_MENU) {
-                navigation.pop();
-            } else {
-                navigation.push(navigation.peek().getSubMenu(nextMenuResult));
+        int userInput = input.nextInt(menu.getMainMenu());
+        while(true){
+            switch (userInput){
+                case(1): {
+                    userInput = input.nextInt(menu.getSupplierSubmenu());
+                    switch (userInput){
+                        case(1): {
+                            //Create Supplier Card
+                            break;
+                        }
+                        case(2): {
+                            //Edit existing supplier card
+                            break;
+                        }
+                        case(3):{
+                            //Delete existing supplier
+                            break;
+                        }
+                    }
+                }
+                case(2): {
+                    userInput = input.nextInt(menu.getItemSubmenu());
+                    switch (userInput){
+                        case(1):{
+                            //Create new item
+                            break;
+                        }
+                        case(2): {
+                            //Edit quantity of existing item
+                            break;
+                        }
+                        case(3): {
+                            //edit price of existing item
+                            break;
+                        }
+                        case(4): {
+                            //delete existing item
+                            break;
+                        }
+                    }
+                }
+                case(3):{
+                    userInput = input.nextInt(menu.getOrderSubmenu());
+                    switch (userInput){
+                        case(1):{
+                            //create new order
+                            break;
+                        }
+                        case(2):{
+                            //edit existing order
+                            break;
+                        }
+                        case(3):{
+                            //delete existing order
+                            break;
+                        }
+                        case(4):{
+                            //display existing order
+                            break;
+                        }
+                    }
+                }
+                case(4):{
+                    userInput = input.nextInt(menu.getQuantityAgreementSubmenu());
+                    switch (userInput){
+                        case(1):{
+                            //create new quantity agreement
+                            break;
+                        }
+                        case(2):{
+                            //edit existing quantity agreement
+                            break;
+                        }
+                        case(3):{
+                            //delete existing quantity agreement
+                            break;
+                        }
+                    }
+                }
             }
         }
-
-        System.out.println("HI! Welcome to the supplier module, What would you like to do?");
-        System.out.println("1. Create new supplier card\n" +
-                "2. Create new order\n" +
-                "3. ");
     }
 
-    private static Menu createMainMenu() {
-    }
+
 }

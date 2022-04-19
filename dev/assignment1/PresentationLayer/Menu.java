@@ -3,31 +3,49 @@ package assignment1.PresentationLayer;
 import java.util.*;
 
 public class Menu {
-    public final String name;
-    protected final UserInput input;
-    protected final UserOutput output;
+
     private final List<Menu> submenus = new ArrayList<>();
 
-    public Menu(String name, UserInput input, UserOutput output) {
-        this.name = name;
-        this.input = input;
-        this.output = output;
+    public Menu() {
     }
 
-    public static final int
-            REMAIN_ON_SAME_MENU = -1, GO_TO_PARENT_MENU = -2;
-    /*
-    returns index of submenu to go to,
-    OR REMAIN_ON_SAME_MENU
-    OR GO_TO_PARENT_MENU
-     */
-    public int run() {
-        // default is to show submenus and allow to choose & go back.
-        // can be overriden.
-        throw new RuntimeException("not implemented yet");
-    }
 
     public Menu getSubMenu(int menuIndex) {
         return submenus.get(menuIndex);
+    }
+    public String getMainMenu(){
+        return new String("1. Supplier menu\n" +
+                "2. Item Menu\n" +
+                "3. Order Menu\n" +
+                "4. Quantity Menu");
+    }
+    public String getItemSubmenu(){
+        return new String(
+                "1. Create new item\n" +
+                "2. Edit quantity of existing item\n" +
+                "3. Edit price of existing item\n" +
+                "4. Delete existing item");
+    }
+
+    public String getOrderSubmenu(){
+        return new String(
+                "1. Create new order\n" +
+                "2. Edit existing order\n" +
+                "3. Delete existing order\n" +
+                        "4. Display existing order");
+    }
+
+    public String getSupplierSubmenu(){
+        return new String(
+                "1. Create new supplier card\n" +
+                "2. Edit existing supplier card\n" +
+                "3. Delete existing supplier");
+    }
+
+    public String getQuantityAgreementSubmenu(){
+        return new String(
+                "1. Create new quantity agreement\n" +
+                "2. Edit existing quantity agreement\n" +
+                "3. Delete existing quantity agreement");
     }
 }
