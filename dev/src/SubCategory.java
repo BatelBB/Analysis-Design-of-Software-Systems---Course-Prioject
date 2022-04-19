@@ -10,33 +10,30 @@ public class SubCategory {
         name=subCatName;
     }
     public void addSubSubCategory(String subSubCatName){
-        try {
             SubSubCategory subSubCategory= new SubSubCategory(subSubCatName);
             subSubCategories.put(name,subSubCategory);
-        }
-        catch (IllegalArgumentException e){
-            throw new IllegalArgumentException(e.getMessage());
-        }
-
-    }
-
-    public void removeSubSubCategory(String name) throws Exception {
-        try {
-            subSubCategories.remove(name);
-        }
-        catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
-    }
-
-    public SubSubCategory getSubSubCategory(String name) throws Exception {
-        try {
-            return subSubCategories.get(name);
-        }
-        catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
     }
 
 
+    public void removeSubSubCategory(String name){
+        subSubCategories.remove(name);
+    }
+
+
+    public SubSubCategory getSubSubCategory(String name){
+        return subSubCategories.get(name);
+    }
+
+
+    public void UpdateDiscountByCategory(int percentage) {
+        for (Map.Entry<String, SubSubCategory> entry : subSubCategories.entrySet()) {
+            entry.getValue().UpdateDiscountByCategory(percentage);
+        }
+    }
+
+    public void UpdateDiscountBySupplier(int percentage, String supplierName) {
+        for (Map.Entry<String, SubSubCategory> entry : subSubCategories.entrySet()) {
+            entry.getValue().UpdateDiscountBySupplier(percentage, supplierName);
+        }
+    }
 }
