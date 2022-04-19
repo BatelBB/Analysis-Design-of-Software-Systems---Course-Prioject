@@ -1,5 +1,9 @@
 package groupk.workers.service;
 
+import groupk.workers.business.EmployeeController;
+import groupk.workers.business.ShiftController;
+
 public class EmployeeService {
-    // TODO Add controllers.
+    private EmployeeController employees;
+    private ShiftController shifts;
 }
