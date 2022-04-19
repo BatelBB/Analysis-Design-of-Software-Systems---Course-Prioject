@@ -6,6 +6,19 @@ public class CategoryController {
 
     protected Map<String, Category> categories;
 
+    private static CategoryController categoryController;
+
+    public static CategoryController getInstance()
+    {
+        if (categoryController==null)
+            categoryController= new CategoryController();
+        return categoryController;
+    }
+
+    private CategoryController(){
+        categoryController = CategoryController.getInstance();
+    }
+
     public void addCategory(String name){
         if (categories.containsKey(name))
             throw new IllegalArgumentException("The categories already exists in the system");

@@ -3,8 +3,19 @@ import java.util.Map;
 public class ReportController {
 
     private Map<Integer, Report> reports;
-    private ProductController productController = ProductController.get();
-    enum ReportType{Missing,Expired,Surpluses,Defective,bySupplier,byProduct,byCategory}
+    private ProductController productController;
+    private static ReportController reportController;
+
+    public static ReportController getInstance()
+    {
+        if (reportController==null)
+            reportController= new ReportController();
+        return reportController;
+    }
+
+    private ReportController(){
+        productController = ProductController.getInstance();
+    }
 
     public void addReport(String name, Integer id, Date date, String report_producer){
         if (reports.containsKey(id))

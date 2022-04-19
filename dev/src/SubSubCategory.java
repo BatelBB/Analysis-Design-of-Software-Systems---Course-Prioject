@@ -31,14 +31,14 @@ public class SubSubCategory {
 
     public void UpdateDiscountByCategory(int percentage) {
         for (Map.Entry<String, Product> entry : products.entrySet()) {
-            entry.getValue().UpdateDiscount(percentage);
+            entry.getValue().SetDiscount(percentage);
         }
     }
 
     public void UpdateDiscountBySupplier(int percentage, String supplierName) {
         for (Map.Entry<String, Product> entry : products.entrySet()) {
             if (entry.getValue().getSupplierName().equals(supplierName))
-                entry.getValue().UpdateDiscount(percentage);
+                entry.getValue().SetDiscount(percentage);
         }
     }
 }
