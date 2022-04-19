@@ -1,0 +1,67 @@
+package BusinessLayer;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class UsersManager {
+
+    private Map<String, User> users;
+    private final int MIN_USERNAME_LENGTH = 3;
+    private final int MAX_USERNAME_LENGTH = 12;
+    private static UsersManager singletonUserManagerInstance = null;
+    private User activeUser = null;
+
+    private UsersManager() {
+        users = new ConcurrentHashMap<String, User>();
+    }
+
+    public UsersManager getInstance() {
+        if (singletonUserManagerInstance == null)
+            singletonUserManagerInstance = new UsersManager();
+        return singletonUserManagerInstance;
+    }
+
+    public boolean addUser(String name, String username, String password, Role role) throws Exception {
+        User newUser;
+        if (role == null)
+            throw new Exception("Please select role");
+        if (!validateUsernameToRegister(username))
+            throw new Exception("Username is not valid");
+        else if (role == Role.truckingManager)
+            newUser = new TruckingManager(name, username, password);
+        else if (role == Role.driver)
+            newUser = new Driver(name, username, password);
+        else
+            throw new Exception("Sorry, we can not yet open a user for this type of employee");
+        users.put(username, newUser);
+        return true;
+    }
+
+    public boolean login(String username, String password) throws Exception {
+        if (username == null)
+            throw new IllegalArgumentException("Please enter valid username");
+        User user = users.get(username);
+        if (user == null)
+            throw new IllegalArgumentException("Sorry but there's no user with that username");
+        return user.login(password);
+    }
+
+    private boolean validateUsernameToRegister(String username)
+    {
+        if (username == null)
+            return false;
+        if(username.length() < MIN_USERNAME_LENGTH)
+            throw new IllegalArgumentException("The minimum password length should be at least 3 characters");
+        if(username.length() > MAX_USERNAME_LENGTH)
+            throw new IllegalArgumentException("The maximum password length should be up to 12 characters");
+        for(int i = 0; i < username.length(); i++) {
+            if(!(Character.isLetter(username.charAt(i)) | Character.isDigit(username.charAt(i))))
+                throw new IllegalArgumentException("Username can only contain letters and numbers");
+        }
+
+        if (users.containsKey(username))
+            throw new IllegalArgumentException("Username is already exist. try another one.");
+        return true;
+    }
+
+}

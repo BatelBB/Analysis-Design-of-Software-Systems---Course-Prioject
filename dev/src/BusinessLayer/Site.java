@@ -13,7 +13,6 @@ public class Site {
     private int apartment;
     private Area area;
 
-
     public Site(String contactGuy, String city, String phoneNumber, String street, int houseNumber, int floor, int apartment, Area area) {
         this.contactGuy = contactGuy;
         this.city=city;
@@ -25,9 +24,6 @@ public class Site {
         this.area = area;
 
     }
-
-
-
 
     public int getApartment() {
         return apartment;
@@ -57,11 +53,7 @@ public class Site {
         return phoneNumber;
     }
 
-
     public Area getArea() {
         return area;
     }
-
-
-
 }

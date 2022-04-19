@@ -11,7 +11,6 @@ public class Truck {
     private int maxWeight;
     private List<Trucking> futureTruckings;
 
-
     public Truck(DLicense lisence, String registationPlate, String model, int weight, int maxWeight) {
         this.lisence = lisence;
         this.registationPlate = registationPlate;
@@ -29,7 +28,6 @@ public class Truck {
     {
         futureTruckings.add(trucking);
     }
-
 
     public DLicense getLisence() {
         return lisence;

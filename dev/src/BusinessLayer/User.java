@@ -2,28 +2,49 @@ package BusinessLayer;
 
 public abstract class User {
     protected String name;
-    protected String id;
-    protected Account account;
+    protected String username;
+    private Password password;
     protected boolean isLogin;
+    protected Role role;
 
-    public boolean isLogin() {
+    public User(String name, String username, String password) throws Exception {
+        this.name = name;
+        this.username = username;
+        this.password = new Password(password);
+    }
+
+    public boolean updatePassword(String newPassword) throws Exception {
+        return password.setPassword(newPassword);
+    }
+
+    public synchronized boolean login(String passwordToCheck) throws Exception {
+        if (isLogin)
+            throw new Exception("This user is already logged in. First, log out.");
+        if (password.checkPassword(passwordToCheck))
+            isLogin = true;
         return isLogin;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public synchronized boolean logout() throws Exception {
+        if (!isLogin)
+            throw new Exception("No user is logged in.");
+        isLogin = false;
+        return true;
+    }
+
+    public synchronized boolean isLogin() {
+        return isLogin;
     }
 
     public String getName() {
         return name;
     }
 
-    public  void setAccount(Role role, String password, String username)
-    {
-        account.setRole(role);
-        account.setUserName(username);
-        account.setPassword(password);
+    public String getUsername() {
+        return username;
     }
 
-    public  void setLogin(){isLogin = true;}
+    public Role getRole() {
+        return role;
+    }
 }
