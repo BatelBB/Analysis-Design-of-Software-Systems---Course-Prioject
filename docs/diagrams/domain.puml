@@ -15,9 +15,9 @@ package presentationLayer {
 	
 }
 
-package domainLayer {
+package businessLayer {
 	
-	package domainLayer.entity as entity {
+	package businessLayer.entity as entity {
 		enum PaymentCondition {
 			DirectDebit
 			Credit
@@ -74,7 +74,7 @@ package domainLayer {
 		Supplier "1" -- "*" Item: supplied
 	}
 	
-	package domainLayer.controller as ctrl {
+	package businessLayer.controller as ctrl {
 		class SupplierController {
 		
 		}
@@ -92,7 +92,7 @@ package domainLayer {
 		OrderController --o Order
 	}
 	
-	package domainLayer.service {
+	package businessLayer.service {
 		class Service
 		
 		Service "1" -- "1" SupplierController
@@ -104,7 +104,7 @@ package domainLayer {
 }
 
 
-	presentationLayer -[hidden]-> domainLayer
+	presentationLayer -[hidden]-> businessLayer
 	PresentationController -d- Service
 
 @enduml
