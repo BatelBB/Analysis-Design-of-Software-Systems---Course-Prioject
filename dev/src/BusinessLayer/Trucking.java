@@ -30,8 +30,8 @@ public class Trucking {
         this.weightWithProducts = 0;
         checkDate();
         checkDLicense();;
-        checkSameArea(sources);//need to send warning if false
-        checkSameArea(destinations);//need to send warning if false
+        checkSameArea(sources);//TODO: need to send warning if false
+        checkSameArea(destinations);//TODO: need to send warning if false
         addSources(sources);
         addDestinations(destinations);
     }
@@ -74,24 +74,40 @@ public class Trucking {
         addSites(destinationsList, this.destinations);
     }
 
-    public synchronized void addProducts() throws Exception {
-        checkDateForUpdateTrucking();
-        //TODO
+    public synchronized void addProducts(ProductForTrucking productForTrucking) throws Exception {
+        synchronized (products) {
+            checkDateForUpdateTrucking();
+            products.add(productForTrucking);
+        }
     }
 
-    public synchronized void moveProducts() throws Exception {
-        checkDateForUpdateTrucking();
-        //TODO
+    public synchronized void moveProducts(Products productSKU) throws Exception {
+        synchronized (products) {
+            checkDateForUpdateTrucking();
+            ListIterator<ProductForTrucking> truckingIterator = products.listIterator();
+            while (truckingIterator.hasNext()) {
+                ProductForTrucking productForTrucking = truckingIterator.next();
+                if(productForTrucking.product == productSKU) {
+                    truckingIterator.remove();
+                    return;
+                }
+            }
+            throw new IllegalArgumentException("The product: \"" + productSKU + "\" doesn't exist in the trucking");
+        }
     }
 
-    public synchronized void moveSource() throws Exception {
+    public synchronized void updateSources(List<Site> sources) throws Exception {
         checkDateForUpdateTrucking();
-        //TODO
+        checkSameArea(sources);
+        this.sources = new ConcurrentHashMap<Area, List<Site>>();
+        addSources(sources);
     }
 
-    public synchronized void moveDestination() throws Exception {
+    public synchronized void updateDestinations(List<Site> destinations) throws Exception {
         checkDateForUpdateTrucking();
-        //TODO
+        checkSameArea(destinations);
+        this.destinations = new ConcurrentHashMap<Area, List<Site>>();
+        addDestinations(destinations);
     }
 
     public synchronized String printSources() {

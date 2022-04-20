@@ -81,24 +81,24 @@ public class TruckingsBoard {
         trucking.addDestinations(destinations);
     }
 
-    public void addProductsToTrucking(int id) throws Exception {
+    public void addProductsToTrucking(int id, ProductForTrucking productForTrucking) throws Exception {
         Trucking trucking = findTruckingById(id);
-        trucking.addProducts();
+        trucking.addProducts(productForTrucking);
     }
 
-    public void moveSourceFromTrucking(int id) throws Exception {
+    public void updateSourcesOnTrucking(int id, List<Site> sources) throws Exception {
         Trucking trucking = findTruckingById(id);
-        trucking.moveSource();
+        trucking.updateSources(sources);
     }
 
-    public void moveDestinationsFromTrucking(int id) throws Exception {
+    public void updateDestinationsOnTrucking(int id, List<Site> destinations) throws Exception {
         Trucking trucking = findTruckingById(id);
-        trucking.moveDestination();
+        trucking.updateDestinations(destinations);
     }
 
-    public void moveProductsToTrucking(int id) throws Exception {
+    public void moveProductsToTrucking(int id, Products productSKU) throws Exception {
         Trucking trucking = findTruckingById(id);
-        trucking.moveProducts();
+        trucking.moveProducts(productSKU);
     }
 
     //TODO: add all the methods from Trucking

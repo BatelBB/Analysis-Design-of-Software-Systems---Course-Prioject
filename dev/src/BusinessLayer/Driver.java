@@ -48,29 +48,14 @@ public class Driver extends User {
             throw new IllegalArgumentException("Oops, the driver does not have a driver's license appropriate for the vehicle type");
     }
 
-    private boolean checkDriver(Trucking trucking) throws Exception {
-        synchronized (futureTruckings) {
-            boolean found = false;
-            Iterator<Trucking> truckingIterator = futureTruckings.iterator();
-            while (!found && truckingIterator.hasNext()) {
-                int compareDates = truckingIterator.next().getDate().compareTo(trucking.getDate());
-                if (compareDates == 0)
-                    throw new Exception("Oops, the driver " + trucking.getDriver().getName() + " has another trucking in the same moment: " + trucking.getDate());
-                if (compareDates > 0)
-                    found = true;
-            }
-        }
-        return true;
-    }
-
-    public void removeTrucking(Trucking trucking) {
+    public synchronized void removeTrucking(Trucking trucking) {
         synchronized (futureTruckings) {
             if (futureTruckings.contains(trucking))
                 futureTruckings.remove(trucking);
         }
     }
 
-    public void addLicense(DLicense dLicense)
+    public synchronized void addLicense(DLicense dLicense)
     {
         synchronized (licenses) {
             if (!(licenses.contains(dLicense)))
@@ -78,7 +63,7 @@ public class Driver extends User {
         }
     }
 
-    public void addLicenses(List<DLicense> DLicenseList) {
+    public synchronized void addLicenses(List<DLicense> DLicenseList) {
         synchronized (licenses) {
             for (DLicense dLicense : DLicenseList) {
                 if (!(licenses.contains(dLicense)))
@@ -87,7 +72,7 @@ public class Driver extends User {
         }
     }
 
-    public void removeLicense(DLicense dLicense)
+    public synchronized void removeLicense(DLicense dLicense)
     {
         synchronized (licenses) {
             if (licenses.contains(dLicense))
@@ -111,6 +96,10 @@ public class Driver extends User {
         return toReturn;
     }
 
+    public synchronized boolean updateTotalWeightOfTrucking(int truckingId, int weight) throws Exception {
+        return findTruckingById(truckingId).updateWeight(weight);
+    }
+
     public List<DLicense> getLicenses() {
         return licenses;
     }
@@ -118,4 +107,30 @@ public class Driver extends User {
     public String getName() {
         return name;
     }
+
+    private boolean checkDriver(Trucking trucking) throws Exception {
+        synchronized (futureTruckings) {
+            boolean found = false;
+            Iterator<Trucking> truckingIterator = futureTruckings.iterator();
+            while (!found && truckingIterator.hasNext()) {
+                int compareDates = truckingIterator.next().getDate().compareTo(trucking.getDate());
+                if (compareDates == 0)
+                    throw new Exception("Oops, the driver " + trucking.getDriver().getName() + " has another trucking in the same moment: " + trucking.getDate());
+                if (compareDates > 0)
+                    found = true;
+            }
+        }
+        return true;
+    }
+
+    private Trucking findTruckingById(int id) {
+        if (id < 0)
+            throw new IllegalArgumentException("Illegal id");
+        for (Trucking trucking : futureTruckings) {
+            if (trucking.getId() == id)
+                return trucking;
+        }
+        throw new IllegalArgumentException("You have no trucking with this number");
+    }
+
 }
