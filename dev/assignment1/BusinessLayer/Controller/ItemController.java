@@ -95,7 +95,7 @@ public class ItemController {
         return created;
     }
 
-    private List<QuantityDiscount> getDiscountList(Item item) {
+    public List<QuantityDiscount> getDiscountList(Item item) {
         return discounts.computeIfAbsent(item, __ -> new ArrayList<QuantityDiscount>());
     }
 }
