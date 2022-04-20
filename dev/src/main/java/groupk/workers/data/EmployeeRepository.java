@@ -1,30 +1,32 @@
 package groupk.workers.data;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class EmployeeRepository {
-    private LinkedList<Employee> employees;
+    private HashMap<String, Employee> employees;
 
     public EmployeeRepository(){
-        employees = new LinkedList<>();
+        employees = new HashMap<>();
     }
-    public LinkedList<Employee> getEmployees() { return  employees;};
+    public List<Employee> getEmployees() {
+        return new ArrayList<>(employees.values());
+    };
 
     public Employee getEmployee(String id){
-        for (Employee e:employees) {
-            if(e.getId().equals(id))
-                return  e;
-        }
-        throw new IllegalArgumentException();
+        return employees.get(id);
     }
 
     public Employee addEmployee(String name, String id, String bank, int bankID, int bankBranch,
                             Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Employee.Role role){
         Employee created = new Employee(name, id, bank, bankID, bankBranch, employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed, role);
-        employees.add(created);
+        employees.put(id, created);
         return created;
+    }
+
+    public Employee deleteEmployee(String id) {
+        Employee deleted = employees.get(id);
+        employees.remove(id);
+        return deleted;
     }
 }

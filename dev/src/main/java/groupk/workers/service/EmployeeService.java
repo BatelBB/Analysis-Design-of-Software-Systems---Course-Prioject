@@ -32,10 +32,10 @@ public class EmployeeService {
                 toCreate.role);
     }
     public Employee readEmployee(String subjectID, String employeeID) {
-        throw new UnsupportedOperationException();
+        return businessController.readEmployee(subjectID, employeeID);
     }
     public Employee deleteEmployee(String subjectID, String employeeID) {
-        throw new UnsupportedOperationException();
+        return businessController.deleteEmployee(subjectID, employeeID);
     }
     public Employee updateEmployee(String subjectID, Employee changed) {
         throw new UnsupportedOperationException();
@@ -44,7 +44,7 @@ public class EmployeeService {
         throw new UnsupportedOperationException();
     }
     public List<Employee> listEmployees(String subjectID) {
-        throw new UnsupportedOperationException();
+        return businessController.listEmployees(subjectID);
     }
 
     public Shift addEmployeeToShift(String subjectID, Date date, Shift.Type type, String employeeID) {

@@ -3,10 +3,8 @@ package groupk.workers.business;
 import groupk.workers.service.dto.Employee;
 import groupk.workers.service.dto.Shift;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BusinessController {
     private EmployeeController employees;
@@ -28,12 +26,38 @@ public class BusinessController {
             int sickDaysUsed,
             int vacationDaysUsed,
             Employee.Role role) {
-        groupk.workers.data.Employee created = employees.addEmployee(
+        groupk.workers.data.Employee created = employees.create(
                 name, id, bank,
                 bankID, bankBranch, employmentStart,
                 salaryPerHour, sickDaysUsed, vacationDaysUsed,
                 serviceRoleToData(role));
         return dataEmployeeToService(created);
+    }
+
+    public Employee readEmployee(String subjectID, String employeeID) {
+        if (subjectID.equals(employeeID) || employees.isFromHumanResources(subjectID)) {
+            return dataEmployeeToService(employees.read(employeeID));
+        } else {
+            throw new IllegalArgumentException("Subject must be authorized to read employees.");
+        }
+    }
+
+    public Employee deleteEmployee(String subjectID, String employeeID) {
+        if (subjectID.equals(employeeID) || employees.isFromHumanResources(subjectID)) {
+            return dataEmployeeToService(employees.delete(employeeID));
+        } else {
+            throw new IllegalArgumentException("Subject must be authorized to delete employees.");
+        }
+    }
+
+    public List<Employee> listEmployees(String subjectID) {
+        if (employees.isFromHumanResources(subjectID)) {
+            return employees.list().stream()
+                    .map(BusinessController::dataEmployeeToService)
+                    .collect(Collectors.toList());
+        } else {
+            throw new IllegalArgumentException("Subject must be authorized to read employees.");
+        }
     }
 
     private static groupk.workers.data.Employee.Role serviceRoleToData(Employee.Role serviceRole) {
