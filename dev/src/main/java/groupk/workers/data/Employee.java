@@ -2,6 +2,8 @@ package groupk.workers.data;
 
 import javax.management.relation.RoleInfoNotFoundException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Employee {
@@ -22,6 +24,10 @@ public class Employee {
         public Day day;
         public Type type;
 
+        public WeeklyShift(int dayInt, int typeInt){
+            day = Day.values()[dayInt];
+            type = Type.values()[typeInt];
+        }
         public Day getDay() {
             return day;
         }
@@ -30,7 +36,6 @@ public class Employee {
             return type;
         }
     }
-
 
     private String name;
     private String id;
@@ -42,12 +47,13 @@ public class Employee {
     private Role role;
 
     public Employee(String name, String id, String bank, int bankID, int bankBranch,
-                    Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, String roleString){
+                    Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, groupk.workers.service.dto.Employee.Role roleDTO){
         this.name = name;
         this.id = id;
         account = new BankAccount(bank, bankID, bankBranch);
         conditions = new WorkingConditions(employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed);
-        this.role = Role.valueOf(roleString);
+        this.role = Role.values()[roleDTO.ordinal()];
+        availableShifts = new HashSet<>();
     }
 
     public String getId() { return id; }
@@ -62,7 +68,9 @@ public class Employee {
 
     public Role getRole() { return role;}
 
-    public void setAvailableShifts(Set<WeeklyShift> availableShifts) {
-        this.availableShifts = availableShifts;
+    public void setAvailableShifts(Set<groupk.workers.service.dto.Employee.WeeklyShift> shiftPreferences) {
+        for (groupk.workers.service.dto.Employee.WeeklyShift shift:shiftPreferences) {
+            availableShifts.add(new WeeklyShift(shift.day.ordinal(), shift.type.ordinal()));
+        }
     }
 }

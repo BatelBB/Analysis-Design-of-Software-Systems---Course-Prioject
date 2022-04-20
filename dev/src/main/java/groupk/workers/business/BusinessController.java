@@ -1,11 +1,21 @@
 package groupk.workers.business;
 
+import java.util.HashMap;
+
 public class BusinessController {
-    private EmployeeController employees;
-    private ShiftController shifts;
+    private EmployeeController employeesController;
+    private ShiftController shiftsController;
 
     public BusinessController(){
-        employees = new EmployeeController();
-        shifts = new ShiftController();
+        employeesController = new EmployeeController();
+        shiftsController = new ShiftController();
+    }
+
+    public EmployeeController getEmployeesController() {
+        return employeesController;
+    }
+
+    public ShiftController getShiftsController() {
+        return shiftsController;
     }
 }

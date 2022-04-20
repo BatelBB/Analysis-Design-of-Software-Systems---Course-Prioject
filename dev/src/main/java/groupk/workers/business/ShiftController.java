@@ -1,6 +1,7 @@
 package groupk.workers.business;
 
 import groupk.workers.data.ShiftRepository;
+import groupk.workers.service.dto.Shift;
 
 import java.util.Date;
 
@@ -11,7 +12,8 @@ public class ShiftController {
         repo = new ShiftRepository();
     }
 
-    public void addShifts(String typeString, Date date){
-        repo.addShift(typeString, date);
+    public void addShifts(Shift shift){
+        repo.addShift(shift);
     }
+
 }

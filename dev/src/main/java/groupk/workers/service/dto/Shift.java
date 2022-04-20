@@ -11,4 +11,12 @@ public class Shift {
     Employee[] staff;
     Date date;
     Type type;
+
+    public Type getType() {
+        return type;
+    }
+
+    public Date getDate() {
+        return date;
+    }
 }
