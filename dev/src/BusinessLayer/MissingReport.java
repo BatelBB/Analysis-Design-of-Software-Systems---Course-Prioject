@@ -1,4 +1,6 @@
-public class MissingReport extends Report{
+package BusinessLayer;
+
+public class MissingReport extends Report {
 
     private String name;
     private Integer id;

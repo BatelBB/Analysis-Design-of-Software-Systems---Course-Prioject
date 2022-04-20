@@ -1,4 +1,6 @@
-public class ExpiredReport extends Report{
+package BusinessLayer;
+
+public class ExpiredReport extends Report {
 
     private String name;
     private Integer id;

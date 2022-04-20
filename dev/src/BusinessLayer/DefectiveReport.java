@@ -1,4 +1,6 @@
-public class DefectiveReport extends Report{
+package BusinessLayer;
+
+public class DefectiveReport extends Report {
 
     private String name;
     private Integer id;

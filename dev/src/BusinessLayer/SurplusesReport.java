@@ -1,4 +1,8 @@
-public class SurplusesReport extends Report{
+package BusinessLayer;
+
+import BusinessLayer.Report;
+
+public class SurplusesReport extends Report {
 
     private String name;
     private Integer id;

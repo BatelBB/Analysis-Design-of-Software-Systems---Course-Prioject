@@ -1,3 +1,5 @@
+package BusinessLayer;
+
 import java.util.Date;
 public class Report {
 

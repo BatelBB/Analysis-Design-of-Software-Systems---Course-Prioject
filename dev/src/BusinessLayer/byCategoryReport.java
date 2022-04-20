@@ -1,4 +1,6 @@
-public class byCategoryReport extends Report{
+package BusinessLayer;
+
+public class byCategoryReport extends Report {
 
     private String name;
     private Integer id;

@@ -1,9 +1,11 @@
+package BusinessLayer;
+
 import java.util.LinkedList;
 import java.util.Map;
 
 public class SubCategory {
 
-    protected Map<String,SubSubCategory> subSubCategories;
+    protected Map<String, SubSubCategory> subSubCategories;
     public String name;
 
     public SubCategory(String subCatName) {
