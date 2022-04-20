@@ -126,6 +126,17 @@ public class Service {
         return responseFor(() -> ExampleSeed.seedDatabase(this));
     }
 
+    public QuantityDiscount getDiscount(int amount, int ppn, int catalog) throws BusinessLogicException {
+        List<QuantityDiscount> discounts = items.getDiscountList(getItem(ppn,catalog));
+        for(int i = 0; i < discounts.size(); i++) {
+            QuantityDiscount current = discounts.get(i);
+            if(current.quantity == amount) {
+                return current;
+            }
+    }
+        throw new BusinessLogicException("There is no discount with amount "+amount);
+    }
+
     private interface BusinessLayerOperation<T> {
         T run() throws BusinessLogicException;
     }
