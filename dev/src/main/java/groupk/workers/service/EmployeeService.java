@@ -45,10 +45,10 @@ public class EmployeeService {
     }
 
     public Shift addEmployeeToShift(String subjectID, Date date, Shift.Type type, String employeeID) {
-        throw new UnsupportedOperationException();
+        return businessController.addEmployeeToShift(subjectID, date , type , employeeID);
     }
     public Shift removeEmployeeFromShift(String subjectID, Date date, Shift.Type type, String employeeID) {
-        throw new UnsupportedOperationException();
+        return businessController.removeEmployeeFromShift(subjectID, date , type , employeeID);
     }
     public Shift setRequiredRoleInShift(String subjectID, Date date, Shift.Type type, Employee.Role role, int count) {
         throw new UnsupportedOperationException();

@@ -11,11 +11,12 @@ public class ShiftRepository {
     public ShiftRepository(){
         shifts = new LinkedList<>();
     }
+
     public LinkedList<Shift> getShifts() {
         return shifts;
     }
 
-    public void addShift(groupk.workers.service.dto.Shift shift){
-        shifts.add(new Shift(shift.getType().ordinal(),shift.getDate()));
+    public void addShift(Shift shift){
+        shifts.add(new Shift(shift.getType() ,shift.getDate(), shift.getStaff(), shift.getRequiredStaff()));
     }
 }

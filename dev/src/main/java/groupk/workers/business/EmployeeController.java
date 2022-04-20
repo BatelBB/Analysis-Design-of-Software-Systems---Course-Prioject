@@ -32,6 +32,16 @@ public class EmployeeController {
     }
 
     public boolean isFromHumanResources(String employeeID) {
-        return repo.getEmployee(employeeID).getRole() == Employee.Role.HumanResources;
+        return getEmployee(employeeID).getRole() == Employee.Role.HumanResources;
+    }
+
+    public Employee getEmployee(String id){
+        List<Employee> employees = list();
+        for(Employee e: employees){
+            if(e.getId().equals(id)){
+                return e;
+            }
+        }
+        throw new IllegalArgumentException("Employee does not exists");
     }
 }

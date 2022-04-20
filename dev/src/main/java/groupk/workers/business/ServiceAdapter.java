@@ -60,6 +60,30 @@ public class ServiceAdapter {
         }
     }
 
+    public Shift addEmployeeToShift(String subjectID, Date date, Shift.Type type, String employeeID){
+        if (employees.isFromHumanResources(subjectID)) {
+            groupk.workers.data.Shift shift = shifts.getShift(date, ServiceTypeToData(type));
+            if(shift.isEmployeeWorking(employeeID))
+                throw new IllegalArgumentException("Employee already working in this shift");
+            else
+                return dataShiftToService(shift.addEmployee(employees.getEmployee(employeeID)));
+        } else {
+            throw new IllegalArgumentException("Subject must be authorized to add employees to shifts.");
+        }
+    }
+
+    public Shift removeEmployeeFromShift(String subjectID, Date date, Shift.Type type, String employeeID){
+        if (employees.isFromHumanResources(subjectID)) {
+            groupk.workers.data.Shift shift = shifts.getShift(date, ServiceTypeToData(type));
+            if(!shift.isEmployeeWorking(employeeID))
+                throw new IllegalArgumentException("Employee is not working in this shift");
+            else
+                return dataShiftToService(shift.removeEmployee(employees.getEmployee(employeeID)));
+        } else {
+            throw new IllegalArgumentException("Subject must be authorized to remove employees from shifts.");
+        }
+    }
+
     private static groupk.workers.data.Employee.Role serviceRoleToData(Employee.Role serviceRole) {
         return groupk.workers.data.Employee.Role.values()[serviceRole.ordinal()];
     }
@@ -94,4 +118,24 @@ public class ServiceAdapter {
         serviceEmployee.shiftPreferences = dataPreferredShiftsToService(dataEmployee.getAvailableShifts());
         return serviceEmployee;
     }
+
+    private static Shift.Type dataTypeToService(groupk.workers.data.Shift.Type dataType) {
+        return Shift.Type.values()[dataType.ordinal()];
+    }
+
+    private static groupk.workers.data.Shift.Type ServiceTypeToData(Shift.Type dataType) {
+        return groupk.workers.data.Shift.Type.values()[dataType.ordinal()];
+    }
+
+
+    private static Shift dataShiftToService(groupk.workers.data.Shift dataShift) {
+        HashMap<Employee.Role, Integer> staffDto = new HashMap<>();
+        dataShift.getRequiredStaff().forEach((k, v) -> staffDto.put(dataRoleToService(k), v));
+        return new Shift(
+                dataShift.getDate(),
+                dataTypeToService(dataShift.getType()),
+                dataShift.getStaff().stream().map(ServiceAdapter::dataEmployeeToService).collect(Collectors.toList()),
+                staffDto);
+    }
+
 }

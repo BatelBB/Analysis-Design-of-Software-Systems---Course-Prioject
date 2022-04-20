@@ -15,6 +15,12 @@ public class Shift {
     Date date;
     Type type;
 
+    public Shift(Date date, Type type, List<Employee> staff, HashMap<Employee.Role, Integer> requiredStaff){
+        this.date = date;
+        this.type = type;
+        this.staff = staff;
+        this.requiredStaff = requiredStaff;
+    }
     public Type getType() {
         return type;
     }
@@ -22,4 +28,13 @@ public class Shift {
     public Date getDate() {
         return date;
     }
+
+    public HashMap<Employee.Role, Integer> getRequiredStaff() {
+        return requiredStaff;
+    }
+
+    public List<Employee> getStaff() {
+        return staff;
+    }
+
 }
