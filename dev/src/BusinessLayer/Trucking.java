@@ -30,7 +30,7 @@ public class Trucking {
         this.weightWithProducts = 0;
         checkDate();
         checkDLicense();;
-        checkSameArea(sources);//TODO: need to send warning if false ccheckvvvvv
+        checkSameArea(sources);//TODO: need to send warning if false
         checkSameArea(destinations);//TODO: need to send warning if false
         addSources(sources);
         addDestinations(destinations);
