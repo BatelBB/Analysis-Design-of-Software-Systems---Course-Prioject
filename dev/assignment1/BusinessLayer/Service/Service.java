@@ -43,11 +43,14 @@ public class Service {
     private final ItemController items;
     private final OrderController orders;
 
-    public Service(SupplierController suppliers, ItemController items, OrderController orders) {
-        this.suppliers = suppliers;
-        this.items = items;
-        this.orders = orders;
+
+
+    public Service() {
+        this.suppliers = new SupplierController();
+        this.items = new ItemController();
+        this.orders = new OrderController();
     }
+
 
     public ServiceResponseWithData<Supplier> createSupplier(
             int ppn, int bankAccount, String name,
@@ -63,6 +66,9 @@ public class Service {
         return suppliers.all();
     }
 
+    public Supplier getSupplier(int ppn) throws BusinessLogicException {
+        return suppliers.get(ppn);
+    }
     
     public ServiceResponse deleteSupplier(int ppn) {
         return responseFor(() -> suppliers.delete(ppn));
@@ -80,6 +86,10 @@ public class Service {
     
     public Collection<Item> getItems() {
         return items.all();
+    }
+
+    public Item getItem(int ppn, int catalog) throws BusinessLogicException {
+        return items.get(ppn, catalog);
     }
 
     
