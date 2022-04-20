@@ -1,9 +1,10 @@
 package ServiceLayer;
 
-public class Response {
+public class Response<T> {
 
     private  String errorMessage;
-    public Response() { }
+    private T value;
+    public Response(T value) { this.value= value;; }
     public Response(String msg)
     {
         this.errorMessage = msg;

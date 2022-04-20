@@ -8,46 +8,47 @@ public class DriverService {
 
     private DriverController driverController;
 
-
-    public Response Register(String id, String name, String username, String password, Role role, String code, List<DLicense> licenses) {
-        try {
-            driverController.registerDriver(id,name,username,password,role,code,licenses);
-            return new Response();
-        } catch (Exception e) {
-            return new Response(e.getMessage());
-        }
+    public DriverService()
+    {
+        driverController = DriverController.getInstance();
     }
-    public Response Login(String username, String password) {
+
+
+    public Response showDriverHisFutureTruckings() {
         try {
-            driverController.LoginDriver(username,password);
-            return new Response();
+            String truckings = driverController.printMyFutureTruckings();
+            return new Response(truckings);
         } catch (Exception e) {
             return new Response(e.getMessage());
         }
     }
 
-    public Response showMyTruckings(String userName) {
+    public Response addLicense(DLicense dLicense) {
         try {
-            driverController.showMyTruckings(userName);
-            return new Response();
-        } catch (Exception e) {
-            return new Response(e.getMessage());
+            driverController.addLicense(dLicense);
+            return new Response("Added license");
         }
-    }
-    public Response addLicense(DLicense license,String username) {
-        try {
-            driverController.addLicense(license,username);
-            return new Response();
-        } catch (Exception e) {
+        catch (Exception e) {
             return new Response(e.getMessage());
         }
     }
 
-    public Response removeLicense(DLicense license,String username) {
+    public Response addLicenses(List<DLicense> dLicenses) {
         try {
-            driverController.removeLicense(license,username);
-            return new Response();
-        } catch (Exception e) {
+            driverController.addLicenses(dLicenses);
+            return new Response("Added licenses");
+        }
+        catch (Exception e) {
+            return new Response(e.getMessage());
+        }
+    }
+
+    public Response removeLicense(DLicense dLicense) {
+        try {
+            driverController.removeLicense(dLicense);
+            return new Response("License removed");
+        }
+        catch (Exception e) {
             return new Response(e.getMessage());
         }
     }

@@ -5,39 +5,113 @@ import jdk.jshell.spi.ExecutionControl;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TruckingsBoard {
 
-    private ConcurrentHashMap<Integer, Trucking> truckings;
+    private LinkedList<Trucking> truckings;
     private final TruckManager truckManager;
-    private int idCounter;
 
     public TruckingsBoard(TruckManager truckManager) {
         this.truckManager = truckManager;
-        this.idCounter = 1;
+        truckings = new LinkedList<Trucking>();
     }
 
     public synchronized void addTrucking(Trucking trucking) throws Exception {
-        synchronized (trucking.getDriver()) {
-            truckings.put(new Integer(idCounter), trucking);
-            idCounter++;
-            //give a id-truck
-            //add to driver's future trucking
+        if (trucking == null)
+            throw new IllegalArgumentException("The trucking s empty");
+        if (truckings.size() == 0) {
+            truckings.add(trucking);
+            return;
+        }
+        else {
+            ListIterator<Trucking> truckingIterator = truckings.listIterator();
+            while (truckingIterator.hasNext()) {
+                int compareDates = truckingIterator.next().getDate().compareTo(trucking.getDate());
+                if (compareDates > 0) {
+                    truckingIterator.previous();
+                    truckingIterator.add(trucking);
+                    return;
+                }
+            }
         }
     }
 
-    public String printBoard() {
-        return "not implemented yet";
+    public synchronized String printBoard() {
+        String toReturn = "             TRUCKINGS BOARD\n\n";
+        for (Trucking trucking : truckings) {
+            toReturn += trucking.printTrucking();
+            toReturn += line;
+        }
+        return toReturn;
     }
 
-    public String printDoneTruckings() {
-        return "not implemented yet";
+    public synchronized String printDoneTruckings() {
+        String toReturn = "             DONE TRUCKINGS\n\n";
+        for (Trucking trucking : truckings) {
+            if (trucking.getDate().compareTo(LocalDateTime.now()) > 0)
+                return toReturn;
+            toReturn += trucking.printTrucking();
+            toReturn += line;
+        }
+        return toReturn;
     }
 
-    public String printFutureTruckings() {
-        return "not implemented yet";
+    public synchronized String printFutureTruckings() {
+        String toReturn = "            FUTURE TRUCKINGS\n\n";
+        for (Trucking trucking : truckings) {
+            if (trucking.getDate().compareTo(LocalDateTime.now()) > 0) {
+                toReturn += trucking.printTrucking();
+                toReturn += line;
+            }
+        }
+        return toReturn;
     }
 
+    public void addSourcesToTrucking(int id, List<Site> sources) throws Exception {
+        Trucking trucking = findTruckingById(id);
+        trucking.addSources(sources);
+    }
+
+    public void addDestinationsToTrucking(int id, List<Site> destinations) throws Exception {
+        Trucking trucking = findTruckingById(id);
+        trucking.addDestinations(destinations);
+    }
+
+    public void addProductsToTrucking(int id) throws Exception {
+        Trucking trucking = findTruckingById(id);
+        trucking.addProducts();
+    }
+
+    public void moveSourceFromTrucking(int id) throws Exception {
+        Trucking trucking = findTruckingById(id);
+        trucking.moveSource();
+    }
+
+    public void moveDestinationsFromTrucking(int id) throws Exception {
+        Trucking trucking = findTruckingById(id);
+        trucking.moveDestination();
+    }
+
+    public void moveProductsToTrucking(int id) throws Exception {
+        Trucking trucking = findTruckingById(id);
+        trucking.moveProducts();
+    }
+
+    //TODO: add all the methods from Trucking
+
+    private Trucking findTruckingById(int id) {
+        if (id < 0)
+            throw new IllegalArgumentException("Illegal id");
+        for (Trucking trucking : truckings) {
+            if (trucking.getId() == id)
+                return trucking;
+        }
+        throw new IllegalArgumentException("There is no trucking in the board with that id");
+    }
+
+    private static String line = "\n____________________________________\n\n";
 }
