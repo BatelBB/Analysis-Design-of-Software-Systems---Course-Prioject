@@ -1,11 +1,12 @@
 package BusinessLayer;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class TruckManagerController {
+public class TruckManagerController extends UserController{
 
     private Map<String, String> users;
     private Map<String,TruckManager> mapTM;
@@ -17,6 +18,65 @@ public class TruckManagerController {
         TruckManagers = new LinkedList<>();
         mapTM  = new ConcurrentHashMap<>();
     }
+
+    public void addVehicle(Vehicle vehicle) {
+        if(vehicle==null) throw new IllegalArgumentException("Empty vehicle ? no no no");
+        boolean validVehicle = vehicle.checkVehicle();
+        if(validVehicle) ((TruckManager)activeUser).addVehicle(vehicle);
+    }
+
+    public void addDriver(Driver driver) throws Exception {
+        ((TruckManager)activeUser).addDriver(driver);
+    }
+
+    public void printTruckings() {
+        ((TruckManager)activeUser).printBoard();
+    }
+
+    public void printDoneTruckings() {
+        ((TruckManager)activeUser).printDoneTruckings();
+
+    }
+
+    public void printFutureTruckings() {
+        ((TruckManager)activeUser).printFutureTruckings();
+    }
+    public synchronized void addSourcesToTrucking(int truckingId, List<Site> sources) throws Exception {
+        ((TruckManager)activeUser).addSourcesToTrucking(truckingId, sources);
+    }
+
+    public synchronized void addDestinationsToTrucking(int truckingId, List<Site> destinations) throws Exception {
+        ((TruckManager)activeUser).addDestinationsToTrucking(truckingId, destinations);
+    }
+
+    public synchronized void addProductsToTrucking(int truckingId, ProductForTrucking productForTrucking) throws Exception {
+        ((TruckManager)activeUser).addProductsToTrucking(truckingId, productForTrucking);
+    }
+
+    public synchronized void updateSourcesOnTrucking(int truckingId, List<Site> sources) throws Exception {
+        ((TruckManager)activeUser).updateSourcesOnTrucking(truckingId, sources);
+    }
+
+    public synchronized void updateDestinationsOnTrucking(int truckingId, List<Site> destinations) throws Exception {
+        ((TruckManager)activeUser).updateDestinationsOnTrucking(truckingId, destinations);
+    }
+
+    public synchronized void moveProductsToTrucking(int truckingId, Products productSKU) throws Exception {
+        ((TruckManager)activeUser).moveProductsToTrucking(truckingId, productSKU);
+    }
+
+    public synchronized void updateVehicleOnTrucking(int truckingId, Vehicle vehicle) throws Exception {
+        ((TruckManager)activeUser).updateVehicleOnTrucking(truckingId, vehicle);
+    }
+
+    public synchronized void updateDriverOnTrucking(int truckingId, Driver driver) throws Exception {
+        ((TruckManager)activeUser).updateDriverOnTrucking(truckingId, driver);
+    }
+
+    public synchronized void updateDateOnTrucking(int truckingId, LocalDateTime date) throws Exception {
+        ((TruckManager)activeUser).updateDateOnTrucking(truckingId, date);
+    }
+
 
     /*
 

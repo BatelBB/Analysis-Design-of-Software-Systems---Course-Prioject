@@ -75,6 +75,10 @@ public class UserController {
         return false;
     }
 
+    public boolean updatePassword(String newPassword) throws Exception {
+        return activeUser.updatePassword(newPassword);
+    }
+
     private boolean validateUsernameToRegister(String username)
     {
         if (username == null)

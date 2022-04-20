@@ -22,8 +22,9 @@ public class Vehicle {
         checkVehicle();
     }
 
-    private boolean checkVehicle()
+    public boolean checkVehicle()
     {
+
         if (!validateWeight(weight)) throw new IllegalArgumentException("Weight is positive");
         if (!validateRegistationPlate(registationPlate)) throw new IllegalArgumentException("Invalid registration plate");
         if (!validateWeightSmallerThanMaxWeight(weight,maxWeight)) throw new IllegalArgumentException("Max wight is bigger then weight");

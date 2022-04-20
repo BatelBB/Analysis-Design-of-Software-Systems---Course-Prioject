@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class TruckManagerService {
-    /*
+
 
     private TruckManagerController truckManagerController;
 
@@ -67,7 +67,111 @@ public class TruckManagerService {
         }
     }
 
-     */
+
+    public Response<String> addVehicle(Vehicle vehicle) {
+        try {
+            truckManagerController.addVehicle(vehicle);
+            return new Response("Well added");
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }
+    }
+
+    public Response<String> addDriverToTM(Driver driver) {
+        try {
+            truckManagerController.addDriver(driver);
+            return new Response("Well added");
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }
+    }
+
+    public Response<String> printTruckings() {
+        truckManagerController.printTruckings();
+        return new Response("Well printed");
+    }
+
+    public Response<String> printDoneTruckings() {
+        truckManagerController.printDoneTruckings();
+        return new Response("Well printed");
+    }
+
+    public Response<String> printFutureTruckings() {
+        truckManagerController.printFutureTruckings();
+        return new Response("Well printed");
+    }
+    public  Response<String>  addSourcesToTrucking(int truckingId, List<Site> sources) throws Exception {
+        try {
+            truckManagerController.addSourcesToTrucking(truckingId,sources);
+            return new Response("Well added");
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }}
+
+    public  Response<String>  addDestinationsToTrucking(int truckingId, List<Site> destinations) throws Exception {
+        try {
+            truckManagerController.addDestinationsToTrucking(truckingId,destinations);
+            return new Response("Well added");
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }}
+
+    public  Response<String>  addProductsToTrucking(int truckingId, ProductForTrucking products) throws Exception {
+        try {
+            truckManagerController.addProductsToTrucking(truckingId,products);
+            return new Response("Well added");
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }}
+
+
+    public  Response<String>  updateSourcesOnTrucking(int truckingId, List<Site> sources) throws Exception {
+        try {
+            truckManagerController.updateSourcesOnTrucking(truckingId,sources);
+            return new Response("Well added");
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }}
+    public  Response<String>  updateDestinationsOnTrucking(int truckingId, List<Site> destinations) throws Exception {
+        try {
+            truckManagerController.updateDestinationsOnTrucking(truckingId,destinations);
+            return new Response("Well added");
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }}
+
+    public  Response<String>  moveProductsToTrucking(int truckingId, Products productSKU) throws Exception {
+        try {
+            truckManagerController.moveProductsToTrucking(truckingId,productSKU);
+            return new Response("Well added");
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }}
+
+    public  Response<String>  updateVehicleOnTrucking(int truckingId, Vehicle vehicle) throws Exception {
+        try {
+            truckManagerController.updateVehicleOnTrucking(truckingId,vehicle);
+            return new Response("Well added");
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }}
+    public  Response<String>  updateDriverOnTrucking(int truckingId, Driver driver) throws Exception {
+        try {
+            truckManagerController.updateDriverOnTrucking(truckingId,driver);
+            return new Response("Well added");
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }}
+
+    public  Response<String>  updateDateOnTrucking(int truckingId, LocalDateTime date) throws Exception {
+        try {
+            truckManagerController.updateDateOnTrucking(truckingId,date);
+            return new Response("Well added");
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }}
+
+
 }
 
 

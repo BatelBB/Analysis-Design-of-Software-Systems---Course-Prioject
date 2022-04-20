@@ -53,4 +53,14 @@ public class UserService {
         }
     }
 
+    public Response<String> updatePassword(String newPassword) {
+        try
+        {
+            boolean success = userController.updatePassword(newPassword);
+        }
+        catch (Exception e)
+        {
+            return new Response(e.getMessage());
+        }
+    }
 }

@@ -27,11 +27,7 @@ public class TruckManager extends User {
         drivers.put(driver.username, driver);
     }
 
-    public synchronized void addVehicle(Vehicle vehicle) throws Exception {
-        if (vehicle == null)
-            throw new IllegalArgumentException("No vehicle entered");
-        vehicles.put(vehicle.getRegistationPlate(), vehicle);
-    }
+    public synchronized void addVehicle(Vehicle vehicle)  { vehicles.put(vehicle.getRegistationPlate(), vehicle); }
 
     public synchronized List<String> getDriversUsernames() {
         List<String> toReturn = new LinkedList<String>();
