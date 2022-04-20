@@ -20,7 +20,7 @@ public class SupplierController {
 
     public Supplier create(int ppn, int bankAccount, String name, boolean isDelivering,
                            PaymentCondition paymentCondition,
-                           List<DayOfWeek> regularSupplyingDays, Contact contact)
+                           DayOfWeek regularSupplyingDays, Contact contact)
             throws BusinessLogicException {
         if (suppliers.containsKey(ppn)) {
             throw new BusinessLogicException("A supplier with this ppn already exists: " + ppn);

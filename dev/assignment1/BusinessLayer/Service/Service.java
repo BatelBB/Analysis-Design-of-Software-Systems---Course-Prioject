@@ -52,7 +52,7 @@ public class Service {
     public ServiceResponseWithData<Supplier> createSupplier(
             int ppn, int bankAccount, String name,
             boolean isDelivering, PaymentCondition paymentCondition,
-            List<DayOfWeek> regularSupplyingDays, Contact contact) {
+            DayOfWeek regularSupplyingDays, Contact contact) {
         return responseFor(() -> suppliers.create(
             ppn, bankAccount, name, isDelivering,
             paymentCondition, regularSupplyingDays, contact

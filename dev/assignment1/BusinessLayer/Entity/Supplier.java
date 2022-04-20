@@ -9,11 +9,11 @@ public class Supplier {
     String name;
     boolean isDelivering;
     PaymentCondition paymentCondition;
-    List<DayOfWeek> regularSupplyingDays;
+    DayOfWeek regularSupplyingDays;
     Contact contact;
 
     public Supplier(int ppn, int bankNumber, String name, boolean isDelivering, PaymentCondition pm,
-                    List<DayOfWeek> rsd, Contact contact){
+                    DayOfWeek rsd, Contact contact){
         this.ppn = ppn;
         this.bankNumber = bankNumber;
         this.name = name;
@@ -63,11 +63,11 @@ public class Supplier {
         this.paymentCondition = paymentCondition;
     }
 
-    public List<DayOfWeek> getRegularSupplyingDays() {
+    public DayOfWeek getRegularSupplyingDays() {
         return regularSupplyingDays;
     }
 
-    public void setRegularSupplyingDays(List<DayOfWeek> regularSupplyingDays) {
+    public void setRegularSupplyingDays(DayOfWeek regularSupplyingDays) {
         this.regularSupplyingDays = regularSupplyingDays;
     }
 
