@@ -1,6 +1,8 @@
 package groupk.workers.data;
 
 import javax.management.relation.RoleInfoNotFoundException;
+import java.util.Date;
+import java.util.Set;
 
 public class Employee {
     public static class WeeklyShift {
@@ -34,10 +36,19 @@ public class Employee {
     private String id;
     private BankAccount account;
     private WorkingConditions conditions;
-    private WeeklyShift[] availableShifts;
+    private Set<WeeklyShift> availableShifts;
     private enum Role{Logisitcs, HumanResources, Stocker,
                 Cashier, LogisticsManager, Driver};
     private Role role;
+
+    public Employee(String name, String id, String bank, int bankID, int bankBranch,
+                    Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Role role){
+        this.name = name;
+        this.id = id;
+        account = new BankAccount(bank, bankID, bankBranch);
+        conditions = new WorkingConditions(employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed);
+        this.role = role;
+    }
 
     public String getId() { return id; }
 
@@ -47,7 +58,11 @@ public class Employee {
 
     public WorkingConditions getConditions() { return conditions; }
 
-    public WeeklyShift[] getAvailableShifts() { return availableShifts; }
+    public Set<WeeklyShift> getAvailableShifts() { return availableShifts; }
 
     public Role getRole() { return role;}
+
+    public void setAvailableShifts(Set<WeeklyShift> availableShifts) {
+        this.availableShifts = availableShifts;
+    }
 }
