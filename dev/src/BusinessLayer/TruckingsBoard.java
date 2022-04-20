@@ -20,7 +20,7 @@ public class TruckingsBoard {
 
     public synchronized void addTrucking(Trucking trucking) throws Exception {
         if (trucking == null)
-            throw new IllegalArgumentException("The trucking s empty");
+            throw new IllegalArgumentException("The trucking is empty");
         if (truckings.size() == 0) {
             truckings.add(trucking);
             return;
@@ -36,6 +36,21 @@ public class TruckingsBoard {
                 }
             }
         }
+    }
+
+    public synchronized void removeTrucking(int truckingId) {
+        if (truckingId < 0)
+            throw new IllegalArgumentException("Illegal id");
+        ListIterator<Trucking> truckingIterator = truckings.listIterator();
+        while (truckingIterator.hasNext()) {
+            Trucking trucking = truckingIterator.next();
+            if(trucking.getId() == truckingId) {
+                trucking.getDriver().removeTrucking(truckingId);
+                //trucking.getVehicle().removeTrucking(truckingId); TODO
+                truckingIterator.remove();
+            }
+        }
+        throw new IllegalArgumentException("There is no trucking in the board with that id");
     }
 
     public synchronized String printBoard() {
@@ -69,43 +84,59 @@ public class TruckingsBoard {
         return toReturn;
     }
 
-    public void addSourcesToTrucking(int id, List<Site> sources) throws Exception {
-        Trucking trucking = findTruckingById(id);
+    public void addSourcesToTrucking(int truckingId, List<Site> sources) throws Exception {
+        Trucking trucking = findTruckingById(truckingId);
         trucking.addSources(sources);
     }
 
-    public void addDestinationsToTrucking(int id, List<Site> destinations) throws Exception {
-        Trucking trucking = findTruckingById(id);
+    public void addDestinationsToTrucking(int truckingId, List<Site> destinations) throws Exception {
+        Trucking trucking = findTruckingById(truckingId);
         trucking.addDestinations(destinations);
     }
 
-    public void addProductsToTrucking(int id, ProductForTrucking productForTrucking) throws Exception {
-        Trucking trucking = findTruckingById(id);
+    public void addProductsToTrucking(int truckingId, ProductForTrucking productForTrucking) throws Exception {
+        Trucking trucking = findTruckingById(truckingId);
         trucking.addProducts(productForTrucking);
     }
 
-    public void updateSourcesOnTrucking(int id, List<Site> sources) throws Exception {
-        Trucking trucking = findTruckingById(id);
+    public void updateSourcesOnTrucking(int truckingId, List<Site> sources) throws Exception {
+        Trucking trucking = findTruckingById(truckingId);
         trucking.updateSources(sources);
     }
 
-    public void updateDestinationsOnTrucking(int id, List<Site> destinations) throws Exception {
-        Trucking trucking = findTruckingById(id);
+    public void updateDestinationsOnTrucking(int truckingId, List<Site> destinations) throws Exception {
+        Trucking trucking = findTruckingById(truckingId);
         trucking.updateDestinations(destinations);
     }
 
-    public void moveProductsToTrucking(int id, Products productSKU) throws Exception {
-        Trucking trucking = findTruckingById(id);
+    public void moveProductsToTrucking(int truckingId, Products productSKU) throws Exception {
+        Trucking trucking = findTruckingById(truckingId);
         trucking.moveProducts(productSKU);
     }
 
-    //TODO: add all the methods from Trucking
+    public synchronized void updateVehicleOnTrucking(int truckingId, Vehicle vehicle) throws Exception {
+        Trucking trucking = findTruckingById(truckingId);
+        trucking.updateVehicle(vehicle);
+    }
 
-    private Trucking findTruckingById(int id) {
-        if (id < 0)
+    public synchronized void updateDriverOnTrucking(int truckingId, Driver driver) throws Exception {
+        Trucking trucking = findTruckingById(truckingId);
+        trucking.updateDriver(driver);
+    }
+
+    public synchronized void updateDateOnTrucking(int truckingId, LocalDateTime date) throws Exception {
+        Trucking trucking = findTruckingById(truckingId);
+        int truckingIndex = truckings.indexOf(trucking);
+        trucking.updateDate(date);
+        truckings.remove(truckingIndex);
+        addTrucking(trucking);
+    }
+
+    private Trucking findTruckingById(int truckingId) {
+        if (truckingId < 0)
             throw new IllegalArgumentException("Illegal id");
         for (Trucking trucking : truckings) {
-            if (trucking.getId() == id)
+            if (trucking.getId() == truckingId)
                 return trucking;
         }
         throw new IllegalArgumentException("There is no trucking in the board with that id");

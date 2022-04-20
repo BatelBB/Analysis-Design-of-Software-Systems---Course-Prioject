@@ -2,6 +2,7 @@ package BusinessLayer;
 
 import jdk.jshell.spi.ExecutionControl;
 
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class Driver extends User {
         licenses = new LinkedList<DLicense>();
     }
 
-    public void addTrucking(Trucking trucking) throws Exception {
+    public synchronized void addTrucking(Trucking trucking) throws Exception {
         checkTrucking(trucking);
         synchronized (futureTruckings) {
             if (futureTruckings.size() == 0) {
@@ -40,7 +41,13 @@ public class Driver extends User {
         }
     }
 
-    private void checkTrucking(Trucking trucking) {
+    public synchronized void removeTrucking(int truckingId) {
+        //TODO
+    }
+
+    private synchronized void checkTrucking(Trucking trucking) {
+        if (trucking.getDate().compareTo(LocalDateTime.now()) <= 0)
+            throw new IllegalArgumentException("The date must be in the future");
         if (trucking.getDriver() != this)
             throw new IllegalArgumentException("The driver does not match the driver specified in the form");
         if (licenses.size() == 0)
