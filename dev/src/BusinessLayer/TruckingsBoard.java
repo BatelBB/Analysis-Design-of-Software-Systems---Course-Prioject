@@ -13,10 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TruckingsBoard {
 
     private LinkedList<Trucking> truckings;
-    private final TruckManager truckManager;
 
     public TruckingsBoard(TruckManager truckManager) {
-        this.truckManager = truckManager;
         truckings = new LinkedList<Trucking>();
     }
 

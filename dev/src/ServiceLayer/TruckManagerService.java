@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class TruckManagerService {
+    /*
 
     private TruckManagerController truckManagerController;
 
@@ -65,6 +66,8 @@ public class TruckManagerService {
             return new Response(e.getMessage());
         }
     }
+
+     */
 }
 
 

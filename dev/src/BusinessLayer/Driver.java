@@ -15,7 +15,8 @@ public class Driver extends User {
     public Driver(String name, String username, String password) throws Exception {
         super(name, username, password);
         this.role = Role.driver;
-        futureTruckings = new LinkedList<Trucking>();
+        futureTruckings = new LinkedList<Trucking>(); //The truckings not sorted by their date
+        licenses = new LinkedList<DLicense>();
     }
 
     public void addTrucking(Trucking trucking) throws Exception {
@@ -80,6 +81,7 @@ public class Driver extends User {
         }
     }
 
+    //TODO: the truckings here are not just future truckings
     public synchronized String printMyFutureTruckings() {
         if (!isLogin())
             throw new IllegalArgumentException("You need to be logged in");

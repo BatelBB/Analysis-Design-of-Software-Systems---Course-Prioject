@@ -29,8 +29,8 @@ public class Trucking {
         this.products = products;
         this.weightWithProducts = 0;
         checkDate();
-        checkDLicense();;
-        checkSameArea(sources);//TODO: need to send warning if false ccheckvvvvv
+        checkDLicense();
+        checkSameArea(sources);//TODO: need to send warning if false
         checkSameArea(destinations);//TODO: need to send warning if false
         addSources(sources);
         addDestinations(destinations);
@@ -110,27 +110,52 @@ public class Trucking {
         addDestinations(destinations);
     }
 
+    public synchronized void updateVehicle(Vehicle vehicle) throws Exception {
+        checkDateForUpdateTrucking();
+        if (vehicle == null)
+            throw new IllegalArgumentException("The vehicle is empty");
+        if (!vehicle.getLisence().equals(driver.getLicenses()))
+            throw new IllegalArgumentException("The driver does not have a suitable driver's license for this vehicle");
+        this.vehicle = vehicle;
+    }
+
+    public synchronized void updateDriver(Driver driver) throws Exception {
+        checkDateForUpdateTrucking();
+        if (driver == null)
+            throw new IllegalArgumentException("The driver is empty");
+        if (!vehicle.getLisence().equals(driver.getLicenses()))
+            throw new IllegalArgumentException("That driver does not have a suitable driver's license for the vehicle");
+        this.driver = driver;
+    }
+
+    public synchronized void updateDate(LocalDateTime date) throws Exception {
+        checkDateForUpdateTrucking();
+        if (date == null)
+            throw new IllegalArgumentException("The data is empty");
+        if (date.compareTo(LocalDateTime.now()) <= 0)
+            throw new IllegalArgumentException("The date must be in the future");
+        this.date = date;
+    }
+
     public synchronized String printSources() {
-        String toReturn = "SOURCE DETAILS:\n";
+        String toReturn = "\nSOURCE DETAILS:\n";
         toReturn += printSitesList(this.sources);
         return toReturn;
     }
 
     public synchronized String printDestinations() {
-        String toReturn = "SOURCE DETAILS:\n";
+        String toReturn = "\nDESTINATION DETAILS:\n";
         toReturn += printSitesList(this.sources);
         return toReturn;
     }
 
     public synchronized String printProducts() {
-        String toReturn = "PRODUCTS:\n";
+        String toReturn = "\nPRODUCTS:\n";
         for(ProductForTrucking product : products) {
             toReturn += product.printProductForTrucking() + "\n";
         }
         return toReturn;
     }
-
-    //TODO: add methods of updating vehicle, driver and date
 
     public Driver getDriver() {
         return driver;

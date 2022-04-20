@@ -41,8 +41,11 @@ public class DriverController extends UserController{
         }
     }
 
-    public void setWeightForTrucking(int weight) {
-        //TODO
+    public void setWeightForTrucking(int truckingId, int weight) throws Exception {
+        synchronized (activeUser) {
+            checkIfActiveUserIsDriver();
+            ((Driver)activeUser).updateTotalWeightOfTrucking(truckingId, weight);
+        }
     }
 
     public void removeLicense(DLicense license) throws Exception {

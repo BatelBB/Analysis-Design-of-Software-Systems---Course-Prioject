@@ -6,7 +6,7 @@ import javax.management.relation.Role;
 import java.util.List;
 
 public class Service {
-
+/*
     TruckManagerService truckManagerService;
     DriverService driverService;
     UserService userService;
@@ -55,7 +55,9 @@ public class Service {
     }
 
 
+ */
+
 }
 
 
-}
+
