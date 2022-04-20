@@ -1,9 +1,9 @@
 package assignment1.BusinessLayer.Entity;
 
 public class QuantityDiscount {
-    private final Item item;
-    int quantity;
-    float discount;
+    public final Item item;
+    public int quantity;
+    public float discount;
 
     public QuantityDiscount(Item item, int quantity, float discount){
         this.item = item;

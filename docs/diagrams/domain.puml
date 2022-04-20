@@ -41,8 +41,8 @@ package businessLayer {
 		}
 		
 		class Order {
-			ordered: Date
-			provided: Date
+			ordered: LocalDate
+			provided: LocalDate
 			totalPrice: float
 		}
 		

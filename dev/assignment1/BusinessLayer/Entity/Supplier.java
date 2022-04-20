@@ -22,4 +22,60 @@ public class Supplier {
         this.regularSupplyingDays = rsd;
         this.contact = contact;
     }
+
+    public int getPpn() {
+        return ppn;
+    }
+
+    public void setPpn(int ppn) {
+        this.ppn = ppn;
+    }
+
+    public int getBankNumber() {
+        return bankNumber;
+    }
+
+    public void setBankNumber(int bankNumber) {
+        this.bankNumber = bankNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isDelivering() {
+        return isDelivering;
+    }
+
+    public void setDelivering(boolean delivering) {
+        isDelivering = delivering;
+    }
+
+    public PaymentCondition getPaymentCondition() {
+        return paymentCondition;
+    }
+
+    public void setPaymentCondition(PaymentCondition paymentCondition) {
+        this.paymentCondition = paymentCondition;
+    }
+
+    public List<DayOfWeek> getRegularSupplyingDays() {
+        return regularSupplyingDays;
+    }
+
+    public void setRegularSupplyingDays(List<DayOfWeek> regularSupplyingDays) {
+        this.regularSupplyingDays = regularSupplyingDays;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
 }
