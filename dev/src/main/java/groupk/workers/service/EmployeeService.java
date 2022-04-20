@@ -17,16 +17,19 @@ public class EmployeeService {
         businessController = new BusinessController();
     }
 
-    public void addEmployee(String name, String id, String bank, int bankID, int bankBranch,
-                            Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Employee.Role role){
-        businessController.getEmployeesController().addEmployee(name, id, bank, bankID, bankBranch, employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed, role);
-    }
-    public void addShiftPreferences(String Id, Set<Employee.WeeklyShift> shiftPreferences){
-        businessController.getEmployeesController().addShiftPreferences(Id, shiftPreferences);
-    }
-
+    // Does not require authentication, so no subjectID.
     public Employee createEmployee(Employee toCreate) {
-        throw new UnsupportedOperationException();
+        return businessController.addEmployee(
+                toCreate.name,
+                toCreate.id,
+                toCreate.bank,
+                toCreate.bankID,
+                toCreate.bankBranch,
+                toCreate.employmentStart,
+                toCreate.salaryPerHour,
+                toCreate.sickDaysUsed,
+                toCreate.vacationDaysUsed,
+                toCreate.role);
     }
     public Employee readEmployee(String subjectID, String employeeID) {
         throw new UnsupportedOperationException();

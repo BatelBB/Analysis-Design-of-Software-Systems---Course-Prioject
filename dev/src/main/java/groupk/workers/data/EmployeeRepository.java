@@ -21,10 +21,10 @@ public class EmployeeRepository {
         throw new IllegalArgumentException();
     }
 
-    public void addEmployee(String name, String id, String bank, int bankID, int bankBranch,
-                            Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, groupk.workers.service.dto.Employee.Role role){
-        employees.add(new Employee(name, id, bank, bankID, bankBranch, employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed, role));
+    public Employee addEmployee(String name, String id, String bank, int bankID, int bankBranch,
+                            Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Employee.Role role){
+        Employee created = new Employee(name, id, bank, bankID, bankBranch, employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed, role);
+        employees.add(created);
+        return created;
     }
-
-
 }

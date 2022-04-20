@@ -42,17 +42,23 @@ public class Employee {
     private BankAccount account;
     private WorkingConditions conditions;
     private Set<WeeklyShift> availableShifts;
-    private enum Role{Logisitcs, HumanResources, Stocker,
-                Cashier, LogisticsManager, Driver};
+    public enum Role{
+        Logisitcs,
+        HumanResources,
+        Stocker,
+        Cashier,
+        LogisticsManager,
+        Driver
+    };
     private Role role;
 
     public Employee(String name, String id, String bank, int bankID, int bankBranch,
-                    Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, groupk.workers.service.dto.Employee.Role roleDTO){
+                    Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Role role){
         this.name = name;
         this.id = id;
         account = new BankAccount(bank, bankID, bankBranch);
         conditions = new WorkingConditions(employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed);
-        this.role = Role.values()[roleDTO.ordinal()];
+        this.role = role;
         availableShifts = new HashSet<>();
     }
 

@@ -1,5 +1,6 @@
 package groupk.workers.service.dto;
 
+import java.util.Date;
 import java.util.Set;
 
 public class Employee {
@@ -38,4 +39,5 @@ public class Employee {
     public int sickDaysUsed;
     public int vacationDaysUsed;
     public Set<WeeklyShift> shiftPreferences;
+    public Date employmentStart;
 }
