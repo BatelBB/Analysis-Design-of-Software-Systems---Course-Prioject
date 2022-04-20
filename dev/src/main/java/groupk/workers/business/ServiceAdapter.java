@@ -60,6 +60,27 @@ public class ServiceAdapter {
         }
     }
 
+    public Employee updateEmployee(String subjectID, Employee changed) {
+        if (subjectID.equals(changed.id) || employees.isFromHumanResources(subjectID)) {
+            return dataEmployeeToService(
+                employees.update(
+                        changed.name,
+                        changed.id,
+                        changed.bank,
+                        changed.bankID,
+                        changed.bankBranch,
+                        changed.employmentStart,
+                        changed.salaryPerHour,
+                        changed.sickDaysUsed,
+                        changed.vacationDaysUsed,
+                        serviceRoleToData(changed.role)
+                )
+            );
+        } else {
+            throw new IllegalArgumentException("Subject must be authorized to delete employees.");
+        }
+    }
+
     private static groupk.workers.data.Employee.Role serviceRoleToData(Employee.Role serviceRole) {
         return groupk.workers.data.Employee.Role.values()[serviceRole.ordinal()];
     }
@@ -84,14 +105,18 @@ public class ServiceAdapter {
                 dataEmployee.getId(),
                 dataEmployee.getName(),
                 dataRoleToService(dataEmployee.getRole()),
-                dataEmployee.getAccount().bank,
-                dataEmployee.getAccount().bankID,
-                dataEmployee.getAccount().bankBranch,
+                dataEmployee.getAccount().getBank(),
+                dataEmployee.getAccount().getBankID(),
+                dataEmployee.getAccount().getBankBranch(),
                 dataEmployee.getConditions().getSalaryPerHour(),
                 dataEmployee.getConditions().getSickDaysUsed(),
                 dataEmployee.getConditions().getVacationDaysUsed(),
                 dataPreferredShiftsToService(dataEmployee.getAvailableShifts()),
                 dataEmployee.getConditions().getEmploymentStart()
         );
+    }
+
+    private groupk.workers.data.Employee serviceEmployeeToData(Employee serviceEmployee) {
+        return employees.read(serviceEmployee.id);
     }
 }

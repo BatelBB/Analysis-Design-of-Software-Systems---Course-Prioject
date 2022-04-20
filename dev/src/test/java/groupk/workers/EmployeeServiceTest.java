@@ -239,4 +239,85 @@ public class EmployeeServiceTest {
             service.readEmployee("222222222", "111111111");
         });
     }
+
+    @Test
+    public void testUpdateEmployee() {
+        EmployeeService service = new EmployeeService();
+        Employee created = service.createEmployee(new Employee(
+                "111111111",
+                "Foo",
+                Employee.Role.Stocker,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        created.name = "Changed";
+        service.updateEmployee(created.id, created);
+        Employee self = service.readEmployee("111111111", "111111111");
+        assertEquals("Changed", self.name);
+    }
+
+    @Test
+    public void testUpdateEmployeeByHR() {
+        EmployeeService service = new EmployeeService();
+        Employee created = service.createEmployee(new Employee(
+                "111111111",
+                "Foo",
+                Employee.Role.Stocker,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        service.createEmployee(new Employee(
+                "222222222",
+                "Bar",
+                Employee.Role.HumanResources,
+                "BarBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        created.name = "Changed";
+        service.updateEmployee("222222222", created);
+        Employee foo = service.readEmployee("222222222", "111111111");
+        assertEquals("Changed", foo.name);
+    }
+
+    @Test
+    public void testUpdateEmployeeUnauthorized() {
+        EmployeeService service = new EmployeeService();
+        Employee created = service.createEmployee(new Employee(
+                "111111111",
+                "Foo",
+                Employee.Role.Stocker,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        service.createEmployee(new Employee(
+                "222222222",
+                "Bar",
+                Employee.Role.Cashier,
+                "BarBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        assertThrows(Exception.class, () -> {
+            service.updateEmployee("222222222", created);
+        });
+    }
 }

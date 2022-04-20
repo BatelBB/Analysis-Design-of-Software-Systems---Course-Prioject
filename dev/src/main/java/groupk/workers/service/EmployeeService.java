@@ -35,7 +35,7 @@ public class EmployeeService {
         return businessController.deleteEmployee(subjectID, employeeID);
     }
     public Employee updateEmployee(String subjectID, Employee changed) {
-        throw new UnsupportedOperationException();
+        return businessController.updateEmployee(subjectID, changed);
     }
     public Employee setEmployeeShiftPreference(String subjectID, String employeeID, Employee.WeeklyShift shift, boolean canWork) {
         throw new UnsupportedOperationException();
