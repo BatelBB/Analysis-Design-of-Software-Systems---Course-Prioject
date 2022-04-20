@@ -35,4 +35,43 @@ public class UserInput {
         }
         return nextInt;
     }
+
+    boolean nextBoolean(String message){
+        //goes in a loop to get boolean and prints the message we provided each time
+        boolean retry = true;
+        boolean nextBool = false;
+        while (retry) {
+            try {
+                UserOutput.getInstance().println(message);
+                String ans = scanner.nextLine();
+                if (!ans.equalsIgnoreCase("true") && !ans.equalsIgnoreCase("false")) {
+                    throw new InputMismatchException("String is not true or false");
+                }
+                nextBool = Boolean.parseBoolean(ans.toLowerCase());
+                retry = false;
+            } catch (Exception e) {
+                UserOutput.getInstance().println("Please try again.");
+            }
+        }
+        return nextBool;
+    }
+
+    String nextString(String message){
+        //goes in a loop to get String and prints the message we provided each time
+        boolean retry = true;
+        String nextString = "";
+        while (retry) {
+            try {
+                UserOutput.getInstance().println(message);
+                nextString = scanner.nextLine();
+                retry = false;
+            } catch (Exception e) {
+                if (!scanner.hasNext()) {
+                    scanner.nextLine();
+                }
+                UserOutput.getInstance().println("Please try again.");
+            }
+        }
+        return nextString;
+    }
 }

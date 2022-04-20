@@ -22,9 +22,11 @@ public class Menu {
     public String getItemSubmenu(){
         return new String(
                 "1. Create new item\n" +
-                "2. Edit quantity of existing item\n" +
+                "2. Edit catalog number of existing item\n" +
                 "3. Edit price of existing item\n" +
-                "4. Delete existing item");
+                        "4. Edit name of existing item\n" +
+                        "5. Edit category of existing item\n" +
+                "6. Delete existing item");
     }
 
     public String getOrderSubmenu(){
@@ -47,5 +49,16 @@ public class Menu {
                 "1. Create new quantity agreement\n" +
                 "2. Edit existing quantity agreement\n" +
                 "3. Delete existing quantity agreement");
+    }
+
+    public String getSupplierEditSubmenu(){
+        return new String(
+                "1. Edit ppn number\n" +
+                "2. Edit bank account number\n" +
+                "3. Edit supplier's company name\n" +
+                "4. Edit supplier's isDelivery status\n" +
+                "5. Edit supplier's payment condition\n" +
+                "6. Edit supplier's day of delivery\n" +
+                "7. Edit supplier's contact");
     }
 }
