@@ -1,5 +1,6 @@
 package groupk.workers.data;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,4 +14,7 @@ public class ShiftRepository {
         return shifts;
     }
 
+    public void addShift(String typeString, Date date){
+        shifts.add(new Shift(typeString,date));
+    }
 }
