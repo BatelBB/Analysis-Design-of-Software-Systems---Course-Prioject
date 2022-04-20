@@ -51,7 +51,13 @@ public class ItemController {
         orderController.refreshDiscounts(discount.item);
     }
 
-
+    public Item get(int ppn, int catalog) throws BusinessLogicException{
+        String key = tuple(ppn, catalog);
+        if(!items.containsKey(key)) {
+            throw new BusinessLogicException("No suppliers with this ppn: " + ppn);
+        }
+        return items.get(ppn);
+    }
     public float priceForAmount(Item item, int amount) {
         float discount = 0;
         List<QuantityDiscount> discounts = getDiscountList(item);
