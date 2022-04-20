@@ -32,6 +32,33 @@ public class Employee {
     public String id;
     public String name;
     public Role role;
+
+    public Employee(
+            String id,
+            String name,
+            Role role,
+            String bank,
+            int bankID,
+            int bankBranch,
+            int salaryPerHour,
+            int sickDaysUsed,
+            int vacationDaysUsed,
+            Set<WeeklyShift> shiftPreferences,
+            Date employmentStart
+    ) {
+        this.id = id;
+        this.name = name;
+        this.role = role;
+        this.bank = bank;
+        this.bankID = bankID;
+        this.bankBranch = bankBranch;
+        this.salaryPerHour = salaryPerHour;
+        this.sickDaysUsed = sickDaysUsed;
+        this.vacationDaysUsed = vacationDaysUsed;
+        this.shiftPreferences = shiftPreferences;
+        this.employmentStart = employmentStart;
+    }
+
     public String bank;
     public int bankID;
     public int bankBranch;

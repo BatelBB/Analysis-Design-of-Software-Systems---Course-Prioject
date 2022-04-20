@@ -3,9 +3,25 @@ import java.util.Date;
 
 public class WorkingConditions {
     private Date employmentStart;
-    public int salaryPerHour;
+    private int salaryPerHour;
     private int sickDaysUsed;
     private int vacationDaysUsed;
+
+    public void setEmploymentStart(Date employmentStart) {
+        this.employmentStart = employmentStart;
+    }
+
+    public void setSalaryPerHour(int salaryPerHour) {
+        this.salaryPerHour = salaryPerHour;
+    }
+
+    public void setSickDaysUsed(int sickDaysUsed) {
+        this.sickDaysUsed = sickDaysUsed;
+    }
+
+    public void setVacationDaysUsed(int vacationDaysUsed) {
+        this.vacationDaysUsed = vacationDaysUsed;
+    }
 
     public WorkingConditions(Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed){
         this.employmentStart = employmentStart;

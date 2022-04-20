@@ -10,7 +10,7 @@ public class ServiceAdapter {
     private EmployeeController employees;
     private ShiftController shifts;
 
-    public ServiceAdapter(){
+    public ServiceAdapter() {
         employees = new EmployeeController();
         shifts = new ShiftController();
     }
@@ -60,10 +60,10 @@ public class ServiceAdapter {
         }
     }
 
-    public Shift addEmployeeToShift(String subjectID, Date date, Shift.Type type, String employeeID){
+    public Shift addEmployeeToShift(String subjectID, Date date, Shift.Type type, String employeeID) {
         if (employees.isFromHumanResources(subjectID)) {
             groupk.workers.data.Shift shift = shifts.getShift(date, ServiceTypeToData(type));
-            if(shift.isEmployeeWorking(employeeID))
+            if (shift.isEmployeeWorking(employeeID))
                 throw new IllegalArgumentException("Employee already working in this shift");
             else
                 return dataShiftToService(shift.addEmployee(employees.getEmployee(employeeID)));
@@ -72,15 +72,36 @@ public class ServiceAdapter {
         }
     }
 
-    public Shift removeEmployeeFromShift(String subjectID, Date date, Shift.Type type, String employeeID){
+    public Shift removeEmployeeFromShift(String subjectID, Date date, Shift.Type type, String employeeID) {
         if (employees.isFromHumanResources(subjectID)) {
             groupk.workers.data.Shift shift = shifts.getShift(date, ServiceTypeToData(type));
-            if(!shift.isEmployeeWorking(employeeID))
+            if (!shift.isEmployeeWorking(employeeID))
                 throw new IllegalArgumentException("Employee is not working in this shift");
             else
                 return dataShiftToService(shift.removeEmployee(employees.getEmployee(employeeID)));
         } else {
             throw new IllegalArgumentException("Subject must be authorized to remove employees from shifts.");
+        }
+    }
+
+    public Employee updateEmployee(String subjectID, Employee changed) {
+        if (subjectID.equals(changed.id) || employees.isFromHumanResources(subjectID)) {
+            return dataEmployeeToService(
+                    employees.update(
+                            changed.name,
+                            changed.id,
+                            changed.bank,
+                            changed.bankID,
+                            changed.bankBranch,
+                            changed.employmentStart,
+                            changed.salaryPerHour,
+                            changed.sickDaysUsed,
+                            changed.vacationDaysUsed,
+                            serviceRoleToData(changed.role)
+                    )
+            );
+        } else {
+            throw new IllegalArgumentException("Subject must be authorized to delete employees.");
         }
     }
 
@@ -92,9 +113,10 @@ public class ServiceAdapter {
         return Employee.Role.values()[dataRole.ordinal()];
     }
 
-    private static Set<Employee.WeeklyShift> dataPreferredShiftsToService(Set<groupk.workers.data.Employee.WeeklyShift> dataShifts) {
+    private static Set<Employee.WeeklyShift> dataPreferredShiftsToService
+            (Set<groupk.workers.data.Employee.WeeklyShift> dataShifts) {
         Set<Employee.WeeklyShift> preferredShifts = new HashSet<>();
-        for (groupk.workers.data.Employee.WeeklyShift shift: dataShifts) {
+        for (groupk.workers.data.Employee.WeeklyShift shift : dataShifts) {
             Employee.WeeklyShift serviceShift = new Employee.WeeklyShift();
             serviceShift.day = Employee.WeeklyShift.Day.values()[shift.day.ordinal()];
             serviceShift.type = Shift.Type.values()[shift.type.ordinal()];
@@ -104,19 +126,23 @@ public class ServiceAdapter {
     }
 
     private static Employee dataEmployeeToService(groupk.workers.data.Employee dataEmployee) {
-        Employee serviceEmployee = new Employee();
-        serviceEmployee.id = dataEmployee.getId();
-        serviceEmployee.name = dataEmployee.getName();
-        serviceEmployee.role = dataRoleToService(dataEmployee.getRole());
-        serviceEmployee.bank = dataEmployee.getAccount().bank;
-        serviceEmployee.bankBranch = dataEmployee.getAccount().bankBranch;
-        serviceEmployee.bankID = dataEmployee.getAccount().bankID;
-        serviceEmployee.salaryPerHour = dataEmployee.getConditions().getSalaryPerHour();
-        serviceEmployee.sickDaysUsed = dataEmployee.getConditions().getSickDaysUsed();
-        serviceEmployee.vacationDaysUsed = dataEmployee.getConditions().getVacationDaysUsed();
-        serviceEmployee.employmentStart = dataEmployee.getConditions().getEmploymentStart();
-        serviceEmployee.shiftPreferences = dataPreferredShiftsToService(dataEmployee.getAvailableShifts());
-        return serviceEmployee;
+        return new Employee(
+                dataEmployee.getId(),
+                dataEmployee.getName(),
+                dataRoleToService(dataEmployee.getRole()),
+                dataEmployee.getAccount().getBank(),
+                dataEmployee.getAccount().getBankID(),
+                dataEmployee.getAccount().getBankBranch(),
+                dataEmployee.getConditions().getSalaryPerHour(),
+                dataEmployee.getConditions().getSickDaysUsed(),
+                dataEmployee.getConditions().getVacationDaysUsed(),
+                dataPreferredShiftsToService(dataEmployee.getAvailableShifts()),
+                dataEmployee.getConditions().getEmploymentStart()
+        );
+    }
+
+    private groupk.workers.data.Employee serviceEmployeeToData(Employee serviceEmployee) {
+        return employees.read(serviceEmployee.id);
     }
 
     private static Shift.Type dataTypeToService(groupk.workers.data.Shift.Type dataType) {
@@ -137,5 +163,6 @@ public class ServiceAdapter {
                 dataShift.getStaff().stream().map(ServiceAdapter::dataEmployeeToService).collect(Collectors.toList()),
                 staffDto);
     }
-
 }
+
+

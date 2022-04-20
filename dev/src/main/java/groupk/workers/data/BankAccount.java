@@ -1,10 +1,22 @@
 package groupk.workers.data;
 
 public class BankAccount {
-    public String bank;
-    public int bankID;
-    public int bankBranch;
+    private String bank;
+    private int bankID;
+    private int bankBranch;
 
+
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
+
+    public void setBankID(int bankID) {
+        this.bankID = bankID;
+    }
+
+    public void setBankBranch(int bankBranch) {
+        this.bankBranch = bankBranch;
+    }
 
     public BankAccount(String bank, int bankID, int bankBranch){
         this.bank = bank;

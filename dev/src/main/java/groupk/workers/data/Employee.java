@@ -39,6 +39,19 @@ public class Employee {
 
     private String name;
     private String id;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     private BankAccount account;
     private WorkingConditions conditions;
     private Set<WeeklyShift> availableShifts;
