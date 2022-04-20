@@ -6,11 +6,11 @@ import groupk.workers.service.dto.Shift;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class BusinessController {
+public class ServiceAdapter {
     private EmployeeController employees;
     private ShiftController shifts;
 
-    public BusinessController(){
+    public ServiceAdapter(){
         employees = new EmployeeController();
         shifts = new ShiftController();
     }
@@ -53,7 +53,7 @@ public class BusinessController {
     public List<Employee> listEmployees(String subjectID) {
         if (employees.isFromHumanResources(subjectID)) {
             return employees.list().stream()
-                    .map(BusinessController::dataEmployeeToService)
+                    .map(ServiceAdapter::dataEmployeeToService)
                     .collect(Collectors.toList());
         } else {
             throw new IllegalArgumentException("Subject must be authorized to read employees.");

@@ -1,20 +1,17 @@
 package groupk.workers.service;
 
-import groupk.workers.business.BusinessController;
-import groupk.workers.business.EmployeeController;
-import groupk.workers.business.ShiftController;
+import groupk.workers.business.ServiceAdapter;
 import groupk.workers.service.dto.Employee;
 import groupk.workers.service.dto.Shift;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 public class EmployeeService {
-    private BusinessController businessController;
+    private ServiceAdapter businessController;
 
     public EmployeeService(){
-        businessController = new BusinessController();
+        businessController = new ServiceAdapter();
     }
 
     // Does not require authentication, so no subjectID.
