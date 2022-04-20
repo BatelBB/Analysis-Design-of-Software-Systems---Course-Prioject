@@ -19,6 +19,9 @@ public class EmployeeRepository {
 
     public Employee addEmployee(String name, String id, String bank, int bankID, int bankBranch,
                             Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Employee.Role role){
+        if (employees.containsKey(id)) {
+            throw new IllegalArgumentException("Employee ID must be unique.");
+        }
         Employee created = new Employee(name, id, bank, bankID, bankBranch, employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed, role);
         employees.put(id, created);
         return created;

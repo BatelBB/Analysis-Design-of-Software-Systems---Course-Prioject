@@ -80,18 +80,18 @@ public class ServiceAdapter {
     }
 
     private static Employee dataEmployeeToService(groupk.workers.data.Employee dataEmployee) {
-        Employee serviceEmployee = new Employee();
-        serviceEmployee.id = dataEmployee.getId();
-        serviceEmployee.name = dataEmployee.getName();
-        serviceEmployee.role = dataRoleToService(dataEmployee.getRole());
-        serviceEmployee.bank = dataEmployee.getAccount().bank;
-        serviceEmployee.bankBranch = dataEmployee.getAccount().bankBranch;
-        serviceEmployee.bankID = dataEmployee.getAccount().bankID;
-        serviceEmployee.salaryPerHour = dataEmployee.getConditions().getSalaryPerHour();
-        serviceEmployee.sickDaysUsed = dataEmployee.getConditions().getSickDaysUsed();
-        serviceEmployee.vacationDaysUsed = dataEmployee.getConditions().getVacationDaysUsed();
-        serviceEmployee.employmentStart = dataEmployee.getConditions().getEmploymentStart();
-        serviceEmployee.shiftPreferences = dataPreferredShiftsToService(dataEmployee.getAvailableShifts());
-        return serviceEmployee;
+        return new Employee(
+                dataEmployee.getId(),
+                dataEmployee.getName(),
+                dataRoleToService(dataEmployee.getRole()),
+                dataEmployee.getAccount().bank,
+                dataEmployee.getAccount().bankID,
+                dataEmployee.getAccount().bankBranch,
+                dataEmployee.getConditions().getSalaryPerHour(),
+                dataEmployee.getConditions().getSickDaysUsed(),
+                dataEmployee.getConditions().getVacationDaysUsed(),
+                dataPreferredShiftsToService(dataEmployee.getAvailableShifts()),
+                dataEmployee.getConditions().getEmploymentStart()
+        );
     }
 }
