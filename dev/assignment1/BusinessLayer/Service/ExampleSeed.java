@@ -40,16 +40,16 @@ public class ExampleSeed {
                 LocalDate.of(2022, Calendar.JUNE, 6)
         ).data;
 
-        service.orderItem(order1, monkeysPaw, 200);
-        service.orderItem(order1, voodooDoll, 200);
+        //service.orderItem(order1, monkeysPaw, 200);
+        //service.orderItem(order1, voodooDoll, 200);
 
         Order order2 = service.createOrder(supplier,
                 LocalDate.of(2022, Calendar.JUNE, 6),
                 LocalDate.of(2023, Calendar.JUNE, 6)
         ).data;
 
-        service.orderItem(order2, monkeysPaw, 50);
-        service.orderItem(order2, curseInABox, 1);
+        //service.orderItem(order2, monkeysPaw, 50);
+        //service.orderItem(order2, curseInABox, 1);
     }
 
     private static void createSupplierGoodFoods(Service service) {
@@ -76,8 +76,8 @@ public class ExampleSeed {
                 LocalDate.of(2022, Calendar.FEBRUARY, 9)
         ).data;
 
-        service.orderItem(order1, bread, 200);
-        service.orderItem(order1, soyMilk, 200);
+        //service.orderItem(order1, bread, 200);
+        //service.orderItem(order1, soyMilk, 200);
 
 
         Order order2 = service.createOrder(supplier,
@@ -85,14 +85,14 @@ public class ExampleSeed {
                 LocalDate.of(2022, Calendar.APRIL, 10)
         ).data;
 
-        service.orderItem(order2, bread, 95);
-        service.orderItem(order2, soyMilk, 1000);
+        //service.orderItem(order2, bread, 95);
+        //service.orderItem(order2, soyMilk, 1000);
     }
 
     private static void createSupplierOfficeStuff(Service service) {
         Supplier supplier = service.createSupplier(1, 1111, "Office Stuff",
                 true, PaymentCondition.DirectDebit,
-                daysList(DayOfWeek.SATURDAY),
+                DayOfWeek.SATURDAY,
                 new Contact("Ofir Office", "ofir@office.stuff", "555-1234")
         ).data;
 
@@ -113,8 +113,8 @@ public class ExampleSeed {
                 LocalDate.of(2022, Calendar.FEBRUARY, 5)
         ).data;
 
-        service.orderItem(order1, pen, 200);
-        service.orderItem(order1, notebook, 200);
+        //service.orderItem(order1, pen, 200);
+        //service.orderItem(order1, notebook, 200);
 
 
         Order order2 = service.createOrder(supplier,
@@ -122,8 +122,8 @@ public class ExampleSeed {
                 LocalDate.of(2022, Calendar.APRIL, 5)
         ).data;
 
-        service.orderItem(order2, pen, 95);
-        service.orderItem(order2, notebook, 1000);
+        //service.orderItem(order2, pen, 95);
+        //service.orderItem(order2, notebook, 1000);
     }
 
     private static List<DayOfWeek> daysList(DayOfWeek... args) {
