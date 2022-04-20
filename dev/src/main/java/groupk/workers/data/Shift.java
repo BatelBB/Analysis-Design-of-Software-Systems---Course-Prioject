@@ -7,6 +7,7 @@ public class Shift {
     private Date date;
     private Employee[] staff;
 
+    
     public Type getType() {
         return type;
     }

@@ -42,12 +42,12 @@ public class Employee {
     private Role role;
 
     public Employee(String name, String id, String bank, int bankID, int bankBranch,
-                    Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Role role){
+                    Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, String roleString){
         this.name = name;
         this.id = id;
         account = new BankAccount(bank, bankID, bankBranch);
         conditions = new WorkingConditions(employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed);
-        this.role = role;
+        this.role = Role.valueOf(roleString);
     }
 
     public String getId() { return id; }
