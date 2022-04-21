@@ -54,7 +54,7 @@ public class ItemController {
     public Item get(int ppn, int catalog) throws BusinessLogicException{
         String key = tuple(ppn, catalog);
         if(!items.containsKey(key)) {
-            throw new BusinessLogicException("No suppliers with this ppn: " + ppn);
+            throw new BusinessLogicException("The item doesn't exist");
         }
         return items.get(ppn);
     }

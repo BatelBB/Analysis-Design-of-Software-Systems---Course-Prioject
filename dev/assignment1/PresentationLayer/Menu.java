@@ -17,7 +17,7 @@ public class Menu {
         return new String("1. Supplier menu\n" +
                 "2. Item Menu\n" +
                 "3. Order Menu\n" +
-                "4. Quantity Menu");
+                "4. Quantity Menu\n");
     }
     public String getItemSubmenu(){
         return new String(
@@ -26,7 +26,7 @@ public class Menu {
                 "3. Edit price of existing item\n" +
                         "4. Edit name of existing item\n" +
                         "5. Edit category of existing item\n" +
-                "6. Delete existing item");
+                "6. Delete existing item\n");
     }
 
     public String getOrderSubmenu(){
@@ -34,21 +34,21 @@ public class Menu {
                 "1. Create new order\n" +
                 "2. Edit existing order\n" +
                 "3. Delete existing order\n" +
-                        "4. Display existing order");
+                        "4. Display existing order\n");
     }
 
     public String getSupplierSubmenu(){
         return new String(
                 "1. Create new supplier card\n" +
                 "2. Edit existing supplier card\n" +
-                "3. Delete existing supplier");
+                "3. Delete existing supplier\n");
     }
 
     public String getQuantityAgreementSubmenu(){
         return new String(
                 "1. Create new quantity agreement\n" +
                 "2. Edit existing quantity agreement\n" +
-                "3. Delete existing quantity agreement");
+                "3. Delete existing quantity agreement\n");
     }
 
     public String getSupplierEditSubmenu(){
@@ -59,6 +59,6 @@ public class Menu {
                 "4. Edit supplier's isDelivery status\n" +
                 "5. Edit supplier's payment condition\n" +
                 "6. Edit supplier's day of delivery\n" +
-                "7. Edit supplier's contact");
+                "7. Edit supplier's contact\n");
     }
 }

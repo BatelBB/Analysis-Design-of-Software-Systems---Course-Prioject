@@ -24,7 +24,7 @@ public class UserInput {
         int nextInt = 0;
         while (retry) {
             try {
-                UserOutput.getInstance().println(message);
+                UserOutput.getInstance().print(message);
                 nextInt = Integer.parseInt(scanner.nextLine());
                 if (nextInt < 0)
                     throw new InputMismatchException("Number was negative");
@@ -42,7 +42,7 @@ public class UserInput {
         boolean nextBool = false;
         while (retry) {
             try {
-                UserOutput.getInstance().println(message);
+                UserOutput.getInstance().print(message);
                 String ans = scanner.nextLine();
                 if (!ans.equalsIgnoreCase("true") && !ans.equalsIgnoreCase("false")) {
                     throw new InputMismatchException("String is not true or false");
@@ -62,7 +62,7 @@ public class UserInput {
         String nextString = "";
         while (retry) {
             try {
-                UserOutput.getInstance().println(message);
+                UserOutput.getInstance().print(message);
                 nextString = scanner.nextLine();
                 retry = false;
             } catch (Exception e) {
