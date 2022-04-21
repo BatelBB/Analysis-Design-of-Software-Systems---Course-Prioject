@@ -19,7 +19,7 @@ public class ShiftController {
         if(!ifShiftExist(shift))
             return repo.addShift(shift);
         else
-            throw new IllegalArgumentException("Shifts does not exists.");
+            throw new IllegalArgumentException("Shift already exists.");
     }
 
     public Shift getShift(Date date, Shift.Type type){

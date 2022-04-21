@@ -48,7 +48,7 @@ public class ServiceAdapter {
             groupk.workers.data.Shift created = new groupk.workers.data.Shift(date, ServiceTypeToData(type), staffData , requiredStaffData);
             return dataShiftToService(shifts.addShifts(created));
         } else {
-            throw new IllegalArgumentException("Subject must be authorized to read employees.");
+            throw new IllegalArgumentException("Subject must be authorized to add shift.");
         }
     }
 
@@ -87,7 +87,7 @@ public class ServiceAdapter {
         if (employees.isFromHumanResources(subjectID)) {
             groupk.workers.data.Shift shift = shifts.getShift(date, ServiceTypeToData(type));
             if (shift.isEmployeeWorking(employeeID))
-                throw new IllegalArgumentException("Employee already working in this shift");
+                throw new IllegalArgumentException("Employee already working in this shift.");
             else
                 return dataShiftToService(shift.addEmployee(employees.getEmployee(employeeID)));
         } else {
@@ -99,7 +99,7 @@ public class ServiceAdapter {
         if (employees.isFromHumanResources(subjectID)) {
             groupk.workers.data.Shift shift = shifts.getShift(date, ServiceTypeToData(type));
             if (!shift.isEmployeeWorking(employeeID))
-                throw new IllegalArgumentException("Employee is not working in this shift");
+                throw new IllegalArgumentException("Employee is not working in this shift.");
             else
                 return dataShiftToService(shift.removeEmployee(employees.getEmployee(employeeID)));
         } else {
@@ -124,7 +124,7 @@ public class ServiceAdapter {
                     )
             );
         } else {
-            throw new IllegalArgumentException("Subject must be authorized to delete employees.");
+            throw new IllegalArgumentException("Subject must be authorized to update employees.");
         }
     }
 
@@ -132,21 +132,21 @@ public class ServiceAdapter {
         if(subjectID.equals(employeeID))
             return dataEmployeeToService(employees.addEmployeeShiftPreference(employeeID, ServiceWeeklyShiftToData(shift)));
         else
-            throw new IllegalArgumentException("Employee can add only to himself shifts preferences");
+            throw new IllegalArgumentException("Employee can add only to himself shifts preferences.");
     }
 
     public Employee setEmployeeShiftsPreference(String subjectID, String employeeID, Set<Employee.WeeklyShift> shiftPreferences) {
         if(subjectID.equals(employeeID))
             return dataEmployeeToService(employees.setEmployeeShiftsPreference(employeeID, ServicePreferredShiftsToData(shiftPreferences)));
         else
-            throw new IllegalArgumentException("Employee can add only to himself shifts preferences");
+            throw new IllegalArgumentException("Employee can add only to himself shifts preferences.");
     }
 
     public Employee deleteEmployeeShiftPreference(String subjectID, String employeeID, Employee.WeeklyShift shift){
         if(subjectID.equals(employeeID))
             return dataEmployeeToService(employees.deleteEmployeeShiftPreference(employeeID, ServiceWeeklyShiftToData(shift)));
         else
-            throw new IllegalArgumentException("Employee can delete only to himself shifts preferences");
+            throw new IllegalArgumentException("Employee can delete only to himself shifts preferences.");
     }
 
     public List<Shift> listShifts(String subjectID) {
