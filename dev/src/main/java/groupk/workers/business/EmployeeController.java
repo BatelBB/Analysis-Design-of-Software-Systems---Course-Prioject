@@ -5,6 +5,7 @@ import groupk.workers.data.Employee;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class EmployeeController {
     private final EmployeeRepository repo;
@@ -66,6 +67,37 @@ public class EmployeeController {
                 return e;
             }
         }
-        throw new IllegalArgumentException("Employee does not exists");
+        throw new IllegalArgumentException("Employee does not exists.");
+    }
+
+
+    public Employee setEmployeeShiftsPreference(String id, Set<Employee.WeeklyShift> shiftPreferences) {
+        Employee e = getEmployee(id);
+        if(e.getAvailableShifts().size() == 0){
+            e.setAvailableShifts(shiftPreferences);
+        }
+        else {
+            for (Employee.WeeklyShift shift : shiftPreferences) {
+                if (!e.isShiftpreferred(shift))
+                    return getEmployee(id).addEmployeeShiftPreference(shift);
+                throw new IllegalArgumentException("This shift already exist in employee preference.");
+            }
+        }
+        return e;
+    }
+
+    public Employee addEmployeeShiftPreference(String id, Employee.WeeklyShift shift){
+        Employee e = getEmployee(id);
+        if(!e.isShiftpreferred(shift))
+            return getEmployee(id).addEmployeeShiftPreference(shift);
+        throw new IllegalArgumentException("This shift already exist in employee preference.");
+    }
+
+    public Employee deleteEmployeeShiftPreference(String id, Employee.WeeklyShift shift){
+        Employee e = getEmployee(id);
+        if(e.isShiftpreferred(shift))
+            return getEmployee(id).deleteEmployeeShiftPreference(shift);
+        throw new IllegalArgumentException("This shift does not exist in employee preference.");
+
     }
 }

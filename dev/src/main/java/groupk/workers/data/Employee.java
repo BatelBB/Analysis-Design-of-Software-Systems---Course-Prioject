@@ -87,9 +87,33 @@ public class Employee {
 
     public Role getRole() { return role;}
 
-    public void setAvailableShifts(Set<groupk.workers.service.dto.Employee.WeeklyShift> shiftPreferences) {
-        for (groupk.workers.service.dto.Employee.WeeklyShift shift:shiftPreferences) {
-            availableShifts.add(new WeeklyShift(shift.day.ordinal(), shift.type.ordinal()));
+    public Employee setAvailableShifts(Set<WeeklyShift> shiftPreferences) {
+        for (WeeklyShift shift:shiftPreferences) {
+            availableShifts.add(shift);
         }
+        return this;
     }
+
+    public Employee addEmployeeShiftPreference(WeeklyShift shift){
+        availableShifts.add(shift);
+        return this;
+    }
+
+    public Employee deleteEmployeeShiftPreference(WeeklyShift shift){
+        availableShifts.remove(shift);
+        return this;
+    }
+
+    public boolean isShiftpreferred(WeeklyShift shift){
+        for(WeeklyShift s: availableShifts){
+            if(s.getDay().equals(shift.getDay()) && s.getType().equals(shift.getType()))
+                return true;
+        }
+        return false;
+    }
+
+
+
+
+
 }

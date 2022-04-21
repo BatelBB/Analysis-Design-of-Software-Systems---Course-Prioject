@@ -6,6 +6,7 @@ import groupk.workers.service.dto.Shift;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class EmployeeService {
     private ServiceAdapter businessController;
@@ -37,9 +38,19 @@ public class EmployeeService {
     public Employee updateEmployee(String subjectID, Employee changed) {
         return businessController.updateEmployee(subjectID, changed);
     }
-    public Employee setEmployeeShiftPreference(String subjectID, String employeeID, Employee.WeeklyShift shift, boolean canWork) {
-        throw new UnsupportedOperationException();
+
+    public Employee addEmployeeShiftPreference(String subjectID, String employeeID, Employee.WeeklyShift shift) {
+        return businessController.addEmployeeShiftPreference(subjectID, employeeID, shift);
     }
+
+    public Employee setEmployeeShiftsPreference(String subjectID, String employeeID, Set<Employee.WeeklyShift> shiftPreferences) {
+        return businessController.setEmployeeShiftPreference(subjectID, employeeID, shiftPreferences);
+    }
+
+    public Employee deleteEmployeeShiftPreference(String subjectID, String employeeID, Employee.WeeklyShift shift){
+        return businessController.deleteEmployeeShiftPreference(subjectID, employeeID, shift);
+    }
+
     public List<Employee> listEmployees(String subjectID) {
         return businessController.listEmployees(subjectID);
     }

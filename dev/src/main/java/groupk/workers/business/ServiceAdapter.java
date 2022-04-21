@@ -105,6 +105,27 @@ public class ServiceAdapter {
         }
     }
 
+    public Employee addEmployeeShiftPreference(String subjectID, String employeeID, Employee.WeeklyShift shift) {
+        if(subjectID.equals(employeeID))
+            return dataEmployeeToService(employees.addEmployeeShiftPreference(employeeID, ServiceWeeklyShiftToData(shift)));
+        else
+            throw new IllegalArgumentException("Employee can add only to himself shifts preferences");
+    }
+
+    public Employee setEmployeeShiftsPreference(String subjectID, String employeeID, Set<Employee.WeeklyShift> shiftPreferences) {
+        if(subjectID.equals(employeeID))
+            return dataEmployeeToService(employees.setEmployeeShiftsPreference(employeeID, ServicePreferredShiftsToData(shiftPreferences)));
+        else
+            throw new IllegalArgumentException("Employee can add only to himself shifts preferences");
+    }
+
+    public Employee deleteEmployeeShiftPreference(String subjectID, String employeeID, Employee.WeeklyShift shift){
+        if(subjectID.equals(employeeID))
+            return dataEmployeeToService(employees.deleteEmployeeShiftPreference(employeeID, ServiceWeeklyShiftToData(shift)));
+        else
+            throw new IllegalArgumentException("Employee can delete only to himself shifts preferences");
+    }
+
     private static groupk.workers.data.Employee.Role serviceRoleToData(Employee.Role serviceRole) {
         return groupk.workers.data.Employee.Role.values()[serviceRole.ordinal()];
     }
@@ -123,6 +144,21 @@ public class ServiceAdapter {
             preferredShifts.add(serviceShift);
         }
         return preferredShifts;
+    }
+
+    private static Set<groupk.workers.data.Employee.WeeklyShift> ServicePreferredShiftsToData
+            (Set<Employee.WeeklyShift> dtoShifts) {
+        Set<groupk.workers.data.Employee.WeeklyShift> preferredShifts = new HashSet<>();
+        for (Employee.WeeklyShift shift : dtoShifts) {
+            groupk.workers.data.Employee.WeeklyShift dataShift =
+                    new groupk.workers.data.Employee.WeeklyShift(shift.day.ordinal(), shift.type.ordinal());
+            preferredShifts.add(dataShift);
+        }
+        return preferredShifts;
+    }
+
+    private static groupk.workers.data.Employee.WeeklyShift ServiceWeeklyShiftToData(Employee.WeeklyShift dtoShift) {
+        return new groupk.workers.data.Employee.WeeklyShift(dtoShift.day.ordinal(), dtoShift.type.ordinal());
     }
 
     private static Employee dataEmployeeToService(groupk.workers.data.Employee dataEmployee) {
