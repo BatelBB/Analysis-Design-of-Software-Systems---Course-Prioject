@@ -10,42 +10,16 @@ import java.util.ListIterator;
 
 public class Driver extends User {
     private List<DLicense> licenses;
-    private List<Trucking> futureTruckings;
+    private TruckManager truckManager;
 
-
-    public Driver(String name, String username, String password) throws Exception {
+    public Driver(String name, String username, String password, TruckManager truckManager) throws Exception {
         super(name, username, password);
         this.role = Role.driver;
-        futureTruckings = new LinkedList<Trucking>(); //The truckings not sorted by their date
         licenses = new LinkedList<DLicense>();
+        this.truckManager = truckManager;
     }
 
-    public synchronized void addTrucking(Trucking trucking) throws Exception {
-        checkTrucking(trucking);
-        synchronized (futureTruckings) {
-            if (futureTruckings.size() == 0) {
-                futureTruckings.add(trucking);
-                return;
-            }
-            ListIterator<Trucking> truckingIterator = futureTruckings.listIterator();
-            while (truckingIterator.hasNext()) {
-                int compareDates = truckingIterator.next().getDate().compareTo(trucking.getDate());
-                if (compareDates == 0)
-                    throw new Exception("Oops, the driver " + trucking.getDriver().getName() + " has another trucking in the same moment: " + trucking.getDate());
-                else if (compareDates > 0) {
-                    truckingIterator.previous();
-                    truckingIterator.add(trucking);
-                    return;
-                }
-            }
-        }
-    }
-
-    public synchronized void removeTrucking(int truckingId) {
-        //TODO
-    }
-
-    private synchronized void checkTrucking(Trucking trucking) {
+    public synchronized void checkTrucking(Trucking trucking) {
         if (trucking.getDate().compareTo(LocalDateTime.now()) <= 0)
             throw new IllegalArgumentException("The date must be in the future");
         if (trucking.getDriver() != this)
@@ -54,13 +28,6 @@ public class Driver extends User {
             throw new IllegalArgumentException("Oops, the driver hasn't entered his driver's license yet");
         if(!licenses.contains(trucking.getVehicle().getLisence()))
             throw new IllegalArgumentException("Oops, the driver does not have a driver's license appropriate for the vehicle type");
-    }
-
-    public synchronized void removeTrucking(Trucking trucking) {
-        synchronized (futureTruckings) {
-            if (futureTruckings.contains(trucking))
-                futureTruckings.remove(trucking);
-        }
     }
 
     public synchronized void addLicense(DLicense dLicense)
@@ -88,25 +55,20 @@ public class Driver extends User {
         }
     }
 
-    //TODO: the truckings here are not just future truckings
-    public synchronized String printMyFutureTruckings() {
-        if (!isLogin())
-            throw new IllegalArgumentException("You need to be logged in");
-        String toReturn = "";
-        synchronized (futureTruckings) {
-            for (Trucking trucking : futureTruckings) {
-                if (trucking != null) {
-                    synchronized (trucking) {
-                        toReturn += trucking.printTrucking();
-                    }
-                }
-            }
-        }
-        return toReturn;
+    public synchronized void updateTotalWeightOfTrucking(int truckingId, int newWeight) throws Exception {
+        truckManager.updateTotalWeight(truckingId, newWeight, this);
     }
 
-    public synchronized boolean updateTotalWeightOfTrucking(int truckingId, int weight) throws Exception {
-        return findTruckingById(truckingId).updateWeight(weight);
+    public synchronized String printTruckings() {
+        return truckManager.printBoardOfDriver(this.getUsername());
+    }
+
+    public synchronized String printTruckingsHistory() {
+        return truckManager.printTruckingsHistoryOfDriver(this.getUsername());
+    }
+
+    public synchronized String printFutureTruckings() {
+        return truckManager.printFutureTruckingsOfDriver(this.getUsername());
     }
 
     public List<DLicense> getLicenses() {
@@ -115,31 +77,6 @@ public class Driver extends User {
 
     public String getName() {
         return name;
-    }
-
-    private boolean checkDriver(Trucking trucking) throws Exception {
-        synchronized (futureTruckings) {
-            boolean found = false;
-            Iterator<Trucking> truckingIterator = futureTruckings.iterator();
-            while (!found && truckingIterator.hasNext()) {
-                int compareDates = truckingIterator.next().getDate().compareTo(trucking.getDate());
-                if (compareDates == 0)
-                    throw new Exception("Oops, the driver " + trucking.getDriver().getName() + " has another trucking in the same moment: " + trucking.getDate());
-                if (compareDates > 0)
-                    found = true;
-            }
-        }
-        return true;
-    }
-
-    private Trucking findTruckingById(int id) {
-        if (id < 0)
-            throw new IllegalArgumentException("Illegal id");
-        for (Trucking trucking : futureTruckings) {
-            if (trucking.getId() == id)
-                return trucking;
-        }
-        throw new IllegalArgumentException("You have no trucking with this number");
     }
 
 }

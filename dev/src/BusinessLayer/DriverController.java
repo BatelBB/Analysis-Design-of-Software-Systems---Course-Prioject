@@ -15,15 +15,26 @@ public class DriverController extends UserController{
         return singletonDriverControllerInstance;
     }
 
-    private DriverController()
-    {
-        UserController.getInstance();
+    private DriverController() {}
+
+    public String printMyTruckings() throws Exception {
+        synchronized (activeUser) {
+            checkIfActiveUserIsDriver();
+            return ((Driver)activeUser).printTruckings();
+        }
+    }
+
+    public String printMyTruckingsHistory() throws Exception {
+        synchronized (activeUser) {
+            checkIfActiveUserIsDriver();
+            return ((Driver)activeUser).printTruckingsHistory();
+        }
     }
 
     public String printMyFutureTruckings() throws Exception {
         synchronized (activeUser) {
             checkIfActiveUserIsDriver();
-            return ((Driver)activeUser).printMyFutureTruckings();
+            return ((Driver)activeUser).printFutureTruckings();
         }
     }
 

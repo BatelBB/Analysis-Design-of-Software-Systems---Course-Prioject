@@ -28,13 +28,21 @@ public class TruckingsBoard {
         else {
             ListIterator<Trucking> truckingIterator = truckings.listIterator();
             while (truckingIterator.hasNext()) {
-                int compareDates = truckingIterator.next().getDate().compareTo(trucking.getDate());
-                if (compareDates > 0) {
+                Trucking currentTrucking = truckingIterator.next();
+                int compareDates = currentTrucking.getDate().compareTo(trucking.getDate());
+                if (compareDates == 0) {
+                    if (currentTrucking.getVehicle().getRegistationPlate() == trucking.getVehicle().getRegistationPlate())
+                        throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same vehicle");
+                    if (currentTrucking.getDriver().getUsername() == trucking.getDriver().getUsername())
+                        throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same driver");
+                }
+                else if (compareDates > 0) {
                     truckingIterator.previous();
                     truckingIterator.add(trucking);
                     return;
                 }
             }
+            truckings.add(trucking);
         }
     }
 
@@ -43,12 +51,8 @@ public class TruckingsBoard {
             throw new IllegalArgumentException("Illegal id");
         ListIterator<Trucking> truckingIterator = truckings.listIterator();
         while (truckingIterator.hasNext()) {
-            Trucking trucking = truckingIterator.next();
-            if(trucking.getId() == truckingId) {
-                trucking.getDriver().removeTrucking(truckingId);
-                //trucking.getVehicle().removeTrucking(truckingId); TODO
+            if(truckingIterator.next().getId() == truckingId)
                 truckingIterator.remove();
-            }
         }
         throw new IllegalArgumentException("There is no trucking in the board with that id");
     }
@@ -56,29 +60,94 @@ public class TruckingsBoard {
     public synchronized String printBoard() {
         String toReturn = "             TRUCKINGS BOARD\n\n";
         for (Trucking trucking : truckings) {
-            toReturn += trucking.printTrucking();
-            toReturn += line;
+            toReturn += trucking.printTrucking() + line;
         }
         return toReturn;
     }
 
-    public synchronized String printDoneTruckings() {
-        String toReturn = "             DONE TRUCKINGS\n\n";
+    public synchronized String printTruckingsHistory() {
+        String toReturn = "            TRUCKINGS HISTORY\n\n";
         for (Trucking trucking : truckings) {
             if (trucking.getDate().compareTo(LocalDateTime.now()) > 0)
                 return toReturn;
-            toReturn += trucking.printTrucking();
-            toReturn += line;
+            toReturn += trucking.printTrucking() + line;
         }
         return toReturn;
     }
 
     public synchronized String printFutureTruckings() {
         String toReturn = "            FUTURE TRUCKINGS\n\n";
+        boolean found = false; //saves time of checking everytime if is it in future, after first future trucking appear.
         for (Trucking trucking : truckings) {
-            if (trucking.getDate().compareTo(LocalDateTime.now()) > 0) {
-                toReturn += trucking.printTrucking();
-                toReturn += line;
+            if (found | trucking.getDate().compareTo(LocalDateTime.now()) > 0) {
+                found = true;
+                toReturn += trucking.printTrucking() + line;
+            }
+        }
+        return toReturn;
+    }
+
+    public synchronized String printBoardOfDriver(String username) {
+        String toReturn = "             TRUCKINGS BOARD\n\n";
+        for (Trucking trucking : truckings) {
+            if(trucking.getDriver().getUsername() == username)
+                toReturn += trucking.printTrucking() + line;
+        }
+        return toReturn;
+    }
+
+    public synchronized String printTruckingsHistoryOfDriver(String username) {
+        String toReturn = "            TRUCKINGS HISTORY\n\n";
+        for (Trucking trucking : truckings) {
+            if (trucking.getDate().compareTo(LocalDateTime.now()) > 0)
+                return toReturn;
+            else if(trucking.getDriver().getUsername() == username)
+                toReturn += trucking.printTrucking() + line;
+        }
+        return toReturn;
+    }
+
+    public synchronized String printFutureTruckingsOfDriver(String username) {
+        String toReturn = "            FUTURE TRUCKINGS\n\n";
+        boolean found = false; //saves time of checking everytime if is it in future, after first future trucking appear.
+        for (Trucking trucking : truckings) {
+            if (found | trucking.getDate().compareTo(LocalDateTime.now()) > 0) {
+                found = true;
+                if(trucking.getDriver().getUsername() == username)
+                    toReturn += trucking.printTrucking() + line;
+            }
+        }
+        return toReturn;
+    }
+
+    public synchronized String printBoardOfVehicle(String registrationPlate) {
+        String toReturn = "             TRUCKINGS BOARD\n\n";
+        for (Trucking trucking : truckings) {
+            if(trucking.getVehicle().getRegistationPlate() == registrationPlate)
+                toReturn += trucking.printTrucking() + line;
+        }
+        return toReturn;
+    }
+
+    public synchronized String printTruckingsHistoryOfVehicle(String registrationPlate) {
+        String toReturn = "            TRUCKINGS HISTORY\n\n";
+        for (Trucking trucking : truckings) {
+            if (trucking.getDate().compareTo(LocalDateTime.now()) > 0)
+                return toReturn;
+            else if(trucking.getVehicle().getRegistationPlate() == registrationPlate)
+                toReturn += trucking.printTrucking() + line;
+        }
+        return toReturn;
+    }
+
+    public synchronized String printFutureTruckingsOfVehicle(String registrationPlate) {
+        String toReturn = "            FUTURE TRUCKINGS\n\n";
+        boolean found = false; //saves time of checking everytime if is it in future, after first future trucking appear.
+        for (Trucking trucking : truckings) {
+            if (found | trucking.getDate().compareTo(LocalDateTime.now()) > 0) {
+                found = true;
+                if(trucking.getVehicle().getRegistationPlate() == registrationPlate)
+                    toReturn += trucking.printTrucking() + line;
             }
         }
         return toReturn;
@@ -130,6 +199,13 @@ public class TruckingsBoard {
         trucking.updateDate(date);
         truckings.remove(truckingIndex);
         addTrucking(trucking);
+    }
+
+    public synchronized void updateTotalWeightOfTrucking(int truckingId, int newWeight, String driverUsername) throws Exception{
+        if(driverUsername == null)
+            throw new IllegalArgumentException("Driver's username is empty");
+        Trucking trucking = findTruckingById(truckingId);
+        trucking.updateWeight(newWeight);
     }
 
     private Trucking findTruckingById(int truckingId) {

@@ -45,15 +45,15 @@ public class TruckManager extends User {
         return toReturn;
     }
 
-    public synchronized void addTrucking(Trucking trucking) throws Exception {
-        if (trucking == null)
-            throw new NullPointerException("The trucking is empty");
-        if (!drivers.containsKey(trucking.getDriver().getUsername()))
-            throw new IllegalArgumentException("The driver is not under the current truck manager");
-        if (!vehicles.containsKey(trucking.getVehicle().getRegistationPlate()))
-            throw new IllegalArgumentException("The vehicle is not under the current truck manager");
-        //TODO: add to the vehicle truckings
-        trucking.getDriver().addTrucking(trucking);
+    public synchronized void addTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<ProductForTrucking> products) throws Exception {
+        if (registrationPlateOfVehicle == null)
+            throw new NullPointerException("The registration plate is empty");
+        if (driverUsername == null)
+            throw new NullPointerException("The driver's username is empty");
+        Driver driver = getDriverByUsername(driverUsername);
+        Vehicle vehicle = getVehicleByRegistrationPlate(registrationPlateOfVehicle);
+        Trucking trucking = new Trucking(id, vehicle, date, driver, sources, destinations, products);
+        driver.checkTrucking(trucking);
         truckingsBoard.addTrucking(trucking);
     }
 
@@ -65,12 +65,39 @@ public class TruckManager extends User {
         return truckingsBoard.printBoard();
     }
 
-    public synchronized String printDoneTruckings() {
-        return truckingsBoard.printDoneTruckings();
+    public synchronized String printTruckingsHistory() {
+        return truckingsBoard.printTruckingsHistory();
     }
 
     public synchronized String printFutureTruckings() {
         return truckingsBoard.printFutureTruckings();
+    }
+
+    public synchronized String printBoardOfDriver(String driverUsername) {
+        Driver driver = getDriverByUsername(driverUsername);
+        return truckingsBoard.printBoardOfDriver(driver.username);
+    }
+
+    public synchronized String printTruckingsHistoryOfDriver(String driverUsername) {
+        Driver driver = getDriverByUsername(driverUsername);
+        return truckingsBoard.printTruckingsHistoryOfDriver(driver.username);
+    }
+
+    public synchronized String printFutureTruckingsOfDriver(String driverUsername) {
+        Driver driver = getDriverByUsername(driverUsername);
+        return truckingsBoard.printFutureTruckingsOfDriver(driver.username);
+    }
+
+    public synchronized String printBoardOfVehicle(String registrationPlate) {
+        return truckingsBoard.printBoardOfVehicle(registrationPlate);
+    }
+
+    public synchronized String printTruckingsHistoryOfVehicle(String registrationPlate) {
+        return truckingsBoard.printTruckingsHistoryOfVehicle(registrationPlate);
+    }
+
+    public synchronized String printFutureTruckingsOfVehicle(String registrationPlate) {
+        return truckingsBoard.printFutureTruckingsOfVehicle(registrationPlate);
     }
 
     public synchronized void addSourcesToTrucking(int truckingId, List<Site> sources) throws Exception {
@@ -97,16 +124,36 @@ public class TruckManager extends User {
         truckingsBoard.moveProductsToTrucking(truckingId, productSKU);
     }
 
-    public synchronized void updateVehicleOnTrucking(int truckingId, Vehicle vehicle) throws Exception {
+    public synchronized void updateVehicleOnTrucking(int truckingId, String registrationOfVehicle) throws Exception {
+        Vehicle vehicle = getVehicleByRegistrationPlate(registrationOfVehicle);
         truckingsBoard.updateVehicleOnTrucking(truckingId, vehicle);
     }
 
-    public synchronized void updateDriverOnTrucking(int truckingId, Driver driver) throws Exception {
+    public synchronized void updateDriverOnTrucking(int truckingId, String driverUsername) throws Exception {
+        Driver driver = getDriverByUsername(driverUsername);
         truckingsBoard.updateDriverOnTrucking(truckingId, driver);
     }
 
     public synchronized void updateDateOnTrucking(int truckingId, LocalDateTime date) throws Exception {
         truckingsBoard.updateDateOnTrucking(truckingId, date);
+    }
+
+    protected synchronized void updateTotalWeight(int truckingId, int newWeight, Driver driver) throws Exception {
+        truckingsBoard.updateTotalWeightOfTrucking(truckingId, newWeight, driver.getUsername());
+    }
+
+    private Driver getDriverByUsername(String driverUsername) {
+        Driver driver = drivers.get(driverUsername);
+        if (driver == null)
+            throw new IllegalArgumentException("The driver is not under the current truck manager");
+        return driver;
+    }
+
+    private Vehicle getVehicleByRegistrationPlate(String RegistrationPlate) {
+        Vehicle vehicle = vehicles.get(RegistrationPlate);
+        if (vehicle == null)
+            throw new IllegalArgumentException("The vehicle is not under the current truck manager");
+        return vehicle;
     }
 
 }

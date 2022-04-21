@@ -6,13 +6,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UserController {
 
     private Map<String, User> users;
+    private static UserController singletonUserControllerInstance = null;
+    protected User activeUser = null;
     private final int MIN_USERNAME_LENGTH = 3;
     private final int MAX_USERNAME_LENGTH = 12;
     private String CODE_TRUCK_MANAGER = "tm1234tm";
-    private String CODE_DRIVER = "dr1234dr";
-    //TODO: add this to register
-    private static UserController singletonUserControllerInstance = null;
-    protected User activeUser = null;
+    private Map<String, String> UNIQUE_DRIVER_CODE_OF_TM; //key: hashcode, value: tmUsername
 
     protected UserController() {
         users = new ConcurrentHashMap<String, User>();
@@ -24,7 +23,7 @@ public class UserController {
         return singletonUserControllerInstance;
     }
 
-    public boolean registerUser(String name, String username, String password, Role role, String code) throws Exception {
+    public synchronized boolean registerUser(String name, String username, String password, Role role, String code) throws Exception {
         User newUser;
         if (role == null)
             throw new Exception("Please select role");
@@ -34,11 +33,12 @@ public class UserController {
             if (code != CODE_TRUCK_MANAGER)
                 throw new IllegalArgumentException("Sorry, the code is not valid");
             newUser = new TruckManager(name, username, password);
+            UNIQUE_DRIVER_CODE_OF_TM.put(String.valueOf(newUser.hashCode()), username);
         }
         else if (role == Role.driver) {
-            if (code != CODE_DRIVER)
-                throw new IllegalArgumentException("Sorry, the code is not valid");
-            newUser = new Driver(name, username, password);
+            TruckManager truckManagerOfTheDriver = getTruckManagerByCode(code);
+            newUser = new Driver(name, username, password, truckManagerOfTheDriver);
+            truckManagerOfTheDriver.addDriver((Driver)newUser);
         }
         else
             throw new Exception("Sorry, we can not yet open a user for this type of employee");
@@ -83,11 +83,11 @@ public class UserController {
     {
         if (username == null)
             return false;
-        if(username.length() < MIN_USERNAME_LENGTH)
+        if (username.length() < MIN_USERNAME_LENGTH)
             throw new IllegalArgumentException("The minimum password length should be at least 3 characters");
-        if(username.length() > MAX_USERNAME_LENGTH)
+        if (username.length() > MAX_USERNAME_LENGTH)
             throw new IllegalArgumentException("The maximum password length should be up to 12 characters");
-        for(int i = 0; i < username.length(); i++) {
+        for (int i = 0; i < username.length(); i++) {
             if(!(Character.isLetter(username.charAt(i)) | Character.isDigit(username.charAt(i))))
                 throw new IllegalArgumentException("Username can only contain letters and numbers");
         }
@@ -97,4 +97,13 @@ public class UserController {
         return true;
     }
 
+    private TruckManager getTruckManagerByCode(String hashcode) {
+        String TruckManagerUsername = UNIQUE_DRIVER_CODE_OF_TM.get(hashcode);
+        if (TruckManagerUsername == null)
+            throw new IllegalArgumentException("Sorry, the code is not valid");
+        User truckManager = users.get(TruckManagerUsername);
+        if (truckManager == null | !(activeUser instanceof TruckManager))
+            throw new IllegalArgumentException("Sorry, the code is not valid");
+        return (TruckManager)truckManager;
+    }
 }
