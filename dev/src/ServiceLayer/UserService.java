@@ -57,6 +57,7 @@ public class UserService {
         try
         {
             boolean success = userController.updatePassword(newPassword);
+            return new Response(success);
         }
         catch (Exception e)
         {
