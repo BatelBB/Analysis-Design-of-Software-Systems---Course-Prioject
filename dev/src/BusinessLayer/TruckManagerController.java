@@ -194,3 +194,4 @@ public class TruckManagerController extends UserController{
     }
 
 }
+

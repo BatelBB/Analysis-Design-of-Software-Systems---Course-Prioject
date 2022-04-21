@@ -15,6 +15,7 @@ public class UserController {
 
     protected UserController() {
         users = new ConcurrentHashMap<String, User>();
+        UNIQUE_DRIVER_CODE_OF_TM = new ConcurrentHashMap<String, String>();
     }
 
     public static UserController getInstance() {
@@ -107,3 +108,4 @@ public class UserController {
         return (TruckManager)truckManager;
     }
 }
+
