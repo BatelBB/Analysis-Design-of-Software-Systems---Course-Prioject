@@ -13,6 +13,30 @@ public class DriverService {
         driverController = DriverController.getInstance();
     }
 
+    public Response setWeightForTrucking(int truckingId, int weight) throws Exception {
+        try {
+            driverController.setWeightForTrucking(truckingId,weight);
+            return new Response("Set weight successfully");
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }
+    }
+
+    public Response printMyTruckings() throws Exception {
+        try {
+            return new Response(driverController.printMyTruckings());
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }
+    }
+
+    public Response printMyTruckingsHistory() throws Exception {
+        try {
+            return new Response(driverController.printMyTruckingsHistory());
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }
+    }
 
     public Response showDriverHisFutureTruckings() {
         try {
