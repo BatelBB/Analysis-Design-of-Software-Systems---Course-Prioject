@@ -476,7 +476,7 @@ public class EmployeeServiceTest {
                 new GregorianCalendar()
         ));
 
-        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.MAY, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
         service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
         assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
     }
@@ -507,7 +507,7 @@ public class EmployeeServiceTest {
                 new GregorianCalendar()
         ));
 
-        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.MAY, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
         assertThrows(Exception.class, () -> {
             service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
         });
@@ -527,7 +527,7 @@ public class EmployeeServiceTest {
                 new HashSet<Employee.ShiftDateTime>(),
                 new GregorianCalendar()
         ));
-        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.MAY, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
         assertThrows(Exception.class, () -> {
             service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, "111111111");
         });
@@ -562,8 +562,8 @@ public class EmployeeServiceTest {
                 new GregorianCalendar()
         ));
 
-        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.MAY, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
-        service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21), Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        service.addEmployeeToShift(HR.id, shift.getDate(), shift.getType(), created.id);
         assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
         service.removeEmployeeFromShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
         assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 0);
@@ -583,7 +583,7 @@ public class EmployeeServiceTest {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
-        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.MAY, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
         assertThrows(Exception.class, () -> {
             service.removeEmployeeFromShift(HR.id, shift.getDate(), Shift.Type.Evening, "111111111");
         });

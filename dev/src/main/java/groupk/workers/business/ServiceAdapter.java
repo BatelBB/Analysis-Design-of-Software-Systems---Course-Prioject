@@ -26,12 +26,15 @@ public class ServiceAdapter {
             int salaryPerHour,
             int sickDaysUsed,
             int vacationDaysUsed,
-            Employee.Role role) {
+            Employee.Role role,
+            Set<Employee.ShiftDateTime> shiftPreferences) {
         groupk.workers.data.Employee created = employees.create(
                 name, id, bank,
                 bankID, bankBranch, employmentStart,
                 salaryPerHour, sickDaysUsed, vacationDaysUsed,
-                serviceRoleToData(role));
+                serviceRoleToData(role),
+                servicePreferredShiftsToData(shiftPreferences)
+                );
         return dataEmployeeToService(created);
     }
 
@@ -86,10 +89,14 @@ public class ServiceAdapter {
     public Shift addEmployeeToShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
         if (employees.isFromHumanResources(subjectID)) {
             groupk.workers.data.Shift shift = shifts.getShift(date, ServiceTypeToData(type));
-            if (shift.isEmployeeWorking(employeeID))
+            if (shift.isEmployeeWorking(employeeID)) {
                 throw new IllegalArgumentException("Employee already working in this shift.");
-            else
-                return dataShiftToService(shift.addEmployee(employees.getEmployee(employeeID)));
+            }
+            groupk.workers.data.Employee added = employees.read(employeeID);
+            if (!added.getAvailableShifts().contains(groupk.workers.data.Employee.toShiftDateTime(date, type == Shift.Type.Evening))) {
+                throw new IllegalArgumentException("Employee must be able to work at day of week and time.");
+            }
+            return dataShiftToService(shift.addEmployee(employees.getEmployee(employeeID)));
         } else {
             throw new IllegalArgumentException("Subject must be authorized to add employees to shifts.");
         }
@@ -137,7 +144,7 @@ public class ServiceAdapter {
 
     public Employee setEmployeeShiftsPreference(String subjectID, String employeeID, Set<Employee.ShiftDateTime> shiftPreferences) {
         if(subjectID.equals(employeeID))
-            return dataEmployeeToService(employees.setEmployeeShiftsPreference(employeeID, ServicePreferredShiftsToData(shiftPreferences)));
+            return dataEmployeeToService(employees.setEmployeeShiftsPreference(employeeID, servicePreferredShiftsToData(shiftPreferences)));
         else
             throw new IllegalArgumentException("Employee can add only to himself shifts preferences.");
     }
@@ -183,7 +190,7 @@ public class ServiceAdapter {
         return preferredShifts;
     }
 
-    private static Set<groupk.workers.data.Employee.ShiftDateTime> ServicePreferredShiftsToData
+    private static Set<groupk.workers.data.Employee.ShiftDateTime> servicePreferredShiftsToData
             (Set<Employee.ShiftDateTime> dtoShifts) {
         Set<groupk.workers.data.Employee.ShiftDateTime> preferredShifts = new HashSet<>();
         for (Employee.ShiftDateTime shift : dtoShifts) {

@@ -21,9 +21,8 @@ public class Employee {
         SaturdayEvening
     }
 
-    public static boolean isMorningShift(ShiftDateTime datetime) {
-        // Shifts with even ordinals are morning shifts.
-        return datetime.ordinal() % 2 == 0;
+    public static ShiftDateTime toShiftDateTime(Calendar date, boolean isEvening) {
+        return ShiftDateTime.values()[((date.get(Calendar.DAY_OF_WEEK)) - 1) * 2 + (isEvening ? 1 : 0)];
     }
 
     private String name;
@@ -45,7 +44,7 @@ public class Employee {
     private WorkingConditions conditions;
     private Set<ShiftDateTime> availableShifts;
     public enum Role{
-        Logisitcs,
+        Logistics,
         HumanResources,
         Stocker,
         Cashier,
@@ -55,13 +54,13 @@ public class Employee {
     private Role role;
 
     public Employee(String name, String id, String bank, int bankID, int bankBranch,
-                    Calendar employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Role role){
+                    Calendar employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Role role, Set<ShiftDateTime> availableShifts){
         this.name = name;
         this.id = id;
         account = new BankAccount(bank, bankID, bankBranch);
         conditions = new WorkingConditions(employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed);
         this.role = role;
-        availableShifts = new HashSet<>();
+        this.availableShifts = availableShifts;
     }
 
     public String getId() { return id; }

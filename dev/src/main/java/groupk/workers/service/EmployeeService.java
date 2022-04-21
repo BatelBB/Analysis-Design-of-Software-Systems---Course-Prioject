@@ -25,7 +25,8 @@ public class EmployeeService {
                 toCreate.salaryPerHour,
                 toCreate.sickDaysUsed,
                 toCreate.vacationDaysUsed,
-                toCreate.role);
+                toCreate.role,
+                toCreate.shiftPreferences);
     }
 
     public Shift createShift(String subjectID, Calendar date, Shift.Type type,

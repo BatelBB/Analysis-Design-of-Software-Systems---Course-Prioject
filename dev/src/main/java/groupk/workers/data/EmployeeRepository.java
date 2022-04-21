@@ -18,11 +18,11 @@ public class EmployeeRepository {
     }
 
     public Employee addEmployee(String name, String id, String bank, int bankID, int bankBranch,
-                                Calendar employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Employee.Role role){
+                                Calendar employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Employee.Role role, Set<Employee.ShiftDateTime> shiftPreferences){
         if (employees.containsKey(id)) {
             throw new IllegalArgumentException("Employee ID must be unique.");
         }
-        Employee created = new Employee(name, id, bank, bankID, bankBranch, employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed, role);
+        Employee created = new Employee(name, id, bank, bankID, bankBranch, employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed, role, shiftPreferences);
         employees.put(id, created);
         return created;
     }
