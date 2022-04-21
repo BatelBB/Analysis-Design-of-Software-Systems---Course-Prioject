@@ -27,6 +27,10 @@ public class Employee {
 
         public Day day;
         public Shift.Type type;
+        public WeeklyShift(Day day, Shift.Type type){
+            this.day = day;
+            this.type = type;
+        }
     }
 
     public String id;

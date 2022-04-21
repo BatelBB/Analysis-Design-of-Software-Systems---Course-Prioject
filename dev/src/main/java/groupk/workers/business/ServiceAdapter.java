@@ -3,6 +3,7 @@ package groupk.workers.business;
 import groupk.workers.service.dto.Employee;
 import groupk.workers.service.dto.Shift;
 
+import javax.security.auth.Subject;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,12 +35,34 @@ public class ServiceAdapter {
         return dataEmployeeToService(created);
     }
 
+    public Shift addShift(String subjectID, Date date, Shift.Type type,
+                          LinkedList<Employee> staff,
+                          HashMap<Employee.Role, Integer> requiredStaff){
+        if (employees.isFromHumanResources(subjectID)) {
+            HashMap<groupk.workers.data.Employee.Role, Integer> requiredStaffData = new HashMap<>();
+            requiredStaff.forEach((k, v) -> requiredStaffData.put(serviceRoleToData(k), v));
+            LinkedList<groupk.workers.data.Employee> staffData = new LinkedList<>();
+            for(Employee e: staff){
+                staffData.add(serviceEmployeeToData(e));
+            }
+            groupk.workers.data.Shift created = new groupk.workers.data.Shift(date, ServiceTypeToData(type), staffData , requiredStaffData);
+            return dataShiftToService(shifts.addShifts(created));
+        } else {
+            throw new IllegalArgumentException("Subject must be authorized to read employees.");
+        }
+    }
+
     public Employee readEmployee(String subjectID, String employeeID) {
         if (subjectID.equals(employeeID) || employees.isFromHumanResources(subjectID)) {
             return dataEmployeeToService(employees.read(employeeID));
         } else {
             throw new IllegalArgumentException("Subject must be authorized to read employees.");
         }
+    }
+
+    public Shift readShift(String subjectID, Date date ,Shift.Type type) {
+        employees.getEmployee(subjectID); //checks if employee exist
+        return dataShiftToService(shifts.getShift(date, ServiceTypeToData(type)));
     }
 
     public Employee deleteEmployee(String subjectID, String employeeID) {
@@ -126,6 +149,23 @@ public class ServiceAdapter {
             throw new IllegalArgumentException("Employee can delete only to himself shifts preferences");
     }
 
+    public List<Shift> listShifts(String subjectID) {
+        if(employees.isFromHumanResources(subjectID)) {
+            List<groupk.workers.data.Shift> dataShifts = shifts.listShifts();
+            List<Shift> dtoShifts = new LinkedList<>();
+            for (groupk.workers.data.Shift s : dataShifts)
+                dtoShifts.add(dataShiftToService(s));
+            return dtoShifts;
+        }
+        throw new IllegalArgumentException("Subject must be authorized to get history of shifts.");
+    }
+
+
+    //private helper function
+
+
+
+
     private static groupk.workers.data.Employee.Role serviceRoleToData(Employee.Role serviceRole) {
         return groupk.workers.data.Employee.Role.values()[serviceRole.ordinal()];
     }
@@ -138,9 +178,7 @@ public class ServiceAdapter {
             (Set<groupk.workers.data.Employee.WeeklyShift> dataShifts) {
         Set<Employee.WeeklyShift> preferredShifts = new HashSet<>();
         for (groupk.workers.data.Employee.WeeklyShift shift : dataShifts) {
-            Employee.WeeklyShift serviceShift = new Employee.WeeklyShift();
-            serviceShift.day = Employee.WeeklyShift.Day.values()[shift.day.ordinal()];
-            serviceShift.type = Shift.Type.values()[shift.type.ordinal()];
+            Employee.WeeklyShift serviceShift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.values()[shift.day.ordinal()], Shift.Type.values()[shift.type.ordinal()]);
             preferredShifts.add(serviceShift);
         }
         return preferredShifts;

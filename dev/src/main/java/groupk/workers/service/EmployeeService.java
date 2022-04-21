@@ -4,9 +4,7 @@ import groupk.workers.business.ServiceAdapter;
 import groupk.workers.service.dto.Employee;
 import groupk.workers.service.dto.Shift;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class EmployeeService {
     private ServiceAdapter businessController;
@@ -29,9 +27,21 @@ public class EmployeeService {
                 toCreate.vacationDaysUsed,
                 toCreate.role);
     }
+
+    public Shift createShift(String subjectID, Date date, Shift.Type type,
+                          LinkedList<Employee> staff,
+                          HashMap<Employee.Role, Integer> requiredStaff){
+        return businessController.addShift(subjectID, date, type, staff ,requiredStaff);
+    }
+
     public Employee readEmployee(String subjectID, String employeeID) {
         return businessController.readEmployee(subjectID, employeeID);
     }
+
+    public Shift readShift(String subjectID, Date date ,Shift.Type type) {
+        return businessController.readShift(subjectID, date ,type);
+    }
+
     public Employee deleteEmployee(String subjectID, String employeeID) {
         return businessController.deleteEmployee(subjectID, employeeID);
     }
@@ -44,7 +54,7 @@ public class EmployeeService {
     }
 
     public Employee setEmployeeShiftsPreference(String subjectID, String employeeID, Set<Employee.WeeklyShift> shiftPreferences) {
-        return businessController.setEmployeeShiftPreference(subjectID, employeeID, shiftPreferences);
+        return businessController.setEmployeeShiftsPreference(subjectID, employeeID, shiftPreferences);
     }
 
     public Employee deleteEmployeeShiftPreference(String subjectID, String employeeID, Employee.WeeklyShift shift){
@@ -65,6 +75,6 @@ public class EmployeeService {
         throw new UnsupportedOperationException();
     }
     public List<Shift> listShifts(String subjectID) {
-        throw new UnsupportedOperationException();
+        return businessController.listShifts(subjectID);
     }
 }

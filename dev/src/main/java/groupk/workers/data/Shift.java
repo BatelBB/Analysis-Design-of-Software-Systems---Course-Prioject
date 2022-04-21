@@ -15,7 +15,7 @@ public class Shift {
         this.requiredStaff = requiredStaff;
     }
 
-    public Shift(Type type, Date date, LinkedList<Employee> staff, HashMap<Employee.Role, Integer> requiredStaff){
+    public Shift(Date date, Type type, LinkedList<Employee> staff, HashMap<Employee.Role, Integer> requiredStaff){
         this.type = type;
         this.date = date;
         this.staff = staff;

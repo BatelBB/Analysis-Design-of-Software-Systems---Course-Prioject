@@ -100,7 +100,10 @@ public class Employee {
     }
 
     public Employee deleteEmployeeShiftPreference(WeeklyShift shift){
-        availableShifts.remove(shift);
+        for(WeeklyShift s: availableShifts){
+            if(s.type.equals(shift.type) && s.day.equals(shift.day))
+                availableShifts.remove(s);
+        }
         return this;
     }
 

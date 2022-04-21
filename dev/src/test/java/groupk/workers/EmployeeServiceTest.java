@@ -4,13 +4,51 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import groupk.workers.service.EmployeeService;
 import groupk.workers.service.dto.Employee;
+import groupk.workers.service.dto.Shift;
 import org.junit.jupiter.api.Test;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class EmployeeServiceTest {
+    @Test
+    public void testCreateShift()
+    {
+        EmployeeService service = new EmployeeService();
+        Employee HR = service.createEmployee(new Employee(
+                "111111110",
+                "Foo",
+                Employee.Role.HumanResources,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        Shift shift = service.createShift(HR.id, new Date(),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        assertEquals(service.listShifts(HR.id).size(), 1);
+    }
+
+    @Test
+    public void testCreateShiftNotUnauthorized()
+    {
+        EmployeeService service = new EmployeeService();
+        Employee NotHR = service.createEmployee(new Employee(
+                "111111110",
+                "Foo",
+                Employee.Role.Stocker,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        assertThrows(Exception.class, () -> {
+            service.createShift(NotHR.id, new Date(),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        });
+    }
+
     @Test
     public void testCreateEmployee()
     {
@@ -319,5 +357,164 @@ public class EmployeeServiceTest {
         assertThrows(Exception.class, () -> {
             service.updateEmployee("222222222", created);
         });
+    }
+
+    @Test
+    public void testAddEmployeeShiftPreference(){
+        EmployeeService service = new EmployeeService();
+        Employee created = service.createEmployee(new Employee(
+                "111111111",
+                "Foo",
+                Employee.Role.Stocker,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        Employee.WeeklyShift shift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Friday, Shift.Type.Morning);
+        service.addEmployeeShiftPreference(created.id, created.id, shift);
+        Employee.WeeklyShift createdShift = service.readEmployee(created.id, created.id).shiftPreferences.iterator().next();
+        assertEquals(Employee.WeeklyShift.Day.Friday, createdShift.day);
+        assertEquals(Shift.Type.Morning, createdShift.type);
+    }
+
+    @Test
+    public void testAddEmployeeShiftPreferenceFromAnotherId(){
+        EmployeeService service = new EmployeeService();
+        Employee created = service.createEmployee(new Employee(
+                "111111111",
+                "Foo",
+                Employee.Role.Stocker,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        Employee created2 = service.createEmployee(new Employee(
+                "111111110",
+                "Foo",
+                Employee.Role.Stocker,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        Employee.WeeklyShift shift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Friday, Shift.Type.Morning);
+        assertThrows(Exception.class, () -> {
+            service.addEmployeeShiftPreference(created2.id, created.id, shift);
+        });
+    }
+
+    @Test
+    public void testDeleteEmployeeShiftPreference(){
+        EmployeeService service = new EmployeeService();
+        Employee created = service.createEmployee(new Employee(
+                "111111111",
+                "Foo",
+                Employee.Role.Stocker,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        Employee.WeeklyShift shift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Friday, Shift.Type.Morning);
+        service.addEmployeeShiftPreference(created.id, created.id, shift);
+        service.deleteEmployeeShiftPreference(created.id, created.id, shift);
+        assertEquals(0, service.readEmployee(created.id, created.id).shiftPreferences.size());
+    }
+
+    @Test
+    public void testSetEmployeeShiftsPreference(){
+        EmployeeService service = new EmployeeService();
+        Employee created = service.createEmployee(new Employee(
+                "111111111",
+                "Foo",
+                Employee.Role.Stocker,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        Set<Employee.WeeklyShift> set = new HashSet<Employee.WeeklyShift>();
+        Employee.WeeklyShift shift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Friday, Shift.Type.Morning);
+        Employee.WeeklyShift shift2 = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Monday, Shift.Type.Evening);
+        set.add(shift);
+        set.add(shift2);
+        service.setEmployeeShiftsPreference(created.id, created.id, set);
+        assertEquals(2, service.readEmployee(created.id, created.id).shiftPreferences.size());
+    }
+
+    @Test
+    public void testAddEmployeeToShift(){
+        EmployeeService service = new EmployeeService();
+        Employee created = service.createEmployee(new Employee(
+                "111111111",
+                "Foo",
+                Employee.Role.Stocker,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        Employee HR = service.createEmployee(new Employee(
+                "111111110",
+                "Foo",
+                Employee.Role.HumanResources,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+
+        Shift shift = service.createShift(HR.id, new Date(),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
+        assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
+    }
+
+    @Test
+    public void testRemoveEmployeeToShift(){
+        EmployeeService service = new EmployeeService();
+        Employee created = service.createEmployee(new Employee(
+                "111111111",
+                "Foo",
+                Employee.Role.Stocker,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+        Employee HR = service.createEmployee(new Employee(
+                "111111110",
+                "Foo",
+                Employee.Role.HumanResources,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new Date()
+        ));
+
+        Shift shift = service.createShift(HR.id, new Date(),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
+        assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
+        service.removeEmployeeFromShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
+        assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 0);
     }
 }
