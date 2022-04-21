@@ -3,10 +3,7 @@ package groupk.workers.business;
 import groupk.workers.data.Shift;
 import groupk.workers.data.ShiftRepository;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class ShiftController {
     private ShiftRepository repo;
@@ -22,7 +19,7 @@ public class ShiftController {
             throw new IllegalArgumentException("Shift already exists.");
     }
 
-    public Shift getShift(Date date, Shift.Type type){
+    public Shift getShift(Calendar date, Shift.Type type){
         LinkedList<Shift> shifts = repo.getShifts();
         for (Shift s: shifts) {
             if(s.getDate().equals(date) && s.getType().equals(type))

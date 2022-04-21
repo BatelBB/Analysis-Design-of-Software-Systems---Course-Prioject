@@ -1,13 +1,14 @@
 package groupk.workers.data;
+import java.util.Calendar;
 import java.util.Date;
 
 public class WorkingConditions {
-    private Date employmentStart;
+    private Calendar employmentStart;
     private int salaryPerHour;
     private int sickDaysUsed;
     private int vacationDaysUsed;
 
-    public void setEmploymentStart(Date employmentStart) {
+    public void setEmploymentStart(Calendar employmentStart) {
         this.employmentStart = employmentStart;
     }
 
@@ -23,14 +24,14 @@ public class WorkingConditions {
         this.vacationDaysUsed = vacationDaysUsed;
     }
 
-    public WorkingConditions(Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed){
+    public WorkingConditions(Calendar employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed){
         this.employmentStart = employmentStart;
         this.salaryPerHour = salaryPerHour;
         this.sickDaysUsed = sickDaysUsed;
         this. vacationDaysUsed = vacationDaysUsed;
 
     }
-    public Date getEmploymentStart() {
+    public Calendar getEmploymentStart() {
         return employmentStart;
     }
     public int getSalaryPerHour() {

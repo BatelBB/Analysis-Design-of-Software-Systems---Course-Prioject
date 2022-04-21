@@ -28,7 +28,7 @@ public class EmployeeService {
                 toCreate.role);
     }
 
-    public Shift createShift(String subjectID, Date date, Shift.Type type,
+    public Shift createShift(String subjectID, Calendar date, Shift.Type type,
                           LinkedList<Employee> staff,
                           HashMap<Employee.Role, Integer> requiredStaff){
         return businessController.addShift(subjectID, date, type, staff ,requiredStaff);
@@ -38,7 +38,7 @@ public class EmployeeService {
         return businessController.readEmployee(subjectID, employeeID);
     }
 
-    public Shift readShift(String subjectID, Date date ,Shift.Type type) {
+    public Shift readShift(String subjectID, Calendar date ,Shift.Type type) {
         return businessController.readShift(subjectID, date ,type);
     }
 
@@ -65,13 +65,13 @@ public class EmployeeService {
         return businessController.listEmployees(subjectID);
     }
 
-    public Shift addEmployeeToShift(String subjectID, Date date, Shift.Type type, String employeeID) {
+    public Shift addEmployeeToShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
         return businessController.addEmployeeToShift(subjectID, date , type , employeeID);
     }
-    public Shift removeEmployeeFromShift(String subjectID, Date date, Shift.Type type, String employeeID) {
+    public Shift removeEmployeeFromShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
         return businessController.removeEmployeeFromShift(subjectID, date , type , employeeID);
     }
-    public Shift setRequiredRoleInShift(String subjectID, Date date, Shift.Type type, Employee.Role role, int count) {
+    public Shift setRequiredRoleInShift(String subjectID, Calendar date, Shift.Type type, Employee.Role role, int count) {
         throw new UnsupportedOperationException();
     }
     public List<Shift> listShifts(String subjectID) {

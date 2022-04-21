@@ -1,5 +1,6 @@
 package groupk.workers.service.dto;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,10 +13,10 @@ public class Shift {
 
     HashMap<Employee.Role, Integer> requiredStaff;
     List<Employee> staff;
-    Date date;
+    Calendar date;
     Type type;
 
-    public Shift(Date date, Type type, List<Employee> staff, HashMap<Employee.Role, Integer> requiredStaff){
+    public Shift(Calendar date, Type type, List<Employee> staff, HashMap<Employee.Role, Integer> requiredStaff){
         this.date = date;
         this.type = type;
         this.staff = staff;
@@ -25,7 +26,7 @@ public class Shift {
         return type;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 

@@ -23,9 +23,9 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
-        Shift shift = service.createShift(HR.id, new Date(),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
         assertEquals(service.listShifts(HR.id).size(), 1);
     }
 
@@ -42,10 +42,10 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         assertThrows(Exception.class, () -> {
-            service.createShift(NotHR.id, new Date(),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+            service.createShift(NotHR.id, new GregorianCalendar(),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
         });
     }
 
@@ -62,7 +62,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         List<Employee> list = service.listEmployees("111111111");
         assertEquals(1, list.size());
@@ -82,7 +82,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         assertThrows(Exception.class, () -> {
             service.createEmployee(new Employee(
@@ -94,7 +94,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
             ));
         });
         List<Employee> list = service.listEmployees("111111111");
@@ -113,7 +113,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         assertThrows(Exception.class, () -> {
             service.listEmployees("111111111");
@@ -132,7 +132,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         service.createEmployee(new Employee(
                 "222222222",
@@ -143,7 +143,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         service.deleteEmployee("111111111", "111111111");
         List<Employee> list = service.listEmployees("222222222");
@@ -162,7 +162,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         service.createEmployee(new Employee(
                 "222222222",
@@ -173,7 +173,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         service.deleteEmployee("222222222", "111111111");
         List<Employee> list = service.listEmployees("222222222");
@@ -192,7 +192,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         assertThrows(Exception.class, () -> {
             service.deleteEmployee("111111111", "999999999");
@@ -211,7 +211,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         Employee self = service.readEmployee("111111111", "111111111");
         assertEquals("111111111", self.id);
@@ -230,7 +230,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         service.createEmployee(new Employee(
                 "222222222",
@@ -241,7 +241,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         Employee self = service.readEmployee("222222222", "111111111");
         assertEquals("111111111", self.id);
@@ -260,7 +260,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         service.createEmployee(new Employee(
                 "222222222",
@@ -271,7 +271,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         assertThrows(Exception.class, () -> {
             service.readEmployee("222222222", "111111111");
@@ -290,7 +290,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         created.name = "Changed";
         service.updateEmployee(created.id, created);
@@ -310,7 +310,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         service.createEmployee(new Employee(
                 "222222222",
@@ -321,7 +321,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         created.name = "Changed";
         service.updateEmployee("222222222", created);
@@ -341,7 +341,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         service.createEmployee(new Employee(
                 "222222222",
@@ -352,7 +352,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         assertThrows(Exception.class, () -> {
             service.updateEmployee("222222222", created);
@@ -371,7 +371,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         Employee.WeeklyShift shift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Friday, Shift.Type.Morning);
         service.addEmployeeShiftPreference(created.id, created.id, shift);
@@ -392,7 +392,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         Employee created2 = service.createEmployee(new Employee(
                 "111111110",
@@ -403,7 +403,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         Employee.WeeklyShift shift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Friday, Shift.Type.Morning);
         assertThrows(Exception.class, () -> {
@@ -423,7 +423,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         Employee.WeeklyShift shift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Friday, Shift.Type.Morning);
         service.addEmployeeShiftPreference(created.id, created.id, shift);
@@ -443,7 +443,7 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
         Set<Employee.WeeklyShift> set = new HashSet<Employee.WeeklyShift>();
         Employee.WeeklyShift shift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Friday, Shift.Type.Morning);
@@ -456,6 +456,8 @@ public class EmployeeServiceTest {
 
     @Test
     public void testAddEmployeeToShift(){
+        Set<Employee.WeeklyShift> availableShifts = new HashSet<Employee.WeeklyShift>();
+        availableShifts.add(new Employee.WeeklyShift(Employee.WeeklyShift.Day.Thursday, Shift.Type.Evening));
         EmployeeService service = new EmployeeService();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
@@ -465,8 +467,8 @@ public class EmployeeServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
-                new Date()
+                availableShifts,
+                new GregorianCalendar()
         ));
         Employee HR = service.createEmployee(new Employee(
                 "111111110",
@@ -477,16 +479,19 @@ public class EmployeeServiceTest {
                 30,
                 0, 0,
                 new HashSet<>(),
-                new Date()
+                new GregorianCalendar()
         ));
 
-        Shift shift = service.createShift(HR.id, new Date(),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.MAY, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
         service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
         assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
     }
 
     @Test
     public void testRemoveEmployeeToShift(){
+        Set<Employee.WeeklyShift> availableShifts = new HashSet<Employee.WeeklyShift>();
+        availableShifts.add(new Employee.WeeklyShift(Employee.WeeklyShift.Day.Thursday, Shift.Type.Evening));
+
         EmployeeService service = new EmployeeService();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
@@ -496,8 +501,8 @@ public class EmployeeServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
-                new Date()
+                availableShifts,
+                new GregorianCalendar()
         ));
         Employee HR = service.createEmployee(new Employee(
                 "111111110",
@@ -507,11 +512,11 @@ public class EmployeeServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
-                new Date()
+                new HashSet<Employee.WeeklyShift>(),
+                new GregorianCalendar()
         ));
 
-        Shift shift = service.createShift(HR.id, new Date(),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.MAY, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
         service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
         assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
         service.removeEmployeeFromShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);

@@ -1,10 +1,7 @@
 package groupk.workers.data;
 
 import javax.management.relation.RoleInfoNotFoundException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Employee {
     public static class WeeklyShift {
@@ -66,7 +63,7 @@ public class Employee {
     private Role role;
 
     public Employee(String name, String id, String bank, int bankID, int bankBranch,
-                    Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Role role){
+                    Calendar employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Role role){
         this.name = name;
         this.id = id;
         account = new BankAccount(bank, bankID, bankBranch);

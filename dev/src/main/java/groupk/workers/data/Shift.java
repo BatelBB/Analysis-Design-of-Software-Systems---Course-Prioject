@@ -4,18 +4,18 @@ import java.util.*;
 public class Shift {
     public enum Type {morning, evening};
     private Type type;
-    private Date date;
+    private Calendar date;
     private LinkedList<Employee> staff;
     private HashMap<Employee.Role, Integer> requiredStaff;
 
-    public Shift(Type type, Date date, HashMap<Employee.Role, Integer> requiredStaff){
+    public Shift(Type type, Calendar date, HashMap<Employee.Role, Integer> requiredStaff){
         this.type = type;
         this.date = date;
         staff = new LinkedList<>();
         this.requiredStaff = requiredStaff;
     }
 
-    public Shift(Date date, Type type, LinkedList<Employee> staff, HashMap<Employee.Role, Integer> requiredStaff){
+    public Shift(Calendar date, Type type, LinkedList<Employee> staff, HashMap<Employee.Role, Integer> requiredStaff){
         this.type = type;
         this.date = date;
         this.staff = staff;
@@ -25,7 +25,7 @@ public class Shift {
     public Type getType() {
         return type;
     }
-    public Date getDate() {return date; }
+    public Calendar getDate() {return date; }
     public LinkedList<Employee> getStaff() {return staff; }
 
     public HashMap<Employee.Role, Integer> getRequiredStaff() {

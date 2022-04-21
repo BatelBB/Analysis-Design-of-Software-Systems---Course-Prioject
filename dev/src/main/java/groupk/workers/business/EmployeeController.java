@@ -3,6 +3,7 @@ package groupk.workers.business;
 import groupk.workers.data.EmployeeRepository;
 import groupk.workers.data.Employee;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,7 @@ public class EmployeeController {
     }
 
     public Employee create(String name, String id, String bank, int bankID, int bankBranch,
-                            Date employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Employee.Role role){
+                           Calendar employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Employee.Role role){
         return repo.addEmployee(name, id, bank, bankID, bankBranch, employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed, role);
     }
 
@@ -29,7 +30,7 @@ public class EmployeeController {
             String bank,
             int bankID,
             int bankBranch,
-            Date employmentStart,
+            Calendar employmentStart,
             int salaryPerHour,
             int sickDaysUsed,
             int vacationDaysUsed,

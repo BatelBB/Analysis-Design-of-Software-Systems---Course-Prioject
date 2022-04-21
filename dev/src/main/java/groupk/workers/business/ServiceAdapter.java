@@ -22,7 +22,7 @@ public class ServiceAdapter {
             String bank,
             int bankID,
             int bankBranch,
-            Date employmentStart,
+            Calendar employmentStart,
             int salaryPerHour,
             int sickDaysUsed,
             int vacationDaysUsed,
@@ -35,7 +35,7 @@ public class ServiceAdapter {
         return dataEmployeeToService(created);
     }
 
-    public Shift addShift(String subjectID, Date date, Shift.Type type,
+    public Shift addShift(String subjectID, Calendar date, Shift.Type type,
                           LinkedList<Employee> staff,
                           HashMap<Employee.Role, Integer> requiredStaff){
         if (employees.isFromHumanResources(subjectID)) {
@@ -60,7 +60,7 @@ public class ServiceAdapter {
         }
     }
 
-    public Shift readShift(String subjectID, Date date ,Shift.Type type) {
+    public Shift readShift(String subjectID, Calendar date ,Shift.Type type) {
         employees.getEmployee(subjectID); //checks if employee exist
         return dataShiftToService(shifts.getShift(date, ServiceTypeToData(type)));
     }
@@ -83,7 +83,7 @@ public class ServiceAdapter {
         }
     }
 
-    public Shift addEmployeeToShift(String subjectID, Date date, Shift.Type type, String employeeID) {
+    public Shift addEmployeeToShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
         if (employees.isFromHumanResources(subjectID)) {
             groupk.workers.data.Shift shift = shifts.getShift(date, ServiceTypeToData(type));
             if (shift.isEmployeeWorking(employeeID))
@@ -95,7 +95,7 @@ public class ServiceAdapter {
         }
     }
 
-    public Shift removeEmployeeFromShift(String subjectID, Date date, Shift.Type type, String employeeID) {
+    public Shift removeEmployeeFromShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
         if (employees.isFromHumanResources(subjectID)) {
             groupk.workers.data.Shift shift = shifts.getShift(date, ServiceTypeToData(type));
             if (!shift.isEmployeeWorking(employeeID))
