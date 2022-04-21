@@ -24,6 +24,11 @@ class ServiceTest {
     }
 
     @org.junit.jupiter.api.Test
+    void editItem() {
+        //enter incorrect supplier ppn or incorrect item catalog number
+        //supposed to ask the user to try again
+    }
+    @org.junit.jupiter.api.Test
     void deleteItem() {
     }
 
