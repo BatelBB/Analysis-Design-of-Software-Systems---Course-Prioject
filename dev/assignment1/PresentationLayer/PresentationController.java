@@ -6,12 +6,16 @@ import assignment1.BusinessLayer.Service.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class PresentationController {
     private static Menu menu = new Menu();
     private static UserInput input = UserInput.getInstance();
     private static UserOutput output = UserOutput.getInstance();
     private static Service service = new Service();
+
+    static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args){
         output.println("Welcome to the supplier module! What would you like to do?");
@@ -40,7 +44,7 @@ public class PresentationController {
                         }
                         case(2): {
                             //Edit existing supplier card
-                            int ppn = input.nextInt("Enter the ppn number");
+                            int ppn = checkPPN("Enter the ppn number");
                             output.println("What do you want to edit?");
                             int edit = input.nextInt(menu.getSupplierEditSubmenu());
                             try {
@@ -88,7 +92,7 @@ public class PresentationController {
                         }
                         case(3):{
                             //Delete existing supplier
-                            int ppn = input.nextInt("Enter the ppn number");
+                            int ppn = checkPPN("Enter the ppn number");
                             service.deleteSupplier(ppn);
                             break;
                         }
@@ -166,8 +170,8 @@ public class PresentationController {
                             break;
                         }
                     }
+                    break;
                 }
-                break;
                 case(3):{
                     userInput = input.nextInt(menu.getOrderSubmenu());
                     switch (userInput){
@@ -197,8 +201,8 @@ public class PresentationController {
                             break;
                         }
                     }
+                    break;
                 }
-                break;
                 case(4):{
                     userInput = input.nextInt(menu.getQuantityAgreementSubmenu());
                     switch (userInput){
@@ -233,11 +237,28 @@ public class PresentationController {
                             break;
                         }
                     }
+                    break;
                 }
-                break;
             }
         }
     }
+
+    private static int checkPPN(String message) {
+        boolean retry = true;
+        int nextInt = 0;
+        while (retry) {
+            try {
+                UserOutput.getInstance().println(message);
+                nextInt = Integer.parseInt(scanner.nextLine());
+                service.getSupplier(nextInt);
+                retry = false;
+            } catch (Exception e) {
+                UserOutput.getInstance().println("There isn't supplier with this ppn number, please try again.");
+            }
+        }
+        return nextInt;
+    }
+
 
     private static DayOfWeek chooseDay() {
         return DayOfWeek.valueOf(input.nextString("Enter day of week:").toUpperCase());
