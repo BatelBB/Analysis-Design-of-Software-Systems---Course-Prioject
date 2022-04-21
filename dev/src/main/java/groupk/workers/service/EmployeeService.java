@@ -73,7 +73,10 @@ public class EmployeeService {
         return businessController.removeEmployeeFromShift(subjectID, date , type , employeeID);
     }
     public Shift setRequiredRoleInShift(String subjectID, Calendar date, Shift.Type type, Employee.Role role, int count) {
-        throw new UnsupportedOperationException();
+        return businessController.setRequiredRoleInShift(subjectID, date, type, role, count);
+    }
+    public Shift setRequiredStaffInShift(String subjectID, Calendar date, Shift.Type type, HashMap<Employee.Role, Integer> staff) {
+        return businessController.setRequiredStaffInShift(subjectID, date, type, staff);
     }
     public List<Shift> listShifts(String subjectID) {
         return businessController.listShifts(subjectID);

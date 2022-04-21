@@ -1,5 +1,6 @@
 package groupk.workers.business;
 
+import groupk.workers.data.Employee;
 import groupk.workers.data.Shift;
 import groupk.workers.data.ShiftRepository;
 
@@ -13,8 +14,9 @@ public class ShiftController {
     }
 
     public Shift addShifts(groupk.workers.data.Shift shift){
-        if(!ifShiftExist(shift))
+        if(!ifShiftExist(shift)) {
             return repo.addShift(shift);
+        }
         else
             throw new IllegalArgumentException("Shift already exists.");
     }
@@ -41,6 +43,12 @@ public class ShiftController {
         return new ArrayList<>(repo.getShifts());
     }
 
+    public Shift setRequiredRoleInShift(Calendar date, Shift.Type type, Employee.Role role, int count) {
+        return getShift(date, type).setRequiredRoleInShift(role, count);
+    }
 
+    public Shift setRequiredStaffInShift(Calendar date, Shift.Type type, HashMap<Employee.Role, Integer> requiredStaff) {
+        return getShift(date, type).setRequiredStaff(requiredStaff);
+    }
 
 }

@@ -42,13 +42,12 @@ public class ServiceAdapter {
                           LinkedList<Employee> staff,
                           HashMap<Employee.Role, Integer> requiredStaff){
         if (employees.isFromHumanResources(subjectID)) {
-            HashMap<groupk.workers.data.Employee.Role, Integer> requiredStaffData = new HashMap<>();
-            requiredStaff.forEach((k, v) -> requiredStaffData.put(serviceRoleToData(k), v));
             LinkedList<groupk.workers.data.Employee> staffData = new LinkedList<>();
             for(Employee e: staff){
                 staffData.add(serviceEmployeeToData(e));
             }
-            groupk.workers.data.Shift created = new groupk.workers.data.Shift(date, ServiceTypeToData(type), staffData , requiredStaffData);
+            groupk.workers.data.Shift created = new groupk.workers.data.Shift(date, serviceTypeToData(type), staffData ,
+                    serviceRequiredRoleInShiftToData(requiredStaff));
             return dataShiftToService(shifts.addShifts(created));
         } else {
             throw new IllegalArgumentException("Subject must be authorized to add shift.");
@@ -65,7 +64,7 @@ public class ServiceAdapter {
 
     public Shift readShift(String subjectID, Calendar date ,Shift.Type type) {
         employees.getEmployee(subjectID); //checks if employee exist
-        return dataShiftToService(shifts.getShift(date, ServiceTypeToData(type)));
+        return dataShiftToService(shifts.getShift(date, serviceTypeToData(type)));
     }
 
     public Employee deleteEmployee(String subjectID, String employeeID) {
@@ -88,7 +87,7 @@ public class ServiceAdapter {
 
     public Shift addEmployeeToShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
         if (employees.isFromHumanResources(subjectID)) {
-            groupk.workers.data.Shift shift = shifts.getShift(date, ServiceTypeToData(type));
+            groupk.workers.data.Shift shift = shifts.getShift(date, serviceTypeToData(type));
             if (shift.isEmployeeWorking(employeeID)) {
                 throw new IllegalArgumentException("Employee already working in this shift.");
             }
@@ -96,7 +95,11 @@ public class ServiceAdapter {
             if (!added.getAvailableShifts().contains(groupk.workers.data.Employee.toShiftDateTime(date, type == Shift.Type.Evening))) {
                 throw new IllegalArgumentException("Employee must be able to work at day of week and time.");
             }
-            return dataShiftToService(shift.addEmployee(employees.getEmployee(employeeID)));
+            if(shift.getRequiredStaff().get(added.getRole()) >
+                    (shift.getStaff().stream().filter(p -> p.getRole().equals(added.getRole())).collect(Collectors.toList())).size())
+                return dataShiftToService(shift.addEmployee(employees.getEmployee(employeeID)));
+            else
+                throw new IllegalArgumentException("There is enough employees with this role.");
         } else {
             throw new IllegalArgumentException("Subject must be authorized to add employees to shifts.");
         }
@@ -104,7 +107,7 @@ public class ServiceAdapter {
 
     public Shift removeEmployeeFromShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
         if (employees.isFromHumanResources(subjectID)) {
-            groupk.workers.data.Shift shift = shifts.getShift(date, ServiceTypeToData(type));
+            groupk.workers.data.Shift shift = shifts.getShift(date, serviceTypeToData(type));
             if (!shift.isEmployeeWorking(employeeID))
                 throw new IllegalArgumentException("Employee is not working in this shift.");
             else
@@ -137,7 +140,7 @@ public class ServiceAdapter {
 
     public Employee addEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift) {
         if(subjectID.equals(employeeID))
-            return dataEmployeeToService(employees.addEmployeeShiftPreference(employeeID, ServiceWeeklyShiftToData(shift)));
+            return dataEmployeeToService(employees.addEmployeeShiftPreference(employeeID, serviceWeeklyShiftToData(shift)));
         else
             throw new IllegalArgumentException("Employee can add only to himself shifts preferences.");
     }
@@ -151,7 +154,7 @@ public class ServiceAdapter {
 
     public Employee deleteEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift){
         if(subjectID.equals(employeeID))
-            return dataEmployeeToService(employees.deleteEmployeeShiftPreference(employeeID, ServiceWeeklyShiftToData(shift)));
+            return dataEmployeeToService(employees.deleteEmployeeShiftPreference(employeeID, serviceWeeklyShiftToData(shift)));
         else
             throw new IllegalArgumentException("Employee can delete only to himself shifts preferences.");
     }
@@ -167,10 +170,21 @@ public class ServiceAdapter {
         throw new IllegalArgumentException("Subject must be authorized to get history of shifts.");
     }
 
+    public Shift setRequiredRoleInShift(String subjectId, Calendar date, Shift.Type type, Employee.Role role, int count) {
+        if(employees.isFromHumanResources(subjectId))
+            return dataShiftToService(shifts.setRequiredRoleInShift(date, serviceTypeToData(type) ,serviceRoleToData(role), count));
+        else
+            throw new IllegalArgumentException("Subject must be authorized to set required roles in shifts.");
+    }
+
+    public Shift setRequiredStaffInShift(String subjectId, Calendar date, Shift.Type type, HashMap<Employee.Role, Integer> requiredStaff) {
+        if(employees.isFromHumanResources(subjectId))
+            return dataShiftToService(shifts.setRequiredStaffInShift(date, serviceTypeToData(type) ,serviceRequiredRoleInShiftToData(requiredStaff)));
+        else
+            throw new IllegalArgumentException("Subject must be authorized to set required roles in shifts.");
+    }
 
     //private helper function
-
-
 
 
     private static groupk.workers.data.Employee.Role serviceRoleToData(Employee.Role serviceRole) {
@@ -199,7 +213,7 @@ public class ServiceAdapter {
         return preferredShifts;
     }
 
-    private static groupk.workers.data.Employee.ShiftDateTime ServiceWeeklyShiftToData(Employee.ShiftDateTime dtoShift) {
+    private static groupk.workers.data.Employee.ShiftDateTime serviceWeeklyShiftToData(Employee.ShiftDateTime dtoShift) {
         return groupk.workers.data.Employee.ShiftDateTime.values()[dtoShift.ordinal()];
     }
 
@@ -227,19 +241,29 @@ public class ServiceAdapter {
         return Shift.Type.values()[dataType.ordinal()];
     }
 
-    private static groupk.workers.data.Shift.Type ServiceTypeToData(Shift.Type dataType) {
+    private static groupk.workers.data.Shift.Type serviceTypeToData(Shift.Type dataType) {
         return groupk.workers.data.Shift.Type.values()[dataType.ordinal()];
     }
 
 
     private static Shift dataShiftToService(groupk.workers.data.Shift dataShift) {
-        HashMap<Employee.Role, Integer> staffDto = new HashMap<>();
-        dataShift.getRequiredStaff().forEach((k, v) -> staffDto.put(dataRoleToService(k), v));
         return new Shift(
                 dataShift.getDate(),
                 dataTypeToService(dataShift.getType()),
                 dataShift.getStaff().stream().map(ServiceAdapter::dataEmployeeToService).collect(Collectors.toList()),
-                staffDto);
+                dataRequiredRoleInShiftToService(dataShift.getRequiredStaff()));
+    }
+
+    private static HashMap<Employee.Role, Integer> dataRequiredRoleInShiftToService(HashMap<groupk.workers.data.Employee.Role, Integer> staffData) {
+        HashMap<Employee.Role, Integer> staffDto = new HashMap<>();
+        staffData.forEach((k, v) -> staffDto.put(dataRoleToService(k), v));
+        return staffDto;
+    }
+
+    private static HashMap<groupk.workers.data.Employee.Role, Integer> serviceRequiredRoleInShiftToData(HashMap<Employee.Role, Integer> staffDto) {
+        HashMap<groupk.workers.data.Employee.Role, Integer> staffData = new HashMap<>();
+        staffDto.forEach((k, v) -> staffData.put(serviceRoleToData(k), v));
+        return staffData;
     }
 }
 

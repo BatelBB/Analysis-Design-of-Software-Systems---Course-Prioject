@@ -8,18 +8,17 @@ public class Shift {
     private LinkedList<Employee> staff;
     private HashMap<Employee.Role, Integer> requiredStaff;
 
-    public Shift(Type type, Calendar date, HashMap<Employee.Role, Integer> requiredStaff){
-        this.type = type;
-        this.date = date;
-        staff = new LinkedList<>();
-        this.requiredStaff = requiredStaff;
-    }
-
     public Shift(Calendar date, Type type, LinkedList<Employee> staff, HashMap<Employee.Role, Integer> requiredStaff){
         this.type = type;
         this.date = date;
         this.staff = staff;
-        this.requiredStaff = requiredStaff;
+        this.requiredStaff = new HashMap<>();
+        for (Employee.Role r : Employee.Role.values()) {
+            if(requiredStaff.containsKey(r))
+                this.requiredStaff.put(r, requiredStaff.get(r));
+            else
+                this.requiredStaff.put(r, 1);
+        }
     }
 
     public Type getType() {
@@ -30,6 +29,17 @@ public class Shift {
 
     public HashMap<Employee.Role, Integer> getRequiredStaff() {
         return requiredStaff;
+    }
+
+    public Shift setRequiredStaff(HashMap<Employee.Role, Integer> requiredStaff){
+        for (Employee.Role r : requiredStaff.keySet())
+            this.requiredStaff.put(r, requiredStaff.get(r));
+        return this;
+    }
+
+    public Shift setRequiredRoleInShift(Employee.Role role, int number){
+        requiredStaff.replace(role, number);
+        return this;
     }
 
     public boolean isEmployeeWorking(String id){
