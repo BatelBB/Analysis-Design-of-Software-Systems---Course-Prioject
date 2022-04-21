@@ -184,6 +184,35 @@ public class ServiceAdapter {
             throw new IllegalArgumentException("Subject must be authorized to set required roles in shifts.");
     }
 
+    public List<Employee> WhoCanWorkWithRole(String subjectId, Employee.ShiftDateTime day, Employee.Role role){
+        if(employees.isFromHumanResources(subjectId)) {
+            List<Employee> employees = listEmployees(subjectId);
+            return employees.stream().filter(p -> p.shiftPreferences.contains(day) && p.role.equals(role)).collect(Collectors.toList());
+        }
+        else
+            throw new IllegalArgumentException("Subject must be authorized to get list of employees.");
+    }
+
+    public List<Employee> WhoCanWork(String subjectId, Employee.ShiftDateTime day) {
+        if(employees.isFromHumanResources(subjectId)) {
+            List<Employee> employees = listEmployees(subjectId);
+            return employees.stream().filter(p -> p.shiftPreferences.contains(day)).collect(Collectors.toList());
+        }
+        else
+            throw new IllegalArgumentException("Subject must be authorized to get list of employees.");
+    }
+
+    public int numOfShifts(String subjectId, String employeeID){
+        if(employees.isFromHumanResources(subjectId)) {
+            employees.getEmployee(employeeID); //checks if employee exist
+            List<Shift> shifts = listShifts(subjectId);
+            return shifts.stream().filter(p -> (p.getStaff().stream()
+                    .filter(x -> x.id.equals(employeeID)).collect(Collectors.toList())).size() != 0).collect(Collectors.toList()).size();
+        }
+        else
+            throw new IllegalArgumentException("Subject must be authorized to get history of shifts.");
+    }
+
     //private helper function
 
 

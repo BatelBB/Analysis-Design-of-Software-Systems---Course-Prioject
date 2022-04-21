@@ -747,4 +747,82 @@ public class EmployeeServiceTest {
             service.removeEmployeeFromShift(HR.id, shift.getDate(), Shift.Type.Evening, "111111111");
         });
     }
+
+    @Test
+    public void testWhoCanWork() {
+        EmployeeService service = new EmployeeService();
+        Employee HR = service.createEmployee(new Employee(
+                "111111111",
+                "Foo",
+                Employee.Role.HumanResources,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        Employee created = service.createEmployee(new Employee(
+                "111111110",
+                "Foo",
+                Employee.Role.Stocker,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        Employee created2 = service.createEmployee(new Employee(
+                "111111100",
+                "Foo",
+                Employee.Role.Cashier,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference(created.id, created.id, Employee.ShiftDateTime.FridayEvening);
+        service.addEmployeeShiftPreference(created2.id, created2.id, Employee.ShiftDateTime.FridayEvening);
+        assertEquals(2, service.WhoCanWork(HR.id, Employee.ShiftDateTime.FridayEvening).size());
+        assertEquals(1, service.WhoCanWorkWithRole(HR.id, Employee.ShiftDateTime.FridayEvening, Employee.Role.Cashier).size());
+    }
+
+    @Test
+    public void testNumOfShifts(){
+        EmployeeService service = new EmployeeService();
+        Employee created = service.createEmployee(new Employee(
+                "111111111",
+                "Foo",
+                Employee.Role.Stocker,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        Employee HR = service.createEmployee(new Employee(
+                "111111110",
+                "Foo",
+                Employee.Role.HumanResources,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        Shift shift2 = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 20),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
+        service.addEmployeeShiftPreference(created.id, created.id, Employee.ShiftDateTime.ThursdayEvening);
+        service.addEmployeeShiftPreference(created.id, created.id, Employee.ShiftDateTime.WednesdayEvening);
+        service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
+        service.addEmployeeToShift(HR.id, shift2.getDate(), Shift.Type.Evening, created.id);
+        assertEquals(service.numOfShifts(HR.id, created.id), 2);
+        assertEquals(service.numOfShifts(HR.id, HR.id), 0);
+    }
 }

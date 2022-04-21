@@ -5,6 +5,7 @@ import groupk.workers.service.dto.Employee;
 import groupk.workers.service.dto.Shift;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class EmployeeService {
     private ServiceAdapter businessController;
@@ -80,5 +81,17 @@ public class EmployeeService {
     }
     public List<Shift> listShifts(String subjectID) {
         return businessController.listShifts(subjectID);
+    }
+
+    public List<Employee> WhoCanWorkWithRole(String subjectId, Employee.ShiftDateTime day, Employee.Role role){
+        return businessController.WhoCanWorkWithRole(subjectId, day, role);
+    }
+
+    public List<Employee> WhoCanWork(String subjectId, Employee.ShiftDateTime day) {
+        return businessController.WhoCanWork(subjectId, day);
+    }
+
+    public int numOfShifts(String subjectId, String employeeID){
+        return businessController.numOfShifts(subjectId, employeeID);
     }
 }
