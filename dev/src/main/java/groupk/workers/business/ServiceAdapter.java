@@ -128,21 +128,21 @@ public class ServiceAdapter {
         }
     }
 
-    public Employee addEmployeeShiftPreference(String subjectID, String employeeID, Employee.WeeklyShift shift) {
+    public Employee addEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift) {
         if(subjectID.equals(employeeID))
             return dataEmployeeToService(employees.addEmployeeShiftPreference(employeeID, ServiceWeeklyShiftToData(shift)));
         else
             throw new IllegalArgumentException("Employee can add only to himself shifts preferences.");
     }
 
-    public Employee setEmployeeShiftsPreference(String subjectID, String employeeID, Set<Employee.WeeklyShift> shiftPreferences) {
+    public Employee setEmployeeShiftsPreference(String subjectID, String employeeID, Set<Employee.ShiftDateTime> shiftPreferences) {
         if(subjectID.equals(employeeID))
             return dataEmployeeToService(employees.setEmployeeShiftsPreference(employeeID, ServicePreferredShiftsToData(shiftPreferences)));
         else
             throw new IllegalArgumentException("Employee can add only to himself shifts preferences.");
     }
 
-    public Employee deleteEmployeeShiftPreference(String subjectID, String employeeID, Employee.WeeklyShift shift){
+    public Employee deleteEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift){
         if(subjectID.equals(employeeID))
             return dataEmployeeToService(employees.deleteEmployeeShiftPreference(employeeID, ServiceWeeklyShiftToData(shift)));
         else
@@ -174,29 +174,26 @@ public class ServiceAdapter {
         return Employee.Role.values()[dataRole.ordinal()];
     }
 
-    private static Set<Employee.WeeklyShift> dataPreferredShiftsToService
-            (Set<groupk.workers.data.Employee.WeeklyShift> dataShifts) {
-        Set<Employee.WeeklyShift> preferredShifts = new HashSet<>();
-        for (groupk.workers.data.Employee.WeeklyShift shift : dataShifts) {
-            Employee.WeeklyShift serviceShift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.values()[shift.day.ordinal()], Shift.Type.values()[shift.type.ordinal()]);
-            preferredShifts.add(serviceShift);
+    private static Set<Employee.ShiftDateTime> dataPreferredShiftsToService
+            (Set<groupk.workers.data.Employee.ShiftDateTime> dataShifts) {
+        Set<Employee.ShiftDateTime> preferredShifts = new HashSet<>();
+        for (groupk.workers.data.Employee.ShiftDateTime shift : dataShifts) {
+            preferredShifts.add(Employee.ShiftDateTime.values()[shift.ordinal()]);
         }
         return preferredShifts;
     }
 
-    private static Set<groupk.workers.data.Employee.WeeklyShift> ServicePreferredShiftsToData
-            (Set<Employee.WeeklyShift> dtoShifts) {
-        Set<groupk.workers.data.Employee.WeeklyShift> preferredShifts = new HashSet<>();
-        for (Employee.WeeklyShift shift : dtoShifts) {
-            groupk.workers.data.Employee.WeeklyShift dataShift =
-                    new groupk.workers.data.Employee.WeeklyShift(shift.day.ordinal(), shift.type.ordinal());
-            preferredShifts.add(dataShift);
+    private static Set<groupk.workers.data.Employee.ShiftDateTime> ServicePreferredShiftsToData
+            (Set<Employee.ShiftDateTime> dtoShifts) {
+        Set<groupk.workers.data.Employee.ShiftDateTime> preferredShifts = new HashSet<>();
+        for (Employee.ShiftDateTime shift : dtoShifts) {
+            preferredShifts.add(groupk.workers.data.Employee.ShiftDateTime.values()[shift.ordinal()]);
         }
         return preferredShifts;
     }
 
-    private static groupk.workers.data.Employee.WeeklyShift ServiceWeeklyShiftToData(Employee.WeeklyShift dtoShift) {
-        return new groupk.workers.data.Employee.WeeklyShift(dtoShift.day.ordinal(), dtoShift.type.ordinal());
+    private static groupk.workers.data.Employee.ShiftDateTime ServiceWeeklyShiftToData(Employee.ShiftDateTime dtoShift) {
+        return groupk.workers.data.Employee.ShiftDateTime.values()[dtoShift.ordinal()];
     }
 
     private static Employee dataEmployeeToService(groupk.workers.data.Employee dataEmployee) {

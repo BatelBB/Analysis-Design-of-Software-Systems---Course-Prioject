@@ -373,11 +373,9 @@ public class EmployeeServiceTest {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
-        Employee.WeeklyShift shift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Friday, Shift.Type.Morning);
-        service.addEmployeeShiftPreference(created.id, created.id, shift);
-        Employee.WeeklyShift createdShift = service.readEmployee(created.id, created.id).shiftPreferences.iterator().next();
-        assertEquals(Employee.WeeklyShift.Day.Friday, createdShift.day);
-        assertEquals(Shift.Type.Morning, createdShift.type);
+        service.addEmployeeShiftPreference(created.id, created.id, Employee.ShiftDateTime.FridayMorning);
+        Employee.ShiftDateTime createdShift = service.readEmployee(created.id, created.id).shiftPreferences.iterator().next();
+        assertEquals(Employee.ShiftDateTime.FridayMorning, createdShift);
     }
 
     @Test
@@ -405,9 +403,8 @@ public class EmployeeServiceTest {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
-        Employee.WeeklyShift shift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Friday, Shift.Type.Morning);
         assertThrows(Exception.class, () -> {
-            service.addEmployeeShiftPreference(created2.id, created.id, shift);
+            service.addEmployeeShiftPreference(created2.id, created.id, Employee.ShiftDateTime.FridayMorning);
         });
     }
 
@@ -425,9 +422,8 @@ public class EmployeeServiceTest {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
-        Employee.WeeklyShift shift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Friday, Shift.Type.Morning);
-        service.addEmployeeShiftPreference(created.id, created.id, shift);
-        service.deleteEmployeeShiftPreference(created.id, created.id, shift);
+        service.addEmployeeShiftPreference(created.id, created.id, Employee.ShiftDateTime.FridayMorning);
+        service.deleteEmployeeShiftPreference(created.id, created.id, Employee.ShiftDateTime.FridayMorning);
         assertEquals(0, service.readEmployee(created.id, created.id).shiftPreferences.size());
     }
 
@@ -445,19 +441,17 @@ public class EmployeeServiceTest {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
-        Set<Employee.WeeklyShift> set = new HashSet<Employee.WeeklyShift>();
-        Employee.WeeklyShift shift = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Friday, Shift.Type.Morning);
-        Employee.WeeklyShift shift2 = new Employee.WeeklyShift(Employee.WeeklyShift.Day.Monday, Shift.Type.Evening);
-        set.add(shift);
-        set.add(shift2);
+        Set<Employee.ShiftDateTime> set = new HashSet<>();
+        set.add(Employee.ShiftDateTime.FridayMorning);
+        set.add(Employee.ShiftDateTime.MondayEvening);
         service.setEmployeeShiftsPreference(created.id, created.id, set);
         assertEquals(2, service.readEmployee(created.id, created.id).shiftPreferences.size());
     }
 
     @Test
     public void testAddEmployeeToShift(){
-        Set<Employee.WeeklyShift> availableShifts = new HashSet<Employee.WeeklyShift>();
-        availableShifts.add(new Employee.WeeklyShift(Employee.WeeklyShift.Day.Thursday, Shift.Type.Evening));
+        Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
+        availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
         EmployeeService service = new EmployeeService();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
@@ -530,7 +524,7 @@ public class EmployeeServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<Employee.WeeklyShift>(),
+                new HashSet<Employee.ShiftDateTime>(),
                 new GregorianCalendar()
         ));
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.MAY, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
@@ -541,8 +535,8 @@ public class EmployeeServiceTest {
 
     @Test
     public void testRemoveEmployeeToShift(){
-        Set<Employee.WeeklyShift> availableShifts = new HashSet<Employee.WeeklyShift>();
-        availableShifts.add(new Employee.WeeklyShift(Employee.WeeklyShift.Day.Thursday, Shift.Type.Evening));
+        Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
+        availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
 
         EmployeeService service = new EmployeeService();
         Employee created = service.createEmployee(new Employee(
@@ -564,7 +558,7 @@ public class EmployeeServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<Employee.WeeklyShift>(),
+                new HashSet<>(),
                 new GregorianCalendar()
         ));
 
@@ -586,7 +580,7 @@ public class EmployeeServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<Employee.WeeklyShift>(),
+                new HashSet<>(),
                 new GregorianCalendar()
         ));
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.MAY, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());

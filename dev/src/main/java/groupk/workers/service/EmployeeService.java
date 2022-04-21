@@ -49,15 +49,15 @@ public class EmployeeService {
         return businessController.updateEmployee(subjectID, changed);
     }
 
-    public Employee addEmployeeShiftPreference(String subjectID, String employeeID, Employee.WeeklyShift shift) {
+    public Employee addEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift) {
         return businessController.addEmployeeShiftPreference(subjectID, employeeID, shift);
     }
 
-    public Employee setEmployeeShiftsPreference(String subjectID, String employeeID, Set<Employee.WeeklyShift> shiftPreferences) {
+    public Employee setEmployeeShiftsPreference(String subjectID, String employeeID, Set<Employee.ShiftDateTime> shiftPreferences) {
         return businessController.setEmployeeShiftsPreference(subjectID, employeeID, shiftPreferences);
     }
 
-    public Employee deleteEmployeeShiftPreference(String subjectID, String employeeID, Employee.WeeklyShift shift){
+    public Employee deleteEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift){
         return businessController.deleteEmployeeShiftPreference(subjectID, employeeID, shift);
     }
 

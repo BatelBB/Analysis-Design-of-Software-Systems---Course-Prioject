@@ -4,34 +4,26 @@ import javax.management.relation.RoleInfoNotFoundException;
 import java.util.*;
 
 public class Employee {
-    public static class WeeklyShift {
-        public enum Day {
-            Sunday,
-            Monday,
-            Tuesday,
-            Wednesday,
-            Thursday,
-            Friday,
-            Saturday
-        }
-        public enum Type {
-            Morning,
-            Evening
-        }
-        public Day day;
-        public Type type;
+    public static enum ShiftDateTime {
+        SundayMorning,
+        SundayEvening,
+        MondayMorning,
+        MondayEvening,
+        TuesdayMorning,
+        TuesdayEvening,
+        WednesdayMorning,
+        WednesdayEvening,
+        ThursdayMorning,
+        ThursdayEvening,
+        FridayMorning,
+        FridayEvening,
+        SaturdayMorning,
+        SaturdayEvening
+    }
 
-        public WeeklyShift(int dayInt, int typeInt){
-            day = Day.values()[dayInt];
-            type = Type.values()[typeInt];
-        }
-        public Day getDay() {
-            return day;
-        }
-
-        public Type getType() {
-            return type;
-        }
+    public static boolean isMorningShift(ShiftDateTime datetime) {
+        // Shifts with even ordinals are morning shifts.
+        return datetime.ordinal() % 2 == 0;
     }
 
     private String name;
@@ -51,7 +43,7 @@ public class Employee {
 
     private BankAccount account;
     private WorkingConditions conditions;
-    private Set<WeeklyShift> availableShifts;
+    private Set<ShiftDateTime> availableShifts;
     public enum Role{
         Logisitcs,
         HumanResources,
@@ -80,40 +72,26 @@ public class Employee {
 
     public WorkingConditions getConditions() { return conditions; }
 
-    public Set<WeeklyShift> getAvailableShifts() { return availableShifts; }
+    public Set<ShiftDateTime> getAvailableShifts() { return availableShifts; }
 
     public Role getRole() { return role;}
 
-    public Employee setAvailableShifts(Set<WeeklyShift> shiftPreferences) {
-        for (WeeklyShift shift:shiftPreferences) {
-            availableShifts.add(shift);
-        }
+    public Employee setAvailableShifts(Set<ShiftDateTime> shiftPreferences) {
+        availableShifts = shiftPreferences;
         return this;
     }
 
-    public Employee addEmployeeShiftPreference(WeeklyShift shift){
+    public Employee addEmployeeShiftPreference(ShiftDateTime shift){
         availableShifts.add(shift);
         return this;
     }
 
-    public Employee deleteEmployeeShiftPreference(WeeklyShift shift){
-        for(WeeklyShift s: availableShifts){
-            if(s.type.equals(shift.type) && s.day.equals(shift.day))
-                availableShifts.remove(s);
-        }
+    public Employee deleteEmployeeShiftPreference(ShiftDateTime shift){
+        availableShifts.remove(shift);
         return this;
     }
 
-    public boolean isShiftpreferred(WeeklyShift shift){
-        for(WeeklyShift s: availableShifts){
-            if(s.getDay().equals(shift.getDay()) && s.getType().equals(shift.getType()))
-                return true;
-        }
-        return false;
+    public boolean isShiftpreferred(ShiftDateTime shift){
+        return availableShifts.contains(shift);
     }
-
-
-
-
-
 }

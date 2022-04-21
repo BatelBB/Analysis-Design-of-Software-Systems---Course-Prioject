@@ -72,13 +72,13 @@ public class EmployeeController {
     }
 
 
-    public Employee setEmployeeShiftsPreference(String id, Set<Employee.WeeklyShift> shiftPreferences) {
+    public Employee setEmployeeShiftsPreference(String id, Set<Employee.ShiftDateTime> shiftPreferences) {
         Employee e = getEmployee(id);
         if(e.getAvailableShifts().size() == 0){
             e.setAvailableShifts(shiftPreferences);
         }
         else {
-            for (Employee.WeeklyShift shift : shiftPreferences) {
+            for (Employee.ShiftDateTime shift : shiftPreferences) {
                 if (!e.isShiftpreferred(shift))
                     return getEmployee(id).addEmployeeShiftPreference(shift);
                 throw new IllegalArgumentException("This shift already exist in employee preference.");
@@ -87,14 +87,14 @@ public class EmployeeController {
         return e;
     }
 
-    public Employee addEmployeeShiftPreference(String id, Employee.WeeklyShift shift){
+    public Employee addEmployeeShiftPreference(String id, Employee.ShiftDateTime shift){
         Employee e = getEmployee(id);
         if(!e.isShiftpreferred(shift))
             return getEmployee(id).addEmployeeShiftPreference(shift);
         throw new IllegalArgumentException("This shift already exist in employee preference.");
     }
 
-    public Employee deleteEmployeeShiftPreference(String id, Employee.WeeklyShift shift){
+    public Employee deleteEmployeeShiftPreference(String id, Employee.ShiftDateTime shift){
         Employee e = getEmployee(id);
         if(e.isShiftpreferred(shift))
             return getEmployee(id).deleteEmployeeShiftPreference(shift);

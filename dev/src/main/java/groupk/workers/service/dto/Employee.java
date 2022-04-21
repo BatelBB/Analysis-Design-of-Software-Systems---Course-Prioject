@@ -14,23 +14,21 @@ public class Employee {
         Driver
     }
 
-    public static class WeeklyShift {
-        public enum Day {
-            Sunday,
-            Monday,
-            Tuesday,
-            Wednesday,
-            Thursday,
-            Friday,
-            Saturday
-        }
-
-        public Day day;
-        public Shift.Type type;
-        public WeeklyShift(Day day, Shift.Type type){
-            this.day = day;
-            this.type = type;
-        }
+    public static enum ShiftDateTime {
+        SundayMorning,
+        SundayEvening,
+        MondayMorning,
+        MondayEvening,
+        TuesdayMorning,
+        TuesdayEvening,
+        WednesdayMorning,
+        WednesdayEvening,
+        ThursdayMorning,
+        ThursdayEvening,
+        FridayMorning,
+        FridayEvening,
+        SaturdayMorning,
+        SaturdayEvening
     }
 
     public String id;
@@ -47,7 +45,7 @@ public class Employee {
             int salaryPerHour,
             int sickDaysUsed,
             int vacationDaysUsed,
-            Set<WeeklyShift> shiftPreferences,
+            Set<ShiftDateTime> shiftPreferences,
             Calendar employmentStart
     ) {
         this.id = id;
@@ -69,6 +67,6 @@ public class Employee {
     public int salaryPerHour;
     public int sickDaysUsed;
     public int vacationDaysUsed;
-    public Set<WeeklyShift> shiftPreferences;
+    public Set<ShiftDateTime> shiftPreferences;
     public Calendar employmentStart;
 }
