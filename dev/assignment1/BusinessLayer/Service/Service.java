@@ -82,6 +82,9 @@ public class Service {
 
     
     public ServiceResponseWithData<Order> createOrder(Supplier supplier, LocalDate ordered, LocalDate delivered) {
+        if(!items.supplierHasAnyItems(supplier)) {
+            return ServiceResponseWithData.error("this supplier doesn't have any items currently");
+        }
         return responseFor(() -> orders.create(supplier, ordered, delivered));
     }
 
@@ -100,7 +103,7 @@ public class Service {
     }
 
     public QuantityDiscount getDiscount(int amount, int ppn, int catalog) throws BusinessLogicException {
-        List<QuantityDiscount> discounts = items.getDiscountList(getItem(ppn,catalog));
+        List<QuantityDiscount> discounts = items.getDiscountList(items.get(ppn,catalog));
         for(int i = 0; i < discounts.size(); i++) {
             QuantityDiscount current = discounts.get(i);
             if(current.quantity == amount) {
