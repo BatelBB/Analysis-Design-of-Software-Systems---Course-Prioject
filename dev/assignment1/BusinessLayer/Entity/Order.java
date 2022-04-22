@@ -12,12 +12,17 @@ public class Order {
     float totalPrice;
     Map<Item, Integer> itemsAmounts;
     public final Supplier supplier;
+    public final int id;
+    private static int instanceCounter = 0;
 
     public Order(Supplier supplier, LocalDate ordered, LocalDate provided){
         this.supplier = supplier;
         this.ordered = ordered;
         this.provided = provided;
         this.itemsAmounts = new HashMap<>();
+
+        instanceCounter++;
+        this.id = instanceCounter;
     }
 
     public void removeItemIfExists(Item item) {

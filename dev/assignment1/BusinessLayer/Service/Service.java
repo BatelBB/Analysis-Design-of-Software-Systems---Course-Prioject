@@ -21,6 +21,10 @@ public class Service {
         this.suppliers = new SupplierController(this.orders, this.items);
     }
 
+    public ServiceResponseWithData<Order> getOrder(int id) {
+        return responseFor(() -> orders.get(id));
+    }
+
     public ServiceResponseWithData<Supplier> createSupplier(
             int ppn, int bankAccount, String name,
             boolean isDelivering, PaymentCondition paymentCondition,
