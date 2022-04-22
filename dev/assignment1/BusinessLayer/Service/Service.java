@@ -61,8 +61,8 @@ public class Service {
         return items.all();
     }
 
-    public Item getItem(int ppn, int catalog) throws BusinessLogicException {
-        return items.get(ppn, catalog);
+    public ServiceResponseWithData<Item> getItem(int ppn, int catalog) {
+        return responseFor(() -> items.get(ppn, catalog));
     }
 
     
