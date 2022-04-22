@@ -12,13 +12,15 @@ public class TruckManager extends User {
     private TruckingsBoard truckingsBoard;
     private Map<String, Driver> drivers; //saves the drivers by their usernames
     private Map<String, Vehicle> vehicles; //saves the vehicles by their registration plate
+    private final String registerCode; //the manager would give this code to his drivers for register to system (verify code).
 
-    public TruckManager(String name, String username, String password) throws Exception {
+    public TruckManager(String name, String username, String password, String code) throws Exception {
         super(name, username, password);
         this.role = Role.truckingManager;
         this.truckingsBoard = new TruckingsBoard(this);
         drivers = new ConcurrentHashMap<String, Driver>();
         vehicles = new ConcurrentHashMap<String, Vehicle>();
+        registerCode = code;
     }
 
     public synchronized void addDriver(Driver driver) throws Exception {
@@ -140,6 +142,10 @@ public class TruckManager extends User {
 
     protected synchronized void updateTotalWeight(int truckingId, int newWeight, Driver driver) throws Exception {
         truckingsBoard.updateTotalWeightOfTrucking(truckingId, newWeight, driver.getUsername());
+    }
+
+    public synchronized String getRegisterCode() {
+        return registerCode;
     }
 
     private Driver getDriverByUsername(String driverUsername) {

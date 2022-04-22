@@ -9,13 +9,16 @@ public class DriverController extends UserController{
 
     private static DriverController singletonDriverControllerInstance = null;
 
-    public static DriverController getInstance() {
+    public static DriverController getInstance() throws Exception {
         if (singletonDriverControllerInstance == null)
             singletonDriverControllerInstance = new DriverController();
         return singletonDriverControllerInstance;
     }
 
-    private DriverController() {}
+    private DriverController() throws Exception {
+        super("");
+        UserController.getInstance();
+    }
 
     public String printMyTruckings() throws Exception {
         synchronized (activeUser) {

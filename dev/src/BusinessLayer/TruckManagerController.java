@@ -13,13 +13,15 @@ public class TruckManagerController extends UserController{
     private static TruckManagerController singletonTruckManagerControllerInstance = null;
     private int truckingIdCounter;
 
-    public static TruckManagerController getInstance() {
+    public static TruckManagerController getInstance() throws Exception {
         if (singletonTruckManagerControllerInstance == null)
             singletonTruckManagerControllerInstance = new TruckManagerController();
         return singletonTruckManagerControllerInstance;
     }
 
-    private TruckManagerController() {
+    private TruckManagerController() throws Exception {
+        super("");
+        UserController.getInstance();
         truckingIdCounter = 1;
     }
 
@@ -181,6 +183,13 @@ public class TruckManagerController extends UserController{
         synchronized (activeUser) {
             checkIfActiveUserIsTruckManager();
             ((TruckManager)activeUser).updateDateOnTrucking(truckingId, date);
+        }
+    }
+
+    public String getMyRegisterCode() throws Exception {
+        synchronized (activeUser) {
+            checkIfActiveUserIsTruckManager();
+            return ((TruckManager)activeUser).getRegisterCode();
         }
     }
 
