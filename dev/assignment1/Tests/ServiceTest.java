@@ -237,8 +237,21 @@ class ServiceTest {
     }
 
     @Test
-    void createOrder() {
-        fail("test not yet implemented.");
+    void deleteOrder() {
+        int ppn = 1, cnPen = 11;
+        Supplier sup = createWithPpn(ppn).data;
+
+        Item pen = service.createItem(ppn, cnPen, "Pen", "Office", 10).data;
+
+        Order order = service.createOrder(sup, date1, date2).data;
+        service.orderItem(order, pen, 10);
+
+        ServiceResponse resDelete = service.deleteOrder(order);
+        assertTrue(resDelete.success);
+
+        // delete already deleted
+        ServiceResponse resDeleteAgain = service.deleteOrder(order);
+        assertFalse(resDeleteAgain.success);
     }
 
     @Test
