@@ -55,7 +55,8 @@ public class Menu {
         return new String(
                 "1. Create new quantity agreement\n" +
                         "2. Edit existing quantity agreement\n" +
-                        "3. Delete existing quantity agreement\n");
+                        "3. Delete existing quantity agreement\n" +
+                        "4. See summery of all quantity agreements\n");
     }
 
     public String getSupplierEditSubmenu() {

@@ -297,6 +297,7 @@ public class PresentationController {
                             break;
                         }
                         case (4):{
+                            //summery of quantity discount
                             output.println(service.toStringQuantity());
                             break;
                         }
@@ -347,7 +348,7 @@ public class PresentationController {
             arr = checkItem();
             amount = input.nextInt("Enter the discount amount you would like to delete: ");
             try {
-                service.getDiscount(arr[0], arr[1], amount);
+                service.getDiscount(amount, arr[0], arr[1]);
                 retry = false;
             } catch (Exception e) {
                 output.println("This discount doesn't exist, try again.");
