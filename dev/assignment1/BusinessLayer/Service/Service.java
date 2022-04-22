@@ -141,8 +141,11 @@ public class Service {
         return order;
     }
     public String toStringQuantity(){
-        //TODO
-        return "";
+        String disc = "";
+        for(Item it : getItems())
+            for(QuantityDiscount qc : items.getDiscountList(it))
+                disc += qc.toString();
+        return disc;
     }
 
     private interface BusinessLayerOperation<T> {
