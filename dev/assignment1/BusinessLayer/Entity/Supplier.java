@@ -27,10 +27,6 @@ public class Supplier {
         return ppn;
     }
 
-    public void setPpn(int ppn) {
-        this.ppn = ppn;
-    }
-
     public int getBankNumber() {
         return bankNumber;
     }

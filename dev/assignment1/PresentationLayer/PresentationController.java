@@ -1,6 +1,7 @@
 package assignment1.PresentationLayer;
 
 import assignment1.BusinessLayer.Entity.Contact;
+import assignment1.BusinessLayer.Entity.Item;
 import assignment1.BusinessLayer.Entity.PaymentCondition;
 import assignment1.BusinessLayer.Service.Service;
 
@@ -56,7 +57,8 @@ public class PresentationController {
                             try {
                                 switch (edit) {
                                     case (1): {
-                                        service.getSupplier(ppn).setPpn(input.nextInt("Enter ppn number: "));
+                                        output.println("[Sorry, this operation isn't available]");
+                                        // service.getSupplier(ppn).setPpn(input.nextInt("Enter ppn number: "));
                                         break;
                                     }
                                     case (2): {
@@ -133,7 +135,8 @@ public class PresentationController {
                             //edit price of existing item
                             int[] arr = checkItem();
                             try {
-                                service.getItem(arr[0], arr[1]).setPrice(input.nextInt("Enter new price: "));
+                                Item item = service.getItem(arr[0], arr[1]);
+                                service.setPrice(item, input.nextFloat("Enter new price: "));
                             } catch (Exception e) {
                                 output.println(e.getMessage());
                             }

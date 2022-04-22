@@ -1,5 +1,7 @@
 package assignment1.PresentationLayer;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -73,5 +75,45 @@ public class UserInput {
             }
         }
         return nextString;
+    }
+
+    public float nextFloat(String message) {
+        //goes in a loop to get int and prints the message we provided each time
+        boolean retry = true;
+        float nextFloat = 0;
+        while (retry) {
+            try {
+                UserOutput.getInstance().print(message);
+                nextFloat = Float.parseFloat(scanner.nextLine());
+                if (nextFloat < 0)
+                    throw new InputMismatchException("Number was negative");
+                retry = false;
+            } catch (Exception e) {
+                UserOutput.getInstance().println("Please try again.");
+            }
+        }
+        return nextFloat;
+    }
+
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    public LocalDate nextDate(String message) {
+        //goes in a loop to get int and prints the message we provided each time
+        boolean retry = true;
+        LocalDate nextDate = null;
+        while (retry) {
+            try {
+                UserOutput.getInstance().print(message + "(format: " + dateTimeFormatter.toString() +
+                        "; or TODAY (all uppercase) for today)");
+                String inputLine = scanner.nextLine();
+                if("TODAY".equals(inputLine)) {
+                    return LocalDate.now();
+                }
+                nextDate = LocalDate.parse(inputLine, dateTimeFormatter);
+                retry = false;
+            } catch (Exception e) {
+                UserOutput.getInstance().println("Please try again.");
+            }
+        }
+        return nextDate;
     }
 }

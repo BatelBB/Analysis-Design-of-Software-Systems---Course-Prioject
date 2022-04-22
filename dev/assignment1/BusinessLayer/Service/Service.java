@@ -10,47 +10,16 @@ import java.time.LocalDate;
 import java.util.*;
 import java.time.DayOfWeek;
 
-class ServiceResponse {
-    public final boolean success;
-    public final String error;
-
-    ServiceResponse(boolean success, String error) {
-        this.success = success;
-        this.error = error;
-    }
-}
-
-class ServiceResponseWithData<T> extends ServiceResponse {
-    public final T data;
-
-    ServiceResponseWithData(boolean success, String error, T data) {
-        super(success, error);
-        this.data = data;
-    }
-
-    static <T> ServiceResponseWithData<T> success(T data) {
-        return new ServiceResponseWithData<>(true, null, data);
-    }
-
-    static <T> ServiceResponseWithData<T> error(String error) {
-        return new ServiceResponseWithData<>(false, error, null);
-    }
-}
-
 public class Service {
-
     private final SupplierController suppliers;
     private final ItemController items;
     private final OrderController orders;
 
-
-
     public Service() {
-        this.suppliers = new SupplierController();
-        this.items = new ItemController();
         this.orders = new OrderController();
+        this.items = new ItemController(this.orders);
+        this.suppliers = new SupplierController(this.orders, this.items);
     }
-
 
     public ServiceResponseWithData<Supplier> createSupplier(
             int ppn, int bankAccount, String name,
@@ -61,8 +30,6 @@ public class Service {
             paymentCondition, regularSupplyingDays, contact
         ));
     }
-
-
 
     public Collection<Supplier> getSuppliers() {
         return suppliers.all();
@@ -121,7 +88,7 @@ public class Service {
 
     
     public ServiceResponse deleteOrder(Order order) {
-        throw new RuntimeException("not yet implemented");
+        return responseFor(() -> orders.delete(order));
     }
 
     public ServiceResponse seedExample() {
@@ -137,6 +104,15 @@ public class Service {
             }
     }
         throw new BusinessLogicException("There is no discount with amount "+amount);
+    }
+
+    public void orderItem(Order order, Item item, int amount) {
+        orders.orderItem(order, item, amount);
+    }
+
+    public void setPrice(Item item, float price) {
+        item.setPrice(price);
+        orders.refreshPricesAndDiscounts(item);
     }
 
     private interface BusinessLayerOperation<T> {

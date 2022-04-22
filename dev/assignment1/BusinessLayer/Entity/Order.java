@@ -1,6 +1,6 @@
 package assignment1.BusinessLayer.Entity;
 
-import assignment1.BusinessLayer.Controller.ItemController;
+import assignment1.BusinessLayer.BusinessLogicException;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ public class Order {
     LocalDate provided;
     float totalPrice;
     Map<Item, Integer> itemsAmounts;
-    Supplier supplier;
+    public final Supplier supplier;
 
     public Order(Supplier supplier, LocalDate ordered, LocalDate provided){
         this.supplier = supplier;
@@ -34,5 +34,28 @@ public class Order {
 
     public boolean containsItem(Item item) {
         return itemsAmounts.containsKey(item);
+    }
+
+    public void orderItem(Item item, int amount) {
+        if(amount == 0) {
+            itemsAmounts.remove(item);
+        } else {
+            itemsAmounts.put(item, amount);
+        }
+        refreshPrice();
+    }
+
+    public void updateOrdered(LocalDate ordered) throws BusinessLogicException {
+        if(ordered.isAfter(provided)) {
+            throw new BusinessLogicException("ordered date can't be after provided date.");
+        }
+        this.ordered = ordered;
+    }
+
+    public void updateProvided(LocalDate provided) throws BusinessLogicException {
+        if(ordered.isAfter(provided)) {
+            throw new BusinessLogicException("provided date can't be before ordered date.");
+        }
+        this.provided = provided;
     }
 }

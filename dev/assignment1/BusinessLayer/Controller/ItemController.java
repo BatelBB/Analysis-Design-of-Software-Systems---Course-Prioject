@@ -12,8 +12,10 @@ public class ItemController {
     Map<Item, List<QuantityDiscount>> discounts;
     OrderController orderController;
 
-    public ItemController(){
+    public ItemController(OrderController orderController) {
         items = new HashMap<>();
+        discounts = new HashMap<>();
+        this.orderController = orderController;
     }
 
     public Item create(Supplier supplier, int catalogNumber, String name, String category, float price)
@@ -48,7 +50,7 @@ public class ItemController {
 
     public void deleteDiscount(QuantityDiscount discount) {
         getDiscountList(discount.item).remove(discount);
-        orderController.refreshDiscounts(discount.item);
+        orderController.refreshPricesAndDiscounts(discount.item);
     }
 
     public Item get(int ppn, int catalog) throws BusinessLogicException{
@@ -56,7 +58,7 @@ public class ItemController {
         if(!items.containsKey(key)) {
             throw new BusinessLogicException("The item doesn't exist");
         }
-        return items.get(ppn);
+        return items.get(key);
     }
     public float priceForAmount(Item item, int amount) {
         float discount = 0;
@@ -91,11 +93,18 @@ public class ItemController {
         }
         QuantityDiscount created = new QuantityDiscount(item, amount, discount);
         discounts.add(index, created);
-        orderController.refreshDiscounts(item);
+        orderController.refreshPricesAndDiscounts(item);
         return created;
     }
 
     public List<QuantityDiscount> getDiscountList(Item item) {
         return discounts.computeIfAbsent(item, __ -> new ArrayList<QuantityDiscount>());
+    }
+
+    public void deleteAllFromSupplier(Supplier s) {
+        for(Map.Entry<String, Item> entry: items.entrySet()) {
+            items.remove(entry.getKey());
+            discounts.remove(entry.getValue());
+        }
     }
 }

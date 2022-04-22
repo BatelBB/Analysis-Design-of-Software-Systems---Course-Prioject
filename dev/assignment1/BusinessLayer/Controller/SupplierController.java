@@ -13,9 +13,13 @@ import java.util.Map;
 
 public class SupplierController {
     Map<Integer, Supplier> suppliers;
+    private OrderController orders;
+    private ItemController items;
 
-    public SupplierController() {
+    public SupplierController(OrderController orders, ItemController items) {
         suppliers = new HashMap<>();
+        this.orders = orders;
+        this.items = items;
     }
 
     public Supplier create(int ppn, int bankAccount, String name, boolean isDelivering,
@@ -44,7 +48,8 @@ public class SupplierController {
             throw new BusinessLogicException("no such ppn:" + ppn);
         }
         Supplier s = suppliers.remove(ppn);
-        // TODO delete related entities
+        orders.deleteAllFromSupplier(s);
+        items.deleteAllFromSupplier(s);
         return s;
     }
 
