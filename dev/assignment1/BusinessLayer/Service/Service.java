@@ -151,6 +151,14 @@ public class Service {
         return disc;
     }
 
+    public void setOrdered(Order order, LocalDate ordered) throws BusinessLogicException {
+        order.updateOrdered(ordered);
+    }
+
+    public void setProvided(Order order, LocalDate provided) throws BusinessLogicException {
+        order.updateProvided(provided);
+    }
+
 
     private interface BusinessLayerOperation<T> {
         T run() throws BusinessLogicException;

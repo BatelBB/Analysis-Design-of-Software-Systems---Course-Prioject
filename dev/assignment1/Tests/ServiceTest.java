@@ -327,7 +327,7 @@ class ServiceTest {
     }
 
     @Test
-    void setOrderingDate() {
+    void setOrderingDate() throws BusinessLogicException {
         final int ppn = 1;
         Supplier supplier = createWithPpn(ppn).data;
 
@@ -343,10 +343,60 @@ class ServiceTest {
                 THU = WED.plus(ONE_DAY),
                 FRI = THU.plus(ONE_DAY);
 
-        Order order = service.createOrder(supplier, SUN, FRI).data;
+        Order order = service.createOrder(supplier, MON, WED).data;
+        assertEquals(MON, order.getOrdered());
+
+        service.setOrdered(order, SUN);
         assertEquals(SUN, order.getOrdered());
 
-        fail("this feature was not implemented yet.");
+        assertDoesNotThrow(() -> service.setOrdered(order, WED), "should support same-day delivery");
+        assertEquals(WED, order.getOrdered());
+
+        service.setOrdered(order, TUE);
+        assertEquals(TUE, order.getOrdered());
+
+        assertThrows(BusinessLogicException.class, () -> service.setOrdered(order, THU));
+        assertEquals(TUE, order.getOrdered());
+
+        assertThrows(BusinessLogicException.class, () -> service.setOrdered(order, FRI));
+        assertEquals(TUE, order.getOrdered());
+    }
+
+
+    @Test
+    void setProvidedDate() throws BusinessLogicException {
+        final int ppn = 1;
+        Supplier supplier = createWithPpn(ppn).data;
+
+        // item doesn't matter, there just has to be at least one for order to create.
+        service.createItem(ppn, 11, "Lorem", "Ipsum", 1);
+
+        final Period ONE_DAY = Period.ofDays(1);
+        final LocalDate
+                SUN = LocalDate.of(2022, Month.JANUARY, 2),
+                MON = SUN.plus(ONE_DAY),
+                TUE = MON.plus(ONE_DAY),
+                WED = TUE.plus(ONE_DAY),
+                THU = WED.plus(ONE_DAY),
+                FRI = THU.plus(ONE_DAY);
+
+        Order order = service.createOrder(supplier, TUE, FRI).data;
+        assertEquals(FRI, order.getProvided());
+
+        service.setProvided(order, THU);
+        assertEquals(THU, order.getProvided());
+
+        assertDoesNotThrow(() -> service.setProvided(order, TUE), "should support same-day delivery");
+        assertEquals(TUE, order.getProvided());
+
+        service.setProvided(order, WED);
+        assertEquals(WED, order.getProvided());
+
+        assertThrows(BusinessLogicException.class, () -> service.setProvided(order, SUN));
+        assertEquals(WED, order.getProvided());
+
+        assertThrows(BusinessLogicException.class, () -> service.setProvided(order, MON));
+        assertEquals(WED, order.getProvided());
     }
 
     /**
