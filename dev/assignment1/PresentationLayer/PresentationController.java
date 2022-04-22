@@ -32,8 +32,7 @@ public class PresentationController {
                             int ppn = input.nextInt("Enter supplier's ppn number: ");
                             int bankAccount = input.nextInt("Enter supplier's bank account number: ");
                             String name = input.nextString("Enter supplier's company name: ");
-                            boolean isDelivering = input.nextBoolean("Is the supplier delivering by himself? " +
-                                    "true/false ");
+                            boolean isDelivering = input.nextBoolean("Is the supplier delivering by himself? ");
                             PaymentCondition paymentCondition = choosePayment("Which way will the supplier pay? ");
                             DayOfWeek day = isDelivering ? chooseDay() : null;
                             String contactName = input.nextString("Enter the supplier's contact name: ");
@@ -71,7 +70,7 @@ public class PresentationController {
                                     }
                                     case (4): {
                                         service.getSupplier(ppn).setDelivering(
-                                                input.nextBoolean("Is delivering? true/false "));
+                                                input.nextBoolean("Is delivering?"));
                                         break;
                                     }
                                     case (5): {

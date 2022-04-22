@@ -15,6 +15,13 @@ public class OrderController {
         orders = new ArrayList<>();
     }
 
+    public Order get(int id) throws BusinessLogicException {
+        return orders.stream()
+                .filter(o -> o.id == id)
+                .findFirst()
+                .orElseThrow(() -> new BusinessLogicException("No order exists with id "+ id));
+    }
+
     public Order create(Supplier supplier, LocalDate ordered, LocalDate delivered) throws BusinessLogicException {
         if(ordered.isAfter(delivered)) {
             throw new BusinessLogicException("delivery date can't be before ordering date.");

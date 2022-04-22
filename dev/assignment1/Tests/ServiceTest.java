@@ -112,6 +112,7 @@ class ServiceTest {
         createWithPpn(ppn1);
         createWithPpn(ppn2);
 
+        // Supplier 1, Item 1
         ServiceResponseWithData<Item> resApple =
                 service.createItem(ppn1, cn1, "Apple", "Fruit", 1);
         assertTrue(resApple.success, "should have succeeded.");
@@ -119,6 +120,7 @@ class ServiceTest {
         assertNotNull(apple, "creating item shouldn't have returned null.");
         assertEquals("Apple", apple.getName());
 
+        // Supplier 1, Item 2
         ServiceResponseWithData<Item> resBanana =
                 service.createItem(ppn1, cn2, "Banana", "Fruit", 2);
         assertTrue(resBanana.success, "should have succeeded but got " + resBanana.error);
@@ -126,7 +128,7 @@ class ServiceTest {
         assertNotNull(banana, "creating item shouldn't have returned null.");
         assertEquals("Banana", banana.getName());
 
-
+        // Supplier 2, Item 1
         ServiceResponseWithData<Item> resOtherSupplier =
                 service.createItem(ppn2, cn1, "Pen", "Office stuff", 10);
         assertTrue(resOtherSupplier.success,
@@ -137,7 +139,8 @@ class ServiceTest {
         assertEquals(cn1, pen.getCatalogNumber());
         assertEquals("Pen", pen.getName());
 
-
+        // Supplier 2, Item 2 (does not exist)
+        ServiceResponseWithData<Item> item = service.getItem(ppn2, cn2);
     }
 
     @Test

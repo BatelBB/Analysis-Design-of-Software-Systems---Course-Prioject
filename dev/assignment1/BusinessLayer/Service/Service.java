@@ -21,6 +21,10 @@ public class Service {
         this.suppliers = new SupplierController(this.orders, this.items);
     }
 
+    public ServiceResponseWithData<Order> getOrder(int id) {
+        return responseFor(() -> orders.get(id));
+    }
+
     public ServiceResponseWithData<Supplier> createSupplier(
             int ppn, int bankAccount, String name,
             boolean isDelivering, PaymentCondition paymentCondition,
@@ -57,8 +61,8 @@ public class Service {
         return items.all();
     }
 
-    public Item getItem(int ppn, int catalog) throws BusinessLogicException {
-        return items.get(ppn, catalog);
+    public ServiceResponseWithData<Item> getItem(int ppn, int catalog) {
+        return responseFor(() -> items.get(ppn, catalog));
     }
 
     
