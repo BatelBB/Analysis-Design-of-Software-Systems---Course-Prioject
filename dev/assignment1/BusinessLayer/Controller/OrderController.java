@@ -26,10 +26,12 @@ public class OrderController {
         if(ordered.isAfter(delivered)) {
             throw new BusinessLogicException("delivery date can't be before ordering date.");
         }
-        return new Order(supplier, ordered,delivered);
+        Order order = new Order(supplier, ordered, delivered);
+        orders.add(order);
+        return order;
     }
 
-    public void removeItem(Item item) {
+    public void removeItemFromOrders(Item item) {
         orders.forEach(o -> o.removeItemIfExists(item));
     }
 

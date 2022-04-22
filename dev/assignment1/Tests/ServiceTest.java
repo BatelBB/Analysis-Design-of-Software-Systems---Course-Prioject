@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -139,25 +139,93 @@ class ServiceTest {
         assertEquals(cn1, pen.getCatalogNumber());
         assertEquals("Pen", pen.getName());
 
-        // Supplier 2, Item 2 (does not exist)
-        ServiceResponseWithData<Item> item = service.getItem(ppn2, cn2);
+        // create with already existing
+        ServiceResponseWithData<Item> alreadyExisting = service.createItem(ppn1, cn1,
+            "Cat in a bag", "Animals & containers", 123
+        );
+        assertFalse(alreadyExisting.success);
+
+        // not existence supplier
+        ServiceResponseWithData<Item> noSuchSupplier = service.createItem(ppnNotExisting, cn1,
+                "Puzzle", "Games",60);
+        assertFalse(noSuchSupplier.success);
+
     }
 
     @Test
     void getItems() {
-        fail("test not yet implemented.");
+        final int[] amountsOfItems = { 10, 11, 12, 13, 14 };
+        for(int i = 0; i < amountsOfItems.length; i++) {
+            int ppn = (i + 1) * 111;
+            int amountForThisSupplier = amountsOfItems[i];
+            createWithPpn(ppn);
+            for(int j = 0; j < amountForThisSupplier; j++) {
+                int cn = (j + 1) * 11111;
+                service.createItem(ppn, cn, "Lorem", "Ipsum", 1);
+            }
+        }
+
+        final int totalItems = Arrays.stream(amountsOfItems).sum();
+        assertEquals(totalItems, service.getItems().size());
     }
 
     @Test
     void getItem() {
-        fail("test not yet implemented.");
+        final int ppn = 1, wrongPPN = 2;
+        final int cn = 11, wrongCN = 2;
+        createWithPpn(ppn);
+        service.createItem(ppn, cn, "Pen", "Office stuff", 10);
+
+        ServiceResponseWithData<Item> resSucc = service.getItem(ppn, cn);
+        assertTrue(resSucc.success);
+        assertNotNull(resSucc.data);
+        assertEquals(ppn, resSucc.data.getSupplier().getPpn());
+        assertEquals(cn, resSucc.data.getCatalogNumber());
+        assertEquals("Pen", resSucc.data.getName());
+
+        ServiceResponseWithData<Item> resWrongPPN = service.getItem(wrongPPN, cn);
+        assertFalse(resWrongPPN.success);
+
+        ServiceResponseWithData<Item> resWrongCN = service.getItem(ppn, wrongCN);
+        assertFalse(resWrongCN.success);
+
+        ServiceResponseWithData<Item> resWrongBoth = service.getItem(wrongPPN, wrongCN);
+        assertFalse(resWrongBoth.success);
+    }
+
+    @Test
+    void seedExample() {
+        assertDoesNotThrow(service::seedExample);
     }
 
     @Test
     void deleteItem() {
-        fail("test not yet implemented.");
+        int ppn = 1, cnPen = 11, cnNotebook = 12;
+        Supplier sup = createWithPpn(ppn).data;
+
+        Item pen = service.createItem(ppn, cnPen, "Pen", "Office", 10).data;
+        Item notebook = service.createItem(ppn, cnNotebook, "Notebook", "Office", 7).data;
+
+        Order orderPens = service.createOrder(sup, date1, date2).data;
+        service.orderItem(orderPens, pen, 10);
+
+        Order orderNotebooks = service.createOrder(sup, date1, date2).data;
+        service.orderItem(orderNotebooks, notebook, 10);
+
+        Order orderBoth = service.createOrder(sup, date1, date2).data;
+        service.orderItem(orderBoth, pen, 10);
+        service.orderItem(orderBoth, notebook, 5);
+
+        ServiceResponse resDelete = service.deleteItem(pen);
+        assertTrue(resDelete.success);
+
+        ServiceResponseWithData<Item> getDeleted = service.getItem(ppn, cnPen);
+        assertFalse(getDeleted.success);
+
+        assertEquals(0, orderPens.getTotalPrice());
     }
 
+/*
     @Test
     void createDiscount() {
         fail("test not yet implemented.");
@@ -179,19 +247,11 @@ class ServiceTest {
     }
 
     @Test
-    void deleteOrder() {
-        fail("test not yet implemented.");
-    }
+    void deleteOrder() { fail("test not yet implemented"); }
+
 
     @Test
-    void seedExample() {
-        assertDoesNotThrow(service::seedExample);
-    }
-
-    @Test
-    void getDiscount() {
-        fail("test not yet implemented.");
-    }
+    void getDiscount() { fail("test not yet implemented."); }
 
     @Test
     void orderItem() {
@@ -202,6 +262,8 @@ class ServiceTest {
     void setPrice() {
         fail("test not yet implemented.");
     }
+
+    */
 
     private ServiceResponseWithData<Supplier> createWithPpn(int ppn) {
        return service.createSupplier(ppn, 111, "dummy", true,

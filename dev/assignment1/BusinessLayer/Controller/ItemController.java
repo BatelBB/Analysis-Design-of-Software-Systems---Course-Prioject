@@ -41,10 +41,11 @@ public class ItemController {
         int ppn = item.getSupplier().getPpn();
         int catalogNumber = item.getCatalogNumber();
         String key = tuple(ppn, catalogNumber);
-        if(items.containsKey(key)) {
+        if(!items.containsKey(key)) {
             throw new BusinessLogicException("Supplier " + ppn +" has no item with catalog number " + catalogNumber);
         }
-        orderController.removeItem(item);
+        discounts.remove(item);
+        orderController.removeItemFromOrders(item);
         items.remove(key);
     }
 

@@ -27,6 +27,7 @@ public class Order {
 
     public void removeItemIfExists(Item item) {
         itemsAmounts.remove(item);
+        refreshPrice();
     }
 
     public void refreshPrice() {
@@ -62,5 +63,9 @@ public class Order {
             throw new BusinessLogicException("provided date can't be before ordered date.");
         }
         this.provided = provided;
+    }
+
+    public float getTotalPrice() {
+        return totalPrice;
     }
 }
