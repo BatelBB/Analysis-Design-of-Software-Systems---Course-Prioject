@@ -24,11 +24,10 @@ public class TruckManagerController extends UserController{
     }
 
     public void addVehicle(DLicense lisence, String registrationPlate, String model, int weight, int maxWeight) throws Exception {
-        synchronized (activeUser) {
             checkIfActiveUserIsTruckManager();
             Vehicle newVehicle = new Vehicle(lisence, registrationPlate, model, weight, maxWeight);
             ((TruckManager)activeUser).addVehicle(newVehicle);
-        }
+
     }
 
     public List<String> getDriversUsernames() throws Exception {
@@ -39,10 +38,9 @@ public class TruckManagerController extends UserController{
     }
 
     public List<String> getVehiclesRegistrationPlates() throws Exception {
-        synchronized (activeUser) {
             checkIfActiveUserIsTruckManager();
             return ((TruckManager)activeUser).getVehiclesRegistrationPlates();
-        }
+
     }
 
     public void addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<ProductForTrucking> products) throws Exception {

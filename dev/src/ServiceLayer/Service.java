@@ -71,7 +71,7 @@ public class Service {
 
     public Response Login(String userEmail,String password) { return userService.Login(userEmail,password);}
 
-    public Response registerUser(String name, String username, String password, Role role, String code) { return userService.registerUser(name,username,password,role,code); }
+    public Response registerUser(String name, String username, String password, BusinessLayer.Role role, String code) { return userService.registerUser(name,username,password,role,code); }
 
     public Response showDriverHisFutureTruckings(String name, String username, String password, Role role, String code) { return driverService.showDriverHisFutureTruckings(); }
 

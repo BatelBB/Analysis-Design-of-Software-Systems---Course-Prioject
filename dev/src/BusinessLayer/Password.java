@@ -1,6 +1,7 @@
 package BusinessLayer;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Password {
     private String password;
@@ -36,6 +37,7 @@ public class Password {
             throw new IllegalArgumentException("The password must contain at least one capital letter");
         if(!lowercaseLetterFlag)
             throw new IllegalArgumentException("The password must contain at least one lowercase letter");
+        this.password = password;
         return true;
     }
 
@@ -44,4 +46,12 @@ public class Password {
             return false;
         return passwordToCheck.equals(password);
     }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(password, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH);
+    }
+
+
 }

@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UserController {
 
     private Map<String, User> users;
+    private Map<String, String> accountsDetails;
     private static UserController singletonUserControllerInstance = null;
     protected User activeUser = null;
     private final int MIN_USERNAME_LENGTH = 3;
@@ -48,7 +49,6 @@ public class UserController {
     }
 
     public boolean login(String username, String password) throws Exception {
-        synchronized (activeUser) {
             if (activeUser != null)
                 throw new IllegalArgumentException("There is a user already connected to the system");
             if (username == null)
@@ -56,11 +56,11 @@ public class UserController {
             User user = users.get(username);
             if (user == null)
                 throw new IllegalArgumentException("Sorry but there's no user with that username");
-            if(user.login(password)) {
+            if(users.get(username).login(password)) {
                 activeUser = user;
                 return true;
             }
-        }
+
         return false;
     }
 
