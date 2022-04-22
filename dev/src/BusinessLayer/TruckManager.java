@@ -47,14 +47,14 @@ public class TruckManager extends User {
         return toReturn;
     }
 
-    public synchronized void addTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<ProductForTrucking> products) throws Exception {
+    public synchronized void addTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<ProductForTrucking> products,long hours, long minutes) throws Exception {
         if (registrationPlateOfVehicle == null)
             throw new NullPointerException("The registration plate is empty");
         if (driverUsername == null)
             throw new NullPointerException("The driver's username is empty");
         Driver driver = getDriverByUsername(driverUsername);
         Vehicle vehicle = getVehicleByRegistrationPlate(registrationPlateOfVehicle);
-        Trucking trucking = new Trucking(id, vehicle, date, driver, sources, destinations, products);
+        Trucking trucking = new Trucking(id, vehicle, date, driver, sources, destinations, products,hours,minutes);
         driver.checkTrucking(trucking);
         truckingsBoard.addTrucking(trucking);
     }
@@ -145,7 +145,7 @@ public class TruckManager extends User {
     }
 
     public synchronized String getRegisterCode() {
-        return registerCode;
+        return String.valueOf(hashCode());
     }
 
     private Driver getDriverByUsername(String driverUsername) {
@@ -162,4 +162,7 @@ public class TruckManager extends User {
         return vehicle;
     }
 
+    public boolean checkPassword(String password) {
+        return  this.password.checkPassword(password);
+    }
 }

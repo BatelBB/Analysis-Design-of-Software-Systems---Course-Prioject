@@ -35,10 +35,10 @@ public class Site {
 
     public String printSite() {
         String toReturn = "Area: " + area + "\n";
-        toReturn += "   Address: " + street + " " + houseNumber + ", " + getCity() + "\n";
+        toReturn += "Address: " + street + " " + houseNumber + ", " + getCity() + "\n";
         if (houseNumber != 0)
-            toReturn += "            floor: " + floor + " apartment: " + apartment + "\n";
-        toReturn += "   Contact guy: " + contactGuy + "  phone number: " + phoneNumber + "\n";
+            toReturn += "floor: " + floor + " apartment: " + apartment + "\n";
+        toReturn += "Contact guy: " + contactGuy + "  phone number: " + phoneNumber + "\n";
         return toReturn;
     }
 

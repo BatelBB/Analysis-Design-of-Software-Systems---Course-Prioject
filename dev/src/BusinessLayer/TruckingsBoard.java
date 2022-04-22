@@ -26,24 +26,41 @@ public class TruckingsBoard {
             return;
         }
         else {
-            ListIterator<Trucking> truckingIterator = truckings.listIterator();
-            while (truckingIterator.hasNext()) {
-                Trucking currentTrucking = truckingIterator.next();
-                int compareDates = currentTrucking.getDate().compareTo(trucking.getDate());
-                if (compareDates == 0) {
-                    if (currentTrucking.getVehicle().getRegistationPlate() == trucking.getVehicle().getRegistationPlate())
-                        throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same vehicle");
-                    if (currentTrucking.getDriver().getUsername() == trucking.getDriver().getUsername())
-                        throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same driver");
+            int indexToAdd = 0 ;
+            for(int i = 0 ; i < truckings.size(); i = i+1)
+            {
+                Trucking currentTrucking = truckings.get(i);
+                LocalDateTime startCurr = currentTrucking.getDate();
+                LocalDateTime endCurr = currentTrucking.finalDate();
+                LocalDateTime startTruck = trucking.getDate();
+                LocalDateTime endTruck = trucking.finalDate();
+                boolean before = endTruck.compareTo(startCurr)<0;
+                boolean bewteenButStartBefore = startTruck.compareTo(startCurr)<0 & endTruck.compareTo(startCurr)>0;
+                boolean bewteenButStartAfter = startTruck.compareTo(startCurr)>0 & startTruck.compareTo(endCurr)<0;
+                if(before) {truckings.add(indexToAdd,trucking); return;}
+                else if (bewteenButStartAfter)
+                {
+                    boolean checkAvailibity = checkAvailibility(currentTrucking.getVehicle().getRegistationPlate(),trucking.getVehicle().getRegistationPlate(),
+                            currentTrucking.getDriver().getUsername(),trucking.getDriver().getUsername());
                 }
-                else if (compareDates > 0) {
-                    truckingIterator.previous();
-                    truckingIterator.add(trucking);
-                    return;
+                else if(bewteenButStartBefore)
+                {
+                    boolean checkAvailibity = checkAvailibility(currentTrucking.getVehicle().getRegistationPlate(),trucking.getVehicle().getRegistationPlate(),
+                            currentTrucking.getDriver().getUsername(),trucking.getDriver().getUsername());
+                    indexToAdd=indexToAdd+1;
                 }
             }
-            truckings.add(trucking);
+            truckings.add(indexToAdd,trucking);
         }
+    }
+
+    public boolean checkAvailibility(String registrationPlate1, String registrationPlate2,String driverUserName1,String driverUserName2)
+    {
+        if (registrationPlate1 == registrationPlate2)
+            throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same vehicle");
+        if (driverUserName1 == driverUserName2)
+            throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same driver");
+        return true;
     }
 
     public synchronized void removeTrucking(int truckingId) {
@@ -58,7 +75,7 @@ public class TruckingsBoard {
     }
 
     public synchronized String printBoard() {
-        String toReturn = "             TRUCKINGS BOARD\n\n";
+        String toReturn = "TRUCKINGS BOARD\n\n";
         for (Trucking trucking : truckings) {
             toReturn += trucking.printTrucking() + line;
         }
@@ -88,7 +105,7 @@ public class TruckingsBoard {
     }
 
     public synchronized String printBoardOfDriver(String username) {
-        String toReturn = "             TRUCKINGS BOARD\n\n";
+        String toReturn = "TRUCKINGS BOARD\n\n";
         for (Trucking trucking : truckings) {
             if(trucking.getDriver().getUsername() == username)
                 toReturn += trucking.printTrucking() + line;

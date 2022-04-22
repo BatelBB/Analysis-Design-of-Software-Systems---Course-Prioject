@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class TruckManagerController extends UserController{
+public class TruckManagerController {
 
     private Map<String, String> users;
     private Map<String,TruckManager> mapTM;
@@ -19,186 +19,137 @@ public class TruckManagerController extends UserController{
         return singletonTruckManagerControllerInstance;
     }
 
-    private TruckManagerController() throws Exception {
-        super("");
-        UserController.getInstance();
+    TruckManagerController() {
         truckingIdCounter = 1;
     }
 
-    public void addVehicle(DLicense lisence, String registrationPlate, String model, int weight, int maxWeight) throws Exception {
-            checkIfActiveUserIsTruckManager();
-            Vehicle newVehicle = new Vehicle(lisence, registrationPlate, model, weight, maxWeight);
-            ((TruckManager)activeUser).addVehicle(newVehicle);
-
+    public void addVehicle(TruckManager truckManager,DLicense lisence, String registrationPlate, String model, int weight, int maxWeight) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        Vehicle newVehicle = new Vehicle(lisence, registrationPlate, model, weight, maxWeight);
+        truckManager.addVehicle(newVehicle);
     }
 
-    public List<String> getDriversUsernames() throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            return ((TruckManager)activeUser).getDriversUsernames();
-        }
+    public List<String> getDriversUsernames(TruckManager truckManager) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        return truckManager.getDriversUsernames();
     }
 
-    public List<String> getVehiclesRegistrationPlates() throws Exception {
-            checkIfActiveUserIsTruckManager();
-            return ((TruckManager)activeUser).getVehiclesRegistrationPlates();
-
+    public List<String> getVehiclesRegistrationPlates(TruckManager truckManager) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        return truckManager.getVehiclesRegistrationPlates();
     }
 
-    public void addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<ProductForTrucking> products) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)activeUser).addTrucking(truckingIdCounter, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products);
-            truckingIdCounter++;
-        }
+    public void addTrucking(TruckManager truckManager,String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<ProductForTrucking> products,long hours, long minutes) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        truckManager.addTrucking(truckingIdCounter, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products,hours,minutes);
+        truckingIdCounter++;
     }
 
-    public void removeTrucking(int truckingId) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)activeUser).removeTrucking(truckingId);
-        }
+    public void removeTrucking(TruckManager truckManager,int truckingId) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        truckManager.removeTrucking(truckingId);
     }
 
-    public String printBoard() throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            return ((TruckManager)activeUser).printBoard();
-        }
+    public String printBoard(TruckManager truckManager) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        return truckManager.printBoard();
     }
 
-    public String printTruckingsHistory() throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            return ((TruckManager)activeUser).printTruckingsHistory();
-        }
+    public String printTruckingsHistory(TruckManager truckManager) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        return truckManager.printTruckingsHistory();
     }
 
-    public String printFutureTruckings() throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            return ((TruckManager)activeUser).printFutureTruckings();
-        }
+    public String printFutureTruckings(TruckManager truckManager) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        return truckManager.printFutureTruckings();
     }
 
-    public String printBoardOfDriver(String driverUsername) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            return ((TruckManager)activeUser).printBoardOfDriver(driverUsername);
-        }
+    public String printBoardOfDriver(TruckManager truckManager,String driverUsername) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        return truckManager.printBoardOfDriver(driverUsername);
     }
 
-    public String printTruckingsHistoryOfDriver(String driverUsername) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            return ((TruckManager)activeUser).printTruckingsHistoryOfDriver(driverUsername);
-        }
+    public String printTruckingsHistoryOfDriver(TruckManager truckManager,String driverUsername) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        return truckManager.printTruckingsHistoryOfDriver(driverUsername);
     }
 
-    public String printFutureTruckingsOfDriver(String driverUsername) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            return ((TruckManager)activeUser).printFutureTruckingsOfDriver(driverUsername);
-        }
+    public String printFutureTruckingsOfDriver(TruckManager truckManager,String driverUsername) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        return truckManager.printFutureTruckingsOfDriver(driverUsername);
     }
 
-    public String printBoardOfVehicle(String registrationPlate) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            return ((TruckManager)activeUser).printBoardOfVehicle(registrationPlate);
-        }
+    public String printBoardOfVehicle(TruckManager truckManager,String registrationPlate) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        return truckManager.printBoardOfVehicle(registrationPlate);
     }
 
-    public String printTruckingsHistoryOfVehicle(String registrationPlate) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            return ((TruckManager)activeUser).printTruckingsHistoryOfVehicle(registrationPlate);
-        }
+    public String printTruckingsHistoryOfVehicle(TruckManager truckManager,String registrationPlate) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        return truckManager.printTruckingsHistoryOfVehicle(registrationPlate);
     }
 
-    public String printFutureTruckingsOfVehicle(String registrationPlate) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            return ((TruckManager)activeUser).printFutureTruckingsOfVehicle(registrationPlate);
-        }
+    public String printFutureTruckingsOfVehicle(TruckManager truckManager,String registrationPlate) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        return truckManager.printFutureTruckingsOfVehicle(registrationPlate);
     }
 
-    public void addSourcesToTrucking(int truckingId, List<Site> sources) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)activeUser).addSourcesToTrucking(truckingId, sources);
-        }
+    public void addSourcesToTrucking(TruckManager truckManager,int truckingId, List<Site> sources) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        truckManager.addSourcesToTrucking(truckingId, sources);
     }
 
-    public void addDestinationToTrucking(int truckingId, List<Site> destinations) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)activeUser).addDestinationsToTrucking(truckingId, destinations);
-        }
+    public void addDestinationToTrucking(TruckManager truckManager,int truckingId, List<Site> destinations) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        truckManager.addDestinationsToTrucking(truckingId, destinations);
     }
 
-    public void addProductToTrucking(int truckingId, ProductForTrucking productForTrucking) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)activeUser).addProductsToTrucking(truckingId, productForTrucking);
-        }
+    public void addProductToTrucking(TruckManager truckManager,int truckingId, ProductForTrucking productForTrucking) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        truckManager.addProductsToTrucking(truckingId, productForTrucking);
     }
 
-    public void updateSourcesOnTrucking(int truckingId, List<Site> sources) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)activeUser).updateSourcesOnTrucking(truckingId, sources);
-        }
+    public void updateSourcesOnTrucking(TruckManager truckManager,int truckingId, List<Site> sources) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        truckManager.updateSourcesOnTrucking(truckingId, sources);
     }
 
-    public void updateDestinationsOnTrucking(int truckingId, List<Site> destinations) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)activeUser).updateDestinationsOnTrucking(truckingId, destinations);
-        }
+    public void updateDestinationsOnTrucking(TruckManager truckManager,int truckingId, List<Site> destinations) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        truckManager.updateDestinationsOnTrucking(truckingId, destinations);
     }
 
-    public void moveProductsToTrucking(int truckingId, Products productSKU) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)activeUser).moveProductsToTrucking(truckingId, productSKU);
-        }
+    public void moveProductsToTrucking(TruckManager truckManager,int truckingId, Products productSKU) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        truckManager.moveProductsToTrucking(truckingId, productSKU);
     }
 
-    public void updateVehicleOnTrucking(int truckingId, String registrationPlateOfVehicle) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)activeUser).updateVehicleOnTrucking(truckingId, registrationPlateOfVehicle);
-        }
+    public void updateVehicleOnTrucking(TruckManager truckManager,int truckingId, String registrationPlateOfVehicle) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        truckManager.updateVehicleOnTrucking(truckingId, registrationPlateOfVehicle);
     }
 
-    public void updateDriverOnTrucking(int truckingId, String driverUsername) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)activeUser).updateDriverOnTrucking(truckingId, driverUsername);
-        }
+    public void updateDriverOnTrucking(TruckManager truckManager,int truckingId, String driverUsername) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        truckManager.updateDriverOnTrucking(truckingId, driverUsername);
     }
 
-    public void updateDateOnTrucking(int truckingId, LocalDateTime date) throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)activeUser).updateDateOnTrucking(truckingId, date);
-        }
+    public void updateDateOnTrucking(TruckManager truckManager,int truckingId, LocalDateTime date) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        truckManager.updateDateOnTrucking(truckingId, date);
     }
 
-    public String getMyRegisterCode() throws Exception {
-        synchronized (activeUser) {
-            checkIfActiveUserIsTruckManager();
-            return ((TruckManager)activeUser).getRegisterCode();
-        }
+    public String getMyRegisterCode(TruckManager truckManager) throws Exception {
+        checkIfActiveUserIsTruckManager(truckManager);
+        return truckManager.getRegisterCode();
     }
 
-    private void checkIfActiveUserIsTruckManager() throws Exception {
-        if (activeUser == null)
+    private void checkIfActiveUserIsTruckManager(TruckManager truckManager) throws Exception {
+        if (truckManager==null)
             throw new Exception("There is no user connected");
-        if (activeUser.getRole() != Role.truckingManager | !(activeUser instanceof TruckManager))
+        if (truckManager.getRole() != Role.truckingManager)
             throw new Exception("Oops, you are not a truck manager");
     }
-
 }
 

@@ -3,7 +3,7 @@ package BusinessLayer;
 public abstract class User {
     protected String name;
     protected String username;
-    private Password password;
+    protected Password password;
     protected boolean isLogin;
     protected Role role;
 

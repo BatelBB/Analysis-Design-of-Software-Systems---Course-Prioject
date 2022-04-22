@@ -16,8 +16,10 @@ public class Trucking {
     private Vehicle vehicle;
     private int weightWithProducts;
     private List<ProductForTrucking> products;
+    private long hours;
+    private long minutes;
 
-    public Trucking(int id, Vehicle vehicle, LocalDateTime date, Driver driver, List<Site> sources, List<Site> destinations, List<ProductForTrucking> products) throws Exception {
+    public Trucking(int id, Vehicle vehicle, LocalDateTime date, Driver driver, List<Site> sources, List<Site> destinations, List<ProductForTrucking> products,long hours, long minutes) throws Exception {
         if (vehicle == null | date == null | driver == null | sources == null | destinations == null | sources.size() == 0 | destinations.size() == 0 | products == null | products.size() == 0)
             throw new Exception("One or more of the data is empty");
         this.id = id;
@@ -28,6 +30,9 @@ public class Trucking {
         this.destinations = new ConcurrentHashMap<Area, List<Site>>();
         this.products = products;
         this.weightWithProducts = 0;
+        this.hours = hours;
+        this.minutes = minutes;
+        checkTime();
         checkDate();
         checkDLicense();
         checkSameArea(sources);//TODO: need to send warning if false
@@ -36,8 +41,24 @@ public class Trucking {
         addDestinations(destinations);
     }
 
+    private void checkTime() {
+        if (hours<0 | hours >6)
+            throw new IllegalArgumentException("To long or minus hour ? no no no");
+        if (minutes<0 | minutes >59)
+            throw new IllegalArgumentException("Minute is between 0 to 59 dont mess with me clown");
+    }
+
+
+    public LocalDateTime finalDate() {
+
+        LocalDateTime dateEnd =  date.plusHours(hours);
+        dateEnd.plusMinutes(minutes);
+        return dateEnd;
+    }
+
+
     public String printTrucking() {
-        String toReturn = "            TRUCKING - " + id + "\n\n";
+        String toReturn = "TRUCKING - " + id + "\n\n";
         toReturn += "TRUCKING DETAILS:\n";
         toReturn += "Date: " + date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear() + "\n";
         toReturn += "Hour: " + date.getHour() + ":" + date.getMinute() + "\n";
@@ -51,6 +72,7 @@ public class Trucking {
         else
             toReturn += "There is no data about the trucking weight\n";
         return toReturn;
+
     }
 
     public synchronized boolean updateWeight(int newWeight) throws Exception {
@@ -114,7 +136,7 @@ public class Trucking {
         checkDateForUpdateTrucking();
         if (vehicle == null)
             throw new IllegalArgumentException("The vehicle is empty");
-        if (!vehicle.getLisence().equals(driver.getLicenses()))
+        if (!(driver.getLicenses().contains(vehicle.getLisence())))
             throw new IllegalArgumentException("The driver does not have a suitable driver's license for this vehicle");
         this.vehicle = vehicle;
     }
@@ -123,7 +145,7 @@ public class Trucking {
         checkDateForUpdateTrucking();
         if (driver == null)
             throw new IllegalArgumentException("The driver is empty");
-        if (!vehicle.getLisence().equals(driver.getLicenses()))
+        if (!(driver.getLicenses().contains(vehicle.getLisence())))
             throw new IllegalArgumentException("That driver does not have a suitable driver's license for the vehicle");
         this.driver = driver;
     }
@@ -145,7 +167,7 @@ public class Trucking {
 
     public synchronized String printDestinations() {
         String toReturn = "\nDESTINATION DETAILS:\n";
-        toReturn += printSitesList(this.sources);
+        toReturn += printSitesList(this.destinations);
         return toReturn;
     }
 
