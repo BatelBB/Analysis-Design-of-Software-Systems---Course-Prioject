@@ -112,6 +112,11 @@ public class PresentationController {
                             service.deleteSupplier(ppn);
                             break;
                         }
+                        case (4):{
+                            //See summery of all suppliers
+                            output.println(service.toStringSupplier());
+                            break;
+                        }
                     }
                     break;
                 }
@@ -177,6 +182,11 @@ public class PresentationController {
                             } catch (Exception e) {
                                 output.println(e.getMessage());
                             }
+                            break;
+                        }
+                        case (7):{
+                            //see summery of items
+                            output.println(service.toStringItems());
                             break;
                         }
                     }
@@ -259,6 +269,11 @@ public class PresentationController {
                             service.getOrder(id).data.orderItem(service.getItem(arr[0], arr[1]).data, amount);
                             break;
                         }
+                        case (6):{
+                            //see summery of all orders
+                            output.println(service.toStringOrders());
+                            break;
+                        }
                     }
                     break;
                 }
@@ -281,12 +296,20 @@ public class PresentationController {
                             deleteDiscount();
                             break;
                         }
+                        case (4):{
+                            output.println(service.toStringQuantity());
+                            break;
+                        }
                     }
                     break;
                 }
                 case(5):{
                     //Show weekly order
                     service.seedExample();
+                    output.println(service.toStringSupplier());
+                    output.println(service.toStringItems());
+                    output.println(service.toStringOrders());
+                    output.println(service.toStringQuantity());
                     break;
                 }
             }
@@ -330,7 +353,6 @@ public class PresentationController {
                 output.println("This discount doesn't exist, try again.");
             }
         }
-
         return new int[]{arr[0], arr[1], amount};
     }
 

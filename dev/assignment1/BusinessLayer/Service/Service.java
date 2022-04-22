@@ -122,6 +122,29 @@ public class Service {
         orders.refreshPricesAndDiscounts(item);
     }
 
+    public String toStringSupplier(){
+        String sup = "";
+        for(Supplier supp: getSuppliers())
+            sup += supp.toString();
+        return sup;
+    }
+    public String toStringItems(){
+        String item = "";
+        for(Item it : getItems())
+            item += it.toString();
+        return item;
+    }
+    public String toStringOrders(){
+        String order = "";
+        for(Order or : getOrders())
+            order += or.toString();
+        return order;
+    }
+    public String toStringQuantity(){
+        //TODO
+        return "";
+    }
+
     private interface BusinessLayerOperation<T> {
         T run() throws BusinessLogicException;
     }
