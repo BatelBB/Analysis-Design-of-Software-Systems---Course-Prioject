@@ -83,7 +83,7 @@ public class Service {
     
     public ServiceResponseWithData<Order> createOrder(Supplier supplier, LocalDate ordered, LocalDate delivered) {
         if(!items.supplierHasAnyItems(supplier)) {
-            return ServiceResponseWithData.error("this supplier doesn't have any items currently");
+            return ServiceResponseWithData.error("This supplier doesn't have any items currently");
         }
         return responseFor(() -> orders.create(supplier, ordered, delivered));
     }

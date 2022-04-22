@@ -2,8 +2,10 @@ package assignment1.PresentationLayer;
 
 import assignment1.BusinessLayer.Entity.Contact;
 import assignment1.BusinessLayer.Entity.Item;
+import assignment1.BusinessLayer.Entity.Order;
 import assignment1.BusinessLayer.Entity.PaymentCondition;
 import assignment1.BusinessLayer.Service.Service;
+import assignment1.BusinessLayer.Service.ServiceResponseWithData;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -125,8 +127,8 @@ public class PresentationController {
                             float price = (float) input.nextInt("Enter the item's price: ");
                             service.createItem(ppn, catalog, name, category, price);
                             output.println(String.format("**SUMMERY:\nSupplier's ppn: %d | " +
-                                    "Item's catalog number: %d | Item's name: %s | Item's category: %s | " +
-                                    "Item's price: %s",
+                                            "Item's catalog number: %d | Item's name: %s | Item's category: %s | " +
+                                            "Item's price: %s",
                                     ppn, catalog, name, category, price));
                             break;
                         }
@@ -185,20 +187,36 @@ public class PresentationController {
                     switch (userInput) {
                         case (1): {
                             //create new order
+                            Order order = null;
                             int ppn = checkPPN("Enter the supplier's ppn number: ");
                             LocalDate ordered = input.nextDate("What is the order date? ");
                             LocalDate deliver = input.nextDate("When is the order supposed to be delivered? ");
                             try {
-                                String err = service.createOrder(service.getSupplier(ppn), ordered, deliver).error;
-                                if(err != null) {
+                                ServiceResponseWithData<Order> serviceResponse = service.createOrder(
+                                        service.getSupplier(ppn), ordered, deliver);
+                                order = serviceResponse.data;
+                                String err = serviceResponse.error;
+                                if (err != null) {
                                     output.println(err);
                                     break;
                                 }
-                                output.println(String.format("**SUMMERY:\nSupplier's ppn: %d | Order date: %s | " +
-                                        "Deliver Date: %s",
-                                        ppn, ordered, deliver));
+                                output.println(String.format("**SUMMERY:\nOrder id: %d | Supplier's ppn: %d | " +
+                                                "Order date: %s | Deliver Date: %s",
+                                        order.id, ppn, ordered, deliver));
+
                             } catch (Exception e) {
                                 output.println(e.getMessage());
+                            }
+                            output.println("Now it's time to add items to the order");
+                            boolean retry = true;
+                            int nextInt = 0;
+                            while (retry) {
+                                int[] arr = checkItem();
+                                int amount = input.nextInt("How much of this item do you want to order? ");
+                                service.orderItem(order, service.getItem(arr[0], arr[1]).data, amount);
+                                String more = input.nextString("Do you want add more items? n/y ");
+                                if (more.equals("n"))
+                                    retry = false;
                             }
                             break;
                         }
@@ -206,6 +224,39 @@ public class PresentationController {
                             //delete existing order
                             int ppn = checkPPN("Enter the supplier's ppn number: ");
                             service.deleteOrder(service.getOrder(ppn).data);
+                            break;
+                        }
+                        case (3): {
+                            //edit ordered date
+                            int id = input.nextInt("Enter order's id number, see summery for info ");
+                            checkId(id);
+                            LocalDate ordered = input.nextDate("What is the order date? ");
+                            try {
+                                service.getOrder(id).data.updateOrdered(ordered);
+                            } catch (Exception e) {
+                                output.println(e.getMessage());
+                            }
+                            break;
+                        }
+                        case (4): {
+                            //edit delivery date
+                            int id = input.nextInt("Enter order's id number, see summery for info ");
+                            checkId(id);
+                            LocalDate delivered = input.nextDate("When is the order supposed to be delivered? ");
+                            try {
+                                service.getOrder(id).data.updateProvided(delivered);
+                            } catch (Exception e) {
+                                output.println(e.getMessage());
+                            }
+                            break;
+                        }
+                        case (5): {
+                            //edit item's amount
+                            int id = input.nextInt("Enter order's id number, see summery for info ");
+                            checkId(id);
+                            int[] arr = checkItem();
+                            int amount = input.nextInt("Enter the correct amount: ");
+                            service.getOrder(id).data.orderItem(service.getItem(arr[0], arr[1]).data, amount);
                             break;
                         }
                     }
@@ -216,34 +267,18 @@ public class PresentationController {
                     switch (userInput) {
                         case (1): {
                             //create new quantity agreement
-                            int[] arr = checkItem();
-                            int amount = input.nextInt("For which amount is the discount applicable?: ");
-                            float discount = input.nextFloat("What would be the discount for this amount?: ");
-                            try {
-                                service.createDiscount(service.getItem(arr[0], arr[1]).data, amount, discount);
-                            } catch (Exception e) {
-                                output.println(e.getMessage());
-                            }
-                            output.println(String.format("**SUMMERY:\nSupplier's ppn: %d | Item's catalog: %d | " +
-                                    "Item's amount number: %d | Discount number: %s",
-                                    arr[0], arr[1], amount, discount));
+                            createDiscount();
                             break;
                         }
                         case (2): {
                             //edit existing quantity agreement
-                            //TODO - Should we edit this? Maybe create just new one and delete the other
+                            deleteDiscount();
+                            createDiscount();
                             break;
                         }
                         case (3): {
                             //delete existing quantity agreement
-                            int ppn = checkPPN("Enter the supplier's ppn number: ");
-                            int catalog = input.nextInt("Enter the item's catalog number: ");
-                            int amount = input.nextInt("Enter the discount amount you would like to delete: ");
-                            try {
-                                service.deleteDiscount(service.getDiscount(amount, ppn, catalog));
-                            } catch (Exception e) {
-                                output.println(e.getMessage());
-                            }
+                            deleteDiscount();
                             break;
                         }
                     }
@@ -253,17 +288,69 @@ public class PresentationController {
         }
     }
 
+    private static void createDiscount() {
+        int[] arr = checkItem();
+        int amount = input.nextInt("For which amount is the discount applicable?: ");
+        float discount = input.nextFloat("What would be the discount for this amount?: ");
+        try {
+            service.createDiscount(service.getItem(arr[0], arr[1]).data, amount, discount);
+        } catch (Exception e) {
+            output.println(e.getMessage());
+        }
+        output.println(String.format("**SUMMERY:\nSupplier's ppn: %d | Item's catalog: %d | " +
+                        "Item's amount number: %d | Discount number: %s",
+                arr[0], arr[1], amount, discount));
+    }
+
+    private static void deleteDiscount() {
+        int[] arr = checkDiscount();
+        try {
+            service.deleteDiscount(service.getDiscount(arr[2], arr[0], arr[1]));
+        } catch (Exception e) {
+            output.println(e.getMessage());
+        }
+    }
+
+    private static int[] checkDiscount() {
+        boolean retry = true;
+        int[] arr = new int[]{};
+        int amount = 0;
+        while (retry) {
+            arr = checkItem();
+            amount = input.nextInt("Enter the discount amount you would like to delete: ");
+            try {
+                service.getDiscount(arr[0], arr[1], amount);
+                retry = false;
+            } catch (Exception e) {
+                output.println("This discount doesn't exist, try again.");
+            }
+        }
+
+        return new int[]{arr[0], arr[1], amount};
+    }
+
+    private static void checkId(int id) {
+        boolean retry = true;
+        int nextInt = 0;
+        while (retry) {
+            if (service.getOrder(id).error != null)
+                retry = false;
+            else
+                output.println("The id doesn't exist please try again");
+        }
+    }
+
 
     private static int[] checkItem() {
         boolean retry = true;
         int nextInt = 0;
-        int ppn = 0 , catalog =0;
+        int ppn = 0, catalog = 0;
         while (retry) {
-                ppn = checkPPN("Enter the supplier's ppn number: ");
-                catalog = input.nextInt("Enter the item's catalog number: ");
-                if(service.getItem(ppn, catalog).success)
-                    retry = false;
-                else UserOutput.getInstance().println("The item doesn't exist, please try again.");
+            ppn = checkPPN("Enter the supplier's ppn number: ");
+            catalog = input.nextInt("Enter the item's catalog number: ");
+            if (service.getItem(ppn, catalog).success) {
+                retry = false;
+            } else output.println("The item doesn't exist, please try again.");
 
         }
         return new int[]{ppn, catalog};
@@ -275,12 +362,11 @@ public class PresentationController {
         int nextInt = 0;
         while (retry) {
             try {
-                UserOutput.getInstance().print(message);
-                nextInt = Integer.parseInt(scanner.nextLine());
+                nextInt = input.nextInt(message);
                 service.getSupplier(nextInt);
                 retry = false;
             } catch (Exception e) {
-                UserOutput.getInstance().println("There isn't supplier with this ppn number, please try again.");
+                output.println("There isn't supplier with this ppn number, please try again.");
             }
         }
         return nextInt;
@@ -293,12 +379,11 @@ public class PresentationController {
         String nextString = "";
         while (retry) {
             try {
-                UserOutput.getInstance().print("Enter day of week: ");
-                nextString = scanner.nextLine();
+                nextString = input.nextString("Enter day of week: ");
                 DayOfWeek.valueOf(nextString.toUpperCase());
                 retry = false;
             } catch (Exception e) {
-                UserOutput.getInstance().println("Please try again.");
+                output.println("Please try again.");
             }
         }
         return DayOfWeek.valueOf(nextString.toUpperCase());
