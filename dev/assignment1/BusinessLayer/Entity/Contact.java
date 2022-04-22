@@ -10,4 +10,12 @@ public class Contact {
         this.email=email;
         this.phoneNumber = phoneNumber;
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "[CONTACT: %s | %s | %s]",
+                name, email, phoneNumber
+        );
+    }
 }

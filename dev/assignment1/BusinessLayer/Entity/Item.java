@@ -61,4 +61,19 @@ public class Item {
     public float priceForAmount(int amount) {
         return controller.priceForAmount(this, amount);
     }
+
+    @Override
+    public String toString() {
+        return EntityUtils.table(
+                2, 25, true,
+                "    **** ITEM **** ", "",
+                "Name", name,
+                "Price", price,
+                "Category", category,
+                "Supplier PPN", supplier.getPpn(),
+                "Supplier name", supplier.getName(),
+                "Catalog number", catalogNumber
+        );
+    }
+
 }

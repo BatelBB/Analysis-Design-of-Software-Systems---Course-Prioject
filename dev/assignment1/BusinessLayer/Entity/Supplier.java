@@ -1,7 +1,7 @@
 package assignment1.BusinessLayer.Entity;
 
+
 import java.time.DayOfWeek;
-import java.util.List;
 
 public class Supplier {
     int ppn;
@@ -74,4 +74,22 @@ public class Supplier {
     public void setContact(Contact contact) {
         this.contact = contact;
     }
+
+    @Override
+    public String toString() {
+        return EntityUtils.table(
+                2, 25, true,
+                "    **** SUPPLIER **** ", "",
+                "PPN", ppn,
+                "Name", name,
+                "Contact name", contact.name,
+                "Contact phone", contact.phoneNumber,
+                "Contact email", contact.email,
+                "Bank #", bankNumber,
+                "Delivering", isDelivering,
+                "Payment condition", paymentCondition,
+                "Supplies on", (regularSupplyingDays == null ? "N/A" : regularSupplyingDays)
+        );
+    }
+
 }

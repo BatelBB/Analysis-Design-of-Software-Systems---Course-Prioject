@@ -14,4 +14,18 @@ public class QuantityDiscount {
     public Item getItem() {
         return item;
     }
+
+    @Override
+    public String toString() {
+        return  EntityUtils.table(
+                2, 30, true,
+                "  **** QUANTITY DISCOUNT **** ", "",
+                "Item name", item.name,
+                "Item catalog number", item.catalogNumber,
+                "For amounts over", quantity,
+                "Discount", String.format("%.2f%%", discount * 100),
+                "Supplier (name)", item.getSupplier().name,
+                "Supplier (ppn)", item.getSupplier().ppn
+        );
+    }
 }
