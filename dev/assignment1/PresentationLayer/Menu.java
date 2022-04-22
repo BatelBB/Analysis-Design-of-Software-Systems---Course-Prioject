@@ -32,9 +32,7 @@ public class Menu {
     public String getOrderSubmenu(){
         return new String(
                 "1. Create new order\n" +
-                "2. Edit existing order\n" +
-                "3. Delete existing order\n" +
-                        "4. Display existing order\n");
+                "2. Delete existing order\n");
     }
 
     public String getSupplierSubmenu(){

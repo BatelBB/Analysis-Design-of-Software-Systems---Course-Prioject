@@ -189,18 +189,8 @@ public class PresentationController {
                             break;
                         }
                         case (2): {
-                            //edit existing order
-                            // TODO - What should we edit exactly?
-                            break;
-                        }
-                        case (3): {
                             //delete existing order
-                            // TODO - should we delete a whole order?
-                            break;
-                        }
-                        case (4): {
-                            //display existing order
-                            // TODO - How should we display it?
+                            service.deleteOrder(service.get)
                             break;
                         }
                     }
