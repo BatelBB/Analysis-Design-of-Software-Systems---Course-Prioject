@@ -10,17 +10,18 @@ public class UserInput {
     private Scanner scanner = new Scanner(System.in);
 
     private static UserInput instance = null;
-    private UserInput(){
+
+    private UserInput() {
 
     }
 
-    static UserInput getInstance(){
-        if(instance == null)
+    static UserInput getInstance() {
+        if (instance == null)
             instance = new UserInput();
         return instance;
     }
 
-    int nextInt(String message){
+    int nextInt(String message) {
         //goes in a loop to get int and prints the message we provided each time
         boolean retry = true;
         int nextInt = 0;
@@ -39,8 +40,7 @@ public class UserInput {
     }
 
 
-
-    boolean nextBoolean(String message){
+    boolean nextBoolean(String message) {
         //goes in a loop to get boolean and prints the message we provided each time
         boolean retry = true;
         boolean nextBool = false;
@@ -60,7 +60,7 @@ public class UserInput {
         return nextBool;
     }
 
-    String nextString(String message){
+    String nextString(String message) {
         //goes in a loop to get String and prints the message we provided each time
         boolean retry = true;
         String nextString = "";
@@ -98,6 +98,7 @@ public class UserInput {
     }
 
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+
     public LocalDate nextDate(String message) {
         //goes in a loop to get int and prints the message we provided each time
         boolean retry = true;
@@ -107,7 +108,7 @@ public class UserInput {
                 UserOutput.getInstance().print(message + "(format: YYYY/MM/DD " +
                         "; or TODAY (all uppercase) for today) ");
                 String inputLine = scanner.nextLine();
-                if("TODAY".equals(inputLine)) {
+                if ("TODAY".equals(inputLine)) {
                     return LocalDate.now();
                 }
                 nextDate = LocalDate.parse(inputLine, dateTimeFormatter);
