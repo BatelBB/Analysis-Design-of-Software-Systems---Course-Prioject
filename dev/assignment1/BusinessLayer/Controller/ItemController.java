@@ -107,4 +107,8 @@ public class ItemController {
             discounts.remove(entry.getValue());
         }
     }
+
+    public boolean supplierHasAnyItems(Supplier supplier) {
+        return items.values().stream().anyMatch(i -> i.getSupplier() == supplier);
+    }
 }
