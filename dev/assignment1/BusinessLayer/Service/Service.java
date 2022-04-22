@@ -100,7 +100,7 @@ public class Service {
     }
 
     public QuantityDiscount getDiscount(int amount, int ppn, int catalog) throws BusinessLogicException {
-        List<QuantityDiscount> discounts = items.getDiscountList(getItem(ppn,catalog));
+        List<QuantityDiscount> discounts = items.getDiscountList(getItem(ppn,catalog).data);
         for(int i = 0; i < discounts.size(); i++) {
             QuantityDiscount current = discounts.get(i);
             if(current.quantity == amount) {

@@ -38,13 +38,15 @@ public class UserInput {
         return nextInt;
     }
 
+
+
     boolean nextBoolean(String message){
         //goes in a loop to get boolean and prints the message we provided each time
         boolean retry = true;
         boolean nextBool = false;
         while (retry) {
             try {
-                UserOutput.getInstance().print(message + " (true/false)");
+                UserOutput.getInstance().print(message + " (true/false) ");
                 String ans = scanner.nextLine();
                 if (!ans.equalsIgnoreCase("true") && !ans.equalsIgnoreCase("false")) {
                     throw new InputMismatchException("String is not true or false");
@@ -103,7 +105,7 @@ public class UserInput {
         while (retry) {
             try {
                 UserOutput.getInstance().print(message + "(format: " + dateTimeFormatter.toString() +
-                        "; or TODAY (all uppercase) for today)");
+                        "; or TODAY (all uppercase) for today) ");
                 String inputLine = scanner.nextLine();
                 if("TODAY".equals(inputLine)) {
                     return LocalDate.now();

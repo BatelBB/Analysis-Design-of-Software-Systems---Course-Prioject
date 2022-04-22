@@ -7,7 +7,6 @@ import assignment1.BusinessLayer.Service.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class PresentationController {
@@ -32,7 +31,7 @@ public class PresentationController {
                             int ppn = input.nextInt("Enter supplier's ppn number: ");
                             int bankAccount = input.nextInt("Enter supplier's bank account number: ");
                             String name = input.nextString("Enter supplier's company name: ");
-                            boolean isDelivering = input.nextBoolean("Is the supplier delivering by himself? ");
+                            boolean isDelivering = input.nextBoolean("Is the supplier delivering by himself?");
                             PaymentCondition paymentCondition = choosePayment("Which way will the supplier pay? ");
                             DayOfWeek day = isDelivering ? chooseDay() : null;
                             String contactName = input.nextString("Enter the supplier's contact name: ");
@@ -40,9 +39,10 @@ public class PresentationController {
                             String phoneNum = input.nextString("Enter the supplier's contact phone number: ");
                             service.createSupplier(ppn, bankAccount, name, isDelivering, paymentCondition, day,
                                     new Contact(contactName, email, phoneNum));
-                            output.println(String.format("**SUMMERY:\nPPN Number: %d | Bank Account: %d | Company Name: %s | " +
-                                            "Is Delivering?: %b | Payment Condition: %s | Supplying Day: %s |\n " +
-                                            "Contact Name: %s | Contact Email: %s | Contact Phone Number: %s",
+                            output.println(String.format("**SUMMERY:\nPPN Number: %d | Bank Account: %d | " +
+                                            "Company Name: %s | Is Delivering?: %b | Payment Condition: %s | " +
+                                            "Supplying Day: %s |\n Contact Name: %s | Contact Email: %s | " +
+                                            "Contact Phone Number: %s",
                                     ppn, bankAccount, name, isDelivering, paymentCondition.toString(), day.toString(),
                                     contactName, email, phoneNum));
 
@@ -50,42 +50,49 @@ public class PresentationController {
                         }
                         case (2): {
                             //Edit existing supplier card
-                            int ppn = checkPPN("Enter the ppn number ");
+                            int ppn = checkPPN("Enter the ppn number: ");
                             output.println("What do you want to edit? ");
                             int edit = input.nextInt(menu.getSupplierEditSubmenu());
                             try {
                                 switch (edit) {
                                     case (1): {
+                                        //PPN NUMBER
                                         output.println("[Sorry, this operation isn't available]");
-                                        // service.getSupplier(ppn).setPpn(input.nextInt("Enter ppn number: "));
                                         break;
                                     }
                                     case (2): {
+                                        //Edit bank account
                                         service.getSupplier(ppn).setBankNumber(input.nextInt("Enter bank account: "));
                                         break;
                                     }
                                     case (3): {
+                                        //Edit company name
                                         service.getSupplier(ppn).setName(input.nextString("Enter name: "));
                                         break;
                                     }
                                     case (4): {
+                                        //Edit delivery
                                         service.getSupplier(ppn).setDelivering(
                                                 input.nextBoolean("Is delivering?"));
                                         break;
                                     }
                                     case (5): {
+                                        //edit payment condition
                                         service.getSupplier(ppn).setPaymentCondition(choosePayment(
-                                                input.nextString("Which way will the supplier pay? ")));
+                                                "Which way will the supplier pay? "));
                                         break;
                                     }
                                     case (6): {
+                                        //edit supplying days
                                         service.getSupplier(ppn).setRegularSupplyingDays(chooseDay());
                                         break;
                                     }
                                     case (7): {
+                                        //Edit contact
                                         String contactName = input.nextString("Enter the supplier's contact name: ");
                                         String email = input.nextString("Enter the supplier's contact email: ");
-                                        String phoneNum = input.nextString("Enter the supplier's contact phone number: ");
+                                        String phoneNum = input.nextString(
+                                                "Enter the supplier's contact phone number: ");
                                         service.getSupplier(ppn).setContact(new Contact(contactName, email, phoneNum));
                                         break;
                                     }
@@ -111,19 +118,23 @@ public class PresentationController {
                     switch (userInput) {
                         case (1): {
                             //Create new item
-                            int ppn = input.nextInt("Enter the supplier's ppn number: ");
+                            int ppn = checkPPN("Enter the supplier's ppn number: ");
                             int catalog = input.nextInt("Enter the item's catalog number: ");
                             String name = input.nextString("Enter the name of the item: ");
                             String category = input.nextString("Enter the item's category: ");
                             float price = (float) input.nextInt("Enter the item's price: ");
                             service.createItem(ppn, catalog, name, category, price);
+                            output.println(String.format("**SUMMERY:\nSupplier's ppn: %d | " +
+                                    "Item's catalog number: %d | Item's name: %s | Item's category: %s | " +
+                                    "Item's price: %s",
+                                    ppn, catalog, name, category, price));
                             break;
                         }
                         case (2): {
                             //Edit catalog number of existing item
                             int[] arr = checkItem();
                             try {
-                                service.getItem(arr[0], arr[1]).setCatalogNumber(
+                                service.getItem(arr[0], arr[1]).data.setCatalogNumber(
                                         input.nextInt("Enter new catalog number: "));
                             } catch (Exception e) {
                                 output.println(e.getMessage());
@@ -134,7 +145,7 @@ public class PresentationController {
                             //edit price of existing item
                             int[] arr = checkItem();
                             try {
-                                Item item = service.getItem(arr[0], arr[1]);
+                                Item item = service.getItem(arr[0], arr[1]).data;
                                 service.setPrice(item, input.nextFloat("Enter new price: "));
                             } catch (Exception e) {
                                 output.println(e.getMessage());
@@ -145,7 +156,7 @@ public class PresentationController {
                             //edit name of existing item
                             int[] arr = checkItem();
                             try {
-                                service.getItem(arr[0], arr[1]).setName(input.nextString("Enter new name: "));
+                                service.getItem(arr[0], arr[1]).data.setName(input.nextString("Enter new name: "));
                             } catch (Exception e) {
                                 output.println(e.getMessage());
                             }
@@ -155,7 +166,8 @@ public class PresentationController {
                             //edit category of existing item
                             int[] arr = checkItem();
                             try {
-                                service.getItem(arr[0], arr[1]).setCategory(input.nextString("Enter new category: "));
+                                service.getItem(arr[0], arr[1]).data.setCategory(input.nextString(
+                                        "Enter new category: "));
                             } catch (Exception e) {
                                 output.println(e.getMessage());
                             }
@@ -165,7 +177,7 @@ public class PresentationController {
                             //delete existing item
                             int[] arr = checkItem();
                             try {
-                                service.deleteItem(service.getItem(arr[0], arr[1]));
+                                service.deleteItem(service.getItem(arr[0], arr[1]).data);
                             } catch (Exception e) {
                                 output.println(e.getMessage());
                             }
@@ -179,9 +191,16 @@ public class PresentationController {
                     switch (userInput) {
                         case (1): {
                             //create new order
-                            int ppn = input.nextInt("Enter the supplier's ppn number: ");
+                            int ppn = checkPPN("Enter the supplier's ppn number: ");
+                            if(!areThereItems(ppn))
+                                break;
+                            LocalDate ordered = input.nextDate("What is the order date? ");
+                            LocalDate deliver = input.nextDate("When is the order supposed to be delivered? ");
                             try {
-                                service.createOrder(service.getSupplier(ppn), LocalDate.now(), null);
+                                service.createOrder(service.getSupplier(ppn), ordered, deliver);
+                                output.println(String.format("**SUMMERY:\nSupplier's ppn: %d | Order date: %s | " +
+                                        "Deliver Date: %s",
+                                        ppn, ordered, deliver));
                             } catch (Exception e) {
                                 output.println(e.getMessage());
                             }
@@ -189,7 +208,8 @@ public class PresentationController {
                         }
                         case (2): {
                             //delete existing order
-                            service.deleteOrder(service.get)
+                            int ppn = checkPPN("Enter the supplier's ppn number: ");
+                            service.deleteOrder(service.getOrder(ppn).data);
                             break;
                         }
                     }
@@ -200,15 +220,17 @@ public class PresentationController {
                     switch (userInput) {
                         case (1): {
                             //create new quantity agreement
-                            int ppn = input.nextInt("Enter the supplier's ppn number: ");
-                            int catalog = input.nextInt("Enter the item's catalog number: ");
+                            int[] arr = checkItem();
                             int amount = input.nextInt("For which amount is the discount applicable?: ");
-                            float discount = (float) input.nextInt("What would be the discount for this amount?: ");
+                            float discount = input.nextFloat("What would be the discount for this amount?: ");
                             try {
-                                service.createDiscount(service.getItem(ppn, catalog), amount, discount);
+                                service.createDiscount(service.getItem(arr[0], arr[1]).data, amount, discount);
                             } catch (Exception e) {
                                 output.println(e.getMessage());
                             }
+                            output.println(String.format("**SUMMERY:\nSupplier's ppn: %d | Item's catalog: %d | " +
+                                    "Item's amount number: %d | Discount number: %s",
+                                    arr[0], arr[1], amount, discount));
                             break;
                         }
                         case (2): {
@@ -218,7 +240,7 @@ public class PresentationController {
                         }
                         case (3): {
                             //delete existing quantity agreement
-                            int ppn = input.nextInt("Enter the supplier's ppn number: ");
+                            int ppn = checkPPN("Enter the supplier's ppn number: ");
                             int catalog = input.nextInt("Enter the item's catalog number: ");
                             int amount = input.nextInt("Enter the discount amount you would like to delete: ");
                             try {
@@ -235,19 +257,22 @@ public class PresentationController {
         }
     }
 
+    private static boolean areThereItems(int ppn) {
+        //TODO
+        return true;
+    }
+
     private static int[] checkItem() {
         boolean retry = true;
         int nextInt = 0;
         int ppn = 0 , catalog =0;
         while (retry) {
-            try {
-                ppn = input.nextInt("Enter the supplier's ppn number: ");
+                ppn = checkPPN("Enter the supplier's ppn number: ");
                 catalog = input.nextInt("Enter the item's catalog number: ");
-                service.getItem(ppn, catalog);
-                retry = false;
-            } catch (Exception e) {
-                UserOutput.getInstance().println("The item doesn't exist, please try again.");
-            }
+                if(service.getItem(ppn, catalog).success)
+                    retry = false;
+                else UserOutput.getInstance().println("The item doesn't exist, please try again.");
+
         }
         return new int[]{ppn, catalog};
 
@@ -258,7 +283,7 @@ public class PresentationController {
         int nextInt = 0;
         while (retry) {
             try {
-                UserOutput.getInstance().println(message);
+                UserOutput.getInstance().print(message);
                 nextInt = Integer.parseInt(scanner.nextLine());
                 service.getSupplier(nextInt);
                 retry = false;
@@ -271,7 +296,20 @@ public class PresentationController {
 
 
     private static DayOfWeek chooseDay() {
-        return DayOfWeek.valueOf(input.nextString("Enter day of week: ").toUpperCase());
+        boolean retry = true;
+        DayOfWeek day = null;
+        String nextString = "";
+        while (retry) {
+            try {
+                UserOutput.getInstance().print("Enter day of week: ");
+                nextString = scanner.nextLine();
+                DayOfWeek.valueOf(nextString.toUpperCase());
+                retry = false;
+            } catch (Exception e) {
+                UserOutput.getInstance().println("Please try again.");
+            }
+        }
+        return DayOfWeek.valueOf(nextString.toUpperCase());
     }
 
     private static PaymentCondition choosePayment(String s) {
