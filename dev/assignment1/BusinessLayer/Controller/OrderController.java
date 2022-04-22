@@ -7,6 +7,8 @@ import assignment1.BusinessLayer.Entity.Supplier;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class OrderController {
     ArrayList<Order> orders;
@@ -52,7 +54,15 @@ public class OrderController {
         orders.removeIf(order -> order.supplier == s);
     }
 
-    public void delete(Order order) {
+    public void delete(Order order) throws BusinessLogicException {
+        if(!orders.contains(order)) {
+            throw new BusinessLogicException("Tried to delete order, but it doesn't " +
+                    "seem to exist (maybe it was already deleted?)");
+        }
         orders.remove(order);
+    }
+
+    public Collection<Order> all() {
+        return new ArrayList<>(orders);
     }
 }
