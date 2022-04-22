@@ -125,6 +125,12 @@ public class Service {
     public Collection<QuantityDiscount> getDiscounts() {
         return items.getAllDiscounts();
     }
+    public String toStringSupplier(){
+        String supp = "";
+        for(Supplier sup : getSuppliers())
+            supp += sup.toString();
+        return supp;
+    }
     public String toStringItems(){
         String item = "";
         for(Item it : getItems())
