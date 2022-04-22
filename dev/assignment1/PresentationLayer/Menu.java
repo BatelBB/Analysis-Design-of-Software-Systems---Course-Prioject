@@ -17,7 +17,7 @@ public class Menu {
         return new String("1. Supplier menu\n" +
                 "2. Item Menu\n" +
                 "3. Order Menu\n" +
-                "4. Quantity Menu\n");
+                "4. Quantity Agreement Menu\n");
     }
     public String getItemSubmenu(){
         return new String(

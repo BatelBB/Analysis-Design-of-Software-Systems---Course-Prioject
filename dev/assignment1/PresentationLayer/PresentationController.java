@@ -132,13 +132,7 @@ public class PresentationController {
                         }
                         case (2): {
                             //Edit catalog number of existing item
-                            int[] arr = checkItem();
-                            try {
-                                service.getItem(arr[0], arr[1]).data.setCatalogNumber(
-                                        input.nextInt("Enter new catalog number: "));
-                            } catch (Exception e) {
-                                output.println(e.getMessage());
-                            }
+                            output.println("[Sorry, this operation isn't available]");
                             break;
                         }
                         case (3): {
@@ -192,12 +186,14 @@ public class PresentationController {
                         case (1): {
                             //create new order
                             int ppn = checkPPN("Enter the supplier's ppn number: ");
-                            if(!areThereItems(ppn))
-                                break;
                             LocalDate ordered = input.nextDate("What is the order date? ");
                             LocalDate deliver = input.nextDate("When is the order supposed to be delivered? ");
                             try {
-                                service.createOrder(service.getSupplier(ppn), ordered, deliver);
+                                String err = service.createOrder(service.getSupplier(ppn), ordered, deliver).error;
+                                if(err != null) {
+                                    output.println(err);
+                                    break;
+                                }
                                 output.println(String.format("**SUMMERY:\nSupplier's ppn: %d | Order date: %s | " +
                                         "Deliver Date: %s",
                                         ppn, ordered, deliver));
@@ -257,10 +253,6 @@ public class PresentationController {
         }
     }
 
-    private static boolean areThereItems(int ppn) {
-        //TODO
-        return true;
-    }
 
     private static int[] checkItem() {
         boolean retry = true;

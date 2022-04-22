@@ -104,7 +104,7 @@ public class UserInput {
         LocalDate nextDate = null;
         while (retry) {
             try {
-                UserOutput.getInstance().print(message + "(format: " + dateTimeFormatter.toString() +
+                UserOutput.getInstance().print(message + "(format: YYYY/MM/DD " +
                         "; or TODAY (all uppercase) for today) ");
                 String inputLine = scanner.nextLine();
                 if("TODAY".equals(inputLine)) {
