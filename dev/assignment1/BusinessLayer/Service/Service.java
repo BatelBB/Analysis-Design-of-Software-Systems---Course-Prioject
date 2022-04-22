@@ -90,7 +90,7 @@ public class Service {
 
     
     public Collection<Order> getOrders() {
-        throw new RuntimeException("not yet implemented");
+        return orders.all();
     }
 
     
@@ -122,11 +122,8 @@ public class Service {
         orders.refreshPricesAndDiscounts(item);
     }
 
-    public String toStringSupplier(){
-        String sup = "";
-        for(Supplier supp: getSuppliers())
-            sup += supp.toString();
-        return sup;
+    public Collection<QuantityDiscount> getDiscounts() {
+        return items.getAllDiscounts();
     }
     public String toStringItems(){
         String item = "";
@@ -144,6 +141,7 @@ public class Service {
         //TODO
         return "";
     }
+
 
     private interface BusinessLayerOperation<T> {
         T run() throws BusinessLogicException;
