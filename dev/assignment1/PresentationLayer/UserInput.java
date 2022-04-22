@@ -44,7 +44,7 @@ public class UserInput {
         boolean nextBool = false;
         while (retry) {
             try {
-                UserOutput.getInstance().print(message);
+                UserOutput.getInstance().print(message + " (true/false)");
                 String ans = scanner.nextLine();
                 if (!ans.equalsIgnoreCase("true") && !ans.equalsIgnoreCase("false")) {
                     throw new InputMismatchException("String is not true or false");
