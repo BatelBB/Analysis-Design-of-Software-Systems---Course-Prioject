@@ -337,11 +337,13 @@ public class PresentationController {
     private static void checkId(int id) {
         boolean retry = true;
         int nextInt = 0;
+        int curId = id;
         while (retry) {
-            if (service.getOrder(id).error != null)
+            if (service.getOrder(curId).success)
                 retry = false;
-            else
-                output.println("The id doesn't exist please try again");
+            else {
+                curId = input.nextInt("The id doesn't exist please try again\n");
+            }
         }
     }
 
