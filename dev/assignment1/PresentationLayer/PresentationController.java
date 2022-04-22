@@ -284,6 +284,11 @@ public class PresentationController {
                     }
                     break;
                 }
+                case(5):{
+                    //Show weekly order
+                    service.seedExample();
+                    break;
+                }
             }
         }
     }
