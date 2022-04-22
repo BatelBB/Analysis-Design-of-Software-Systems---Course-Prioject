@@ -6,6 +6,7 @@ import assignment1.BusinessLayer.Entity.QuantityDiscount;
 import assignment1.BusinessLayer.Entity.Supplier;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ItemController {
     Map<String, Item> items;
@@ -111,5 +112,9 @@ public class ItemController {
 
     public boolean supplierHasAnyItems(Supplier supplier) {
         return items.values().stream().anyMatch(i -> i.getSupplier() == supplier);
+    }
+
+    public Collection<QuantityDiscount> getAllDiscounts() {
+        return discounts.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
     }
 }

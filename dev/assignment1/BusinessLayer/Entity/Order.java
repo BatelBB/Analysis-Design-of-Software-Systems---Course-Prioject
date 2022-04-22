@@ -73,6 +73,15 @@ public class Order {
     public float getTotalPrice() {
         return totalPrice;
     }
+
+    public LocalDate getOrdered() {
+        return ordered;
+    }
+
+    public LocalDate getProvided() {
+        return provided;
+    }
+
     @Override
     public String toString() {
         ArrayList<String> table = new ArrayList<>();
