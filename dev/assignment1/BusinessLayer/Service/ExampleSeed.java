@@ -56,7 +56,7 @@ public class ExampleSeed {
         Supplier supplier = service.createSupplier(2, 22222, "Good Foods",
                 true, PaymentCondition.DirectDebit,
                 null,
-                new Contact("Good Foods", "gezer@goodfood.food", "555-0001")
+                new Contact("Tim Apple", "tim@good.food", "555-0001")
         ).data;
 
         Item bread = service.createItem(supplier.getPpn(), 1,
