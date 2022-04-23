@@ -188,7 +188,7 @@ public class TruckManagerController extends UserController{
     }
 
     private void checkIfActiveUserIsTruckManager() throws Exception {
-        if (getActiveUser() == null)
+        if (getActiveUser().hashCode() == getNullUserForLogOut().hashCode())
             throw new Exception("There is no user connected");
         if (getActiveUser().getRole() != Role.truckingManager | !(getActiveUser() instanceof TruckManager))
             throw new Exception("Oops, you are not a truck manager");

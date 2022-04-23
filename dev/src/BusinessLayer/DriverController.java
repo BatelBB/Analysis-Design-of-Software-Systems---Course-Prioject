@@ -69,7 +69,7 @@ public class DriverController extends UserController{
     }
 
     private void checkIfActiveUserIsDriver() throws Exception {
-        if (getActiveUser().hashCode() == UserController.getInstance().nullUserForLogOut.hashCode())
+        if (getActiveUser().hashCode() == getNullUserForLogOut().hashCode())
             throw new Exception("There is no user connected");
         if (getActiveUser().getRole() != Role.driver | !(getActiveUser() instanceof Driver))
             throw new Exception("Oops, you are not a driver");

@@ -8,7 +8,7 @@ public class UserController {
     private Map<String, User> users;
     private static UserController singletonUserControllerInstance = null;
     private User activeUser;
-    protected User nullUserForLogOut = new TruckManager(null, null, null);
+    private User nullUserForLogOut = new TruckManager(null, null, null);
     private final int MIN_USERNAME_LENGTH = 3;
     private final int MAX_USERNAME_LENGTH = 12;
     private String CODE_TRUCK_MANAGER = "tm1234tm";
