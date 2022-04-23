@@ -12,7 +12,30 @@ import java.util.stream.Collectors;
 
 public class EmployeeServiceTest {
     @Test
-    public void testCreateShift()
+    public void testCreateShiftMorning()
+    {
+        EmployeeService service = new EmployeeService();
+        Employee HR = service.createEmployee(new Employee(
+                "111111110",
+                "Foo",
+                Employee.Role.HumanResources,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(),Shift.Type.Morning, new LinkedList<>(), new HashMap<>());
+        assertEquals(service.listShifts(HR.id).size(), 1);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().size(),8);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().get(Employee.Role.StoreManager),1);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().get(Employee.Role.LogisticsManager),1);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().get(Employee.Role.HumanResources),1);
+    }
+
+    @Test
+    public void testCreateShiftEvening()
     {
         EmployeeService service = new EmployeeService();
         Employee HR = service.createEmployee(new Employee(
@@ -28,6 +51,10 @@ public class EmployeeServiceTest {
         ));
         Shift shift = service.createShift(HR.id, new GregorianCalendar(),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
         assertEquals(service.listShifts(HR.id).size(), 1);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().size(),8);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().get(Employee.Role.StoreManager),0);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().get(Employee.Role.LogisticsManager),0);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().get(Employee.Role.HumanResources),0);
     }
 
     @Test

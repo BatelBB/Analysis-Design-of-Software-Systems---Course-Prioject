@@ -49,7 +49,9 @@ public class Employee {
         Stocker,
         Cashier,
         LogisticsManager,
-        Driver
+        ShiftManager,
+        Driver,
+        StoreManager
     };
     private Role role;
 

@@ -16,8 +16,16 @@ public class Shift {
         for (Employee.Role r : Employee.Role.values()) {
             if(requiredStaff.containsKey(r))
                 this.requiredStaff.put(r, requiredStaff.get(r));
-            else
-                this.requiredStaff.put(r, 1);
+            else {
+                if(type.equals(Type.morning))
+                    this.requiredStaff.put(r, 1);
+                else{
+                    if(!(r.equals(Employee.Role.HumanResources)|r.equals(Employee.Role.LogisticsManager)|r.equals(Employee.Role.StoreManager)))
+                        this.requiredStaff.put(r, 1);
+                    else
+                        this.requiredStaff.put(r, 0);
+                }
+            }
         }
     }
 
