@@ -1,28 +1,17 @@
 @startuml
 
-title Relationships - Class Diagram
-
 package presentationLayer {
-	class PresentationController
-	class UserInput 
-	class UserOutput
-	class Menu
-	
-	PresentationController -- UserInput
-	PresentationController -- UserOutput
-	PresentationController "1" -- "*" Menu
-	Menu "*" -- "1" Menu
-	
+	PresentationController -- UserInput: uses
+	PresentationController -- UserOutput: uses
+	UserInput -- UserOutput: uses
 }
 
 package businessLayer {
 	
 	package businessLayer.entity as entity {
-		enum PaymentCondition {
-			DirectDebit
-			Credit
-		}
-	
+		
+		class EntityUtils
+		
 		class Supplier {
 			ppn: int
 			bankNumber: int
@@ -31,8 +20,6 @@ package businessLayer {
 			paymentCondition: PaymentCondition
 			regularSupplyingDays?: List<Weekday>
 		}
-		
-		' note left of Supplier: "notice regularSupplyingDays is optional" '
 		
 		class Contact {
 			name: string
@@ -44,10 +31,6 @@ package businessLayer {
 			ordered: LocalDate
 			provided: LocalDate
 			totalPrice: float
-		}
-		
-		class ItemOrder {
-			quantity: int
 		}
 		
 		class Item {
@@ -62,14 +45,14 @@ package businessLayer {
 			discount: float
 		}
 		
-		Supplier "has" ..  PaymentCondition
-		Supplier "1" -- "1" Contact: "contacted via"
+		Supplier "1" *-- "1" Contact: "contacted via"
 		
-		QuantityDiscount "*" -- "1" Item: "is for"
-		QuantityDiscount "*" -- "1" Supplier: "given by"
+		QuantityDiscount "*" --* "1" Item: "is for"
 		
-		ItemOrder "*" *-- "1" Item: ordered
-		ItemOrder "*" *-- "1" Order: ordering
+		<>   item_order_link_node
+		Item "*" o--  item_order_link_node: ordering
+		item_order_link_node  --o "*" Order: ordering
+		note left of item_order_link_node: "quantity: int"
 		
 		Supplier "1" -- "*" Item: supplied
 	}
@@ -87,9 +70,9 @@ package businessLayer {
 		
 		}
 		
-		SupplierController --o Supplier
-		ItemController --o Item
-		OrderController --o Order
+		SupplierController *-- Supplier
+		ItemController *-- Item
+		OrderController *-- Order
 	}
 	
 	package businessLayer.service {
@@ -103,8 +86,6 @@ package businessLayer {
 	ctrl --[hidden]-> entity
 }
 
-
-	presentationLayer -[hidden]-> businessLayer
-	PresentationController -d- Service
-
+	PresentationController -- Service: uses
+	Service -[hidden]-> presentationLayer
 @enduml

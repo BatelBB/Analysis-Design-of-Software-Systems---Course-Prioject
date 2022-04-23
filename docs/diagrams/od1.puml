@@ -20,13 +20,6 @@
 		totalPrice: 800.0
 	}
 	
-	object "ItemOrder" as ItemOrder {
-		quantity: 100
-	}
-	
-	object "ItemOrder" as ItemOrder2 {
-		quantity: 50
-	}
 	
 	object "milk: Item" as Item {
 		catalogNumber: 1
@@ -42,16 +35,24 @@
 		price: 6.0
 	}
 	
-	Supplier  --  Contact: "contacted via"
+	Supplier -- Contact: "contacted via"
 	
-	ItemOrder  --*  Item: ordered
-	ItemOrder  *--  Order: ordering
 	
-	ItemOrder2  --*  Item2: ordered
-	ItemOrder2  *--  Order: ordering
+	diamond ItemOrder
+	note right of	ItemOrder: "quantity: 100"
 	
-	Supplier  --  Item: supplied
-	Supplier  --  Item2: supplied
+	
+	diamond ItemOrder2
+	note right of	ItemOrder2: "quantity: 50"
+	
+	ItemOrder -- Item: ordered
+	ItemOrder -- Order: ordering
+	
+	ItemOrder2 -- Item2: ordered
+	ItemOrder2 -- Order: ordering
+	
+	Supplier -- Item: supplied
+	Supplier -- Item2: supplied
 	
 	Order -- Supplier: "is from"
 
@@ -67,9 +68,9 @@
 	
 	}
 	
-	SupplierController --o Supplier
-	ItemController --o Item
-	OrderController --o Order
+	SupplierController -- Supplier
+	ItemController -- Item
+	OrderController -- Order
 
 
 @enduml
