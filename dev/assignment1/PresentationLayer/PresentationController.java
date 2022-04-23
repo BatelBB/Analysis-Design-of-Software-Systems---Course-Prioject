@@ -39,15 +39,8 @@ public class PresentationController {
                             String contactName = input.nextString("Enter the supplier's contact name: ");
                             String email = input.nextString("Enter the supplier's contact email: ");
                             String phoneNum = input.nextString("Enter the supplier's contact phone number: ");
-                            service.createSupplier(ppn, bankAccount, name, isDelivering, paymentCondition, day,
-                                    new Contact(contactName, email, phoneNum));
-                            output.println(String.format("**SUMMERY:\nPPN Number: %d | Bank Account: %d | " +
-                                            "Company Name: %s | Is Delivering?: %b | Payment Condition: %s | " +
-                                            "Supplying Day: %s |\n Contact Name: %s | Contact Email: %s | " +
-                                            "Contact Phone Number: %s",
-                                    ppn, bankAccount, name, isDelivering, paymentCondition.toString(), day.toString(),
-                                    contactName, email, phoneNum));
-
+                            output.print(service.createSupplier(ppn, bankAccount, name, isDelivering,
+                                    paymentCondition, day, new Contact(contactName, email, phoneNum)).data.toString());
                             break;
                         }
                         case (2): {
@@ -130,11 +123,7 @@ public class PresentationController {
                             String name = input.nextString("Enter the name of the item: ");
                             String category = input.nextString("Enter the item's category: ");
                             float price = (float) input.nextInt("Enter the item's price: ");
-                            service.createItem(ppn, catalog, name, category, price);
-                            output.println(String.format("**SUMMERY:\nSupplier's ppn: %d | " +
-                                            "Item's catalog number: %d | Item's name: %s | Item's category: %s | " +
-                                            "Item's price: %s",
-                                    ppn, catalog, name, category, price));
+                            output.print(service.createItem(ppn, catalog, name, category, price).data.toString());
                             break;
                         }
                         case (2): {
@@ -210,9 +199,6 @@ public class PresentationController {
                                     output.println(err);
                                     break;
                                 }
-                                output.println(String.format("**SUMMERY:\nOrder id: %d | Supplier's ppn: %d | " +
-                                                "Order date: %s | Deliver Date: %s",
-                                        order.id, ppn, ordered, deliver));
 
                             } catch (Exception e) {
                                 output.println(e.getMessage());
@@ -225,9 +211,11 @@ public class PresentationController {
                                 int amount = input.nextInt("How much of this item do you want to order? ");
                                 service.orderItem(order, service.getItem(arr[0], arr[1]).data, amount);
                                 String more = input.nextString("Do you want add more items? n/y ");
-                                if (more.equals("n"))
+                                if (more.equals("n")) {
                                     retry = false;
+                                }
                             }
+                            output.println(order.toString());
                             break;
                         }
                         case (2): {
@@ -271,7 +259,7 @@ public class PresentationController {
                         }
                         case (6):{
                             //see summery of all orders
-                            output.println(service.toStringOrders());
+                            output.print(service.toStringOrders());
                             break;
                         }
                     }
@@ -322,13 +310,12 @@ public class PresentationController {
         int amount = input.nextInt("For which amount is the discount applicable?: ");
         float discount = input.nextFloat("What would be the discount for this amount?: ");
         try {
-            service.createDiscount(service.getItem(arr[0], arr[1]).data, amount, discount);
+            output.print(service.createDiscount(service.getItem(arr[0], arr[1]).data, amount, discount)
+                    .data.toString());
         } catch (Exception e) {
             output.println(e.getMessage());
         }
-        output.println(String.format("**SUMMERY:\nSupplier's ppn: %d | Item's catalog: %d | " +
-                        "Item's amount number: %d | Discount number: %s",
-                arr[0], arr[1], amount, discount));
+
     }
 
     private static void deleteDiscount() {
