@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class DriverController {
+public class DriverController extends UserController{
 
     private static DriverController singletonDriverControllerInstance = null;
 
@@ -15,53 +15,63 @@ public class DriverController {
         return singletonDriverControllerInstance;
     }
 
-    DriverController() throws Exception { }
-
-    public String printMyTruckings(Driver driver) throws Exception {
-            checkIfActiveUserIsDriver(driver);
-            return driver.printTruckings();
+    private DriverController() throws Exception {
+        super(null);
     }
 
-    public String printMyTruckingsHistory(Driver driver) throws Exception {
-            checkIfActiveUserIsDriver(driver);
-            return driver.printTruckingsHistory();
-
-    }
-
-    public String printMyFutureTruckings(Driver driver) throws Exception {
-            checkIfActiveUserIsDriver(driver);
-            return driver.printFutureTruckings();
-    }
-
-    public void addLicense(Driver driver,DLicense license) throws Exception {
-            checkIfActiveUserIsDriver(driver);
-            driver.addLicense(license);
-
-    }
-
-    public void addLicenses(Driver driver,List<DLicense> licenses) throws Exception {
-            checkIfActiveUserIsDriver(driver);
-        driver.addLicenses(licenses);
-
-    }
-
-    public void setWeightForTrucking(Driver driver,int truckingId, int weight) throws Exception {
-        synchronized (driver) {
-            checkIfActiveUserIsDriver(driver);
-            driver.updateTotalWeightOfTrucking(truckingId, weight);
+    public String printMyTruckings() throws Exception {
+        synchronized (getActiveUser()) {
+            checkIfActiveUserIsDriver();
+            return ((Driver)getActiveUser()).printTruckings();
         }
     }
 
-    public void removeLicense(Driver driver,DLicense license) throws Exception {
-            checkIfActiveUserIsDriver(driver);
-            driver.removeLicense(license);
-
+    public String printMyTruckingsHistory() throws Exception {
+        synchronized (getActiveUser()) {
+            checkIfActiveUserIsDriver();
+            return ((Driver)getActiveUser()).printTruckingsHistory();
+        }
     }
 
-    private void checkIfActiveUserIsDriver(Driver driver) throws Exception {
-        if (driver == null)
+    public String printMyFutureTruckings() throws Exception {
+        synchronized (getActiveUser()) {
+            checkIfActiveUserIsDriver();
+            return ((Driver)getActiveUser()).printFutureTruckings();
+        }
+    }
+
+    public void addLicense(DLicense license) throws Exception {
+        synchronized (getActiveUser()) {
+            checkIfActiveUserIsDriver();
+            ((Driver)getActiveUser()).addLicense(license);
+        }
+    }
+
+    public void addLicenses(List<DLicense> licenses) throws Exception {
+        synchronized (getActiveUser()) {
+            checkIfActiveUserIsDriver();
+            ((Driver)getActiveUser()).addLicenses(licenses);
+        }
+    }
+
+    public void setWeightForTrucking(int truckingId, int weight) throws Exception {
+        synchronized (getActiveUser()) {
+            checkIfActiveUserIsDriver();
+            ((Driver)getActiveUser()).updateTotalWeightOfTrucking(truckingId, weight);
+        }
+    }
+
+    public void removeLicense(DLicense license) throws Exception {
+        synchronized (getActiveUser()) {
+            checkIfActiveUserIsDriver();
+            ((Driver)getActiveUser()).removeLicense(license);
+        }
+    }
+
+    private void checkIfActiveUserIsDriver() throws Exception {
+        if (getActiveUser().hashCode() == UserController.getInstance().nullUserForLogOut.hashCode())
             throw new Exception("There is no user connected");
-        if (driver.getRole() != Role.driver )
+        if (getActiveUser().getRole() != Role.driver | !(getActiveUser() instanceof Driver))
             throw new Exception("Oops, you are not a driver");
     }
 }

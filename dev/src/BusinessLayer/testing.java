@@ -27,6 +27,7 @@ public class testing {
     public testing() throws Exception {
     }
 
+    /*
 
     @Test
     public void registerUsersTests() throws Exception {
@@ -249,4 +250,6 @@ public class testing {
         createTrucking4();
         System.out.println(userController.printBoard());
     }
+
+     */
 }

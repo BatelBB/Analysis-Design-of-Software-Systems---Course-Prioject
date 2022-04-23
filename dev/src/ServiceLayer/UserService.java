@@ -13,6 +13,7 @@ public class UserService {
     public UserService() throws Exception {
         userController = UserController.getInstance();
     }
+    /*
 
     public Response setWeightForTrucking(int truckingId, int weight) throws Exception {
         try {
@@ -331,4 +332,6 @@ public class UserService {
             return new Response(e.getMessage());
         }
     }
+
+     */
 }

@@ -14,6 +14,7 @@ public class Service {
         userService = new UserService();
     }
 
+    /*
     public Response getRegisterCode() throws Exception {return userService.getRegisterCode(); }
 
     public Response removeTrucking(int truckingId) throws Exception {return userService.removeTrucking(truckingId); }
@@ -83,7 +84,10 @@ public class Service {
     public Response printMyTruckings() throws Exception {return userService.printMyTruckings(); }
 
     public Response printMyTruckingsHistory() throws Exception { return userService.printMyTruckingsHistory(); }
+
+*/
 }
+
 
 
 
