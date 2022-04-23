@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class PresentationController {
-    private static Menu menu = new Menu();
     private static UserInput input = UserInput.getInstance();
     private static UserOutput output = UserOutput.getInstance();
     private static Service service = new Service();
@@ -20,13 +19,17 @@ public class PresentationController {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        output.println("Welcome to the supplier module! What would you like to do?");
+        output.println("Welcome to the supplier module!");
+        if(input.nextBoolean("Would you like to load example data?")) {
+            service.seedExample();
+            output.println("example data loaded.");
+        }
 
         while (true) {
-            int userInput = input.nextInt(menu.getMainMenu());
+            int userInput = input.nextInt(Menu.getMainMenu());
             switch (userInput) {
                 case (1): {
-                    userInput = input.nextInt(menu.getSupplierSubmenu());
+                    userInput = input.nextInt(Menu.getSupplierSubmenu());
                     switch (userInput) {
                         case (1): {
                             //Create Supplier Card
@@ -47,7 +50,7 @@ public class PresentationController {
                             //Edit existing supplier card
                             int ppn = checkPPN("Enter the ppn number: ");
                             output.println("What do you want to edit? ");
-                            int edit = input.nextInt(menu.getSupplierEditSubmenu());
+                            int edit = input.nextInt(Menu.getSupplierEditSubmenu());
                             try {
                                 switch (edit) {
                                     case (1): {
@@ -114,7 +117,7 @@ public class PresentationController {
                     break;
                 }
                 case (2): {
-                    userInput = input.nextInt(menu.getItemSubmenu());
+                    userInput = input.nextInt(Menu.getItemSubmenu());
                     switch (userInput) {
                         case (1): {
                             //Create new item
@@ -167,7 +170,7 @@ public class PresentationController {
                     break;
                 }
                 case (3): {
-                    userInput = input.nextInt(menu.getOrderSubmenu());
+                    userInput = input.nextInt(Menu.getOrderSubmenu());
                     switch (userInput) {
                         case (1): {
                             //create new order
@@ -251,7 +254,7 @@ public class PresentationController {
                     break;
                 }
                 case (4): {
-                    userInput = input.nextInt(menu.getQuantityAgreementSubmenu());
+                    userInput = input.nextInt(Menu.getQuantityAgreementSubmenu());
                     switch (userInput) {
                         case (1): {
                             //create new quantity agreement
@@ -277,15 +280,7 @@ public class PresentationController {
                     }
                     break;
                 }
-                case(5):{
-                    //Show weekly order
-                    service.seedExample();
-                    output.println(service.toStringSupplier());
-                    output.println(service.toStringItems());
-                    output.println(service.toStringOrders());
-                    output.println(service.toStringQuantity());
-                    break;
-                }
+
             }
         }
     }
@@ -377,7 +372,7 @@ public class PresentationController {
         String nextString = "";
         while (retry) {
             try {
-                nextString = input.nextString("Enter day of week: ");
+                nextString = input.nextString("Enter constant day of week: ");
                 DayOfWeek.valueOf(nextString.toUpperCase());
                 retry = false;
             } catch (Exception e) {

@@ -1,28 +1,15 @@
 package assignment1.PresentationLayer;
 
-import java.util.*;
-
 public class Menu {
 
-    private final List<Menu> submenus = new ArrayList<>();
-
-    public Menu() {
-    }
-
-
-    public Menu getSubMenu(int menuIndex) {
-        return submenus.get(menuIndex);
-    }
-
-    public String getMainMenu() {
+    public static String getMainMenu() {
         return new String("1. Supplier menu\n" +
                 "2. Item Menu\n" +
                 "3. Order Menu\n" +
-                "4. Quantity Agreement Menu\n" +
-                "5. See summery of weekly orders\n");
+                "4. Quantity Agreement Menu\n");
     }
 
-    public String getItemSubmenu() {
+    public static String getItemSubmenu() {
         return new String(
                 "1. Create new item\n" +
                         "2. Edit catalog number of existing item\n" +
@@ -33,7 +20,7 @@ public class Menu {
                         "7. See summery of all items\n");
     }
 
-    public String getOrderSubmenu() {
+    public static String getOrderSubmenu() {
         return new String(
                 "1. Create new order\n" +
                         "2. Delete existing order\n" +
@@ -43,7 +30,7 @@ public class Menu {
                         "6. See summery of all orders\n");
     }
 
-    public String getSupplierSubmenu() {
+    public static String getSupplierSubmenu() {
         return new String(
                 "1. Create new supplier card\n" +
                         "2. Edit existing supplier card\n" +
@@ -51,7 +38,7 @@ public class Menu {
                         "4. See summery of all suppliers\n");
     }
 
-    public String getQuantityAgreementSubmenu() {
+    public static String getQuantityAgreementSubmenu() {
         return new String(
                 "1. Create new quantity agreement\n" +
                         "2. Edit existing quantity agreement\n" +
@@ -59,7 +46,7 @@ public class Menu {
                         "4. See summery of all quantity agreements\n");
     }
 
-    public String getSupplierEditSubmenu() {
+    public static String getSupplierEditSubmenu() {
         return new String(
                 "1. Edit ppn number\n" +
                         "2. Edit bank account number\n" +
