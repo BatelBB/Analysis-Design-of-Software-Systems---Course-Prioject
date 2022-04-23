@@ -62,12 +62,16 @@ public class Facade {
     }
 
     public Shift readShift(String subjectID, Calendar date ,Shift.Type type) {
-        employees.getEmployee(subjectID); //checks if employee exist
-        return dataShiftToService(shifts.getShift(date, serviceTypeToData(type)));
+        if (employees.isFromHumanResources(subjectID)) {
+            return dataShiftToService(shifts.getShift(date, serviceTypeToData(type)));
+        }
+        else {
+            throw new IllegalArgumentException("Subject must be authorized to read shifts.");
+        }
     }
 
     public Employee deleteEmployee(String subjectID, String employeeID) {
-        if (subjectID.equals(employeeID) || employees.isFromHumanResources(subjectID)) {
+        if (employees.isFromHumanResources(subjectID)) {
             return dataEmployeeToService(employees.delete(employeeID));
         } else {
             throw new IllegalArgumentException("Subject must be authorized to delete employees.");
@@ -117,7 +121,7 @@ public class Facade {
     }
 
     public Employee updateEmployee(String subjectID, Employee changed) {
-        if (subjectID.equals(changed.id) || employees.isFromHumanResources(subjectID)) {
+        if (employees.isFromHumanResources(subjectID)) {
             return dataEmployeeToService(
                     employees.update(
                             changed.name,

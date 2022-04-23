@@ -149,36 +149,6 @@ public class ServiceTest {
     }
 
     @Test
-    public void testDeleteEmployee() {
-        Service service = new Service();
-        service.createEmployee(new Employee(
-                "111111111",
-                "Foo",
-                Employee.Role.Stocker,
-                "FooBank",
-                1, 1,
-                30,
-                0, 0,
-                new HashSet<>(),
-                new GregorianCalendar()
-        ));
-        service.createEmployee(new Employee(
-                "222222222",
-                "Bar",
-                Employee.Role.HumanResources,
-                "BarBank",
-                1, 1,
-                30,
-                0, 0,
-                new HashSet<>(),
-                new GregorianCalendar()
-        ));
-        service.deleteEmployee("111111111", "111111111");
-        List<Employee> list = service.listEmployees("222222222");
-        assertEquals(1, list.size());
-    }
-
-    @Test
     public void testDeleteEmployeeByHR() {
         Service service = new Service();
         service.createEmployee(new Employee(
@@ -304,26 +274,6 @@ public class ServiceTest {
         assertThrows(Exception.class, () -> {
             service.readEmployee("222222222", "111111111");
         });
-    }
-
-    @Test
-    public void testUpdateEmployee() {
-        Service service = new Service();
-        Employee created = service.createEmployee(new Employee(
-                "111111111",
-                "Foo",
-                Employee.Role.Stocker,
-                "FooBank",
-                1, 1,
-                30,
-                0, 0,
-                new HashSet<>(),
-                new GregorianCalendar()
-        ));
-        created.name = "Changed";
-        service.updateEmployee(created.id, created);
-        Employee self = service.readEmployee("111111111", "111111111");
-        assertEquals("Changed", self.name);
     }
 
     @Test
@@ -505,7 +455,7 @@ public class ServiceTest {
         ));
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
         service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
-        assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
     }
 
     @Test
@@ -551,7 +501,7 @@ public class ServiceTest {
         service.setRequiredRoleInShift(HR.id, shift.getDate(), shift.getType(), Employee.Role.Stocker, 2);
         service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
         service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created2.id);
-        assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 2);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 2);
     }
 
     @Test
@@ -614,9 +564,9 @@ public class ServiceTest {
         assertThrows(Exception.class, () -> {
             service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created3.id);
         });
-        int size = (service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().stream().filter(p -> p.role.equals(created3.role)).collect(Collectors.toList())).size();
+        int size = (service.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().stream().filter(p -> p.role.equals(created3.role)).collect(Collectors.toList())).size();
         assertEquals( size,0);
-        assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 2);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 2);
     }
 
     @Test
@@ -663,7 +613,7 @@ public class ServiceTest {
         assertThrows(Exception.class, () -> {
             service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created2.id);
         });
-        assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
     }
 
     @Test
@@ -750,9 +700,9 @@ public class ServiceTest {
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),
                 Shift.Type.Evening, new LinkedList<>(), new HashMap<>());
         service.addEmployeeToShift(HR.id, shift.getDate(), shift.getType(), created.id);
-        assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
         service.removeEmployeeFromShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
-        assertEquals(service.readShift(created.id, shift.getDate(), shift.getType()).getStaff().size(), 0);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 0);
     }
 
     @Test
