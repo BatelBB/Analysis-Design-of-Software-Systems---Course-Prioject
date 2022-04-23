@@ -187,6 +187,13 @@ public class TruckManagerController extends UserController{
         }
     }
 
+    public String getRegisterCode() throws Exception {
+        synchronized (getActiveUser()) {
+            checkIfActiveUserIsTruckManager();
+            return String.valueOf(getActiveUser().hashCode());
+        }
+    }
+
     private void checkIfActiveUserIsTruckManager() throws Exception {
         if (getActiveUser().hashCode() == getNullUserForLogOut().hashCode())
             throw new Exception("There is no user connected");

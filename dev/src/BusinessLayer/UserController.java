@@ -57,7 +57,7 @@ public class UserController {
     }
 
     public boolean login(String username, String password) throws Exception {
-        if (getActiveUser().hashCode() == getNullUserForLogOut().hashCode())
+        if (getActiveUser().hashCode() != getNullUserForLogOut().hashCode())
             throw new IllegalArgumentException("There is a user already connected to the system");
         if (username == null)
             throw new IllegalArgumentException("Please enter valid username");
@@ -97,14 +97,13 @@ public class UserController {
         if (username == null)
             return false;
         if (username.length() < MIN_USERNAME_LENGTH)
-            throw new IllegalArgumentException("The minimum password length should be at least 3 characters");
+            throw new IllegalArgumentException("The minimum username length should be at least 3 characters");
         if (username.length() > MAX_USERNAME_LENGTH)
-            throw new IllegalArgumentException("The maximum password length should be up to 12 characters");
+            throw new IllegalArgumentException("The maximum username length should be up to 12 characters");
         for (int i = 0; i < username.length(); i++) {
             if(!(Character.isLetter(username.charAt(i)) | Character.isDigit(username.charAt(i))))
                 throw new IllegalArgumentException("Username can only contain letters and numbers");
         }
-
         if (users.containsKey(username))
             throw new IllegalArgumentException("Username is already exist. try another one.");
         return true;
