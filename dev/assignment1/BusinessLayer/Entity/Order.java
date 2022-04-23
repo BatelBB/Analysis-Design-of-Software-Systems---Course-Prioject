@@ -87,6 +87,7 @@ public class Order {
         ArrayList<String> table = new ArrayList<>();
         table.add(" **** ORDER **** "); table.add(" "); table.add(" "); table.add(" ");
 
+        table.add("Order id: "); table.add(String.valueOf(id)); table.add(" "); table.add(" ");
         table.add("Supplier name: "); table.add(supplier.name);
         table.add("Supplier PPN: "); table.add(supplier.getPpn() + "");
 
