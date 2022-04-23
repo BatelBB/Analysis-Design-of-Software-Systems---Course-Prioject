@@ -2,7 +2,7 @@ package groupk.workers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import groupk.workers.service.EmployeeService;
+import groupk.workers.service.Service;
 import groupk.workers.service.dto.Employee;
 import groupk.workers.service.dto.Shift;
 import org.junit.jupiter.api.Test;
@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class EmployeeServiceTest {
+public class ServiceTest {
     @Test
     public void testCreateShiftMorning()
     {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee HR = service.createEmployee(new Employee(
                 "111111110",
                 "Foo",
@@ -37,7 +37,7 @@ public class EmployeeServiceTest {
     @Test
     public void testCreateShiftEvening()
     {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee HR = service.createEmployee(new Employee(
                 "111111110",
                 "Foo",
@@ -60,7 +60,7 @@ public class EmployeeServiceTest {
     @Test
     public void testCreateShiftNotUnauthorized()
     {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee NotHR = service.createEmployee(new Employee(
                 "111111110",
                 "Foo",
@@ -80,7 +80,7 @@ public class EmployeeServiceTest {
     @Test
     public void testCreateEmployee()
     {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -100,7 +100,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testCreateEmployeeSameID() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -131,7 +131,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testReadEmployeesUnauthorized() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -150,7 +150,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testDeleteEmployee() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -180,7 +180,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testDeleteEmployeeByHR() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -210,7 +210,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testDeleteEmployeeUnauthorized() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -229,7 +229,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testReadEmployee() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -248,7 +248,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testReadEmployeeByHR() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -278,7 +278,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testReadEmployeeUnauthorized() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -308,7 +308,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testUpdateEmployee() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -328,7 +328,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testUpdateEmployeeByHR() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -359,7 +359,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testUpdateEmployeeUnauthorized() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -389,7 +389,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testAddEmployeeShiftPreference(){
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -408,7 +408,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testAddEmployeeShiftPreferenceFromAnotherId(){
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -438,7 +438,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testDeleteEmployeeShiftPreference(){
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -457,7 +457,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testSetEmployeeShiftsPreference(){
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -480,7 +480,7 @@ public class EmployeeServiceTest {
     public void testAddEmployeeToShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -512,7 +512,7 @@ public class EmployeeServiceTest {
     public void testAddEmployeeToShiftWithRistrictionsOnRoles(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -558,7 +558,7 @@ public class EmployeeServiceTest {
     public void testsetRequiredStaffInShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -623,7 +623,7 @@ public class EmployeeServiceTest {
     public void testAddEmployeeToShiftWithRistrictionsOnRolesWithoutSpace(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -668,7 +668,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testAddEmployeeToShiftCanNotWork() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -700,7 +700,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testAddEmployeeToShiftNoEmployee() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee HR = service.createEmployee(new Employee(
                 "111111110",
                 "Foo",
@@ -723,7 +723,7 @@ public class EmployeeServiceTest {
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
 
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -757,7 +757,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testRemoveEmployeeFromShiftNoEmployee() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee HR = service.createEmployee(new Employee(
                 "111111110",
                 "Foo",
@@ -777,7 +777,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testWhoCanWork() {
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee HR = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",
@@ -819,7 +819,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testNumOfShifts(){
-        EmployeeService service = new EmployeeService();
+        Service service = new Service();
         Employee created = service.createEmployee(new Employee(
                 "111111111",
                 "Foo",

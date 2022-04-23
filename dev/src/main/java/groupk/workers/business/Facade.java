@@ -3,15 +3,14 @@ package groupk.workers.business;
 import groupk.workers.service.dto.Employee;
 import groupk.workers.service.dto.Shift;
 
-import javax.security.auth.Subject;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ServiceAdapter {
+public class Facade {
     private EmployeeController employees;
     private ShiftController shifts;
 
-    public ServiceAdapter() {
+    public Facade() {
         employees = new EmployeeController();
         shifts = new ShiftController();
     }
@@ -78,7 +77,7 @@ public class ServiceAdapter {
     public List<Employee> listEmployees(String subjectID) {
         if (employees.isFromHumanResources(subjectID)) {
             return employees.list().stream()
-                    .map(ServiceAdapter::dataEmployeeToService)
+                    .map(Facade::dataEmployeeToService)
                     .collect(Collectors.toList());
         } else {
             throw new IllegalArgumentException("Subject must be authorized to read employees.");
@@ -279,7 +278,7 @@ public class ServiceAdapter {
         return new Shift(
                 dataShift.getDate(),
                 dataTypeToService(dataShift.getType()),
-                dataShift.getStaff().stream().map(ServiceAdapter::dataEmployeeToService).collect(Collectors.toList()),
+                dataShift.getStaff().stream().map(Facade::dataEmployeeToService).collect(Collectors.toList()),
                 dataRequiredRoleInShiftToService(dataShift.getRequiredStaff()));
     }
 
