@@ -134,43 +134,28 @@ public class PresentationController {
                         case (3): {
                             //edit price of existing item
                             int[] arr = checkItem();
-                            try {
-                                Item item = service.getItem(arr[0], arr[1]).data;
-                                service.setPrice(item, input.nextFloat("Enter new price: "));
-                            } catch (Exception e) {
-                                output.println(e.getMessage());
-                            }
+                            Item item = service.getItem(arr[0], arr[1]).data;
+                            service.setPrice(item, input.nextFloat("Enter new price: "));
                             break;
                         }
                         case (4): {
                             //edit name of existing item
                             int[] arr = checkItem();
-                            try {
-                                service.getItem(arr[0], arr[1]).data.setName(input.nextString("Enter new name: "));
-                            } catch (Exception e) {
-                                output.println(e.getMessage());
-                            }
+                            String name = input.nextString("Enter new name: ");
+                            service.getItem(arr[0], arr[1]).data.setName(name);
                             break;
                         }
                         case (5): {
                             //edit category of existing item
                             int[] arr = checkItem();
-                            try {
-                                service.getItem(arr[0], arr[1]).data.setCategory(input.nextString(
-                                        "Enter new category: "));
-                            } catch (Exception e) {
-                                output.println(e.getMessage());
-                            }
+                            service.getItem(arr[0], arr[1]).data.setCategory(input.nextString(
+                                    "Enter new category: "));
                             break;
                         }
                         case (6): {
                             //delete existing item
                             int[] arr = checkItem();
-                            try {
-                                service.deleteItem(service.getItem(arr[0], arr[1]).data);
-                            } catch (Exception e) {
-                                output.println(e.getMessage());
-                            }
+                            service.deleteItem(service.getItem(arr[0], arr[1]).data);
                             break;
                         }
                         case (7):{
@@ -210,7 +195,7 @@ public class PresentationController {
                                 int[] arr = checkItem();
                                 int amount = input.nextInt("How much of this item do you want to order? ");
                                 service.orderItem(order, service.getItem(arr[0], arr[1]).data, amount);
-                                String more = input.nextString("Do you want add more items? n/y ");
+                                String more = input.nextString("Do you want to add more items? n/y ");
                                 if (more.equals("n")) {
                                     retry = false;
                                 }
@@ -309,12 +294,8 @@ public class PresentationController {
         int[] arr = checkItem();
         int amount = input.nextInt("For which amount is the discount applicable?: ");
         float discount = input.nextFloat("What would be the discount for this amount?: ");
-        try {
-            output.print(service.createDiscount(service.getItem(arr[0], arr[1]).data, amount, discount)
-                    .data.toString());
-        } catch (Exception e) {
-            output.println(e.getMessage());
-        }
+        output.print(service.createDiscount(service.getItem(arr[0], arr[1]).data, amount, discount)
+                .data.toString());
 
     }
 
