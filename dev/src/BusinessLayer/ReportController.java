@@ -33,7 +33,7 @@ public class ReportController {
 
     public Report getReport(Integer id) { return reports.get(id); } //להוסיף
 
-    public Report createMissingReport(String name, Integer id, String report_producer) {
+    public Report createMissingReport(String name, int id, String report_producer) {
         if (reports.containsKey(id))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
@@ -44,7 +44,7 @@ public class ReportController {
         }
     }
 
-    public Report createExpiredReport(String name, Integer id, String report_producer) {
+    public Report createExpiredReport(String name, int id, String report_producer) {
         if (reports.containsKey(id))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
@@ -55,7 +55,7 @@ public class ReportController {
         }
     }
 
-    public Report createSurplusesReport(String name, Integer id, String report_producer) {
+    public Report createSurplusesReport(String name, int id, String report_producer) {
         if (reports.containsKey(id))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
@@ -66,7 +66,7 @@ public class ReportController {
         }
     }
 
-    public Report createSurplusesReport(String name, Integer id, String report_producer) {
+    public Report createSurplusesReport(String name, int id, String report_producer) {
         if (reports.containsKey(id))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
@@ -77,7 +77,7 @@ public class ReportController {
         }
     }
 
-    public Report createDefectiveReport(String name, Integer id, String report_producer) {
+    public Report createDefectiveReport(String name, int id, String report_producer) {
         if (reports.containsKey(id))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
@@ -88,7 +88,7 @@ public class ReportController {
         }
     }
 
-    public Report createBySupplierReport(String name, Integer id, String report_producer, String suppName) {
+    public Report createBySupplierReport(String name, int id, String report_producer, String suppName) {
         if (reports.containsKey(id))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
@@ -99,7 +99,7 @@ public class ReportController {
         }
     }
 
-    public Report createByProductReport(String name, Integer id, String report_producer, String proName) {
+    public Report createByProductReport(String name, int id, String report_producer, String proName) {
         if (reports.containsKey(id))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
@@ -110,7 +110,7 @@ public class ReportController {
         }
     }
 
-    public Report createByCategoryReport(String name, Integer id, String report_producer, String CatName) {
+    public Report createByCategoryReport(String name, int id, String report_producer, String CatName) {
         if (reports.containsKey(id))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
