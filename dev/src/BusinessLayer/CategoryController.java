@@ -42,27 +42,6 @@ public class CategoryController {
         else
             return categories.get(name);
     }
-
-    public void UpdateDiscountByCategory(int percentage , String name){
-        if (percentage > 100)
-            throw new IllegalArgumentException("A discount of more than 100 percent is not possible");
-        if (!categories.containsKey(name))
-            throw new IllegalArgumentException(("This category does not exist"));
-        else
-            for (Map.Entry<String, Category> entry : categories.entrySet()) {
-                entry.getValue().UpdateDiscountByCategory(percentage);
-            }
-    }
-
-    //need to check that the supplier is exist
-    public void UpdateDiscountBySupplier(int percentage , String SupplierName){
-        if (percentage > 100)
-            throw new IllegalArgumentException("A discount of more than 100 percent is not possible");
-        else
-            for (Map.Entry<String, Category> entry : categories.entrySet()) {
-                entry.getValue().UpdateDiscountBySupplier(percentage,SupplierName);
-            }
-    }
 }
 
 

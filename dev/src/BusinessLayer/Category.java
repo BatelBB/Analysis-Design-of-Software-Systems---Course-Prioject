@@ -5,12 +5,16 @@ import java.util.Map;
 
 public class Category {
 
-    protected Map<String, SubCategory> subC;
-    String name;
+    private Map<String, SubCategory> subC;
+    private String name;
 
     Category(String name) {
         this.name = name;
     }
+
+    public Map<String, SubCategory> getSubC() { return subC; }
+
+    public String getName() { return name; }
 
     public void addSubCategory(String name) {
         if (subC.containsKey(name))
@@ -35,18 +39,6 @@ public class Category {
             throw new IllegalArgumentException("Category doesn't exists");
         else {
             return subC.get(name);
-        }
-    }
-
-    public void UpdateDiscountByCategory(int percentage) {
-        for (Map.Entry<String, SubCategory> entry : subC.entrySet()) {
-            entry.getValue().UpdateDiscountByCategory(percentage);
-        }
-    }
-
-    public void UpdateDiscountBySupplier(int percentage, String supplierName) {
-        for (Map.Entry<String, SubCategory> entry : subC.entrySet()) {
-            entry.getValue().UpdateDiscountBySupplier(percentage,supplierName);
         }
     }
 }

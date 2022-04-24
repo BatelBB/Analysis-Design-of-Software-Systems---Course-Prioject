@@ -1,38 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0a6a04d1-5445-4bb4-ba10-21c3011cd23b" name="Default Changelist" comment="commit unversioned files">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/DefectiveReport.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/DiscountPair.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/ExpiredReport.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/MissingReport.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/Product.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/ProductItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/Report.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/SurplusesReport.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/byCategoryReport.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/byProductReport.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/bySupplierReport.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" afterDir="false" />
+    <list default="true" id="0a6a04d1-5445-4bb4-ba10-21c3011cd23b" name="Default Changelist" comment="&quot;add reportService and ServiceObjects&quot;">
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/Category.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/SubCategory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Category.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/DiscountPair.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/DiscountPair.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Report.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Report.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/SubCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/SubCategory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/SubSubCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/SubSubCategory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +78,13 @@
       <option name="project" value="LOCAL" />
       <updated>1650808193724</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL‎00004" summary="&quot;add reportService and ServiceObjects&quot;">
+      <created>1650819159660</created>
+      <option name="number" value="LOCAL‎00004" />
+      <option name="presentableId" value="LOCAL‎00004" />
+      <updated>1650819159660</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -125,6 +107,7 @@
     <MESSAGE value="products first push" />
     <MESSAGE value="products exceptions" />
     <MESSAGE value="manual merge from Category_and_Report" />
-    <option name="LAST_COMMIT_MESSAGE" value="manual merge from Category_and_Report" />
+    <MESSAGE value="&quot;add reportService and ServiceObjects&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;add reportService and ServiceObjects&quot;" />
   </component>
 </project>

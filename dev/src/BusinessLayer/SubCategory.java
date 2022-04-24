@@ -5,12 +5,17 @@ import java.util.Map;
 
 public class SubCategory {
 
-    protected Map<String, SubSubCategory> subSubCategories;
-    public String name;
+    private Map<String, SubSubCategory> subSubCategories;
+    private String name;
 
     public SubCategory(String subCatName) {
         name=subCatName;
     }
+
+    public Map<String, SubSubCategory> getSubSubCategories() { return subSubCategories; }
+
+    public String getName() { return name; }
+
     public void addSubSubCategory(String subSubCatName){
         SubSubCategory subSubCategory= new SubSubCategory(subSubCatName);
         subSubCategories.put(name,subSubCategory);
@@ -25,7 +30,6 @@ public class SubCategory {
         }
     }
 
-
     public SubSubCategory getSubSubCategory(String name) {
         if (!subSubCategories.containsKey(name))
             throw new IllegalArgumentException("Category doesn't exists");
@@ -34,16 +38,4 @@ public class SubCategory {
         }
     }
 
-
-    public void UpdateDiscountByCategory(int percentage) {
-        for (Map.Entry<String, SubSubCategory> entry : subSubCategories.entrySet()) {
-            entry.getValue().UpdateDiscountByCategory(percentage);
-        }
-    }
-
-    public void UpdateDiscountBySupplier(int percentage, String supplierName) {
-        for (Map.Entry<String, SubSubCategory> entry : subSubCategories.entrySet()) {
-            entry.getValue().UpdateDiscountBySupplier(percentage, supplierName);
-        }
-    }
 }
