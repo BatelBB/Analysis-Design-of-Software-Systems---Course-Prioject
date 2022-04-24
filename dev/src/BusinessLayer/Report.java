@@ -5,10 +5,10 @@ public class Report {
 
     enum ReportType{Missing,Expired,Surpluses,Defective,bySupplier,byProduct,byCategory}
 
-    Integer id;
-    String name;
-    Date date;
-    String report_producer;
+    protected Integer id;
+    protected String name;
+    protected Date date;
+    protected String report_producer;
 
     public Report(String name, Integer id, String report_producer) {
         this.name=name;
@@ -16,8 +16,11 @@ public class Report {
         date=new Date();
         this.report_producer=report_producer;
     }
+    public Integer getId() { return id; }
 
+    public String getName() { return name; }
 
+    public Date getDate() { return date; }
 
-
+    public String getReport_producer() { return report_producer; }
 }

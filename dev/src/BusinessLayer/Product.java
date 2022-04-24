@@ -117,6 +117,17 @@ public class Product {
     }
 
     //getters and setters
+
+    public int getItem_ids() { return item_ids; }
+
+    public int getProduct_id() { return product_id; }
+
+    public String getCat() { return cat; }
+
+    public String getSub_cat() { return sub_cat; }
+
+    public String getSub_sub_cat() { return sub_sub_cat; }
+
     public String getName() {
         return name;
     }
