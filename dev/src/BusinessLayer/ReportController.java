@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Map;
 public class ReportController {
 
-    private Map<Integer, Report> reports;
+    private Map<String, Report> reports;
     private ProductController productController;
     private static ReportController reportController;
 
@@ -19,8 +19,8 @@ public class ReportController {
         productController = ProductController.getInstance();
     }
 
-    public void addReport(String name, Integer id, Date date, String report_producer){
-        if (reports.containsKey(id))
+    public void addReport(String name, int id, Date date, String report_producer){
+        if (reports.containsKey(Integer.toString(id)))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
             Report report = new Report(name, id, report_producer);
@@ -29,9 +29,9 @@ public class ReportController {
         }
 
 
-    public void removeReport(Integer id) { reports.remove(id); }
+    public void removeReport(Integer id) { reports.remove(id); } //להוסיף זריקות חריגה
 
-    public Report getReport(Integer id) { return reports.get(id); }
+    public Report getReport(Integer id) { return reports.get(id); } //להוסיף
 
     public Report createMissingReport(String name, Integer id, String report_producer) {
         if (reports.containsKey(id))
