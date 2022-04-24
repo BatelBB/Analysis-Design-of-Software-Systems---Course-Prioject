@@ -70,7 +70,7 @@ public class Product {
         return items.get(Integer.toString(item_id)).getLocation();
     }
 
-    public void addItem(String store, String location, String supplier, LocalDateTime expiration_date) throws Exception {
+    public void addItem(String store, String location, String supplier, LocalDateTime expiration_date, boolean on_shelf) throws Exception {
         if (store == null || store.equals(""))
             throw new Exception("store name empty");
         if (location == null || location.equals(""))
@@ -79,12 +79,20 @@ public class Product {
             throw new Exception("supplier name empty");
         if (expiration_date == null)
             throw new Exception("expiration date is null");
-        items.put(Integer.toString(item_ids), new ProductItem(item_ids, store, location, supplier, expiration_date));
+        items.put(Integer.toString(item_ids), new ProductItem(item_ids, store, location, supplier, expiration_date, on_shelf));
+        if (on_shelf)
+            shelf_qty++;
+        else
+            storage_qty++;
         item_ids++;
     }
 
     public void removeItem(int item_id) throws Exception {
         itemExists(item_id);
+        if (items.get(Integer.toString(item_id)).isOn_shelf())
+            shelf_qty--;
+        else
+            storage_qty--;
         items.remove(Integer.toString(item_id));
     }
 
@@ -95,6 +103,18 @@ public class Product {
         items.get(Integer.toString(item_id)).setLocation(location);
     }
 
+    public void changeItemOnShelf(int item_id, boolean on_shelf) throws Exception {
+        itemExists(item_id);
+        if (items.get(Integer.toString(item_id)).isOn_shelf() && !on_shelf) {
+            shelf_qty--;
+            storage_qty++;
+            items.get(Integer.toString(item_id)).setOn_shelf(false);
+        } else if (!items.get(Integer.toString(item_id)).isOn_shelf() && on_shelf) {
+            shelf_qty++;
+            storage_qty--;
+            items.get(Integer.toString(item_id)).setOn_shelf(false);
+        }
+    }
 
     //getters and setters
     public String getName() {
@@ -167,6 +187,30 @@ public class Product {
 
     public void setItems(Map<String, ProductItem> items) {
         this.items = items;
+    }
+
+    public String getCat() {
+        return cat;
+    }
+
+    public void setCat(String cat) {
+        this.cat = cat;
+    }
+
+    public String getSub_cat() {
+        return sub_cat;
+    }
+
+    public void setSub_cat(String sub_cat) {
+        this.sub_cat = sub_cat;
+    }
+
+    public String getSub_sub_cat() {
+        return sub_sub_cat;
+    }
+
+    public void setSub_sub_cat(String sub_sub_cat) {
+        this.sub_sub_cat = sub_sub_cat;
     }
 
     //private methods

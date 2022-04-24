@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="manual merge from Category_and_Report" />
+    <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="manually combining two main branches">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,6 +33,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectId" id="28EjMzfjmEAIHwG4dUQtsQy08TV" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -26,16 +44,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Git.Branch.Popup.ShowAllRemotes": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Git.Branch.Popup.ShowAllRemotes&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
-}]]></component>
+}</component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -91,6 +122,7 @@
     <MESSAGE value="products first push" />
     <MESSAGE value="products exceptions" />
     <MESSAGE value="manual merge from Category_and_Report" />
-    <option name="LAST_COMMIT_MESSAGE" value="manual merge from Category_and_Report" />
+    <MESSAGE value="manually combining two main branches" />
+    <option name="LAST_COMMIT_MESSAGE" value="manually combining two main branches" />
   </component>
 </project>

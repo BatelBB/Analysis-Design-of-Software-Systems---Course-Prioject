@@ -1,5 +1,7 @@
 package BusinessLayer;
 
+import java.util.List;
+
 public class MissingReport extends Report {
 
     private String name;
