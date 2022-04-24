@@ -1,9 +1,6 @@
 package BusinessLayer;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class DriverController extends UserController{
 
@@ -18,6 +15,9 @@ public class DriverController extends UserController{
     private DriverController() throws Exception {
         super(null);
     }
+
+
+
 
     public String printMyTruckings() throws Exception {
         synchronized (getActiveUser()) {
@@ -40,14 +40,14 @@ public class DriverController extends UserController{
         }
     }
 
-    public void addLicense(DLicense license) throws Exception {
+    public void addLicense(String license) throws Exception {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsDriver();
             ((Driver)getActiveUser()).addLicense(license);
         }
     }
 
-    public void addLicenses(List<DLicense> licenses) throws Exception {
+    public void addLicenses(List<String> licenses) throws Exception {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsDriver();
             ((Driver)getActiveUser()).addLicenses(licenses);
@@ -61,7 +61,7 @@ public class DriverController extends UserController{
         }
     }
 
-    public void removeLicense(DLicense license) throws Exception {
+    public void removeLicense(String license) throws Exception {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsDriver();
             ((Driver)getActiveUser()).removeLicense(license);

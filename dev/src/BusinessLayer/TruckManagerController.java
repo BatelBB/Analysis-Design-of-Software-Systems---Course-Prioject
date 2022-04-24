@@ -1,10 +1,8 @@
 package BusinessLayer;
 
 import java.time.LocalDateTime;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class TruckManagerController extends UserController{
 
@@ -23,6 +21,12 @@ public class TruckManagerController extends UserController{
         super(null);
         truckingIdCounter = 1;
     }
+
+    public void reserForTests()
+    {
+        truckingIdCounter = 1;
+    }
+
 
     public void addVehicle(DLicense lisence, String registrationPlate, String model, int weight, int maxWeight) throws Exception {
         synchronized (getActiveUser()) {

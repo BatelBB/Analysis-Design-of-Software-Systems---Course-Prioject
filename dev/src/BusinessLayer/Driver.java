@@ -1,12 +1,8 @@
 package BusinessLayer;
 
-import jdk.jshell.spi.ExecutionControl;
-
 import java.time.LocalDateTime;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 public class Driver extends User {
     private List<DLicense> licenses;
@@ -30,25 +26,38 @@ public class Driver extends User {
             throw new IllegalArgumentException("Oops, the driver does not have a driver's license appropriate for the vehicle type");
     }
 
-    public synchronized void addLicense(DLicense dLicense)
+    public synchronized void addLicense(String dLicenseS)
     {
+        DLicense dLicense = castFromString(dLicenseS);
         synchronized (licenses) {
             if (!(licenses.contains(dLicense)))
                 licenses.add(dLicense);
         }
     }
 
-    public synchronized void addLicenses(List<DLicense> DLicenseList) {
+    public synchronized void addLicenses(List<String> DLicenseList) {
         synchronized (licenses) {
-            for (DLicense dLicense : DLicenseList) {
+            for (String dLicenseS : DLicenseList) {
+                DLicense dLicense = castFromString(dLicenseS);
                 if (!(licenses.contains(dLicense)))
                     licenses.add(dLicense);
             }
         }
     }
 
-    public synchronized void removeLicense(DLicense dLicense)
+    private DLicense castFromString(String dLicense)
     {
+        if(dLicense.equals("B")) return DLicense.B;
+        else if (dLicense.equals("C")) return DLicense.C;
+        else if (dLicense.equals("C1")) return DLicense.C1;
+        else if (dLicense.equals("C+E")) return DLicense.C_E;
+        else return DLicense.wrong;
+
+    }
+
+    public synchronized void removeLicense(String dLicenseS)
+    {
+        DLicense dLicense = castFromString(dLicenseS);
         synchronized (licenses) {
             if (licenses.contains(dLicense))
                 licenses.remove(dLicense);

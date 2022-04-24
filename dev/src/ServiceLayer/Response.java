@@ -16,4 +16,9 @@ public class Response<T> {
     public String getErrorMessage() {
         return errorMessage;
     }
+
+    @Override
+    public String toString() {
+        return value.toString();
+    }
 }

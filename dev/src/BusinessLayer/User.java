@@ -22,6 +22,8 @@ public abstract class User {
             throw new Exception("This user is already logged in. First, log out.");
         if (password.checkPassword(passwordToCheck))
             isLogin = true;
+        else
+            throw new Exception("Wrong username or wrong password.");
         return isLogin;
     }
 

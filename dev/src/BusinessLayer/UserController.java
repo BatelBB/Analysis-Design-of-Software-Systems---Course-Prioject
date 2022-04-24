@@ -20,6 +20,13 @@ public class UserController {
         activeUser = nullUserForLogOut;
     }
 
+    public void reserForTests()
+    {
+        users = new ConcurrentHashMap<String, User>();
+        UNIQUE_DRIVER_CODE_OF_TM = new ConcurrentHashMap<String, String>();
+        activeUser = nullUserForLogOut;
+    }
+
     protected UserController(String notUsed) throws Exception { //fictive constructor for the extends classes
         getInstance();
         users = getInstance().users;
@@ -33,14 +40,21 @@ public class UserController {
         return singletonUserControllerInstance;
     }
 
-    public synchronized boolean registerUser(String name, String username, String password, Role role, String code) throws Exception {
+    private Role castStringToRole(String role)
+    {
+        if(role.equals("driver")) return Role.driver;
+        else if (role.equals("trucking manager")) return Role.truckingManager;
+        else return Role.wrongrole;
+    }
+    public synchronized boolean registerUser(String name, String username, String password, String roleString, String code) throws Exception {
         User newUser;
+        Role role = castStringToRole(roleString);
         if (role == null)
             throw new Exception("Please select role");
         if (!validateUsernameToRegister(username))
             throw new Exception("Username is not valid");
         else if (role == Role.truckingManager) {
-            if (code != CODE_TRUCK_MANAGER)
+            if (!code.equals(CODE_TRUCK_MANAGER))
                 throw new IllegalArgumentException("Sorry, the code is not valid");
             newUser = new TruckManager(name, username, password);
             UNIQUE_DRIVER_CODE_OF_TM.put(String.valueOf(newUser.hashCode()), username);
@@ -66,7 +80,8 @@ public class UserController {
             throw new IllegalArgumentException("Sorry but there's no user with that username");
         if(users.get(username).login(password)) {
             getInstance().activeUser = user;
-            return true;
+            if (activeUser.role==Role.driver)return true;
+            else return false;
         }
 
         return false;
