@@ -15,6 +15,15 @@ public class ShiftController {
 
     public Shift addShifts(groupk.workers.data.Shift shift){
         if(!ifShiftExist(shift)) {
+            HashMap<Employee.Role, Integer> numOfRoles = new HashMap<>();
+            for (Employee.Role r : Employee.Role.values())
+                numOfRoles.put(r, 0);
+            for(Employee e :shift.getStaff())
+                numOfRoles.replace(e.getRole(), numOfRoles.get(e.getRole())+1);
+            for(Employee.Role r : shift.getRequiredStaff().keySet()){
+                if(shift.getRequiredStaff().get(r) > numOfRoles.get(r))
+                    throw new IllegalArgumentException("There are not enough workers to open this shift.");
+            }
             return repo.addShift(shift);
         }
         else
