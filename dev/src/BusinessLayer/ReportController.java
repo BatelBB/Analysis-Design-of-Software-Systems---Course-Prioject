@@ -1,11 +1,14 @@
 package BusinessLayer;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 public class ReportController {
 
-    private Map<Integer, Report> reports;
+    private Map<String, Report> reports;
     private ProductController productController;
+
     private static ReportController reportController;
 
     public static ReportController getInstance()
@@ -16,107 +19,110 @@ public class ReportController {
     }
 
     private ReportController(){
-        productController = ProductController.getInstance();
+        productController= ProductController.getInstance();
+        reports = new HashMap<>();
     }
 
-    public void addReport(String name, Integer id, Date date, String report_producer){
-        if (reports.containsKey(id))
+    /*public void addReport(String name, int id, Date date, String report_producer){
+        if (reports.containsKey(Integer.toString(id)))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
             Report report = new Report(name, id, report_producer);
-            reports.put(id,report);
-            }
+            reports.put(Integer.toString(id),report);
         }
+    }*/
 
 
-    public void removeReport(Integer id) { reports.remove(id); }
+    public void removeReport(int id) {
+        if (!reports.containsKey(Integer.toString(id)))
+            throw new IllegalArgumentException("Category doesn't exists");
+        else {
+            reports.remove(Integer.toString(id));
+        }
+    }
 
-    public Report getReport(Integer id) { return reports.get(id); }
+    public Report getReport(int id) {
+        if (!reports.containsKey(Integer.toString(id)))
+            throw new IllegalArgumentException("Category doesn't exists");
+        else {
+            return reports.get(Integer.toString(id));
+        }
+    }
 
-    public Report createMissingReport(String name, Integer id, String report_producer) {
-        if (reports.containsKey(id))
+    public MissingReport createMissingReport(String name, int id, String report_producer) {
+        if (reports.containsKey(Integer.toString(id)))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
             List<Product> missingPro = productController.getMissingProduct();
             MissingReport report = new MissingReport(name, id, report_producer, missingPro);
-            reports.put(id, report);
+            reports.put(Integer.toString(id), report);
             return report;
         }
     }
 
-    public Report createExpiredReport(String name, Integer id, String report_producer) {
-        if (reports.containsKey(id))
+    public ExpiredReport createExpiredReport(String name, int id, String report_producer) {
+        if (reports.containsKey(Integer.toString(id)))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
             List<Product> ExpiredPro = productController.getExpiredProduct();
             ExpiredReport report = new ExpiredReport(name, id, report_producer, ExpiredPro);
-            reports.put(id, report);
+            reports.put(Integer.toString(id), report);
             return report;
         }
     }
 
-    public Report createSurplusesReport(String name, Integer id, String report_producer) {
-        if (reports.containsKey(id))
+    public SurplusesReport createSurplusesReport(String name, int id, String report_producer) {
+        if (reports.containsKey(Integer.toString(id)))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
             List<Product> SurplusesPro = productController.getSurplusesProduct();
             SurplusesReport report = new SurplusesReport(name, id, report_producer, SurplusesPro);
-            reports.put(id, report);
+            reports.put(Integer.toString(id), report);
             return report;
         }
     }
 
-    public Report createSurplusesReport(String name, Integer id, String report_producer) {
-        if (reports.containsKey(id))
-            throw new IllegalArgumentException("The ReportId already exists in the system");
-        else {
-            List<Product> SurplusesPro = productController.getSurplusesProduct();
-            SurplusesReport report = new SurplusesReport(name, id, report_producer, SurplusesPro);
-            reports.put(id, report);
-            return report;
-        }
-    }
 
-    public Report createDefectiveReport(String name, Integer id, String report_producer) {
-        if (reports.containsKey(id))
+    public DefectiveReport createDefectiveReport(String name, int id, String report_producer) {
+        if (reports.containsKey(Integer.toString(id)))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
             List<Product> DefectivePro = productController.getDefectiveProduct();
             DefectiveReport report = new DefectiveReport(name, id, report_producer, DefectivePro);
-            reports.put(id, report);
+            reports.put(Integer.toString(id), report);
             return report;
         }
     }
 
-    public Report createBySupplierReport(String name, Integer id, String report_producer, String suppName) {
-        if (reports.containsKey(id))
+    public bySupplierReport createBySupplierReport(String name, int id, String report_producer, String suppName) {
+        if (reports.containsKey(Integer.toString(id)))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
             List<Product> bySupplierPro = productController.getbySupplierProduct(suppName);
             bySupplierReport report = new bySupplierReport(name, id, report_producer, bySupplierPro);
-            reports.put(id, report);
+            reports.put(Integer.toString(id), report);
             return report;
         }
     }
 
-    public Report createByProductReport(String name, Integer id, String report_producer, String proName) {
-        if (reports.containsKey(id))
+    public byProductReport createByProductReport(String name, int id, String report_producer, String proName) {
+        if (reports.containsKey(Integer.toString(id)))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
             List<ProductItem> byProductPro = productController.getByProduct(proName);
             byProductReport report = new byProductReport(name, id, report_producer, byProductPro);
-            reports.put(id, report);
+            reports.put(Integer.toString(id), report);
             return report;
         }
     }
 
-    public Report createByCategoryReport(String name, Integer id, String report_producer, String CatName) {
-        if (reports.containsKey(id))
+    public byCategoryReport createByCategoryReport(String name, int id, String report_producer, String CatName) {
+        if (reports.containsKey(Integer.toString(id)))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
             List<Product> byCategoryPro = productController.getByCategoryProduct(CatName);
             byCategoryReport report = new byCategoryReport(name, id, report_producer, byCategoryPro);
-            reports.put(id, report);
+            reports.put(Integer.toString(id), report);
             return report;
         }
     }

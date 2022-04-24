@@ -8,7 +8,7 @@ public class ProductService {
     private final ProductController product_controller;
 
     public ProductService() {
-        product_controller = new ProductController();
+        product_controller = ProductController.getInstance();
     }
 
     //methods

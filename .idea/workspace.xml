@@ -1,16 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="manual merge from Category_and_Report" />
+    <list default="true" id="0a6a04d1-5445-4bb4-ba10-21c3011cd23b" name="Default Changelist" comment="commit unversioned files">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/DefectiveReport.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/DiscountPair.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/ExpiredReport.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/MissingReport.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/Product.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/ProductItem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/Report.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/SurplusesReport.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/byCategoryReport.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/byProductReport.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/bySupplierReport.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/DiscountPair.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/DiscountPair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Report.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Report.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/SubCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/SubCategory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/SubSubCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/SubSubCategory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Category_and_Report" />
+        <entry key="$PROJECT_DIR$" value="208612812_207546078" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -26,16 +65,10 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Git.Branch.Popup.ShowAllRemotes": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "nodejs_package_manager_path": "npm"
-  }
-}]]></component>
+  <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -85,6 +118,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
