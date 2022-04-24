@@ -17,13 +17,21 @@ public class SubCategory {
     }
 
 
-    public void removeSubSubCategory(String name){
-        subSubCategories.remove(name);
+    public void removeSubSubCategory(String name) {
+        if (!subSubCategories.containsKey(name))
+            throw new IllegalArgumentException("Category doesn't exists");
+        else {
+            subSubCategories.remove(name);
+        }
     }
 
 
-    public SubSubCategory getSubSubCategory(String name){
-        return subSubCategories.get(name);
+    public SubSubCategory getSubSubCategory(String name) {
+        if (!subSubCategories.containsKey(name))
+            throw new IllegalArgumentException("Category doesn't exists");
+        else {
+            return subSubCategories.get(name);
+        }
     }
 
 

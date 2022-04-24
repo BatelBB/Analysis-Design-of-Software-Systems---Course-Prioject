@@ -22,9 +22,21 @@ public class Category {
     }
 
 
-    public void removeSubCategory(String name){ subC.remove(name); }
+    public void removeSubCategory(String name) {
+        if (!subC.containsKey(name))
+            throw new IllegalArgumentException("Category doesn't exists");
+        else {
+            subC.remove(name);
+        }
+    }
 
-    public SubCategory getSubCategory(String name) {return subC.get(name);}
+    public SubCategory getSubCategory(String name) {
+        if (!subC.containsKey(name))
+            throw new IllegalArgumentException("Category doesn't exists");
+        else {
+            return subC.get(name);
+        }
+    }
 
     public void UpdateDiscountByCategory(int percentage) {
         for (Map.Entry<String, SubCategory> entry : subC.entrySet()) {

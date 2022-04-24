@@ -28,19 +28,25 @@ public class CategoryController {
             }
     }
 
-    public void removeCategory(String name) throws Exception {
-        categories.remove(name);
+    public void removeCategory(String name) {
+        if (!categories.containsKey(name))
+            throw new IllegalArgumentException("Category doesn't exists");
+        else
+            categories.remove(name);
     }
 
-    public Category getCategory(String name) throws Exception {
-        return categories.get(name);
+    public Category getCategory(String name) {
+        if (!categories.containsKey(name))
+            throw new IllegalArgumentException("Category doesn't exists");
+        else
+            return categories.get(name);
     }
 
     public void UpdateDiscountByCategory(int percentage , String name){
         if (percentage > 100)
             throw new IllegalArgumentException("A discount of more than 100 percent is not possible");
         if (!categories.containsKey(name))
-            throw new IllegalArgumentException(("This category does not exist"))
+            throw new IllegalArgumentException(("This category does not exist"));
         else
             for (Map.Entry<String, Category> entry : categories.entrySet()) {
                 entry.getValue().UpdateDiscountByCategory(percentage);
