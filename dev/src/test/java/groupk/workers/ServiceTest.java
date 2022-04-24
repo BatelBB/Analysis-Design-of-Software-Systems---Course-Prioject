@@ -15,6 +15,9 @@ public class ServiceTest {
     @Test
     public void testCreateShiftMorning()
     {
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+            shiftPreferences.add(shiftDateTime);
         Service service = new Service();
         Employee HR = service.createEmployee(new Employee(
                 "111111110",
@@ -24,7 +27,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         Employee LM = service.createEmployee(new Employee(
@@ -35,7 +38,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         Employee shiftM = service.createEmployee(new Employee(
@@ -46,7 +49,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         Employee s = service.createEmployee(new Employee(
@@ -57,7 +60,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         Employee c = service.createEmployee(new Employee(
@@ -68,7 +71,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         Employee d = service.createEmployee(new Employee(
@@ -79,7 +82,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         Employee l = service.createEmployee(new Employee(
@@ -90,7 +93,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         Employee SM = service.createEmployee(new Employee(
@@ -101,7 +104,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         LinkedList<Employee> em = new LinkedList<>();
@@ -119,6 +122,9 @@ public class ServiceTest {
     @Test
     public void testCreateShiftEvening()
     {
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+            shiftPreferences.add(shiftDateTime);
         Service service = new Service();
         Employee HR = service.createEmployee(new Employee(
                 "111111110",
@@ -128,7 +134,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         Employee shiftM = service.createEmployee(new Employee(
@@ -139,7 +145,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         Employee s = service.createEmployee(new Employee(
@@ -150,7 +156,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         Employee c = service.createEmployee(new Employee(
@@ -161,7 +167,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         Employee d = service.createEmployee(new Employee(
@@ -172,7 +178,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         Employee l = service.createEmployee(new Employee(
@@ -183,7 +189,7 @@ public class ServiceTest {
                 1, 1,
                 30,
                 0, 0,
-                new HashSet<>(),
+                shiftPreferences,
                 new GregorianCalendar()
         ));
         LinkedList<Employee> em = new LinkedList<>();
@@ -593,12 +599,26 @@ public class ServiceTest {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
+        Employee shiftM = service.createEmployee(new Employee(
+                "11115170",
+                "Foo",
+                Employee.Role.ShiftManager,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                availableShifts,
+                new GregorianCalendar()
+        ));
+        LinkedList<Employee> employees = new LinkedList<>();
+        employees.add(shiftM);
         HashMap<Employee.Role, Integer> r = new HashMap<>();
         for(Employee.Role role : Employee.Role.values())
             r.put(role, 0);
-        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, new LinkedList<>(), r);
+        r.replace(Employee.Role.ShiftManager, 1);
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, employees, r);
         service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
-        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 2);
     }
 
     @Test
@@ -628,12 +648,24 @@ public class ServiceTest {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
+        Employee shiftM = service.createEmployee(new Employee(
+                "11115170",
+                "Foo",
+                Employee.Role.ShiftManager,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                availableShifts,
+                new GregorianCalendar()
+        ));
         LinkedList<Employee> em = new LinkedList<>();
-        em.add(created);
+        em.add(created); em.add(shiftM);
         HashMap<Employee.Role, Integer> r = new HashMap<>();
         for(Employee.Role role : Employee.Role.values())
             r.put(role, 0);
         r.replace(Employee.Role.Cashier, 1);
+        r.replace(Employee.Role.ShiftManager, 1);
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, em, r);
         r.replace(Employee.Role.Cashier, 2);
         assertThrows(Exception.class, () -> {
@@ -669,10 +701,27 @@ public class ServiceTest {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+            shiftPreferences.add(shiftDateTime);
+        Employee shiftM = service.createEmployee(new Employee(
+                "11115170",
+                "Foo",
+                Employee.Role.ShiftManager,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                shiftPreferences,
+                new GregorianCalendar()
+        ));
+        LinkedList<Employee> employees = new LinkedList<>();
+        employees.add(shiftM);
         HashMap<Employee.Role, Integer> r = new HashMap<>();
         for(Employee.Role role : Employee.Role.values())
             r.put(role, 0);
-        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, new LinkedList<>(), r);
+        r.replace(Employee.Role.ShiftManager, 1);
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, employees, r);
         assertThrows(Exception.class, () -> {
             service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
         });
@@ -692,10 +741,27 @@ public class ServiceTest {
                 new HashSet<Employee.ShiftDateTime>(),
                 new GregorianCalendar()
         ));
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+            shiftPreferences.add(shiftDateTime);
+        Employee shiftM = service.createEmployee(new Employee(
+                "11115170",
+                "Foo",
+                Employee.Role.ShiftManager,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                shiftPreferences,
+                new GregorianCalendar()
+        ));
+        LinkedList<Employee> employees = new LinkedList<>();
+        employees.add(shiftM);
         HashMap<Employee.Role, Integer> r = new HashMap<>();
         for(Employee.Role role : Employee.Role.values())
             r.put(role, 0);
-        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, new LinkedList<>(), r);
+        r.replace(Employee.Role.ShiftManager, 1);
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, employees, r);
         assertThrows(Exception.class, () -> {
             service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, "111111111");
         });
@@ -728,19 +794,34 @@ public class ServiceTest {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+            shiftPreferences.add(shiftDateTime);
+        Employee shiftM = service.createEmployee(new Employee(
+                "11115170",
+                "Foo",
+                Employee.Role.ShiftManager,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                availableShifts,
+                new GregorianCalendar()
+        ));
         HashMap<Employee.Role, Integer> r = new HashMap<>();
         for(Employee.Role role : Employee.Role.values())
             r.put(role, 0);
         r.put(created.role, 1);
+        r.replace(Employee.Role.ShiftManager, 1);
         LinkedList<Employee> em = new LinkedList<>();
-        em.add(created);
+        em.add(created); em.add(shiftM);
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),
                 Shift.Type.Evening, em, r);
-        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 2);
         assertThrows(Exception.class, () -> {
             service.removeEmployeeFromShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
         });
-        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 2);
     }
 
     @Test
@@ -757,10 +838,27 @@ public class ServiceTest {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+            shiftPreferences.add(shiftDateTime);
+        Employee shiftM = service.createEmployee(new Employee(
+                "11115170",
+                "Foo",
+                Employee.Role.ShiftManager,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                shiftPreferences,
+                new GregorianCalendar()
+        ));
         HashMap<Employee.Role, Integer> r = new HashMap<>();
         for(Employee.Role role : Employee.Role.values())
             r.put(role, 0);
-        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, new LinkedList<>(), r);
+        r.replace(Employee.Role.ShiftManager, 1);
+        LinkedList<Employee> employees = new LinkedList<>();
+        employees.add(shiftM);
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, employees, r);
         assertThrows(Exception.class, () -> {
             service.removeEmployeeFromShift(HR.id, shift.getDate(), Shift.Type.Evening, "111111111");
         });
@@ -833,11 +931,28 @@ public class ServiceTest {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+            shiftPreferences.add(shiftDateTime);
+        Employee shiftM = service.createEmployee(new Employee(
+                "11115170",
+                "Foo",
+                Employee.Role.ShiftManager,
+                "FooBank",
+                1, 1,
+                30,
+                0, 0,
+                shiftPreferences,
+                new GregorianCalendar()
+        ));
+        LinkedList<Employee> employees = new LinkedList<>();
+        employees.add(shiftM);
         HashMap<Employee.Role, Integer> r = new HashMap<>();
         for(Employee.Role role : Employee.Role.values())
             r.put(role, 0);
-        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, new LinkedList<>(), r);
-        Shift shift2 = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 20),Shift.Type.Evening, new LinkedList<>(), r);
+        r.replace(Employee.Role.ShiftManager, 1);
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, employees, r);
+        Shift shift2 = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 20),Shift.Type.Evening, employees, r);
         service.addEmployeeShiftPreference(created.id, created.id, Employee.ShiftDateTime.ThursdayEvening);
         service.addEmployeeShiftPreference(created.id, created.id, Employee.ShiftDateTime.WednesdayEvening);
         service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);

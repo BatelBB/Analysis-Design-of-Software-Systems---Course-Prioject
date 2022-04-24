@@ -43,7 +43,11 @@ public class Facade {
         if (employees.isFromHumanResources(subjectID)) {
             LinkedList<groupk.workers.data.Employee> staffData = new LinkedList<>();
             for(Employee e: staff){
-                staffData.add(serviceEmployeeToData(e));
+                groupk.workers.data.Employee added = serviceEmployeeToData(e);
+                if (!added.getAvailableShifts().contains(groupk.workers.data.Employee.toShiftDateTime(date, type == Shift.Type.Evening))) {
+                    throw new IllegalArgumentException("Employee must be able to work at day of week and time.");
+                }
+                staffData.add(added);
             }
             groupk.workers.data.Shift created = new groupk.workers.data.Shift(date, serviceTypeToData(type), staffData ,
                     serviceRequiredRoleInShiftToData(requiredStaff));

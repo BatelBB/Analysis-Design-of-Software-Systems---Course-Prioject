@@ -22,7 +22,8 @@ public class Employee {
     }
 
     public static ShiftDateTime toShiftDateTime(Calendar date, boolean isEvening) {
-        return ShiftDateTime.values()[((date.get(Calendar.DAY_OF_WEEK)) - 1) * 2 + (isEvening ? 1 : 0)];
+        ShiftDateTime s = ShiftDateTime.values()[((date.get(Calendar.DAY_OF_WEEK)) - 1) * 2 + (isEvening ? 1 : 0)];
+        return s;
     }
 
     private String name;

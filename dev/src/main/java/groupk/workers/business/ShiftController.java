@@ -15,6 +15,8 @@ public class ShiftController {
 
     public Shift addShifts(groupk.workers.data.Shift shift){
         if(!ifShiftExist(shift)) {
+            if(shift.getRequiredStaff().get(Employee.Role.ShiftManager) == 0)
+                throw new IllegalArgumentException("In each shift there must be a Shift Manager");
             HashMap<Employee.Role, Integer> numOfRoles = new HashMap<>();
             for(Employee.Role r : Employee.Role.values())
                 numOfRoles.put(r, 0);
@@ -54,6 +56,8 @@ public class ShiftController {
     }
 
     public Shift setRequiredRoleInShift(Calendar date, Shift.Type type, Employee.Role role, int count) {
+        if(role.equals(Employee.Role.ShiftManager) && count == 0)
+            throw new IllegalArgumentException("In each shift there must be a Shift Manager");
         int numOfRoles = 0;
         Shift shift = getShift(date, type);
         for(Employee e :shift.getStaff()){
@@ -66,6 +70,8 @@ public class ShiftController {
     }
 
     public Shift setRequiredStaffInShift(Calendar date, Shift.Type type, HashMap<Employee.Role, Integer> requiredStaff) {
+        if(requiredStaff.get(Employee.Role.ShiftManager) == 0)
+            throw new IllegalArgumentException("In each shift there must be a Shift Manager");
         HashMap<Employee.Role, Integer> numOfRoles = new HashMap<>();
         Shift shift = getShift(date, type);
         for(Employee.Role r : Employee.Role.values())
