@@ -16,10 +16,11 @@ public class ShiftController {
     public Shift addShifts(groupk.workers.data.Shift shift){
         if(!ifShiftExist(shift)) {
             HashMap<Employee.Role, Integer> numOfRoles = new HashMap<>();
-            for (Employee.Role r : Employee.Role.values())
+            for(Employee.Role r : Employee.Role.values())
                 numOfRoles.put(r, 0);
-            for(Employee e :shift.getStaff())
-                numOfRoles.replace(e.getRole(), numOfRoles.get(e.getRole())+1);
+            for(Employee e :shift.getStaff()) {
+                numOfRoles.replace(e.getRole(), numOfRoles.get(e.getRole()) + 1);
+            }
             for(Employee.Role r : shift.getRequiredStaff().keySet()){
                 if(shift.getRequiredStaff().get(r) > numOfRoles.get(r))
                     throw new IllegalArgumentException("There are not enough workers to open this shift.");
@@ -53,11 +54,30 @@ public class ShiftController {
     }
 
     public Shift setRequiredRoleInShift(Calendar date, Shift.Type type, Employee.Role role, int count) {
-        return getShift(date, type).setRequiredRoleInShift(role, count);
+        int numOfRoles = 0;
+        Shift shift = getShift(date, type);
+        for(Employee e :shift.getStaff()){
+            if(e.getRole().equals(role))
+                numOfRoles ++;
+        }
+        if(count < numOfRoles)
+            throw new IllegalArgumentException("There are not enough workers with this role to run this shift.");
+        return shift.setRequiredRoleInShift(role, count);
     }
 
     public Shift setRequiredStaffInShift(Calendar date, Shift.Type type, HashMap<Employee.Role, Integer> requiredStaff) {
-        return getShift(date, type).setRequiredStaff(requiredStaff);
+        HashMap<Employee.Role, Integer> numOfRoles = new HashMap<>();
+        Shift shift = getShift(date, type);
+        for(Employee.Role r : Employee.Role.values())
+            numOfRoles.put(r, 0);
+        for(Employee e :shift.getStaff()) {
+            numOfRoles.replace(e.getRole(), numOfRoles.get(e.getRole()) + 1);
+        }
+        for(Employee.Role r : requiredStaff.keySet()){
+            if(requiredStaff.get(r) > numOfRoles.get(r))
+                throw new IllegalArgumentException("There are not enough workers to run this shift.");
+        }
+        return shift.setRequiredStaff(requiredStaff);
     }
 
 }
