@@ -1,5 +1,7 @@
 package BusinessLayer;
 
+import java.util.List;
+
 public class byProductReport extends Report {
 
     private String name;

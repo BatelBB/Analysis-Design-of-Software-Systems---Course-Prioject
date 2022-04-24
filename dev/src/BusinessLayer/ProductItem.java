@@ -13,6 +13,7 @@ public class ProductItem {
     private List<DiscountPair> man_discount;
     private List<DiscountPair> cus_discount;
     private boolean is_defect;
+    private boolean on_shelf;
     private String defect_reporter;
 
     //constructors
@@ -28,7 +29,7 @@ public class ProductItem {
         defect_reporter = null;
     }
 
-    public ProductItem(int id, String store, String location, String supplier, LocalDateTime expirationDate) {
+    public ProductItem(int id, String store, String location, String supplier, LocalDateTime expirationDate, boolean on_shelf) {
         this.id = id;
         this.store = store;
         this.location = location;
@@ -37,6 +38,7 @@ public class ProductItem {
         this.man_discount = new ArrayList<>();
         this.cus_discount = new ArrayList<>();
         this.is_defect = false;
+        this.on_shelf=on_shelf;
         defect_reporter = null;
     }
 
@@ -128,5 +130,13 @@ public class ProductItem {
 
     public void setDefect_reporter(String defect_reporter) {
         this.defect_reporter = defect_reporter;
+    }
+
+    public boolean isOn_shelf() {
+        return on_shelf;
+    }
+
+    public void setOn_shelf(boolean on_shelf) {
+        this.on_shelf = on_shelf;
     }
 }
