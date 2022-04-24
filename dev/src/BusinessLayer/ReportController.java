@@ -18,8 +18,8 @@ public class ReportController {
         return reportController;
     }
 
-    private ReportController(){
-        product_controller= ProductController.getInstance();
+    private ReportController() {
+        product_controller = ProductController.getInstance();
         reports = new HashMap<>();
     }
 
@@ -53,7 +53,7 @@ public class ReportController {
         if (reports.containsKey(Integer.toString(id)))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
-            List<Product> missingPro = productController.getMissingProduct();
+            List<Product> missingPro = product_controller.getMissingProducts();
             MissingReport report = new MissingReport(name, id, report_producer, missingPro);
             reports.put(Integer.toString(id), report);
             return report;
@@ -75,7 +75,7 @@ public class ReportController {
         if (reports.containsKey(Integer.toString(id)))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
-            List<Product> SurplusesPro = productController.getSurplusesProduct();
+            List<Product> SurplusesPro = product_controller.getSurplusProducts();
             SurplusesReport report = new SurplusesReport(name, id, report_producer, SurplusesPro);
             reports.put(Integer.toString(id), report);
             return report;
@@ -116,7 +116,7 @@ public class ReportController {
         }
     }
 
-    public byCategoryReport createByCategoryReport(String name, int id, String report_producer, String CatName) {
+    public byCategoryReport createByCategoryReport(String name, int id, String report_producer, String CatName, String subCatName, String subSubCatName) {
         if (reports.containsKey(Integer.toString(id)))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {

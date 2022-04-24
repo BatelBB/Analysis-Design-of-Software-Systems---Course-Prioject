@@ -4,13 +4,13 @@ import java.util.List;
 
 public class DefectiveReport extends Report{
 
-    private List<Product> DefectivePro;
+    private List<ServiceLayer.Objects.ProductItem> DefectivePro;
 
     public DefectiveReport(BusinessLayer.DefectiveReport report) {
         super(report);
-        List<BusinessLayer.Product> BusinessDefectivePro=report.getDefectivePro();
-        for (BusinessLayer.Product p:BusinessDefectivePro) {
-            DefectivePro.add(new Product(p));
+        List<BusinessLayer.ProductItem> BusinessDefectivePro=report.getDefectivePro();
+        for (BusinessLayer.ProductItem p:BusinessDefectivePro) {
+            DefectivePro.add(new ServiceLayer.Objects.ProductItem(p));
         }
     }
 }

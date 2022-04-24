@@ -7,22 +7,22 @@ public class ReportService {
 
     private final ReportController reportController;
 
-    public ReportService(){ reportController= ReportController.getInstance();}
+    public ReportService() {
+        reportController = ReportController.getInstance();
+    }
 
-    public void removeReport(int id){
+    public void removeReport(int id) {
         try {
             reportController.removeReport(id);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void getReport(int id){
+    public void getReport(int id) {
         try {
             reportController.getReport(id);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -87,16 +87,15 @@ public class ReportService {
         return null;
     }
 
-    public ServiceLayer.Objects.byCategoryReport createByCategoryReport(String name, int id, String report_producer, String CatName) {
+    public ServiceLayer.Objects.byCategoryReport createByCategoryReport(String name, int id, String report_producer, String CatName, String subCatName, String subSubCatName) {
         try {
-            BusinessLayer.byCategoryReport report = reportController.createByCategoryReport(name, id, report_producer, CatName);
+            BusinessLayer.byCategoryReport report = reportController.createByCategoryReport(name, id, report_producer, CatName, subCatName, subSubCatName);
             return new ServiceLayer.Objects.byCategoryReport(report);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return null;
     }
-
 
 
 }

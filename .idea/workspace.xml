@@ -5,17 +5,12 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductItem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/DefectiveReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/DefectiveReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/ExpiredReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/ExpiredReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/bySupplierReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/bySupplierReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +29,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectId" id="28EjMzfjmEAIHwG4dUQtsQy08TV" />
   <component name="ProjectLevelVcsManager">
@@ -100,7 +95,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650808193724</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="manually combining two main branches">
+      <created>1650819557197</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1650819557197</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
