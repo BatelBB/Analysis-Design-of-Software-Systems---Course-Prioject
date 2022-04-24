@@ -42,6 +42,52 @@ public class CategoryController {
         else
             return categories.get(name);
     }
+
+    public void addSubCategory(String categoryName, String SubCategoryName) {
+        if (!categories.containsKey(categoryName))
+            throw new IllegalArgumentException("Category doesn't exists");
+        else {
+            Category category = categories.get(categoryName);
+            category.addSubCategory(SubCategoryName);
+        }
+    }
+
+    public void removeSubCategory(String categoryName, String SubCategoryName) {
+        if (!categories.containsKey(categoryName))
+            throw new IllegalArgumentException("Category doesn't exists");
+        else {
+            Category category = categories.get(categoryName);
+            category.removeSubCategory(SubCategoryName);
+        }
+    }
+    public SubCategory getSubCategory(String categoryName, String SubCategoryName) {
+        if (!categories.containsKey(categoryName))
+            throw new IllegalArgumentException("Category doesn't exists");
+        else {
+            Category category = categories.get(categoryName);
+            return category.getSubCategory(SubCategoryName);
+        }
+    }
+
+    public void addSubSubCategory(String categoryName, String sub_category, String name) {
+        if (!categories.containsKey(categoryName))
+            throw new IllegalArgumentException("Category doesn't exists");
+        else {
+            Category category = categories.get(categoryName);
+            SubCategory subCategory= category.getSubCategory(sub_category);
+            subCategory.addSubSubCategory(name);
+        }
+    }
+
+    public void removeSubSubCategory(String categoryName, String sub_category, String name) {
+        if (!categories.containsKey(categoryName))
+            throw new IllegalArgumentException("Category doesn't exists");
+        else {
+            Category category = categories.get(categoryName);
+            SubCategory subCategory= category.getSubCategory(sub_category);
+            subCategory.removeSubSubCategory(name);
+        }
+    }
 }
 
 
