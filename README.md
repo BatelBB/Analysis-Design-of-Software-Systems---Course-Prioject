@@ -1,5 +1,7 @@
 # ADSS GROUP K Workers Module
 
+create employee foo 111 1 1 1 1 HumanResources
+
 ## Development
 
 The `dev` directory contains a Maven project.
