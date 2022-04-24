@@ -2,15 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="manually combining two main branches">
+      <change beforePath="$PROJECT_DIR$/.idea/adss_group_k.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/adss_group_k.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/DefectiveReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/DefectiveReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/ExpiredReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/ExpiredReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/bySupplierReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/bySupplierReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,7 +16,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Category_and_Report" />
+        <entry key="$PROJECT_DIR$" value="208612812_207546078" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -39,16 +35,11 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Git.Branch.Popup.ShowAllRemotes&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
-  }
-}</component>
+  <component name="PropertiesComponent">
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
@@ -118,6 +109,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />

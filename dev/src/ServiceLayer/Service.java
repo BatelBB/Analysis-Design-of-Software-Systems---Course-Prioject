@@ -1,31 +1,39 @@
 package ServiceLayer;
 
+import ServiceLayer.Objects.Category;
+import ServiceLayer.Objects.MissingReport;
+import ServiceLayer.Objects.SubCategory;
+
 import java.time.LocalDateTime;
 
 public class Service {
     private final ProductService product_service;
+    private final CategoryService category_service;
+    private final ReportService report_service;
 
     public Service() {
+
         product_service = new ProductService();
+        report_service = new ReportService();
+        category_service = new CategoryService();
     }
 
-    public void addCategory(String name) {
+    public void addCategory(String name) { category_service.addCategory(name); }
+
+    public void removeCategory(String name) { category_service.removeCategory(name); }
+    public Category getCategory(String name){ return category_service.getCategory(name); }
+
+    public void addSubCategory(String categoryName, String SubCategoryName) {category_service.addSubCategory(categoryName, SubCategoryName);
     }
 
-    public void removeCategory(String name) {
+    public void removeSubCategory(String category, String name) {category_service.removeSubCategory(category, name);
     }
+    public SubCategory getSubCategory(String category, String name) {return category_service.getSubCategory(category,name);}
 
-    public void addSubCategory(String category, String name) {
-    }
+    public void addSubSubCategory(String category, String sub_category, String name) { category_service.addSubSubCategory(category,sub_category, name); }
 
-    public void removeSubCategory(String category, String name) {
-    }
+    public void removeSubSubCategory(String category, String sub_category, String name) { category_service.removeSubSubCategory(category,sub_category, name); }
 
-    public void addSubSubCategory(String category, String sub_category, String name) {
-    }
-
-    public void removeSubSubCategory(String category, String sub_category, String name) {
-    }
 
     public void updateCategoryManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
         product_service.updateCategoryManDiscount(discount, start_date, end_date, category, sub_category, subsub_category);
@@ -90,4 +98,14 @@ public class Service {
     public void changeItemOnShelf(int product_id, int item_id, boolean on_shelf) {
         product_service.changeItemOnShelf(product_id, item_id, on_shelf);
     }
+    public void removeReport(int id) {report_service.removeReport(id);}
+    public void getReport(int id) {report_service.getReport(id);}
+    public MissingReport createMissingReport(String name, int id, String report_producer) {return report_service.createMissingReport(name, id, report_producer);}
+    public ServiceLayer.Objects.ExpiredReport createExpiredReport(String name, int id, String report_producer){return report_service.createExpiredReport(name, id, report_producer);}
+    public ServiceLayer.Objects.SurplusesReport createSurplusesReport(String name, int id, String report_producer){return report_service.createSurplusesReport(name, id, report_producer);}
+    public ServiceLayer.Objects.DefectiveReport createDefectiveReport(String name, int id, String report_producer){return report_service.createDefectiveReport(name, id, report_producer);}
+    public ServiceLayer.Objects.bySupplierReport createBySupplierReport(String name, int id, String report_producer, String suppName){return report_service.createBySupplierReport(name, id, report_producer, suppName);}
+    public ServiceLayer.Objects.byProductReport createByProductReport(String name, int id, String report_producer, String proName){return report_service.createByProductReport(name, id, report_producer, proName);}
+    public ServiceLayer.Objects.byCategoryReport createByCategoryReport(String name, int id, String report_producer, String CatName, String subCatName, String subSubCatName)
+    {return report_service.createByCategoryReport(name, id, report_producer, CatName, subCatName, subSubCatName);}
 }
