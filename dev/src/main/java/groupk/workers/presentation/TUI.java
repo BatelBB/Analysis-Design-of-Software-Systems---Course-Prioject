@@ -34,10 +34,6 @@ public class TUI {
             handleUpdateEmployee(command);
             return;
         }
-        if (command.startsWith("create shift")) {
-            handleCreateShift(command);
-            return;
-        }
         if (command.startsWith("list employees")) {
             handleListEmployees(command);
             return;
@@ -48,6 +44,22 @@ public class TUI {
         }
         if (command.startsWith("delete shift preference")) {
             handleRemoveShiftPreference(command);
+            return;
+        }
+        if (command.startsWith("create shift")) {
+            handleCreateShift(command);
+            return;
+        }
+        if (command.startsWith("add shift staff")) {
+            handleAddShiftStaff(command);
+            return;
+        }
+        if (command.startsWith("delete shift staff")) {
+            handleDeleteShiftStaff(command);
+            return;
+        }
+        if (command.startsWith("update shift required role")) {
+            handleUpdateShiftRequiredRole(command);
             return;
         }
 
@@ -76,6 +88,9 @@ public class TUI {
         System.out.println("  add shift preference");
         System.out.println("  delete shift preference");
         System.out.println("  create shift");
+        System.out.println("  add shift staff");
+        System.out.println("  delete shift staff");
+        System.out.println("  update shift required role");
         System.out.println("Usage:");
         System.out.println("> <command> [arguments]");
         System.out.println("For command specific help, run the command without arguments.");
@@ -137,6 +152,7 @@ public class TUI {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
+        service.addEmployeeShiftPreference("999368814", "999368814", Employee.ShiftDateTime.SundayMorning);
         service.addEmployeeShiftPreference("999368814", "999368814", Employee.ShiftDateTime.SundayEvening);
         service.addEmployeeShiftPreference("999368814", "999368814", Employee.ShiftDateTime.MondayEvening);
         service.addEmployeeShiftPreference("999368814", "999368814", Employee.ShiftDateTime.WednesdayMorning);
@@ -152,6 +168,7 @@ public class TUI {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
+        service.addEmployeeShiftPreference("999849854", "999849854", Employee.ShiftDateTime.SundayMorning);
         service.addEmployeeShiftPreference("999849854", "999849854", Employee.ShiftDateTime.SundayEvening);
         service.addEmployeeShiftPreference("999849854", "999849854", Employee.ShiftDateTime.MondayEvening);
         service.addEmployeeShiftPreference("999849854", "999849854", Employee.ShiftDateTime.WednesdayMorning);
@@ -212,6 +229,7 @@ public class TUI {
                 new HashSet<>(),
                 new GregorianCalendar()
         ));
+        service.addEmployeeShiftPreference("999205214", "999205214", Employee.ShiftDateTime.SundayMorning);
         service.addEmployeeShiftPreference("999205214", "999205214", Employee.ShiftDateTime.SundayEvening);
         service.addEmployeeShiftPreference("999205214", "999205214", Employee.ShiftDateTime.MondayEvening);
         service.addEmployeeShiftPreference("999205214", "999205214", Employee.ShiftDateTime.WednesdayMorning);
@@ -231,8 +249,170 @@ public class TUI {
         service.addEmployeeShiftPreference("999838402", "999838402", Employee.ShiftDateTime.MondayMorning);
         service.addEmployeeShiftPreference("999838402", "999838402", Employee.ShiftDateTime.TuesdayEvening);
         service.addEmployeeShiftPreference("999838402", "999838402", Employee.ShiftDateTime.FridayEvening);
+    }
 
+    private void handleUpdateShiftRequiredRole(String command) {
+        String[] args = command.split(" ");
+        if (args.length != 8) {
+            System.out.println("Error: All arguments must be supplied.");
+            System.out.println("Usage:");
+            System.out.println("> update shift required role <date> <type> <role> <required-count>");
+            return;
+        }
 
+        String[] splitDate = args[4].split("-");
+        if (
+                splitDate.length != 3
+                        && splitDate[0].length() == 4
+                        && splitDate[1].length() == 2
+                        && splitDate[2].length() == 2
+        ) {
+            System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
+            return;
+        }
+        Calendar date;
+        try {
+            date = new GregorianCalendar(
+                    Integer.parseInt(splitDate[0]),
+                    // Why -1 you ask? Because the Java library can not even be consistent within
+                    // the arguments of a single constructor.
+                    Integer.parseInt(splitDate[1]) - 1,
+                    Integer.parseInt(splitDate[2]));
+        } catch (NumberFormatException e) {
+            System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
+            return;
+        }
+
+        Shift.Type type;
+        try {
+            type = Shift.Type.valueOf(args[5]);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: type must be either Morning or Evening.");
+            return;
+        }
+
+        Employee.Role role;
+        try {
+            role = Employee.Role.valueOf(args[6]);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: role must be one of the following:");
+            System.out.println("Logistics, HumanResources, Stocker, Cashier, LogisticsManager, ShiftManager, Driver, StoreManager.");
+            return;
+        }
+
+        int count;
+        try {
+            count = Integer.parseInt(args[7]);
+            if (count < 0) {
+                throw new IllegalArgumentException();
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Error: required-count must be an integer.");
+            return;
+        }
+
+        try {
+            service.setRequiredRoleInShift(subject, date, type, role, count);
+            System.out.println("updated required staff in shift.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void handleDeleteShiftStaff(String command) {
+        String[] args = command.split(" ");
+        if (args.length != 6) {
+            System.out.println("Error: All arguments must be supplied.");
+            System.out.println("Usage:");
+            System.out.println("> delete shift staff <date> <type> <employee-id>");
+            return;
+        }
+
+        String[] splitDate = args[3].split("-");
+        if (
+                splitDate.length != 3
+                        && splitDate[0].length() == 4
+                        && splitDate[1].length() == 2
+                        && splitDate[2].length() == 2
+        ) {
+            System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
+            return;
+        }
+        Calendar date;
+        try {
+            date = new GregorianCalendar(
+                    Integer.parseInt(splitDate[0]),
+                    // Why -1 you ask? Because the Java library can not even be consistent within
+                    // the arguments of a single constructor.
+                    Integer.parseInt(splitDate[1]) - 1,
+                    Integer.parseInt(splitDate[2]));
+        } catch (NumberFormatException e) {
+            System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
+            return;
+        }
+
+        Shift.Type type;
+        try {
+            type = Shift.Type.valueOf(args[4]);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: type must be either Morning or Evening.");
+            return;
+        }
+
+        try {
+            service.addEmployeeToShift(subject, date, type, args[5]);
+            System.out.println("added employee to shift.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void handleAddShiftStaff(String command) {
+        String[] args = command.split(" ");
+        if (args.length != 6) {
+            System.out.println("Error: All arguments must be supplied.");
+            System.out.println("Usage:");
+            System.out.println("> add shift staff <date> <type> <employee-id>");
+            return;
+        }
+
+        String[] splitDate = args[3].split("-");
+        if (
+                splitDate.length != 3
+                        && splitDate[0].length() == 4
+                        && splitDate[1].length() == 2
+                        && splitDate[2].length() == 2
+        ) {
+            System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
+            return;
+        }
+        Calendar date;
+        try {
+            date = new GregorianCalendar(
+                    Integer.parseInt(splitDate[0]),
+                    // Why -1 you ask? Because the Java library can not even be consistent within
+                    // the arguments of a single constructor.
+                    Integer.parseInt(splitDate[1]) - 1,
+                    Integer.parseInt(splitDate[2]));
+        } catch (NumberFormatException e) {
+            System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
+            return;
+        }
+
+        Shift.Type type;
+        try {
+            type = Shift.Type.valueOf(args[4]);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: type must be either Morning or Evening.");
+            return;
+        }
+
+        try {
+            service.removeEmployeeFromShift(subject, date, type, args[5]);
+            System.out.println("removed employee from shift.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private void handleListEmployees(String command) {
@@ -514,9 +694,9 @@ public class TUI {
         try {
             date = new GregorianCalendar(
                     Integer.parseInt(splitDate[0]),
-                    // Why +1 you ask? Because the Java library can not even be consistent within
+                    // Why -1 you ask? Because the Java library can not even be consistent within
                     // the arguments of a single constructor.
-                    Integer.parseInt(splitDate[1]) + 1,
+                    Integer.parseInt(splitDate[1]) - 1,
                     Integer.parseInt(splitDate[2]));
         } catch (NumberFormatException e) {
             System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
