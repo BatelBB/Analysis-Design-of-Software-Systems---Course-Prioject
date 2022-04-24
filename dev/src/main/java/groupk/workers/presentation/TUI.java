@@ -55,18 +55,24 @@ public class TUI {
             handleLogin(command);
             return;
         }
+        if (command.equals("load sample")) {
+            handleLoadSample();
+            return;
+        }
         if (command.equals("quit")) {
             onStop.run();
             return;
         }
 
         System.out.println("Error: command must be one of the following:");
+        System.out.println("  load sample");
         System.out.println("  login");
         System.out.println("  quit");
         System.out.println("  create employee");
         System.out.println("  get employee");
         System.out.println("  delete employee");
         System.out.println("  update employee");
+        System.out.println("  list employees");
         System.out.println("  add shift preference");
         System.out.println("  delete shift preference");
         System.out.println("  create shift");
@@ -74,6 +80,159 @@ public class TUI {
         System.out.println("> <command> [arguments]");
         System.out.println("For command specific help, run the command without arguments.");
         System.out.println("To quit the program, run the quit command. ALL INFORMATION WILL BE LOST ON QUIT.");
+    }
+
+    private void handleLoadSample() {
+        service.createEmployee(new Employee(
+                "999871163",
+                "Noam Levi",
+                Employee.Role.HumanResources,
+                "Foo",
+                12556, 1,
+                35,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference("999871163", "999871163", Employee.ShiftDateTime.SundayMorning);
+        service.addEmployeeShiftPreference("999871163", "999871163", Employee.ShiftDateTime.MondayMorning);
+        service.addEmployeeShiftPreference("999871163", "999871163", Employee.ShiftDateTime.ThursdayMorning);
+        service.createEmployee(new Employee(
+                "999698780",
+                "David Perez",
+                Employee.Role.HumanResources,
+                "Foo",
+                55336, 1,
+                35,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference("999698780", "999698780", Employee.ShiftDateTime.SundayMorning);
+        service.addEmployeeShiftPreference("999698780", "999698780", Employee.ShiftDateTime.WednesdayMorning);
+        service.addEmployeeShiftPreference("999698780", "999698780", Employee.ShiftDateTime.ThursdayMorning);
+        service.createEmployee(new Employee(
+                "999356934",
+                "Noa Cohen",
+                Employee.Role.Cashier,
+                "Foo",
+                23226, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference("999356934", "999356934", Employee.ShiftDateTime.SundayMorning);
+        service.addEmployeeShiftPreference("999356934", "999356934", Employee.ShiftDateTime.MondayMorning);
+        service.addEmployeeShiftPreference("999356934", "999356934", Employee.ShiftDateTime.TuesdayEvening);
+        service.addEmployeeShiftPreference("999356934", "999356934", Employee.ShiftDateTime.ThursdayMorning);
+        service.createEmployee(new Employee(
+                "999368814",
+                "David Levi",
+                Employee.Role.Cashier,
+                "Foo",
+                15323, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference("999368814", "999368814", Employee.ShiftDateTime.SundayEvening);
+        service.addEmployeeShiftPreference("999368814", "999368814", Employee.ShiftDateTime.MondayEvening);
+        service.addEmployeeShiftPreference("999368814", "999368814", Employee.ShiftDateTime.WednesdayMorning);
+        service.addEmployeeShiftPreference("999368814", "999368814", Employee.ShiftDateTime.ThursdayEvening);
+        service.createEmployee(new Employee(
+                "999849854",
+                "Josef Cohen",
+                Employee.Role.Stocker,
+                "Foo",
+                12552, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference("999849854", "999849854", Employee.ShiftDateTime.SundayEvening);
+        service.addEmployeeShiftPreference("999849854", "999849854", Employee.ShiftDateTime.MondayEvening);
+        service.addEmployeeShiftPreference("999849854", "999849854", Employee.ShiftDateTime.WednesdayMorning);
+        service.addEmployeeShiftPreference("999849854", "999849854", Employee.ShiftDateTime.ThursdayEvening);
+        service.createEmployee(new Employee(
+                "999007248",
+                "Maya Dehan",
+                Employee.Role.Stocker,
+                "Foo",
+                65552, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference("999007248", "999007248", Employee.ShiftDateTime.SundayMorning);
+        service.addEmployeeShiftPreference("999007248", "999007248", Employee.ShiftDateTime.MondayMorning);
+        service.addEmployeeShiftPreference("999007248", "999007248", Employee.ShiftDateTime.TuesdayEvening);
+        service.addEmployeeShiftPreference("999007248", "999007248", Employee.ShiftDateTime.FridayEvening);
+        service.createEmployee(new Employee(
+                "999481773",
+                "Eitan Cohen",
+                Employee.Role.Driver,
+                "Foo",
+                13525, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference("999481773", "999481773", Employee.ShiftDateTime.SundayMorning);
+        service.addEmployeeShiftPreference("999481773", "999481773", Employee.ShiftDateTime.MondayMorning);
+        service.addEmployeeShiftPreference("999481773", "999481773", Employee.ShiftDateTime.TuesdayEvening);
+        service.addEmployeeShiftPreference("999481773", "999481773", Employee.ShiftDateTime.FridayEvening);
+        service.createEmployee(new Employee(
+                "999555931",
+                "Omer Levi",
+                Employee.Role.Driver,
+                "Foo",
+                15731, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference("999555931", "999555931", Employee.ShiftDateTime.SundayMorning);
+        service.addEmployeeShiftPreference("999555931", "999555931", Employee.ShiftDateTime.MondayMorning);
+        service.addEmployeeShiftPreference("999555931", "999555931", Employee.ShiftDateTime.TuesdayEvening);
+        service.addEmployeeShiftPreference("999555931", "999555931", Employee.ShiftDateTime.FridayEvening);
+        service.createEmployee(new Employee(
+                "999205214",
+                "Tamar Meir",
+                Employee.Role.Logistics,
+                "Foo",
+                63731, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference("999205214", "999205214", Employee.ShiftDateTime.SundayEvening);
+        service.addEmployeeShiftPreference("999205214", "999205214", Employee.ShiftDateTime.MondayEvening);
+        service.addEmployeeShiftPreference("999205214", "999205214", Employee.ShiftDateTime.WednesdayMorning);
+        service.addEmployeeShiftPreference("999205214", "999205214", Employee.ShiftDateTime.ThursdayEvening);
+        service.createEmployee(new Employee(
+                "999838402",
+                "Michal Alon",
+                Employee.Role.Logistics,
+                "Foo",
+                63731, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference("999838402", "999838402", Employee.ShiftDateTime.SundayMorning);
+        service.addEmployeeShiftPreference("999838402", "999838402", Employee.ShiftDateTime.MondayMorning);
+        service.addEmployeeShiftPreference("999838402", "999838402", Employee.ShiftDateTime.TuesdayEvening);
+        service.addEmployeeShiftPreference("999838402", "999838402", Employee.ShiftDateTime.FridayEvening);
+
+
     }
 
     private void handleListEmployees(String command) {
@@ -89,7 +248,7 @@ public class TUI {
             List<Employee> employees = service.listEmployees(subject);
             System.out.println("id, name, role");
             for (Employee employee: employees) {
-                System.out.printf("%s, %s, %s", employee.id, employee.name, employee.role);
+                System.out.printf("%s, %s, %s\n", employee.id, employee.name, employee.role);
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
