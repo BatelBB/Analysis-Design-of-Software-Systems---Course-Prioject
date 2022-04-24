@@ -49,30 +49,50 @@ public class Product {
     }
 
     //methods
-    public void updateItemManDiscount(int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date){
+    public void updateItemManDiscount(int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) throws Exception {
+        itemExists(item_id);
         items.get(Integer.toString(item_id)).addManDiscount(new DiscountPair(start_date, end_date, discount));
     }
 
-    public void updateItemCusDiscount(int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date){
+    public void updateItemCusDiscount(int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) throws Exception {
+        itemExists(item_id);
         items.get(Integer.toString(item_id)).addCusDiscount(new DiscountPair(start_date, end_date, discount));
     }
 
-    public void updateItemDefect(int id, boolean is_defect, String defect_reporter) {
+    public void updateItemDefect(int id, boolean is_defect, String defect_reporter) throws Exception {
+        itemExists(id);
         items.get(Integer.toString(id)).setIs_defect(is_defect);
         items.get(Integer.toString(id)).setDefect_reporter(defect_reporter);
     }
 
-    public String getItemLocation(int item_id) {
+    public String getItemLocation(int item_id) throws Exception {
+        itemExists(item_id);
         return items.get(Integer.toString(item_id)).getLocation();
     }
 
-    public void addItem(String store, String location, String supplier, LocalDateTime expiration_date) {
+    public void addItem(String store, String location, String supplier, LocalDateTime expiration_date) throws Exception {
+        if (store == null || store.equals(""))
+            throw new Exception("store name empty");
+        if (location == null || location.equals(""))
+            throw new Exception("location name empty");
+        if (supplier == null || supplier.equals(""))
+            throw new Exception("supplier name empty");
+        if (expiration_date == null)
+            throw new Exception("expiration date is null");
         items.put(Integer.toString(item_ids), new ProductItem(item_ids, store, location, supplier, expiration_date));
         item_ids++;
     }
 
-    public void removeItem(int item_id) {
+    public void removeItem(int item_id) throws Exception {
+        itemExists(item_id);
         items.remove(Integer.toString(item_id));
+    }
+
+    public void changeItemLocation(int item_id, String location) throws Exception {
+        itemExists(item_id);
+        if (location == null || location.equals(""))
+            throw new Exception("location name empty");
+        items.get(Integer.toString(item_id)).setLocation(location);
     }
 
 
@@ -147,5 +167,11 @@ public class Product {
 
     public void setItems(Map<String, ProductItem> items) {
         this.items = items;
+    }
+
+    //private methods
+    private void itemExists(int item_id) throws Exception {
+        if (!items.containsKey(Integer.toString(item_id)))
+            throw new Exception("item id doesn't exist");
     }
 }

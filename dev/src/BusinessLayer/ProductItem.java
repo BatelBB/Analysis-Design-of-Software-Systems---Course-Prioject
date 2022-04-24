@@ -53,7 +53,7 @@ public class ProductItem {
         double discount = 1;
         for (DiscountPair pair : man_discount)
             if (pair.getStart_date().isBefore(LocalDateTime.now()) && pair.getEnd_date().isAfter(LocalDateTime.now()))
-                discount *= pair.getDiscount();
+                discount *= (1 - pair.getDiscount());
         return discount;
     }
 
