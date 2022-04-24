@@ -98,11 +98,7 @@ public class Facade {
             if (!added.getAvailableShifts().contains(groupk.workers.data.Employee.toShiftDateTime(date, type == Shift.Type.Evening))) {
                 throw new IllegalArgumentException("Employee must be able to work at day of week and time.");
             }
-            if(shift.getRequiredStaff().get(added.getRole()) >
-                    (shift.getStaff().stream().filter(p -> p.getRole().equals(added.getRole())).collect(Collectors.toList())).size())
-                return dataShiftToService(shift.addEmployee(employees.getEmployee(employeeID)));
-            else
-                throw new IllegalArgumentException("There is enough employees with this role.");
+            return dataShiftToService(shift.addEmployee(employees.getEmployee(employeeID)));
         } else {
             throw new IllegalArgumentException("Subject must be authorized to add employees to shifts.");
         }
@@ -113,8 +109,17 @@ public class Facade {
             groupk.workers.data.Shift shift = shifts.getShift(date, serviceTypeToData(type));
             if (!shift.isEmployeeWorking(employeeID))
                 throw new IllegalArgumentException("Employee is not working in this shift.");
-            else
-                return dataShiftToService(shift.removeEmployee(employees.getEmployee(employeeID)));
+            else {
+                groupk.workers.data.Employee employee = employees.getEmployee(employeeID);
+                int numOfRoles = -1 ; //without this employee
+                for(groupk.workers.data.Employee e :shift.getStaff()) {
+                    if(e.getRole().equals(employee.getRole()))
+                        numOfRoles++;
+                }
+                if(numOfRoles < shift.getRequiredStaff().get(employee.getRole()))
+                    throw new IllegalArgumentException("There are not enough workers with this employee's role to run this shift without him.");
+                return dataShiftToService(shift.removeEmployee(employee));
+            }
         } else {
             throw new IllegalArgumentException("Subject must be authorized to remove employees from shifts.");
         }
