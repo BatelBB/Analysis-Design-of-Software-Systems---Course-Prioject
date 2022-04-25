@@ -1,5 +1,6 @@
 package BusinessLayer;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ public class SubCategory {
 
     public SubCategory(String subCatName) {
         name = subCatName;
+        subSubCategories= new HashMap<>();
     }
 
     public Map<String, SubSubCategory> getSubSubCategories() {

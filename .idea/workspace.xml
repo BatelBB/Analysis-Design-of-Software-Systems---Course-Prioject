@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="&quot;add 10 tests&quot;">
+    <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="&quot;add toString to the Report&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Report.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Report.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/SubCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/SubCategory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/DefectiveReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/DefectiveReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ExpiredReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ExpiredReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/MissingReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/MissingReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/Report.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/Report.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ReportController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ReportController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/SubCategory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/SubCategory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/SurplusesReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/SurplusesReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/byCategoryReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/byCategoryReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/byProductReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/byProductReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/bySupplierReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/bySupplierReport.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,7 +158,13 @@
       <option name="presentableId" value="LOCAL‎00007" />
       <updated>1650887410509</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL‎00008" summary="&quot;add toString to the Report&quot;">
+      <created>1650890485541</created>
+      <option name="number" value="LOCAL‎00008" />
+      <option name="presentableId" value="LOCAL‎00008" />
+      <updated>1650890485541</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -181,25 +191,29 @@
     <MESSAGE value="finishing Service_Layer" />
     <MESSAGE value="first imp of Response" />
     <MESSAGE value="&quot;add 10 tests&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&quot;add 10 tests&quot;" />
+    <MESSAGE value="&quot;add toString to the Report&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;add toString to the Report&quot;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/dev/src/PresentationLayer/PresentationModel.java</url>
           <line>115</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java</url>
-          <line>12</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java</url>
-          <line>16</line>
+          <line>13</line>
           <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint type="java-method">
+          <url>file://$PROJECT_DIR$/dev/Tests/ServiceLayer/ServiceTest.java</url>
+          <line>34</line>
+          <properties class="ServiceLayer.ServiceTest" method="setData">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/dev/Tests/ServiceLayer/ServiceTest.java</url>
@@ -207,15 +221,7 @@
           <properties class="ServiceLayer.ServiceTest" method="addProduct">
             <option name="EMULATED" value="true" />
           </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/dev/Tests/ServiceLayer/ServiceTest.java</url>
-          <line>34</line>
-          <properties class="ServiceLayer.ServiceTest" method="setData">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="6" />
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
