@@ -1,7 +1,5 @@
 package PresentaionLayer;
 
-import java.util.Scanner;
-
 public class Driver extends User {
 
     public Driver(String name, String username) {
@@ -34,8 +32,10 @@ public class Driver extends User {
                 driverFunctionality.setWeightForTrucking();
             else if(choice == 6)
                 driverFunctionality.updatePassword();
-            else if(choice == 7)
+            else if(choice == 7) {
                 driverFunctionality.logOut();
+                logedOut = true;
+            }
             else
                 System.out.println("You needed to select from the list...");
         }

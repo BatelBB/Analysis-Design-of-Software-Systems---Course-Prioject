@@ -1,7 +1,5 @@
 package PresentaionLayer;
 
-import java.util.Scanner;
-
 public class TruckManager extends User{
     public TruckManager(String name, String username) {
         super(name, username);
@@ -23,13 +21,27 @@ public class TruckManager extends User{
             System.out.println("Enter 9  to print truckings history of a driver");
             System.out.println("Enter 10 to print future trucking of a driver");
             System.out.println("Enter 11 to add a vehicle");
-            System.out.println("Enter 12 to print a board of one of your vheicle");
+            System.out.println("Enter 12  to get register code");
             System.out.println("Enter 13 to update password");
-            System.out.println("Enter 14 to logout");
+            System.out.println("Enter 14  to print a board of one of your vehicles");
+            System.out.println("Enter 15  to print truckings history of a vehicle");
+            System.out.println("Enter 16 to print future trucking of a vehicle");
+            System.out.println("Enter 17 to add sources to a trucking");
+            System.out.println("Enter 18  to update sources of a trucking");
+            System.out.println("Enter 19  to add sources to a trucking");
+            System.out.println("Enter 20 to update destinations of a trucking");
+            System.out.println("Enter 21  to update driver on a trucking");
+            System.out.println("Enter 22 to update vehicle on a trucking");
+            System.out.println("Enter 23  to update date on a trucking");
+            System.out.println("Enter 24  to remove a product from a trucking");
+            System.out.println("Enter 25 to add a product to a trucking");
+            System.out.println("Enter 26 to logout");
             int choice = Main.getNumber();
             TruckManagerFunctionality truckManagerFunctionality = new TruckManagerFunctionality();
-            if(choice == 1)
-                return;
+            if(choice == 0)
+                truckManagerFunctionality.getRegisterCode();
+            else if(choice == 1)
+                truckManagerFunctionality.removeTrucking();
             else if(choice == 2)
                 truckManagerFunctionality.printTruckingsBoard();
             else if(choice == 3)
@@ -37,22 +49,48 @@ public class TruckManager extends User{
             else if(choice == 4)
                 truckManagerFunctionality.printFutureTruckings();
             else if(choice == 5)
-                return;
+                truckManagerFunctionality.getDriversUsernames();
             else if(choice == 6)
-                return;
+                truckManagerFunctionality.getVehiclesRegistrationPlates();
             else if(choice == 7)
-                return;
+                truckManagerFunctionality.addTrucking();
             else if(choice == 8)
-                return;
+                truckManagerFunctionality.printBoardOfDriver();
             else if(choice == 9)
-                return;
+                truckManagerFunctionality.printTruckingHistoryOfDriver();
             else if(choice == 10)
-                return;
+                truckManagerFunctionality.printFutureTruckingsOfDriver();
             else if(choice == 11)
-                return;
+                truckManagerFunctionality.addVehicle();
             else if(choice == 12)
+                truckManagerFunctionality.getRegisterCode();
+            else if(choice == 13)
                 truckManagerFunctionality.updatePassword();
-            else if(choice == 13) {
+            else if(choice == 14)
+                truckManagerFunctionality.printBoardOfVehicle();
+            else if(choice == 15)
+                truckManagerFunctionality.printTruckingsHistoryOfVehicle();
+            else if(choice == 16)
+                truckManagerFunctionality.printFutureTruckingsOfVehicle();
+            else if(choice == 17)
+                truckManagerFunctionality.addSourcesToTrucking();
+            else if(choice == 18)
+                truckManagerFunctionality.updateSourcesOnTrucking();
+            else if(choice == 19)
+                truckManagerFunctionality.addDestinationToTrucking();
+            else if(choice == 20)
+                truckManagerFunctionality.updateDestinationsOnTrucking();
+            else if(choice == 21)
+                truckManagerFunctionality.updateDriverOnTrucking();
+            else if(choice == 22)
+                truckManagerFunctionality.updateVehicleOnTrucking();
+            else if(choice == 23)
+                truckManagerFunctionality.updateDateOnTrucking();
+            else if(choice == 24)
+                truckManagerFunctionality.moveProductsToTrucking();
+            else if(choice == 25)
+                truckManagerFunctionality.addProductToTrucking();
+            else if(choice == 26) {
                 truckManagerFunctionality.logOut();
                 logedOut = true;
             }

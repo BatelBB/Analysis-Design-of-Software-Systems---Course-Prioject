@@ -30,7 +30,7 @@ public class RegisterWindow {
                 System.out.println(response.getErrorMessage());
                 System.out.println("Enter 1 to try again or 2 for return to the menu");
                 String choice = myObj.nextLine();
-                while (!(choice.equals("1") | !choice.equals("2")))
+                while (!(choice.equals("1") | choice.equals("2")))
                 {
                     System.out.println("wrong input, Enter 1 to try again or 2 for return to the menu");
                     choice = myObj.nextLine();

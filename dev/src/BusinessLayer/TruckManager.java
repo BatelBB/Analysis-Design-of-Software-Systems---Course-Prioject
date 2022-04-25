@@ -3,7 +3,6 @@ package BusinessLayer;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -45,16 +44,30 @@ public class TruckManager extends User {
         return toReturn;
     }
 
-    public synchronized void addTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<ProductForTrucking> products,long hours, long minutes) throws Exception {
+    public synchronized void addTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products,long hours, long minutes) throws Exception {
         if (registrationPlateOfVehicle == null)
             throw new NullPointerException("The registration plate is empty");
         if (driverUsername == null)
             throw new NullPointerException("The driver's username is empty");
         Driver driver = getDriverByUsername(driverUsername);
         Vehicle vehicle = getVehicleByRegistrationPlate(registrationPlateOfVehicle);
-        Trucking trucking = new Trucking(id, vehicle, date, driver, sources, destinations, products,hours,minutes);
+        Trucking trucking = new Trucking(id, vehicle, date, driver, sources, destinations, productForTruckings(products),hours,minutes);
         driver.checkTrucking(trucking);
         truckingsBoard.addTrucking(trucking);
+    }
+
+    private List<ProductForTrucking> productForTruckings(List <Map<String,Integer>> map)
+    {
+        List<ProductForTrucking> productForTruckings = new LinkedList<>();
+        for(int i = 0 ; i < map.size();i++)
+        {
+            Map<String,Integer> prod = map.get(0);
+            if(prod.containsKey("eggs")) productForTruckings.add(new ProductForTrucking(Products.Eggs_4902505139314,prod.get("eggs")));
+            if(prod.containsKey("milk")) productForTruckings.add(new ProductForTrucking(Products.Eggs_4902505139314,prod.get("milk")));
+            if(prod.containsKey("water")) productForTruckings.add(new ProductForTrucking(Products.Eggs_4902505139314,prod.get("water")));
+
+        }
+        return productForTruckings;
     }
 
     public synchronized void removeTrucking(int truckingId) {
@@ -100,27 +113,27 @@ public class TruckManager extends User {
         return truckingsBoard.printFutureTruckingsOfVehicle(registrationPlate);
     }
 
-    public synchronized void addSourcesToTrucking(int truckingId, List<Site> sources) throws Exception {
+    public synchronized void addSourcesToTrucking(int truckingId,List<List<String>> sources) throws Exception {
         truckingsBoard.addSourcesToTrucking(truckingId, sources);
     }
 
-    public synchronized void addDestinationsToTrucking(int truckingId, List<Site> destinations) throws Exception {
+    public synchronized void addDestinationsToTrucking(int truckingId, List<List<String>> destinations) throws Exception {
         truckingsBoard.addDestinationsToTrucking(truckingId, destinations);
     }
 
-    public synchronized void addProductsToTrucking(int truckingId, ProductForTrucking productForTrucking) throws Exception {
-        truckingsBoard.addProductsToTrucking(truckingId, productForTrucking);
+    public synchronized void addProductsToTrucking(int truckingId, String pruductName,int quantity) throws Exception {
+        truckingsBoard.addProductsToTrucking(truckingId, pruductName,quantity);
     }
 
-    public synchronized void updateSourcesOnTrucking(int truckingId, List<Site> sources) throws Exception {
+    public synchronized void updateSourcesOnTrucking(int truckingId, List<List<String>> sources) throws Exception {
         truckingsBoard.updateSourcesOnTrucking(truckingId, sources);
     }
 
-    public synchronized void updateDestinationsOnTrucking(int truckingId, List<Site> destinations) throws Exception {
+    public synchronized void updateDestinationsOnTrucking(int truckingId,List<List<String>> destinations) throws Exception {
         truckingsBoard.updateDestinationsOnTrucking(truckingId, destinations);
     }
 
-    public synchronized void moveProductsToTrucking(int truckingId, Products productSKU) throws Exception {
+    public synchronized void moveProductsToTrucking(int truckingId, String productSKU) throws Exception {
         truckingsBoard.moveProductsToTrucking(truckingId, productSKU);
     }
 

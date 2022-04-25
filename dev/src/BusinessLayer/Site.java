@@ -71,9 +71,6 @@ public class Site {
         return street;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
 
     public Area getArea() {
         return area;
@@ -83,12 +80,12 @@ public class Site {
         String phoneNumberWithoutHyphens = "";
         for (int index = 0; index < phoneNumber.length(); index++) {
             char charAt = phoneNumber.charAt(index);
-            if (charAt > 47 || charAt < 58)
+            if (charAt > 47 && charAt < 58)
                 phoneNumberWithoutHyphens += charAt;
             else if (charAt != 45)
                 throw new IllegalArgumentException("The phone number is not validate. the phone number must contains only digits");
         }
-        if (phoneNumberWithoutHyphens.length() < 9 | phoneNumberWithoutHyphens.length() > 12)
+        if (phoneNumberWithoutHyphens.length() < 8 | phoneNumberWithoutHyphens.length() > 12)
             throw new IllegalArgumentException("The phone number is too short/long");
         phoneNumber = phoneNumberWithoutHyphens;
         return true;

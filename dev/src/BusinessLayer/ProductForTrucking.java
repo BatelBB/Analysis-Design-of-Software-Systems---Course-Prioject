@@ -6,6 +6,7 @@ public class ProductForTrucking {
 
     public ProductForTrucking(Products product, int quantity) {
         this.product = product;
+        if(!(quantity>0))throw  new IllegalArgumentException("Quantity of a product must be posive");
         this.quantity = quantity;
     }
 

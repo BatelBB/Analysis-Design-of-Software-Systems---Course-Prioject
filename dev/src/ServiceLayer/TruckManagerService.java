@@ -4,11 +4,15 @@ import BusinessLayer.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class TruckManagerService {
 
 
-    private TruckManagerController truckManagerController;
+    private TruckManagerController truckManagerController = TruckManagerController.getInstance();
+
+    public TruckManagerService() throws Exception {
+    }
 
 
     public Response removeTrucking(int truckingId) {
@@ -61,7 +65,7 @@ public class TruckManagerService {
         }
     }
 
-    public Response addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<ProductForTrucking> products,long hour, long minutes) throws Exception {
+    public Response addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products, long hour, long minutes) throws Exception {
         try {
             truckManagerController.addTrucking(registrationPlateOfVehicle,date,driverUsername,sources,destinations,products,hour,minutes);
             return new Response(true);
@@ -88,7 +92,7 @@ public class TruckManagerService {
 
     public Response printFutureTruckingsOfDriver(String driverUsername) {
         try {
-            return new Response(printFutureTruckingsOfDriver(driverUsername));
+            return new Response(truckManagerController.printFutureTruckingsOfDriver(driverUsername));
         } catch (Exception e) {
             return new Response(e.getMessage());
         }
@@ -118,7 +122,7 @@ public class TruckManagerService {
         }
     }
 
-    public Response addDestinationToTrucking(int truckingId, List<Site> destinations) {
+    public Response addDestinationToTrucking(int truckingId, List<List<String>> destinations) {
         try {
             truckManagerController.addDestinationToTrucking(truckingId,destinations);
             return new Response(true);
@@ -127,17 +131,26 @@ public class TruckManagerService {
         }
     }
 
-    public Response addProductToTrucking(int truckingId, ProductForTrucking productForTrucking) {
+    public Response addProductToTrucking(int truckingId, String pruductName,int quantity) {
         try {
-            truckManagerController.addProductToTrucking(truckingId,productForTrucking);
+            truckManagerController.addProductToTrucking(truckingId,pruductName,quantity);
             return new Response(true);
         } catch (Exception e) {
             return new Response(e.getMessage());
         }
     }
 
+    public Response getRegisterCode() {
+        try {
+            truckManagerController.getRegisterCode();
+            return new Response(truckManagerController.getRegisterCode());
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }
+    }
 
-    public Response addVehicle(DLicense lisence, String registrationPlate, String model, int weight, int maxWeight) {
+
+    public Response addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight) {
         try {
             truckManagerController.addVehicle(lisence,registrationPlate,model,weight,maxWeight);
             return new Response(true);
@@ -154,7 +167,7 @@ public class TruckManagerService {
             return new Response(e.getMessage());
         }
     }
-    public  Response  addSourcesToTrucking(int truckingId, List<Site> sources) {
+    public  Response  addSourcesToTrucking(int truckingId,List<List<String>> sources) {
         try {
             truckManagerController.addSourcesToTrucking(truckingId,sources);
             return new Response(true);
@@ -163,14 +176,14 @@ public class TruckManagerService {
         }}
 
 
-    public  Response  updateSourcesOnTrucking(int truckingId, List<Site> sources) {
+    public  Response  updateSourcesOnTrucking(int truckingId, List<List<String>> sources) {
         try {
             truckManagerController.updateSourcesOnTrucking(truckingId,sources);
             return new Response(true);
         } catch (Exception e) {
             return new Response(e.getMessage());
         }}
-    public  Response  updateDestinationsOnTrucking(int truckingId, List<Site> destinations) {
+    public  Response  updateDestinationsOnTrucking(int truckingId, List<List<String>> destinations) {
         try {
             truckManagerController.updateDestinationsOnTrucking(truckingId,destinations);
             return new Response(true);
@@ -178,7 +191,7 @@ public class TruckManagerService {
             return new Response(e.getMessage());
         }}
 
-    public  Response  moveProductsToTrucking(int truckingId, Products productSKU) {
+    public  Response  moveProductsToTrucking(int truckingId, String productSKU) {
         try {
             truckManagerController.moveProductsToTrucking(truckingId,productSKU);
             return new Response(true);

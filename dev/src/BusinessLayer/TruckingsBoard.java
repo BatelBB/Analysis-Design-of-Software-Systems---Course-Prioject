@@ -1,14 +1,8 @@
 package BusinessLayer;
 
-import jdk.jshell.spi.ExecutionControl;
-
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class TruckingsBoard {
 
@@ -66,12 +60,15 @@ public class TruckingsBoard {
     public synchronized void removeTrucking(int truckingId) {
         if (truckingId < 0)
             throw new IllegalArgumentException("Illegal id");
-        ListIterator<Trucking> truckingIterator = truckings.listIterator();
-        while (truckingIterator.hasNext()) {
-            if(truckingIterator.next().getId() == truckingId)
-                truckingIterator.remove();
+        boolean found = false;
+        for(Trucking trucking : truckings)
+        {
+            if(trucking.getId() == truckingId) {
+                truckings.remove();
+                found = true;
+            }
         }
-        throw new IllegalArgumentException("There is no trucking in the board with that id");
+        if(!found)throw new IllegalArgumentException("There is no trucking in the board with that id");
     }
 
     public synchronized String printBoard() {
@@ -170,32 +167,32 @@ public class TruckingsBoard {
         return toReturn;
     }
 
-    public void addSourcesToTrucking(int truckingId, List<Site> sources) throws Exception {
+    public void addSourcesToTrucking(int truckingId, List<List<String>> sources) throws Exception {
         Trucking trucking = findTruckingById(truckingId);
         trucking.addSources(sources);
     }
 
-    public void addDestinationsToTrucking(int truckingId, List<Site> destinations) throws Exception {
+    public void addDestinationsToTrucking(int truckingId, List<List<String>> destinations) throws Exception {
         Trucking trucking = findTruckingById(truckingId);
         trucking.addDestinations(destinations);
     }
 
-    public void addProductsToTrucking(int truckingId, ProductForTrucking productForTrucking) throws Exception {
+    public void addProductsToTrucking(int truckingId,String pruductName,int quantity) throws Exception {
         Trucking trucking = findTruckingById(truckingId);
-        trucking.addProducts(productForTrucking);
+        trucking.addProducts(pruductName,quantity);
     }
 
-    public void updateSourcesOnTrucking(int truckingId, List<Site> sources) throws Exception {
+    public void updateSourcesOnTrucking(int truckingId, List<List<String>> sources) throws Exception {
         Trucking trucking = findTruckingById(truckingId);
         trucking.updateSources(sources);
     }
 
-    public void updateDestinationsOnTrucking(int truckingId, List<Site> destinations) throws Exception {
+    public void updateDestinationsOnTrucking(int truckingId, List<List<String>> destinations) throws Exception {
         Trucking trucking = findTruckingById(truckingId);
         trucking.updateDestinations(destinations);
     }
 
-    public void moveProductsToTrucking(int truckingId, Products productSKU) throws Exception {
+    public void moveProductsToTrucking(int truckingId, String productSKU) throws Exception {
         Trucking trucking = findTruckingById(truckingId);
         trucking.moveProducts(productSKU);
     }

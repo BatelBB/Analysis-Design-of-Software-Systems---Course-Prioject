@@ -21,7 +21,7 @@ public class LoginWindow {
                 System.out.println(response.getErrorMessage());
                 System.out.println("Enter 1 to try again or 2 for return to the menu");
                 String choice = myObj.nextLine();
-                while (!choice.equals("1") | !choice.equals("2"))
+                while (!(choice.equals("1")|choice.equals("2")))
                 {
                     System.out.println("wrong input, Enter 1 to try again or 2 for return to the menu");
                     choice = myObj.nextLine();
@@ -32,11 +32,12 @@ public class LoginWindow {
             {
                 System.out.println("Login completed");
                 User user;
-                if(response.toString().equals(true))
+                if(response.getValue().equals(true))
                     user = new Driver(username,password);
                 else
                     user = new TruckManager(username,password);
                 user.act();
+                wantToBack = true;
             }
         }
     }

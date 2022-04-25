@@ -1,10 +1,8 @@
 package ServiceLayer;
 
-import BusinessLayer.*;
-
-import javax.management.relation.Role;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class Service {
 
@@ -38,7 +36,7 @@ public class Service {
         return truckManagerService.getVehiclesRegistrationPlates();
     }
 
-    public Response addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<ProductForTrucking> products,long hours, long minutes) throws Exception {
+    public Response addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products, long hours, long minutes) throws Exception {
         return truckManagerService.addTrucking(registrationPlateOfVehicle, date, driverUsername, sources, destinations, products,hours,minutes);
     }
 
@@ -66,12 +64,16 @@ public class Service {
         return truckManagerService.printFutureTruckingsOfVehicle(registrationPlate);
     }
 
-    public Response addDestinationToTrucking(int truckingId, List<Site> destinations) {
+    public Response addDestinationToTrucking(int truckingId, List<List<String>> destinations) {
         return truckManagerService.addDestinationToTrucking(truckingId, destinations);
     }
 
-    public Response addProductToTrucking(int truckingId, ProductForTrucking productForTrucking) {
-        return truckManagerService.addProductToTrucking(truckingId, productForTrucking);
+    public Response addProductToTrucking(int truckingId, String pruductName,int quantity) {
+        return truckManagerService.addProductToTrucking(truckingId, pruductName,quantity);
+    }
+
+    public Response getRegisterCode() {
+        return truckManagerService.getRegisterCode();
     }
 
     public Response Logout() {
@@ -86,19 +88,19 @@ public class Service {
         return truckManagerService.printFutureTruckings();
     }
 
-    public Response addSourcesToTrucking(int truckingId, List<Site> sources) {
+    public Response addSourcesToTrucking(int truckingId, List<List<String>> sources) {
         return truckManagerService.addSourcesToTrucking(truckingId, sources);
     }
 
-    public Response updateSourcesOnTrucking(int truckingId, List<Site> sources) {
+    public Response updateSourcesOnTrucking(int truckingId, List<List<String>> sources) {
         return truckManagerService.updateSourcesOnTrucking(truckingId, sources);
     }
 
-    public Response updateDestinationsOnTrucking(int truckingId, List<Site> destinations) {
+    public Response updateDestinationsOnTrucking(int truckingId, List<List<String>> destinations) {
         return truckManagerService.updateDestinationsOnTrucking(truckingId, destinations);
     }
 
-    public Response moveProductsToTrucking(int truckingId, Products productSKU) {
+    public Response moveProductsToTrucking(int truckingId, String productSKU) {
         return truckManagerService.moveProductsToTrucking(truckingId, productSKU);
     }
 
@@ -114,7 +116,7 @@ public class Service {
         return truckManagerService.updateDateOnTrucking(truckingId, date);
     }
 
-    public Response addVehicle(DLicense lisence, String registrationPlate, String model, int weight, int maxWeight) {
+    public Response addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight) {
         return truckManagerService.addVehicle(lisence, registrationPlate, model, weight, maxWeight);
     }
 

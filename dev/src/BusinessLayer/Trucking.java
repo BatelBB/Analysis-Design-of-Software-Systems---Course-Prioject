@@ -1,10 +1,11 @@
 package BusinessLayer;
 
 
-import jdk.jshell.spi.ExecutionControl;
-
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Trucking {
@@ -19,7 +20,7 @@ public class Trucking {
     private long hours;
     private long minutes;
 
-    public Trucking(int id, Vehicle vehicle, LocalDateTime date, Driver driver, List<Site> sources, List<Site> destinations, List<ProductForTrucking> products,long hours, long minutes) throws Exception {
+    public Trucking(int id, Vehicle vehicle, LocalDateTime date, Driver driver, List<List<String>> sources, List<List<String>> destinations, List<ProductForTrucking> products,long hours, long minutes) throws Exception {
         if (vehicle == null | date == null | driver == null | sources == null | destinations == null | sources.size() == 0 | destinations.size() == 0 | products == null | products.size() == 0)
             throw new Exception("One or more of the data is empty");
         this.id = id;
@@ -77,39 +78,45 @@ public class Trucking {
 
     public synchronized boolean updateWeight(int newWeight) throws Exception {
         if (newWeight <= 0)
-            throw new IllegalArgumentException("The weight must be positive number");
-        if (newWeight <= vehicle.getWeight())
-            throw new IllegalArgumentException("Oops, the weight with the product is lower than the vehicle weight alone");
-        if (newWeight + vehicle.getWeight() > vehicle.getMaxWeight())
-            throw new IllegalArgumentException("Oops, the weight with the products is higher than the maximum allowable weight");
-        weightWithProducts = newWeight;
+            throw new IllegalArgumentException("The weight of a product must be positive number");
+        if (newWeight > vehicle.getMaxWeight()-vehicle.getWeight())
+            throw new IllegalArgumentException("Oops, the weight with the products is to heavy");
+        weightWithProducts = newWeight + vehicle.getWeight();
         return true;
     }
 
-    public synchronized void addSources(List<Site> sourcesList) throws Exception {
+    public synchronized void addSources(List<List<String>> sourcesList) throws Exception {
         checkDateForUpdateTrucking();
         addSites(sourcesList, this.sources);
     }
 
-    public synchronized void addDestinations(List<Site> destinationsList) throws Exception {
+    public synchronized void addDestinations(List<List<String>> destinationsList) throws Exception {
         checkDateForUpdateTrucking();
         addSites(destinationsList, this.destinations);
     }
 
-    public synchronized void addProducts(ProductForTrucking productForTrucking) throws Exception {
+    public synchronized void addProducts(String pruductName,int quantity) throws Exception {
         synchronized (products) {
             checkDateForUpdateTrucking();
-            products.add(productForTrucking);
+            products.add(new ProductForTrucking(castFromString(pruductName),quantity));
         }
     }
 
-    public synchronized void moveProducts(Products productSKU) throws Exception {
+    private Products castFromString(String sProuduct)
+    {
+        if(sProuduct.equals("eggs")) return Products.Eggs_4902505139314;
+        else if (sProuduct.equals("milk")) return Products.Milk_7290111607400;
+        else if (sProuduct.equals("water")) return Products.Water_7290019056966;
+        else throw new IllegalArgumentException("wrong license");
+    }
+
+    public synchronized void moveProducts(String productSKU) throws Exception {
         synchronized (products) {
             checkDateForUpdateTrucking();
             ListIterator<ProductForTrucking> truckingIterator = products.listIterator();
             while (truckingIterator.hasNext()) {
                 ProductForTrucking productForTrucking = truckingIterator.next();
-                if(productForTrucking.product == productSKU) {
+                if(productForTrucking.product == castFromString(productSKU)) {
                     truckingIterator.remove();
                     return;
                 }
@@ -118,14 +125,14 @@ public class Trucking {
         }
     }
 
-    public synchronized void updateSources(List<Site> sources) throws Exception {
+    public synchronized void updateSources(List<List<String>> sources) throws Exception {
         checkDateForUpdateTrucking();
         checkSameArea(sources);
         this.sources = new ConcurrentHashMap<Area, List<Site>>();
         addSources(sources);
     }
 
-    public synchronized void updateDestinations(List<Site> destinations) throws Exception {
+    public synchronized void updateDestinations(List<List<String>> destinations) throws Exception {
         checkDateForUpdateTrucking();
         checkSameArea(destinations);
         this.destinations = new ConcurrentHashMap<Area, List<Site>>();
@@ -219,14 +226,15 @@ public class Trucking {
         return true;
     }
 
-    private boolean checkSameArea(List<Site> sites) throws Exception {
+    private boolean checkSameArea(List<List<String>> sites) throws Exception {
         synchronized (sites) {
             if(sites == null | sites.size() == 0)
                 throw new IllegalArgumentException("Oops, the sites cannot be empty");
             if (sites.get(0) == null)
                 return false;
-            Area area = sites.get(0).getArea();
-            for (Site site: sites) {
+            Area area = castFromString(sites.get(0)).getArea();
+            for (List<String> siteS: sites) {
+                Site site = castFromString(siteS);
                 if (site == null || site.getArea() != area)
                     return false;
             }
@@ -242,9 +250,9 @@ public class Trucking {
         throw new IllegalArgumentException("Oops, the driver does not hold a driver's license that matches the type of vehicle");
     }
 
-    private void addSites(List<Site> sites, Map<Area, List<Site>> sourcesOrDestinations) {
+    private void addSites(List<List<String>> sites, Map<Area, List<Site>> sourcesOrDestinations) throws Exception {
         for (int index = 0; index < sites.size(); index++) {
-            Site Source = sites.get(index);
+            Site Source = castFromString(sites.get(index));
             if(Source == null | Source.getArea() == null)
                 throw new IllegalArgumentException("illegal details of site");
             if(sourcesOrDestinations.containsKey(Source.getArea()))
@@ -255,6 +263,15 @@ public class Trucking {
                 sourcesOrDestinations.put(Source.getArea(), sourcesList);
             }
         }
+    }
+
+    private Site castFromString(List<String> detailsOfSite) throws Exception {
+        if(!(detailsOfSite.size()==8)) throw new IllegalArgumentException("illegal number of details of site");
+        else
+            return new Site(detailsOfSite.get(0),detailsOfSite.get(1),detailsOfSite.get(2),detailsOfSite.get(3),
+                    Integer.parseInt(detailsOfSite.get(4)),Integer.parseInt(detailsOfSite.get(5)),Integer.parseInt(detailsOfSite.get(6)),
+                    detailsOfSite.get(7));
+
     }
 }
 

@@ -82,7 +82,7 @@ public class UserController {
                 throw new IllegalArgumentException("Sorry but there's no user with that username");
             if(users.get(username).login(password)) {
                 getInstance().activeUser = user;
-                if (activeUser.role==Role.driver)
+                if (users.get(username).getRole()==Role.driver)
                     return true;
                 else
                     return false;

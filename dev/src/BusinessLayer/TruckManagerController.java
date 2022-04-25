@@ -28,7 +28,7 @@ public class TruckManagerController extends UserController{
     }
 
 
-    public void addVehicle(DLicense lisence, String registrationPlate, String model, int weight, int maxWeight) throws Exception {
+    public void addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight) throws Exception {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsTruckManager();
             Vehicle newVehicle = new Vehicle(lisence, registrationPlate, model, weight, maxWeight);
@@ -50,7 +50,7 @@ public class TruckManagerController extends UserController{
         }
     }
 
-    public void addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<ProductForTrucking> products, long hours, long minutes) throws Exception {
+    public void addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products, long hours, long minutes) throws Exception {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsTruckManager();
             ((TruckManager)getActiveUser()).addTrucking(truckingIdCounter, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products, hours, minutes);
@@ -128,42 +128,44 @@ public class TruckManagerController extends UserController{
         }
     }
 
-    public void addSourcesToTrucking(int truckingId, List<Site> sources) throws Exception {
+    public void addSourcesToTrucking(int truckingId, List<List<String>> sources) throws Exception {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsTruckManager();
             ((TruckManager)getActiveUser()).addSourcesToTrucking(truckingId, sources);
         }
     }
 
-    public void addDestinationToTrucking(int truckingId, List<Site> destinations) throws Exception {
+    public void addDestinationToTrucking(int truckingId, List<List<String>> destinations) throws Exception {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsTruckManager();
             ((TruckManager)getActiveUser()).addDestinationsToTrucking(truckingId, destinations);
         }
     }
 
-    public void addProductToTrucking(int truckingId, ProductForTrucking productForTrucking) throws Exception {
+    public void addProductToTrucking(int truckingId, String pruductName,int quantity) throws Exception {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsTruckManager();
-            ((TruckManager)getActiveUser()).addProductsToTrucking(truckingId, productForTrucking);
+            ((TruckManager)getActiveUser()).addProductsToTrucking(truckingId, pruductName,quantity);
         }
     }
 
-    public void updateSourcesOnTrucking(int truckingId, List<Site> sources) throws Exception {
+
+
+    public void updateSourcesOnTrucking(int truckingId, List<List<String>> sources) throws Exception {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsTruckManager();
             ((TruckManager)getActiveUser()).updateSourcesOnTrucking(truckingId, sources);
         }
     }
 
-    public void updateDestinationsOnTrucking(int truckingId, List<Site> destinations) throws Exception {
+    public void updateDestinationsOnTrucking(int truckingId, List<List<String>> destinations) throws Exception {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsTruckManager();
             ((TruckManager)getActiveUser()).updateDestinationsOnTrucking(truckingId, destinations);
         }
     }
 
-    public void moveProductsToTrucking(int truckingId, Products productSKU) throws Exception {
+    public void moveProductsToTrucking(int truckingId, String productSKU) throws Exception {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsTruckManager();
             ((TruckManager)getActiveUser()).moveProductsToTrucking(truckingId, productSKU);

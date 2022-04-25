@@ -1,16 +1,20 @@
 package Test;
 
 
-import BusinessLayer.*;
-import org.junit.*;
+import BusinessLayer.DriverController;
+import BusinessLayer.Site;
+import BusinessLayer.TruckManagerController;
+import BusinessLayer.UserController;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
-
-import static BusinessLayer.Products.Eggs_4902505139314;
-import static BusinessLayer.Products.Water_7290019056966;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Tests {
 
@@ -35,22 +39,39 @@ public class Tests {
     }
     public void addTrucking() throws Exception {
         userController.login("ido1Ido1", "ido1Ido1");
-        truckManagerController.addVehicle(DLicense.C,"12345642","BMW",12,14);
-        truckManagerController.addVehicle(DLicense.C,"45345642","volvo",12,14);
-        Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,2,3,"center");
+        truckManagerController.addVehicle("C","12345642","BMW",12,14);
+        truckManagerController.addVehicle("C","45345642","volvo",12,14);
+        List <String> site1 = new LinkedList<>();
+        List <String> site2 = new LinkedList<>();
+        addToList(site1,"mega","herzliya","0543397995","hamatganit","13","2","3","center");
+        addToList(site2,"viktory","haifa","0524321231","hayarden","100","1","6","north");
         Site d1 = new Site("viktory","haifa","0524321231","hayarden",100,1,6,"north");
         List sources = new LinkedList();
-        sources.add(s1);
         List destinations = new LinkedList();
-        destinations.add(d1);
+        sources.add(site1);
+        destinations.add(site2);
         String dInStr = "2022-09-09";
         LocalDate localDate = LocalDate.parse(dInStr);
         LocalDateTime datetime = localDate.atTime(1,50,0);
-        ProductForTrucking productForTrucking = new ProductForTrucking(Water_7290019056966,2);
-        List prods= new LinkedList();
-        prods.add(productForTrucking);
-        truckManagerController.addTrucking("45345642",datetime,"tam1Tamir1", sources,destinations,prods,2,30);
+        List <Map<String,Integer>> products = new LinkedList<>();
+        Map<String,Integer> prod = new ConcurrentHashMap<>();
+        prod.put("water",2);
+        products.add(prod);
+        truckManagerController.addTrucking("45345642",datetime,"tam1Tamir1", sources,destinations,products,2,30);
         userController.logout();
+    }
+
+    private void addToList(List<String> list,String a,String b,String c,String  d,String e, String f ,String g ,String h)
+    {
+        list.add(a);
+        list.add(b);
+        list.add(c);
+        list.add(d);
+        list.add(e);
+        list.add(f);
+        list.add(g);
+        list.add(h);
+
     }
     public void registerIdoTamirRami() throws Exception {
         userController.registerUser("ido shapira", "ido1Ido1", "ido1Ido1", "trucking manager", "tm1234tm");
@@ -145,25 +166,25 @@ public class Tests {
     public void addVehiclesTests() throws Exception {
         Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         try {
-            truckManagerController.addVehicle(DLicense.C,"45345E642","volvo",12,14);
+            truckManagerController.addVehicle("C","45345E642","volvo",12,14);
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage(),"Invalid registration plate");
         }
         try {
-            truckManagerController.addVehicle(DLicense.C,"45345642","volvo",-4,14);
+            truckManagerController.addVehicle("C","45345642","volvo",-4,14);
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage(),"Weight is positive");
         }
         try {
-            truckManagerController.addVehicle(DLicense.C,"45345642","volvo",12,9);
+            truckManagerController.addVehicle("C","45345642","volvo",12,9);
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage(),"Max wight is bigger then weight");
         }
         try {
-            truckManagerController.addVehicle(DLicense.C,"45345642","BMW122414124124",12,14);
+            truckManagerController.addVehicle("C","45345642","BMW122414124124",12,14);
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage(),"Invalid model");
@@ -250,43 +271,47 @@ public class Tests {
         Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking3();
         createTrucking4();
-        Site s2 = new Site("halfree", "herzliya", "0543397993", "davidHamelech", 2, 4, 3, "center");
-        Site d2 = new Site("tivTaam", "haifa", "0543397912", "haravSade", 13, 2, 3, "north");
-        List add1 = new LinkedList();
-        List add2 = new LinkedList();
-        add1.add(s2);
-        add2.add(d2);
-        truckManagerController.addSourcesToTrucking(1, add1);
-        truckManagerController.addDestinationToTrucking(1, add2);
-        ProductForTrucking productForTruckingToAdd = new ProductForTrucking(Eggs_4902505139314, 2);
-        truckManagerController.addProductToTrucking(1, productForTruckingToAdd);
+        List <String> site1 = new LinkedList<>();
+        List <String> site2 = new LinkedList<>();
+        addToList(site1,"halfree", "herzliya", "0543397993", "davidHamelech", "2", "4", "3", "center");
+        addToList(site2,"tivTaam", "haifa", "0543397912", "haravSade", "13", "2", "3", "north");
+        List sources = new LinkedList();
+        List destinations = new LinkedList();
+        sources.add(site1);
+        destinations.add(site2);
+        truckManagerController.addSourcesToTrucking(1, sources);
+        truckManagerController.addDestinationToTrucking(1, destinations);
+        truckManagerController.addProductToTrucking(1, "eggs",1);
         Assert.assertEquals(truckManagerController.printBoardOfDriver("tam1Tamir1").contains("halfree"), true);
         Assert.assertEquals(truckManagerController.printBoardOfDriver("tam1Tamir1").contains("tivTaam"), true);
         Assert.assertEquals(truckManagerController.printBoardOfDriver("tam1Tamir1").contains("Eggs"), true);
         truckManagerController.updateDriverOnTrucking(1, "ramiF");
-        truckManagerController.updateDestinationsOnTrucking(1, add1);
+        truckManagerController.updateDestinationsOnTrucking(1, sources);
         truckManagerController.updateVehicleOnTrucking(1, "12345642");
-        truckManagerController.updateSourcesOnTrucking(1, add2);
+        truckManagerController.updateSourcesOnTrucking(1, destinations);
         Assert.assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("12345642"), true);
         Assert.assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("hayarden"), false);
         Assert.assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("hamatganit"), false);
 
     }
     private void createTrucking1 () throws Exception {
-        Site s1 = new Site("tamirHouse","batYam","0543397995","tamirStr",13,2,3,"center");
-        Site d1 = new Site("idoHouse","herzliya","0524321231","idoStr",100,1,6,"center");
+        List <String> site1 = new LinkedList<>();
+        List <String> site2 = new LinkedList<>();
+        addToList(site1,"tamirHouse","batYam","0543397995","tamirStr","13","2","3","center");
+        addToList(site2,"idoHouse","herzliya","0524321231","idoStr","100","1","6","center");
         List sources = new LinkedList();
-        sources.add(s1);
         List destinations = new LinkedList();
-        destinations.add(d1);
+        sources.add(site1);
+        destinations.add(site2);
         String dInStr = "2022-09-09";
         LocalDate localDate = LocalDate.parse(dInStr);
         LocalDateTime datetime = localDate.atTime(1,20,9);
-        ProductForTrucking productForTrucking = new ProductForTrucking(Water_7290019056966,2);
-        List prods= new LinkedList();
-        prods.add(productForTrucking);
+        List <Map<String,Integer>> products = new LinkedList<>();
+        Map<String,Integer> prod = new ConcurrentHashMap<>();
+        prod.put("milk",2);
+        products.add(prod);
         try {
-            truckManagerController.addTrucking("12345642",datetime,"tam1Tamir1", sources,destinations,prods,1,30);
+            truckManagerController.addTrucking("12345642",datetime,"tam1Tamir1", sources,destinations,products,1,30);
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage(),"Oops, there is another trucking at the same date and with the same driver");
@@ -294,20 +319,23 @@ public class Tests {
     }
 
     private void createTrucking2 () throws Exception {
-        Site s1 = new Site("tamirHouse","batYam","0543397995","tamirStr",13,2,3,"center");
-        Site d1 = new Site("idoHouse","herzliya","0524321231","idoStr",100,1,6,"center");
+        List <String> site1 = new LinkedList<>();
+        List <String> site2 = new LinkedList<>();
+        addToList(site1,"tamirHouse","batYam","0543397995","tamirStr","13","2","3","center");
+        addToList(site2,"idoHouse","herzliya","0524321231","idoStr","100","1","6","center");
         List sources = new LinkedList();
-        sources.add(s1);
         List destinations = new LinkedList();
-        destinations.add(d1);
+        sources.add(site1);
+        destinations.add(site2);
         String dInStr = "2022-09-09";
         LocalDate localDate = LocalDate.parse(dInStr);
         LocalDateTime datetime = localDate.atTime(1,55,0);
-        ProductForTrucking productForTrucking = new ProductForTrucking(Water_7290019056966,2);
-        List prods= new LinkedList();
-        prods.add(productForTrucking);
+        List <Map<String,Integer>> products = new LinkedList<>();
+        Map<String,Integer> prod = new ConcurrentHashMap<>();
+        prod.put("milk",2);
+        products.add(prod);
         try {
-            truckManagerController.addTrucking("45345642",datetime,"ramiF", sources,destinations,prods,1,30);
+            truckManagerController.addTrucking("45345642",datetime,"ramiF", sources,destinations,products,1,30);
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage(),"Oops, there is another trucking at the same date and with the same vehicle");
@@ -315,39 +343,45 @@ public class Tests {
     }
 
     private void createTrucking3 () throws Exception {
-        Site s1 = new Site("tamirHouse","batYam","0543397995","tamirStr",13,2,3,"center");
-        Site d1 = new Site("idoHouse","herzliya","0524321231","idoStr",100,1,6,"center");
+        List <String> site1 = new LinkedList<>();
+        List <String> site2 = new LinkedList<>();
+        addToList(site1,"tamirHouse","batYam","0543397995","tamirStr","13","2","3","center");
+        addToList(site2,"idoHouse","herzliya","0524321231","idoStr","100","1","6","center");
         List sources = new LinkedList();
-        sources.add(s1);
         List destinations = new LinkedList();
-        destinations.add(d1);
+        sources.add(site1);
+        destinations.add(site2);
         String dInStr = "2022-09-09";
         LocalDate localDate = LocalDate.parse(dInStr);
         LocalDateTime datetime = localDate.atTime(1,20,9);
-        ProductForTrucking productForTrucking = new ProductForTrucking(Water_7290019056966,1);
-        List prods= new LinkedList();
-        prods.add(productForTrucking);
+        List <Map<String,Integer>> products = new LinkedList<>();
+        Map<String,Integer> prod = new ConcurrentHashMap<>();
+        prod.put("milk",2);
+        products.add(prod);
         try {
-            truckManagerController.addTrucking("45345642",datetime,"ramiF", sources,destinations,prods,1,30);
+            truckManagerController.addTrucking("45345642",datetime,"ramiF", sources,destinations,products,1,30);
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage(),"Oops, there is another trucking at the same date and with the same vehicle");
         }
     }
     private void createTrucking4 () throws Exception {
-        Site s1 = new Site("tamirHouse","batYam","0543397995","tamirStr",13,2,3,"center");
-        Site d1 = new Site("idoHouse","herzliya","0524321231","idoStr",100,1,6,"center");
+        List <String> site1 = new LinkedList<>();
+        List <String> site2 = new LinkedList<>();
+        addToList(site1,"tamirHouse","batYam","0543397995","tamirStr","13","2","3","center");
+        addToList(site2,"idoHouse","herzliya","0524321231","idoStr","100","1","6","center");
         List sources = new LinkedList();
-        sources.add(s1);
         List destinations = new LinkedList();
-        destinations.add(d1);
+        sources.add(site1);
+        destinations.add(site2);
         String dInStr = "2022-09-09";
         LocalDate localDate = LocalDate.parse(dInStr);
         LocalDateTime datetime = localDate.atTime(1,20,9);
-        ProductForTrucking productForTrucking = new ProductForTrucking(Water_7290019056966,2);
-        List prods= new LinkedList();
-        prods.add(productForTrucking);
-        truckManagerController.addTrucking("12345642",datetime,"ramiF", sources,destinations,prods,1,30);
+        List <Map<String,Integer>> products = new LinkedList<>();
+        Map<String,Integer> prod = new ConcurrentHashMap<>();
+        prod.put("milk",2);
+        products.add(prod);
+        truckManagerController.addTrucking("12345642",datetime,"ramiF", sources,destinations,products,1,30);
         Assert.assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("tamirStr"), true);
 
     }
