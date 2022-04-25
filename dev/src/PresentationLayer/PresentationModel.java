@@ -1,5 +1,8 @@
 package PresentationLayer;
 
+import ServiceLayer.Objects.*;
+import ServiceLayer.Response;
+import ServiceLayer.ResponseT;
 import ServiceLayer.Service;
 
 import java.time.LocalDateTime;
@@ -55,156 +58,281 @@ public class PresentationModel {
 
     //service callers
     private void addCategory() {
-        if (args.length == 1)
-            service.addCategory(args[0]);
+        Response r;
+        if (args.length == 1) {
+            r = service.addCategory(args[0]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     private void removeCategory() {
-        if (args.length == 1)
-            service.removeCategory(args[0]);
+        Response r;
+        if (args.length == 1) {
+            r = service.removeCategory(args[0]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     private void addSubCategory() {
-        if (args.length == 2)
-            service.addSubCategory(args[0], args[1]);
+        Response r;
+        if (args.length == 2) {
+            r = service.addSubCategory(args[0], args[1]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     private void removeSubCategory() {
-        if (args.length == 2)
-            service.removeSubCategory(args[0], args[1]);
+        Response r;
+        if (args.length == 2) {
+            r = service.removeSubCategory(args[0], args[1]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     private void addSubSubCategory() {
-        if (args.length == 3)
-            service.addSubSubCategory(args[0], args[1], args[2]);
+        Response r;
+        if (args.length == 3) {
+            r = service.addSubSubCategory(args[0], args[1], args[2]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     private void removeSubSubCategory() {
-        if (args.length == 3)
-            service.removeSubSubCategory(args[0], args[1], args[2]);
+        Response r;
+        if (args.length == 3) {
+            r = service.removeSubSubCategory(args[0], args[1], args[2]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     private void updateCategoryCusDiscount() {
+        Response r;
         if (args.length == 6 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null) {
-            service.updateCategoryCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), args[3], args[4], args[5]);
+            r = service.updateCategoryCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), args[3], args[4], args[5]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
         }
     }
 
     private void updateProductCusDiscount() {
+        Response r;
         if (args.length == 4 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null && convertDouble(args[3]) != -1) {
-            service.updateProductCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]));
+            r = service.updateProductCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]));
+            if (r.error_occurred)
+                System.out.println(r.error_message);
         }
     }
 
     private void updateItemCusDiscount() {
+        Response r;
         if (args.length == 5 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null && convertDouble(args[3]) != -1 && convertDouble(args[4]) != -1) {
-            service.updateItemCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]), convertInt(args[4]));
+            r = service.updateItemCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]), convertInt(args[4]));
+            if (r.error_occurred)
+                System.out.println(r.error_message);
         }
     }
 
     private void updateProductManPrice() {
+        Response r;
         if (args.length == 2 && convertDouble(args[1]) != -1.0 && convertInt(args[0]) != -1) {
-            service.updateProductManPrice(convertInt(args[0]), convertDouble(args[1]));
+            r = service.updateProductManPrice(convertInt(args[0]), convertDouble(args[1]));
+            if (r.error_occurred)
+                System.out.println(r.error_message);
         }
     }
 
     private void updateProductCusPrice() {
+        Response r;
         if (args.length == 2 && convertDouble(args[1]) != -1.0 && convertInt(args[0]) != -1) {
-            service.updateProductCusPrice(convertInt(args[0]), convertDouble(args[1]));
+            r = service.updateProductCusPrice(convertInt(args[0]), convertDouble(args[1]));
+            if (r.error_occurred)
+                System.out.println(r.error_message);
         }
     }
 
     private void addProduct() {
+        Response r;
         double man_price = convertDouble(args[2]);
         double cus_price = convertDouble(args[3]);
         int min_qty = convertInt(args[4]);
         int supply_time = convertInt(args[5]);
-        if (args.length == 9 && man_price != -1.0 && cus_price != -1.0 && min_qty != -1 && supply_time != -1)
-            service.addProduct(args[0], args[1], man_price, cus_price, min_qty, supply_time, args[6], args[7], args[8]);
+        if (args.length == 9 && man_price != -1.0 && cus_price != -1.0 && min_qty != -1 && supply_time != -1) {
+            r = service.addProduct(args[0], args[1], man_price, cus_price, min_qty, supply_time, args[6], args[7], args[8]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     private void removeProduct() {
-        if (args.length == 1 && convertInt(args[0]) != -1)
-            service.removeProduct(convertInt(args[0]));
+        Response r;
+        if (args.length == 1 && convertInt(args[0]) != -1) {
+            r = service.removeProduct(convertInt(args[0]));
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     private void addItem() {
+        Response r;
         int product_id = convertInt(args[0]);
         LocalDateTime expiration_date = convertDate(args[4]);
-        if (args.length == 6 && product_id != -1 && expiration_date != null && convertBoolean(args[5]) != null)
-            service.addItem(product_id, args[1], args[2], args[3], expiration_date, Objects.requireNonNull(convertBoolean(args[5])));
+        if (args.length == 6 && product_id != -1 && expiration_date != null && convertBoolean(args[5]) != null) {
+            r = service.addItem(product_id, args[1], args[2], args[3], expiration_date, Objects.requireNonNull(convertBoolean(args[5])));
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     private void removeItem() {
-        if (args.length == 2 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1)
-            service.removeItem(convertInt(args[0]), convertInt(args[0]));
+        Response r;
+        if (args.length == 2 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
+            r = service.removeItem(convertInt(args[0]), convertInt(args[0]));
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     public void updateItemDefect() {
+        Response r;
         int product_id = convertInt(args[0]);
         int item_id = convertInt(args[1]);
-        if (args.length == 4 && product_id != -1 && item_id != -1 && convertBoolean(args[2]) != null)
-            service.updateItemDefect(product_id, item_id, convertBoolean(args[2]), args[3]);
+        if (args.length == 4 && product_id != -1 && item_id != -1 && convertBoolean(args[2]) != null) {
+            r = service.updateItemDefect(product_id, item_id, convertBoolean(args[2]), args[3]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     public void getItemLocation() {
-        if (args.length == 2 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1)
-            service.getItemLocation(convertInt(args[0]), convertInt(args[0]));
+        ResponseT<String> r;
+        if (args.length == 2 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
+            r = service.getItemLocation(convertInt(args[0]), convertInt(args[0]));
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+            else
+                System.out.println(r.value);
+        }
     }
 
     public void changeItemLocation() {
-        if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1)
-            service.changeItemLocation(convertInt(args[0]), convertInt(args[0]), args[2]);
+        Response r;
+        if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
+            r = service.changeItemLocation(convertInt(args[0]), convertInt(args[0]), args[2]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     public void changeItemOnShelf() {
-        if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1 && convertBoolean(args[2]) != null)
-            service.changeItemOnShelf(convertInt(args[0]), convertInt(args[0]), convertBoolean(args[2]));
+        Response r;
+        if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1 && convertBoolean(args[2]) != null) {
+            r = service.changeItemOnShelf(convertInt(args[0]), convertInt(args[0]), convertBoolean(args[2]));
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     public void createMissingReport() {
-        if (args.length == 3 && convertInt(args[1]) != -1)
-            service.createMissingReport(args[0], convertInt(args[1]), args[2]);
+        ResponseT<MissingReport> r;
+        if (args.length == 3 && convertInt(args[1]) != -1) {
+            r = service.createMissingReport(args[0], convertInt(args[1]), args[2]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+            else
+                System.out.println(r.value);
+        }
     }
 
     public void createExpiredReport() {
-        if (args.length == 3 && convertInt(args[1]) != -1)
-            service.createExpiredReport(args[0], convertInt(args[1]), args[2]);
+        ResponseT<ExpiredReport> r;
+        if (args.length == 3 && convertInt(args[1]) != -1) {
+            r = service.createExpiredReport(args[0], convertInt(args[1]), args[2]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+            else
+                System.out.println(r.value);
+        }
     }
 
     public void createSurplusesReport() {
-        if (args.length == 3 && convertInt(args[1]) != -1)
-            service.createSurplusesReport(args[0], convertInt(args[1]), args[2]);
+        ResponseT<SurplusesReport> r;
+        if (args.length == 3 && convertInt(args[1]) != -1) {
+            r = service.createSurplusesReport(args[0], convertInt(args[1]), args[2]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+            else
+                System.out.println(r.value);
+        }
     }
 
     public void createDefectiveReport() {
-        if (args.length == 3 && convertInt(args[1]) != -1)
-            service.createDefectiveReport(args[0], convertInt(args[1]), args[2]);
+        ResponseT<DefectiveReport> r;
+        if (args.length == 3 && convertInt(args[1]) != -1) {
+            r = service.createDefectiveReport(args[0], convertInt(args[1]), args[2]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+            else
+                System.out.println(r.value);
+        }
     }
 
     public void createBySupplierReport() {
-        if (args.length == 4 && convertInt(args[1]) != -1)
-            service.createBySupplierReport(args[0], convertInt(args[1]), args[2], args[3]);
+        ResponseT<bySupplierReport> r;
+        if (args.length == 4 && convertInt(args[1]) != -1) {
+            r = service.createBySupplierReport(args[0], convertInt(args[1]), args[2], args[3]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+            else
+                System.out.println(r.value);
+        }
     }
 
     public void createByProductReport() {
-        if (args.length == 4 && convertInt(args[1]) != -1)
-            service.createByProductReport(args[0], convertInt(args[1]), args[2], args[3]);
+        ResponseT<byProductReport> r;
+        if (args.length == 4 && convertInt(args[1]) != -1) {
+            r = service.createByProductReport(args[0], convertInt(args[1]), args[2], args[3]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+            else
+                System.out.println(r.value);
+        }
     }
 
     public void createByCategoryReport() {
-        if (args.length == 6 && convertInt(args[1]) != -1)
-            service.createByCategoryReport(args[0], convertInt(args[1]), args[2], args[3], args[4], args[5]);
+        ResponseT<byCategoryReport> r;
+        if (args.length == 6 && convertInt(args[1]) != -1) {
+            r = service.createByCategoryReport(args[0], convertInt(args[1]), args[2], args[3], args[4], args[5]);
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+            else
+                System.out.println(r.value);
+        }
     }
 
     public void removeReport() {
-        if (args.length == 1 && convertInt(args[0]) != -1)
-            service.removeReport(convertInt(args[0]));
+        Response r;
+        if (args.length == 1 && convertInt(args[0]) != -1) {
+            r = service.removeReport(convertInt(args[0]));
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+        }
     }
 
     public void getReport() {
-        if (args.length == 1 && convertInt(args[0]) != -1)
-            service.getReport(convertInt(args[0]));
+        ResponseT<Report> r;
+        if (args.length == 1 && convertInt(args[0]) != -1) {
+            r = service.getReport(convertInt(args[0]));
+            if (r.error_occurred)
+                System.out.println(r.error_message);
+            else
+                System.out.println(r.value);
+        }
     }
 
 
