@@ -31,9 +31,9 @@ public class CategoryService {
         }
     }
 
-    public Response removeCategory(String name) {
+    public Response removeCategory(String name, boolean safe_remove) {
         try {
-            category_controller.removeCategory(name);
+            category_controller.removeCategory(name, safe_remove);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
@@ -58,9 +58,9 @@ public class CategoryService {
         }
     }
 
-    public Response removeSubCategory(String category, String name) {
+    public Response removeSubCategory(String category, String name, boolean safe_remove) {
         try {
-            category_controller.removeSubCategory(category, name);
+            category_controller.removeSubCategory(category, name, safe_remove);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
@@ -85,9 +85,9 @@ public class CategoryService {
         }
     }
 
-    public Response removeSubSubCategory(String category, String sub_category, String name) {
+    public Response removeSubSubCategory(String category, String sub_category, String name, boolean safe_remove) {
         try {
-            category_controller.removeSubSubCategory(category, sub_category, name);
+            category_controller.removeSubSubCategory(category, sub_category, name, safe_remove);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());

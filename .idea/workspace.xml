@@ -3,15 +3,36 @@
   <component name="ChangeListManager">
     <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="&quot;add 10 tests&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Report.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Report.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/SubCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/SubCategory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/PresentationLayer/PresentationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/PresentationLayer/PresentationModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/SubCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/SubCategory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Response.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/DefectiveReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/DefectiveReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ExpiredReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ExpiredReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/MissingReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/MissingReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ProductController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ProductController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/Report.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/Report.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ReportController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ReportController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/SubCategory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/SubCategory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/SurplusesReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/SurplusesReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/byCategoryReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/byCategoryReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/byProductReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/byProductReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/bySupplierReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/bySupplierReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/PresentationLayer/PresentationModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/PresentationLayer/PresentationModel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/Category.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/Category.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/SubCategory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/SubCategory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/ProductService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/ProductService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/ReportService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/ReportService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Response.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Response.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Service.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Service.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +68,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="RunManager" selected="JUnit.ServiceTest">
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
+  }
+}]]></component>
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="PresentationLayer.Main" />
       <module name="adss_group_k" />
@@ -89,8 +118,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ServiceTest" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.ServiceTest" />
       </list>
     </recent_temporary>
   </component>
@@ -170,7 +199,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -187,37 +215,17 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/dev/src/PresentationLayer/PresentationModel.java</url>
-          <line>115</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java</url>
-          <line>12</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java</url>
-          <line>16</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/dev/Tests/ServiceLayer/ServiceTest.java</url>
-          <line>116</line>
-          <properties class="ServiceLayer.ServiceTest" method="addProduct">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/dev/Tests/ServiceLayer/ServiceTest.java</url>
-          <line>34</line>
-          <properties class="ServiceLayer.ServiceTest" method="setData">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="6" />
+          <url>file://$PROJECT_DIR$/dev/src/ServiceLayer/Objects/SubCategory.java</url>
+          <line>15</line>
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="BusinessLayer.SubSubCategory" memberName="name" />
+        <PinnedItemInfo parentTag="BusinessLayer.Category" memberName="subC" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>

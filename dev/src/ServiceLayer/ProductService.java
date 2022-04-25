@@ -1,19 +1,20 @@
 package ServiceLayer;
 
 import BusinessLayer.ProductController;
+import ServiceLayer.Objects.Product;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProductService {
-    private static ProductController product_controller;
+    private final ProductController product_controller;
 
     public ProductService() {
         product_controller = ProductController.getInstance();
     }
 
     //methods
-    public static ResponseT<List<String>> getProductIdes() {
+    public ResponseT<List<String>> getProductIdes() {
         try {
             return ResponseT.fromValue(product_controller.getProductIdes());
         } catch (Exception e) {
@@ -21,13 +22,13 @@ public class ProductService {
         }
     }
 
-    public void updateCategoryManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
-        try {
-            product_controller.updateCategoryManDiscount(discount, start_date, end_date, category, sub_category, subsub_category);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
+//    public void updateCategoryManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
+//        try {
+//            product_controller.updateCategoryManDiscount(discount, start_date, end_date, category, sub_category, subsub_category);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 
     public Response updateCategoryCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
         try {
@@ -38,30 +39,40 @@ public class ProductService {
         }
     }
 
-    public Response updateProductManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) {
+    public Response updateProductSupplierManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String supplier) {
         try {
-            product_controller.updateProductManDiscount(discount, start_date, end_date, product_id);
+            product_controller.updateProductSupplierManDiscount(discount, start_date, end_date, supplier);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
         }
     }
 
-    public void updateProductCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) {
+//    public Response updateProductManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) {
+//        try {
+//            product_controller.updateProductManDiscount(discount, start_date, end_date, product_id);
+//            return new Response();
+//        } catch (Exception e) {
+//            return new Response(e.getMessage());
+//        }
+//    }
+
+    public Response updateProductCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) {
         try {
             product_controller.updateProductCusDiscount(discount, start_date, end_date, product_id);
+            return new Response();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            return new Response(e.getMessage());
         }
     }
 
-    public void updateItemManDiscount(int product_id, int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) {
-        try {
-            product_controller.updateItemManDiscount(product_id, item_id, discount, start_date, end_date);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
+//    public void updateItemManDiscount(int product_id, int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) {
+//        try {
+//            product_controller.updateItemManDiscount(product_id, item_id, discount, start_date, end_date);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 
     public Response updateItemCusDiscount(int product_id, int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) {
         try {
@@ -99,12 +110,11 @@ public class ProductService {
         }
     }
 
-    public Response addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
+    public ResponseT<Product> addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
         try {
-            product_controller.addProduct(name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category);
-            return new Response();
+            return ResponseT.fromValue(new Product(product_controller.addProduct(name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category)));
         } catch (Exception e) {
-            return new Response(e.getMessage());
+            return ResponseT.fromError(e.getMessage());
         }
     }
 
@@ -160,6 +170,18 @@ public class ProductService {
         } catch (Exception e) {
             return new Response(e.getMessage());
         }
+    }
+
+    public boolean productsInCategory(String category) {
+        return product_controller.productsInCategory(category);
+    }
+
+    public boolean productsInSubCategory(String category, String sub_category) {
+        return product_controller.productsInSubCategory(category, sub_category);
+    }
+
+    public boolean productsInSubSubCategory(String category, String sub_category, String sub_sub_category) {
+        return product_controller.productsInSubSubCategory(category, sub_category, sub_sub_category);
     }
 
     public void restart() {

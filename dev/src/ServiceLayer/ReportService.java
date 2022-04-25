@@ -7,7 +7,6 @@ import ServiceLayer.Objects.Report;
 import java.util.List;
 
 public class ReportService {
-
     private final ReportController report_controller;
 
     public ReportService() {

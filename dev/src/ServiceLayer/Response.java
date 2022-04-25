@@ -12,6 +12,8 @@ public class Response {
     }
 
     public boolean getError_occurred() {
-        return !error_message.equals("");
+        if (error_message != null)
+            return !error_message.equals("");
+        return false;
     }
 }

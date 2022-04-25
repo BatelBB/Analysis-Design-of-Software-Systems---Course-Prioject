@@ -22,7 +22,7 @@ public class Product {
     private String sub_sub_cat;
 
     public Product(BusinessLayer.Product p) {
-        item_ids=p.getItem_ids();
+        item_ids = p.getItem_ids();
         product_id = p.getProduct_id();
         name = p.getName();
         shelf_qty = p.getShelf_qty();
@@ -32,11 +32,11 @@ public class Product {
         cus_price = p.getCus_price();
         min_qty = p.getMin_qty();
         supply_time = p.getSupply_time();
-        cat=p.getCat();
-        sub_cat= p.getCat();
-        sub_sub_cat= p.getSub_sub_cat();
-        Map<String,BusinessLayer.ProductItem> BusinessItemsMap=p.getItems();
-        for (Map.Entry<String,BusinessLayer.ProductItem> entry : BusinessItemsMap.entrySet()) {
+        cat = p.getCat();
+        sub_cat = p.getCat();
+        sub_sub_cat = p.getSub_sub_cat();
+        Map<String, BusinessLayer.ProductItem> BusinessItemsMap = p.getItems();
+        for (Map.Entry<String, BusinessLayer.ProductItem> entry : BusinessItemsMap.entrySet()) {
             items.put(entry.getKey(), new ProductItem(entry.getValue()));
         }
 

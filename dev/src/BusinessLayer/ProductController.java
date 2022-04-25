@@ -25,34 +25,34 @@ public class ProductController {
 
     //methods
 
-    public void updateCategoryManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) throws Exception {
-        if (category != null && !category.equals("")) {
-            if (sub_category != null && !sub_category.equals("")) {
-                if (subsub_category != null && !subsub_category.equals("")) {
-                    for (Product p : products.values())
-                        if (p.getCat().equals(category) && p.getSub_cat().equals(sub_category) && p.getSub_sub_cat().equals(subsub_category))
-                            for (ProductItem i : p.getItems().values())
-                                i.addManDiscount(new DiscountPair(start_date, end_date, discount));
-                } else
-                    for (Product p : products.values())
-                        if (p.getCat().equals(category) && p.getSub_cat().equals(sub_category))
-                            for (ProductItem i : p.getItems().values())
-                                i.addManDiscount(new DiscountPair(start_date, end_date, discount));
-            } else
-                for (Product p : products.values())
-                    if (p.getCat().equals(category)) {
-                        for (ProductItem i : p.getItems().values())
-                            i.addManDiscount(new DiscountPair(start_date, end_date, discount));
-                    }
-        } else {
-            if (sub_category == null || sub_category.equals("") || subsub_category == null || subsub_category.equals(""))
-                for (Product p : products.values())
-                    for (ProductItem i : p.getItems().values())
-                        i.addManDiscount(new DiscountPair(start_date, end_date, discount));
-            else
-                throw new Exception("missing category input");
-        }
-    }
+//    public void updateCategoryManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) throws Exception {
+//        if (category != null && !category.equals("")) {
+//            if (sub_category != null && !sub_category.equals("")) {
+//                if (subsub_category != null && !subsub_category.equals("")) {
+//                    for (Product p : products.values())
+//                        if (p.getCat().equals(category) && p.getSub_cat().equals(sub_category) && p.getSub_sub_cat().equals(subsub_category))
+//                            for (ProductItem i : p.getItems().values())
+//                                i.addManDiscount(new DiscountPair(start_date, end_date, discount));
+//                } else
+//                    for (Product p : products.values())
+//                        if (p.getCat().equals(category) && p.getSub_cat().equals(sub_category))
+//                            for (ProductItem i : p.getItems().values())
+//                                i.addManDiscount(new DiscountPair(start_date, end_date, discount));
+//            } else
+//                for (Product p : products.values())
+//                    if (p.getCat().equals(category)) {
+//                        for (ProductItem i : p.getItems().values())
+//                            i.addManDiscount(new DiscountPair(start_date, end_date, discount));
+//                    }
+//        } else {
+//            if (sub_category == null || sub_category.equals("") || subsub_category == null || subsub_category.equals(""))
+//                for (Product p : products.values())
+//                    for (ProductItem i : p.getItems().values())
+//                        i.addManDiscount(new DiscountPair(start_date, end_date, discount));
+//            else
+//                throw new Exception("missing category input");
+//        }
+//    }
 
     public void updateCategoryCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) throws Exception {
         if (category != null && !category.equals("")) {
@@ -82,11 +82,18 @@ public class ProductController {
         }
     }
 
-    public void updateProductManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) throws Exception {
-        productExists(product_id);
-        for (ProductItem i : products.get(Integer.toString(product_id)).getItems().values())
-            i.addManDiscount(new DiscountPair(start_date, end_date, discount));
+    public void updateProductSupplierManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String supplier) {
+        for (Product p : products.values())
+            for (ProductItem i : p.getItems().values())
+                if (i.getSupplier().equals(supplier))
+                    i.addManDiscount(new DiscountPair(start_date, end_date, discount));
     }
+
+//    public void updateProductManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) throws Exception {
+//        productExists(product_id);
+//        for (ProductItem i : products.get(Integer.toString(product_id)).getItems().values())
+//            i.addManDiscount(new DiscountPair(start_date, end_date, discount));
+//    }
 
     public void updateProductCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) throws Exception {
         productExists(product_id);
@@ -94,12 +101,12 @@ public class ProductController {
             i.addCusDiscount(new DiscountPair(start_date, end_date, discount));
     }
 
-    public void updateItemManDiscount(int product_id, int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) throws Exception {
-        discountLegal(discount);
-        checkDates(start_date, end_date);
-        productExists(product_id);
-        products.get(Integer.toString(product_id)).updateItemManDiscount(item_id, discount, start_date, end_date);
-    }
+//    public void updateItemManDiscount(int product_id, int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) throws Exception {
+//        discountLegal(discount);
+//        checkDates(start_date, end_date);
+//        productExists(product_id);
+//        products.get(Integer.toString(product_id)).updateItemManDiscount(item_id, discount, start_date, end_date);
+//    }
 
     public void updateItemCusDiscount(int product_id, int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) throws Exception {
         discountLegal(discount);
@@ -132,7 +139,7 @@ public class ProductController {
         return products.get(Integer.toString(product_id)).getItemLocation(item_id);
     }
 
-    public void addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
+    public Product addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
         if (category_controller.getCategories().containsKey(category) && category_controller.getCategories().get(category).getSubC().containsKey(sub_category) && category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().containsKey(subsub_category)) {
             if (name == null || name.equals("")) throw new Exception("product name empty");
             if (manufacturer == null || manufacturer.equals("")) throw new Exception("product name empty");
@@ -144,8 +151,10 @@ public class ProductController {
             if (sub_category == null || sub_category.equals("")) throw new Exception("sub_category name empty");
             if (subsub_category == null || subsub_category.equals(""))
                 throw new Exception("subsub_category name empty");
-            products.put(Integer.toString(product_ids), new Product(product_ids, name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category));
+            Product p = new Product(product_ids, name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category);
+            products.put(Integer.toString(product_ids), p);
             product_ids++;
+            return p;
         } else
             throw new Exception("category doesn't exist");
     }
@@ -234,6 +243,27 @@ public class ProductController {
                 if (p.getCat().equals(category)) ret_products.add(p);
         } else ret_products = new ArrayList<>(products.values());
         return ret_products;
+    }
+
+    public boolean productsInCategory(String category) {
+        for (Product p : products.values())
+            if (p.getCat().equals(category))
+                return false;
+        return true;
+    }
+
+    public boolean productsInSubCategory(String category, String sub_category) {
+        for (Product p : products.values())
+            if (p.getCat().equals(category) && p.getSub_cat().equals(sub_category))
+                return false;
+        return true;
+    }
+
+    public boolean productsInSubSubCategory(String category, String sub_category, String sub_sub_category) {
+        for (Product p : products.values())
+            if (p.getCat().equals(category) && p.getSub_cat().equals(sub_category) && p.getSub_sub_cat().equals(sub_sub_category))
+                return false;
+        return true;
     }
 
 

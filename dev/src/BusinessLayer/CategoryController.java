@@ -32,7 +32,9 @@ public class CategoryController {
         }
     }
 
-    public void removeCategory(String name) {
+    public void removeCategory(String name, boolean safe_remove) {
+        if(!safe_remove)
+            throw new IllegalArgumentException("Category has products in it");
         if (!categories.containsKey(name))
             throw new IllegalArgumentException("Category doesn't exists");
         else
@@ -55,7 +57,9 @@ public class CategoryController {
         }
     }
 
-    public void removeSubCategory(String categoryName, String SubCategoryName) {
+    public void removeSubCategory(String categoryName, String SubCategoryName, boolean safe_remove) {
+        if(!safe_remove)
+            throw new IllegalArgumentException("Subcategory has products in it");
         if (!categories.containsKey(categoryName))
             throw new IllegalArgumentException("Category doesn't exists");
         else {
@@ -83,7 +87,9 @@ public class CategoryController {
         }
     }
 
-    public void removeSubSubCategory(String categoryName, String sub_category, String name) {
+    public void removeSubSubCategory(String categoryName, String sub_category, String name, boolean safe_remove) {
+        if(!safe_remove)
+            throw new IllegalArgumentException("Subsubcategory has products in it");
         if (!categories.containsKey(categoryName))
             throw new IllegalArgumentException("Category doesn't exists");
         else {

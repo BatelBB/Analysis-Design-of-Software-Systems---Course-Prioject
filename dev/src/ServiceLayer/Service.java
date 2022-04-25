@@ -1,9 +1,6 @@
 package ServiceLayer;
 
-import ServiceLayer.Objects.Category;
-import ServiceLayer.Objects.MissingReport;
-import ServiceLayer.Objects.Report;
-import ServiceLayer.Objects.SubCategory;
+import ServiceLayer.Objects.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +21,7 @@ public class Service {
     }
 
     public ResponseT<List<String>> getProductIdes() {
-        return ProductService.getProductIdes();
+        return product_service.getProductIdes();
     }
 
     public ResponseT<List<Integer>> getReportListNames() {
@@ -36,7 +33,7 @@ public class Service {
     }
 
     public Response removeCategory(String name) {
-        return category_service.removeCategory(name);
+        return category_service.removeCategory(name, product_service.productsInCategory(name));
     }
 
     public ResponseT<Category> getCategory(String name) {
@@ -48,40 +45,44 @@ public class Service {
     }
 
     public Response removeSubCategory(String category, String name) {
-        return category_service.removeSubCategory(category, name);
+        return category_service.removeSubCategory(category, name, product_service.productsInSubCategory(category, name));
     }
 
-    public ResponseT<SubCategory> getSubCategory(String category, String name) {
-        return category_service.getSubCategory(category, name);
-    }
+//    public ResponseT<SubCategory> getSubCategory(String category, String name) {
+//        return category_service.getSubCategory(category, name);
+//    }
 
     public Response addSubSubCategory(String category, String sub_category, String name) {
         return category_service.addSubSubCategory(category, sub_category, name);
     }
 
     public Response removeSubSubCategory(String category, String sub_category, String name) {
-        return category_service.removeSubSubCategory(category, sub_category, name);
+        return category_service.removeSubSubCategory(category, sub_category, name, product_service.productsInSubSubCategory(category, sub_category, name));
     }
 
-    public void updateCategoryManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
-        product_service.updateCategoryManDiscount(discount, start_date, end_date, category, sub_category, subsub_category);
-    }
+//    public void updateCategoryManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
+//        product_service.updateCategoryManDiscount(discount, start_date, end_date, category, sub_category, subsub_category);
+//    }
 
     public Response updateCategoryCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
         return product_service.updateCategoryCusDiscount(discount, start_date, end_date, category, sub_category, subsub_category);
     }
 
-    public void updateProductManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) {
-        product_service.updateProductManDiscount(discount, start_date, end_date, product_id);
+//    public void updateProductManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) {
+//        product_service.updateProductManDiscount(discount, start_date, end_date, product_id);
+//    }
+
+    public Response updateProductSupplierManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String supplier) {
+        return product_service.updateProductSupplierManDiscount(discount, start_date, end_date, supplier);
     }
 
     public Response updateProductCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) {
-        return product_service.updateProductManDiscount(discount, start_date, end_date, product_id);
+        return product_service.updateProductCusDiscount(discount, start_date, end_date, product_id);
     }
 
-    public void updateItemManDiscount(int product_id, int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) {
-        product_service.updateItemManDiscount(product_id, item_id, discount, start_date, end_date);
-    }
+//    public void updateItemManDiscount(int product_id, int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) {
+//        product_service.updateItemManDiscount(product_id, item_id, discount, start_date, end_date);
+//    }
 
     public Response updateItemCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id, int item_id) {
         return product_service.updateItemCusDiscount(product_id, item_id, discount, start_date, end_date);
@@ -95,7 +96,7 @@ public class Service {
         return product_service.updateProductCusPrice(product_id, price);
     }
 
-    public Response addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
+    public ResponseT<Product> addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
         return product_service.addProduct(name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category);
     }
 
