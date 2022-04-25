@@ -50,6 +50,10 @@ public class TUI {
             handleCreateShift(command);
             return;
         }
+        if (command.startsWith("list shifts")) {
+            handleListShifts(command);
+            return;
+        }
         if (command.startsWith("add shift staff")) {
             handleAddShiftStaff(command);
             return;
@@ -88,6 +92,7 @@ public class TUI {
         System.out.println("  add shift preference");
         System.out.println("  delete shift preference");
         System.out.println("  create shift");
+        System.out.println("  list shifts");
         System.out.println("  add shift staff");
         System.out.println("  delete shift staff");
         System.out.println("  update shift required role");
@@ -264,6 +269,34 @@ public class TUI {
         service.addEmployeeShiftPreference("999072804", "999072804", Employee.ShiftDateTime.MondayMorning);
         service.addEmployeeShiftPreference("999072804", "999072804", Employee.ShiftDateTime.TuesdayEvening);
         service.addEmployeeShiftPreference("999072804", "999072804", Employee.ShiftDateTime.FridayEvening);
+    }
+
+    private void handleListShifts(String command) {
+        String[] args = command.split(" ");
+        if (args.length != 2) {
+            System.out.println("Error: Too many arguments.");
+            System.out.println("Usage:");
+            System.out.println("> list shifts");
+            return;
+        }
+        try {
+            List<Shift> shifts = service.listShifts(subject);
+            for (Shift shift: shifts) {
+                String date = shift.getDate().get(GregorianCalendar.DAY_OF_MONTH)
+                        + "/" + (shift.getDate().get(GregorianCalendar.MONTH) + 1)
+                        + "/" + shift.getDate().get(GregorianCalendar.YEAR);
+                System.out.printf("- date: %s\n  type: %s\n  required staff:\n", date, shift.getType());
+                for (Employee.Role key: shift.getRequiredStaff().keySet()) {
+                    System.out.printf("  - role: %s\n    count: %s\n", key, shift.getRequiredStaff().get(key));
+                }
+                System.out.println("  staff:");
+                for (Employee staff: shift.getStaff()) {
+                    System.out.printf("  - id: %s\n    name: %s\n    role: %s\n", staff.id, staff.name, staff.role);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private void handleUpdateShiftRequiredRole(String command) {
@@ -656,7 +689,7 @@ public class TUI {
         try {
             Employee read = service.readEmployee(subject, args[2]);
             String startDate = read.employmentStart.get(GregorianCalendar.DAY_OF_MONTH)
-                    + "/" + read.employmentStart.get(GregorianCalendar.MONTH)
+                    + "/" + (read.employmentStart.get(GregorianCalendar.MONTH) + 1)
                     + "/" + read.employmentStart.get(GregorianCalendar.YEAR);
             System.out.printf("name: %s\nid: %s\nrole: %s\nbank details:\n  bank: %s\n  branch: %s\n  account number: %s\nworking conditions:\n  hourly salary: %s\n  sick days used: %s\n  vacation days used: %s\n  employment start: %s\n", read.name, read.id, read.role, read.bank, read.bankBranch, read.bankID, read.salaryPerHour, read.sickDaysUsed, read.vacationDaysUsed, startDate);
             System.out.println("can work at:");
