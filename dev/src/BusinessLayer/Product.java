@@ -230,4 +230,17 @@ public class Product {
         if (!items.containsKey(Integer.toString(item_id)))
             throw new Exception("item id doesn't exist");
     }
+    public String toString() {
+        String s = "product_id: " + product_id + "\n" + "product name: " + name + "\n"
+                + "category: " + cat + "\n" + "sub category: " + sub_cat + "\n" +
+                "sub sub category: " + sub_sub_cat + "\n" + "manufacturer: " + manufacturer + "\n" +
+                "manufacturer price: " + man_price + "\n" + "customer price: " + cus_price + "\n" +
+                "supply time: " + supply_time + "\n" + "minimum quantity: " + min_qty + "\n" +
+                "shelf quantity" + shelf_qty + "\n" + "storage quantity" + storage_qty + "\n" +
+                "The items id in this product are:\n";
+        for (Map.Entry<String, ProductItem> entry : items.entrySet()) {
+            s = s + entry.getValue().getId() + "\n";
+        }
+        return s;
+    }
 }
