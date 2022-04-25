@@ -57,12 +57,18 @@ public class Main {
         return choicesArray[choice - 1];
     }
 
-    public static void printOptionsList(List<String> optionsList) {
+    public static int printOptionsList(List<String> optionsList) {
         int counter = 1;
         for (String option : optionsList) {
             System.out.println(counter + ". " + option);
             counter++;
         }
+        int choice = Main.getNumber();
+        while (choice < 1 | choice > optionsList.size()) {
+            System.out.println("Enter number from the list");
+            choice = Main.getNumber();
+        }
+        return choice;
     }
 
 }

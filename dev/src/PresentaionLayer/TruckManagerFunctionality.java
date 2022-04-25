@@ -36,25 +36,30 @@ public class TruckManagerFunctionality extends UserFunctionality{
     }
 
     public void printBoardOfDriver() {
+        String driverUsername = getDriverUsernameFromTheUser();
+        if (driverUsername != null) {
+        Response<String> response = service.printBoardOfDriver(driverUsername);
+        if (response.ErrorOccured())
+            System.out.println(response.getErrorMessage());
+        else
+            System.out.println(response.getValue());
+        }
+    }
+
+    private String getDriverUsernameFromTheUser() {
         Response<List<String>> drivers = service.getDriversUsernames();
-        if (drivers.ErrorOccured())
+        if (drivers.ErrorOccured()) {
             System.out.println(drivers.getErrorMessage());
-        if (drivers.getValue() == null | drivers.getValue().size() == 0)
+            return null;
+        }
+        if (drivers.getValue() == null | drivers.getValue().size() == 0) {
             System.out.println("You have no drivers");
+            return null;
+        }
         else {
             System.out.println("Choose driver:");
-            Main.printOptionsList(drivers.getValue());
-            int choice = Main.getNumber();
-            while (choice < 1 | choice > drivers.getValue().size()) {
-                System.out.println("Enter number from the list");
-                choice = Main.getNumber();
-            }
-            String driverUsername = drivers.getValue().get(choice);
-            Response<String> response = service.printBoardOfDriver(driverUsername);
-            if (response.ErrorOccured())
-                System.out.println(response.getErrorMessage());
-            else
-                System.out.println(response.getValue());
+            int choice = Main.printOptionsList(drivers.getValue());
+            return drivers.getValue().get(choice);
         }
     }
 

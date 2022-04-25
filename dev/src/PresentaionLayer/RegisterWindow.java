@@ -10,7 +10,7 @@ public class RegisterWindow {
     public RegisterWindow() throws Exception {
 
     }
-    public void  register() throws Exception {
+    public void  register() {
         boolean wantToBack = false;
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         while (!wantToBack) {
