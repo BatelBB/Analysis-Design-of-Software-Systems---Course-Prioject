@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="first imp of Response">
+    <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="&quot;add 10 tests&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/Tests/ServiceLayer/ServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/Tests/ServiceLayer/ServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/DefectiveReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ExpiredReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/MissingReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Report.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Report.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/PresentationLayer/PresentationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/PresentationLayer/PresentationModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/SurplusesReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byCategoryReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/byProductReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/bySupplierReport.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +148,13 @@
       <option name="project" value="LOCAL" />
       <updated>1650879718930</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL‎00007" summary="&quot;add 10 tests&quot;">
+      <created>1650887410509</created>
+      <option name="number" value="LOCAL‎00007" />
+      <option name="presentableId" value="LOCAL‎00007" />
+      <updated>1650887410509</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,14 +180,15 @@
     <MESSAGE value="manually combining two main branches" />
     <MESSAGE value="finishing Service_Layer" />
     <MESSAGE value="first imp of Response" />
-    <option name="LAST_COMMIT_MESSAGE" value="first imp of Response" />
+    <MESSAGE value="&quot;add 10 tests&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;add 10 tests&quot;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/dev/src/PresentationLayer/PresentationModel.java</url>
-          <line>87</line>
+          <line>115</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
