@@ -201,6 +201,18 @@ public class Product {
         this.items = items;
     }
 
+    public String getCat() {
+        return cat;
+    }
+
+    public String getSub_cat() {
+        return sub_cat;
+    }
+
+    public String getSub_sub_cat() {
+        return sub_sub_cat;
+    }
+
     public void setCat(String cat) {
         this.cat = cat;
     }

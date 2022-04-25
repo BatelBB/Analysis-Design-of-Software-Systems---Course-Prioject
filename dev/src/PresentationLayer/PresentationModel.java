@@ -7,102 +7,114 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class PresentationModel {
-    private final String command;
-    private final String[] args;
+    private String[] args;
+    private final Service service;
 
-    public PresentationModel(String input) {
-        command = input.substring(0, input.indexOf(" "));
-        args = input.substring(input.indexOf(" ")).split(",", -1);
+    public PresentationModel(Service service) {
+        this.service = service;
     }
 
-    public void execute(Service service) {
-        switch (command) {
-            case "addCategory" -> addCategory(service);
-            case "removeCategory" -> removeCategory(service);
-            case "addSubCategory" -> addSubCategory(service);
-            case "removeSubCategory" -> removeSubCategory(service);
-            case "addSubSubCategory" -> addSubSubCategory(service);
-            case "removeSubSubCategory" -> removeSubSubCategory(service);
-            case "updateCategoryCusDiscount" -> updateCategoryCusDiscount(service);
-            case "updateProductCusDiscount" -> updateProductCusDiscount(service);
-            case "updateItemCusDiscount" -> updateItemCusDiscount(service);
-            case "updateProductManPrice" -> updateProductManPrice(service);
-            case "updateProductCusPrice" -> updateProductCusPrice(service);
-            case "addProduct" -> addProduct(service);
-            case "removeProduct" -> removeProduct(service);
-            case "addItem" -> addItem(service);
-            case "removeItem" -> removeItem(service);
-            case "updateItemDefect" -> updateItemDefect(service);
-            case "getItemLocation" -> getItemLocation(service);
-            case "changeItemLocation" -> changeItemLocation(service);
-            case "changeItemOnShelf" -> changeItemOnShelf(service);
-            default -> System.out.println("unknown command, aborting..");
+    public void execute(String input) {
+        if (!input.equals("exit")) {
+            String command = input.substring(0, input.indexOf(" "));
+            args = input.substring(input.indexOf(" ")).split(",", -1);
+            switch (command) {
+                case "addCategory" -> addCategory();
+                case "removeCategory" -> removeCategory();
+                case "addSubCategory" -> addSubCategory();
+                case "removeSubCategory" -> removeSubCategory();
+                case "addSubSubCategory" -> addSubSubCategory();
+                case "removeSubSubCategory" -> removeSubSubCategory();
+                case "updateCategoryCusDiscount" -> updateCategoryCusDiscount();
+                case "updateProductCusDiscount" -> updateProductCusDiscount();
+                case "updateItemCusDiscount" -> updateItemCusDiscount();
+                case "updateProductManPrice" -> updateProductManPrice();
+                case "updateProductCusPrice" -> updateProductCusPrice();
+                case "addProduct" -> addProduct();
+                case "removeProduct" -> removeProduct();
+                case "addItem" -> addItem();
+                case "removeItem" -> removeItem();
+                case "updateItemDefect" -> updateItemDefect();
+                case "getItemLocation" -> getItemLocation();
+                case "changeItemLocation" -> changeItemLocation();
+                case "changeItemOnShelf" -> changeItemOnShelf();
+                case "createMissingReport" -> createMissingReport();
+                case "createExpiredReport" -> createExpiredReport();
+                case "createSurplusesReport" -> createSurplusesReport();
+                case "createDefectiveReport" -> createDefectiveReport();
+                case "createBySupplierReport" -> createBySupplierReport();
+                case "createByProductReport" -> createByProductReport();
+                case "createByCategoryReport" -> createByCategoryReport();
+                case "removeReport" -> removeReport();
+                case "getReport" -> getReport();
+                default -> System.out.println("unknown command, aborting..");
+            }
         }
     }
 
 
     //service callers
-    private void addCategory(Service service) {
+    private void addCategory() {
         if (args.length == 1)
             service.addCategory(args[0]);
     }
 
-    private void removeCategory(Service service) {
+    private void removeCategory() {
         if (args.length == 1)
             service.removeCategory(args[0]);
     }
 
-    private void addSubCategory(Service service) {
+    private void addSubCategory() {
         if (args.length == 2)
             service.addSubCategory(args[0], args[1]);
     }
 
-    private void removeSubCategory(Service service) {
+    private void removeSubCategory() {
         if (args.length == 2)
             service.removeSubCategory(args[0], args[1]);
     }
 
-    private void addSubSubCategory(Service service) {
+    private void addSubSubCategory() {
         if (args.length == 3)
             service.addSubSubCategory(args[0], args[1], args[2]);
     }
 
-    private void removeSubSubCategory(Service service) {
+    private void removeSubSubCategory() {
         if (args.length == 3)
             service.removeSubSubCategory(args[0], args[1], args[2]);
     }
 
-    private void updateCategoryCusDiscount(Service service) {
+    private void updateCategoryCusDiscount() {
         if (args.length == 6 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null) {
             service.updateCategoryCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), args[3], args[4], args[5]);
         }
     }
 
-    private void updateProductCusDiscount(Service service) {
+    private void updateProductCusDiscount() {
         if (args.length == 4 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null && convertDouble(args[3]) != -1) {
             service.updateProductCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]));
         }
     }
 
-    private void updateItemCusDiscount(Service service) {
+    private void updateItemCusDiscount() {
         if (args.length == 5 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null && convertDouble(args[3]) != -1 && convertDouble(args[4]) != -1) {
             service.updateItemCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]), convertInt(args[4]));
         }
     }
 
-    private void updateProductManPrice(Service service) {
+    private void updateProductManPrice() {
         if (args.length == 2 && convertDouble(args[1]) != -1.0 && convertInt(args[0]) != -1) {
             service.updateProductManPrice(convertInt(args[0]), convertDouble(args[1]));
         }
     }
 
-    private void updateProductCusPrice(Service service) {
+    private void updateProductCusPrice() {
         if (args.length == 2 && convertDouble(args[1]) != -1.0 && convertInt(args[0]) != -1) {
             service.updateProductCusPrice(convertInt(args[0]), convertDouble(args[1]));
         }
     }
 
-    private void addProduct(Service service) {
+    private void addProduct() {
         double man_price = convertDouble(args[2]);
         double cus_price = convertDouble(args[3]);
         int min_qty = convertInt(args[4]);
@@ -111,43 +123,88 @@ public class PresentationModel {
             service.addProduct(args[0], args[1], man_price, cus_price, min_qty, supply_time, args[6], args[7], args[8]);
     }
 
-    private void removeProduct(Service service) {
+    private void removeProduct() {
         if (args.length == 1 && convertInt(args[0]) != -1)
             service.removeProduct(convertInt(args[0]));
     }
 
-    private void addItem(Service service) {
+    private void addItem() {
         int product_id = convertInt(args[0]);
         LocalDateTime expiration_date = convertDate(args[4]);
         if (args.length == 6 && product_id != -1 && expiration_date != null && convertBoolean(args[5]) != null)
             service.addItem(product_id, args[1], args[2], args[3], expiration_date, Objects.requireNonNull(convertBoolean(args[5])));
     }
 
-    private void removeItem(Service service) {
+    private void removeItem() {
         if (args.length == 2 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1)
             service.removeItem(convertInt(args[0]), convertInt(args[0]));
     }
 
-    public void updateItemDefect(Service service) {
+    public void updateItemDefect() {
         int product_id = convertInt(args[0]);
         int item_id = convertInt(args[1]);
         if (args.length == 4 && product_id != -1 && item_id != -1 && convertBoolean(args[2]) != null)
             service.updateItemDefect(product_id, item_id, convertBoolean(args[2]), args[3]);
     }
 
-    public void getItemLocation(Service service) {
+    public void getItemLocation() {
         if (args.length == 2 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1)
             service.getItemLocation(convertInt(args[0]), convertInt(args[0]));
     }
 
-    public void changeItemLocation(Service service) {
+    public void changeItemLocation() {
         if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1)
             service.changeItemLocation(convertInt(args[0]), convertInt(args[0]), args[2]);
     }
 
-    public void changeItemOnShelf(Service service) {
+    public void changeItemOnShelf() {
         if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1 && convertBoolean(args[2]) != null)
             service.changeItemOnShelf(convertInt(args[0]), convertInt(args[0]), convertBoolean(args[2]));
+    }
+
+    public void createMissingReport() {
+        if (args.length == 3 && convertInt(args[1]) != -1)
+            service.createMissingReport(args[0], convertInt(args[1]), args[2]);
+    }
+
+    public void createExpiredReport() {
+        if (args.length == 3 && convertInt(args[1]) != -1)
+            service.createExpiredReport(args[0], convertInt(args[1]), args[2]);
+    }
+
+    public void createSurplusesReport() {
+        if (args.length == 3 && convertInt(args[1]) != -1)
+            service.createSurplusesReport(args[0], convertInt(args[1]), args[2]);
+    }
+
+    public void createDefectiveReport() {
+        if (args.length == 3 && convertInt(args[1]) != -1)
+            service.createDefectiveReport(args[0], convertInt(args[1]), args[2]);
+    }
+
+    public void createBySupplierReport() {
+        if (args.length == 4 && convertInt(args[1]) != -1)
+            service.createBySupplierReport(args[0], convertInt(args[1]), args[2], args[3]);
+    }
+
+    public void createByProductReport() {
+        if (args.length == 4 && convertInt(args[1]) != -1)
+            service.createByProductReport(args[0], convertInt(args[1]), args[2], args[3]);
+    }
+
+    public void createByCategoryReport() {
+        if (args.length == 6 && convertInt(args[1]) != -1)
+            service.createByCategoryReport(args[0], convertInt(args[1]), args[2], args[3], args[4], args[5]);
+    }
+
+    public void removeReport() {
+        if (args.length == 1 && convertInt(args[0]) != -1)
+            service.removeReport(convertInt(args[0]));
+    }
+
+    public void getReport() {
+        if (args.length == 1 && convertInt(args[0]) != -1)
+            service.getReport(convertInt(args[0]));
     }
 
 

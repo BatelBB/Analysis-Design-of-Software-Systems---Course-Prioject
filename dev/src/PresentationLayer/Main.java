@@ -2,8 +2,6 @@ package PresentationLayer;
 
 import ServiceLayer.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Main {
@@ -11,11 +9,12 @@ public class Main {
         Service service = new Service();
         Scanner scan = new Scanner(System.in);
         String input = "";
+        PresentationModel pm = new PresentationModel(service);
         do {
             input = scan.nextLine();
-            System.out.println(LocalDateTime.parse(input, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            pm.execute(input);
         }
-        while (!input.equals("Exit"));
+        while (!input.equals("exit"));
         System.out.println("thank you");
     }
 }

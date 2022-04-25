@@ -18,99 +18,150 @@ public class Service {
         report_service = new ReportService();
         category_service = new CategoryService();
     }
-    public List<String> getCategoriesNames(){return CategoryService.getCategoriesNames();}
-    public List<String> getProductIdes(){return ProductService.getProductIdes();}
-    public List<Integer> getReportListNames() {return ReportService.getReportListNames(); }
-    public void addCategory(String name) { category_service.addCategory(name); }
 
-    public void removeCategory(String name) { category_service.removeCategory(name); }
-    public Category getCategory(String name){ return category_service.getCategory(name); }
-
-    public void addSubCategory(String categoryName, String SubCategoryName) {category_service.addSubCategory(categoryName, SubCategoryName);
+    public ResponseT<List<String>> getCategoriesNames() {
+        return CategoryService.getCategoriesNames();
     }
 
-    public void removeSubCategory(String category, String name) {category_service.removeSubCategory(category, name);
+    public ResponseT<List<String>> getProductIdes() {
+        return ProductService.getProductIdes();
     }
-    public SubCategory getSubCategory(String category, String name) {return category_service.getSubCategory(category,name);}
 
-    public void addSubSubCategory(String category, String sub_category, String name) { category_service.addSubSubCategory(category,sub_category, name); }
+    public ResponseT<List<Integer>> getReportListNames() {
+        return ReportService.getReportListNames();
+    }
 
-    public void removeSubSubCategory(String category, String sub_category, String name) { category_service.removeSubSubCategory(category,sub_category, name); }
+    public Response addCategory(String name) {
+        return category_service.addCategory(name);
+    }
 
+    public Response removeCategory(String name) {
+        return category_service.removeCategory(name);
+    }
+
+    public ResponseT<Category> getCategory(String name) {
+        return category_service.getCategory(name);
+    }
+
+    public Response addSubCategory(String categoryName, String SubCategoryName) {
+        return category_service.addSubCategory(categoryName, SubCategoryName);
+    }
+
+    public Response removeSubCategory(String category, String name) {
+        return category_service.removeSubCategory(category, name);
+    }
+
+    public ResponseT<SubCategory> getSubCategory(String category, String name) {
+        return category_service.getSubCategory(category, name);
+    }
+
+    public Response addSubSubCategory(String category, String sub_category, String name) {
+        return category_service.addSubSubCategory(category, sub_category, name);
+    }
+
+    public Response removeSubSubCategory(String category, String sub_category, String name) {
+        return category_service.removeSubSubCategory(category, sub_category, name);
+    }
 
     public void updateCategoryManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
         product_service.updateCategoryManDiscount(discount, start_date, end_date, category, sub_category, subsub_category);
     }
 
-    public void updateCategoryCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
-        product_service.updateCategoryCusDiscount(discount, start_date, end_date, category, sub_category, subsub_category);
+    public Response updateCategoryCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
+        return product_service.updateCategoryCusDiscount(discount, start_date, end_date, category, sub_category, subsub_category);
     }
 
     public void updateProductManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) {
         product_service.updateProductManDiscount(discount, start_date, end_date, product_id);
     }
 
-    public void updateProductCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) {
-        product_service.updateProductManDiscount(discount, start_date, end_date, product_id);
+    public Response updateProductCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) {
+        return product_service.updateProductManDiscount(discount, start_date, end_date, product_id);
     }
 
     public void updateItemManDiscount(int product_id, int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) {
         product_service.updateItemManDiscount(product_id, item_id, discount, start_date, end_date);
     }
 
-    public void updateItemCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id, int item_id) {
-        product_service.updateItemCusDiscount(product_id, item_id, discount, start_date, end_date);
+    public Response updateItemCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id, int item_id) {
+        return product_service.updateItemCusDiscount(product_id, item_id, discount, start_date, end_date);
     }
 
-    public void updateProductManPrice(int product_id, double price) {
-        product_service.updateProductManPrice(product_id, price);
+    public Response updateProductManPrice(int product_id, double price) {
+        return product_service.updateProductManPrice(product_id, price);
     }
 
-    public void updateProductCusPrice(int product_id, double price) {
-        product_service.updateProductCusPrice(product_id, price);
+    public Response updateProductCusPrice(int product_id, double price) {
+        return product_service.updateProductCusPrice(product_id, price);
     }
 
-    public void addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
-        product_service.addProduct(name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category);
+    public Response addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
+        return product_service.addProduct(name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category);
     }
 
-    public void removeProduct(int id) {
-        product_service.removeProduct(id);
+    public Response removeProduct(int id) {
+        return product_service.removeProduct(id);
     }
 
-    public void addItem(int product_id, String store, String location, String supplier, LocalDateTime expiration_date, boolean on_shelf) {
-        product_service.addItem(product_id, store, location, supplier, expiration_date, on_shelf);
+    public Response addItem(int product_id, String store, String location, String supplier, LocalDateTime expiration_date, boolean on_shelf) {
+        return product_service.addItem(product_id, store, location, supplier, expiration_date, on_shelf);
     }
 
-    public void removeItem(int product_id, int item_id) {
-        product_service.removeItem(product_id, item_id);
+    public Response removeItem(int product_id, int item_id) {
+        return product_service.removeItem(product_id, item_id);
     }
 
-    public void updateItemDefect(int product_id, int item_id, boolean is_defect, String defect_reporter) {
-        product_service.updateItemDefect(product_id, item_id, is_defect, defect_reporter);
+    public Response updateItemDefect(int product_id, int item_id, boolean is_defect, String defect_reporter) {
+        return product_service.updateItemDefect(product_id, item_id, is_defect, defect_reporter);
     }
 
-    public String getItemLocation(int product_id, int item_id) {
+    public ResponseT<String> getItemLocation(int product_id, int item_id) {
         return product_service.getItemLocation(product_id, item_id);
     }
 
-    public void changeItemLocation(int product_id, int item_id, String location) {
-        product_service.changeItemLocation(product_id, item_id, location);
+    public Response changeItemLocation(int product_id, int item_id, String location) {
+        return product_service.changeItemLocation(product_id, item_id, location);
     }
 
-    public void changeItemOnShelf(int product_id, int item_id, boolean on_shelf) {
-        product_service.changeItemOnShelf(product_id, item_id, on_shelf);
+    public Response changeItemOnShelf(int product_id, int item_id, boolean on_shelf) {
+        return product_service.changeItemOnShelf(product_id, item_id, on_shelf);
     }
-    public void removeReport(int id) {report_service.removeReport(id);}
-    public Report getReport(int id) {return report_service.getReport(id);}
-    public MissingReport createMissingReport(String name, int id, String report_producer) {return report_service.createMissingReport(name, id, report_producer);}
-    public ServiceLayer.Objects.ExpiredReport createExpiredReport(String name, int id, String report_producer){return report_service.createExpiredReport(name, id, report_producer);}
-    public ServiceLayer.Objects.SurplusesReport createSurplusesReport(String name, int id, String report_producer){return report_service.createSurplusesReport(name, id, report_producer);}
-    public ServiceLayer.Objects.DefectiveReport createDefectiveReport(String name, int id, String report_producer){return report_service.createDefectiveReport(name, id, report_producer);}
-    public ServiceLayer.Objects.bySupplierReport createBySupplierReport(String name, int id, String report_producer, String suppName){return report_service.createBySupplierReport(name, id, report_producer, suppName);}
-    public ServiceLayer.Objects.byProductReport createByProductReport(String name, int id, String report_producer, String proName){return report_service.createByProductReport(name, id, report_producer, proName);}
-    public ServiceLayer.Objects.byCategoryReport createByCategoryReport(String name, int id, String report_producer, String CatName, String subCatName, String subSubCatName)
-    {return report_service.createByCategoryReport(name, id, report_producer, CatName, subCatName, subSubCatName);}
+
+    public ResponseT<MissingReport> createMissingReport(String name, int id, String report_producer) {
+        return report_service.createMissingReport(name, id, report_producer);
+    }
+
+    public ResponseT<ServiceLayer.Objects.ExpiredReport> createExpiredReport(String name, int id, String report_producer) {
+        return report_service.createExpiredReport(name, id, report_producer);
+    }
+
+    public ResponseT<ServiceLayer.Objects.SurplusesReport> createSurplusesReport(String name, int id, String report_producer) {
+        return report_service.createSurplusesReport(name, id, report_producer);
+    }
+
+    public ResponseT<ServiceLayer.Objects.DefectiveReport> createDefectiveReport(String name, int id, String report_producer) {
+        return report_service.createDefectiveReport(name, id, report_producer);
+    }
+
+    public ResponseT<ServiceLayer.Objects.bySupplierReport> createBySupplierReport(String name, int id, String report_producer, String suppName) {
+        return report_service.createBySupplierReport(name, id, report_producer, suppName);
+    }
+
+    public ResponseT<ServiceLayer.Objects.byProductReport> createByProductReport(String name, int id, String report_producer, String proName) {
+        return report_service.createByProductReport(name, id, report_producer, proName);
+    }
+
+    public ResponseT<ServiceLayer.Objects.byCategoryReport> createByCategoryReport(String name, int id, String report_producer, String CatName, String subCatName, String subSubCatName) {
+        return report_service.createByCategoryReport(name, id, report_producer, CatName, subCatName, subSubCatName);
+    }
+
+    public Response removeReport(int id) {
+        return report_service.removeReport(id);
+    }
+
+    public ResponseT<Report> getReport(int id) {
+        return report_service.getReport(id);
+    }
 
 
 }

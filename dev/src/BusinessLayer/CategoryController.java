@@ -1,9 +1,6 @@
 package BusinessLayer;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CategoryController {
 
@@ -11,23 +8,22 @@ public class CategoryController {
 
     private static CategoryController categoryController;
 
-    public static CategoryController getInstance()
-    {
-        if (categoryController==null)
-            categoryController= new CategoryController();
+    public static CategoryController getInstance() {
+        if (categoryController == null)
+            categoryController = new CategoryController();
         return categoryController;
     }
 
-    private CategoryController(){
+    private CategoryController() {
         categories = new HashMap<>();
     }
 
-    public void addCategory(String name){
+    public void addCategory(String name) {
         if (categories.containsKey(name))
             throw new IllegalArgumentException("The categories already exists in the system");
         else {
             Category category = new Category(name);
-            categories.put(name,category);
+            categories.put(name, category);
         }
     }
 
@@ -62,6 +58,7 @@ public class CategoryController {
             category.removeSubCategory(SubCategoryName);
         }
     }
+
     public SubCategory getSubCategory(String categoryName, String SubCategoryName) {
         if (!categories.containsKey(categoryName))
             throw new IllegalArgumentException("Category doesn't exists");
@@ -76,7 +73,7 @@ public class CategoryController {
             throw new IllegalArgumentException("Category doesn't exists");
         else {
             Category category = categories.get(categoryName);
-            SubCategory subCategory= category.getSubCategory(sub_category);
+            SubCategory subCategory = category.getSubCategory(sub_category);
             subCategory.addSubSubCategory(name);
         }
     }
@@ -86,17 +83,22 @@ public class CategoryController {
             throw new IllegalArgumentException("Category doesn't exists");
         else {
             Category category = categories.get(categoryName);
-            SubCategory subCategory= category.getSubCategory(sub_category);
+            SubCategory subCategory = category.getSubCategory(sub_category);
             subCategory.removeSubSubCategory(name);
         }
     }
 
     public static List<String> getCategoriesNames() {
-        List<String> CategoriesNames = new LinkedList<>();
-        for (Map.Entry<String, Category> entry : categories.entrySet()) {
-            CategoriesNames.add(entry.getKey());
-        }
-        return CategoriesNames;
+//        List<String> CategoriesNames = new LinkedList<>();
+//        for (Map.Entry<String, Category> entry : categories.entrySet()) {
+//            CategoriesNames.add(entry.getKey());
+//        }
+//        return CategoriesNames;
+        return new ArrayList<>(categories.keySet());
+    }
+
+    public static Map<String, Category> getCategories() {
+        return categories;
     }
 }
 
