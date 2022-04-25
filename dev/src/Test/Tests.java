@@ -47,7 +47,7 @@ public class Tests {
         destinations.add(d1);
         String dInStr = "2022-09-09";
         LocalDate localDate = LocalDate.parse(dInStr);
-        LocalDateTime datetime = localDate.atTime(1,50,9);
+        LocalDateTime datetime = localDate.atTime(1,50,0);
         ProductForTrucking productForTrucking = new ProductForTrucking(Water_7290019056966,2);
         List prods= new LinkedList();
         prods.add(productForTrucking);
@@ -91,7 +91,7 @@ public class Tests {
     }
     @Test
     public void loginLogoutTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), true);
+        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         try {
             Assert.assertEquals(userController.login("ramiF","rami1Rami1"),true);
         }
@@ -111,7 +111,7 @@ public class Tests {
 
     @Test
     public void addVehiclesTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), true);
+        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         try {
             truckManagerController.addVehicle(DLicense.C,"45345E642","volvo",12,14);
         }
@@ -140,7 +140,7 @@ public class Tests {
 
     @Test
     public void addSitesTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), true);
+        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         try {
             Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,500,3,Area.center);
         }
@@ -184,21 +184,21 @@ public class Tests {
 
     @Test
     public void addlegalTruckingsTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), true);
+        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking3();
         createTrucking4();
     }
 
     @Test
     public void addIllegalTruckingsTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), true);
+        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking1();
         createTrucking2();
     }
 
     @Test
     public void checkBoardTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), true);
+        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking3();
         createTrucking4();
         Assert.assertEquals(userController.logout(), true);
@@ -207,7 +207,7 @@ public class Tests {
         Assert.assertEquals(driverController.printMyFutureTruckings().contains("herzliya"), true);
         Assert.assertEquals(driverController.printMyTruckingsHistory().contains("herzliya"), false);
         Assert.assertEquals(userController.logout(), true);
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), true);
+        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         Assert.assertEquals(truckManagerController.printFutureTruckings().contains("herzliya"), true);
         Assert.assertEquals(truckManagerController.getVehiclesRegistrationPlates().get(0), "45345642");
         Assert.assertEquals(truckManagerController.printBoardOfDriver("tam1Tamir1").contains("herzliya"), true);
@@ -215,7 +215,7 @@ public class Tests {
 
     @Test
     public void updateTruckTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), true);
+        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking3();
         createTrucking4();
         Site s2 = new Site("halfree", "herzliya", "0543397993", "davidHamelech", 2, 4, 3, Area.center);
@@ -270,7 +270,7 @@ public class Tests {
         destinations.add(d1);
         String dInStr = "2022-09-09";
         LocalDate localDate = LocalDate.parse(dInStr);
-        LocalDateTime datetime = localDate.atTime(1,55,9);
+        LocalDateTime datetime = localDate.atTime(1,55,0);
         ProductForTrucking productForTrucking = new ProductForTrucking(Water_7290019056966,2);
         List prods= new LinkedList();
         prods.add(productForTrucking);
@@ -289,15 +289,18 @@ public class Tests {
         sources.add(s1);
         List destinations = new LinkedList();
         destinations.add(d1);
-        String dInStr = "2022-08-09";
+        String dInStr = "2022-09-09";
         LocalDate localDate = LocalDate.parse(dInStr);
         LocalDateTime datetime = localDate.atTime(1,20,9);
-        ProductForTrucking productForTrucking = new ProductForTrucking(Water_7290019056966,2);
+        ProductForTrucking productForTrucking = new ProductForTrucking(Water_7290019056966,1);
         List prods= new LinkedList();
         prods.add(productForTrucking);
-        truckManagerController.addTrucking("12345642",datetime,"ramiF", sources,destinations,prods,1,30);
-        Assert.assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("tamirStr"), true);
-
+        try {
+            truckManagerController.addTrucking("45345642",datetime,"ramiF", sources,destinations,prods,1,30);
+        }
+        catch (Exception e) {
+            Assert.assertEquals(e.getMessage(),"Oops, there is another trucking at the same date and with the same vehicle");
+        }
     }
     private void createTrucking4 () throws Exception {
         Site s1 = new Site("tamirHouse","batYam","0543397995","tamirStr",13,2,3,Area.center);
