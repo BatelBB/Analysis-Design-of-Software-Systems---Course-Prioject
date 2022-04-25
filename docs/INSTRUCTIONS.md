@@ -1,10 +1,12 @@
 # ADSS Group K Employees TUI Instructions
 
+![](hrms-welcome.png)
+
 ## Quick Start
 
 Once the program starts, you will be greeted with a prompt for commands.
 
-For general help and command list, type any unknown command.
+For general help and command list, type the `help` command.
 For help about a specific command, type said command without arguments.
 For example, for `create employee`, input `create employee` for help.
 
@@ -46,6 +48,8 @@ The following commands are supported:
 * `add shift staff`.
 * `delete shift staff`.
 * `update shift required role`.
+* `list shifts`.
+* `can work`.
 
 All example commands should work when using the provided sample data (`load sample` command).
 

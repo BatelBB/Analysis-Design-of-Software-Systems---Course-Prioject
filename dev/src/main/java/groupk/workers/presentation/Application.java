@@ -11,10 +11,9 @@ public class Application {
             keepGoing.set(false);
         });
 
+        tui.startupPrompt();
+
         Scanner input = new Scanner(System.in);
-
-        System.out.println( "Hello World!" );
-
         while(keepGoing.get()) {
             System.out.print("> ");
             String command = input.nextLine();

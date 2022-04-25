@@ -17,6 +17,20 @@ public class TUI {
         this.onStop = onStop;
     }
 
+    public void startupPrompt() {
+        System.out.println(" ___  ___  ________  _____ ______   ________      ");
+        System.out.println("|\\  \\|\\  \\|\\   __  \\|\\   _ \\  _   \\|\\   ____\\     ");
+        System.out.println("\\ \\  \\\\\\  \\ \\  \\|\\  \\ \\  \\\\\\__\\ \\  \\ \\  \\___|_    ");
+        System.out.println(" \\ \\   __  \\ \\   _  _\\ \\  \\\\|__| \\  \\ \\_____  \\   ");
+        System.out.println("  \\ \\  \\ \\  \\ \\  \\\\  \\\\ \\  \\    \\ \\  \\|____|\\  \\  ");
+        System.out.println("   \\ \\__\\ \\__\\ \\__\\\\ _\\\\ \\__\\    \\ \\__\\____\\_\\  \\ ");
+        System.out.println("    \\|__|\\|__|\\|__|\\|__|\\|__|     \\|__|\\_________\\");
+        System.out.println("                                      \\|_________|");
+        System.out.println("Welcome to Human Resources Management System.");
+        System.out.println("");
+        System.out.println("For usage information run the 'help' command.");
+    }
+
     public void handleCommand(String command) {
         if (command.startsWith("create employee")) {
             handleCreateEmployee(command);
@@ -84,23 +98,27 @@ public class TUI {
             return;
         }
 
-        System.out.println("Error: command must be one of the following:");
-        System.out.println("  load sample");
-        System.out.println("  login");
-        System.out.println("  quit");
-        System.out.println("  create employee");
-        System.out.println("  get employee");
-        System.out.println("  delete employee");
-        System.out.println("  update employee");
-        System.out.println("  list employees");
-        System.out.println("  add shift preference");
-        System.out.println("  delete shift preference");
-        System.out.println("  create shift");
-        System.out.println("  list shifts");
-        System.out.println("  can work");
-        System.out.println("  add shift staff");
-        System.out.println("  delete shift staff");
-        System.out.println("  update shift required role");
+        if (command.equals("help")) {
+            System.out.println("Available commands:");
+        } else {
+            System.out.println("Error: command must be one of the following:");
+        }
+        System.out.println("  load sample                   Load included demonstration sample.");
+        System.out.println("  login                         Login as an employee.");
+        System.out.println("  quit                          Quit the system. ALL DATA WILL BE LOST.");
+        System.out.println("  create employee               Create a new employee.");
+        System.out.println("  get employee                  Get details of a specific employee.");
+        System.out.println("  delete employee               Delete an employee.");
+        System.out.println("  update employee               Update employee details.");
+        System.out.println("  list employees                List all employees.");
+        System.out.println("  add shift preference          Add shift preference to an employee.");
+        System.out.println("  delete shift preference       Delete employee's shift preference.");
+        System.out.println("  create shift                  Create new shift.");
+        System.out.println("  list shifts                   List past and future shifts.");
+        System.out.println("  can work                      List staff who can work at date and time.");
+        System.out.println("  add shift staff               Add staff to shift.");
+        System.out.println("  delete shift staff            Remove staff from shift.");
+        System.out.println("  update shift required role    Update required roles in shift.");
         System.out.println("Usage:");
         System.out.println("> <command> [arguments]");
         System.out.println("For command specific help, run the command without arguments.");
@@ -484,7 +502,7 @@ public class TUI {
         }
 
         try {
-            service.addEmployeeToShift(subject, date, type, args[5]);
+            service.removeEmployeeFromShift(subject, date, type, args[5]);
             System.out.println("added employee to shift.");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
