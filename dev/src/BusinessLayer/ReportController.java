@@ -5,9 +5,9 @@ import java.util.List;
 
 public class ReportController {
 
-    private static Map<String, Report> reports;
+    private Map<String, Report> reports;
 
-    private ProductController product_controller;
+    private final ProductController product_controller;
 
     private static ReportController reportController;
 
@@ -22,7 +22,7 @@ public class ReportController {
         reports = new HashMap<>();
     }
 
-    public static List<Integer> getReportListNames() {
+    public List<Integer> getReportListNames() {
         List<Integer> ReportListNames = new LinkedList<>();
         for (Map.Entry<String, Report> entry : reports.entrySet()) {
             ReportListNames.add(Integer.valueOf(entry.getKey()));

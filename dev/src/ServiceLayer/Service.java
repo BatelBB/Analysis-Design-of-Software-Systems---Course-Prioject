@@ -20,7 +20,7 @@ public class Service {
     }
 
     public ResponseT<List<String>> getCategoriesNames() {
-        return CategoryService.getCategoriesNames();
+        return category_service.getCategoriesNames();
     }
 
     public ResponseT<List<String>> getProductIdes() {
@@ -28,7 +28,7 @@ public class Service {
     }
 
     public ResponseT<List<Integer>> getReportListNames() {
-        return ReportService.getReportListNames();
+        return report_service.getReportListNames();
     }
 
     public Response addCategory(String name) {

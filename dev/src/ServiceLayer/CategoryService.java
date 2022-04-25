@@ -7,15 +7,15 @@ import BusinessLayer.SubCategory;
 import java.util.List;
 
 public class CategoryService {
-    private final CategoryController categoryController;
+    private final CategoryController category_controller;
 
     public CategoryService() {
-        categoryController = CategoryController.getInstance();
+        category_controller = CategoryController.getInstance();
     }
 
-    public static ResponseT<List<String>> getCategoriesNames() {
+    public ResponseT<List<String>> getCategoriesNames() {
         try {
-            return ResponseT.fromValue(CategoryController.getCategoriesNames());
+            return ResponseT.fromValue(category_controller.getCategoriesNames());
         } catch (Exception e) {
             return ResponseT.fromError(e.getMessage());
         }
@@ -24,7 +24,7 @@ public class CategoryService {
 
     public Response addCategory(String name) {
         try {
-            categoryController.addCategory(name);
+            category_controller.addCategory(name);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
@@ -33,7 +33,7 @@ public class CategoryService {
 
     public Response removeCategory(String name) {
         try {
-            categoryController.removeCategory(name);
+            category_controller.removeCategory(name);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
@@ -42,7 +42,7 @@ public class CategoryService {
 
     public ResponseT<ServiceLayer.Objects.Category> getCategory(String name) {
         try {
-            Category category = categoryController.getCategory(name);
+            Category category = category_controller.getCategory(name);
             return ResponseT.fromValue(new ServiceLayer.Objects.Category(category));
         } catch (Exception e) {
             return ResponseT.fromError(e.getMessage());
@@ -51,7 +51,7 @@ public class CategoryService {
 
     public Response addSubCategory(String categoryName, String SubCategoryName) {
         try {
-            categoryController.addSubCategory(categoryName, SubCategoryName);
+            category_controller.addSubCategory(categoryName, SubCategoryName);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
@@ -60,7 +60,7 @@ public class CategoryService {
 
     public Response removeSubCategory(String category, String name) {
         try {
-            categoryController.removeSubCategory(category, name);
+            category_controller.removeSubCategory(category, name);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
@@ -69,7 +69,7 @@ public class CategoryService {
 
     public ResponseT<ServiceLayer.Objects.SubCategory> getSubCategory(String categoryName, String SubCategoryName) {
         try {
-            SubCategory subCategory = categoryController.getSubCategory(categoryName, SubCategoryName);
+            SubCategory subCategory = category_controller.getSubCategory(categoryName, SubCategoryName);
             return ResponseT.fromValue(new ServiceLayer.Objects.SubCategory(subCategory));
         } catch (Exception e) {
             return ResponseT.fromError(e.getMessage());
@@ -78,7 +78,7 @@ public class CategoryService {
 
     public Response addSubSubCategory(String category, String sub_category, String name) {
         try {
-            categoryController.addSubSubCategory(category, sub_category, name);
+            category_controller.addSubSubCategory(category, sub_category, name);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
@@ -87,7 +87,7 @@ public class CategoryService {
 
     public Response removeSubSubCategory(String category, String sub_category, String name) {
         try {
-            categoryController.removeSubSubCategory(category, sub_category, name);
+            category_controller.removeSubSubCategory(category, sub_category, name);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
@@ -96,6 +96,6 @@ public class CategoryService {
     }
 
     public void restart() {
-        categoryController.restart();
+        category_controller.restart();
     }
 }

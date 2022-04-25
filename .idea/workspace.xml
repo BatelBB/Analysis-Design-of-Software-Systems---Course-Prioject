@@ -3,15 +3,19 @@
   <component name="ChangeListManager">
     <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="first imp of Response">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/Tests/ServiceLayer/ServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/Tests/ServiceLayer/ServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/src/PresentationLayer/PresentationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/PresentationLayer/PresentationModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/CategoryController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/CategoryController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ProductController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ProductController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ReportController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ReportController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/PresentationLayer/PresentationModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/PresentationLayer/PresentationModel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/CategoryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/CategoryService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/ReportService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/ReportService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Service.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Service.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +51,11 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "settings.editor.selected.configurable": "preferences.lookFeel"
+  }
+}]]></component>
   <component name="RunManager" selected="JUnit.ServiceTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="PresentationLayer.Main" />
@@ -164,7 +173,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -190,25 +198,14 @@
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/src/BusinessLayer/ProductController.java</url>
+          <line>20</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java</url>
-          <line>16</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/dev/Tests/ServiceLayer/ServiceTest.java</url>
-          <line>116</line>
-          <properties class="ServiceLayer.ServiceTest" method="addProduct">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/dev/Tests/ServiceLayer/ServiceTest.java</url>
-          <line>34</line>
-          <properties class="ServiceLayer.ServiceTest" method="setData">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="6" />
+          <line>22</line>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

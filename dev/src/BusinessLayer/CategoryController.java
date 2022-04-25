@@ -8,16 +8,17 @@ import java.util.Map;
 
 public class CategoryController {
 
-    private static Map<String, Category> categories;
+    private Map<String, Category> categories;
+    private static CategoryController category_controller;
 
-    private static CategoryController categoryController;
-
+    //singleton instance
     public static CategoryController getInstance() {
-        if (categoryController == null)
-            categoryController = new CategoryController();
-        return categoryController;
+        if (category_controller == null)
+            category_controller = new CategoryController();
+        return category_controller;
     }
 
+    //constructor
     private CategoryController() {
         categories = new HashMap<>();
     }
@@ -92,7 +93,7 @@ public class CategoryController {
         }
     }
 
-    public static List<String> getCategoriesNames() {
+    public List<String> getCategoriesNames() {
 //        List<String> CategoriesNames = new LinkedList<>();
 //        for (Map.Entry<String, Category> entry : categories.entrySet()) {
 //            CategoriesNames.add(entry.getKey());
@@ -101,7 +102,7 @@ public class CategoryController {
         return new ArrayList<>(categories.keySet());
     }
 
-    public static Map<String, Category> getCategories() {
+    public Map<String, Category> getCategories() {
         return categories;
     }
 

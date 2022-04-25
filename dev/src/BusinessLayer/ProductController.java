@@ -6,7 +6,7 @@ import java.util.*;
 public class ProductController {
     private int product_ids;
     private Map<String, Product> products;
-    private CategoryController category_controller= CategoryController.getInstance();
+    private final CategoryController category_controller;
     private static ProductController product_controller;
 
     //singleton instance
@@ -20,7 +20,7 @@ public class ProductController {
     private ProductController() {
         product_ids = 0;
         products = new HashMap<>();
-//        category_controller = CategoryController.getInstance();
+        category_controller = CategoryController.getInstance();
     }
 
     //methods
@@ -133,7 +133,7 @@ public class ProductController {
     }
 
     public void addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
-        if (CategoryController.getCategories().containsKey(category) && CategoryController.getCategories().get(category).getSubC().containsKey(sub_category) && CategoryController.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().containsKey(subsub_category)) {
+        if (category_controller.getCategories().containsKey(category) && category_controller.getCategories().get(category).getSubC().containsKey(sub_category) && category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().containsKey(subsub_category)) {
             if (name == null || name.equals("")) throw new Exception("product name empty");
             if (manufacturer == null || manufacturer.equals("")) throw new Exception("product name empty");
             priceLegal(man_price);

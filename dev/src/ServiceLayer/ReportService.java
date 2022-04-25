@@ -8,15 +8,15 @@ import java.util.List;
 
 public class ReportService {
 
-    private final ReportController reportController;
+    private final ReportController report_controller;
 
     public ReportService() {
-        reportController = ReportController.getInstance();
+        report_controller = ReportController.getInstance();
     }
 
-    public static ResponseT<List<Integer>> getReportListNames() {
+    public ResponseT<List<Integer>> getReportListNames() {
         try {
-            return ResponseT.fromValue(ReportController.getReportListNames());
+            return ResponseT.fromValue(report_controller.getReportListNames());
         } catch (Exception e) {
             return ResponseT.fromError(e.getMessage());
         }
@@ -24,7 +24,7 @@ public class ReportService {
 
     public Response removeReport(int id) {
         try {
-            reportController.removeReport(id);
+            report_controller.removeReport(id);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
@@ -33,7 +33,7 @@ public class ReportService {
 
     public ResponseT<Report> getReport(int id) {
         try {
-            return ResponseT.fromValue(new Report(reportController.getReport(id)));
+            return ResponseT.fromValue(new Report(report_controller.getReport(id)));
         } catch (Exception e) {
             return ResponseT.fromError(e.getMessage());
         }
@@ -41,7 +41,7 @@ public class ReportService {
 
     public ResponseT<MissingReport> createMissingReport(String name, int id, String report_producer) {
         try {
-            BusinessLayer.MissingReport report = reportController.createMissingReport(name, id, report_producer);
+            BusinessLayer.MissingReport report = report_controller.createMissingReport(name, id, report_producer);
             return ResponseT.fromValue(new MissingReport(report));
         } catch (Exception e) {
             return ResponseT.fromError(e.getMessage());
@@ -50,7 +50,7 @@ public class ReportService {
 
     public ResponseT<ServiceLayer.Objects.ExpiredReport> createExpiredReport(String name, int id, String report_producer) {
         try {
-            BusinessLayer.ExpiredReport report = reportController.createExpiredReport(name, id, report_producer);
+            BusinessLayer.ExpiredReport report = report_controller.createExpiredReport(name, id, report_producer);
             return ResponseT.fromValue(new ServiceLayer.Objects.ExpiredReport(report));
         } catch (Exception e) {
             return ResponseT.fromError(e.getMessage());
@@ -59,7 +59,7 @@ public class ReportService {
 
     public ResponseT<ServiceLayer.Objects.SurplusesReport> createSurplusesReport(String name, int id, String report_producer) {
         try {
-            BusinessLayer.SurplusesReport report = reportController.createSurplusesReport(name, id, report_producer);
+            BusinessLayer.SurplusesReport report = report_controller.createSurplusesReport(name, id, report_producer);
             return ResponseT.fromValue(new ServiceLayer.Objects.SurplusesReport(report));
         } catch (Exception e) {
             return ResponseT.fromError(e.getMessage());
@@ -68,7 +68,7 @@ public class ReportService {
 
     public ResponseT<ServiceLayer.Objects.DefectiveReport> createDefectiveReport(String name, int id, String report_producer) {
         try {
-            BusinessLayer.DefectiveReport report = reportController.createDefectiveReport(name, id, report_producer);
+            BusinessLayer.DefectiveReport report = report_controller.createDefectiveReport(name, id, report_producer);
             return ResponseT.fromValue(new ServiceLayer.Objects.DefectiveReport(report));
         } catch (Exception e) {
             return ResponseT.fromError(e.getMessage());
@@ -77,7 +77,7 @@ public class ReportService {
 
     public ResponseT<ServiceLayer.Objects.bySupplierReport> createBySupplierReport(String name, int id, String report_producer, String suppName) {
         try {
-            BusinessLayer.bySupplierReport report = reportController.createBySupplierReport(name, id, report_producer, suppName);
+            BusinessLayer.bySupplierReport report = report_controller.createBySupplierReport(name, id, report_producer, suppName);
             return ResponseT.fromValue(new ServiceLayer.Objects.bySupplierReport(report));
         } catch (Exception e) {
             return ResponseT.fromError(e.getMessage());
@@ -86,7 +86,7 @@ public class ReportService {
 
     public ResponseT<ServiceLayer.Objects.byProductReport> createByProductReport(String name, int id, String report_producer, String proName) {
         try {
-            BusinessLayer.byProductReport report = reportController.createByProductReport(name, id, report_producer, proName);
+            BusinessLayer.byProductReport report = report_controller.createByProductReport(name, id, report_producer, proName);
             return ResponseT.fromValue(new ServiceLayer.Objects.byProductReport(report));
         } catch (Exception e) {
             return ResponseT.fromError(e.getMessage());
@@ -95,7 +95,7 @@ public class ReportService {
 
     public ResponseT<ServiceLayer.Objects.byCategoryReport> createByCategoryReport(String name, int id, String report_producer, String CatName, String subCatName, String subSubCatName) {
         try {
-            BusinessLayer.byCategoryReport report = reportController.createByCategoryReport(name, id, report_producer, CatName, subCatName, subSubCatName);
+            BusinessLayer.byCategoryReport report = report_controller.createByCategoryReport(name, id, report_producer, CatName, subCatName, subSubCatName);
             return ResponseT.fromValue(new ServiceLayer.Objects.byCategoryReport(report));
         } catch (Exception e) {
             return ResponseT.fromError(e.getMessage());
@@ -104,6 +104,6 @@ public class ReportService {
 
 
     public void restart() {
-        reportController.restart();
+        report_controller.restart();
     }
 }
