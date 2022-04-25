@@ -12,4 +12,11 @@ public class ExpiredReport extends Report {
     }
 
     public List<ProductItem> getExpiredPro() { return ExpiredPro; }
+    public String toString(){
+        String s= super.toString()+ "The expired products items are:\n";
+        for (ProductItem p:ExpiredPro) {
+            s=s+p.getId()+"\n";
+        }
+        return s;
+    }
 }

@@ -107,7 +107,7 @@ public class ReportController {
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
             List<ProductItem> bySupplierPro = product_controller.getItemsBySupplier(suppName);
-            bySupplierReport report = new bySupplierReport(name, id, report_producer, bySupplierPro);
+            bySupplierReport report = new bySupplierReport(name, id, report_producer, bySupplierPro, suppName);
             reports.put(Integer.toString(id), report);
             return report;
         }
@@ -118,7 +118,7 @@ public class ReportController {
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
             List<ProductItem> byProductPro = product_controller.getItemsByProduct(proName);
-            byProductReport report = new byProductReport(name, id, report_producer, byProductPro);
+            byProductReport report = new byProductReport(name, id, report_producer, byProductPro, proName);
             reports.put(Integer.toString(id), report);
             return report;
         }
@@ -129,7 +129,7 @@ public class ReportController {
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {
             List<Product> byCategoryPro = product_controller.getItemsByCategory(CatName, subCatName, subSubCatName);
-            byCategoryReport report = new byCategoryReport(name, id, report_producer, byCategoryPro);
+            byCategoryReport report = new byCategoryReport(name, id, report_producer, byCategoryPro, CatName);
             reports.put(Integer.toString(id), report);
             return report;
         }
