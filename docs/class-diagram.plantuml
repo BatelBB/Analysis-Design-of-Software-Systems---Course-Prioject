@@ -1,0 +1,111 @@
+@startuml
+package presentation {
+  class Application {}
+
+  class TUI {
+    - Service service
+    - Runnable onStop
+    - String subject
+  }
+
+  Application "1" *-- "1" TUI: Runs
+}
+
+package service {
+  class Service {
+    -Facade facade
+  }
+
+  package dto {
+    class service.dto.Employee {
+      +string id
+      +string name
+      +Role role
+      +string bank
+      +int bankBranch
+      +int bankID
+      +int salaryPerHour
+      +int sickDaysUsed
+      +int vacationDaysUsed
+      +Set<ShiftDateTime> shiftPreferences
+    }
+    
+    class service.dto.Shift {
+      +Employee[] staff
+      +HashMap<Role, Integer> requiredStaff
+      +Calendar date
+      +Type type
+    }
+
+    service.dto.Shift "*" *-- "*" service.dto.Employee: Works
+  }
+}
+
+package business {
+  class Facade {
+    -EmployeeController employees
+    -ShiftController shifts
+  }
+
+  class EmployeeController {
+    -EmployeeRepository repo
+  }
+
+  class ShiftController {
+    -ShiftRepository repo
+  }
+
+  Facade "1" *-- "1" EmployeeController: Uses
+  Facade "1" *-- "1" ShiftController: Uses
+}
+
+package data {
+  class Employee {
+    -string name
+    -string id
+    -BankAccount account
+    -WorkingConditions conditions
+    -Set<ShiftDateTime> availableShifts
+    -Role role
+  }
+
+  class WorkingConditions {
+    -Calendar employmentStart
+    -int salaryPerHour
+    -int sickDaysUsed
+    -int vacationDaysUsed
+  }
+
+  class BankAccount {
+    -string bank
+    -int bankBranch
+    -int bankID
+  }
+
+  class Shift {
+    -Type type
+    -Calendar date
+    -LinkedList<Employee> staff
+    -HashMap<Role, Integer> requiredStaff
+  }
+
+  class EmployeeRepository {
+    -HashMap<String, Employee> employees
+  }
+
+  class ShiftRepository {
+    -LinkedList<Shift> shifts
+  }
+
+  EmployeeRepository "1" *-- "*" Employee: Contains
+  Employee "1" *-- "1" WorkingConditions: Has
+  Employee "1" *-- "1" BankAccount: Has
+  ShiftRepository "1" *-- "*" Shift: Contains
+  Shift "*" *-- "*" Employee: Works
+}
+
+TUI "1" *-- "1" Service: Uses
+Service "1" *-- "1" Facade: Uses
+ShiftController "1" *-- "1" ShiftRepository: Uses
+EmployeeController "1" *-- "1" EmployeeRepository: Uses
+@enduml

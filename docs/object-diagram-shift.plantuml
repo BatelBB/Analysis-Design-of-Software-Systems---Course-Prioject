@@ -1,0 +1,60 @@
+@startuml
+object Shift {
+  type = Night
+  date = { 2022, 4, 23 }
+  requiredStaff = { Logistics: 0, Stocker: 0, Cashier: 1, Driver: 1, HumanResources: 0, LogisticsManager: 0, ShiftManager: 0, StoreManager: 0 }
+}
+
+Shift *-- EmployeeYossi
+Shift *-- EmployeeAvi
+
+
+object "Yossi: Employee" as EmployeeYossi {
+  name = "Yossi Luchim"
+  id = "111111111"
+  role = Cashier
+  availableShifts = { SaturdayEvening }
+}
+
+object "workingConditions: WorkingConditions" as WorkingConditionsYossi {
+  salaryPerHour = 35
+  sickDaysUsed = 0
+  vacationDaysUsed = 0
+  employmentStart = { 2021, 8, 26 }
+}
+
+object "bankAccount: BankAccount" as BankAccountYossi {
+  bank = "City Bank"
+  bankBranch = 27
+  bankID = 513683
+}
+
+EmployeeYossi *-- WorkingConditionsYossi
+EmployeeYossi *-- BankAccountYossi
+
+
+
+
+object "Avi: Employee" as EmployeeAvi {
+  name = "Avi Cohen"
+  id = "222222222"
+  role = Driver
+  availableShifts = { SaturdayEvening }
+}
+
+object "workingConditions: WorkingConditions" as WorkingConditionsAvi {
+  salaryPerHour = 35
+  sickDaysUsed = 4
+  vacationDaysUsed = 2
+  employmentStart = { 2022, 2, 16 }
+}
+
+object "bankAccount: BankAccount" as BankAccountAvi {
+  bank = "City Bank"
+  bankBranch = 27
+  bankID = 512473
+}
+
+EmployeeAvi *-- WorkingConditionsAvi
+EmployeeAvi *-- BankAccountAvi
+@enduml

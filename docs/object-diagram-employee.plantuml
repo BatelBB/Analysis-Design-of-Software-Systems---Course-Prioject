@@ -1,0 +1,23 @@
+@startuml
+object "Yossi: Employee" as Employee {
+  name = "Yossi Luchim"
+  id = "111111111"
+  role = Cashier
+  availableShifts = {}
+}
+
+object "workingConditions: WorkingConditions" as WorkingConditions {
+  salaryPerHour = 35
+  sickDaysUsed = 0
+  vacationDaysUsed = 0
+}
+
+object "bankAccount: BankAccount" as BankAccount {
+  bank = "City Bank"
+  bankBranch = 27
+  bankID = 513683
+}
+
+Employee *-- WorkingConditions
+Employee *-- BankAccount
+@enduml
