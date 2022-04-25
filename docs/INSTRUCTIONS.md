@@ -294,6 +294,8 @@ delete shift preference 999871163 FridayEvening
 
 Create a shift.
 
+It is recommended to use the `can work` command to pick employees for a shift before creating it.
+
 Only employees authenticated as HumanResources role may invoke this command.
 
 #### Usage
@@ -400,4 +402,32 @@ list shifts
 
 ```
 list shifts
+```
+
+### Can Work
+
+List employees who can work a specified shift, optionally filter employees of a certain role.
+
+Lists in CSV format for easy import to Excel, to allow incremental rollout of the new system.
+
+Only employees authenticated as HumanResources role may invoke this command.
+
+#### Usage
+
+```
+can work <date> <type>
+```
+
+```
+can work <date> <type> <role>
+```
+
+#### Example
+
+```
+can work 2022-04-24 Evening
+```
+
+```
+can work 2022-04-24 Evening Logistics
 ```

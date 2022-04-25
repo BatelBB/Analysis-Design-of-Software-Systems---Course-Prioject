@@ -66,6 +66,10 @@ public class TUI {
             handleUpdateShiftRequiredRole(command);
             return;
         }
+        if (command.startsWith("can work")) {
+            handleCanWork(command);
+            return;
+        }
 
         if (command.startsWith("login")) {
             handleLogin(command);
@@ -93,6 +97,7 @@ public class TUI {
         System.out.println("  delete shift preference");
         System.out.println("  create shift");
         System.out.println("  list shifts");
+        System.out.println("  can work");
         System.out.println("  add shift staff");
         System.out.println("  delete shift staff");
         System.out.println("  update shift required role");
@@ -269,6 +274,77 @@ public class TUI {
         service.addEmployeeShiftPreference("999072804", "999072804", Employee.ShiftDateTime.MondayMorning);
         service.addEmployeeShiftPreference("999072804", "999072804", Employee.ShiftDateTime.TuesdayEvening);
         service.addEmployeeShiftPreference("999072804", "999072804", Employee.ShiftDateTime.FridayEvening);
+    }
+
+    private void handleCanWork(String command) {
+        String[] args = command.split(" ");
+        if (args.length < 4 || 5 < args.length) {
+            System.out.println("Error: Too many arguments.");
+            System.out.println("Usage:");
+            System.out.println("> can work <date> <type>");
+            System.out.println("or:");
+            System.out.println("> can work <date> <type> <role>");
+            return;
+        }
+
+        String[] splitDate = args[2].split("-");
+        if (
+                splitDate.length != 3
+                        && splitDate[0].length() == 4
+                        && splitDate[1].length() == 2
+                        && splitDate[2].length() == 2
+        ) {
+            System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
+            return;
+        }
+        Calendar date;
+        try {
+            date = new GregorianCalendar(
+                    Integer.parseInt(splitDate[0]),
+                    // Why -1 you ask? Because the Java library can not even be consistent within
+                    // the arguments of a single constructor.
+                    Integer.parseInt(splitDate[1]) - 1,
+                    Integer.parseInt(splitDate[2]));
+        } catch (NumberFormatException e) {
+            System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
+            return;
+        }
+
+        Shift.Type type;
+        try {
+            type = Shift.Type.valueOf(args[3]);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: type must be either Morning or Evening.");
+            return;
+        }
+
+        Employee.ShiftDateTime shift = Employee.ShiftDateTime.values()[((date.get(Calendar.DAY_OF_WEEK)) - 1) * 2 + (type == Shift.Type.Evening ? 1 : 0)];
+
+        try {
+            List<Employee> canWork;
+            if (args.length == 4) {
+                // List all employees that can work at date.
+                canWork = service.WhoCanWork(subject, shift);
+            } else {
+                // List all employees of role that can work at date.
+                Employee.Role role;
+                try {
+                    role = Employee.Role.valueOf(args[4]);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Error: role must be one of the following:");
+                    System.out.println("Logistics, HumanResources, Stocker, Cashier, LogisticsManager, ShiftManager, Driver, StoreManager.");
+                    return;
+                }
+                canWork = service.WhoCanWorkWithRole(subject, shift, role);
+            }
+            System.out.println("id, name, role");
+            for (Employee employee: canWork) {
+                System.out.printf("%s, %s, %s\n", employee.id, employee.name, employee.role);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
     }
 
     private void handleListShifts(String command) {
