@@ -305,25 +305,25 @@ public class TUI {
             return;
         }
 
-        String[] splitDate = args[2].split("-");
-        if (
-                splitDate.length != 3
-                        && splitDate[0].length() == 4
-                        && splitDate[1].length() == 2
-                        && splitDate[2].length() == 2
-        ) {
-            System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
-            return;
-        }
         Calendar date;
         try {
+            String[] splitDate = args[2].split("-");
+            if (
+                    splitDate.length != 3
+                            && splitDate[0].length() == 4
+                            && splitDate[1].length() == 2
+                            && splitDate[2].length() == 2
+            ) {
+                System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
+                return;
+            }
             date = new GregorianCalendar(
                     Integer.parseInt(splitDate[0]),
                     // Why -1 you ask? Because the Java library can not even be consistent within
                     // the arguments of a single constructor.
                     Integer.parseInt(splitDate[1]) - 1,
                     Integer.parseInt(splitDate[2]));
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
             return;
         }
@@ -402,25 +402,25 @@ public class TUI {
             return;
         }
 
-        String[] splitDate = args[4].split("-");
-        if (
-                splitDate.length != 3
-                        && splitDate[0].length() == 4
-                        && splitDate[1].length() == 2
-                        && splitDate[2].length() == 2
-        ) {
-            System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
-            return;
-        }
         Calendar date;
         try {
+            String[] splitDate = args[4].split("-");
+            if (
+                    splitDate.length != 3
+                            && splitDate[0].length() == 4
+                            && splitDate[1].length() == 2
+                            && splitDate[2].length() == 2
+            ) {
+                System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
+                return;
+            }
             date = new GregorianCalendar(
                     Integer.parseInt(splitDate[0]),
                     // Why -1 you ask? Because the Java library can not even be consistent within
                     // the arguments of a single constructor.
                     Integer.parseInt(splitDate[1]) - 1,
                     Integer.parseInt(splitDate[2]));
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
             return;
         }
@@ -470,25 +470,25 @@ public class TUI {
             return;
         }
 
-        String[] splitDate = args[3].split("-");
-        if (
-                splitDate.length != 3
-                        && splitDate[0].length() == 4
-                        && splitDate[1].length() == 2
-                        && splitDate[2].length() == 2
-        ) {
-            System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
-            return;
-        }
         Calendar date;
         try {
+            String[] splitDate = args[3].split("-");
+            if (
+                    splitDate.length != 3
+                            && splitDate[0].length() == 4
+                            && splitDate[1].length() == 2
+                            && splitDate[2].length() == 2
+            ) {
+                System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
+                return;
+            }
             date = new GregorianCalendar(
                     Integer.parseInt(splitDate[0]),
                     // Why -1 you ask? Because the Java library can not even be consistent within
                     // the arguments of a single constructor.
                     Integer.parseInt(splitDate[1]) - 1,
                     Integer.parseInt(splitDate[2]));
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
             return;
         }
@@ -518,25 +518,25 @@ public class TUI {
             return;
         }
 
-        String[] splitDate = args[3].split("-");
-        if (
-                splitDate.length != 3
-                        && splitDate[0].length() == 4
-                        && splitDate[1].length() == 2
-                        && splitDate[2].length() == 2
-        ) {
-            System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
-            return;
-        }
         Calendar date;
         try {
+            String[] splitDate = args[3].split("-");
+            if (
+                    splitDate.length != 3
+                            && splitDate[0].length() == 4
+                            && splitDate[1].length() == 2
+                            && splitDate[2].length() == 2
+            ) {
+                System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
+                return;
+            }
             date = new GregorianCalendar(
                     Integer.parseInt(splitDate[0]),
                     // Why -1 you ask? Because the Java library can not even be consistent within
                     // the arguments of a single constructor.
                     Integer.parseInt(splitDate[1]) - 1,
                     Integer.parseInt(splitDate[2]));
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
             return;
         }
@@ -826,25 +826,25 @@ public class TUI {
             return;
         }
 
-        String[] splitDate = args[2].split("-");
-        if (
-                splitDate.length != 3
-                && splitDate[0].length() == 4
-                && splitDate[1].length() == 2
-                && splitDate[2].length() == 2
-        ) {
-            System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
-            return;
-        }
         Calendar date;
         try {
+            String[] splitDate = args[2].split("-");
+            if (
+                    splitDate.length != 3
+                            && splitDate[0].length() == 4
+                            && splitDate[1].length() == 2
+                            && splitDate[2].length() == 2
+            ) {
+                System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
+                return;
+            }
             date = new GregorianCalendar(
                     Integer.parseInt(splitDate[0]),
                     // Why -1 you ask? Because the Java library can not even be consistent within
                     // the arguments of a single constructor.
                     Integer.parseInt(splitDate[1]) - 1,
                     Integer.parseInt(splitDate[2]));
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             System.out.println("Error: date must follow yyyy-mm-dd format, for example 2022-04-25.");
             return;
         }
