@@ -2,9 +2,12 @@ package groupk.workers;
 
 import static org.junit.jupiter.api.Assertions.*;
 import groupk.workers.business.Facade;
+import groupk.workers.service.Service;
 import groupk.workers.service.dto.Employee;
 import groupk.workers.service.dto.Shift;
 import org.junit.jupiter.api.Test;
+import sun.awt.image.ImageWatched;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,6 +36,9 @@ public class BusinessTest {
     @Test
     public void testCreateBasicShift()
     {
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+            shiftPreferences.add(shiftDateTime);
         Facade facade = new Facade();
         Employee HR = facade.addEmployee(
                 "Foo",
@@ -43,7 +49,7 @@ public class BusinessTest {
                 30,
                 0, 0,
                 Employee.Role.HumanResources,
-                new HashSet<>()
+                shiftPreferences
         );
         Employee LM = facade.addEmployee(
                 "Foo",
@@ -54,7 +60,7 @@ public class BusinessTest {
                 30,
                 0, 0,
                 Employee.Role.LogisticsManager,
-                new HashSet<>()
+                shiftPreferences
         );
         Employee SM = facade.addEmployee(
                 "Foo",
@@ -65,7 +71,7 @@ public class BusinessTest {
                 30,
                 0, 0,
                 Employee.Role.StoreManager,
-                new HashSet<>()
+                shiftPreferences
         );
         Employee s = facade.addEmployee(
                 "Foo",
@@ -76,7 +82,7 @@ public class BusinessTest {
                 30,
                 0, 0,
                 Employee.Role.Stocker,
-                new HashSet<>()
+                shiftPreferences
         );
         Employee c = facade.addEmployee(
                 "Foo",
@@ -87,7 +93,7 @@ public class BusinessTest {
                 30,
                 0, 0,
                 Employee.Role.Cashier,
-                new HashSet<>()
+                shiftPreferences
         );
         Employee d = facade.addEmployee(
                 "Foo",
@@ -98,7 +104,7 @@ public class BusinessTest {
                 30,
                 0, 0,
                 Employee.Role.Driver,
-                new HashSet<>()
+                shiftPreferences
         );
         Employee l = facade.addEmployee(
                 "Foo",
@@ -109,8 +115,9 @@ public class BusinessTest {
                 30,
                 0, 0,
                 Employee.Role.Logistics,
-                new HashSet<>()
+                shiftPreferences
         );
+
         Employee ShM = facade.addEmployee(
                 "Foo",
                 "11180",
@@ -120,7 +127,7 @@ public class BusinessTest {
                 30,
                 0, 0,
                 Employee.Role.ShiftManager,
-                new HashSet<>()
+                shiftPreferences
         );
         LinkedList<Employee> em = new LinkedList<>();
         em.add(SM); em.add(HR); em.add(LM); em.add(s); em.add(d); em.add(ShM); em.add(c); em.add(l);
@@ -211,12 +218,29 @@ public class BusinessTest {
                 Employee.Role.HumanResources,
                 new HashSet<>()
         );
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime s : Employee.ShiftDateTime.values())
+            shiftPreferences.add(s);
+        Employee SM = facade.addEmployee(
+                "SM",
+                "11411110",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.ShiftManager,
+                shiftPreferences
+        );
+        LinkedList<Employee> em = new LinkedList<>();
+        em.add(SM);
         HashMap<Employee.Role, Integer> r = new HashMap<>();
         for(Employee.Role role : Employee.Role.values())
             r.put(role, 0);
-        Shift shift = facade.addShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, new LinkedList<>(), r);
+        r.replace(Employee.Role.ShiftManager, 1);
+        Shift shift = facade.addShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, em, r);
         facade.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
-        assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 1);
+        assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(), 2);
     }
 
     @Test
@@ -244,10 +268,27 @@ public class BusinessTest {
                 Employee.Role.HumanResources,
                 new HashSet<>()
         );
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime s : Employee.ShiftDateTime.values())
+            shiftPreferences.add(s);
+        Employee SM = facade.addEmployee(
+                "SM",
+                "11411110",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.ShiftManager,
+                shiftPreferences
+        );
+        LinkedList<Employee> em = new LinkedList<>();
+        em.add(SM);
         HashMap<Employee.Role, Integer> r = new HashMap<>();
         for(Employee.Role role : Employee.Role.values())
             r.put(role, 0);
-        Shift shift = facade.addShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, new LinkedList<>(), r);
+        r.replace(Employee.Role.ShiftManager, 1);
+        Shift shift = facade.addShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, em, r);
         assertThrows(Exception.class, () -> {
             facade.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id);
         });
@@ -280,12 +321,27 @@ public class BusinessTest {
                 Employee.Role.HumanResources,
                 new HashSet<>()
         );
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime s : Employee.ShiftDateTime.values())
+            shiftPreferences.add(s);
+        Employee SM = facade.addEmployee(
+                "SM",
+                "11411110",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.ShiftManager,
+                shiftPreferences
+        );
         HashMap<Employee.Role, Integer> r = new HashMap<>();
         for(Employee.Role role : Employee.Role.values())
             r.put(role, 0);
         r.replace(created.role, 1);
+        r.replace(Employee.Role.ShiftManager, 1);
         LinkedList<Employee> employees = new LinkedList<>();
-        employees.add(created);
+        employees.add(created); employees.add(SM);
         Shift shift = facade.addShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),
                 Shift.Type.Evening, employees, r);
         assertThrows(Exception.class, () -> {
@@ -349,12 +405,87 @@ public class BusinessTest {
                 Employee.Role.HumanResources,
                 new HashSet<>()
         );
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime s : Employee.ShiftDateTime.values())
+            shiftPreferences.add(s);
+        Employee SM = facade.addEmployee(
+                "SM",
+                "111141110",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.ShiftManager,
+                shiftPreferences
+        );
+        LinkedList<Employee> em = new LinkedList<>();
+        em.add(SM);
         HashMap<Employee.Role, Integer> r = new HashMap<>();
         for(Employee.Role role : Employee.Role.values())
             r.put(role, 0);
-        Shift shift = facade.addShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21), Shift.Type.Evening, new LinkedList<>(), r);
+        r.replace(Employee.Role.ShiftManager,1);
+        Shift shift = facade.addShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21), Shift.Type.Evening, em, r);
         assertThrows(Exception.class, () -> {
             facade.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, "111111111");
         });
+    }
+
+    @Test
+    public void testSetRequiredStaffInShift(){
+        Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
+        availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
+        Facade facade = new Facade();
+        Employee HR = facade.addEmployee(
+                "Foo",
+                "111111110",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.HumanResources,
+                new HashSet<>()
+        );
+        Employee created = facade.addEmployee(
+                "Foo",
+                "111111111",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.Cashier,
+                availableShifts
+        );
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime s : Employee.ShiftDateTime.values())
+            shiftPreferences.add(s);
+        Employee SM = facade.addEmployee(
+                "SM",
+                "11411110",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.ShiftManager,
+                shiftPreferences
+        );
+        LinkedList<Employee> em = new LinkedList<>();
+        em.add(created); em.add(SM);
+        HashMap<Employee.Role, Integer> r = new HashMap<>();
+        for(Employee.Role role : Employee.Role.values())
+            r.put(role, 0);
+        r.replace(Employee.Role.ShiftManager, 1);
+        r.replace(Employee.Role.Cashier, 1);
+        Shift shift = facade.addShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, em, r);
+        r.replace(Employee.Role.Cashier, 2);
+        assertThrows(Exception.class, () -> {
+            facade.setRequiredStaffInShift(HR.id, shift.getDate(), shift.getType(), r);
+        });
+        r.replace(Employee.Role.Cashier, 0);
+        facade.setRequiredStaffInShift(HR.id, shift.getDate(), shift.getType(), r);
+        assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().get(Employee.Role.Cashier),0);
     }
 }
