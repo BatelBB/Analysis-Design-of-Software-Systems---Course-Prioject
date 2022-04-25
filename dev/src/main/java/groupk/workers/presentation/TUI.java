@@ -126,7 +126,7 @@ public class TUI {
     }
 
     private void handleLoadSample() {
-        service.createEmployee(new Employee(
+        Employee HM1 = service.createEmployee(new Employee(
                 "999871163",
                 "Noam Levi",
                 Employee.Role.HumanResources,
@@ -140,7 +140,7 @@ public class TUI {
         service.addEmployeeShiftPreference("999871163", "999871163", Employee.ShiftDateTime.SundayMorning);
         service.addEmployeeShiftPreference("999871163", "999871163", Employee.ShiftDateTime.MondayMorning);
         service.addEmployeeShiftPreference("999871163", "999871163", Employee.ShiftDateTime.ThursdayMorning);
-        service.createEmployee(new Employee(
+        Employee HM2 = service.createEmployee(new Employee(
                 "999698780",
                 "David Perez",
                 Employee.Role.HumanResources,
@@ -154,7 +154,7 @@ public class TUI {
         service.addEmployeeShiftPreference("999698780", "999698780", Employee.ShiftDateTime.SundayMorning);
         service.addEmployeeShiftPreference("999698780", "999698780", Employee.ShiftDateTime.WednesdayMorning);
         service.addEmployeeShiftPreference("999698780", "999698780", Employee.ShiftDateTime.ThursdayMorning);
-        service.createEmployee(new Employee(
+        Employee C1 = service.createEmployee(new Employee(
                 "999356934",
                 "Noa Cohen",
                 Employee.Role.Cashier,
@@ -169,7 +169,7 @@ public class TUI {
         service.addEmployeeShiftPreference("999356934", "999356934", Employee.ShiftDateTime.MondayMorning);
         service.addEmployeeShiftPreference("999356934", "999356934", Employee.ShiftDateTime.TuesdayEvening);
         service.addEmployeeShiftPreference("999356934", "999356934", Employee.ShiftDateTime.ThursdayMorning);
-        service.createEmployee(new Employee(
+        Employee C2 = service.createEmployee(new Employee(
                 "999368814",
                 "David Levi",
                 Employee.Role.Cashier,
@@ -185,7 +185,7 @@ public class TUI {
         service.addEmployeeShiftPreference("999368814", "999368814", Employee.ShiftDateTime.MondayEvening);
         service.addEmployeeShiftPreference("999368814", "999368814", Employee.ShiftDateTime.WednesdayMorning);
         service.addEmployeeShiftPreference("999368814", "999368814", Employee.ShiftDateTime.ThursdayEvening);
-        service.createEmployee(new Employee(
+        Employee S1 = service.createEmployee(new Employee(
                 "999849854",
                 "Josef Cohen",
                 Employee.Role.Stocker,
@@ -201,7 +201,7 @@ public class TUI {
         service.addEmployeeShiftPreference("999849854", "999849854", Employee.ShiftDateTime.MondayEvening);
         service.addEmployeeShiftPreference("999849854", "999849854", Employee.ShiftDateTime.WednesdayMorning);
         service.addEmployeeShiftPreference("999849854", "999849854", Employee.ShiftDateTime.ThursdayEvening);
-        service.createEmployee(new Employee(
+        Employee S2 = service.createEmployee(new Employee(
                 "999007248",
                 "Maya Dehan",
                 Employee.Role.Stocker,
@@ -216,7 +216,7 @@ public class TUI {
         service.addEmployeeShiftPreference("999007248", "999007248", Employee.ShiftDateTime.MondayMorning);
         service.addEmployeeShiftPreference("999007248", "999007248", Employee.ShiftDateTime.TuesdayEvening);
         service.addEmployeeShiftPreference("999007248", "999007248", Employee.ShiftDateTime.FridayEvening);
-        service.createEmployee(new Employee(
+        Employee D1 = service.createEmployee(new Employee(
                 "999481773",
                 "Eitan Cohen",
                 Employee.Role.Driver,
@@ -231,7 +231,7 @@ public class TUI {
         service.addEmployeeShiftPreference("999481773", "999481773", Employee.ShiftDateTime.MondayMorning);
         service.addEmployeeShiftPreference("999481773", "999481773", Employee.ShiftDateTime.TuesdayEvening);
         service.addEmployeeShiftPreference("999481773", "999481773", Employee.ShiftDateTime.FridayEvening);
-        service.createEmployee(new Employee(
+        Employee D2 = service.createEmployee(new Employee(
                 "999555931",
                 "Omer Levi",
                 Employee.Role.Driver,
@@ -246,7 +246,7 @@ public class TUI {
         service.addEmployeeShiftPreference("999555931", "999555931", Employee.ShiftDateTime.MondayMorning);
         service.addEmployeeShiftPreference("999555931", "999555931", Employee.ShiftDateTime.TuesdayEvening);
         service.addEmployeeShiftPreference("999555931", "999555931", Employee.ShiftDateTime.FridayEvening);
-        service.createEmployee(new Employee(
+        Employee L1 = service.createEmployee(new Employee(
                 "999205214",
                 "Tamar Meir",
                 Employee.Role.Logistics,
@@ -262,7 +262,7 @@ public class TUI {
         service.addEmployeeShiftPreference("999205214", "999205214", Employee.ShiftDateTime.MondayEvening);
         service.addEmployeeShiftPreference("999205214", "999205214", Employee.ShiftDateTime.WednesdayMorning);
         service.addEmployeeShiftPreference("999205214", "999205214", Employee.ShiftDateTime.ThursdayEvening);
-        service.createEmployee(new Employee(
+        Employee L2 = service.createEmployee(new Employee(
                 "999838402",
                 "Michal Alon",
                 Employee.Role.Logistics,
@@ -277,7 +277,7 @@ public class TUI {
         service.addEmployeeShiftPreference("999838402", "999838402", Employee.ShiftDateTime.MondayMorning);
         service.addEmployeeShiftPreference("999838402", "999838402", Employee.ShiftDateTime.TuesdayEvening);
         service.addEmployeeShiftPreference("999838402", "999838402", Employee.ShiftDateTime.FridayEvening);
-        service.createEmployee(new Employee(
+        Employee SM1 = service.createEmployee(new Employee(
                 "999072804",
                 "Michal Golan",
                 Employee.Role.ShiftManager,
@@ -292,6 +292,43 @@ public class TUI {
         service.addEmployeeShiftPreference("999072804", "999072804", Employee.ShiftDateTime.MondayMorning);
         service.addEmployeeShiftPreference("999072804", "999072804", Employee.ShiftDateTime.TuesdayEvening);
         service.addEmployeeShiftPreference("999072804", "999072804", Employee.ShiftDateTime.FridayEvening);
+        Employee StoreM1 = service.createEmployee(new Employee(
+                "999070004",
+                "Omri Cohen",
+                Employee.Role.StoreManager,
+                "Foo",
+                63521, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference("999070004", "999070004", Employee.ShiftDateTime.SundayMorning);
+        Employee LM1 = service.createEmployee(new Employee(
+                "559072804",
+                "Lior Power",
+                Employee.Role.LogisticsManager,
+                "Foo",
+                63521, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference("559072804", "559072804", Employee.ShiftDateTime.SundayMorning);
+        service.addEmployeeShiftPreference("559072804", "559072804", Employee.ShiftDateTime.MondayMorning);
+        service.addEmployeeShiftPreference("559072804", "559072804", Employee.ShiftDateTime.TuesdayEvening);
+        service.addEmployeeShiftPreference("559072804", "559072804", Employee.ShiftDateTime.FridayEvening);
+        LinkedList<Employee> employeeLinkedList = new LinkedList<>();
+        employeeLinkedList.add(HM1);
+        employeeLinkedList.add(L1);
+        employeeLinkedList.add(S1);
+        employeeLinkedList.add(D1);
+        employeeLinkedList.add(C1);
+        employeeLinkedList.add(SM1);
+        employeeLinkedList.add(StoreM1);
+        employeeLinkedList.add(LM1);
+        service.createShift(HM1.id, new GregorianCalendar(2022, Calendar.APRIL, 17),Shift.Type.Morning, employeeLinkedList, new HashMap<>());
     }
 
     private void handleCanWork(String command) {
