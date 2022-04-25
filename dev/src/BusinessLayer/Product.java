@@ -200,24 +200,12 @@ public class Product {
         this.items = items;
     }
 
-    public String getCat() {
-        return cat;
-    }
-
     public void setCat(String cat) {
         this.cat = cat;
     }
 
-    public String getSub_cat() {
-        return sub_cat;
-    }
-
     public void setSub_cat(String sub_cat) {
         this.sub_cat = sub_cat;
-    }
-
-    public String getSub_sub_cat() {
-        return sub_sub_cat;
     }
 
     public void setSub_sub_cat(String sub_sub_cat) {

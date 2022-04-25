@@ -3,15 +3,17 @@ package ServiceLayer;
 import BusinessLayer.ProductController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ProductService {
-    private final ProductController product_controller;
+    private static ProductController product_controller;
 
     public ProductService() {
         product_controller = ProductController.getInstance();
     }
 
     //methods
+    public static List<String> getProductIdes() {return product_controller.getProductIdes();}
     public void updateCategoryManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
         try {
             product_controller.updateCategoryManDiscount(discount, start_date, end_date, category, sub_category, subsub_category);

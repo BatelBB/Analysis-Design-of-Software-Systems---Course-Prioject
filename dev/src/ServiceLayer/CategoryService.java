@@ -5,10 +5,15 @@ import BusinessLayer.CategoryController;
 import BusinessLayer.SubCategory;
 import BusinessLayer.SubSubCategory;
 
+import java.util.List;
+
 public class CategoryService {
     private final CategoryController categoryController;
 
     public CategoryService(){categoryController= CategoryController.getInstance();}
+
+    public static List<String> getCategoriesNames() { return CategoryController.getCategoriesNames();}
+
 
     public void addCategory(String name){
         try {

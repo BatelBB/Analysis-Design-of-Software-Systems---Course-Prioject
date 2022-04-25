@@ -1,26 +1,34 @@
 package BusinessLayer;
 
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ReportController {
 
-    private Map<String, Report> reports;
+    private static Map<String, Report> reports;
+
     private ProductController product_controller;
 
     private static ReportController reportController;
 
     public static ReportController getInstance() {
-        if (reportController == null) reportController = new ReportController();
+        if (reportController == null)
+            reportController = new ReportController();
         return reportController;
     }
 
     private ReportController() {
         product_controller = ProductController.getInstance();
         reports = new HashMap<>();
+    }
+
+    public static List<Integer> getReportListNames() {
+        List<Integer> ReportListNames = new LinkedList<>();
+        for (Map.Entry<String, Report> entry : reports.entrySet()) {
+            ReportListNames.add(Integer.valueOf(entry.getKey()));
+        }
+        return ReportListNames;
+
     }
 
     /*public void addReport(String name, int id, Date date, String report_producer){
@@ -35,7 +43,7 @@ public class ReportController {
 
     public void removeReport(int id) {
         if (!reports.containsKey(Integer.toString(id)))
-            throw new IllegalArgumentException("Category doesn't exists");
+            throw new IllegalArgumentException("Report id doesn't exists");
         else {
             reports.remove(Integer.toString(id));
         }
@@ -43,7 +51,7 @@ public class ReportController {
 
     public Report getReport(int id) {
         if (!reports.containsKey(Integer.toString(id)))
-            throw new IllegalArgumentException("Category doesn't exists");
+            throw new IllegalArgumentException("Report id doesn't exists");
         else {
             return reports.get(Integer.toString(id));
         }
