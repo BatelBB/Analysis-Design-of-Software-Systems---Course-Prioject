@@ -6,12 +6,13 @@ import java.util.*;
 public class ProductController {
     private int product_ids;
     private Map<String, Product> products;
-    private final CategoryController category_controller;
+    private CategoryController category_controller= CategoryController.getInstance();
     private static ProductController product_controller;
 
     //singleton instance
     public static ProductController getInstance() {
-        if (product_controller == null) product_controller = new ProductController();
+        if (product_controller == null)
+            product_controller = new ProductController();
         return product_controller;
     }
 
@@ -19,7 +20,7 @@ public class ProductController {
     private ProductController() {
         product_ids = 0;
         products = new HashMap<>();
-        category_controller = CategoryController.getInstance();
+//        category_controller = CategoryController.getInstance();
     }
 
     //methods
@@ -271,5 +272,9 @@ public class ProductController {
             ProductIdes.add(entry.getValue().getName());
         }
         return ProductIdes;
+    }
+
+    public void restart() {
+        products.clear();
     }
 }

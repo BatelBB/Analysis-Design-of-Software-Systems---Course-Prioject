@@ -1,10 +1,14 @@
 package BusinessLayer;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CategoryController {
 
-    protected static Map<String, Category> categories;
+    private static Map<String, Category> categories;
 
     private static CategoryController categoryController;
 
@@ -99,6 +103,10 @@ public class CategoryController {
 
     public static Map<String, Category> getCategories() {
         return categories;
+    }
+
+    public void restart() {
+        categories.clear();
     }
 }
 

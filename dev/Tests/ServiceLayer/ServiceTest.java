@@ -3,7 +3,10 @@ package ServiceLayer;
 import ServiceLayer.Objects.*;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,6 +29,23 @@ class ServiceTest {
         CategoryList = new LinkedList<>();
         ProductListNames = new LinkedList<>();
         ReportList = new LinkedList<>();
+
+    }
+    @BeforeEach
+    void setData(){
+        service.addCategory("Dairy Products");
+        service.addSubCategory("Dairy Products","Milks");
+        service.addSubSubCategory("Dairy Products","Milks","Cow Milk");
+    }
+    @AfterEach
+    void resetData(){
+        service.removeCategory("Dairy Products");
+        service.removeSubCategory("Dairy Products","Milks");
+        service.removeSubSubCategory("Dairy Products","Milks","Cow Milk");
+    }
+
+    void restartService(){
+        service.restart();
     }
 
     @Before
@@ -92,24 +112,26 @@ class ServiceTest {
         ProductListNames.clear();
     }
 
+
     @org.junit.jupiter.api.Test
     void addProduct() {
         try {
             assertTrue(ProductListNames.isEmpty());
-            service.addProduct("Milk", "Tnova", 4, 5.9, 350, 6);
+            service.addProduct("Milk", "Tnova", 4, 5.9, 350, 6, "Dairy Products","Milks","Cow Milk");
             setProductIdes();
             assertTrue(ProductListNames.contains("Milk"));
             setProductIdes();
-            service.addProduct("", "Tnova", 4, 5.9, 350, 6);
+            service.addProduct("", "Tnova", 4, 5.9, 350, 6, "Dairy Products","Milks","Cow Milk");
         } catch (Exception e) {
             assertEquals(e.getMessage(), "product name empty");
+            restartService();
         }
     }
 
     @org.junit.jupiter.api.Test
     void removeProduct() {
         try {
-            service.addProduct("Milk", "Tnova", 4, 5.9, 350, 6);
+            service.addProduct("Milk", "Tnova", 4, 5.9, 350, 6, "Dairy Products","Milks","Cow Milk");
             setProductIdes();
             assertTrue(ProductListNames.contains("Milk"));
             service.removeProduct(0);
@@ -119,6 +141,7 @@ class ServiceTest {
         } catch (Exception e) {
             assertEquals(e.getMessage(), "product id does not exist");
             clearProductIdes();
+            restartService();
         }
     }
 

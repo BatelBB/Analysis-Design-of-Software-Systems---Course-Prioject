@@ -95,4 +95,7 @@ public class CategoryService {
 
     }
 
+    public void restart() {
+        categoryController.restart();
+    }
 }

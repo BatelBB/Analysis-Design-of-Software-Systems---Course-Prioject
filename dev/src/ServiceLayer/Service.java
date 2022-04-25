@@ -164,4 +164,9 @@ public class Service {
     }
 
 
+    public void restart() {
+        product_service.restart();
+        report_service.restart();
+        category_service.restart();
+    }
 }

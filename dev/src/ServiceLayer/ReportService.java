@@ -103,4 +103,7 @@ public class ReportService {
     }
 
 
+    public void restart() {
+        reportController.restart();
+    }
 }

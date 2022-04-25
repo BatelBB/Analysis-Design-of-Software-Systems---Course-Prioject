@@ -161,4 +161,8 @@ public class ProductService {
             return new Response(e.getMessage());
         }
     }
+
+    public void restart() {
+        product_controller.restart();
+    }
 }

@@ -136,4 +136,7 @@ public class ReportController {
     }
 
 
+    public void restart() {
+        reports.clear();
+    }
 }
