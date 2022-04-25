@@ -30,11 +30,30 @@ For more information on available commands, refer to the Commands section of thi
 
 ## Commands
 
+The following commands are supported:
+
+* `load sample`.
+* `login`.
+* `quit`.
+* `create employee`.
+* `get employee`.
+* `delete employee`.
+* `update employee`.
+* `list employees`.
+* `add shift preference`.
+* `delete shift preference`.
+* `create shift`.
+* `add shift staff`.
+* `delete shift staff`.
+* `update shift required role`.
+
 All example commands should work when using the provided sample data (`load sample` command).
 
 ### Load Sample
 
 Load sample data for demonstration purposes.
+
+Any user, including unauthenticated users, can perform this command.
 
 #### Usage
 
@@ -55,6 +74,8 @@ Set the currently active user.
 As of now, employees are authenticated only by their ID.
 Not using passwords allows to use the service with authentication methods not involving passwords, such as TOTP or hardware keys.
 
+Any user, including unauthenticated users, can perform this command.
+
 #### Usage
 
 ```
@@ -71,6 +92,8 @@ login 999871163
 
 Quit the program.
 
+Any user, including unauthenticated users, can perform this command.
+
 #### Usage
 
 ```
@@ -86,6 +109,8 @@ quit
 ### Create Employee
 
 Add a new employee.
+
+Any user, including unauthenticated users, can perform this command.
 
 #### Usage
 
@@ -114,6 +139,8 @@ create employee Noga 999074396 Bar 12345 1 30 HumanResources
 
 Get the details of an employee.
 
+Authenticated employees can look themselves up, employees authenticated as HumanResources role can look up all employees.
+
 #### Usage
 
 ```
@@ -130,6 +157,8 @@ get employee 999871163
 
 Delete an employee.
 
+Only employees authenticated as HumanResources role may invoke this command.
+
 #### Usage
 
 ```
@@ -145,6 +174,8 @@ delete employee 999356934
 ### Update Employee
 
 Update an employee's details.
+
+Only employees authenticated as HumanResources role may invoke this command.
 
 #### Usage
 
@@ -173,6 +204,10 @@ update employee 999356934 Noga Bar 12345 1 30 HumanResources
 
 List employees and their roles.
 
+Lists in CSV format for easy import to Excel, to allow incremental rollout of the new system.
+
+Only employees authenticated as HumanResources role may invoke this command.
+
 #### Usage
 
 ```
@@ -188,6 +223,8 @@ list employees
 ### Add Shift Preference
 
 Add an available shift for an employee.
+
+Employees can only invoke this command for themselves.
 
 #### Usage
 
@@ -222,6 +259,8 @@ add shift preference 999871163 FridayEvening
 
 Remove an available shift for an employee.
 
+Employees can only invoke this command for themselves.
+
 #### Usage
 
 ```
@@ -255,6 +294,8 @@ delete shift preference 999871163 FridayEvening
 
 Create a shift.
 
+Only employees authenticated as HumanResources role may invoke this command.
+
 #### Usage
 
 ```
@@ -269,12 +310,14 @@ Where `type` is one of the following:
 #### Example
 
 ```
-create shift 2022-04-24 Evening 999368814 999849854 999481773 999205214
+create shift 2022-04-24 Evening 999368814 999849854 999481773 999205214 999072804
 ```
 
 ### Add Shift Staff
 
 Add an employee to a shift's staff.
+
+Only employees authenticated as HumanResources role may invoke this command.
 
 #### Usage
 
@@ -297,6 +340,8 @@ add shift staff 2022-04-24 Evening 999871163
 
 Remove an employee from a shift's staff.
 
+Only employees authenticated as HumanResources role may invoke this command.
+
 #### Usage
 
 ```
@@ -318,6 +363,8 @@ delete shift staff 2022-04-24 Evening 999871163
 
 Update a shift's required roles.
 
+Only employees authenticated as HumanResources role may invoke this command.
+
 #### Usage
 
 ```
@@ -333,4 +380,24 @@ Where `type` is one of the following:
 
 ```
 update shift required role 2022-04-24 Evening Stocker 2
+```
+
+### List Shifts
+
+List all past and future shifts.
+
+Lists shifts in YAML format, for easy parsing in printing scripts. Allowing the customer to incrementally roll out the new system by partially working with paper forms.
+
+Only employees authenticated as HumanResources role may invoke this command.
+
+#### Usage
+
+```
+list shifts
+```
+
+#### Example
+
+```
+list shifts
 ```
