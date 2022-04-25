@@ -22,7 +22,7 @@ public class Product {
     private String sub_sub_cat;
 
     //constructors
-    public Product(int product_id, String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time) {
+    public Product(int product_id, String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
         this.product_id = product_id;
         this.name = name;
         shelf_qty = 0;
@@ -33,6 +33,9 @@ public class Product {
         this.min_qty = min_qty;
         this.supply_time = supply_time;
         items = new HashMap<>();
+        this.cat = category;
+        this.sub_cat = sub_category;
+        this.sub_sub_cat = subsub_category;
     }
 
     public Product(int product_id, String name, int shelf_qty, int storage_qty, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, Map<String, ProductItem> items) {
@@ -118,15 +121,13 @@ public class Product {
 
     //getters and setters
 
-    public int getItem_ids() { return item_ids; }
+    public int getItem_ids() {
+        return item_ids;
+    }
 
-    public int getProduct_id() { return product_id; }
-
-    public String getCat() { return cat; }
-
-    public String getSub_cat() { return sub_cat; }
-
-    public String getSub_sub_cat() { return sub_sub_cat; }
+    public int getProduct_id() {
+        return product_id;
+    }
 
     public String getName() {
         return name;

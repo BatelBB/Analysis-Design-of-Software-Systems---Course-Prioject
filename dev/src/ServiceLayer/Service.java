@@ -14,7 +14,6 @@ public class Service {
     private final ReportService report_service;
 
     public Service() {
-
         product_service = new ProductService();
         report_service = new ReportService();
         category_service = new CategoryService();
@@ -43,7 +42,7 @@ public class Service {
         product_service.updateCategoryManDiscount(discount, start_date, end_date, category, sub_category, subsub_category);
     }
 
-    public void updateCategoryCusDiscount(String name, double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
+    public void updateCategoryCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
         product_service.updateCategoryCusDiscount(discount, start_date, end_date, category, sub_category, subsub_category);
     }
 
@@ -59,7 +58,7 @@ public class Service {
         product_service.updateItemManDiscount(product_id, item_id, discount, start_date, end_date);
     }
 
-    public void updateItemCusDiscount(int product_id, int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) {
+    public void updateItemCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id, int item_id) {
         product_service.updateItemCusDiscount(product_id, item_id, discount, start_date, end_date);
     }
 
@@ -71,8 +70,8 @@ public class Service {
         product_service.updateProductCusPrice(product_id, price);
     }
 
-    public void addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time) {
-        product_service.addProduct(name, manufacturer, man_price, cus_price, min_qty, supply_time);
+    public void addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
+        product_service.addProduct(name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category);
     }
 
     public void removeProduct(int id) {

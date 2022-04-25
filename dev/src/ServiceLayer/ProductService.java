@@ -86,9 +86,9 @@ public class ProductService {
         }
     }
 
-    public void addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time) {
+    public void addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
         try {
-            product_controller.addProduct(name, manufacturer, man_price, cus_price, min_qty, supply_time);
+            product_controller.addProduct(name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
