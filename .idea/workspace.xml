@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="manually combining two main branches">
+    <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="&quot;add Category&amp;Report Service Methods to Srevice &quot;">
+      <change afterPath="$PROJECT_DIR$/dev/Tests/ServiceLayer/ServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/adss_group_k.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/adss_group_k.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Category.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/CategoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/BusinessLayer/ReportController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/CategoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/Report.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Objects/Report.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/ReportService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/src/ServiceLayer/Service.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="JUnit5 Test Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -36,11 +53,104 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
   </component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="ServiceLayer" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.ServiceTest">
+    <configuration name="ServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="adss_group_k" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ServiceLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ServiceLayer" />
+      <option name="MAIN_CLASS_NAME" value="ServiceLayer.ServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServiceTest.createBySupplierReport" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="adss_group_k" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ServiceLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ServiceLayer" />
+      <option name="MAIN_CLASS_NAME" value="ServiceLayer.ServiceTest" />
+      <option name="METHOD_NAME" value="createBySupplierReport" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServiceTest.createExpiredReport" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="adss_group_k" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ServiceLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ServiceLayer" />
+      <option name="MAIN_CLASS_NAME" value="ServiceLayer.ServiceTest" />
+      <option name="METHOD_NAME" value="createExpiredReport" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServiceTest.createMissingReport" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="adss_group_k" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ServiceLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ServiceLayer" />
+      <option name="MAIN_CLASS_NAME" value="ServiceLayer.ServiceTest" />
+      <option name="METHOD_NAME" value="createMissingReport" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServiceTest.getReport" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="adss_group_k" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ServiceLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ServiceLayer" />
+      <option name="MAIN_CLASS_NAME" value="ServiceLayer.ServiceTest" />
+      <option name="METHOD_NAME" value="getReport" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
         <option name="Make" enabled="true" />
@@ -52,6 +162,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.ServiceTest" />
+        <item itemvalue="JUnit.ServiceTest.createMissingReport" />
+        <item itemvalue="JUnit.ServiceTest.createBySupplierReport" />
+        <item itemvalue="JUnit.ServiceTest.createExpiredReport" />
+        <item itemvalue="JUnit.ServiceTest.getReport" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -93,7 +212,13 @@
       <option name="project" value="LOCAL" />
       <updated>1650819557197</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL‎00005" summary="&quot;add Category&amp;Report Service Methods to Srevice &quot;">
+      <created>1650828139855</created>
+      <option name="number" value="LOCAL‎00005" />
+      <option name="presentableId" value="LOCAL‎00005" />
+      <updated>1650828139855</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -117,6 +242,7 @@
     <MESSAGE value="products exceptions" />
     <MESSAGE value="manual merge from Category_and_Report" />
     <MESSAGE value="manually combining two main branches" />
-    <option name="LAST_COMMIT_MESSAGE" value="manually combining two main branches" />
+    <MESSAGE value="&quot;add Category&amp;Report Service Methods to Srevice &quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;add Category&amp;Report Service Methods to Srevice &quot;" />
   </component>
 </project>

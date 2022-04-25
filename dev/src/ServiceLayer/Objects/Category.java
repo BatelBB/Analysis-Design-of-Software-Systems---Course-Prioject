@@ -8,6 +8,7 @@ public class Category {
     private Map<String, ServiceLayer.Objects.SubCategory> subC;
     private String name;
 
+    public String getName() { return name; }
 
     public Category(BusinessLayer.Category category) {
         name= category.getName();

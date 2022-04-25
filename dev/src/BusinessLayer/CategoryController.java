@@ -1,11 +1,13 @@
 package BusinessLayer;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class CategoryController {
 
-    protected Map<String, Category> categories;
+    protected static Map<String, Category> categories;
 
     private static CategoryController categoryController;
 
@@ -87,6 +89,14 @@ public class CategoryController {
             SubCategory subCategory= category.getSubCategory(sub_category);
             subCategory.removeSubSubCategory(name);
         }
+    }
+
+    public static List<String> getCategoriesNames() {
+        List<String> CategoriesNames = new LinkedList<>();
+        for (Map.Entry<String, Category> entry : categories.entrySet()) {
+            CategoriesNames.add(entry.getKey());
+        }
+        return CategoriesNames;
     }
 }
 

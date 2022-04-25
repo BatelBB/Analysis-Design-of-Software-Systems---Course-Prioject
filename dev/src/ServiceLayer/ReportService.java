@@ -2,6 +2,9 @@ package ServiceLayer;
 
 import BusinessLayer.ReportController;
 import ServiceLayer.Objects.MissingReport;
+import ServiceLayer.Objects.Report;
+
+import java.util.List;
 
 public class ReportService {
 
@@ -11,6 +14,8 @@ public class ReportService {
         reportController = ReportController.getInstance();
     }
 
+    public static List<Integer> getReportListNames() { return ReportController.getReportListNames();}
+
     public void removeReport(int id) {
         try {
             reportController.removeReport(id);
@@ -19,12 +24,13 @@ public class ReportService {
         }
     }
 
-    public void getReport(int id) {
+    public Report getReport(int id) {
         try {
-            reportController.getReport(id);
+            return new Report(reportController.getReport(id));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        return null;
     }
 
     public MissingReport createMissingReport(String name, int id, String report_producer) {

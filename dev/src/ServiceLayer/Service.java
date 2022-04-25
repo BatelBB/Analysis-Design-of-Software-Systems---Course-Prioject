@@ -2,9 +2,11 @@ package ServiceLayer;
 
 import ServiceLayer.Objects.Category;
 import ServiceLayer.Objects.MissingReport;
+import ServiceLayer.Objects.Report;
 import ServiceLayer.Objects.SubCategory;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Service {
     private final ProductService product_service;
@@ -17,7 +19,9 @@ public class Service {
         report_service = new ReportService();
         category_service = new CategoryService();
     }
-
+    public List<String> getCategoriesNames(){return CategoryService.getCategoriesNames();}
+    public List<String> getProductIdes(){return ProductService.getProductIdes();}
+    public List<Integer> getReportListNames() {return ReportService.getReportListNames(); }
     public void addCategory(String name) { category_service.addCategory(name); }
 
     public void removeCategory(String name) { category_service.removeCategory(name); }
@@ -99,7 +103,7 @@ public class Service {
         product_service.changeItemOnShelf(product_id, item_id, on_shelf);
     }
     public void removeReport(int id) {report_service.removeReport(id);}
-    public void getReport(int id) {report_service.getReport(id);}
+    public Report getReport(int id) {return report_service.getReport(id);}
     public MissingReport createMissingReport(String name, int id, String report_producer) {return report_service.createMissingReport(name, id, report_producer);}
     public ServiceLayer.Objects.ExpiredReport createExpiredReport(String name, int id, String report_producer){return report_service.createExpiredReport(name, id, report_producer);}
     public ServiceLayer.Objects.SurplusesReport createSurplusesReport(String name, int id, String report_producer){return report_service.createSurplusesReport(name, id, report_producer);}
@@ -108,4 +112,6 @@ public class Service {
     public ServiceLayer.Objects.byProductReport createByProductReport(String name, int id, String report_producer, String proName){return report_service.createByProductReport(name, id, report_producer, proName);}
     public ServiceLayer.Objects.byCategoryReport createByCategoryReport(String name, int id, String report_producer, String CatName, String subCatName, String subSubCatName)
     {return report_service.createByCategoryReport(name, id, report_producer, CatName, subCatName, subSubCatName);}
+
+
 }

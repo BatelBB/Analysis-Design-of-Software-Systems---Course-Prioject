@@ -6,6 +6,7 @@ import java.util.*;
 public class ProductController {
     private int product_ids;
     private Map<String, Product> products;
+
     private static ProductController product_controller;
 
     //singleton instance
@@ -21,6 +22,7 @@ public class ProductController {
     }
 
     //methods
+
     public void updateCategoryManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) throws Exception {
         if (category != null && !category.equals("")) {
             if (sub_category != null && !sub_category.equals("")) {
@@ -253,5 +255,13 @@ public class ProductController {
 
     private void priceLegal(double price) throws Exception {
         if (price < 0) throw new Exception("price illegal");
+    }
+
+    public List<String> getProductIdes() {
+        List<String> ProductIdes= new LinkedList<>();
+        for (Map.Entry<String, Product> entry : products.entrySet()) {
+            ProductIdes.add(entry.getValue().getName());
+        }
+        return ProductIdes;
     }
 }

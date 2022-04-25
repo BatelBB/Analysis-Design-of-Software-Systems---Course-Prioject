@@ -15,4 +15,6 @@ public class Report {
         date= report.getDate();
         report_producer= report.getReport_producer();
     }
+
+    public String getName() { return name; }
 }
