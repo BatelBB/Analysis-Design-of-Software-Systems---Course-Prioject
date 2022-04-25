@@ -6,6 +6,7 @@ import java.util.*;
 public class ProductController {
     private int product_ids;
     private Map<String, Product> products;
+    private final CategoryController category_controller;
     private static ProductController product_controller;
 
     //singleton instance
@@ -18,9 +19,11 @@ public class ProductController {
     private ProductController() {
         product_ids = 0;
         products = new HashMap<>();
+        category_controller = CategoryController.getInstance();
     }
 
     //methods
+
     public void updateCategoryManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) throws Exception {
         if (category != null && !category.equals("")) {
             if (sub_category != null && !sub_category.equals("")) {
@@ -128,15 +131,22 @@ public class ProductController {
         return products.get(Integer.toString(product_id)).getItemLocation(item_id);
     }
 
-    public void addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time) throws Exception {
-        if (name == null || name.equals("")) throw new Exception("product name empty");
-        if (manufacturer == null || manufacturer.equals("")) throw new Exception("product name empty");
-        priceLegal(man_price);
-        priceLegal(cus_price);
-        if (min_qty < 0) throw new Exception("min quantity smaller than 0");
-        if (supply_time < 0) throw new Exception("supply time smaller than 0");
-        products.put(Integer.toString(product_ids), new Product(product_ids, name, manufacturer, man_price, cus_price, min_qty, supply_time));
-        product_ids++;
+    public void addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
+        if (CategoryController.getCategories().containsKey(category) && CategoryController.getCategories().get(category).getSubC().containsKey(sub_category) && CategoryController.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().containsKey(subsub_category)) {
+            if (name == null || name.equals("")) throw new Exception("product name empty");
+            if (manufacturer == null || manufacturer.equals("")) throw new Exception("product name empty");
+            priceLegal(man_price);
+            priceLegal(cus_price);
+            if (min_qty < 0) throw new Exception("min quantity smaller than 0");
+            if (supply_time < 0) throw new Exception("supply time smaller than 0");
+            if (category == null || category.equals("")) throw new Exception("category name empty");
+            if (sub_category == null || sub_category.equals("")) throw new Exception("sub_category name empty");
+            if (subsub_category == null || subsub_category.equals(""))
+                throw new Exception("subsub_category name empty");
+            products.put(Integer.toString(product_ids), new Product(product_ids, name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category));
+            product_ids++;
+        } else
+            throw new Exception("category doesn't exist");
     }
 
     public void removeProduct(int product_id) throws Exception {
@@ -253,5 +263,13 @@ public class ProductController {
 
     private void priceLegal(double price) throws Exception {
         if (price < 0) throw new Exception("price illegal");
+    }
+
+    public List<String> getProductIdes() {
+        List<String> ProductIdes = new LinkedList<>();
+        for (Map.Entry<String, Product> entry : products.entrySet()) {
+            ProductIdes.add(entry.getValue().getName());
+        }
+        return ProductIdes;
     }
 }

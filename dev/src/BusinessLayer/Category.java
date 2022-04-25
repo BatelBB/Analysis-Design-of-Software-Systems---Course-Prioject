@@ -1,20 +1,25 @@
 package BusinessLayer;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Category {
 
-    private Map<String, SubCategory> subC;
-    private String name;
+    private final Map<String, SubCategory> subC;
+    private final String name;
 
     Category(String name) {
         this.name = name;
+        subC = new HashMap<>();
     }
 
-    public Map<String, SubCategory> getSubC() { return subC; }
+    public Map<String, SubCategory> getSubC() {
+        return subC;
+    }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     public void addSubCategory(String name) {
         if (subC.containsKey(name))
