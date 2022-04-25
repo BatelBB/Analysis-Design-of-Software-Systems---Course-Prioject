@@ -249,6 +249,21 @@ public class TUI {
         service.addEmployeeShiftPreference("999838402", "999838402", Employee.ShiftDateTime.MondayMorning);
         service.addEmployeeShiftPreference("999838402", "999838402", Employee.ShiftDateTime.TuesdayEvening);
         service.addEmployeeShiftPreference("999838402", "999838402", Employee.ShiftDateTime.FridayEvening);
+        service.createEmployee(new Employee(
+                "999072804",
+                "Michal Golan",
+                Employee.Role.ShiftManager,
+                "Foo",
+                63521, 1,
+                30,
+                0, 0,
+                new HashSet<>(),
+                new GregorianCalendar()
+        ));
+        service.addEmployeeShiftPreference("999072804", "999072804", Employee.ShiftDateTime.SundayMorning);
+        service.addEmployeeShiftPreference("999072804", "999072804", Employee.ShiftDateTime.MondayMorning);
+        service.addEmployeeShiftPreference("999072804", "999072804", Employee.ShiftDateTime.TuesdayEvening);
+        service.addEmployeeShiftPreference("999072804", "999072804", Employee.ShiftDateTime.FridayEvening);
     }
 
     private void handleUpdateShiftRequiredRole(String command) {
@@ -659,6 +674,10 @@ public class TUI {
             System.out.println("Error: All arguments must be supplied.");
             System.out.println("Usage:");
             System.out.println("> delete employee <id>");
+            return;
+        }
+        if (args[2].equals(subject)) {
+            System.out.println("Error: Can not delete currently logged in user.");
             return;
         }
         try {
