@@ -128,14 +128,17 @@ public class ProductController {
         return products.get(Integer.toString(product_id)).getItemLocation(item_id);
     }
 
-    public void addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time) throws Exception {
+    public void addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
         if (name == null || name.equals("")) throw new Exception("product name empty");
         if (manufacturer == null || manufacturer.equals("")) throw new Exception("product name empty");
         priceLegal(man_price);
         priceLegal(cus_price);
         if (min_qty < 0) throw new Exception("min quantity smaller than 0");
         if (supply_time < 0) throw new Exception("supply time smaller than 0");
-        products.put(Integer.toString(product_ids), new Product(product_ids, name, manufacturer, man_price, cus_price, min_qty, supply_time));
+        if (category == null || category.equals("")) throw new Exception("category name empty");
+        if (sub_category == null || sub_category.equals("")) throw new Exception("sub_category name empty");
+        if (subsub_category == null || subsub_category.equals("")) throw new Exception("subsub_category name empty");
+        products.put(Integer.toString(product_ids), new Product(product_ids, name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category));
         product_ids++;
     }
 
