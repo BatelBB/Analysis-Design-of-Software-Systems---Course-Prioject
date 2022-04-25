@@ -6,6 +6,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProductItem {
+    public int getId() {
+        return id;
+    }
+
     private int id;
     private String store;
     private String location;

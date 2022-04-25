@@ -36,9 +36,23 @@ public class Product {
         sub_cat = p.getCat();
         sub_sub_cat = p.getSub_sub_cat();
         Map<String, BusinessLayer.ProductItem> BusinessItemsMap = p.getItems();
+        items = new HashMap<>();
         for (Map.Entry<String, BusinessLayer.ProductItem> entry : BusinessItemsMap.entrySet()) {
             items.put(entry.getKey(), new ProductItem(entry.getValue()));
         }
+    }
 
+    public String toString() {
+        String s = "product_id: " + product_id + "\n" + "product name: " + name + "\n"
+                + "category: " + cat + "\n" + "sub category: " + sub_cat + "\n" +
+                "sub sub category: " + sub_sub_cat + "\n" + "manufacturer: " + manufacturer + "\n" +
+                "manufacturer price: " + man_price + "\n" + "customer price: " + cus_price + "\n" +
+                "supply time: " + supply_time + "\n" + "minimum quantity: " + min_qty + "\n" +
+                "shelf quantity: " + shelf_qty + "\n" + "storage quantity: " + storage_qty + "\n" +
+                "The items id in this product are:\n";
+        for (Map.Entry<String, ProductItem> entry : items.entrySet()) {
+            s = s + entry.getValue().getId() + "\n";
+        }
+        return s;
     }
 }

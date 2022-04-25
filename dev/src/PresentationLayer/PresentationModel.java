@@ -22,36 +22,96 @@ public class PresentationModel {
             String command = input.substring(0, input.indexOf(" "));
             args = input.substring(input.indexOf(" ") + 1).split(",", -1);
             switch (command) {
-                case "addCategory" -> addCategory();
-                case "removeCategory" -> removeCategory();
-                case "addSubCategory" -> addSubCategory();
-                case "removeSubCategory" -> removeSubCategory();
-                case "addSubSubCategory" -> addSubSubCategory();
-                case "removeSubSubCategory" -> removeSubSubCategory();
-                case "updateCategoryCusDiscount" -> updateCategoryCusDiscount();
-                case "updateProductSupplierManDiscount" -> updateProductSupplierManDiscount();
-                case "updateProductCusDiscount" -> updateProductCusDiscount();
-                case "updateItemCusDiscount" -> updateItemCusDiscount();
-                case "updateProductManPrice" -> updateProductManPrice();
-                case "updateProductCusPrice" -> updateProductCusPrice();
-                case "addProduct" -> addProduct();
-                case "removeProduct" -> removeProduct();
-                case "addItem" -> addItem();
-                case "removeItem" -> removeItem();
-                case "updateItemDefect" -> updateItemDefect();
-                case "getItemLocation" -> getItemLocation();
-                case "changeItemLocation" -> changeItemLocation();
-                case "changeItemOnShelf" -> changeItemOnShelf();
-                case "createMissingReport" -> createMissingReport();
-                case "createExpiredReport" -> createExpiredReport();
-                case "createSurplusesReport" -> createSurplusesReport();
-                case "createDefectiveReport" -> createDefectiveReport();
-                case "createBySupplierReport" -> createBySupplierReport();
-                case "createByProductReport" -> createByProductReport();
-                case "createByCategoryReport" -> createByCategoryReport();
-                case "removeReport" -> removeReport();
-                case "getReport" -> getReport();
-                default -> System.out.println("unknown command, aborting..");
+                case "addCategory":
+                    addCategory();
+                    break;
+                case "removeCategory":
+                    removeCategory();
+                    break;
+                case "addSubCategory":
+                    addSubCategory();
+                    break;
+                case "removeSubCategory":
+                    removeSubCategory();
+                    break;
+                case "addSubSubCategory":
+                    addSubSubCategory();
+                    break;
+                case "removeSubSubCategory":
+                    removeSubSubCategory();
+                    break;
+                case "updateCategoryCusDiscount":
+                    updateCategoryCusDiscount();
+                    break;
+                case "updateProductSupplierManDiscount":
+                    updateProductSupplierManDiscount();
+                    break;
+                case "updateProductCusDiscount":
+                    updateProductCusDiscount();
+                    break;
+                case "updateItemCusDiscount":
+                    updateItemCusDiscount();
+                    break;
+                case "updateProductManPrice":
+                    updateProductManPrice();
+                    break;
+                case "updateProductCusPrice":
+                    updateProductCusPrice();
+                    break;
+                case "addProduct":
+                    addProduct();
+                    break;
+                case "removeProduct":
+                    removeProduct();
+                    break;
+                case "addItem":
+                    addItem();
+                    break;
+                case "removeItem":
+                    removeItem();
+                    break;
+                case "updateItemDefect":
+                    updateItemDefect();
+                    break;
+                case "getItemLocation":
+                    getItemLocation();
+                    break;
+                case "changeItemLocation":
+                    changeItemLocation();
+                    break;
+                case "changeItemOnShelf":
+                    changeItemOnShelf();
+                    break;
+                case "createMissingReport":
+                    createMissingReport();
+                    break;
+                case "createExpiredReport":
+                    createExpiredReport();
+                    break;
+                case "createSurplusesReport":
+                    createSurplusesReport();
+                    break;
+                case "createDefectiveReport":
+                    createDefectiveReport();
+                    break;
+                case "createBySupplierReport":
+                    createBySupplierReport();
+                    break;
+                case "createByProductReport":
+                    createByProductReport();
+                    break;
+                case "createByCategoryReport":
+                    createByCategoryReport();
+                    break;
+                case "removeReport":
+                    removeReport();
+                    break;
+                case "getReport":
+                    getReport();
+                    break;
+                default:
+                    System.out.println("unknown command, aborting..");
+                    break;
             }
         }
     }
@@ -349,7 +409,6 @@ public class PresentationModel {
 
 
     //converters
-
     private Boolean convertBoolean(String input) {
         try {
             return Boolean.parseBoolean(input);
