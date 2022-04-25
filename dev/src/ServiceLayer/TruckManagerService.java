@@ -11,7 +11,7 @@ public class TruckManagerService {
     private TruckManagerController truckManagerController;
 
 
-    public Response removeTrucking(int truckingId) throws Exception {
+    public Response removeTrucking(int truckingId) {
         try {
             truckManagerController.removeTrucking(truckingId);
             return new Response(true);
@@ -20,33 +20,39 @@ public class TruckManagerService {
         }
     }
 
-    public Response printBoard() throws Exception {
+    public Response<String> printBoard() {
+        Response<String> response;
         try {
-            return new Response(truckManagerController.printBoard());
+            response = new  Response(truckManagerController.printBoard());
         } catch (Exception e) {
-            return new Response(e.getMessage());
+            response = new Response(e.getMessage());
         }
+        return response;
     }
 
-    public Response printTruckingsHistory() throws Exception {
+    public Response<String> printTruckingsHistory() {
+        Response<String> response;
         try {
-            return new Response(truckManagerController.printTruckingsHistory());
+            response = new Response(truckManagerController.printTruckingsHistory());
         } catch (Exception e) {
-            return new Response(e.getMessage());
+            response = new Response(e.getMessage());
         }
+        return response;
     }
 
 
-    public Response getDriversUsernames() throws Exception {
+    public Response<List<String>> getDriversUsernames() {
+        Response<List<String>> response;
         try {
             List<String> userNamesOfDrivers = truckManagerController.getDriversUsernames();
-            return new Response(userNamesOfDrivers);
+            response = new Response(userNamesOfDrivers);
         } catch (Exception e) {
-            return new Response(e.getMessage());
+            response = new Response(e.getMessage());
         }
+        return response;
     }
 
-    public Response getVehiclesRegistrationPlates() throws Exception {
+    public Response getVehiclesRegistrationPlates() {
         try {
             List<String> vehiclesRegistrationPlates = truckManagerController.getVehiclesRegistrationPlates();
             return new Response(vehiclesRegistrationPlates);
@@ -64,7 +70,7 @@ public class TruckManagerService {
         }
     }
 
-    public Response printBoardOfDriver(String driverUsername) throws Exception {
+    public Response printBoardOfDriver(String driverUsername) {
         try {
             return new Response(truckManagerController.printBoardOfDriver(driverUsername));
         } catch (Exception e) {
@@ -72,7 +78,7 @@ public class TruckManagerService {
         }
     }
 
-    public Response printTruckingsHistoryOfDriver(String driverUsername) throws Exception {
+    public Response printTruckingsHistoryOfDriver(String driverUsername) {
         try {
             return new Response(truckManagerController.printTruckingsHistoryOfDriver(driverUsername));
         } catch (Exception e) {
@@ -80,7 +86,7 @@ public class TruckManagerService {
         }
     }
 
-    public Response printFutureTruckingsOfDriver(String driverUsername) throws Exception {
+    public Response printFutureTruckingsOfDriver(String driverUsername) {
         try {
             return new Response(printFutureTruckingsOfDriver(driverUsername));
         } catch (Exception e) {
@@ -88,7 +94,7 @@ public class TruckManagerService {
         }
     }
 
-    public Response printBoardOfVehicle(String registrationPlate) throws Exception {
+    public Response printBoardOfVehicle(String registrationPlate) {
         try {
             return new Response(truckManagerController.printBoardOfVehicle(registrationPlate));
         } catch (Exception e) {
@@ -96,7 +102,7 @@ public class TruckManagerService {
         }
     }
 
-    public Response printTruckingsHistoryOfVehicle(String registrationPlate) throws Exception {
+    public Response printTruckingsHistoryOfVehicle(String registrationPlate) {
         try {
             return new Response(truckManagerController.printTruckingsHistoryOfVehicle(registrationPlate));
         } catch (Exception e) {
@@ -104,7 +110,7 @@ public class TruckManagerService {
         }
     }
 
-    public Response printFutureTruckingsOfVehicle(String registrationPlate) throws Exception {
+    public Response printFutureTruckingsOfVehicle(String registrationPlate) {
         try {
             return new Response(truckManagerController.printFutureTruckingsOfVehicle(registrationPlate));
         } catch (Exception e) {
@@ -112,7 +118,7 @@ public class TruckManagerService {
         }
     }
 
-    public Response addDestinationToTrucking(int truckingId, List<Site> destinations) throws Exception {
+    public Response addDestinationToTrucking(int truckingId, List<Site> destinations) {
         try {
             truckManagerController.addDestinationToTrucking(truckingId,destinations);
             return new Response(true);
@@ -121,7 +127,7 @@ public class TruckManagerService {
         }
     }
 
-    public Response addProductToTrucking(int truckingId, ProductForTrucking productForTrucking) throws Exception {
+    public Response addProductToTrucking(int truckingId, ProductForTrucking productForTrucking) {
         try {
             truckManagerController.addProductToTrucking(truckingId,productForTrucking);
             return new Response(true);
@@ -148,7 +154,7 @@ public class TruckManagerService {
             return new Response(e.getMessage());
         }
     }
-    public  Response  addSourcesToTrucking(int truckingId, List<Site> sources) throws Exception {
+    public  Response  addSourcesToTrucking(int truckingId, List<Site> sources) {
         try {
             truckManagerController.addSourcesToTrucking(truckingId,sources);
             return new Response(true);
@@ -157,14 +163,14 @@ public class TruckManagerService {
         }}
 
 
-    public  Response  updateSourcesOnTrucking(int truckingId, List<Site> sources) throws Exception {
+    public  Response  updateSourcesOnTrucking(int truckingId, List<Site> sources) {
         try {
             truckManagerController.updateSourcesOnTrucking(truckingId,sources);
             return new Response(true);
         } catch (Exception e) {
             return new Response(e.getMessage());
         }}
-    public  Response  updateDestinationsOnTrucking(int truckingId, List<Site> destinations) throws Exception {
+    public  Response  updateDestinationsOnTrucking(int truckingId, List<Site> destinations) {
         try {
             truckManagerController.updateDestinationsOnTrucking(truckingId,destinations);
             return new Response(true);
@@ -172,7 +178,7 @@ public class TruckManagerService {
             return new Response(e.getMessage());
         }}
 
-    public  Response  moveProductsToTrucking(int truckingId, Products productSKU) throws Exception {
+    public  Response  moveProductsToTrucking(int truckingId, Products productSKU) {
         try {
             truckManagerController.moveProductsToTrucking(truckingId,productSKU);
             return new Response(true);
@@ -180,14 +186,14 @@ public class TruckManagerService {
             return new Response(e.getMessage());
         }}
 
-    public  Response updateVehicleOnTrucking(int truckingId, String registrationPlateOfVehicle) throws Exception {
+    public  Response updateVehicleOnTrucking(int truckingId, String registrationPlateOfVehicle) {
         try {
             truckManagerController.updateVehicleOnTrucking(truckingId,registrationPlateOfVehicle);
             return new Response(true);
         } catch (Exception e) {
             return new Response(e.getMessage());
         }}
-    public  Response updateDriverOnTrucking(int truckingId, String driverUsername) throws Exception {
+    public  Response updateDriverOnTrucking(int truckingId, String driverUsername) {
         try {
             truckManagerController.updateDriverOnTrucking(truckingId,driverUsername);
             return new Response(true);
@@ -195,7 +201,7 @@ public class TruckManagerService {
             return new Response(e.getMessage());
         }}
 
-    public  Response updateDateOnTrucking(int truckingId, LocalDateTime date) throws Exception {
+    public  Response updateDateOnTrucking(int truckingId, LocalDateTime date) {
         try {
             truckManagerController.updateDateOnTrucking(truckingId,date);
             return new Response(true);

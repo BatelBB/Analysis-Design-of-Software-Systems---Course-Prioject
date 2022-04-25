@@ -44,8 +44,9 @@ public class UserController {
     {
         if(role.equals("driver")) return Role.driver;
         else if (role.equals("trucking manager")) return Role.truckingManager;
-        else return Role.wrongrole;
+        else throw new IllegalArgumentException("wrong role");
     }
+
     public synchronized boolean registerUser(String name, String username, String password, String roleString, String code) throws Exception {
         User newUser;
         Role role = castStringToRole(roleString);
@@ -71,20 +72,23 @@ public class UserController {
     }
 
     public boolean login(String username, String password) throws Exception {
-        if (getActiveUser().hashCode() != getNullUserForLogOut().hashCode())
-            throw new IllegalArgumentException("There is a user already connected to the system");
-        if (username == null)
-            throw new IllegalArgumentException("Please enter valid username");
-        User user = users.get(username);
-        if (user == null)
-            throw new IllegalArgumentException("Sorry but there's no user with that username");
-        if(users.get(username).login(password)) {
-            getInstance().activeUser = user;
-            if (activeUser.role==Role.driver)return true;
-            else return false;
+        synchronized (getActiveUser()) {
+            if (getActiveUser().hashCode() != getNullUserForLogOut().hashCode())
+                throw new IllegalArgumentException("There is a user already connected to the system");
+            if (username == null)
+                throw new IllegalArgumentException("Please enter valid username");
+            User user = users.get(username);
+            if (user == null)
+                throw new IllegalArgumentException("Sorry but there's no user with that username");
+            if(users.get(username).login(password)) {
+                getInstance().activeUser = user;
+                if (activeUser.role==Role.driver)
+                    return true;
+                else
+                    return false;
+            }
+            return false;
         }
-
-        return false;
     }
 
     public boolean logout() throws Exception {
@@ -142,4 +146,3 @@ public class UserController {
         return getInstance().nullUserForLogOut;
     }
 }
-

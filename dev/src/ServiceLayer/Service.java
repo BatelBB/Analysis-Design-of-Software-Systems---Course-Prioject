@@ -18,23 +18,23 @@ public class Service {
         userService = new UserService();
     }
 
-    public Response removeTrucking(int truckingId) throws Exception {
+    public Response removeTrucking(int truckingId) {
         return truckManagerService.removeTrucking(truckingId);
     }
 
-    public Response printBoard() throws Exception {
+    public Response<String> printBoard() {
         return truckManagerService.printBoard();
     }
 
-    public Response printTruckingsHistory() throws Exception {
+    public Response<String> printTruckingsHistory() {
         return truckManagerService.printTruckingsHistory();
     }
 
-    public Response getDriversUsernames() throws Exception {
+    public Response<List<String>> getDriversUsernames() {
         return truckManagerService.getDriversUsernames();
     }
 
-    public Response getVehiclesRegistrationPlates() throws Exception {
+    public Response getVehiclesRegistrationPlates() {
         return truckManagerService.getVehiclesRegistrationPlates();
     }
 
@@ -42,35 +42,35 @@ public class Service {
         return truckManagerService.addTrucking(registrationPlateOfVehicle, date, driverUsername, sources, destinations, products,hours,minutes);
     }
 
-    public Response printBoardOfDriver(String driverUsername) throws Exception {
+    public Response printBoardOfDriver(String driverUsername) {
         return truckManagerService.printBoardOfDriver(driverUsername);
     }
 
-    public Response printTruckingsHistoryOfDriver(String driverUsername) throws Exception {
+    public Response printTruckingsHistoryOfDriver(String driverUsername) {
         return truckManagerService.printTruckingsHistoryOfDriver(driverUsername);
     }
 
-    public Response printFutureTruckingsOfDriver(String driverUsername) throws Exception {
+    public Response printFutureTruckingsOfDriver(String driverUsername) {
         return truckManagerService.printFutureTruckingsOfDriver(driverUsername);
     }
 
-    public Response printBoardOfVehicle(String registrationPlate) throws Exception {
+    public Response printBoardOfVehicle(String registrationPlate) {
         return truckManagerService.printBoardOfVehicle(registrationPlate);
     }
 
-    public Response printTruckingsHistoryOfVehicle(String registrationPlate) throws Exception {
+    public Response printTruckingsHistoryOfVehicle(String registrationPlate) {
         return truckManagerService.printTruckingsHistoryOfVehicle(registrationPlate);
     }
 
-    public Response printFutureTruckingsOfVehicle(String registrationPlate) throws Exception {
+    public Response printFutureTruckingsOfVehicle(String registrationPlate) {
         return truckManagerService.printFutureTruckingsOfVehicle(registrationPlate);
     }
 
-    public Response addDestinationToTrucking(int truckingId, List<Site> destinations) throws Exception {
+    public Response addDestinationToTrucking(int truckingId, List<Site> destinations) {
         return truckManagerService.addDestinationToTrucking(truckingId, destinations);
     }
 
-    public Response addProductToTrucking(int truckingId, ProductForTrucking productForTrucking) throws Exception {
+    public Response addProductToTrucking(int truckingId, ProductForTrucking productForTrucking) {
         return truckManagerService.addProductToTrucking(truckingId, productForTrucking);
     }
 
@@ -82,35 +82,35 @@ public class Service {
         return userService.updatePassword(newPassowrd);
     }
 
-    public Response printFutureTruckings() {
+    public Response<String> printFutureTruckings() {
         return truckManagerService.printFutureTruckings();
     }
 
-    public Response addSourcesToTrucking(int truckingId, List<Site> sources) throws Exception {
+    public Response addSourcesToTrucking(int truckingId, List<Site> sources) {
         return truckManagerService.addSourcesToTrucking(truckingId, sources);
     }
 
-    public Response updateSourcesOnTrucking(int truckingId, List<Site> sources) throws Exception {
+    public Response updateSourcesOnTrucking(int truckingId, List<Site> sources) {
         return truckManagerService.updateSourcesOnTrucking(truckingId, sources);
     }
 
-    public Response updateDestinationsOnTrucking(int truckingId, List<Site> destinations) throws Exception {
+    public Response updateDestinationsOnTrucking(int truckingId, List<Site> destinations) {
         return truckManagerService.updateDestinationsOnTrucking(truckingId, destinations);
     }
 
-    public Response moveProductsToTrucking(int truckingId, Products productSKU) throws Exception {
+    public Response moveProductsToTrucking(int truckingId, Products productSKU) {
         return truckManagerService.moveProductsToTrucking(truckingId, productSKU);
     }
 
-    public Response updateVehicleOnTrucking(int truckingId, String registrationPlateOfVehicle) throws Exception {
+    public Response updateVehicleOnTrucking(int truckingId, String registrationPlateOfVehicle) {
         return truckManagerService.updateVehicleOnTrucking(truckingId, registrationPlateOfVehicle);
     }
 
-    public Response updateDriverOnTrucking(int truckingId, String driverUserName) throws Exception {
+    public Response updateDriverOnTrucking(int truckingId, String driverUserName) {
         return truckManagerService.updateDriverOnTrucking(truckingId, driverUserName);
     }
 
-    public Response updateDateOnTrucking(int truckingId, LocalDateTime date) throws Exception {
+    public Response updateDateOnTrucking(int truckingId, LocalDateTime date) {
         return truckManagerService.updateDateOnTrucking(truckingId, date);
     }
 
@@ -126,7 +126,7 @@ public class Service {
         return userService.registerUser(name, username, password, role, code);
     }
 
-    public Response showDriverHisFutureTruckings(String name, String username, String password, Role role, String code) {
+    public Response<String> showDriverHisFutureTruckings() {
         return driverService.showDriverHisFutureTruckings();
     }
 
@@ -142,15 +142,20 @@ public class Service {
         return driverService.removeLicense(dLicense);
     }
 
-    public Response setWeightForTrucking(int truckingId, int weight) throws Exception {
+    public Response setWeightForTrucking(int truckingId, int weight) {
         return driverService.setWeightForTrucking(truckingId, weight);
     }
 
-    public Response printMyTruckings() throws Exception {
+    public Response<String> printMyTruckings() {
         return driverService.printMyTruckings();
     }
 
-    public Response printMyTruckingsHistory() throws Exception {
+    public Response<String> printMyTruckingsHistory() {
         return driverService.printMyTruckingsHistory();
     }
+
+    public Response<List<String>> getLicenses() {
+        return driverService.getLicenses();
+    }
+
 }

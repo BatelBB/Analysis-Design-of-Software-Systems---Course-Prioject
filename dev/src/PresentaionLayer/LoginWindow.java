@@ -32,8 +32,10 @@ public class LoginWindow {
             {
                 System.out.println("Login completed");
                 User user;
-                if(response.toString().equals(true)) user = new Driver(username,password);
-                else user = new TruckManager(username,password);
+                if(response.toString().equals(true))
+                    user = new Driver(username,password);
+                else
+                    user = new TruckManager(username,password);
                 user.act();
             }
         }

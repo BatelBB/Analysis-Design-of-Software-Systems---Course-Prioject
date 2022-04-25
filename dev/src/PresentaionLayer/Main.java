@@ -1,5 +1,6 @@
 package PresentaionLayer;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -16,15 +17,52 @@ public class Main {
             if (answer.equals("1")) {
                 RegisterWindow registerWindow = new RegisterWindow();
                 registerWindow.register();
-            } else if (answer.equals("2")) {
+            }
+            else if (answer.equals("2")) {
                 LoginWindow loginWindow = new LoginWindow();
                 loginWindow.login();
-            } else if (answer.equals("3")) wantToLeaveTheSystem = true;
-            else {
+            }
+            else if (answer.equals("3"))
+                wantToLeaveTheSystem = true;
+            else
                 System.out.println("wrong input!");
+        }
+    }
+
+    public static int getNumber() {
+        Scanner in = new Scanner(System.in);
+        boolean done = false;
+        int numToReturn = 0;
+        while (!done) {
+            String input = in.next();
+            if (input == null) {
+                System.out.println("Please enter your selection");
+            }
+            try {
+                numToReturn = Integer.parseInt(input);
+                done = true;
+            } catch (NumberFormatException nfe) {
+                System.out.println("Please enter number");
             }
         }
+        return numToReturn;
+    }
 
+    public static String getChoiceFromArray(String[] choicesArray) {
+        int choice = getNumber();
+        while (choice > choicesArray.length) {
+            System.out.println("Please enter number from the options list");
+            choice = getNumber();
+        }
+        return choicesArray[choice - 1];
+    }
+
+    public static void printOptionsList(List<String> optionsList) {
+        int counter = 1;
+        for (String option : optionsList) {
+            System.out.println(counter + ". " + option);
+            counter++;
+        }
     }
 
 }

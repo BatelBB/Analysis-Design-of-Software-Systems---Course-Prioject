@@ -2,7 +2,7 @@ package ServiceLayer;
 
 public class Response<T> {
 
-    private  String errorMessage;
+    private String errorMessage;
     private T value;
     public Response(T value) { this.value= value;; }
     public Response(String msg)
@@ -20,5 +20,11 @@ public class Response<T> {
     @Override
     public String toString() {
         return value.toString();
+    }
+    public T getValue() {
+        if (!ErrorOccured())
+            return value;
+        else
+            return null;
     }
 }

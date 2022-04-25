@@ -12,7 +12,7 @@ public class DriverService {
         driverController = DriverController.getInstance();
     }
 
-    public Response setWeightForTrucking(int truckingId, int weight) throws Exception {
+    public Response setWeightForTrucking(int truckingId, int weight) {
         try {
             driverController.setWeightForTrucking(truckingId,weight);
             return new Response(true);
@@ -21,29 +21,35 @@ public class DriverService {
         }
     }
 
-    public Response printMyTruckings() throws Exception {
+    public Response<String> printMyTruckings() {
+        Response<String> response;
         try {
-            return new Response(driverController.printMyTruckings());
+            response = new Response(driverController.printMyTruckings());
         } catch (Exception e) {
-            return new Response(e.getMessage());
+            response = new Response(e.getMessage());
         }
+        return response;
     }
 
-    public Response printMyTruckingsHistory() throws Exception {
+    public Response<String> printMyTruckingsHistory() {
+        Response<String> response;
         try {
-            return new Response(driverController.printMyTruckingsHistory());
+            response = new Response(driverController.printMyTruckingsHistory());
         } catch (Exception e) {
-            return new Response(e.getMessage());
+            response = new Response(e.getMessage());
         }
+        return response;
     }
 
-    public Response showDriverHisFutureTruckings() {
+    public Response<String> showDriverHisFutureTruckings() {
+        Response<String> response;
         try {
             String truckings = driverController.printMyFutureTruckings();
-            return new Response(truckings);
+            response = new Response<>(truckings);
         } catch (Exception e) {
-            return new Response(e.getMessage());
+            response = new Response<>(e.getMessage());
         }
+        return response;
     }
 
     public Response addLicense(String dLicense) {
@@ -74,5 +80,17 @@ public class DriverService {
         catch (Exception e) {
             return new Response(e.getMessage());
         }
+    }
+
+    public Response<List<String>> getLicenses() {
+        List<String> licenses;
+        Response<List<String>> toReturn;
+        try {
+            licenses = driverController.getMyLicenses();
+            toReturn = new Response(licenses);
+        } catch (Exception e) {
+            toReturn = new Response(e.getMessage());
+        }
+        return toReturn;
     }
 }

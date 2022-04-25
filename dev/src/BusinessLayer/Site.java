@@ -1,8 +1,5 @@
 package BusinessLayer;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class Site {
     private String contactGuy;
     private String city;
@@ -13,8 +10,8 @@ public class Site {
     private int apartment;
     private Area area;
 
-    public Site(String contactGuy, String city, String phoneNumber, String street, int houseNumber, int floor, int apartment, Area area) throws Exception {
-        if (contactGuy == null | contactGuy.length() == 0 | city == null | city.length() == 0 | phoneNumber == null | phoneNumber.length() == 0 | street == null | street.length() == 0 | area == null)
+    public Site(String contactGuy, String city, String phoneNumber, String street, int houseNumber, int floor, int apartment, String Sarea) throws Exception {
+        if (contactGuy == null | contactGuy.length() == 0 | city == null | city.length() == 0 | phoneNumber == null | phoneNumber.length() == 0 | street == null | street.length() == 0)
             throw new IllegalArgumentException("One or more of the site details are empty");
         this.contactGuy = contactGuy;
         this.city = city;
@@ -23,7 +20,7 @@ public class Site {
         this.street = street;
         this.floor = floor;
         this.apartment = apartment;
-        this.area = area;
+        this.area = castStringToArea(Sarea);
         validateInt(floor, "floor", 0, 100);
         validateInt(apartment, "apartment", 1, 100);
         validateInt(houseNumber, "house number", 0, 300);
@@ -31,6 +28,14 @@ public class Site {
         validateString(city, "city", 2, 20);
         validateString(city, "contact guy", 2, 15);
         validatePhoneNumber();
+    }
+
+    private Area castStringToArea(String area)
+    {
+        if(area.equals("center")) return Area.center;
+        else if(area.equals("north")) return Area.north;
+        else  if(area.equals("south")) return Area.south;
+        else throw new IllegalArgumentException("wrong area");
     }
 
     public String printSite() {

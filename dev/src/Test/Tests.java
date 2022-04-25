@@ -1,5 +1,3 @@
-
-
 package Test;
 
 
@@ -39,8 +37,8 @@ public class Tests {
         userController.login("ido1Ido1", "ido1Ido1");
         truckManagerController.addVehicle(DLicense.C,"12345642","BMW",12,14);
         truckManagerController.addVehicle(DLicense.C,"45345642","volvo",12,14);
-        Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,2,3,Area.center);
-        Site d1 = new Site("viktory","haifa","0524321231","hayarden",100,1,6,Area.north);
+        Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,2,3,"center");
+        Site d1 = new Site("viktory","haifa","0524321231","hayarden",100,1,6,"north");
         List sources = new LinkedList();
         sources.add(s1);
         List destinations = new LinkedList();
@@ -59,10 +57,8 @@ public class Tests {
         userController.login("ido1Ido1", "ido1Ido1");
         String hashCode = truckManagerController.getRegisterCode();
         userController.logout();
-        userController.login("ido1Ido1", "ido1Ido1");
         userController.registerUser("rami fozis", "ramiF", "rami1Rami1", "driver", hashCode);
         userController.registerUser("tamir avisar", "tam1Tamir1", "tam1Tamir1", "driver", hashCode);
-        userController.logout();
     }
 
     public void resetForTests()
@@ -79,6 +75,42 @@ public class Tests {
         addTrucking();
     }
 
+    @Test
+    public void multiplayTruckManagersTests() throws Exception {
+        userController.registerUser("ben gurion", "bgu", "Ubgu123", "trucking manager", "tm1234tm");
+        userController.login("bgu", "Ubgu123");
+        String hashCode = truckManagerController.getRegisterCode();
+        userController.logout();
+        userController.registerUser("tel aviv", "tau", "Utau123", "driver", hashCode);
+        userController.login("bgu", "Ubgu123");
+        Assert.assertEquals(truckManagerController.getDriversUsernames().contains("tau"), true);
+        Assert.assertEquals(truckManagerController.getDriversUsernames().contains("tam1Tamir1"), false);
+        Assert.assertEquals(truckManagerController.getVehiclesRegistrationPlates().contains("12345642"), false);
+        userController.logout();
+        userController.login("ido1Ido1", "ido1Ido1");
+        Assert.assertEquals(truckManagerController.getDriversUsernames().contains("tau"), false);
+        Assert.assertEquals(truckManagerController.getDriversUsernames().contains("tam1Tamir1"), true);
+        Assert.assertEquals(truckManagerController.getVehiclesRegistrationPlates().contains("12345642"), true);
+
+    }
+
+    @Test
+    public void addLicensesFailTests() throws Exception {
+        userController.login("tam1Tamir1", "tam1Tamir1");
+        try {
+            driverController.addLicense("C");
+        } catch (Exception e) {
+            Assert.assertEquals(e.getMessage(), "License is already exist");
+        }
+        List<String> licenses = new LinkedList<>();
+        licenses.add("C");
+        try {
+            driverController.addLicenses(licenses);
+        } catch (Exception e) {
+            Assert.assertEquals(e.getMessage(), "All the licenses are already exist");
+        }
+
+    }
     @Test
     public void updatePasswordTests() throws Exception {
         userController.login("tam1Tamir1", "tam1Tamir1");
@@ -142,41 +174,41 @@ public class Tests {
     public void addSitesTests() throws Exception {
         Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         try {
-            Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,500,3,Area.center);
+            Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,500,3,"center");
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage()," isn't valid");
         }
 
         try {
-            Site s1 = new Site("mega","herzliya","0543397995","hamatganit",-4,500,3,Area.center);
+            Site s1 = new Site("mega","herzliya","0543397995","hamatganit",-4,500,3,"center");
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage(),"floor isn't valid");
         }
         try {
-            Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,500,8000,Area.center);
+            Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,500,8000,"center");
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage()," isn't valid");
         }
         try {
-            Site s1 = new Site("this is to long to real name","herzliya","0543397995","hamatganit",13,500,3,Area.center);
+            Site s1 = new Site("this is to long to real name","herzliya","0543397995","hamatganit",13,500,3,"center");
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage()," isn't valid");
         }
         try {
-            Site s1 = new Site("mega","herzliya","0543397995","pardiso",13,500,3,Area.center);
+            Site s1 = new Site("mega","herzliya","0543397995","pardiso",13,500,3,"center");
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage(),"The phone number is too short/long");
         }
         try {
-            Site s1 = new Site("mega","herzliya","0543397999999995","hamatganit",13,500,3,Area.center);
+            Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,500,3,"west");
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"The phone number is too short/long");
+            Assert.assertEquals(e.getMessage(),"wrong area");
         }
 
     }
@@ -218,8 +250,8 @@ public class Tests {
         Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking3();
         createTrucking4();
-        Site s2 = new Site("halfree", "herzliya", "0543397993", "davidHamelech", 2, 4, 3, Area.center);
-        Site d2 = new Site("tivTaam", "haifa", "0543397912", "haravSade", 13, 2, 3, Area.north);
+        Site s2 = new Site("halfree", "herzliya", "0543397993", "davidHamelech", 2, 4, 3, "center");
+        Site d2 = new Site("tivTaam", "haifa", "0543397912", "haravSade", 13, 2, 3, "north");
         List add1 = new LinkedList();
         List add2 = new LinkedList();
         add1.add(s2);
@@ -241,8 +273,8 @@ public class Tests {
 
     }
     private void createTrucking1 () throws Exception {
-        Site s1 = new Site("tamirHouse","batYam","0543397995","tamirStr",13,2,3,Area.center);
-        Site d1 = new Site("idoHouse","herzliya","0524321231","idoStr",100,1,6,Area.center);
+        Site s1 = new Site("tamirHouse","batYam","0543397995","tamirStr",13,2,3,"center");
+        Site d1 = new Site("idoHouse","herzliya","0524321231","idoStr",100,1,6,"center");
         List sources = new LinkedList();
         sources.add(s1);
         List destinations = new LinkedList();
@@ -262,8 +294,8 @@ public class Tests {
     }
 
     private void createTrucking2 () throws Exception {
-        Site s1 = new Site("tamirHouse","batYam","0543397995","tamirStr",13,2,3,Area.center);
-        Site d1 = new Site("idoHouse","herzliya","0524321231","idoStr",100,1,6,Area.center);
+        Site s1 = new Site("tamirHouse","batYam","0543397995","tamirStr",13,2,3,"center");
+        Site d1 = new Site("idoHouse","herzliya","0524321231","idoStr",100,1,6,"center");
         List sources = new LinkedList();
         sources.add(s1);
         List destinations = new LinkedList();
@@ -283,8 +315,8 @@ public class Tests {
     }
 
     private void createTrucking3 () throws Exception {
-        Site s1 = new Site("tamirHouse","batYam","0543397995","tamirStr",13,2,3,Area.center);
-        Site d1 = new Site("idoHouse","herzliya","0524321231","idoStr",100,1,6,Area.center);
+        Site s1 = new Site("tamirHouse","batYam","0543397995","tamirStr",13,2,3,"center");
+        Site d1 = new Site("idoHouse","herzliya","0524321231","idoStr",100,1,6,"center");
         List sources = new LinkedList();
         sources.add(s1);
         List destinations = new LinkedList();
@@ -303,8 +335,8 @@ public class Tests {
         }
     }
     private void createTrucking4 () throws Exception {
-        Site s1 = new Site("tamirHouse","batYam","0543397995","tamirStr",13,2,3,Area.center);
-        Site d1 = new Site("idoHouse","herzliya","0524321231","idoStr",100,1,6,Area.center);
+        Site s1 = new Site("tamirHouse","batYam","0543397995","tamirStr",13,2,3,"center");
+        Site d1 = new Site("idoHouse","herzliya","0524321231","idoStr",100,1,6,"center");
         List sources = new LinkedList();
         sources.add(s1);
         List destinations = new LinkedList();

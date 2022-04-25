@@ -32,16 +32,22 @@ public class Driver extends User {
         synchronized (licenses) {
             if (!(licenses.contains(dLicense)))
                 licenses.add(dLicense);
+            else
+                throw new IllegalArgumentException("License is already exist");
         }
     }
 
     public synchronized void addLicenses(List<String> DLicenseList) {
         synchronized (licenses) {
+            boolean added = false;
             for (String dLicenseS : DLicenseList) {
                 DLicense dLicense = castFromString(dLicenseS);
-                if (!(licenses.contains(dLicense)))
+                if (!(licenses.contains(dLicense))) {
+                    added = true;
                     licenses.add(dLicense);
+                }
             }
+            if(!added)throw new IllegalArgumentException("All the licenses are already exist");
         }
     }
 
@@ -51,7 +57,7 @@ public class Driver extends User {
         else if (dLicense.equals("C")) return DLicense.C;
         else if (dLicense.equals("C1")) return DLicense.C1;
         else if (dLicense.equals("C+E")) return DLicense.C_E;
-        else return DLicense.wrong;
+        else throw new IllegalArgumentException("wrong license");
 
     }
 
@@ -89,4 +95,3 @@ public class Driver extends User {
     }
 
 }
-

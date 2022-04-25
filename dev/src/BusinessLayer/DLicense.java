@@ -1,5 +1,5 @@
 package BusinessLayer;
 
 public enum DLicense {
-    B,C,C1,C_E,wrong;
+    B,C,C1,C_E;
 }

@@ -1,5 +1,6 @@
 package BusinessLayer;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class DriverController extends UserController{
@@ -16,8 +17,17 @@ public class DriverController extends UserController{
         super(null);
     }
 
-
-
+    public List<String> getMyLicenses() throws Exception {
+        synchronized (getActiveUser()) {
+            checkIfActiveUserIsDriver();
+            List<DLicense> licenses = ((Driver)getActiveUser()).getLicenses();
+            List<String> toReturn = new LinkedList<String>();
+            for (DLicense dLicense : licenses) {
+                toReturn.add(dLicense.toString());
+            }
+            return toReturn;
+        }
+    }
 
     public String printMyTruckings() throws Exception {
         synchronized (getActiveUser()) {
