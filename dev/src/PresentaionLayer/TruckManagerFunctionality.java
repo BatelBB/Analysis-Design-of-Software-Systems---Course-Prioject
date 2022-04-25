@@ -18,7 +18,7 @@ public class TruckManagerFunctionality extends UserFunctionality {
 
     public void removeTrucking() {
         System.out.println("Enter Trucking ID");
-        int id = checkIntField();
+        int id = Main.getNumber();
         Response response = service.removeTrucking(id);
         if (response.ErrorOccured())
             System.out.println(response.getErrorMessage());
@@ -41,9 +41,9 @@ public class TruckManagerFunctionality extends UserFunctionality {
         String registrationPlate = myObj.nextLine();
         System.out.println("Enter the vehicle's weight");
         int weight, maxWeight;
-        weight = checkIntField();
+        weight = Main.getNumber();
         System.out.println("Enter the vehicle's max weight");
-        maxWeight = checkIntField();
+        maxWeight = Main.getNumber();
         Response<String> response = service.addVehicle(license, registrationPlate, model, weight, maxWeight);
         if (response.ErrorOccured())
             System.out.println(response.getErrorMessage());
@@ -51,36 +51,20 @@ public class TruckManagerFunctionality extends UserFunctionality {
             System.out.println("Vehicle added successfully");
     }
 
-
-    private int checkIntField() {
-        Scanner myObj = new Scanner(System.in);
-        boolean done = false;
-        int intField = 0;
-        while (!done) {
-            String stringField = myObj.next();
-            try {
-                intField = Integer.parseInt(stringField);
-                done = true;
-            } catch (NumberFormatException nfe) {
-                System.out.println("This field is a number");
-            }
-        }
-        return intField;
-    }
-
     private <T> void printList(List<T> list) {
         int number = 1 ;
         for (T element : list) {
-            {
-                System.out.println(String.valueOf(number) +". " + element.toString());
-                number++;
-            }
+            System.out.println(String.valueOf(number) +". " + element.toString());
+            number++;
         }
+        if (list.size() == 0)
+            System.out.println("[empty]");
     }
 
     public void getDriversUsernames() {
         Response<List<String>> response = service.getDriversUsernames();
-        if (response.ErrorOccured()) System.out.println(response.getErrorMessage());
+        if (response.ErrorOccured())
+            System.out.println(response.getErrorMessage());
         else printList(response.getValue());
     }
 
@@ -95,67 +79,61 @@ public class TruckManagerFunctionality extends UserFunctionality {
         Scanner myObj = new Scanner(System.in);
         System.out.println("Enter registration plate of the vehicle");
         String registrationPlate = getVehiclesFromTheUser();
-        System.out.println("Enter year");
-        int year = checkIntField();
-        System.out.println("Enter month");
-        int month = checkIntField();
-        System.out.println("Enter day");
-        int day = checkIntField();
-        System.out.println("Enter hour");
-        int hour = checkIntField();
-        System.out.println("Enter minute");
-        int minutes = checkIntField();
-        LocalDateTime date = LocalDateTime.of(year, month, day, hour, minutes);
-        System.out.println("Enter driver username");
-        String driverUserName = getDriverUsernameFromTheUser();
-        List<List<String>> sources = new LinkedList<>();
-        System.out.println("Enter 1 to add source or 2 to end the action");
-        String answer = myObj.nextLine();
-        while (!answer.equals("2")) {
-            if (answer.equals("1")) {
-                sources.add(createSite());
-                System.out.println("Enter 1 to add source or 2 to end the action");
-                answer = myObj.nextLine();
-            } else {
-                System.out.println("Wrong input, Enter 1 to add source or 2 to end the action");
-                answer = myObj.nextLine();
+        LocalDateTime date = Main.getDateFromUser();
+        if (date == null)
+            System.out.println("Oops, failed to add date");
+        else {
+            System.out.println("Enter driver username");
+            String driverUserName = getDriverUsernameFromTheUser();
+            List<List<String>> sources = new LinkedList<>();
+            System.out.println("Enter 1 to add source or 2 to end the action");
+            String answer = myObj.nextLine();
+            while (!answer.equals("2")) {
+                if (answer.equals("1")) {
+                    sources.add(createSite());
+                    System.out.println("Enter 1 to add source or 2 to end the action");
+                    answer = myObj.nextLine();
+                } else {
+                    System.out.println("Wrong input, Enter 1 to add source or 2 to end the action");
+                    answer = myObj.nextLine();
+                }
             }
-        }
-        List<List<String>> destinations = new LinkedList<>();
-        System.out.println("Enter 1 to add destination or 2 to end the action");
-        String answerTag = myObj.nextLine();
-        while (!answerTag.equals("2")) {
-            if (answerTag.equals("1")) {
-                destinations.add(createSite());
-                System.out.println("Enter 1 to add destination or 2 to end the action");
-                answerTag = myObj.nextLine();
-            } else {
-                System.out.println("Wrong input, Enter 1 to add destination or 2 to end the action");
-                answerTag = myObj.nextLine();
+            List<List<String>> destinations = new LinkedList<>();
+            System.out.println("Enter 1 to add destination or 2 to end the action");
+            String answerTag = myObj.nextLine();
+            while (!answerTag.equals("2")) {
+                if (answerTag.equals("1")) {
+                    destinations.add(createSite());
+                    System.out.println("Enter 1 to add destination or 2 to end the action");
+                    answerTag = myObj.nextLine();
+                } else {
+                    System.out.println("Wrong input, Enter 1 to add destination or 2 to end the action");
+                    answerTag = myObj.nextLine();
+                }
             }
-        }
-        List<Map<String, Integer>> products = new LinkedList<>();
-        System.out.println("Enter 1 to add product or 2 to end the action");
-        String ans = myObj.nextLine();
-        while (!ans.equals("2")) {
-            if (ans.equals("1")) {
-                products.add(createProduct());
-                System.out.println("Enter 1 to add product or 2 to end the action");
-                ans = myObj.nextLine();
-            } else {
-                System.out.println("Wrong input, Enter 1 to add product or 2 to end the action");
-                ans = myObj.nextLine();
+            List<Map<String, Integer>> products = new LinkedList<>();
+            System.out.println("Enter 1 to add product or 2 to end the action");
+            String ans = myObj.nextLine();
+            while (!ans.equals("2")) {
+                if (ans.equals("1")) {
+                    products.add(createProduct());
+                    System.out.println("Enter 1 to add product or 2 to end the action");
+                    ans = myObj.nextLine();
+                } else {
+                    System.out.println("Wrong input, Enter 1 to add product or 2 to end the action");
+                    ans = myObj.nextLine();
+                }
             }
+            System.out.println("Enter length of the Trucking in hours");
+            int hourT = Main.getNumber();
+            System.out.println("Enter length of the Trucking in minutes");
+            int minutesT = Main.getNumber();
+            Response<String> response = service.addTrucking(registrationPlate, date, driverUserName, sources, destinations, products, hourT, minutesT);
+            if (response.ErrorOccured())
+                System.out.println(response.getErrorMessage());
+            else
+                System.out.println("Trucking added successfully");
         }
-        System.out.println("Enter length of the Trucking in hours");
-        int hourT = checkIntField();
-        System.out.println("Enter length of the Trucking in minutes");
-        int minutesT = checkIntField();
-        Response<String> response = service.addTrucking(registrationPlate, date, driverUserName, sources, destinations, products, hourT, minutesT);
-        if (response.ErrorOccured())
-            System.out.println(response.getErrorMessage());
-        else
-            System.out.println("Trucking added successfully");
     }
 
     public void printTruckingsBoard() {
@@ -252,7 +230,7 @@ public class TruckManagerFunctionality extends UserFunctionality {
     public void addSourcesToTrucking() {
         List<List<String>> sources = new LinkedList<>();
         System.out.println("Enter Trucking ID");
-        int id = checkIntField();
+        int id = Main.getNumber();
         Scanner myObj = new Scanner(System.in);
         System.out.println("Enter 1 to add source or 2 to end the action");
         String answer = myObj.nextLine();
@@ -277,7 +255,7 @@ public class TruckManagerFunctionality extends UserFunctionality {
     public void updateSourcesOnTrucking() {
         List<List<String>> sources = new LinkedList<>();
         System.out.println("Enter Trucking ID");
-        int id = checkIntField();
+        int id = Main.getNumber();
         Scanner myObj = new Scanner(System.in);
         System.out.println("Enter 1 to add source or 2 to end the action");
         String answer = myObj.nextLine();
@@ -302,7 +280,7 @@ public class TruckManagerFunctionality extends UserFunctionality {
     public void addDestinationToTrucking() {
         List<List<String>> destinations = new LinkedList<>();
         System.out.println("Enter Trucking ID");
-        int id = checkIntField();
+        int id = Main.getNumber();
         Scanner myObj = new Scanner(System.in);
         System.out.println("Enter 1 to add destination or 2 to end the action");
         String answer = myObj.nextLine();
@@ -328,7 +306,7 @@ public class TruckManagerFunctionality extends UserFunctionality {
     public void updateDestinationsOnTrucking() {
         List<List<String>> destinations = new LinkedList<>();
         System.out.println("Enter Trucking ID");
-        int id = checkIntField();
+        int id = Main.getNumber();
         Scanner myObj = new Scanner(System.in);
         System.out.println("Enter 1 to add destination or 2 to end the action");
         String answer = myObj.nextLine();
@@ -350,54 +328,9 @@ public class TruckManagerFunctionality extends UserFunctionality {
 
     }
 
-    private Map<String, Integer> createProduct() {
-        Scanner myObj = new Scanner(System.in);
-        System.out.println("Choose product: ");
-        System.out.println("1. eggs");
-        System.out.println("2. milk");
-        System.out.println("3. water");
-        String productName = Main.getChoiceFromArray(new String[]{"eggs", "milk", "water"});
-        System.out.println("Enter quantity");
-        int quantity = checkIntField();
-        Map products = new ConcurrentHashMap();
-        products.put(productName, quantity);
-        return products;
-    }
-
-    private List<String> createSite() {
-        Scanner myObj = new Scanner(System.in);
-        System.out.println("Enter contact guy name");
-        String name = myObj.nextLine();
-        System.out.println("Enter city name");
-        String city = myObj.nextLine();
-        System.out.println("Enter phone number to contact");
-        String pn = myObj.nextLine();
-        System.out.println("Enter street");
-        String street = myObj.nextLine();
-        System.out.println("Enter house number");
-        String hn = String.valueOf(checkIntField());
-        System.out.println("Enter floor number");
-        String fn = String.valueOf(checkIntField());
-        System.out.println("Enter apartment number");
-        String an = myObj.nextLine();
-        System.out.println("Enter area");
-        String area = myObj.nextLine();
-        List<String> site = new LinkedList<>();
-        site.add(name);
-        site.add(city);
-        site.add(pn);
-        site.add(street);
-        site.add(hn);
-        site.add(fn);
-        site.add(an);
-        site.add(area);
-        return site;
-    }
-
-
     public void updateVehicleOnTrucking() {
         System.out.println("Enter Trucking ID");
-        int id = checkIntField();
+        int id = Main.getNumber();
         Scanner myObj = new Scanner(System.in);
         System.out.println("Enter the vehicle registration plate");
         String registrationPlate = getVehiclesFromTheUser();
@@ -411,7 +344,7 @@ public class TruckManagerFunctionality extends UserFunctionality {
 
     public void updateDriverOnTrucking() {
         System.out.println("Enter Trucking ID");
-        int id = checkIntField();
+        int id = Main.getNumber();
         Scanner myObj = new Scanner(System.in);
         System.out.println("Enter the driver username");
         String driverusername = getDriverUsernameFromTheUser();
@@ -425,7 +358,7 @@ public class TruckManagerFunctionality extends UserFunctionality {
 
     public void moveProductsToTrucking() {
         System.out.println("Enter Trucking ID");
-        int id = checkIntField();
+        int id = Main.getNumber();
         Scanner myObj = new Scanner(System.in);
         System.out.println("Choose product: ");
         System.out.println("1. eggs");
@@ -442,15 +375,14 @@ public class TruckManagerFunctionality extends UserFunctionality {
 
     public void addProductToTrucking() {
         System.out.println("Enter Trucking ID");
-        int id = checkIntField();
-        Scanner myObj = new Scanner(System.in);
+        int id = Main.getNumber();
         System.out.println("Choose product: ");
         System.out.println("1. eggs");
         System.out.println("2. milk");
         System.out.println("3. water");
         String productName = Main.getChoiceFromArray(new String[]{"eggs", "milk", "water"});
         System.out.println("Enter quantity");
-        int quantity = checkIntField();
+        int quantity = Main.getNumber();
         Response<String> response = service.addProductToTrucking(id, productName, quantity);
         if (response.ErrorOccured())
             System.out.println(response.getErrorMessage());
@@ -461,27 +393,26 @@ public class TruckManagerFunctionality extends UserFunctionality {
 
     public void updateDateOnTrucking() {
         System.out.println("Enter Trucking ID");
-        int id = checkIntField();
-        Scanner myObj = new Scanner(System.in);
-        System.out.println("Enter year");
-        int year = checkIntField();
-        System.out.println("Enter month");
-        int month = checkIntField();
-        System.out.println("Enter day");
-        int day = checkIntField();
-        System.out.println("Enter hour");
-        int hour = checkIntField();
-        System.out.println("Enter minute");
-        int minutes = checkIntField();
-        LocalDateTime date = LocalDateTime.of(year, month, day, hour, minutes);
-        Response<String> response = service.updateDateOnTrucking(id, date);
+        int id = Main.getNumber();
+        LocalDateTime date = Main.getDateFromUser();
+        if (date == null)
+            System.out.println("Oops, failed to add date");
+        else {
+            Response<String> response = service.updateDateOnTrucking(id, date);
+            if (response.ErrorOccured())
+                System.out.println(response.getErrorMessage());
+            else
+                System.out.println("Update successfully");
+        }
+    }
+
+    public void getRegisterCode() {
+        Response<List<String>> response = service.getRegisterCode();
         if (response.ErrorOccured())
             System.out.println(response.getErrorMessage());
         else
-            System.out.println("Update successfully");
-
+            System.out.println("Trucking manager register code: " + response.getValue());
     }
-
 
     private String getDriverUsernameFromTheUser() {
         Response<List<String>> drivers = service.getDriversUsernames();
@@ -516,12 +447,51 @@ public class TruckManagerFunctionality extends UserFunctionality {
         }
     }
 
-    public void getRegisterCode() {
-        Response<List<String>> response = service.getRegisterCode();
-        if (response.ErrorOccured())
-            System.out.println(response.getErrorMessage());
-        else
-            System.out.println("Trucking manager register code: " + response.getValue());
+    private Map<String, Integer> createProduct() {
+        Scanner myObj = new Scanner(System.in);
+        System.out.println("Choose product: ");
+        System.out.println("1. eggs");
+        System.out.println("2. milk");
+        System.out.println("3. water");
+        String productName = Main.getChoiceFromArray(new String[]{"eggs", "milk", "water"});
+        System.out.println("Enter quantity");
+        int quantity = Main.getNumber();
+        Map products = new ConcurrentHashMap();
+        products.put(productName, quantity);
+        return products;
+    }
+
+    private List<String> createSite() {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter contact guy name");
+        String name = in.nextLine();
+        System.out.println("Enter city name");
+        String city = in.nextLine();
+        System.out.println("Enter phone number to contact");
+        String pn = in.nextLine();
+        System.out.println("Enter street");
+        String street = in.nextLine();
+        System.out.println("Enter house number");
+        String hn = String.valueOf(Main.getNumber());
+        System.out.println("Enter floor number");
+        String fn = String.valueOf(Main.getNumber());
+        System.out.println("Enter apartment number");
+        String an = String.valueOf(Main.getNumber());
+        System.out.println("Choose area:");
+        System.out.println("1. Center");
+        System.out.println("2. North");
+        System.out.println("3. South");
+        String area = Main.getChoiceFromArray(new String[]{"center", "north", "south"});
+        List<String> site = new LinkedList<>();
+        site.add(name);
+        site.add(city);
+        site.add(pn);
+        site.add(street);
+        site.add(hn);
+        site.add(fn);
+        site.add(an);
+        site.add(area);
+        return site;
     }
 
 }

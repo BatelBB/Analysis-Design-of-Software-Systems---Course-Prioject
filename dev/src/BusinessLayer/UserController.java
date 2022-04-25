@@ -14,7 +14,7 @@ public class UserController {
     private String CODE_TRUCK_MANAGER = "tm1234tm";
     private Map<String, String> UNIQUE_DRIVER_CODE_OF_TM; //key: hashcode, value: tmUsername
 
-    protected UserController() throws Exception {
+    private UserController() throws Exception {
         users = new ConcurrentHashMap<String, User>();
         UNIQUE_DRIVER_CODE_OF_TM = new ConcurrentHashMap<String, String>();
         activeUser = nullUserForLogOut;

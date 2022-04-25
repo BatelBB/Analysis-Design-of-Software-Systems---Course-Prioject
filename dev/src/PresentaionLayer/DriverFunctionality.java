@@ -80,7 +80,7 @@ public class DriverFunctionality extends UserFunctionality{
     public void setWeightForTrucking() {
         System.out.print("Enter trucking id for weight update: ");
         int id = Main.getNumber();
-        System.out.print("Enter weight: ");
+        System.out.print("Enter weight with products: ");
         int weight = Main.getNumber();
         Response response = service.setWeightForTrucking(id, weight);
         if (response.ErrorOccured())

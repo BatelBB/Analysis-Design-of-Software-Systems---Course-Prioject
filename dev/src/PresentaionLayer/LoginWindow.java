@@ -2,6 +2,7 @@ package PresentaionLayer;
 
 import ServiceLayer.Response;
 import ServiceLayer.Service;
+import java.io.*;
 
 import java.util.Scanner;
 
@@ -33,13 +34,12 @@ public class LoginWindow {
                 System.out.println("Login completed");
                 User user;
                 if(response.getValue().equals(true))
-                    user = new Driver(username,password);
+                    user = new Driver();
                 else
-                    user = new TruckManager(username,password);
+                    user = new TruckManager();
                 user.act();
                 wantToBack = true;
             }
         }
     }
-
 }

@@ -20,8 +20,10 @@ public class RegisterWindow {
             String username = myObj.nextLine();
             System.out.println("Enter Password");
             String password = myObj.nextLine();
-            System.out.println("Enter Role");
-            String role = myObj.nextLine();
+            System.out.println("Choose Role:");
+            System.out.println("1. Truck manager");
+            System.out.println("2. Driver");
+            String role = Main.getChoiceFromArray(new String[]{"trucking manager", "driver"});
             System.out.println("Enter Code");
             String code = myObj.nextLine();
             Response response = service.registerUser(name,username,password,role,code);

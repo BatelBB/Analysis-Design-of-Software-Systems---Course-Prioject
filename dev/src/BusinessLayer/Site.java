@@ -22,8 +22,8 @@ public class Site {
         this.apartment = apartment;
         this.area = castStringToArea(Sarea);
         validateInt(floor, "floor", 0, 100);
-        validateInt(apartment, "apartment", 1, 100);
-        validateInt(houseNumber, "house number", 0, 300);
+        validateInt(apartment, "apartment", 0, 100);
+        validateInt(houseNumber, "house number", 1, 300);
         validateString(city, "city", 2, 20);
         validateString(city, "city", 2, 20);
         validateString(city, "contact guy", 2, 15);
@@ -41,7 +41,7 @@ public class Site {
     public String printSite() {
         String toReturn = "Area: " + area + "\n";
         toReturn += "Address: " + street + " " + houseNumber + ", " + getCity() + "\n";
-        if (houseNumber != 0)
+        if (apartment != 0 | floor != 0)
             toReturn += "floor: " + floor + " apartment: " + apartment + "\n";
         toReturn += "Contact guy: " + contactGuy + "  phone number: " + phoneNumber + "\n";
         return toReturn;
@@ -92,9 +92,9 @@ public class Site {
     }
 
     private boolean validateInt(int fieldToCheck, String fieldToCheckName, int min, int max) {
-        if(houseNumber >= min & houseNumber <= max)
+        if(fieldToCheck >= min & fieldToCheck <= max)
             return true;
-        throw new IllegalArgumentException(fieldToCheckName + " isn't valid");
+        throw new IllegalArgumentException(fieldToCheckName + " isn't valid. Need to be between " + String.valueOf(min) + "-" + String.valueOf(max) + ".");
     }
 
     private boolean validateString(String fieldToCheck, String fieldToCheckName, int minLength, int maxLength) {

@@ -2,8 +2,8 @@ package PresentaionLayer;
 
 public class Driver extends User {
 
-    public Driver(String name, String username) {
-        super(name, username);
+    public Driver() {
+
     }
 
     public void act() throws Exception {

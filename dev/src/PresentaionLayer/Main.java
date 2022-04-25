@@ -1,5 +1,6 @@
 package PresentaionLayer;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -69,6 +70,55 @@ public class Main {
             choice = Main.getNumber();
         }
         return choice;
+    }
+
+    public static LocalDateTime getDateFromUser() {
+        boolean found = false;
+        LocalDateTime toReturn = null;
+        while (!found) {
+            System.out.println("Enter year");
+            int year = getNumber();
+            while (year < 0 | year > 2100) {
+                System.out.println("please enter a normal year");
+                year = getNumber();
+            }
+            System.out.println("Enter month");
+            int month = getNumber();
+            while (month < 1 | year > 12) {
+                System.out.println("don't be stupid. month need to be between 1-12");
+                month = getNumber();
+            }
+            System.out.println("Enter day");
+            int day = getNumber();
+            while (day < 1 | day > 31) {
+                System.out.println("You do not know how many days there are in a month?");
+                day = getNumber();
+            }
+            int hour = getNumber();
+            while (hour < 0 | hour > 23) {
+                System.out.println("You do not know how many hours there are in a day?");
+                hour = getNumber();
+            }
+            int minute = getNumber();
+            while (minute < 0 | minute > 59) {
+                System.out.println("You do not know how many minutes there are in a hour?");
+                minute = getNumber();
+            }
+            try {
+                toReturn = LocalDateTime.of(year, month, day, hour, minute);
+                found = true;
+            }
+            catch (Exception e) {
+                System.out.println("Oops, something got wrong. Maybe the date is not valid.");
+                System.out.println("Do you want to try again?");
+                System.out.println("1. Yes");
+                System.out.println("2. No");
+                String choice = getChoiceFromArray(new String[]{"Yes", "No"});
+                if (choice.equals("No"))
+                    found = true;
+            }
+        }
+        return toReturn;
     }
 
 }

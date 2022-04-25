@@ -36,8 +36,8 @@ public class Trucking {
         checkTime();
         checkDate();
         checkDLicense();
-        checkSameArea(sources);//TODO: need to send warning if false
-        checkSameArea(destinations);//TODO: need to send warning if false
+        checkSameArea(sources);
+        checkSameArea(destinations);
         addSources(sources);
         addDestinations(destinations);
     }
@@ -117,6 +117,8 @@ public class Trucking {
             while (truckingIterator.hasNext()) {
                 ProductForTrucking productForTrucking = truckingIterator.next();
                 if(productForTrucking.product == castFromString(productSKU)) {
+                    if (products.size() == 1)
+                        throw new IllegalArgumentException("You can't stay empty products list");
                     truckingIterator.remove();
                     return;
                 }
@@ -215,7 +217,7 @@ public class Trucking {
         return toReturn;
     }
 
-    private void checkDateForUpdateTrucking() throws Exception{
+    private void checkDateForUpdateTrucking() throws Exception {
         if (date.compareTo(LocalDateTime.now()) <= 0)
             throw new IllegalArgumentException("Sorry, it's too late to update the trucking");
     }
@@ -251,8 +253,8 @@ public class Trucking {
     }
 
     private void addSites(List<List<String>> sites, Map<Area, List<Site>> sourcesOrDestinations) throws Exception {
-        for (int index = 0; index < sites.size(); index++) {
-            Site Source = castFromString(sites.get(index));
+        for (List<String> site : sites) {
+            Site Source = castFromString(site);
             if(Source == null | Source.getArea() == null)
                 throw new IllegalArgumentException("illegal details of site");
             if(sourcesOrDestinations.containsKey(Source.getArea()))
