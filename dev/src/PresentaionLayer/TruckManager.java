@@ -25,7 +25,7 @@ public class TruckManager extends User{
             else if(choice == 3)
                 getInformationAboutVehicles();
             else if(choice == 4)
-                truckManagerFunctionality.printFutureTruckings();
+                updateTruckings();
             else if(choice == 5)
                 truckManagerFunctionality.getRegisterCode();
             else if(choice == 6)
