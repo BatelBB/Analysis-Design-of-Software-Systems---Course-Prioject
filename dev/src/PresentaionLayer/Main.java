@@ -84,7 +84,7 @@ public class Main {
             }
             System.out.println("Enter month");
             int month = getNumber();
-            while (month < 1 | year > 12) {
+            while (month < 1 | month > 12) {
                 System.out.println("don't be stupid. month need to be between 1-12");
                 month = getNumber();
             }
