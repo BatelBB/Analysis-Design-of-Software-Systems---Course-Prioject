@@ -29,7 +29,7 @@ public class TruckingsBoard {
                 LocalDateTime startCurr = currentTrucking.getDate();
                 LocalDateTime endCurr = currentTrucking.finalDate();
                 if (startTruck.isAfter(endCurr)) {
-                    truckingListIterator.add(trucking);
+                    insertTrucking(trucking);
                     return;
                 }
                 if (endTruck.isAfter(startCurr)) {
@@ -37,8 +37,24 @@ public class TruckingsBoard {
                             currentTrucking.getDriver().getUsername(),trucking.getDriver().getUsername());
                 }
             }
-            truckingListIterator.add(trucking);
+            insertTrucking(trucking);
         }
+    }
+
+    private void insertTrucking(Trucking trucking) {
+        if (truckings.size() == 0) {
+            truckings.add(trucking);
+            return;
+        }
+        ListIterator<Trucking> truckingListIterator = truckings.listIterator();
+        while (truckingListIterator.hasNext()) {
+            if(trucking.getDate().compareTo(truckingListIterator.next().getDate()) >= 0) {
+                truckingListIterator.previous();
+                truckingListIterator.add(trucking);
+                return;
+            }
+        }
+        truckings.add(trucking);
     }
 
     public boolean checkAvailibility(String registrationPlate1, String registrationPlate2,String driverUserName1,String driverUserName2) throws Exception {
