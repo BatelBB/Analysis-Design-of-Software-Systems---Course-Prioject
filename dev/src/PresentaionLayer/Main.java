@@ -94,11 +94,13 @@ public class Main {
                 System.out.println("You do not know how many days there are in a month?");
                 day = getNumber();
             }
+            System.out.println("Enter the trucking time (just the hour part)");
             int hour = getNumber();
             while (hour < 0 | hour > 23) {
-                System.out.println("You do not know how many hours there are in a day?");
+                System.out.println("Do you not know how many hours there are in a day?");
                 hour = getNumber();
             }
+            System.out.println("Enter the trucking time (just the minutes part)");
             int minute = getNumber();
             while (minute < 0 | minute > 59) {
                 System.out.println("You do not know how many minutes there are in a hour?");

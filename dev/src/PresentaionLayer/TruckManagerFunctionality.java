@@ -76,7 +76,6 @@ public class TruckManagerFunctionality extends UserFunctionality {
     }
 
     public void addTrucking() throws Exception {
-        Scanner myObj = new Scanner(System.in);
         System.out.println("Enter registration plate of the vehicle");
         String registrationPlate = getVehiclesFromTheUser();
         LocalDateTime date = Main.getDateFromUser();
@@ -86,48 +85,41 @@ public class TruckManagerFunctionality extends UserFunctionality {
             System.out.println("Enter driver username");
             String driverUserName = getDriverUsernameFromTheUser();
             List<List<String>> sources = new LinkedList<>();
-            System.out.println("Enter 1 to add source or 2 to end the action");
-            String answer = myObj.nextLine();
+            System.out.println("Now we gonna take details about the first source:");
+            String answer = "1";
             while (!answer.equals("2")) {
-                if (answer.equals("1")) {
-                    sources.add(createSite());
-                    System.out.println("Enter 1 to add source or 2 to end the action");
-                    answer = myObj.nextLine();
-                } else {
-                    System.out.println("Wrong input, Enter 1 to add source or 2 to end the action");
-                    answer = myObj.nextLine();
-                }
+                sources.add(createSite());
+                System.out.println("Enter 1 to add another source or 2 if not");
+                answer = Main.getChoiceFromArray(new String[]{"1", "2"});
             }
             List<List<String>> destinations = new LinkedList<>();
-            System.out.println("Enter 1 to add destination or 2 to end the action");
-            String answerTag = myObj.nextLine();
-            while (!answerTag.equals("2")) {
-                if (answerTag.equals("1")) {
-                    destinations.add(createSite());
-                    System.out.println("Enter 1 to add destination or 2 to end the action");
-                    answerTag = myObj.nextLine();
-                } else {
-                    System.out.println("Wrong input, Enter 1 to add destination or 2 to end the action");
-                    answerTag = myObj.nextLine();
-                }
+            System.out.println("Now we gonna take details about the first destination:");
+            answer = "1";
+            while (!answer.equals("2")) {
+                destinations.add(createSite());
+                System.out.println("Enter 1 to add another destination or 2 if not");
+                answer = Main.getChoiceFromArray(new String[]{"1", "2"});
             }
             List<Map<String, Integer>> products = new LinkedList<>();
-            System.out.println("Enter 1 to add product or 2 to end the action");
-            String ans = myObj.nextLine();
-            while (!ans.equals("2")) {
-                if (ans.equals("1")) {
-                    products.add(createProduct());
-                    System.out.println("Enter 1 to add product or 2 to end the action");
-                    ans = myObj.nextLine();
-                } else {
-                    System.out.println("Wrong input, Enter 1 to add product or 2 to end the action");
-                    ans = myObj.nextLine();
-                }
+            System.out.println("Now we gonna choose the products:");
+            answer = "1";
+            while (!answer.equals("2")) {
+                products.add(createProduct());
+                System.out.println("Enter 1 to add another product or 2 if not");
+                answer = Main.getChoiceFromArray(new String[]{"1", "2"});
             }
-            System.out.println("Enter length of the Trucking in hours");
+            System.out.println("Enter length of the Trucking in hours (the ? part in ?:__)");
             int hourT = Main.getNumber();
-            System.out.println("Enter length of the Trucking in minutes");
+            while (hourT < 0) {
+                System.out.println("Hour can't be negative number");
+                hourT = Main.getNumber();
+            }
+            System.out.println("Enter length of the Trucking in minutes (the ? part in _:??)");
             int minutesT = Main.getNumber();
+            while (minutesT < 0 | minutesT > 59) {
+                System.out.println("Need to be between 0 to 59");
+                minutesT = Main.getNumber();
+            }
             Response<String> response = service.addTrucking(registrationPlate, date, driverUserName, sources, destinations, products, hourT, minutesT);
             if (response.ErrorOccured())
                 System.out.println(response.getErrorMessage());
