@@ -15,7 +15,7 @@ public class TruckManager extends User {
     public TruckManager(String name, String username, String password) throws Exception {
         super(name, username, password);
         this.role = Role.truckingManager;
-        this.truckingsBoard = new TruckingsBoard(this);
+        this.truckingsBoard = new TruckingsBoard();
         drivers = new ConcurrentHashMap<String, Driver>();
         vehicles = new ConcurrentHashMap<String, Vehicle>();
     }

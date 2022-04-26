@@ -198,35 +198,35 @@ public class Tests {
             Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,500,3,"center");
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage()," isn't valid");
+            Assert.assertEquals(e.getMessage(),"floor isn't valid. Need to be between 0-100.");
         }
 
         try {
-            Site s1 = new Site("mega","herzliya","0543397995","hamatganit",-4,500,3,"center");
+            Site s1 = new Site("mega","herzliya","0543397995","hamatganit",-4,100,3,"center");
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"floor isn't valid");
+            Assert.assertEquals(e.getMessage(),"house number isn't valid. Need to be between 1-300.");
         }
         try {
-            Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,500,8000,"center");
+            Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,100,8000,"center");
+        }
+        catch (Exception e) {
+            Assert.assertEquals(e.getMessage(),"apartment isn't valid. Need to be between 0-100.");
+        }
+        try {
+            Site s1 = new Site("this is to long to real name","herzliya","0543397995","hamatganit",13,100,3,"center");
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage()," isn't valid");
         }
         try {
-            Site s1 = new Site("this is to long to real name","herzliya","0543397995","hamatganit",13,500,3,"center");
-        }
-        catch (Exception e) {
-            Assert.assertEquals(e.getMessage()," isn't valid");
-        }
-        try {
-            Site s1 = new Site("mega","herzliya","0543397995","pardiso",13,500,3,"center");
+            Site s1 = new Site("mega","herzliya","054323397995","pardiso",13,100,3,"center");
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage(),"The phone number is too short/long");
         }
         try {
-            Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,500,3,"west");
+            Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,100,3,"west");
         }
         catch (Exception e) {
             Assert.assertEquals(e.getMessage(),"wrong area");

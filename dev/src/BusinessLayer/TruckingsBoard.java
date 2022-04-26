@@ -3,12 +3,13 @@ package BusinessLayer;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class TruckingsBoard {
 
     private LinkedList<Trucking> truckings;
 
-    public TruckingsBoard(TruckManager truckManager) {
+    public TruckingsBoard() {
         truckings = new LinkedList<Trucking>();
     }
 
@@ -20,36 +21,43 @@ public class TruckingsBoard {
             return;
         }
         else {
-            int indexToAdd = 0 ;
-            for(int i = 0 ; i < truckings.size(); i = i+1)
-            {
-                Trucking currentTrucking = truckings.get(i);
+            LocalDateTime startTruck = trucking.getDate();
+            LocalDateTime endTruck = trucking.finalDate();
+            ListIterator<Trucking> truckingListIterator = truckings.listIterator();
+            while (truckingListIterator.hasNext()) {
+                Trucking currentTrucking = truckingListIterator.next();
                 LocalDateTime startCurr = currentTrucking.getDate();
                 LocalDateTime endCurr = currentTrucking.finalDate();
-                LocalDateTime startTruck = trucking.getDate();
-                LocalDateTime endTruck = trucking.finalDate();
-                boolean before = endTruck.compareTo(startCurr)<0;
-                boolean bewteenButStartBefore = startTruck.compareTo(startCurr)<0 & endTruck.compareTo(startCurr)>0;
-                boolean bewteenButStartAfter = startTruck.compareTo(startCurr)>0 & startTruck.compareTo(endCurr)<0;
-                if(before) {truckings.add(indexToAdd,trucking); return;}
-                else if (bewteenButStartAfter)
-                {
-                    boolean checkAvailibity = checkAvailibility(currentTrucking.getVehicle().getRegistationPlate(),trucking.getVehicle().getRegistationPlate(),
-                            currentTrucking.getDriver().getUsername(),trucking.getDriver().getUsername());
+                if (startTruck.isAfter(endCurr)) {
+                    insertTrucking(trucking);
+                    return;
                 }
-                else if(bewteenButStartBefore)
-                {
-                    boolean checkAvailibity = checkAvailibility(currentTrucking.getVehicle().getRegistationPlate(),trucking.getVehicle().getRegistationPlate(),
+                if (endTruck.isAfter(startCurr)) {
+                    checkAvailibility(currentTrucking.getVehicle().getRegistationPlate(),trucking.getVehicle().getRegistationPlate(),
                             currentTrucking.getDriver().getUsername(),trucking.getDriver().getUsername());
-                    indexToAdd=indexToAdd+1;
                 }
             }
-            truckings.add(indexToAdd,trucking);
+            insertTrucking(trucking);
         }
     }
 
-    public boolean checkAvailibility(String registrationPlate1, String registrationPlate2,String driverUserName1,String driverUserName2)
-    {
+    private void insertTrucking(Trucking trucking) {
+        if (truckings.size() == 0) {
+            truckings.add(trucking);
+            return;
+        }
+        ListIterator<Trucking> truckingListIterator = truckings.listIterator();
+        while (truckingListIterator.hasNext()) {
+            if(trucking.getDate().compareTo(truckingListIterator.next().getDate()) >= 0) {
+                truckingListIterator.previous();
+                truckingListIterator.add(trucking);
+                return;
+            }
+        }
+        truckings.add(trucking);
+    }
+
+    public boolean checkAvailibility(String registrationPlate1, String registrationPlate2,String driverUserName1,String driverUserName2) throws Exception {
         if (registrationPlate1 == registrationPlate2)
             throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same vehicle");
         if (driverUserName1 == driverUserName2)
