@@ -5,9 +5,11 @@ import BusinessLayer.DriverController;
 import BusinessLayer.Site;
 import BusinessLayer.TruckManagerController;
 import BusinessLayer.UserController;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -88,7 +90,7 @@ public class Tests {
         truckManagerController.reserForTests();
     }
 
-    @Before
+    @BeforeAll
     public void setUp() throws Exception {
         resetForTests();
         registerIdoTamirRami();
@@ -104,14 +106,14 @@ public class Tests {
         userController.logout();
         userController.registerUser("tel aviv", "tau", "Utau123", "driver", hashCode);
         userController.login("bgu", "Ubgu123");
-        Assert.assertEquals(truckManagerController.getDriversUsernames().contains("tau"), true);
-        Assert.assertEquals(truckManagerController.getDriversUsernames().contains("tam1Tamir1"), false);
-        Assert.assertEquals(truckManagerController.getVehiclesRegistrationPlates().contains("12345642"), false);
+        assertEquals(truckManagerController.getDriversUsernames().contains("tau"), true);
+        assertEquals(truckManagerController.getDriversUsernames().contains("tam1Tamir1"), false);
+        assertEquals(truckManagerController.getVehiclesRegistrationPlates().contains("12345642"), false);
         userController.logout();
         userController.login("ido1Ido1", "ido1Ido1");
-        Assert.assertEquals(truckManagerController.getDriversUsernames().contains("tau"), false);
-        Assert.assertEquals(truckManagerController.getDriversUsernames().contains("tam1Tamir1"), true);
-        Assert.assertEquals(truckManagerController.getVehiclesRegistrationPlates().contains("12345642"), true);
+        assertEquals(truckManagerController.getDriversUsernames().contains("tau"), false);
+        assertEquals(truckManagerController.getDriversUsernames().contains("tam1Tamir1"), true);
+        assertEquals(truckManagerController.getVehiclesRegistrationPlates().contains("12345642"), true);
 
     }
 
@@ -121,14 +123,14 @@ public class Tests {
         try {
             driverController.addLicense("C");
         } catch (Exception e) {
-            Assert.assertEquals(e.getMessage(), "License is already exist");
+            assertEquals(e.getMessage(), "License is already exist");
         }
         List<String> licenses = new LinkedList<>();
         licenses.add("C");
         try {
             driverController.addLicenses(licenses);
         } catch (Exception e) {
-            Assert.assertEquals(e.getMessage(), "All the licenses are already exist");
+            assertEquals(e.getMessage(), "All the licenses are already exist");
         }
 
     }
@@ -136,100 +138,100 @@ public class Tests {
     public void updatePasswordTests() throws Exception {
         userController.login("tam1Tamir1", "tam1Tamir1");
         try {
-            Assert.assertEquals(userController.updatePassword("pass"), true);
+            assertEquals(userController.updatePassword("pass"), true);
         } catch (Exception e) {
-            Assert.assertEquals(e.getMessage(), "The minimum password length should be at least 6 characters");
+            assertEquals(e.getMessage(), "The minimum password length should be at least 6 characters");
         }
-        Assert.assertEquals(userController.updatePassword("passIdo1"), true);
+        assertEquals(userController.updatePassword("passIdo1"), true);
     }
     @Test
     public void loginLogoutTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
+        assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         try {
-            Assert.assertEquals(userController.login("ramiF","rami1Rami1"),true);
+            assertEquals(userController.login("ramiF","rami1Rami1"),true);
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"There is a user already connected to the system");
+            assertEquals(e.getMessage(),"There is a user already connected to the system");
         }
         userController.logout();
         try {
-            Assert.assertEquals(userController.login("ramiF","rami2Rami1"),true);
+            assertEquals(userController.login("ramiF","rami2Rami1"),true);
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"Wrong username or wrong password.");
+            assertEquals(e.getMessage(),"Wrong username or wrong password.");
         }
-        Assert.assertEquals(userController.login("ramiF","rami1Rami1"),true);
-        Assert.assertEquals(userController.logout(), true);
+        assertEquals(userController.login("ramiF","rami1Rami1"),true);
+        assertEquals(userController.logout(), true);
     }
 
     @Test
     public void addVehiclesTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
+        assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         try {
             truckManagerController.addVehicle("C","45345E642","volvo",12,14);
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"Invalid registration plate");
+            assertEquals(e.getMessage(),"Invalid registration plate");
         }
         try {
             truckManagerController.addVehicle("C","45345642","volvo",-4,14);
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"Weight is positive");
+            assertEquals(e.getMessage(),"Weight is positive");
         }
         try {
             truckManagerController.addVehicle("C","45345642","volvo",12,9);
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"Max wight is bigger then weight");
+            assertEquals(e.getMessage(),"Max wight is bigger then weight");
         }
         try {
             truckManagerController.addVehicle("C","45345642","BMW122414124124",12,14);
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"Invalid model");
+            assertEquals(e.getMessage(),"Invalid model");
         }
     }
 
     @Test
     public void addSitesTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
+        assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         try {
             Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,500,3,"center");
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"floor isn't valid. Need to be between 0-100.");
+            assertEquals(e.getMessage(),"floor isn't valid. Need to be between 0-100.");
         }
 
         try {
             Site s1 = new Site("mega","herzliya","0543397995","hamatganit",-4,100,3,"center");
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"house number isn't valid. Need to be between 1-300.");
+            assertEquals(e.getMessage(),"house number isn't valid. Need to be between 1-300.");
         }
         try {
             Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,100,8000,"center");
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"apartment isn't valid. Need to be between 0-100.");
+            assertEquals(e.getMessage(),"apartment isn't valid. Need to be between 0-100.");
         }
         try {
             Site s1 = new Site("this is to long to real name","herzliya","0543397995","hamatganit",13,100,3,"center");
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage()," isn't valid");
+            assertEquals(e.getMessage()," isn't valid");
         }
         try {
             Site s1 = new Site("mega","herzliya","054323397995","pardiso",13,100,3,"center");
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"The phone number is too short/long");
+            assertEquals(e.getMessage(),"The phone number is too short/long");
         }
         try {
             Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,100,3,"west");
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"wrong area");
+            assertEquals(e.getMessage(),"wrong area");
         }
 
     }
@@ -237,38 +239,38 @@ public class Tests {
 
     @Test
     public void addlegalTruckingsTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
+        assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking3();
         createTrucking4();
     }
 
     @Test
     public void addIllegalTruckingsTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
+        assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking1();
         createTrucking2();
     }
 
     @Test
     public void checkBoardTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
+        assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking3();
         createTrucking4();
-        Assert.assertEquals(userController.logout(), true);
-        Assert.assertEquals(userController.login("ramiF", "rami1Rami1"), true);
-        Assert.assertEquals(driverController.printMyTruckings().contains("herzliya"), true);
-        Assert.assertEquals(driverController.printMyFutureTruckings().contains("herzliya"), true);
-        Assert.assertEquals(driverController.printMyTruckingsHistory().contains("herzliya"), false);
-        Assert.assertEquals(userController.logout(), true);
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
-        Assert.assertEquals(truckManagerController.printFutureTruckings().contains("herzliya"), true);
-        Assert.assertEquals(truckManagerController.getVehiclesRegistrationPlates().get(0), "45345642");
-        Assert.assertEquals(truckManagerController.printBoardOfDriver("tam1Tamir1").contains("herzliya"), true);
+        assertEquals(userController.logout(), true);
+        assertEquals(userController.login("ramiF", "rami1Rami1"), true);
+        assertEquals(driverController.printMyTruckings().contains("herzliya"), true);
+        assertEquals(driverController.printMyFutureTruckings().contains("herzliya"), true);
+        assertEquals(driverController.printMyTruckingsHistory().contains("herzliya"), false);
+        assertEquals(userController.logout(), true);
+        assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
+        assertEquals(truckManagerController.printFutureTruckings().contains("herzliya"), true);
+        assertEquals(truckManagerController.getVehiclesRegistrationPlates().get(0), "45345642");
+        assertEquals(truckManagerController.printBoardOfDriver("tam1Tamir1").contains("herzliya"), true);
     }
 
     @Test
     public void updateTruckTests() throws Exception {
-        Assert.assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
+        assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking3();
         createTrucking4();
         List <String> site1 = new LinkedList<>();
@@ -282,16 +284,16 @@ public class Tests {
         truckManagerController.addSourcesToTrucking(1, sources);
         truckManagerController.addDestinationToTrucking(1, destinations);
         truckManagerController.addProductToTrucking(1, "eggs",1);
-        Assert.assertEquals(truckManagerController.printBoardOfDriver("tam1Tamir1").contains("halfree"), true);
-        Assert.assertEquals(truckManagerController.printBoardOfDriver("tam1Tamir1").contains("tivTaam"), true);
-        Assert.assertEquals(truckManagerController.printBoardOfDriver("tam1Tamir1").contains("Eggs"), true);
+        assertEquals(truckManagerController.printBoardOfDriver("tam1Tamir1").contains("halfree"), true);
+        assertEquals(truckManagerController.printBoardOfDriver("tam1Tamir1").contains("tivTaam"), true);
+        assertEquals(truckManagerController.printBoardOfDriver("tam1Tamir1").contains("Eggs"), true);
         truckManagerController.updateDriverOnTrucking(1, "ramiF");
         truckManagerController.updateDestinationsOnTrucking(1, sources);
         truckManagerController.updateVehicleOnTrucking(1, "12345642");
         truckManagerController.updateSourcesOnTrucking(1, destinations);
-        Assert.assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("12345642"), true);
-        Assert.assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("hayarden"), false);
-        Assert.assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("hamatganit"), false);
+        assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("12345642"), true);
+        assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("hayarden"), false);
+        assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("hamatganit"), false);
 
     }
     private void createTrucking1 () throws Exception {
@@ -314,7 +316,7 @@ public class Tests {
             truckManagerController.addTrucking("12345642",datetime,"tam1Tamir1", sources,destinations,products,1,30);
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"Oops, there is another trucking at the same date and with the same driver");
+            assertEquals(e.getMessage(),"Oops, there is another trucking at the same date and with the same driver");
         }
     }
 
@@ -338,7 +340,7 @@ public class Tests {
             truckManagerController.addTrucking("45345642",datetime,"ramiF", sources,destinations,products,1,30);
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"Oops, there is another trucking at the same date and with the same vehicle");
+            assertEquals(e.getMessage(),"Oops, there is another trucking at the same date and with the same vehicle");
         }
     }
 
@@ -362,7 +364,7 @@ public class Tests {
             truckManagerController.addTrucking("45345642",datetime,"ramiF", sources,destinations,products,1,30);
         }
         catch (Exception e) {
-            Assert.assertEquals(e.getMessage(),"Oops, there is another trucking at the same date and with the same vehicle");
+            assertEquals(e.getMessage(),"Oops, there is another trucking at the same date and with the same vehicle");
         }
     }
     private void createTrucking4 () throws Exception {
@@ -382,7 +384,7 @@ public class Tests {
         prod.put("milk",2);
         products.add(prod);
         truckManagerController.addTrucking("12345642",datetime,"ramiF", sources,destinations,products,1,30);
-        Assert.assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("tamirStr"), true);
+        assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("tamirStr"), true);
 
     }
 
