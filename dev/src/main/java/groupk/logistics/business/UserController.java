@@ -1,4 +1,4 @@
-package BusinessLayer;
+package groupk.logistics.business;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

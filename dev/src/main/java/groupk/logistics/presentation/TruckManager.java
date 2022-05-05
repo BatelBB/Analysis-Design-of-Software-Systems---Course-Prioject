@@ -1,4 +1,4 @@
-package PresentaionLayer;
+package groupk.logistics.presentation;
 
 public class TruckManager extends User{
     public TruckManager() {

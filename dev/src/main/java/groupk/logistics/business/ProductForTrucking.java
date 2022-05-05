@@ -1,4 +1,4 @@
-package BusinessLayer;
+package groupk.logistics.business;
 
 public class ProductForTrucking {
     public Products product;

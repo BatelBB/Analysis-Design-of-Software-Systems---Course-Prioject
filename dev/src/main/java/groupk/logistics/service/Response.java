@@ -1,4 +1,4 @@
-package ServiceLayer;
+package groupk.logistics.service;
 
 public class Response<T> {
 

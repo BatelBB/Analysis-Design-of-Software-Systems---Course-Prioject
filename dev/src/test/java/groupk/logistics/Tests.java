@@ -1,10 +1,10 @@
 package groupk.logistics;
 
 
-import BusinessLayer.DriverController;
-import BusinessLayer.Site;
-import BusinessLayer.TruckManagerController;
-import BusinessLayer.UserController;
+import groupk.logistics.business.DriverController;
+import groupk.logistics.business.Site;
+import groupk.logistics.business.TruckManagerController;
+import groupk.logistics.business.UserController;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,4 +1,4 @@
-package PresentaionLayer;
+package groupk.logistics.presentation;
 
 public abstract class User {
 

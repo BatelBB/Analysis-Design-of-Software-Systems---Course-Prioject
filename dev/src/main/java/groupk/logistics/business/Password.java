@@ -1,4 +1,4 @@
-package BusinessLayer;
+package groupk.logistics.business;
 
 import java.util.Date;
 import java.util.Objects;

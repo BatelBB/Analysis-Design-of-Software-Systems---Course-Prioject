@@ -1,4 +1,4 @@
-package BusinessLayer;
+package groupk.logistics.business;
 
 import java.time.LocalDateTime;
 import java.util.List;

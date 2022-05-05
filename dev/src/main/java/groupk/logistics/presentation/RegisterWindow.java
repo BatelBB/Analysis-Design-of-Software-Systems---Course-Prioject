@@ -1,7 +1,7 @@
-package PresentaionLayer;
+package groupk.logistics.presentation;
 
-import ServiceLayer.Response;
-import ServiceLayer.Service;
+import groupk.logistics.service.Response;
+import groupk.logistics.service.Service;
 
 import java.util.Scanner;
 

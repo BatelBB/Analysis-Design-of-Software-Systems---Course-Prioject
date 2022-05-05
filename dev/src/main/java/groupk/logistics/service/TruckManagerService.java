@@ -1,6 +1,6 @@
-package ServiceLayer;
+package groupk.logistics.service;
 
-import BusinessLayer.*;
+import groupk.logistics.business.*;
 
 import java.time.LocalDateTime;
 import java.util.List;

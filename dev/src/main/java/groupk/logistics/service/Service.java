@@ -1,4 +1,4 @@
-package ServiceLayer;
+package groupk.logistics.service;
 
 import java.time.LocalDateTime;
 import java.util.List;

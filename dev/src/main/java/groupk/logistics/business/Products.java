@@ -1,4 +1,4 @@
-package BusinessLayer;
+package groupk.logistics.business;
 
 public enum Products {
     Water_7290019056966,
