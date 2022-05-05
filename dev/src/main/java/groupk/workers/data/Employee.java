@@ -52,7 +52,8 @@ public class Employee {
         LogisticsManager,
         ShiftManager,
         Driver,
-        StoreManager
+        StoreManager,
+        TruckingManger
     };
     private Role role;
 
