@@ -14,11 +14,6 @@ public class bySupplierReport extends Report {
     }
 
     public List<ProductItem> getBySupplierPro() { return bySupplierPro; }
-    public String toString(){
-        String s= super.toString()+ "The Items that "+ suppName+" is provides are:"+"\n";
-        for (ProductItem p:bySupplierPro) {
-            s=s+p.getId()+"\n";
-        }
-        return s;
-    }
+
+    public String getSuppName() {return suppName;}
 }

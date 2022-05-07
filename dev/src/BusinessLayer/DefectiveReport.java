@@ -12,11 +12,5 @@ public class DefectiveReport extends Report {
     }
 
     public List<ProductItem> getDefectivePro() { return DefectivePro; }
-    public String toString(){
-        String s= super.toString()+ "The defective products are:"+"\n";
-        for (ProductItem p:DefectivePro) {
-            s=s+p.getId()+"\n";
-        }
-        return s;
-    }
+
 }

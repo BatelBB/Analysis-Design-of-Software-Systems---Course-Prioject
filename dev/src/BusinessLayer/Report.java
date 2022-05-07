@@ -23,7 +23,5 @@ public class Report {
     public Date getDate() { return date; }
 
     public String getReport_producer() { return report_producer; }
-    public String toString(){
-        return "Id: "+id+"\n"+ "name: "+name+"\n"+ "date: "+date+"\n"+ "report_producer: "+report_producer+"\n";
-    }
+
 }

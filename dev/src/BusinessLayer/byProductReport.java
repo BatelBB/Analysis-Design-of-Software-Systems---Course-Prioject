@@ -14,11 +14,6 @@ public class byProductReport extends Report {
     }
 
     public List<ProductItem> getByProductPro() { return byProductPro; }
-    public String toString(){
-        String s= super.toString()+ "The Items ids are" +proName+ "product:"+"\n";
-        for (ProductItem p:byProductPro) {
-            s=s+p.getId()+"\n";
-        }
-        return s;
-    }
+
+    public String getProName() {return proName;}
 }

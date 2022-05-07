@@ -16,4 +16,11 @@ public class ExpiredReport extends Report{
             ExpiredPro.add(new ServiceLayer.Objects.ProductItem(p));
         }
     }
+    public String toString(){
+        String s= super.toString()+ "The expired products items are:\n";
+        for (ServiceLayer.Objects.ProductItem p:ExpiredPro) {
+            s=s+p.getId()+"\n";
+        }
+        return s;
+    }
 }

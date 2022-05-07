@@ -13,4 +13,11 @@ public class DefectiveReport extends Report{
             DefectivePro.add(new ServiceLayer.Objects.ProductItem(p));
         }
     }
+    public String toString(){
+        String s= super.toString()+ "The defective products are:"+"\n";
+        for (ProductItem p:DefectivePro) {
+            s=s+p.getId()+"\n";
+        }
+        return s;
+    }
 }

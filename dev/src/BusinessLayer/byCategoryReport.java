@@ -14,11 +14,7 @@ public class byCategoryReport extends Report {
     }
 
     public List<Product> getByCategoryPro() { return byCategoryPro; }
-    public String toString(){
-        String s= super.toString()+ "The products in "+ catName+" category are:"+"\n";
-        for (Product p:byCategoryPro) {
-            s=s+p.getName()+"\n";
-        }
-        return s;
-    }
+    public String getCatName() {return catName;}
+
+
 }

@@ -15,4 +15,11 @@ public class SurplusesReport extends Report{
             SurplusesPro.add(new ServiceLayer.Objects.Product(p));
         }
     }
+    public String toString(){
+        String s= super.toString()+ "The surpluses products items are:\n";
+        for (ServiceLayer.Objects.Product p:SurplusesPro) {
+            s=s+p.getName()+", current Shelf_qty: "+p.getShelf_qty()+", current Storage_qty: "+p.getStorage_qty()+"\n";
+        }
+        return s;
+    }
 }

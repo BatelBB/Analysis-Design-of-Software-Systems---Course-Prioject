@@ -17,4 +17,7 @@ public class Report {
     }
 
     public String getName() { return name; }
+    public String toString(){
+        return "Id: "+id+"\n"+ "name: "+name+"\n"+ "date: "+date+"\n"+ "report_producer: "+report_producer+"\n";
+    }
 }

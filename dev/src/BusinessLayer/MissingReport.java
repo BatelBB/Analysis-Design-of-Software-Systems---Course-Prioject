@@ -12,11 +12,5 @@ public class MissingReport extends Report {
     }
 
     public List<Product> getMissingPro() { return missingPro; }
-    public String toString(){
-        String s= super.toString()+ "The missing products items are:\n";
-        for (Product p:missingPro) {
-            s=s+p.getName()+", current Shelf_qty: "+p.getShelf_qty()+", current Storage_qty: "+p.getStorage_qty()+"\n";
-        }
-        return s;
-    }
+
 }

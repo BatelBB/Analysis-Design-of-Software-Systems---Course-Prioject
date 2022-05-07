@@ -55,4 +55,10 @@ public class Product {
         }
         return s;
     }
+
+    public String getName() {return name;}
+
+    public int getShelf_qty() {return shelf_qty;}
+
+    public int getStorage_qty() {return storage_qty;}
 }
