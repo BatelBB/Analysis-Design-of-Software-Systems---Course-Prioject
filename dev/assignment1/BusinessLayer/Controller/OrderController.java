@@ -1,34 +1,36 @@
 package assignment1.BusinessLayer.Controller;
 
 import assignment1.BusinessLayer.BusinessLogicException;
-import assignment1.BusinessLayer.Entity.Item;
-import assignment1.BusinessLayer.Entity.Order;
-import assignment1.BusinessLayer.Entity.Supplier;
+import assignment1.BusinessLayer.Entity.MutableItem;
+import assignment1.BusinessLayer.Entity.MutableOrder;
+import assignment1.BusinessLayer.Entity.MutableSupplier;
+import assignment1.BusinessLayer.Entity.readonly.Item;
+import assignment1.BusinessLayer.Entity.readonly.Order;
+import assignment1.BusinessLayer.Entity.readonly.Supplier;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class OrderController {
-    ArrayList<Order> orders;
+    ArrayList<MutableOrder> orders;
 
     public OrderController(){
         orders = new ArrayList<>();
     }
 
-    public Order get(int id) throws BusinessLogicException {
+    public MutableOrder get(int id) throws BusinessLogicException {
         return orders.stream()
                 .filter(o -> o.id == id)
                 .findFirst()
                 .orElseThrow(() -> new BusinessLogicException("No order exists with id "+ id));
     }
 
-    public Order create(Supplier supplier, LocalDate ordered, LocalDate delivered) throws BusinessLogicException {
+    public MutableOrder create(Supplier supplier, LocalDate ordered, LocalDate delivered) throws BusinessLogicException {
         if(ordered.isAfter(delivered)) {
             throw new BusinessLogicException("delivery date can't be before ordering date.");
         }
-        Order order = new Order(supplier, ordered, delivered);
+        MutableOrder order = new MutableOrder(supplier, ordered, delivered);
         orders.add(order);
         return order;
     }
@@ -38,7 +40,7 @@ public class OrderController {
     }
 
     public void refreshPricesAndDiscounts(Item item) {
-        for(Order order: orders) {
+        for(MutableOrder order: orders) {
             if(order.containsItem(item)) {
                 order.refreshPrice();
             }
@@ -46,11 +48,12 @@ public class OrderController {
     }
 
     public void orderItem(Order order, Item item, int amount) {
-        order.orderItem(item, amount);
-        order.refreshPrice();
+        MutableOrder mutable = (MutableOrder) order;
+        mutable.orderItem(item, amount);
+        mutable.refreshPrice();
     }
 
-    public void deleteAllFromSupplier(Supplier s) {
+    public void deleteAllFromSupplier(MutableSupplier s) {
         orders.removeIf(order -> order.supplier == s);
     }
 
@@ -64,5 +67,19 @@ public class OrderController {
 
     public Collection<Order> all() {
         return new ArrayList<>(orders);
+    }
+
+    public void setOrdered(Order order, LocalDate ordered) throws BusinessLogicException {
+        ((MutableOrder) order).updateOrdered(ordered);
+    }
+
+    public void setProvided(Order order, LocalDate provided) throws BusinessLogicException {
+        ((MutableOrder) order).updateProvided(provided);
+    }
+
+
+    public void updateAmount(Order order, Item item, int amount) {
+        ((MutableOrder) order).orderItem(item, amount);
+        refreshPricesAndDiscounts(item);
     }
 }

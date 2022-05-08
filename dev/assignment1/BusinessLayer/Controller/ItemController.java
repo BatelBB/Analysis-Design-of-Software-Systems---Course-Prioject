@@ -1,15 +1,17 @@
 package assignment1.BusinessLayer.Controller;
 
 import assignment1.BusinessLayer.BusinessLogicException;
-import assignment1.BusinessLayer.Entity.Item;
+import assignment1.BusinessLayer.Entity.MutableItem;
 import assignment1.BusinessLayer.Entity.QuantityDiscount;
-import assignment1.BusinessLayer.Entity.Supplier;
+import assignment1.BusinessLayer.Entity.MutableSupplier;
+import assignment1.BusinessLayer.Entity.readonly.Item;
+import assignment1.BusinessLayer.Entity.readonly.Supplier;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ItemController {
-    Map<String, Item> items;
+    Map<String, MutableItem> items;
     Map<Item, List<QuantityDiscount>> discounts;
     OrderController orderController;
 
@@ -19,13 +21,13 @@ public class ItemController {
         this.orderController = orderController;
     }
 
-    public Item create(Supplier supplier, int catalogNumber, String name, String category, float price)
+    public MutableItem create(MutableSupplier supplier, int catalogNumber, String name, String category, float price)
             throws BusinessLogicException {
         String key = tuple(supplier.getPpn(), catalogNumber);
         if(items.containsKey(key)) {
             throw new BusinessLogicException("Supplier " + supplier +" already has item with catalog number " + catalogNumber);
         }
-        Item item = new Item(supplier, catalogNumber, name, category, price, this);
+        MutableItem item = new MutableItem(supplier, catalogNumber, name, category, price, this);
         items.put(key, item);
         return item;
     }
@@ -35,7 +37,7 @@ public class ItemController {
     }
 
     public Collection<Item> all() {
-        return items.values();
+        return new ArrayList<>(items.values());
     }
 
     public void delete(Item item) throws BusinessLogicException {
@@ -55,14 +57,14 @@ public class ItemController {
         orderController.refreshPricesAndDiscounts(discount.item);
     }
 
-    public Item get(int ppn, int catalog) throws BusinessLogicException{
+    public MutableItem get(int ppn, int catalog) throws BusinessLogicException{
         String key = tuple(ppn, catalog);
         if(!items.containsKey(key)) {
             throw new BusinessLogicException("The item doesn't exist");
         }
         return items.get(key);
     }
-    public float priceForAmount(Item item, int amount) {
+    public float priceForAmount(MutableItem item, int amount) {
         float discount = 0;
         List<QuantityDiscount> discounts = getDiscountList(item);
         for(QuantityDiscount qd: discounts) {
@@ -103,8 +105,8 @@ public class ItemController {
         return discounts.computeIfAbsent(item, __ -> new ArrayList<QuantityDiscount>());
     }
 
-    public void deleteAllFromSupplier(Supplier s) {
-        for(Map.Entry<String, Item> entry: items.entrySet()) {
+    public void deleteAllFromSupplier(MutableSupplier s) {
+        for(Map.Entry<String, MutableItem> entry: items.entrySet()) {
             items.remove(entry.getKey());
             discounts.remove(entry.getValue());
         }
@@ -117,4 +119,19 @@ public class ItemController {
     public Collection<QuantityDiscount> getAllDiscounts() {
         return discounts.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
     }
+
+    public void setItemPrice(Item item, float price) {
+        ((MutableItem) item).setPrice(price);
+    }
+
+    public void setItemName(Item item, String name) {
+        ((MutableItem) item).setName(name);
+    }
+
+
+    public void setItemCategory(Item item, String category) {
+        ((MutableItem) item).setCategory(category);
+    }
+
+
 }

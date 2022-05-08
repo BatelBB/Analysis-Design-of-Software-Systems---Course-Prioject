@@ -1,16 +1,17 @@
 package assignment1.BusinessLayer.Entity;
 
 import assignment1.BusinessLayer.BusinessLogicException;
+import assignment1.BusinessLayer.Entity.readonly.Item;
+import assignment1.BusinessLayer.Entity.readonly.Order;
+import assignment1.BusinessLayer.Entity.readonly.Supplier;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Order {
+public class MutableOrder implements Order {
     LocalDate ordered;
     LocalDate provided;
     float totalPrice;
@@ -20,7 +21,7 @@ public class Order {
     private static int instanceCounter = 0;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
-    public Order(Supplier supplier, LocalDate ordered, LocalDate provided){
+    public MutableOrder(Supplier supplier, LocalDate ordered, LocalDate provided){
         this.supplier = supplier;
         this.ordered = ordered;
         this.provided = provided;
@@ -43,6 +44,7 @@ public class Order {
         totalPrice = price;
     }
 
+    @Override
     public boolean containsItem(Item item) {
         return itemsAmounts.containsKey(item);
     }
@@ -70,14 +72,17 @@ public class Order {
         this.provided = provided;
     }
 
+    @Override
     public float getTotalPrice() {
         return totalPrice;
     }
 
+    @Override
     public LocalDate getOrdered() {
         return ordered;
     }
 
+    @Override
     public LocalDate getProvided() {
         return provided;
     }
@@ -88,7 +93,7 @@ public class Order {
         table.add(" **** ORDER **** "); table.add(" "); table.add(" "); table.add(" ");
 
         table.add("Order id: "); table.add(String.valueOf(id)); table.add(" "); table.add(" ");
-        table.add("Supplier name: "); table.add(supplier.name);
+        table.add("Supplier name: "); table.add(supplier.getName());
         table.add("Supplier PPN: "); table.add(supplier.getPpn() + "");
 
         table.add("Ordered: "); table.add(ordered.format(DATE_FORMAT));
@@ -103,10 +108,10 @@ public class Order {
             Item item = entry.getKey();
             int amount = entry.getValue();
 
-            table.add(item.name);
-            table.add(item.catalogNumber + "");
+            table.add(item.getName());
+            table.add(item.getCatalogNumber() + "");
             table.add(amount + " units");
-            table.add(String.format("$%.2f / ea", item.price));
+            table.add(String.format("$%.2f / ea", item.getPrice()));
         }
 
         table.add("----");

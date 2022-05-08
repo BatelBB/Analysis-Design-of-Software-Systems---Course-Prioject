@@ -1,31 +1,31 @@
 package assignment1.BusinessLayer.Entity;
 
-import assignment1.BusinessLayer.BusinessLogicException;
 import assignment1.BusinessLayer.Controller.ItemController;
+import assignment1.BusinessLayer.Entity.readonly.Item;
 
-import java.util.List;
-
-public class Item {
-    private final Supplier supplier;
+public class MutableItem implements Item {
+    private final MutableSupplier supplier;
     private final ItemController controller;
     int catalogNumber;
     String name;
     String category;
     float price;
 
-    public Item(Supplier supplier, int catalogNumber, String name, String category, float price, ItemController controller){
+    public MutableItem(MutableSupplier supplier, int catalogNumber, String name, String category, float price, ItemController controller) {
         this.supplier = supplier;
         this.catalogNumber = catalogNumber;
-        this.name=name;
+        this.name = name;
         this.category = category;
         this.price = price;
         this.controller = controller;
     }
 
-    public Supplier getSupplier() {
+    @Override
+    public MutableSupplier getSupplier() {
         return supplier;
     }
 
+    @Override
     public int getCatalogNumber() {
         return catalogNumber;
     }
@@ -34,6 +34,7 @@ public class Item {
         this.catalogNumber = catalogNumber;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -42,6 +43,7 @@ public class Item {
         this.name = name;
     }
 
+    @Override
     public String getCategory() {
         return category;
     }
@@ -50,6 +52,7 @@ public class Item {
         this.category = category;
     }
 
+    @Override
     public float getPrice() {
         return price;
     }
@@ -58,6 +61,7 @@ public class Item {
         this.price = price;
     }
 
+    @Override
     public float priceForAmount(int amount) {
         return controller.priceForAmount(this, amount);
     }

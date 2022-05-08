@@ -1,5 +1,7 @@
 package assignment1.BusinessLayer.Entity;
 
+import assignment1.BusinessLayer.Entity.readonly.Item;
+
 public class QuantityDiscount {
     public final Item item;
     public final int quantity;
@@ -20,12 +22,12 @@ public class QuantityDiscount {
         return  EntityUtils.table(
                 2, 30, true,
                 "  **** QUANTITY DISCOUNT **** ", "",
-                "Item name", item.name,
-                "Item catalog number", item.catalogNumber,
+                "Item name", item.getName(),
+                "Item catalog number", item.getCatalogNumber(),
                 "For amounts over", quantity,
                 "Discount", String.format("%.2f%%", discount * 100),
-                "Supplier (name)", item.getSupplier().name,
-                "Supplier (ppn)", item.getSupplier().ppn
+                "Supplier (name)", item.getSupplier().getName(),
+                "Supplier (ppn)", item.getSupplier().getPpn()
         );
     }
 }

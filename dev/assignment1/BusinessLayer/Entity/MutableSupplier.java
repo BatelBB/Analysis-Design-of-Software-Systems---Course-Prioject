@@ -1,19 +1,21 @@
 package assignment1.BusinessLayer.Entity;
 
 
+import assignment1.BusinessLayer.Entity.readonly.Supplier;
+
 import java.time.DayOfWeek;
 
-public class Supplier {
+public class MutableSupplier implements Supplier {
     int ppn;
     int bankNumber;
     String name;
     boolean isDelivering;
     PaymentCondition paymentCondition;
     DayOfWeek regularSupplyingDays;
-    Contact contact;
+    MutableContact contact;
 
-    public Supplier(int ppn, int bankNumber, String name, boolean isDelivering, PaymentCondition pm,
-                    DayOfWeek rsd, Contact contact){
+    public MutableSupplier(int ppn, int bankNumber, String name, boolean isDelivering, PaymentCondition pm,
+                           DayOfWeek rsd, MutableContact contact){
         this.ppn = ppn;
         this.bankNumber = bankNumber;
         this.name = name;
@@ -23,10 +25,12 @@ public class Supplier {
         this.contact = contact;
     }
 
+    @Override
     public int getPpn() {
         return ppn;
     }
 
+    @Override
     public int getBankNumber() {
         return bankNumber;
     }
@@ -35,6 +39,7 @@ public class Supplier {
         this.bankNumber = bankNumber;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -43,6 +48,7 @@ public class Supplier {
         this.name = name;
     }
 
+    @Override
     public boolean isDelivering() {
         return isDelivering;
     }
@@ -51,6 +57,7 @@ public class Supplier {
         isDelivering = delivering;
     }
 
+    @Override
     public PaymentCondition getPaymentCondition() {
         return paymentCondition;
     }
@@ -59,6 +66,7 @@ public class Supplier {
         this.paymentCondition = paymentCondition;
     }
 
+    @Override
     public DayOfWeek getRegularSupplyingDays() {
         return regularSupplyingDays;
     }
@@ -67,11 +75,12 @@ public class Supplier {
         this.regularSupplyingDays = regularSupplyingDays;
     }
 
-    public Contact getContact() {
+    @Override
+    public MutableContact getContact() {
         return contact;
     }
 
-    public void setContact(Contact contact) {
+    public void setContact(MutableContact contact) {
         this.contact = contact;
     }
 

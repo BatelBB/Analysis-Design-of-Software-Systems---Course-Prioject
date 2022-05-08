@@ -1,18 +1,21 @@
 package assignment1.BusinessLayer.Controller;
 
 import assignment1.BusinessLayer.BusinessLogicException;
-import assignment1.BusinessLayer.Entity.Contact;
+import assignment1.BusinessLayer.Entity.MutableContact;
 import assignment1.BusinessLayer.Entity.PaymentCondition;
-import assignment1.BusinessLayer.Entity.Supplier;
+import assignment1.BusinessLayer.Entity.MutableSupplier;
+import assignment1.BusinessLayer.Entity.readonly.Contact;
+import assignment1.BusinessLayer.Entity.readonly.Supplier;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SupplierController {
-    Map<Integer, Supplier> suppliers;
+    Map<Integer, MutableSupplier> suppliers;
     private OrderController orders;
     private ItemController items;
 
@@ -22,14 +25,14 @@ public class SupplierController {
         this.items = items;
     }
 
-    public Supplier create(int ppn, int bankAccount, String name, boolean isDelivering,
-                           PaymentCondition paymentCondition,
-                           DayOfWeek regularSupplyingDays, Contact contact)
+    public MutableSupplier create(int ppn, int bankAccount, String name, boolean isDelivering,
+                                  PaymentCondition paymentCondition,
+                                  DayOfWeek regularSupplyingDays, MutableContact contact)
             throws BusinessLogicException {
         if (suppliers.containsKey(ppn)) {
             throw new BusinessLogicException("A supplier with this ppn already exists: " + ppn);
         }
-        Supplier supplier = new Supplier(
+        MutableSupplier supplier = new MutableSupplier(
                 ppn, bankAccount, name,
                 isDelivering, paymentCondition,
                 regularSupplyingDays, contact
@@ -40,23 +43,56 @@ public class SupplierController {
 
 
     public Collection<Supplier> all() {
-        return suppliers.values();
+        return new ArrayList<>(suppliers.values());
     }
 
     public Supplier delete(int ppn) throws BusinessLogicException {
         if (!suppliers.containsKey(ppn)) {
             throw new BusinessLogicException("no such ppn:" + ppn);
         }
-        Supplier s = suppliers.remove(ppn);
+        MutableSupplier s = suppliers.remove(ppn);
         orders.deleteAllFromSupplier(s);
         items.deleteAllFromSupplier(s);
         return s;
     }
 
-    public Supplier get(int ppn) throws BusinessLogicException{
+    public MutableSupplier get(int ppn) throws BusinessLogicException{
         if(!suppliers.containsKey(ppn)) {
             throw new BusinessLogicException("No suppliers with this ppn: " + ppn);
         }
         return suppliers.get(ppn);
     }
+
+    public void setBankAccount(Supplier supplier, int bankAct) {
+        ((MutableSupplier) supplier).setBankNumber(bankAct);
+    }
+
+    public void setCompanyName(Supplier supplier, String newName) {
+        ((MutableSupplier) supplier).setName(newName);
+    }
+
+
+    public void setDelivering(Supplier supplier, boolean newValue) {
+        ((MutableSupplier) supplier).setDelivering(newValue);
+    }
+
+
+    public void setPaymentCondition(Supplier supplier, PaymentCondition payment) {
+        ((MutableSupplier) supplier).setPaymentCondition(payment);
+    }
+
+
+    public void setRegularSupplyingDays(Supplier supplier, DayOfWeek dayOfWeek) {
+        ((MutableSupplier) supplier).setRegularSupplyingDays(dayOfWeek);
+    }
+
+
+    public void setContact(Supplier supplier, String name, String phoneNumber, String email) {
+        MutableContact contact = (MutableContact) supplier.getContact();
+        contact.setName(name);
+        contact.setPhoneNumber(phoneNumber);
+        contact.setEmail(email);
+    }
+
+
 }
