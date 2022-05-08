@@ -1,9 +1,9 @@
-package adss_group_k.suppliers.BusinessLayer.Entity;
+package adss_group_k.shared.utils;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-class EntityUtils {
+class Utils {
     public static String table(int columns, int columnWidth, boolean dashesUnderFirstLine, Object... args) {
 
         StringBuilder sb = new StringBuilder();

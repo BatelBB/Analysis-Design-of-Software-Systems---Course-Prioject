@@ -8,7 +8,7 @@ import assignment1.BusinessLayer.Entity.*;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Item;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Order;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Supplier;
-import adss_group_k.suppliers.BusinessLayer.Service.Service;
+import adss_group_k.suppliers.BusinessLayer.Service.SupplierService;
 import adss_group_k.suppliers.BusinessLayer.Service.ServiceResponse;
 import adss_group_k.suppliers.BusinessLayer.Service.ServiceResponseWithData;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,11 +31,11 @@ class ServiceTest {
             date2 = LocalDate.of(2022, Month.APRIL, 2);
 
 
-    private Service service;
+    private SupplierService service;
 
     @BeforeEach
     void setUp() {
-        service = new Service();
+        service = new SupplierService();
     }
 
     /**

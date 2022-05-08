@@ -14,13 +14,13 @@ import java.util.Calendar;
 import java.util.List;
 
 public class ExampleSeed {
-    public static void seedDatabase(Service service) {
+    public static void seedDatabase(SupplierService service) {
         createSupplierOfficeStuff(service);
         createSupplierGoodFoods(service);
         createSupplierMysteryItems(service);
     }
 
-    private static void createSupplierMysteryItems(Service service) {
+    private static void createSupplierMysteryItems(SupplierService service) {
         Supplier supplier = service.createSupplier(666, 666666, "Mystery Items",
                 false, PaymentCondition.Credit,
                 null,
@@ -57,7 +57,7 @@ public class ExampleSeed {
         service.orderItem(order2, curseInABox, 1);
     }
 
-    private static void createSupplierGoodFoods(Service service) {
+    private static void createSupplierGoodFoods(SupplierService service) {
         Supplier supplier = service.createSupplier(2, 22222, "Good Foods",
                 true, PaymentCondition.DirectDebit,
                 null,
@@ -94,7 +94,7 @@ public class ExampleSeed {
         service.orderItem(order2, soyMilk, 1000);
     }
 
-    private static void createSupplierOfficeStuff(Service service) {
+    private static void createSupplierOfficeStuff(SupplierService service) {
         Supplier supplier = service.createSupplier(1, 1111, "Office Stuff",
                 true, PaymentCondition.DirectDebit,
                 DayOfWeek.SATURDAY,

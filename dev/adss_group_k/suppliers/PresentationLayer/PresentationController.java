@@ -5,7 +5,7 @@ import adss_group_k.suppliers.BusinessLayer.Entity.PaymentCondition;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Item;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Order;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Supplier;
-import adss_group_k.suppliers.BusinessLayer.Service.Service;
+import adss_group_k.suppliers.BusinessLayer.Service.SupplierService;
 import adss_group_k.suppliers.BusinessLayer.Service.ServiceResponseWithData;
 
 import java.time.DayOfWeek;
@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class PresentationController {
     private static UserInput input = UserInput.getInstance();
     private static UserOutput output = UserOutput.getInstance();
-    private static Service service = new Service();
+    private static SupplierService service = new SupplierService();
 
     static Scanner scanner = new Scanner(System.in);
 

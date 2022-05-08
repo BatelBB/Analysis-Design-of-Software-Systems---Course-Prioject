@@ -1,7 +1,7 @@
 package adss_group_k.inventory.ServiceLayer;
 
-import ServiceLayer.Objects.*;
 import adss_group_k.inventory.ServiceLayer.Objects.*;
+import adss_group_k.suppliers.BusinessLayer.Service.SupplierService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,11 +10,13 @@ public class Service {
     private final ProductService product_service;
     private final CategoryService category_service;
     private final ReportService report_service;
+    private final SupplierService supplierService;
 
-    public Service() {
+    public Service(SupplierService supplierService) {
         product_service = new ProductService();
         report_service = new ReportService();
         category_service = new CategoryService();
+        this.supplierService = supplierService;
     }
 
     public ResponseT<List<String>> getCategoriesNames() {

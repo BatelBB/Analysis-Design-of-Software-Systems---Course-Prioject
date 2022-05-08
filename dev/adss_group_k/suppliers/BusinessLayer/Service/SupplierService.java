@@ -1,5 +1,6 @@
 package adss_group_k.suppliers.BusinessLayer.Service;
 
+import adss_group_k.inventory.BusinessLayer.Product;
 import adss_group_k.suppliers.BusinessLayer.BusinessLogicException;
 import adss_group_k.suppliers.BusinessLayer.Controller.ItemController;
 import adss_group_k.suppliers.BusinessLayer.Controller.OrderController;
@@ -10,18 +11,18 @@ import adss_group_k.suppliers.BusinessLayer.Entity.QuantityDiscount;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Item;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Order;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Supplier;
-import assignment1.BusinessLayer.Entity.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.time.DayOfWeek;
 
-public class Service {
+public class SupplierService {
     private final SupplierController suppliers;
     private final ItemController items;
     private final OrderController orders;
 
-    public Service() {
+    public SupplierService() {
         this.orders = new OrderController();
         this.items = new ItemController(this.orders);
         this.suppliers = new SupplierController(this.orders, this.items);
@@ -87,7 +88,7 @@ public class Service {
     }
 
     
-    public ServiceResponseWithData<Order> createOrder(Supplier supplier, LocalDate ordered, LocalDate delivered) {
+    public ServiceResponseWithData<Order> createOrder(Supplier supplier, LocalDate ordered, LocalDate delivered, Order.OrderType type) {
         if(!items.supplierHasAnyItems(supplier)) {
             return ServiceResponseWithData.error("This supplier doesn't have any items currently");
         }
@@ -209,6 +210,9 @@ public class Service {
         orders.updateAmount(order, item, amount);
     }
 
+    public Supplier findCheapestSupplierFor(Product product, int amount) {
+        throw new NotImplementedException();
+    }
 
     private interface BusinessLayerOperation<T> {
         T run() throws BusinessLogicException;
