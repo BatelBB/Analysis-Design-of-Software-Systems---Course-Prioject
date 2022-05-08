@@ -2,6 +2,9 @@ package assignment1.Tests;
 
 import assignment1.BusinessLayer.BusinessLogicException;
 import assignment1.BusinessLayer.Entity.*;
+import assignment1.BusinessLayer.Entity.readonly.Item;
+import assignment1.BusinessLayer.Entity.readonly.Order;
+import assignment1.BusinessLayer.Entity.readonly.Supplier;
 import assignment1.BusinessLayer.Service.Service;
 import assignment1.BusinessLayer.Service.ServiceResponse;
 import assignment1.BusinessLayer.Service.ServiceResponseWithData;
@@ -9,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.*;
-import java.time.temporal.TemporalAmount;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -46,8 +48,8 @@ class ServiceTest {
         // TODO add tests for other fields if there's time
 
         ServiceResponseWithData<Supplier> responseErroneous = createWithPpn(1);
-        assertFalse(responseErroneous.success, "shouldn't be able to create when supplier with same PPN exists.");
-        assertNull(responseErroneous.data, "shouldn't be able to create when supplier with same PPN exists.");
+        assertFalse(responseErroneous.success, "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
+        assertNull(responseErroneous.data, "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
     }
 
     @Test
@@ -66,7 +68,7 @@ class ServiceTest {
     void getSupplier() throws BusinessLogicException {
         service.createSupplier(1, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
-                new Contact("john", "john@email.com", "054"));
+                new MutableContact("john", "john@email.com", "054"));
         Supplier supplier = service.getSupplier(1);
         assertNotNull(supplier);
         assertEquals(1, supplier.getPpn());
@@ -80,37 +82,37 @@ class ServiceTest {
 
         Supplier supplier = service.createSupplier(ppn, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
-                new Contact("john", "john@email.com", "054")).data;
+                new MutableContact("john", "john@email.com", "054")).data;
         Item item = service.createItem(ppn, 1, "item", "category", 1).data;
         Order order = service.createOrder(supplier, date1, date2).data;
         service.orderItem(order, item, 12);
 
         // delete should work.
         ServiceResponse serviceResponse = service.deleteSupplier(ppn);
-        assertTrue(serviceResponse.success, "delete supplier failed, but shouldn't have");
+        assertTrue(serviceResponse.success, "delete ReadOnlysupplier failed, but shouldn't have");
 
-        // getting this supplier shouldn't work.
+        // getting this ReadOnlysupplier shouldn't work.
         assertThrows(BusinessLogicException.class, () -> service.getSupplier(ppn),
-                "Getting deleted supplier should have failed");
+                "Getting deleted ReadOnlysupplier should have failed");
 
         // creating new one with same PPN should work.
         ServiceResponseWithData<Supplier> otherResponse = service.createSupplier(ppn, 222,
                 "Ipsum", false,
                 PaymentCondition.Credit, DayOfWeek.MONDAY,
-                new Contact("george", "george@email.com", "050"));
+                new MutableContact("george", "george@email.com", "050"));
         assertTrue(otherResponse.success,
-                "creating new supplier with PPN of deleted supplier should have worked");
+                "creating new ReadOnlysupplier with PPN of deleted ReadOnlysupplier should have worked");
         assertNotNull(otherResponse.data,
-                "creating new supplier with PPN of deleted supplier should have worked");
+                "creating new ReadOnlysupplier with PPN of deleted ReadOnlysupplier should have worked");
         assertEquals(ppn, otherResponse.data.getPpn());
 
         // getting new one should work.
         Supplier findNew = service.getSupplier(ppn);
         assertNotNull(findNew,
-                "creating new supplier with PPN of deleted supplier should have worked");
+                "creating new ReadOnlysupplier with PPN of deleted ReadOnlysupplier should have worked");
         assertEquals(ppn, findNew.getPpn());
         assertEquals(222, findNew.getBankNumber(),
-                "new supplier should have fields of new one.");
+                "new ReadOnlysupplier should have fields of new one.");
     }
 
     /**
@@ -122,29 +124,30 @@ class ServiceTest {
         createWithPpn(ppn1);
         createWithPpn(ppn2);
 
-        // Supplier 1, Item 1
+        // ReadOnlySupplier 1, ReadOnlyItem 1
         ServiceResponseWithData<Item> resApple =
                 service.createItem(ppn1, cn1, "Apple", "Fruit", 1);
         assertTrue(resApple.success, "should have succeeded.");
         Item apple = resApple.data;
-        assertNotNull(apple, "creating item shouldn't have returned null.");
+        assertNotNull(apple, "creating ReadOnlyitem shouldn't have returned null.");
         assertEquals("Apple", apple.getName());
 
-        // Supplier 1, Item 2
+        // ReadOnlySupplier 1, ReadOnlyItem 2
         ServiceResponseWithData<Item> resBanana =
                 service.createItem(ppn1, cn2, "Banana", "Fruit", 2);
         assertTrue(resBanana.success, "should have succeeded but got " + resBanana.error);
+
         Item banana = resBanana.data;
-        assertNotNull(banana, "creating item shouldn't have returned null.");
+        assertNotNull(banana, "creating ReadOnlyitem shouldn't have returned null.");
         assertEquals("Banana", banana.getName());
 
-        // Supplier 2, Item 1
+        // ReadOnlySupplier 2, ReadOnlyItem 1
         ServiceResponseWithData<Item> resOtherSupplier =
                 service.createItem(ppn2, cn1, "Pen", "Office stuff", 10);
         assertTrue(resOtherSupplier.success,
-                "creating other item with same CN but different PPN should've worked.");
+                "creating other ReadOnlyitem with same CN but different PPN should've worked.");
         Item pen = resOtherSupplier.data;
-        assertNotNull(pen, "creating item shouldn't have returned null.");
+        assertNotNull(pen, "creating ReadOnlyitem shouldn't have returned null.");
         assertEquals(ppn2, pen.getSupplier().getPpn());
         assertEquals(cn1, pen.getCatalogNumber());
         assertEquals("Pen", pen.getName());
@@ -241,7 +244,7 @@ class ServiceTest {
 
         ServiceResponseWithData<Order> responseWithEmptySupplier = service.createOrder(sup, date1, date2);
         assertFalse(responseWithEmptySupplier.success,
-                "shouldn't be able to start order if supplier has no items.");
+                "shouldn't be able to start ReadOnlyorder if ReadOnlysupplier has no items.");
 
 
         service.createItem(ppn, cnPen, "Pen", "Office", 10);
@@ -249,7 +252,7 @@ class ServiceTest {
 
         ServiceResponseWithData<Order> responseWithBadDates = service.createOrder(sup, date2, date1);
         assertFalse(responseWithBadDates.success,
-                "shouldn't be able to start order if supplying date is before ordering.");
+                "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
         ServiceResponseWithData<Order> response = service.createOrder(sup, date1, date2);
         assertTrue(response.success);
@@ -264,7 +267,7 @@ class ServiceTest {
 
             Supplier sup = createWithPpn(ppn).data;
 
-            // supplier must have >= 1 items or opening order fails.
+            // ReadOnlysupplier must have >= 1 items or opening ReadOnlyorder fails.
             service.createItem(ppn, 0, "Lorem", "Ipsum", 1);
             int amountForThisSupplier = amountOfOrders[i];
             createWithPpn(ppn);
@@ -331,7 +334,7 @@ class ServiceTest {
         final int ppn = 1;
         Supplier supplier = createWithPpn(ppn).data;
 
-        // item doesn't matter, there just has to be at least one for order to create.
+        // ReadOnlyitem doesn't matter, there just has to be at least one for ReadOnlyorder to create.
         service.createItem(ppn, 11, "Lorem", "Ipsum", 1);
 
         final Period ONE_DAY = Period.ofDays(1);
@@ -368,7 +371,7 @@ class ServiceTest {
         final int ppn = 1;
         Supplier supplier = createWithPpn(ppn).data;
 
-        // item doesn't matter, there just has to be at least one for order to create.
+        // ReadOnlyitem doesn't matter, there just has to be at least one for ReadOnlyorder to create.
         service.createItem(ppn, 11, "Lorem", "Ipsum", 1);
 
         final Period ONE_DAY = Period.ofDays(1);
@@ -558,6 +561,6 @@ class ServiceTest {
     private ServiceResponseWithData<Supplier> createWithPpn(int ppn) {
         return service.createSupplier(ppn, 111, "dummy", true,
                 PaymentCondition.Credit, null,
-                new Contact("John", "john@email.com", "054"));
+                new MutableContact("John", "john@email.com", "054"));
     }
 }

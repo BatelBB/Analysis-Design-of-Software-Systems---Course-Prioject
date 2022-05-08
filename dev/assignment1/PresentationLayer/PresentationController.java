@@ -1,9 +1,10 @@
 package assignment1.PresentationLayer;
 
-import assignment1.BusinessLayer.Entity.Contact;
-import assignment1.BusinessLayer.Entity.Item;
-import assignment1.BusinessLayer.Entity.Order;
+import assignment1.BusinessLayer.Entity.MutableContact;
 import assignment1.BusinessLayer.Entity.PaymentCondition;
+import assignment1.BusinessLayer.Entity.readonly.Item;
+import assignment1.BusinessLayer.Entity.readonly.Order;
+import assignment1.BusinessLayer.Entity.readonly.Supplier;
 import assignment1.BusinessLayer.Service.Service;
 import assignment1.BusinessLayer.Service.ServiceResponseWithData;
 
@@ -43,7 +44,7 @@ public class PresentationController {
                             String email = input.nextString("Enter the supplier's contact email: ");
                             String phoneNum = input.nextString("Enter the supplier's contact phone number: ");
                             output.print(service.createSupplier(ppn, bankAccount, name, isDelivering,
-                                    paymentCondition, day, new Contact(contactName, email, phoneNum)).data.toString());
+                                    paymentCondition, day, new MutableContact(contactName, email, phoneNum)).data.toString());
                             break;
                         }
                         case (2): {
@@ -52,6 +53,7 @@ public class PresentationController {
                             output.println("What do you want to edit? ");
                             int edit = input.nextInt(Menu.getSupplierEditSubmenu());
                             try {
+                                Supplier supplier = service.getSupplier(ppn);
                                 switch (edit) {
                                     case (1): {
                                         //PPN NUMBER
@@ -60,29 +62,32 @@ public class PresentationController {
                                     }
                                     case (2): {
                                         //Edit bank account
-                                        service.getSupplier(ppn).setBankNumber(input.nextInt("Enter bank account: "));
+                                        int bankAct = input.nextInt("Enter bank account: ");
+                                        service.setSupplierBankAccount(supplier, bankAct);
                                         break;
                                     }
                                     case (3): {
                                         //Edit company name
-                                        service.getSupplier(ppn).setName(input.nextString("Enter name: "));
+                                        String newName = input.nextString("Enter name: ");
+                                        service.setSupplierCompanyName(supplier, newName);
                                         break;
                                     }
                                     case (4): {
                                         //Edit delivery
-                                        service.getSupplier(ppn).setDelivering(
-                                                input.nextBoolean("Is delivering?"));
+                                        boolean newValue = input.nextBoolean("Is delivering?");
+                                        service.setSupplierIsDelivering(supplier, newValue);
                                         break;
                                     }
                                     case (5): {
                                         //edit payment condition
-                                        service.getSupplier(ppn).setPaymentCondition(choosePayment(
-                                                "Which way will the supplier pay? "));
+                                        PaymentCondition payment = choosePayment(
+                                                "Which way will the supplier pay? ");
+                                        service.setSupplierPaymentCondition(supplier, payment);
                                         break;
                                     }
                                     case (6): {
                                         //edit supplying days
-                                        service.getSupplier(ppn).setRegularSupplyingDays(chooseDay());
+                                        service.setSupplierRegularSupplyingDays(supplier, chooseDay());
                                         break;
                                     }
                                     case (7): {
@@ -91,7 +96,7 @@ public class PresentationController {
                                         String email = input.nextString("Enter the supplier's contact email: ");
                                         String phoneNum = input.nextString(
                                                 "Enter the supplier's contact phone number: ");
-                                        service.getSupplier(ppn).setContact(new Contact(contactName, email, phoneNum));
+                                        service.setSupplierContact(supplier, contactName, phoneNum, email);
                                         break;
                                     }
 
@@ -144,15 +149,18 @@ public class PresentationController {
                         case (4): {
                             //edit name of existing item
                             int[] arr = checkItem();
+                            Item item = service.getItem(arr[0], arr[1]).data;
                             String name = input.nextString("Enter new name: ");
-                            service.getItem(arr[0], arr[1]).data.setName(name);
+                            service.setItemName(item, name);
                             break;
                         }
                         case (5): {
                             //edit category of existing item
+
                             int[] arr = checkItem();
-                            service.getItem(arr[0], arr[1]).data.setCategory(input.nextString(
-                                    "Enter new category: "));
+                            Item item = service.getItem(arr[0], arr[1]).data;
+                            String category = input.nextString("Enter new category: ");
+                            service.setItemCategory(item, category);
                             break;
                         }
                         case (6): {
@@ -216,9 +224,10 @@ public class PresentationController {
                             //edit ordered date
                             int id = input.nextInt("Enter order's id number, see summery for info ");
                             checkId(id);
-                            LocalDate ordered = input.nextDate("What is the order date? ");
+                            LocalDate delivered = input.nextDate("When is the order ordered? ");
                             try {
-                                service.getOrder(id).data.updateOrdered(ordered);
+                                Order order = service.getOrder(id).data;
+                                service.updateOrderOrdered(order ,delivered);
                             } catch (Exception e) {
                                 output.println(e.getMessage());
                             }
@@ -230,19 +239,24 @@ public class PresentationController {
                             checkId(id);
                             LocalDate delivered = input.nextDate("When is the order supposed to be delivered? ");
                             try {
-                                service.getOrder(id).data.updateProvided(delivered);
+                                Order order = service.getOrder(id).data;
+                                service.updateOrderProvided(order ,delivered);
                             } catch (Exception e) {
                                 output.println(e.getMessage());
                             }
                             break;
                         }
                         case (5): {
-                            //edit item's amount
                             int id = input.nextInt("Enter order's id number, see summery for info ");
                             checkId(id);
-                            int[] arr = checkItem();
-                            int amount = input.nextInt("Enter the correct amount: ");
-                            service.getOrder(id).data.orderItem(service.getItem(arr[0], arr[1]).data, amount);
+                            int[] itemCoords = checkItem();
+                            try {
+                                Item item = service.getItem(itemCoords[0], itemCoords[1]).data;
+                                Order order = service.getOrder(id).data;
+                                service.updateOrderAmount(order ,item, input.nextInt("Enter amount to order"));
+                            } catch (Exception e) {
+                                output.println(e.getMessage());
+                            }
                             break;
                         }
                         case (6):{
@@ -387,6 +401,4 @@ public class PresentationController {
         int pay = input.nextInt("1. Direct Debit\n2. Credit\n");
         return pay == 1 ? PaymentCondition.DirectDebit : PaymentCondition.Credit;
     }
-
-
 }

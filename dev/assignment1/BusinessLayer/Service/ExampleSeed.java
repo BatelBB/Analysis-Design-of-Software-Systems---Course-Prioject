@@ -1,6 +1,9 @@
 package assignment1.BusinessLayer.Service;
 
 import assignment1.BusinessLayer.Entity.*;
+import assignment1.BusinessLayer.Entity.readonly.Item;
+import assignment1.BusinessLayer.Entity.readonly.Order;
+import assignment1.BusinessLayer.Entity.readonly.Supplier;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -19,7 +22,7 @@ public class ExampleSeed {
         Supplier supplier = service.createSupplier(666, 666666, "Mystery Items",
                 false, PaymentCondition.Credit,
                 null,
-                new Contact("Not Satan", "not_satan@hell.doom", "555-6666")
+                new MutableContact("Not Satan", "not_satan@hell.doom", "555-6666")
         ).data;
 
         Item monkeysPaw = service.createItem(supplier.getPpn(), 1,
@@ -56,7 +59,7 @@ public class ExampleSeed {
         Supplier supplier = service.createSupplier(2, 22222, "Good Foods",
                 true, PaymentCondition.DirectDebit,
                 null,
-                new Contact("Tim Apple", "tim@good.food", "555-0001")
+                new MutableContact("Tim Apple", "tim@good.food", "555-0001")
         ).data;
 
         Item bread = service.createItem(supplier.getPpn(), 1,
@@ -93,7 +96,7 @@ public class ExampleSeed {
         Supplier supplier = service.createSupplier(1, 1111, "Office Stuff",
                 true, PaymentCondition.DirectDebit,
                 DayOfWeek.SATURDAY,
-                new Contact("Ofir Office", "ofir@office.stuff", "555-1234")
+                new MutableContact("Ofir Office", "ofir@office.stuff", "555-1234")
         ).data;
 
         Item pen = service.createItem(supplier.getPpn(), 1,

@@ -5,10 +5,15 @@ import assignment1.BusinessLayer.Controller.ItemController;
 import assignment1.BusinessLayer.Controller.OrderController;
 import assignment1.BusinessLayer.Controller.SupplierController;
 import assignment1.BusinessLayer.Entity.*;
+import assignment1.BusinessLayer.Entity.readonly.Contact;
+import assignment1.BusinessLayer.Entity.readonly.Item;
+import assignment1.BusinessLayer.Entity.readonly.Order;
+import assignment1.BusinessLayer.Entity.readonly.Supplier;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.time.DayOfWeek;
+import java.util.stream.Collectors;
 
 public class Service {
     private final SupplierController suppliers;
@@ -28,7 +33,7 @@ public class Service {
     public ServiceResponseWithData<Supplier> createSupplier(
             int ppn, int bankAccount, String name,
             boolean isDelivering, PaymentCondition paymentCondition,
-            DayOfWeek regularSupplyingDays, Contact contact) {
+            DayOfWeek regularSupplyingDays, MutableContact contact) {
         return responseFor(() -> suppliers.create(
             ppn, bankAccount, name, isDelivering,
             paymentCondition, regularSupplyingDays, contact
@@ -118,7 +123,7 @@ public class Service {
     }
 
     public void setPrice(Item item, float price) {
-        item.setPrice(price);
+        items.setItemPrice(item, price);
         orders.refreshPricesAndDiscounts(item);
     }
 
@@ -152,11 +157,55 @@ public class Service {
     }
 
     public void setOrdered(Order order, LocalDate ordered) throws BusinessLogicException {
-        order.updateOrdered(ordered);
+        orders.setOrdered(order, ordered);
     }
 
     public void setProvided(Order order, LocalDate provided) throws BusinessLogicException {
-        order.updateProvided(provided);
+        orders.setProvided(order, provided);
+    }
+
+    public void setSupplierBankAccount(Supplier supplier, int bankAct) {
+        suppliers.setBankAccount(supplier, bankAct);
+    }
+
+    public void setSupplierCompanyName(Supplier supplier, String newName) {
+        suppliers.setCompanyName(supplier, newName);
+    }
+
+    public void setSupplierIsDelivering(Supplier supplier, boolean newValue) {
+        suppliers.setDelivering(supplier, newValue);
+    }
+
+    public void setSupplierPaymentCondition(Supplier supplier, PaymentCondition payment) {
+        suppliers.setPaymentCondition(supplier, payment);
+    }
+
+    public void setSupplierRegularSupplyingDays(Supplier supplier, DayOfWeek dayOfWeek) {
+        suppliers.setRegularSupplyingDays(supplier, dayOfWeek);
+    }
+
+    public void setSupplierContact(Supplier supplier, String name, String phoneNumber, String email) {
+        suppliers.setContact(supplier, name, phoneNumber, email);
+    }
+
+    public void setItemName(Item item, String name) {
+        items.setItemName(item, name);
+    }
+
+    public void setItemCategory(Item item, String category) {
+        items.setItemCategory(item, category);
+    }
+
+    public void updateOrderOrdered(Order order, LocalDate ordered) throws BusinessLogicException {
+        orders.setOrdered(order, ordered);
+    }
+
+    public void updateOrderProvided(Order order, LocalDate delivered) throws BusinessLogicException {
+        orders.setProvided(order, delivered);
+    }
+
+    public void updateOrderAmount(Order order, Item item, int amount) {
+        orders.updateAmount(order, item, amount);
     }
 
 
