@@ -11,7 +11,7 @@ public class TruckManagerService {
 
     private TruckManagerController truckManagerController = TruckManagerController.getInstance();
 
-    public TruckManagerService() throws Exception {
+    public TruckManagerService() {
     }
 
 
@@ -65,7 +65,7 @@ public class TruckManagerService {
         }
     }
 
-    public Response addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products, long hour, long minutes) throws Exception {
+    public Response addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products, long hour, long minutes) {
         try {
             truckManagerController.addTrucking(registrationPlateOfVehicle,date,driverUsername,sources,destinations,products,hour,minutes);
             return new Response(true);

@@ -8,7 +8,7 @@ import groupk.logistics.business.UserController;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -24,14 +24,14 @@ public class Tests {
     private TruckManagerController truckManagerController ;
     private DriverController driverController;
 
-    public Tests() throws Exception {
+    public Tests() {
         userController = UserController.getInstance();
         truckManagerController = TruckManagerController.getInstance();
         driverController = DriverController.getInstance();
     }
 
 
-    public void setLicenses() throws Exception {
+    public void setLicenses() {
         userController.login("tam1Tamir1", "tam1Tamir1");
         driverController.addLicense("C");
         userController.logout();
@@ -39,7 +39,7 @@ public class Tests {
         driverController.addLicense("C");
         userController.logout();
     }
-    public void addTrucking() throws Exception {
+    public void addTrucking() {
         userController.login("ido1Ido1", "ido1Ido1");
         truckManagerController.addVehicle("C","12345642","BMW",12,14);
         truckManagerController.addVehicle("C","45345642","volvo",12,14);
@@ -75,7 +75,7 @@ public class Tests {
         list.add(h);
 
     }
-    public void registerIdoTamirRami() throws Exception {
+    public void registerIdoTamirRami() {
         userController.registerUser("ido shapira", "ido1Ido1", "ido1Ido1", "trucking manager", "tm1234tm");
         userController.login("ido1Ido1", "ido1Ido1");
         String hashCode = truckManagerController.getRegisterCode();
@@ -90,8 +90,8 @@ public class Tests {
         truckManagerController.reserForTests();
     }
 
-    @BeforeAll
-    public void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() {
         resetForTests();
         registerIdoTamirRami();
         setLicenses();
@@ -99,7 +99,7 @@ public class Tests {
     }
 
     @Test
-    public void multiplayTruckManagersTests() throws Exception {
+    public void multiplayTruckManagersTests() {
         userController.registerUser("ben gurion", "bgu", "Ubgu123", "trucking manager", "tm1234tm");
         userController.login("bgu", "Ubgu123");
         String hashCode = truckManagerController.getRegisterCode();
@@ -118,7 +118,7 @@ public class Tests {
     }
 
     @Test
-    public void addLicensesFailTests() throws Exception {
+    public void addLicensesFailTests() {
         userController.login("tam1Tamir1", "tam1Tamir1");
         try {
             driverController.addLicense("C");
@@ -135,7 +135,7 @@ public class Tests {
 
     }
     @Test
-    public void updatePasswordTests() throws Exception {
+    public void updatePasswordTests() {
         userController.login("tam1Tamir1", "tam1Tamir1");
         try {
             assertEquals(userController.updatePassword("pass"), true);
@@ -145,7 +145,7 @@ public class Tests {
         assertEquals(userController.updatePassword("passIdo1"), true);
     }
     @Test
-    public void loginLogoutTests() throws Exception {
+    public void loginLogoutTests() {
         assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         try {
             assertEquals(userController.login("ramiF","rami1Rami1"),true);
@@ -165,7 +165,7 @@ public class Tests {
     }
 
     @Test
-    public void addVehiclesTests() throws Exception {
+    public void addVehiclesTests() {
         assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         try {
             truckManagerController.addVehicle("C","45345E642","volvo",12,14);
@@ -194,7 +194,7 @@ public class Tests {
     }
 
     @Test
-    public void addSitesTests() throws Exception {
+    public void addSitesTests() {
         assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         try {
             Site s1 = new Site("mega","herzliya","0543397995","hamatganit",13,500,3,"center");
@@ -238,21 +238,21 @@ public class Tests {
 
 
     @Test
-    public void addlegalTruckingsTests() throws Exception {
+    public void addlegalTruckingsTests() {
         assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking3();
         createTrucking4();
     }
 
     @Test
-    public void addIllegalTruckingsTests() throws Exception {
+    public void addIllegalTruckingsTests() {
         assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking1();
         createTrucking2();
     }
 
     @Test
-    public void checkBoardTests() throws Exception {
+    public void checkBoardTests() {
         assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking3();
         createTrucking4();
@@ -269,7 +269,7 @@ public class Tests {
     }
 
     @Test
-    public void updateTruckTests() throws Exception {
+    public void updateTruckTests() {
         assertEquals(userController.login("ido1Ido1", "ido1Ido1"), false);
         createTrucking3();
         createTrucking4();
@@ -296,7 +296,7 @@ public class Tests {
         assertEquals(truckManagerController.printBoardOfDriver("ramiF").contains("hamatganit"), false);
 
     }
-    private void createTrucking1 () throws Exception {
+    private void createTrucking1 () {
         List <String> site1 = new LinkedList<>();
         List <String> site2 = new LinkedList<>();
         addToList(site1,"tamirHouse","batYam","0543397995","tamirStr","13","2","3","center");
@@ -320,7 +320,7 @@ public class Tests {
         }
     }
 
-    private void createTrucking2 () throws Exception {
+    private void createTrucking2 () {
         List <String> site1 = new LinkedList<>();
         List <String> site2 = new LinkedList<>();
         addToList(site1,"tamirHouse","batYam","0543397995","tamirStr","13","2","3","center");
@@ -344,7 +344,7 @@ public class Tests {
         }
     }
 
-    private void createTrucking3 () throws Exception {
+    private void createTrucking3 () {
         List <String> site1 = new LinkedList<>();
         List <String> site2 = new LinkedList<>();
         addToList(site1,"tamirHouse","batYam","0543397995","tamirStr","13","2","3","center");
@@ -367,7 +367,7 @@ public class Tests {
             assertEquals(e.getMessage(),"Oops, there is another trucking at the same date and with the same vehicle");
         }
     }
-    private void createTrucking4 () throws Exception {
+    private void createTrucking4 () {
         List <String> site1 = new LinkedList<>();
         List <String> site2 = new LinkedList<>();
         addToList(site1,"tamirHouse","batYam","0543397995","tamirStr","13","2","3","center");

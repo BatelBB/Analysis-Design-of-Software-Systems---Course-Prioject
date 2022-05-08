@@ -7,29 +7,29 @@ public abstract class User {
     protected boolean isLogin;
     protected Role role;
 
-    public User(String name, String username, String password) throws Exception {
+    public User(String name, String username, String password) {
         this.name = name;
         this.username = username;
         this.password = new Password(password);
     }
 
-    public boolean updatePassword(String newPassword) throws Exception {
+    public boolean updatePassword(String newPassword) {
         return password.setPassword(newPassword);
     }
 
-    public synchronized boolean login(String passwordToCheck) throws Exception {
+    public synchronized boolean login(String passwordToCheck) {
         if (isLogin)
-            throw new Exception("This user is already logged in. First, log out.");
+            throw new IllegalArgumentException("This user is already logged in. First, log out.");
         if (password.checkPassword(passwordToCheck))
             isLogin = true;
         else
-            throw new Exception("Wrong username or wrong password.");
+            throw new IllegalArgumentException("Wrong username or wrong password.");
         return isLogin;
     }
 
-    public synchronized boolean logout() throws Exception {
+    public synchronized boolean logout() {
         if (!isLogin)
-            throw new Exception("The user " + username + " is actually not connected");
+            throw new IllegalArgumentException("The user " + username + " is actually not connected");
         isLogin = false;
         return true;
     }

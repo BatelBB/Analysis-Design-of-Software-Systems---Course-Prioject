@@ -8,11 +8,11 @@ public class Password {
     private final int MIN_PASSWORD_LENGTH = 6;
     private final int MAX_PASSWORD_LENGTH = 12;
 
-    public Password(String password) throws Exception {
+    public Password(String password) {
         setPassword(password);
     }
 
-    public synchronized boolean setPassword(String password) throws Exception {
+    public synchronized boolean setPassword(String password) {
         if (password == null)
             return false;
         if(password.length() < MIN_PASSWORD_LENGTH)

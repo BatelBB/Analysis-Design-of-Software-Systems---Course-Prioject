@@ -12,7 +12,7 @@ public class TruckManager extends User {
     private Map<String, Driver> drivers; //saves the drivers by their usernames
     private Map<String, Vehicle> vehicles; //saves the vehicles by their registration plate
 
-    public TruckManager(String name, String username, String password) throws Exception {
+    public TruckManager(String name, String username, String password) {
         super(name, username, password);
         this.role = Role.truckingManager;
         this.truckingsBoard = new TruckingsBoard();
@@ -20,7 +20,7 @@ public class TruckManager extends User {
         vehicles = new ConcurrentHashMap<String, Vehicle>();
     }
 
-    public synchronized void addDriver(Driver driver) throws Exception {
+    public synchronized void addDriver(Driver driver) {
         if (driver == null)
             throw new IllegalArgumentException("No driver entered");
         drivers.put(driver.username, driver);
@@ -44,7 +44,7 @@ public class TruckManager extends User {
         return toReturn;
     }
 
-    public synchronized void addTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products,long hours, long minutes) throws Exception {
+    public synchronized void addTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products,long hours, long minutes) {
         if (registrationPlateOfVehicle == null)
             throw new NullPointerException("The registration plate is empty");
         if (driverUsername == null)
@@ -113,45 +113,45 @@ public class TruckManager extends User {
         return truckingsBoard.printFutureTruckingsOfVehicle(registrationPlate);
     }
 
-    public synchronized void addSourcesToTrucking(int truckingId,List<List<String>> sources) throws Exception {
+    public synchronized void addSourcesToTrucking(int truckingId,List<List<String>> sources) {
         truckingsBoard.addSourcesToTrucking(truckingId, sources);
     }
 
-    public synchronized void addDestinationsToTrucking(int truckingId, List<List<String>> destinations) throws Exception {
+    public synchronized void addDestinationsToTrucking(int truckingId, List<List<String>> destinations) {
         truckingsBoard.addDestinationsToTrucking(truckingId, destinations);
     }
 
-    public synchronized void addProductsToTrucking(int truckingId, String pruductName,int quantity) throws Exception {
+    public synchronized void addProductsToTrucking(int truckingId, String pruductName,int quantity) {
         truckingsBoard.addProductsToTrucking(truckingId, pruductName,quantity);
     }
 
-    public synchronized void updateSourcesOnTrucking(int truckingId, List<List<String>> sources) throws Exception {
+    public synchronized void updateSourcesOnTrucking(int truckingId, List<List<String>> sources) {
         truckingsBoard.updateSourcesOnTrucking(truckingId, sources);
     }
 
-    public synchronized void updateDestinationsOnTrucking(int truckingId,List<List<String>> destinations) throws Exception {
+    public synchronized void updateDestinationsOnTrucking(int truckingId,List<List<String>> destinations) {
         truckingsBoard.updateDestinationsOnTrucking(truckingId, destinations);
     }
 
-    public synchronized void moveProductsToTrucking(int truckingId, String productSKU) throws Exception {
+    public synchronized void moveProductsToTrucking(int truckingId, String productSKU) {
         truckingsBoard.moveProductsToTrucking(truckingId, productSKU);
     }
 
-    public synchronized void updateVehicleOnTrucking(int truckingId, String registrationOfVehicle) throws Exception {
+    public synchronized void updateVehicleOnTrucking(int truckingId, String registrationOfVehicle) {
         Vehicle vehicle = getVehicleByRegistrationPlate(registrationOfVehicle);
         truckingsBoard.updateVehicleOnTrucking(truckingId, vehicle);
     }
 
-    public synchronized void updateDriverOnTrucking(int truckingId, String driverUsername) throws Exception {
+    public synchronized void updateDriverOnTrucking(int truckingId, String driverUsername) {
         Driver driver = getDriverByUsername(driverUsername);
         truckingsBoard.updateDriverOnTrucking(truckingId, driver);
     }
 
-    public synchronized void updateDateOnTrucking(int truckingId, LocalDateTime date) throws Exception {
+    public synchronized void updateDateOnTrucking(int truckingId, LocalDateTime date) {
         truckingsBoard.updateDateOnTrucking(truckingId, date);
     }
 
-    protected synchronized void updateTotalWeight(int truckingId, int newWeight, Driver driver) throws Exception {
+    protected synchronized void updateTotalWeight(int truckingId, int newWeight, Driver driver) {
         truckingsBoard.updateTotalWeightOfTrucking(truckingId, newWeight, driver.getUsername());
     }
 

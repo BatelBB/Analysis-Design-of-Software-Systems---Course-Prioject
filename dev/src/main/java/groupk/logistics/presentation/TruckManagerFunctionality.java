@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class TruckManagerFunctionality extends UserFunctionality {
 
-    public TruckManagerFunctionality() throws Exception {
+    public TruckManagerFunctionality() {
         super();
 
     }
@@ -75,7 +75,7 @@ public class TruckManagerFunctionality extends UserFunctionality {
         else printList(response.getValue());
     }
 
-    public void addTrucking() throws Exception {
+    public void addTrucking() {
         System.out.println("Enter registration plate of the vehicle");
         String registrationPlate = getVehiclesFromTheUser();
         LocalDateTime date = Main.getDateFromUser();

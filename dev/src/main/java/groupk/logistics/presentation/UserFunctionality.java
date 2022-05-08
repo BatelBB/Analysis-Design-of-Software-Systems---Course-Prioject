@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class UserFunctionality {
     protected Service service;
-    public UserFunctionality() throws Exception {
+    public UserFunctionality() {
         service = new Service();
     }
 

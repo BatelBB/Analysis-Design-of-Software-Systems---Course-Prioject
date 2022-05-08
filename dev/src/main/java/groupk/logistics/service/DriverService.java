@@ -8,7 +8,7 @@ public class DriverService {
 
     private DriverController driverController;
 
-    public DriverService() throws Exception {
+    public DriverService() {
         driverController = DriverController.getInstance();
     }
 

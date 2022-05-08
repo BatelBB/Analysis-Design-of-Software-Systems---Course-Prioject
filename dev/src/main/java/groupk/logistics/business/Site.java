@@ -10,7 +10,7 @@ public class Site {
     private int apartment;
     private Area area;
 
-    public Site(String contactGuy, String city, String phoneNumber, String street, int houseNumber, int floor, int apartment, String Sarea) throws Exception {
+    public Site(String contactGuy, String city, String phoneNumber, String street, int houseNumber, int floor, int apartment, String Sarea) {
         if (contactGuy == null | contactGuy.length() == 0 | city == null | city.length() == 0 | phoneNumber == null | phoneNumber.length() == 0 | street == null | street.length() == 0)
             throw new IllegalArgumentException("One or more of the site details are empty");
         this.contactGuy = contactGuy;
@@ -76,7 +76,7 @@ public class Site {
         return area;
     }
 
-    private boolean validatePhoneNumber() throws Exception {
+    private boolean validatePhoneNumber() {
         String phoneNumberWithoutHyphens = "";
         for (int index = 0; index < phoneNumber.length(); index++) {
             char charAt = phoneNumber.charAt(index);

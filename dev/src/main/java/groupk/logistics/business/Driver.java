@@ -8,7 +8,7 @@ public class Driver extends User {
     private List<DLicense> licenses;
     private TruckManager truckManager;
 
-    public Driver(String name, String username, String password, TruckManager truckManager) throws Exception {
+    public Driver(String name, String username, String password, TruckManager truckManager) {
         super(name, username, password);
         this.role = Role.driver;
         licenses = new LinkedList<DLicense>();
@@ -70,7 +70,7 @@ public class Driver extends User {
         }
     }
 
-    public synchronized void updateTotalWeightOfTrucking(int truckingId, int newWeight) throws Exception {
+    public synchronized void updateTotalWeightOfTrucking(int truckingId, int newWeight) {
         truckManager.updateTotalWeight(truckingId, newWeight, this);
     }
 

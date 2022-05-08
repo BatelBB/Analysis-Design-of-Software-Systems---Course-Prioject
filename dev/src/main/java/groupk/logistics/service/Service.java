@@ -10,7 +10,7 @@ public class Service {
     DriverService driverService;
     UserService userService;
 
-    public Service() throws Exception {
+    public Service() {
         driverService = new DriverService();
         truckManagerService = new TruckManagerService();
         userService = new UserService();
@@ -36,7 +36,7 @@ public class Service {
         return truckManagerService.getVehiclesRegistrationPlates();
     }
 
-    public Response addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products, long hours, long minutes) throws Exception {
+    public Response addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products, long hours, long minutes) {
         return truckManagerService.addTrucking(registrationPlateOfVehicle, date, driverUsername, sources, destinations, products,hours,minutes);
     }
 

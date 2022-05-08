@@ -20,9 +20,9 @@ public class Trucking {
     private long hours;
     private long minutes;
 
-    public Trucking(int id, Vehicle vehicle, LocalDateTime date, Driver driver, List<List<String>> sources, List<List<String>> destinations, List<ProductForTrucking> products,long hours, long minutes) throws Exception {
+    public Trucking(int id, Vehicle vehicle, LocalDateTime date, Driver driver, List<List<String>> sources, List<List<String>> destinations, List<ProductForTrucking> products,long hours, long minutes) {
         if (vehicle == null | date == null | driver == null | sources == null | destinations == null | sources.size() == 0 | destinations.size() == 0 | products == null | products.size() == 0)
-            throw new Exception("One or more of the data is empty");
+            throw new IllegalArgumentException("One or more of the data is empty");
         this.id = id;
         this.vehicle = vehicle;
         this.date = date;
@@ -76,7 +76,7 @@ public class Trucking {
 
     }
 
-    public synchronized boolean updateWeight(int newWeight) throws Exception {
+    public synchronized boolean updateWeight(int newWeight) {
         if (newWeight <= 0)
             throw new IllegalArgumentException("The weight of a product must be positive number");
         if (newWeight > vehicle.getMaxWeight()-vehicle.getWeight())
@@ -85,17 +85,17 @@ public class Trucking {
         return true;
     }
 
-    public synchronized void addSources(List<List<String>> sourcesList) throws Exception {
+    public synchronized void addSources(List<List<String>> sourcesList) {
         checkDateForUpdateTrucking();
         addSites(sourcesList, this.sources);
     }
 
-    public synchronized void addDestinations(List<List<String>> destinationsList) throws Exception {
+    public synchronized void addDestinations(List<List<String>> destinationsList) {
         checkDateForUpdateTrucking();
         addSites(destinationsList, this.destinations);
     }
 
-    public synchronized void addProducts(String pruductName,int quantity) throws Exception {
+    public synchronized void addProducts(String pruductName,int quantity) {
         synchronized (products) {
             checkDateForUpdateTrucking();
             products.add(new ProductForTrucking(castFromString(pruductName),quantity));
@@ -110,7 +110,7 @@ public class Trucking {
         else throw new IllegalArgumentException("wrong license");
     }
 
-    public synchronized void moveProducts(String productSKU) throws Exception {
+    public synchronized void moveProducts(String productSKU) {
         synchronized (products) {
             checkDateForUpdateTrucking();
             ListIterator<ProductForTrucking> truckingIterator = products.listIterator();
@@ -127,21 +127,21 @@ public class Trucking {
         }
     }
 
-    public synchronized void updateSources(List<List<String>> sources) throws Exception {
+    public synchronized void updateSources(List<List<String>> sources) {
         checkDateForUpdateTrucking();
         checkSameArea(sources);
         this.sources = new ConcurrentHashMap<Area, List<Site>>();
         addSources(sources);
     }
 
-    public synchronized void updateDestinations(List<List<String>> destinations) throws Exception {
+    public synchronized void updateDestinations(List<List<String>> destinations) {
         checkDateForUpdateTrucking();
         checkSameArea(destinations);
         this.destinations = new ConcurrentHashMap<Area, List<Site>>();
         addDestinations(destinations);
     }
 
-    public synchronized void updateVehicle(Vehicle vehicle) throws Exception {
+    public synchronized void updateVehicle(Vehicle vehicle) {
         checkDateForUpdateTrucking();
         if (vehicle == null)
             throw new IllegalArgumentException("The vehicle is empty");
@@ -150,7 +150,7 @@ public class Trucking {
         this.vehicle = vehicle;
     }
 
-    public synchronized void updateDriver(Driver driver) throws Exception {
+    public synchronized void updateDriver(Driver driver) {
         checkDateForUpdateTrucking();
         if (driver == null)
             throw new IllegalArgumentException("The driver is empty");
@@ -159,7 +159,7 @@ public class Trucking {
         this.driver = driver;
     }
 
-    public synchronized void updateDate(LocalDateTime date) throws Exception {
+    public synchronized void updateDate(LocalDateTime date) {
         checkDateForUpdateTrucking();
         if (date == null)
             throw new IllegalArgumentException("The data is empty");
@@ -217,7 +217,7 @@ public class Trucking {
         return toReturn;
     }
 
-    private void checkDateForUpdateTrucking() throws Exception {
+    private void checkDateForUpdateTrucking() {
         if (date.compareTo(LocalDateTime.now()) <= 0)
             throw new IllegalArgumentException("Sorry, it's too late to update the trucking");
     }
@@ -228,7 +228,7 @@ public class Trucking {
         return true;
     }
 
-    private boolean checkSameArea(List<List<String>> sites) throws Exception {
+    private boolean checkSameArea(List<List<String>> sites) {
         synchronized (sites) {
             if(sites == null | sites.size() == 0)
                 throw new IllegalArgumentException("Oops, the sites cannot be empty");
@@ -244,7 +244,7 @@ public class Trucking {
         }
     }
 
-    private boolean checkDLicense() throws Exception {
+    private boolean checkDLicense() {
         for (DLicense dLicense : getDriver().getLicenses()) {
             if(dLicense == getVehicle().getLisence())
                 return true;
@@ -252,7 +252,7 @@ public class Trucking {
         throw new IllegalArgumentException("Oops, the driver does not hold a driver's license that matches the type of vehicle");
     }
 
-    private void addSites(List<List<String>> sites, Map<Area, List<Site>> sourcesOrDestinations) throws Exception {
+    private void addSites(List<List<String>> sites, Map<Area, List<Site>> sourcesOrDestinations) {
         for (List<String> site : sites) {
             Site Source = castFromString(site);
             if(Source == null | Source.getArea() == null)
@@ -267,7 +267,7 @@ public class Trucking {
         }
     }
 
-    private Site castFromString(List<String> detailsOfSite) throws Exception {
+    private Site castFromString(List<String> detailsOfSite) {
         if(!(detailsOfSite.size()==8)) throw new IllegalArgumentException("illegal number of details of site");
         else
             return new Site(detailsOfSite.get(0),detailsOfSite.get(1),detailsOfSite.get(2),detailsOfSite.get(3),

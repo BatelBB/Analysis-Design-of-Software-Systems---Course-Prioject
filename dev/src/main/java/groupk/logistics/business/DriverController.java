@@ -7,17 +7,17 @@ public class DriverController extends UserController{
 
     private static DriverController singletonDriverControllerInstance = null;
 
-    public static DriverController getInstance() throws Exception {
+    public static DriverController getInstance() {
         if (singletonDriverControllerInstance == null)
             singletonDriverControllerInstance = new DriverController();
         return singletonDriverControllerInstance;
     }
 
-    private DriverController() throws Exception {
+    private DriverController() {
         super(null);
     }
 
-    public List<String> getMyLicenses() throws Exception {
+    public List<String> getMyLicenses() {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsDriver();
             List<DLicense> licenses = ((Driver)getActiveUser()).getLicenses();
@@ -29,60 +29,60 @@ public class DriverController extends UserController{
         }
     }
 
-    public String printMyTruckings() throws Exception {
+    public String printMyTruckings() {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsDriver();
             return ((Driver)getActiveUser()).printTruckings();
         }
     }
 
-    public String printMyTruckingsHistory() throws Exception {
+    public String printMyTruckingsHistory() {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsDriver();
             return ((Driver)getActiveUser()).printTruckingsHistory();
         }
     }
 
-    public String printMyFutureTruckings() throws Exception {
+    public String printMyFutureTruckings() {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsDriver();
             return ((Driver)getActiveUser()).printFutureTruckings();
         }
     }
 
-    public void addLicense(String license) throws Exception {
+    public void addLicense(String license) {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsDriver();
             ((Driver)getActiveUser()).addLicense(license);
         }
     }
 
-    public void addLicenses(List<String> licenses) throws Exception {
+    public void addLicenses(List<String> licenses) {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsDriver();
             ((Driver)getActiveUser()).addLicenses(licenses);
         }
     }
 
-    public void setWeightForTrucking(int truckingId, int weight) throws Exception {
+    public void setWeightForTrucking(int truckingId, int weight) {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsDriver();
             ((Driver)getActiveUser()).updateTotalWeightOfTrucking(truckingId, weight);
         }
     }
 
-    public void removeLicense(String license) throws Exception {
+    public void removeLicense(String license) {
         synchronized (getActiveUser()) {
             checkIfActiveUserIsDriver();
             ((Driver)getActiveUser()).removeLicense(license);
         }
     }
 
-    private void checkIfActiveUserIsDriver() throws Exception {
+    private void checkIfActiveUserIsDriver() {
         if (getActiveUser().hashCode() == getNullUserForLogOut().hashCode())
-            throw new Exception("There is no user connected");
+            throw new IllegalArgumentException("There is no user connected");
         if (getActiveUser().getRole() != Role.driver | !(getActiveUser() instanceof Driver))
-            throw new Exception("Oops, you are not a driver");
+            throw new IllegalArgumentException("Oops, you are not a driver");
     }
 }
 

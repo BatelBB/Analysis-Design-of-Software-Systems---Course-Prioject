@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DriverFunctionality extends UserFunctionality{
 
-    public DriverFunctionality() throws Exception {
+    public DriverFunctionality() {
         super();
     }
 
