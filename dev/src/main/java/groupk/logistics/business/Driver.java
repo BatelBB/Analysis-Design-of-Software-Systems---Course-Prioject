@@ -8,7 +8,7 @@ public class Driver extends User {
     private List<DLicense> licenses;
 
 
-    public Driver(String name, String username, String password, TruckManager truckManager) {
+    public Driver(String name, String username, String password) {
         super(name, username, password);
         this.role = Role.driver;
         licenses = new LinkedList<DLicense>();

@@ -3,7 +3,7 @@ package groupk.logistics.business;
 public abstract class User {
     protected String name;
     protected String username;
-    protected Password password;
+    private Password password;
     protected boolean isLogin;
     protected Role role;
 
@@ -50,4 +50,8 @@ public abstract class User {
         return role;
     }
 
+    public  boolean checkPassword(String password)
+    {
+        return this.password.checkPassword(password);
+    }
 }

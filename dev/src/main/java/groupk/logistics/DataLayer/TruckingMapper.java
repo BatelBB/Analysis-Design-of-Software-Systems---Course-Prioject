@@ -48,4 +48,17 @@ public class TruckingMapper extends myDataBase {
     public void addTrucking(Trucking trucking) {
         truckingsIDMap.truckingMap.put(trucking.getId(),trucking);
     }
+
+    public boolean setWeightForTrucking(int truckingId, int weight) {
+        if(truckingsIDMap.truckingMap.containsKey(truckingId))truckingsIDMap.truckingMap.get(truckingId).updateWeight(weight);
+        String sql = "UPDATE Trucking SET weight="+weight+" WHERE TID='"+truckingId+"'";
+        int n=0;
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            n = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return n>0;
+    }
 }

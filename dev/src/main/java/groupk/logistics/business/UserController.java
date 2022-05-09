@@ -1,5 +1,7 @@
 package groupk.logistics.business;
 
+import groupk.logistics.DataLayer.UserMapper;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,11 +15,13 @@ public class UserController {
     private final int MAX_USERNAME_LENGTH = 12;
     private String CODE_TRUCK_MANAGER = "tm1234tm";
     private Map<String, String> UNIQUE_DRIVER_CODE_OF_TM; //key: hashcode, value: tmUsername
+    private UserMapper userMapper;
 
-    private UserController() {
+    private UserController() throws Exception {
         users = new ConcurrentHashMap<String, User>();
         UNIQUE_DRIVER_CODE_OF_TM = new ConcurrentHashMap<String, String>();
         activeUser = nullUserForLogOut;
+        userMapper = new UserMapper();
     }
 
     public void reserForTests()
@@ -61,54 +65,40 @@ public class UserController {
             UNIQUE_DRIVER_CODE_OF_TM.put(String.valueOf(newUser.hashCode()), username);
         }
         else if (role == Role.driver) {
-            TruckManager truckManagerOfTheDriver = getTruckManagerByCode(code);
-            newUser = new Driver(name, username, password, truckManagerOfTheDriver);
-            truckManagerOfTheDriver.addDriver((Driver)newUser);
+            newUser = new Driver(name, username, password);
         }
         else
             throw new IllegalArgumentException("Sorry, we can not yet open a user for this type of employee");
-        users.put(username, newUser);
+        userMapper.addUser(newUser);
         return true;
     }
 
     public boolean login(String username, String password) throws Exception {
-        synchronized (getActiveUser()) {
             if (getActiveUser().hashCode() != getNullUserForLogOut().hashCode())
                 throw new IllegalArgumentException("There is a user already connected to the system");
             if (username == null)
                 throw new IllegalArgumentException("Please enter valid username");
-            User user = users.get(username);
+            User user = userMapper.getUser(username);
             if (user == null)
                 throw new IllegalArgumentException("Sorry but there's no user with that username");
-            if(users.get(username).login(password)) {
-                getInstance().activeUser = user;
-                if (users.get(username).getRole()==Role.driver)
-                    return true;
-                else
-                    return false;
-            }
-            return false;
-        }
+            if(!(user.checkPassword(password))) return false;
+            return true;
+
     }
 
     public boolean logout() throws Exception {
-        synchronized (getActiveUser()) {
             if (getActiveUser().hashCode() == getNullUserForLogOut().hashCode())
                 throw new IllegalArgumentException("There is no active user in the system");
             if(getActiveUser().logout()) {
                 getInstance().activeUser = getNullUserForLogOut();
                 return true;
-            }
+
         }
         return false;
     }
 
     public boolean updatePassword(String newPassword) throws Exception {
-        synchronized (getActiveUser()) {
-            if (getActiveUser().hashCode() == getNullUserForLogOut().hashCode())
-                throw new IllegalArgumentException("There is no active user in the system");
-            return getActiveUser().updatePassword(newPassword);
-        }
+        return userMapper.updatePassword(getActiveUser().getUsername(),newPassword);
     }
 
     private boolean validateUsernameToRegister(String username)
@@ -123,7 +113,7 @@ public class UserController {
             if(!(Character.isLetter(username.charAt(i)) | Character.isDigit(username.charAt(i))))
                 throw new IllegalArgumentException("Username can only contain letters and numbers");
         }
-        if (users.containsKey(username))
+        if (userMapper.hasUsername(username))
             throw new IllegalArgumentException("Username is already exist. try another one.");
         return true;
     }

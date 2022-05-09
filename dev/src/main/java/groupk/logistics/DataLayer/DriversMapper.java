@@ -73,7 +73,7 @@ public class DriversMapper extends myDataBase {
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             while (rs.next()) {
-                return new Driver(userDetails.get(1),driverUsername,userDetails.get(0),truckManager);
+                return new Driver(userDetails.get(1),driverUsername,userDetails.get(0));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
