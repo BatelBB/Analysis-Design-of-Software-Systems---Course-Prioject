@@ -11,7 +11,7 @@ public class TruckManagerService {
 
     private TruckManagerController truckManagerController = TruckManagerController.getInstance();
 
-    public TruckManagerService() {
+    public TruckManagerService() throws Exception {
     }
 
 

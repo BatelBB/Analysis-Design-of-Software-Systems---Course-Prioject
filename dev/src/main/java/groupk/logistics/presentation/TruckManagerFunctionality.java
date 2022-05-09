@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class TruckManagerFunctionality extends UserFunctionality {
 
-    public TruckManagerFunctionality() {
+    public TruckManagerFunctionality() throws Exception {
         super();
 
     }

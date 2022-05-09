@@ -6,7 +6,7 @@ public class Driver extends User {
 
     }
 
-    public void act() {
+    public void act() throws Exception {
         boolean logedOut = false;
         while (!logedOut)
         {

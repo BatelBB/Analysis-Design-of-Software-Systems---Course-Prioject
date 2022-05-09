@@ -27,14 +27,14 @@ public class UserController {
         activeUser = nullUserForLogOut;
     }
 
-    protected UserController(String notUsed) { //fictive constructor for the extends classes
+    protected UserController(String notUsed) throws Exception { //fictive constructor for the extends classes
         getInstance();
         users = getInstance().users;
         activeUser = getInstance().activeUser;
         UNIQUE_DRIVER_CODE_OF_TM = getInstance().UNIQUE_DRIVER_CODE_OF_TM;
     }
 
-    public static UserController getInstance() {
+    public static UserController getInstance() throws Exception {
         if (singletonUserControllerInstance == null)
             singletonUserControllerInstance = new UserController();
         return singletonUserControllerInstance;
@@ -47,7 +47,7 @@ public class UserController {
         else throw new IllegalArgumentException("wrong role");
     }
 
-    public synchronized boolean registerUser(String name, String username, String password, String roleString, String code) {
+    public synchronized boolean registerUser(String name, String username, String password, String roleString, String code) throws Exception {
         User newUser;
         Role role = castStringToRole(roleString);
         if (role == null)
@@ -71,7 +71,7 @@ public class UserController {
         return true;
     }
 
-    public boolean login(String username, String password) {
+    public boolean login(String username, String password) throws Exception {
         synchronized (getActiveUser()) {
             if (getActiveUser().hashCode() != getNullUserForLogOut().hashCode())
                 throw new IllegalArgumentException("There is a user already connected to the system");
@@ -91,7 +91,7 @@ public class UserController {
         }
     }
 
-    public boolean logout() {
+    public boolean logout() throws Exception {
         synchronized (getActiveUser()) {
             if (getActiveUser().hashCode() == getNullUserForLogOut().hashCode())
                 throw new IllegalArgumentException("There is no active user in the system");
@@ -103,7 +103,7 @@ public class UserController {
         return false;
     }
 
-    public boolean updatePassword(String newPassword) {
+    public boolean updatePassword(String newPassword) throws Exception {
         synchronized (getActiveUser()) {
             if (getActiveUser().hashCode() == getNullUserForLogOut().hashCode())
                 throw new IllegalArgumentException("There is no active user in the system");
@@ -128,7 +128,7 @@ public class UserController {
         return true;
     }
 
-    private TruckManager getTruckManagerByCode(String hashcode) {
+    private TruckManager getTruckManagerByCode(String hashcode) throws Exception {
         String TruckManagerUsername = UNIQUE_DRIVER_CODE_OF_TM.get(hashcode);
         if (TruckManagerUsername == null)
             throw new IllegalArgumentException("Sorry, the code is not valid");
@@ -138,11 +138,11 @@ public class UserController {
         return (TruckManager)truckManager;
     }
 
-    protected User getActiveUser() {
+    protected User getActiveUser() throws Exception {
         return getInstance().activeUser;
     }
 
-    protected User getNullUserForLogOut() {
+    protected User getNullUserForLogOut() throws Exception {
         return getInstance().nullUserForLogOut;
     }
 }

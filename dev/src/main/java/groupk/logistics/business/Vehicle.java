@@ -9,14 +9,17 @@ public class Vehicle {
     private String model;
     private int weight;
     private int maxWeight;
+    private String myTM;
 
-    public Vehicle(String lisence, String registationPlate, String model, int weight, int maxWeight) {
+    public Vehicle(String lisence, String registationPlate, String model, int weight, int maxWeight, String username) {
         this.lisence = castFromString(lisence);
         this.registationPlate = registationPlate;
         this.maxWeight = maxWeight;
         this.weight = weight;
         this.model = model;
+        myTM = username;
         checkVehicle();
+
     }
 
     private DLicense castFromString(String dLicense)

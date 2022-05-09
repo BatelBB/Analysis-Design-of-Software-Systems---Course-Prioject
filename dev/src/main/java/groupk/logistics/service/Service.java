@@ -10,11 +10,12 @@ public class Service {
     DriverService driverService;
     UserService userService;
 
-    public Service() {
+    public Service() throws Exception {
         driverService = new DriverService();
         truckManagerService = new TruckManagerService();
         userService = new UserService();
     }
+
 
     public Response removeTrucking(int truckingId) {
         return truckManagerService.removeTrucking(truckingId);

@@ -42,6 +42,20 @@ public class Trucking {
         addDestinations(destinations);
     }
 
+    public static List<ProductForTrucking> productForTruckings(List <Map<String,Integer>> map)
+    {
+        List<ProductForTrucking> productForTruckings = new LinkedList<>();
+        for(int i = 0 ; i < map.size();i++)
+        {
+            Map<String,Integer> prod = map.get(0);
+            if(prod.containsKey("eggs")) productForTruckings.add(new ProductForTrucking(Products.Eggs_4902505139314,prod.get("eggs")));
+            if(prod.containsKey("milk")) productForTruckings.add(new ProductForTrucking(Products.Eggs_4902505139314,prod.get("milk")));
+            if(prod.containsKey("water")) productForTruckings.add(new ProductForTrucking(Products.Eggs_4902505139314,prod.get("water")));
+
+        }
+        return productForTruckings;
+    }
+
     private void checkTime() {
         if (hours<0 | hours >6)
             throw new IllegalArgumentException("To long or minus hour ? no no no");

@@ -1,5 +1,7 @@
 package groupk.logistics.business;
 
+import groupk.logistics.DataLayer.VehicleMapper;
+
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +56,18 @@ public class TruckManager extends User {
         Trucking trucking = new Trucking(id, vehicle, date, driver, sources, destinations, productForTruckings(products),hours,minutes);
         driver.checkTrucking(trucking);
         truckingsBoard.addTrucking(trucking);
+    }
+
+    public  boolean checkTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products,long hours, long minutes) {
+        if (registrationPlateOfVehicle == null)
+            throw new NullPointerException("The registration plate is empty");
+        if (driverUsername == null)
+            throw new NullPointerException("The driver's username is empty");
+        Driver driver = getDriverByUsername(driverUsername);
+        Vehicle vehicle = getVehicleByRegistrationPlate(registrationPlateOfVehicle);
+        Trucking trucking = new Trucking(id, vehicle, date, driver, sources, destinations, productForTruckings(products),hours,minutes);
+        driver.checkTrucking(trucking);
+        return true;
     }
 
     private List<ProductForTrucking> productForTruckings(List <Map<String,Integer>> map)

@@ -7,7 +7,7 @@ public class UserService {
 
     private UserController userController;
 
-    public UserService() {
+    public UserService() throws Exception {
         userController = UserController.getInstance();
     }
 

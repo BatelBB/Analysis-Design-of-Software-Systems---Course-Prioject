@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class RegisterWindow {
     Service service = new Service();
-    public RegisterWindow() {
+    public RegisterWindow() throws Exception {
 
     }
     public void  register() {

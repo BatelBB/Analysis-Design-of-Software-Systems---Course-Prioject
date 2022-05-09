@@ -4,7 +4,7 @@ public class TruckManager extends User{
     public TruckManager() {
     }
 
-    public void act() {
+    public void act() throws Exception {
         boolean logedOut = false;
         while (!logedOut)
         {
@@ -39,7 +39,7 @@ public class TruckManager extends User{
         }
     }
 
-    private void getInformationAboutTruckings() {
+    private void getInformationAboutTruckings() throws Exception {
         boolean found = false;
         while (!found) {
             found = true;
@@ -67,7 +67,7 @@ public class TruckManager extends User{
         }
     }
 
-    private void getInformationAboutDrivers() {
+    private void getInformationAboutDrivers() throws Exception {
         boolean found = false;
         while (!found) {
             found = true;
@@ -98,7 +98,7 @@ public class TruckManager extends User{
         }
     }
 
-    private void getInformationAboutVehicles() {
+    private void getInformationAboutVehicles() throws Exception {
         boolean found = false;
         while (!found) {
             found = true;
@@ -133,7 +133,7 @@ public class TruckManager extends User{
         }
     }
 
-    private void updateTruckings() {
+    private void updateTruckings() throws Exception {
         boolean found = false;
         while (!found) {
             found = true;

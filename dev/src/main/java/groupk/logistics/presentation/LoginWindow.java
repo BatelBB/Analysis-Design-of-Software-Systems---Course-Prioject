@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class LoginWindow {
-    public void login() {
+    public void login() throws Exception {
         boolean wantToBack = false;
         Service service = new Service();
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
