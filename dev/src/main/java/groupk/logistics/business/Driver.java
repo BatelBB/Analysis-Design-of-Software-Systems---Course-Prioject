@@ -6,13 +6,12 @@ import java.util.List;
 
 public class Driver extends User {
     private List<DLicense> licenses;
-    private TruckManager truckManager;
+
 
     public Driver(String name, String username, String password, TruckManager truckManager) {
         super(name, username, password);
         this.role = Role.driver;
         licenses = new LinkedList<DLicense>();
-        this.truckManager = truckManager;
     }
 
     public synchronized void checkTrucking(Trucking trucking) {

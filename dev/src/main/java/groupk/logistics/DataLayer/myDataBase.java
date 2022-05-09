@@ -23,7 +23,6 @@ abstract class myDataBase<T> {
         String vehiclesTable = "CREATE TABLE IF NOT EXISTS " + "Vehicles" + " (\n" +
                 "\tregistration_plate INTEGER PRIMARY KEY,\n" +
                 "\tmodel TEXT NOT NULL,\n" +
-                "\ttruck_manager TEXT NOT NULL,\n" +
                 "\tlicense INTEGER NOT NULL,\n" +
                 "\tweight INTEGER NOT NULL,\n" +
                 "\tmax_weight INTEGER NOT NULL\n" +
@@ -32,16 +31,14 @@ abstract class myDataBase<T> {
 
         String truckManagersTable = "CREATE TABLE IF NOT EXISTS " + "TruckManagers" + " (\n" +
                 "\tusername Text PRIMARY KEY,\n" +
-                "\tcode TEXT NOT NULL\n" +
+                "\tcode TEXT NOT NULL,\n" +
                 "FOREIGN KEY(username) REFERENCES Users(username)\n" +
                 "\t);\n" +
                 "\n";
 
         String dirversTable = "CREATE TABLE IF NOT EXISTS " + "Drivers" + " (\n" +
                 "\tusername Text PRIMARY KEY,\n" +
-                "\ttruck_manager Text  ,\n" +
-                "\tFOREIGN KEY(username) REFERENCES Users(username)\n" +
-                "FOREIGN KEY(driver_username) REFERENCES Drivers(username)\n" +
+                "FOREIGN KEY(username) REFERENCES Users(username)\n" +
                 "\t);\n" +
                 "\n";
         String dirversLicencesTable = "CREATE TABLE IF NOT EXISTS " + "Drivers_Licences" + " (\n" +
