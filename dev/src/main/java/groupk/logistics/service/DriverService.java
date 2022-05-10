@@ -54,8 +54,8 @@ public class DriverService {
 
     public Response addLicense(String dLicense) {
         try {
-            driverController.addLicense(dLicense);
-            return new Response(true);
+            boolean added = driverController.addLicense(dLicense);
+            return new Response(added);
         }
         catch (Exception e) {
             return new Response(e.getMessage());
@@ -72,15 +72,7 @@ public class DriverService {
         }
     }
 
-    public Response removeLicense(String dLicense) {
-        try {
-            driverController.removeLicense(dLicense);
-            return new Response(true);
-        }
-        catch (Exception e) {
-            return new Response(e.getMessage());
-        }
-    }
+
 
     public Response<List<String>> getLicenses() {
         List<String> licenses;

@@ -69,8 +69,7 @@ public class UserController {
         }
         else
             throw new IllegalArgumentException("Sorry, we can not yet open a user for this type of employee");
-        userMapper.addUser(newUser);
-        return true;
+        return userMapper.addUser(newUser,password);
     }
 
     public boolean login(String username, String password) throws Exception {
@@ -81,14 +80,14 @@ public class UserController {
             User user = userMapper.getUser(username);
             if (user == null)
                 throw new IllegalArgumentException("Sorry but there's no user with that username");
-            if(!(user.checkPassword(password))) return false;
-            return true;
+            if(!(user.checkPassword(password))) throw new IllegalArgumentException("wrong password or username");
+            activeUser=user;
+            activeUser.isLogin=true;
+            return user.getRole()==Role.driver;
 
     }
 
     public boolean logout() throws Exception {
-            if (getActiveUser().hashCode() == getNullUserForLogOut().hashCode())
-                throw new IllegalArgumentException("There is no active user in the system");
             if(getActiveUser().logout()) {
                 getInstance().activeUser = getNullUserForLogOut();
                 return true;

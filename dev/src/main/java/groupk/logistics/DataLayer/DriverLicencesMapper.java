@@ -2,10 +2,7 @@ package groupk.logistics.DataLayer;
 
 import groupk.logistics.business.Driver;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -40,12 +37,12 @@ public class DriverLicencesMapper extends myDataBase {
         return DTOList;
     }
 
-    public boolean addLicence(String username, String license) {
+    public boolean addLicence(String username, String license) throws Exception {
 
         int n = 0;
         String query = "INSERT INTO Drivers_Licences(username,licence) VALUES(?,?)";
 
-        try(Connection conn = getConnection()){
+        try(Connection conn = DriverManager.getConnection(finalCurl)){
             if(conn != null) {
                 PreparedStatement prepStat = conn.prepareStatement(query);
                 prepStat.setString(1, username);
@@ -57,7 +54,7 @@ public class DriverLicencesMapper extends myDataBase {
                 return false;
         }
         catch (SQLException e){
-            System.out.println(e.getMessage());
+            throw new Exception("You already have this licence");
         }
 
         return n == 1;

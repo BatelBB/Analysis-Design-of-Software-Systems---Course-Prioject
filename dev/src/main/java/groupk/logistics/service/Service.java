@@ -141,9 +141,6 @@ public class Service {
         return driverService.addLicenses(dLicenses);
     }
 
-    public Response removeLicenseFromDriver(String dLicense) {
-        return driverService.removeLicense(dLicense);
-    }
 
     public Response setWeightForTrucking(int truckingId, int weight) {
         return driverService.setWeightForTrucking(truckingId, weight);

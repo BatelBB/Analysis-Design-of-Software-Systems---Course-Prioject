@@ -35,7 +35,6 @@ public class Trucking {
         this.minutes = minutes;
         checkTime();
         checkDate();
-        checkDLicense();
         checkSameArea(sources);
         checkSameArea(destinations);
         addSources(sources);
@@ -156,21 +155,11 @@ public class Trucking {
     }
 
     public synchronized void updateVehicle(Vehicle vehicle) {
-        checkDateForUpdateTrucking();
-        if (vehicle == null)
-            throw new IllegalArgumentException("The vehicle is empty");
-        if (!(driver.getLicenses().contains(vehicle.getLisence())))
-            throw new IllegalArgumentException("The driver does not have a suitable driver's license for this vehicle");
-        this.vehicle = vehicle;
+
     }
 
     public synchronized void updateDriver(Driver driver) {
-        checkDateForUpdateTrucking();
-        if (driver == null)
-            throw new IllegalArgumentException("The driver is empty");
-        if (!(driver.getLicenses().contains(vehicle.getLisence())))
-            throw new IllegalArgumentException("That driver does not have a suitable driver's license for the vehicle");
-        this.driver = driver;
+
     }
 
     public synchronized void updateDate(LocalDateTime date) {
@@ -258,13 +247,7 @@ public class Trucking {
         }
     }
 
-    private boolean checkDLicense() {
-        for (DLicense dLicense : getDriver().getLicenses()) {
-            if(dLicense == getVehicle().getLisence())
-                return true;
-        }
-        throw new IllegalArgumentException("Oops, the driver does not hold a driver's license that matches the type of vehicle");
-    }
+
 
     private void addSites(List<List<String>> sites, Map<Area, List<Site>> sourcesOrDestinations) {
         for (List<String> site : sites) {

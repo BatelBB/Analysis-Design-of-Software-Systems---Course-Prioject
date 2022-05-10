@@ -70,23 +70,23 @@ public class TruckManagerController extends UserController{
 
     public void addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products, long hours, long minutes) throws Exception {
         boolean checkTrucking = ((TruckManager)getActiveUser()).checkTrucking(truckingIdCounter, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products, hours, minutes);
-        if(checkTrucking) {
-            List<String> userDetails = userMapper.getUser(driverUsername);
-            Vehicle vehicle = vehicleMapper.getVehicle(registrationPlateOfVehicle,getActiveUser().getUsername());
-            Driver driver =driversMapper.getDriver(driverUsername,(TruckManager) getActiveUser(),userDetails);
-            if(userDetails==null|driver==null)  throw new Exception("The driver username is not ok");
-            if(vehicle==null)  throw new Exception("The regitration plate username is not ok");
-            List<ProductForTrucking> productForTruckings = Trucking.productForTruckings(products);
-            Trucking trucking = new Trucking(truckingIdCounter,vehicle,date,driver,sources,destinations,productForTruckings,hours,minutes);
-            boolean added = truckingMapper.addTrucking(truckingIdCounter,getActiveUser().getUsername(),registrationPlateOfVehicle,driverUsername,date,hours,minutes);
-            sourcesMapper.addTruckingSources(truckingIdCounter,sources);
-            truckings_destsMapper.addTruckingDestinations(truckingIdCounter,destinations);
-            sourcesMapper.addTruckingProducts(truckingIdCounter,productForTruckings);
-            if(added) {
-                truckingMapper.addTrucking(trucking);
-                truckingIdCounter++;
-            }
-        }
+//        if(checkTrucking) {
+//            List<String> userDetails = userMapper.getUser(driverUsername);
+//            Vehicle vehicle = vehicleMapper.getVehicle(registrationPlateOfVehicle,getActiveUser().getUsername());
+//            Driver driver =driversMapper.getDriver(driverUsername,(TruckManager) getActiveUser(),userDetails);
+//            if(userDetails==null|driver==null)  throw new Exception("The driver username is not ok");
+//            if(vehicle==null)  throw new Exception("The regitration plate username is not ok");
+//            List<ProductForTrucking> productForTruckings = Trucking.productForTruckings(products);
+//            Trucking trucking = new Trucking(truckingIdCounter,vehicle,date,driver,sources,destinations,productForTruckings,hours,minutes);
+//            boolean added = truckingMapper.addTrucking(truckingIdCounter,getActiveUser().getUsername(),registrationPlateOfVehicle,driverUsername,date,hours,minutes);
+//            sourcesMapper.addTruckingSources(truckingIdCounter,sources);
+//            truckings_destsMapper.addTruckingDestinations(truckingIdCounter,destinations);
+//            sourcesMapper.addTruckingProducts(truckingIdCounter,productForTruckings);
+//            if(added) {
+//                truckingMapper.addTrucking(trucking);
+//                truckingIdCounter++;
+//            }
+//        }
     }
 
 

@@ -9,9 +9,9 @@ import java.util.List;
 
 abstract class myDataBase<T> {
     static Connection con;
-    private static String JDBCurl="jdbc:sqlite:";
-    private static String path = (new File("").getAbsolutePath()).concat("\\superLee.db");
-    private static String finalCurl;
+    protected static String JDBCurl="jdbc:sqlite:";
+    protected static String path = (new File("").getAbsolutePath()).concat("\\superLee.db");
+    protected static String finalCurl;
     private String tableName;
 
     public myDataBase(String tableName) throws SQLException {
@@ -42,8 +42,9 @@ abstract class myDataBase<T> {
                 "\t);\n" +
                 "\n";
         String dirversLicencesTable = "CREATE TABLE IF NOT EXISTS " + "Drivers_Licences" + " (\n" +
-                "\tusername Text PRIMARY KEY,\n" +
+                "\tusername Text NOT NULL,\n" +
                 "\tlicence TEXT NOT NULL,\n" +
+                "\tPRIMARY KEY (username,licence),\n" +
                 "FOREIGN KEY(username) REFERENCES Drivers(username)\n" +
                 "\t);\n" +
                 "\n";
@@ -93,7 +94,7 @@ abstract class myDataBase<T> {
                 "FOREIGN KEY(TID) REFERENCES Truckings(TID)\n" +
                 "\t);\n" +
                 "\n";
-        String UsersTable = "CREATE TABLE IF NOT EXISTS " + "User" + " (\n" +
+        String UsersTable = "CREATE TABLE IF NOT EXISTS " + "Users" + " (\n" +
                 "\tusername TEXT PRIMARY KEY,\n" +
                 "\tpassword TEXT NOT NULL,\n" +
                 "\tname TEXT NOT NULL,\n" +
@@ -115,17 +116,15 @@ abstract class myDataBase<T> {
             s.addBatch(Truckings);
             s.addBatch(Truckings_Destinations);
             s.addBatch(Truckings_Products);
-           s.addBatch(Truckings_Sources);
+            s.addBatch(Truckings_Sources);
             s.executeBatch();
+
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
-//
-//            // create a new table
-//            statement.executeBatch();
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
+
 
     public static Connection getConnection(){
         finalCurl = JDBCurl.concat(path);

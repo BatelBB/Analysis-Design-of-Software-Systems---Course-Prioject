@@ -34,36 +34,7 @@ public class DriverFunctionality extends UserFunctionality{
         }
     }
 
-    public void removeLicense() {
-        boolean done = false;
-        while (!done) {
-            Response<List<String>> licenses = service.getLicenses();
-            if (licenses.ErrorOccured()) {
-                System.out.println(licenses.getErrorMessage());
-                done = true;
-            }
-            else if (licenses.getValue() == null | licenses.getValue().size() == 0) {
-                System.out.println("Oops, first you need to add driver licenses to your profile");
-                done = true;
-            }
-            else {
-                System.out.println("Choose driver license to remove: ");
-                Main.printOptionsList(licenses.getValue());
-                String dLicense = Main.getChoiceFromArray(licenses.getValue().toArray(new String[licenses.getValue().size()]));
-                Response response = service.removeLicenseFromDriver(dLicense);
-                if (response.ErrorOccured())
-                    System.out.println(response.getErrorMessage());
-                else
-                    System.out.println("The driver's license was successfully removed");
-                System.out.println("Do you want to add another driver license? choose your selection:");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                String startAgain = Main.getChoiceFromArray(new String[]{"Yes", "No"});
-                if(startAgain.equals("No"))
-                    done = true;
-            }
-        }
-    }
+
 
     public void printLicenses() {
         Response<List<String>> licenses = service.getLicenses();

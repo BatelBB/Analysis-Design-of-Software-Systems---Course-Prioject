@@ -25,30 +25,9 @@ public class Driver extends User {
             throw new IllegalArgumentException("Oops, the driver does not have a driver's license appropriate for the vehicle type");
     }
 
-    public synchronized void addLicense(String dLicenseS)
-    {
-        DLicense dLicense = castFromString(dLicenseS);
-        synchronized (licenses) {
-            if (!(licenses.contains(dLicense)))
-                licenses.add(dLicense);
-            else
-                throw new IllegalArgumentException("License is already exist");
-        }
-    }
 
-    public synchronized void addLicenses(List<String> DLicenseList) {
-        synchronized (licenses) {
-            boolean added = false;
-            for (String dLicenseS : DLicenseList) {
-                DLicense dLicense = castFromString(dLicenseS);
-                if (!(licenses.contains(dLicense))) {
-                    added = true;
-                    licenses.add(dLicense);
-                }
-            }
-            if(!added)throw new IllegalArgumentException("All the licenses are already exist");
-        }
-    }
+
+
 
     private DLicense castFromString(String dLicense)
     {
@@ -60,34 +39,7 @@ public class Driver extends User {
 
     }
 
-    public synchronized void removeLicense(String dLicenseS)
-    {
-        DLicense dLicense = castFromString(dLicenseS);
-        synchronized (licenses) {
-            if (licenses.contains(dLicense))
-                licenses.remove(dLicense);
-        }
-    }
 
-    public synchronized void updateTotalWeightOfTrucking(int truckingId, int newWeight) {
-        truckManager.updateTotalWeight(truckingId, newWeight, this);
-    }
-
-    public synchronized String printTruckings() {
-        return truckManager.printBoardOfDriver(this.getUsername());
-    }
-
-    public synchronized String printTruckingsHistory() {
-        return truckManager.printTruckingsHistoryOfDriver(this.getUsername());
-    }
-
-    public synchronized String printFutureTruckings() {
-        return truckManager.printFutureTruckingsOfDriver(this.getUsername());
-    }
-
-    public List<DLicense> getLicenses() {
-        return licenses;
-    }
 
     public String getName() {
         return name;

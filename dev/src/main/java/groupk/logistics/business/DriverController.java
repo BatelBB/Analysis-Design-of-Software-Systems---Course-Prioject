@@ -31,24 +31,17 @@ public class DriverController extends UserController{
     }
 
     public String printMyTruckings() throws Exception {
-        synchronized (getActiveUser()) {
-            checkIfActiveUserIsDriver();
-            return ((Driver)getActiveUser()).printTruckings();
-        }
+        return "need to implement";
     }
 
     public String printMyTruckingsHistory() throws Exception {
-        synchronized (getActiveUser()) {
-            checkIfActiveUserIsDriver();
-            return ((Driver)getActiveUser()).printTruckingsHistory();
-        }
+        return "need to implement";
+
     }
 
     public String printMyFutureTruckings() throws Exception {
-        synchronized (getActiveUser()) {
-            checkIfActiveUserIsDriver();
-            return ((Driver)getActiveUser()).printFutureTruckings();
-        }
+        return "need to implement";
+
     }
 
     public boolean addLicense(String license) throws Exception {
