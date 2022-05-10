@@ -45,16 +45,7 @@ public class TruckManagerService {
     }
 
 
-    public Response<List<String>> getDriversUsernames() {
-        Response<List<String>> response;
-        try {
-            List<String> userNamesOfDrivers = truckManagerController.getDriversUsernames();
-            response = new Response(userNamesOfDrivers);
-        } catch (Exception e) {
-            response = new Response(e.getMessage());
-        }
-        return response;
-    }
+
 
     public Response getVehiclesRegistrationPlates() {
         try {

@@ -1,7 +1,9 @@
 package groupk.logistics.business;
 
 import groupk.logistics.DataLayer.UserMapper;
+import groupk.logistics.service.Response;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -133,5 +135,9 @@ public class UserController {
 
     protected User getNullUserForLogOut() throws Exception {
         return getInstance().nullUserForLogOut;
+    }
+
+    public List<String> getDriversUsernames() throws Exception {
+        return userMapper.getDriversUsernames();
     }
 }

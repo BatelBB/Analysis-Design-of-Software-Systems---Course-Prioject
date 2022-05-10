@@ -63,10 +63,6 @@ public class TruckManager extends User {
             throw new NullPointerException("The registration plate is empty");
         if (driverUsername == null)
             throw new NullPointerException("The driver's username is empty");
-        Driver driver = getDriverByUsername(driverUsername);
-        Vehicle vehicle = getVehicleByRegistrationPlate(registrationPlateOfVehicle);
-        Trucking trucking = new Trucking(id, vehicle, date, driver, sources, destinations, productForTruckings(products),hours,minutes);
-        driver.checkTrucking(trucking);
         return true;
     }
 

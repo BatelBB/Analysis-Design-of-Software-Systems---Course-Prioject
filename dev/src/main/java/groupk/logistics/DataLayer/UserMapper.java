@@ -2,6 +2,7 @@ package groupk.logistics.DataLayer;
 
 import groupk.logistics.business.*;
 import groupk.logistics.business.Driver;
+import groupk.logistics.service.Response;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -100,5 +101,21 @@ public class UserMapper extends myDataBase{
         }
 
         return n == 1;
+    }
+
+    public List<String> getDriversUsernames() {
+        List<String> driversUsername = new LinkedList<>();
+        String query = "SELECT * FROM Users " +
+                "WHERE role='"+"driver"+"'";
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(query)){
+            while (rs.next()) {
+                driversUsername.add(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return driversUsername;
     }
 }

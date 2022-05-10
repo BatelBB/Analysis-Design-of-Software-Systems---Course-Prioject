@@ -11,13 +11,12 @@ public class Vehicle {
     private int maxWeight;
     private String myTM;
 
-    public Vehicle(String lisence, String registationPlate, String model, int weight, int maxWeight, String username) {
+    public Vehicle(String lisence, String registationPlate, String model, int weight, int maxWeight) {
         this.lisence = castFromString(lisence);
         this.registationPlate = registationPlate;
         this.maxWeight = maxWeight;
         this.weight = weight;
         this.model = model;
-        myTM = username;
         checkVehicle();
 
     }

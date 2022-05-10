@@ -30,6 +30,11 @@ public class Site {
         validatePhoneNumber();
     }
 
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
     private Area castStringToArea(String area)
     {
         if(area.equals("center")) return Area.center;
@@ -105,4 +110,11 @@ public class Site {
         return true;
     }
 
+    public String getStringArea() {
+        String area = "";
+        if(this.area==Area.north)area="north";
+        if(this.area==Area.center)area="center";
+        if(this.area==Area.south)area="south";
+        return area;
+    }
 }

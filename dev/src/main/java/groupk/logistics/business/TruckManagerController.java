@@ -3,6 +3,7 @@ package groupk.logistics.business;
 import groupk.logistics.DataLayer.*;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -49,8 +50,8 @@ public class TruckManagerController extends UserController{
 
 
     public void addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight) throws Exception {
-            Vehicle newVehicle = new Vehicle(lisence, registrationPlate, model, weight, maxWeight,getActiveUser().username);
-            boolean success = vehicleMapper.addVehicle(lisence, registrationPlate, model, weight, maxWeight,getActiveUser().username);
+            Vehicle newVehicle = new Vehicle(lisence, registrationPlate, model, weight, maxWeight);
+            boolean success = vehicleMapper.addVehicle(lisence, registrationPlate, model, weight, maxWeight);
             if(success)vehicleMapper.addVehicle(newVehicle);
     }
 
@@ -70,23 +71,32 @@ public class TruckManagerController extends UserController{
 
     public void addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products, long hours, long minutes) throws Exception {
         boolean checkTrucking = ((TruckManager)getActiveUser()).checkTrucking(truckingIdCounter, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products, hours, minutes);
-//        if(checkTrucking) {
-//            List<String> userDetails = userMapper.getUser(driverUsername);
-//            Vehicle vehicle = vehicleMapper.getVehicle(registrationPlateOfVehicle,getActiveUser().getUsername());
-//            Driver driver =driversMapper.getDriver(driverUsername,(TruckManager) getActiveUser(),userDetails);
-//            if(userDetails==null|driver==null)  throw new Exception("The driver username is not ok");
-//            if(vehicle==null)  throw new Exception("The regitration plate username is not ok");
-//            List<ProductForTrucking> productForTruckings = Trucking.productForTruckings(products);
-//            Trucking trucking = new Trucking(truckingIdCounter,vehicle,date,driver,sources,destinations,productForTruckings,hours,minutes);
-//            boolean added = truckingMapper.addTrucking(truckingIdCounter,getActiveUser().getUsername(),registrationPlateOfVehicle,driverUsername,date,hours,minutes);
-//            sourcesMapper.addTruckingSources(truckingIdCounter,sources);
-//            truckings_destsMapper.addTruckingDestinations(truckingIdCounter,destinations);
-//            sourcesMapper.addTruckingProducts(truckingIdCounter,productForTruckings);
-//            if(added) {
-//                truckingMapper.addTrucking(trucking);
-//                truckingIdCounter++;
-//            }
-//        }
+        if(checkTrucking) {
+            User driver = userMapper.getUser(driverUsername);
+            if(driver==null||driver.getRole()!=Role.driver) throw new Exception("The driver username is not ok");
+            Vehicle vehicle = vehicleMapper.getVehicle(registrationPlateOfVehicle);
+            if(vehicle==null)  throw new Exception("The registration plate username is not ok");
+            List<Site> sources_ = checkSites(sources);
+            List<Site> destinations_ = checkSites(destinations);
+            List<ProductForTrucking> productForTruckings = Trucking.productForTruckings(products);
+            Trucking trucking = new Trucking(truckingIdCounter,vehicle,date,(Driver)driver,sources,destinations,productForTruckings,hours,minutes);
+            boolean added = truckingMapper.addTrucking(truckingIdCounter,getActiveUser().getUsername(),registrationPlateOfVehicle,driverUsername,date,hours,minutes);
+            sourcesMapper.addTruckingSources(truckingIdCounter,sources_);
+            truckings_destsMapper.addTruckingDestinations(truckingIdCounter,destinations_);
+            productsMapper.addTruckingProducts(truckingIdCounter,productForTruckings);
+            if(added) {
+                truckingMapper.addTrucking(trucking);
+                truckingIdCounter++;
+            }
+        }
+    }
+
+    private List<Site> checkSites(List<List<String>> Sites)
+    {
+        List<Site> sites = new LinkedList<>();
+        for(List<String> site : Sites)
+            sites.add(new Site(site.get(0),site.get(1),site.get(2),site.get(3),Integer.parseInt(site.get(4)),Integer.parseInt(site.get(5)),Integer.parseInt(site.get(6)),site.get(7)));
+        return sites;
     }
 
 

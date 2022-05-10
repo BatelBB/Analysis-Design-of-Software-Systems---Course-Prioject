@@ -30,7 +30,7 @@ public class Service {
     }
 
     public Response<List<String>> getDriversUsernames() {
-        return truckManagerService.getDriversUsernames();
+        return userService.getDriversUsernames();
     }
 
     public Response getVehiclesRegistrationPlates() {

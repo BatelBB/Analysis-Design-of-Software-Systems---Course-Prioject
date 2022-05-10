@@ -16,19 +16,18 @@ public class VehicleMapper extends myDataBase {
     Object ConvertResultSetToDTO(ResultSet rs) throws SQLException {
         return rs.getString(1);
     }
-    public boolean addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight, String username){
+    public boolean addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight){
         int n = 0;
-        String query = "INSERT INTO Vehicles(registration_plate, model,truck_manager,license, weight,max_weight) VALUES(?,?,?,?,?,?)";
+        String query = "INSERT INTO Vehicles(registration_plate, model,license, weight,max_weight) VALUES(?,?,?,?,?)";
 
         try(Connection conn = getConnection()){
             if(conn != null) {
                 PreparedStatement prepStat = conn.prepareStatement(query);
                 prepStat.setString(1, registrationPlate);
                 prepStat.setString(2, model);
-                prepStat.setString(3,username);
-                prepStat.setString(4, lisence);
-                prepStat.setInt(5, weight);
-                prepStat.setInt(6, maxWeight);
+                prepStat.setString(3, lisence);
+                prepStat.setInt(4, weight);
+                prepStat.setInt(5, maxWeight);
                 n = prepStat.executeUpdate();
             }
             else
@@ -46,18 +45,23 @@ public class VehicleMapper extends myDataBase {
 
     }
 
-    public Vehicle getVehicle(String registrationPlateOfVehicle, String username) {
-        String query = "SELECT * FROM Vehicles" +
-                "WHERE registration_plate='"+registrationPlateOfVehicle+"' AND truck_manager = '"+username+"'";
-        try (Connection conn = this.getConnection();
-             Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(query)){
-            while (rs.next()) {
-                return new Vehicle(rs.getString(4),rs.getString(1), rs.getString(2),
-                        rs.getInt(5),rs.getInt(6),username);
+    public Vehicle getVehicle(String registrationPlateOfVehicle) {
+        if(vehicleIDMapper.vehicleMap.containsKey(registrationPlateOfVehicle))return vehicleIDMapper.vehicleMap.get(registrationPlateOfVehicle);
+        else {
+            String query = "SELECT * FROM Vehicles " +
+                    "WHERE registration_plate='" + registrationPlateOfVehicle + "'";
+            try (Connection conn = DriverManager.getConnection(finalCurl);
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(query)) {
+                while (rs.next()) {
+                    Vehicle vehicle = new Vehicle(rs.getString(3), rs.getString(1), rs.getString(2),
+                            rs.getInt(4), rs.getInt(5));
+                    vehicleIDMapper.vehicleMap.put(registrationPlateOfVehicle, vehicle);
+                    return vehicle;
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
         return null;
     }

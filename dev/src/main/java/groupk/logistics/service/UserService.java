@@ -2,6 +2,8 @@ package groupk.logistics.service;
 
 import groupk.logistics.business.*;
 
+import java.util.List;
+
 
 public class UserService {
 
@@ -62,4 +64,15 @@ public class UserService {
             return new Response(e.getMessage());
         }
     }
+
+    public Response<List<String>> getDriversUsernames() {
+        try
+        {
+            List<String> driversUsername = userController.getDriversUsernames();
+            return new Response(driversUsername);
+        }
+        catch (Exception e)
+        {
+            return new Response(e.getMessage());
+        }    }
 }
