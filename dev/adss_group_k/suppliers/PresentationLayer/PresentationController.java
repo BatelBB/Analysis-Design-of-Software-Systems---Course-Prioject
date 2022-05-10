@@ -188,7 +188,7 @@ public class PresentationController {
                             LocalDate deliver = input.nextDate("When is the order supposed to be delivered? ");
                             try {
                                 ServiceResponseWithData<Order> serviceResponse = service.createOrder(
-                                        service.getSupplier(ppn), ordered, deliver);
+                                        service.getSupplier(ppn), ordered, deliver, Order.OrderType.Periodical);
                                 order = serviceResponse.data;
                                 String err = serviceResponse.error;
                                 if (err != null) {

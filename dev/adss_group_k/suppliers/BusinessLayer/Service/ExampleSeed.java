@@ -5,7 +5,6 @@ import adss_group_k.suppliers.BusinessLayer.Entity.PaymentCondition;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Item;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Order;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Supplier;
-import assignment1.BusinessLayer.Entity.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -43,7 +42,7 @@ public class ExampleSeed {
         Order order1 = service.createOrder(supplier,
                 LocalDate.of(2021, Calendar.JUNE, 6),
                 LocalDate.of(2022, Calendar.JUNE, 6)
-        ).data;
+        , Order.OrderType.Periodical).data;
 
         service.orderItem(order1, monkeysPaw, 200);
         service.orderItem(order1, voodooDoll, 200);
@@ -51,7 +50,7 @@ public class ExampleSeed {
         Order order2 = service.createOrder(supplier,
                 LocalDate.of(2022, Calendar.JUNE, 6),
                 LocalDate.of(2023, Calendar.JUNE, 6)
-        ).data;
+                , Order.OrderType.Periodical).data;
 
         service.orderItem(order2, monkeysPaw, 50);
         service.orderItem(order2, curseInABox, 1);
@@ -79,7 +78,7 @@ public class ExampleSeed {
         Order order1 = service.createOrder(supplier,
                 LocalDate.of(2022, Calendar.FEBRUARY, 5),
                 LocalDate.of(2022, Calendar.FEBRUARY, 9)
-        ).data;
+                , Order.OrderType.Periodical).data;
 
         service.orderItem(order1, bread, 200);
         service.orderItem(order1, soyMilk, 200);
@@ -88,7 +87,7 @@ public class ExampleSeed {
         Order order2 = service.createOrder(supplier,
                 LocalDate.of(2022, Calendar.APRIL, 2),
                 LocalDate.of(2022, Calendar.APRIL, 10)
-        ).data;
+                , Order.OrderType.Periodical).data;
 
         service.orderItem(order2, bread, 95);
         service.orderItem(order2, soyMilk, 1000);
@@ -116,7 +115,7 @@ public class ExampleSeed {
         Order order1 = service.createOrder(supplier,
                 LocalDate.of(2022, Calendar.FEBRUARY, 1),
                 LocalDate.of(2022, Calendar.FEBRUARY, 5)
-        ).data;
+                , Order.OrderType.Periodical).data;
 
         service.orderItem(order1, pen, 200);
         service.orderItem(order1, notebook, 200);
@@ -125,7 +124,7 @@ public class ExampleSeed {
         Order order2 = service.createOrder(supplier,
                 LocalDate.of(2022, Calendar.APRIL, 1),
                 LocalDate.of(2022, Calendar.APRIL, 5)
-        ).data;
+                , Order.OrderType.Periodical).data;
 
         service.orderItem(order2, pen, 95);
         service.orderItem(order2, notebook, 1000);
