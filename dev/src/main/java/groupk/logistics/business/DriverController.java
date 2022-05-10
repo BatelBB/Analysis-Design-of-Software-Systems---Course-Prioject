@@ -27,7 +27,12 @@ public class DriverController extends UserController{
     }
 
     public List<String> getMyLicenses() throws Exception {
-        return driverLicencesMapper.getMyLicenses(getActiveUser().getUsername());
+        List<String> toReturn = new LinkedList<String>();
+        List<DLicense> licenses = driverLicencesMapper.getMyLicenses(getActiveUser().getUsername());
+        for (DLicense license : licenses) {
+            toReturn.add(license.name());
+        }
+        return toReturn;
     }
 
     public String printMyTruckings() throws Exception {
@@ -44,12 +49,8 @@ public class DriverController extends UserController{
 
     }
 
-    public boolean addLicense(String license) throws Exception {
+    public boolean addLicense(DLicense license) throws Exception {
         return driverLicencesMapper.addLicence(getActiveUser().getUsername(),license);
-    }
-
-    public void addLicenses(List<String> licenses) throws Exception {
-       for(String licence:licenses) addLicense(licence);
     }
 
     public boolean setWeightForTrucking(int truckingId, int weight) throws Exception {

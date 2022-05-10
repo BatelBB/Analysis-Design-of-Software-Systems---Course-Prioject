@@ -6,7 +6,6 @@ import java.sql.*;
 import java.util.List;
 
 public class Truckings_ProductsMapper extends  myDataBase {
-    private Truckings_ProductsIDMAP productsIDMAP =  Truckings_ProductsIDMAP.getInstance();
     public Truckings_ProductsMapper() throws Exception {
         super("Truckings_Products");
     }
@@ -16,7 +15,9 @@ public class Truckings_ProductsMapper extends  myDataBase {
         return null;
     }
     public void addTruckingProducts(int truckingIdCounter, List<ProductForTrucking> productForTruckings) {
-        for (ProductForTrucking productForTrucking: productForTruckings) { addTruckingProduct(truckingIdCounter, productForTrucking);productsIDMAP.productForTruckingMap.put(truckingIdCounter,productForTrucking);}
+        for (ProductForTrucking productForTrucking: productForTruckings) {
+            addTruckingProduct(truckingIdCounter, productForTrucking);
+        }
     }
 
     private void addTruckingProduct(int truckingIdCounter, ProductForTrucking productForTrucking) {

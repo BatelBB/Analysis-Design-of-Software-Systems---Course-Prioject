@@ -13,9 +13,8 @@ public class TruckManager extends User{
             System.out.println("Enter 2  to get information about your drivers and update data about them");
             System.out.println("Enter 3  to get information about your vehicles and update data about them");
             System.out.println("Enter 4  to update truckings");
-            System.out.println("Enter 5  to get register code");
-            System.out.println("Enter 6  to update password");
-            System.out.println("Enter 7  to logout");
+            System.out.println("Enter 5  to update password");
+            System.out.println("Enter 6  to logout");
             int choice = Main.getNumber();
             TruckManagerFunctionality truckManagerFunctionality = new TruckManagerFunctionality();
             if(choice == 1)
@@ -27,10 +26,8 @@ public class TruckManager extends User{
             else if(choice == 4)
                 updateTruckings();
             else if(choice == 5)
-                truckManagerFunctionality.getRegisterCode();
-            else if(choice == 6)
                 truckManagerFunctionality.updatePassword();
-            else if(choice == 7) {
+            else if(choice == 6) {
                 truckManagerFunctionality.logOut();
                 logedOut = true;
             }

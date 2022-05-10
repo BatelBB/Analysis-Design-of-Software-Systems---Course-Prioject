@@ -9,10 +9,9 @@ public class Vehicle {
     private String model;
     private int weight;
     private int maxWeight;
-    private String myTM;
 
-    public Vehicle(String lisence, String registationPlate, String model, int weight, int maxWeight) {
-        this.lisence = castFromString(lisence);
+    public Vehicle(String lisence, String registationPlate, String model, int weight, int maxWeight) throws Exception {
+        this.lisence = castDLicenseFromString(lisence);
         this.registationPlate = registationPlate;
         this.maxWeight = maxWeight;
         this.weight = weight;
@@ -21,20 +20,16 @@ public class Vehicle {
 
     }
 
-    private DLicense castFromString(String dLicense)
-    {
+    public static DLicense castDLicenseFromString(String dLicense) throws Exception {
         if(dLicense.equals("B")) return DLicense.B;
         else if (dLicense.equals("C")) return DLicense.C;
         else if (dLicense.equals("C1")) return DLicense.C1;
         else if (dLicense.equals("C+E")) return DLicense.C_E;
-        else throw new IllegalArgumentException("wrong license");
-
+        else throw new IllegalArgumentException("The driver's license \"" + dLicense + "\" doesn't exist");
     }
 
 
-    public boolean checkVehicle()
-    {
-
+    public boolean checkVehicle() {
         if (weight <= 0)
             throw new IllegalArgumentException("Weight is positive");
         if (!validateRegistationPlate(registationPlate))

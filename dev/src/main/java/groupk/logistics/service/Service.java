@@ -73,10 +73,6 @@ public class Service {
         return truckManagerService.addProductToTrucking(truckingId, pruductName,quantity);
     }
 
-    public Response getRegisterCode() {
-        return truckManagerService.getRegisterCode();
-    }
-
     public Response Logout() {
         return userService.Logout();
     }
@@ -135,10 +131,6 @@ public class Service {
 
     public Response addLicenseToDriver(String dLicense) {
         return driverService.addLicense(dLicense);
-    }
-
-    public Response addLicensesToDriver(List<String> dLicenses) {
-        return driverService.addLicenses(dLicenses);
     }
 
 

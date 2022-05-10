@@ -54,18 +54,8 @@ public class DriverService {
 
     public Response addLicense(String dLicense) {
         try {
-            boolean added = driverController.addLicense(dLicense);
+            boolean added = driverController.addLicense(Vehicle.castDLicenseFromString(dLicense));
             return new Response(added);
-        }
-        catch (Exception e) {
-            return new Response(e.getMessage());
-        }
-    }
-
-    public Response addLicenses(List<String> dLicenses) {
-        try {
-            driverController.addLicenses(dLicenses);
-            return new Response(true);
         }
         catch (Exception e) {
             return new Response(e.getMessage());

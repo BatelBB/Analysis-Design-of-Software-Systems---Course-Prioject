@@ -1,5 +1,6 @@
 package groupk.logistics.DataLayer;
 
+import groupk.logistics.business.DLicense;
 import groupk.logistics.business.Vehicle;
 
 import java.sql.*;
@@ -42,7 +43,26 @@ public class VehicleMapper extends myDataBase {
 
     public void addVehicle(Vehicle newVehicle) {
         vehicleIDMapper.vehicleMap.put(newVehicle.getRegistationPlate(), newVehicle);
+    }
 
+    public DLicense getLicense(String registrationPlateOfVehicle) throws Exception{
+        if(vehicleIDMapper.vehicleMap.containsKey(registrationPlateOfVehicle))
+            return vehicleIDMapper.vehicleMap.get(registrationPlateOfVehicle).getLisence();
+        else {
+            String query = "SELECT license FROM Vehicles " +
+                    "WHERE registration_plate='" + registrationPlateOfVehicle + "'";
+            try (Connection conn = DriverManager.getConnection(finalCurl);
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(query)) {
+                if (rs.next())
+                    return Vehicle.castDLicenseFromString(rs.getString(1));
+                else
+                    throw new Exception("Oops, there is no vehicle with this driver's license");
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return null;
     }
 
     public Vehicle getVehicle(String registrationPlateOfVehicle) {

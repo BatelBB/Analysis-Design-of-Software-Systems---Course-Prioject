@@ -131,16 +131,6 @@ public class TruckManagerService {
         }
     }
 
-    public Response getRegisterCode() {
-        try {
-            truckManagerController.getRegisterCode();
-            return new Response(truckManagerController.getRegisterCode());
-        } catch (Exception e) {
-            return new Response(e.getMessage());
-        }
-    }
-
-
     public Response addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight) {
         try {
             truckManagerController.addVehicle(lisence,registrationPlate,model,weight,maxWeight);

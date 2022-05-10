@@ -9,12 +9,9 @@ import java.util.Map;
 
 public class TruckManagerController extends UserController{
 
-    private Map<String, String> users;
-    private Map<String,TruckManager> mapTM;
     private static TruckManagerController singletonTruckManagerControllerInstance = null;
     private int truckingIdCounter;
     private VehicleMapper vehicleMapper;
-    private DriversMapper driversMapper;
     private TruckingMapper truckingMapper;
     private UserMapper userMapper;
     private Truckings_DestsMapper truckings_destsMapper;
@@ -33,7 +30,6 @@ public class TruckManagerController extends UserController{
         super(null);
         truckingIdCounter = 1;
         vehicleMapper = new VehicleMapper();
-        driversMapper = new DriversMapper();
         truckingMapper = new TruckingMapper();
         userMapper = new UserMapper();
         truckings_destsMapper = new Truckings_DestsMapper();
@@ -55,7 +51,9 @@ public class TruckManagerController extends UserController{
             if(success)vehicleMapper.addVehicle(newVehicle);
     }
 
-    public List<String> getDriversUsernames() throws Exception { return driversMapper.selectTMDrivers(getActiveUser().getUsername()); }
+    public List<String> getDriversUsernames() throws Exception {
+        return null; //TODO
+    }
 
     public List<String> getVehiclesRegistrationPlates() throws Exception { return vehicleMapper.selectAll(); }
 
@@ -81,7 +79,7 @@ public class TruckManagerController extends UserController{
             List<ProductForTrucking> productForTruckings = Trucking.productForTruckings(products);
             Trucking trucking = new Trucking(truckingIdCounter,vehicle,date,(Driver)driver,sources,destinations,productForTruckings,hours,minutes);
             boolean added = truckingMapper.addTrucking(truckingIdCounter,getActiveUser().getUsername(),registrationPlateOfVehicle,driverUsername,date,hours,minutes);
-            sourcesMapper.addTruckingSources(truckingIdCounter,sources_);
+            sourcesMapper.addTruckingSources(truckingIdCounter,sources_); //to fix
             truckings_destsMapper.addTruckingDestinations(truckingIdCounter,destinations_);
             productsMapper.addTruckingProducts(truckingIdCounter,productForTruckings);
             if(added) {
@@ -232,13 +230,6 @@ public class TruckManagerController extends UserController{
         synchronized (getActiveUser()) {
             checkIfActiveUserIsTruckManager();
             ((TruckManager)getActiveUser()).updateDateOnTrucking(truckingId, date);
-        }
-    }
-
-    public String getRegisterCode() throws Exception {
-        synchronized (getActiveUser()) {
-            checkIfActiveUserIsTruckManager();
-            return String.valueOf(getActiveUser().hashCode());
         }
     }
 

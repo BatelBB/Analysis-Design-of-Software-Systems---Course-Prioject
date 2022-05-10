@@ -1,6 +1,8 @@
 package groupk.logistics.DataLayer;
 
+import groupk.logistics.business.DLicense;
 import groupk.logistics.business.Driver;
+import groupk.logistics.business.Vehicle;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -15,30 +17,27 @@ public class DriverLicencesMapper extends myDataBase {
         driverLicencesIDMapper = DriverLicencesIDMapper.getInstance();
     }
 
-
-
     @Override
     Object ConvertResultSetToDTO(ResultSet rs) throws SQLException {
         return rs.getString(2);
     }
 
-    public List<String> getMyLicenses(String username) {
-        List DTOList = new LinkedList();
-        String query = "SELECT * FROM Drivers_Licences Where username = " + username;
+    public List<DLicense> getMyLicenses(String username) throws Exception {
+        List<DLicense> DTOList = new LinkedList<DLicense>();
+        String query = "SELECT licence FROM Drivers_Licences Where username = " + username;
         try (Connection conn = getConnection();
              PreparedStatement pstmt  = conn.prepareStatement(query)){
             ResultSet rs  = pstmt.executeQuery();
             while (rs.next()) {
-                DTOList.add(ConvertResultSetToDTO(rs));
+                DTOList.add(Vehicle.castDLicenseFromString(rs.getString(1)));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new Exception("Oops, there was unexpected problem with get the licenses from the driver: \"" + username + "\"\nError description: " + e.getMessage());
         }
         return DTOList;
     }
 
-    public boolean addLicence(String username, String license) throws Exception {
-
+    public boolean addLicence(String username, DLicense license) throws Exception {
         int n = 0;
         String query = "INSERT INTO Drivers_Licences(username,licence) VALUES(?,?)";
 
@@ -46,15 +45,15 @@ public class DriverLicencesMapper extends myDataBase {
             if(conn != null) {
                 PreparedStatement prepStat = conn.prepareStatement(query);
                 prepStat.setString(1, username);
-                prepStat.setString(2, license);
+                prepStat.setString(2, license.name());
                 n = prepStat.executeUpdate();
-                driverLicencesIDMapper.driverLicencesIDMapper.put(username,license);
+                driverLicencesIDMapper.driverLicencesIDMapper.put(username,license.name());
             }
             else
-                return false;
+                throw new Exception("The connection to the data has lost");
         }
         catch (SQLException e){
-            throw new Exception("You already have this licence");
+            throw new Exception("Oops, there was unexpected problem with add the license '" + license.name() + "' to the driver: '" + username + "'\nError description: " + e.getMessage());
         }
 
         return n == 1;

@@ -398,14 +398,6 @@ public class TruckManagerFunctionality extends UserFunctionality {
         }
     }
 
-    public void getRegisterCode() {
-        Response<List<String>> response = service.getRegisterCode();
-        if (response.ErrorOccured())
-            System.out.println(response.getErrorMessage());
-        else
-            System.out.println("Trucking manager register code: " + response.getValue());
-    }
-
     private String getDriverUsernameFromTheUser() {
         Response<List<String>> drivers = service.getDriversUsernames();
         if (drivers.ErrorOccured()) {
