@@ -70,19 +70,22 @@ public class Driver extends User {
     }
 
     public synchronized void updateTotalWeightOfTrucking(int truckingId, int newWeight) {
-        truckManager.updateTotalWeight(truckingId, newWeight, this);
+        //truckManager.updateTotalWeight(truckingId, newWeight, this);
     }
 
     public synchronized String printTruckings() {
-        return truckManager.printBoardOfDriver(this.getUsername());
+        return null;
+        //return truckManager.printBoardOfDriver(this.getUsername());
     }
 
     public synchronized String printTruckingsHistory() {
-        return truckManager.printTruckingsHistoryOfDriver(this.getUsername());
+        return null;
+        //return truckManager.printTruckingsHistoryOfDriver(this.getUsername());
     }
 
     public synchronized String printFutureTruckings() {
-        return truckManager.printFutureTruckingsOfDriver(this.getUsername());
+        return null;
+        //return truckManager.printFutureTruckingsOfDriver(this.getUsername());
     }
 
     public List<DLicense> getLicenses() {

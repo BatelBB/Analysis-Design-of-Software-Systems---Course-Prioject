@@ -34,6 +34,7 @@ public class DriverFunctionality extends UserFunctionality{
         }
     }
 
+    /*
     public void removeLicense() {
         boolean done = false;
         while (!done) {
@@ -64,6 +65,8 @@ public class DriverFunctionality extends UserFunctionality{
             }
         }
     }
+
+     */
 
     public void printLicenses() {
         Response<List<String>> licenses = service.getLicenses();

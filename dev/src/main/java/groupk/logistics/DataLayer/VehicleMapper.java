@@ -1,6 +1,7 @@
 package groupk.logistics.DataLayer;
 
 import groupk.logistics.business.Vehicle;
+import jdk.jshell.spi.ExecutionControl;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -60,5 +61,9 @@ public class VehicleMapper extends myDataBase {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    public String getLicense(String registrationPlateOfVehicle) {
+        return null; //TODO
     }
 }

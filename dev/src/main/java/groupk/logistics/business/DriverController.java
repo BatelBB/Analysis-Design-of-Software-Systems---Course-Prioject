@@ -1,15 +1,14 @@
 package groupk.logistics.business;
 
-import groupk.logistics.DataLayer.DriverLicencesMapper;
+import groupk.logistics.DataLayer.DriverLicensesMapper;
 import groupk.logistics.DataLayer.TruckingMapper;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class DriverController extends UserController{
 
     private static DriverController singletonDriverControllerInstance = null;
-    private DriverLicencesMapper driverLicencesMapper;
+    private DriverLicensesMapper driverLicensesMapper;
     private TruckingMapper truckingMapper;
 
 
@@ -22,12 +21,12 @@ public class DriverController extends UserController{
 
     private DriverController() throws Exception {
         super(null);
-        driverLicencesMapper = new DriverLicencesMapper();
+        driverLicensesMapper = new DriverLicensesMapper();
         truckingMapper = new TruckingMapper();
     }
 
     public List<String> getMyLicenses() throws Exception {
-        return driverLicencesMapper.getMyLicenses(getActiveUser().getUsername());
+        return driverLicensesMapper.getMyLicenses(getActiveUser().getUsername());
     }
 
     public String printMyTruckings() throws Exception {
@@ -52,7 +51,7 @@ public class DriverController extends UserController{
     }
 
     public boolean addLicense(String license) throws Exception {
-        return driverLicencesMapper.addLicence(getActiveUser().getUsername(),license);
+        return driverLicensesMapper.addLicence(getActiveUser().getUsername(),license);
     }
 
     public void addLicenses(List<String> licenses) throws Exception {

@@ -69,6 +69,7 @@ public class TruckManagerController extends UserController{
 
 
     public void addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products, long hours, long minutes) throws Exception {
+        /*
         boolean checkTrucking = ((TruckManager)getActiveUser()).checkTrucking(truckingIdCounter, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products, hours, minutes);
         if(checkTrucking) {
             List<String> userDetails = userMapper.getUser(driverUsername);
@@ -87,6 +88,9 @@ public class TruckManagerController extends UserController{
                 truckingIdCounter++;
             }
         }
+         */
+        truckingMapper.addTrucking(truckingIdCounter, getActiveUser().getUsername(), driverUsername, registrationPlateOfVehicle, date, hours, minutes);
+        truckingIdCounter++;
     }
 
 

@@ -72,6 +72,7 @@ public class DriverService {
         }
     }
 
+    /*
     public Response removeLicense(String dLicense) {
         try {
             driverController.removeLicense(dLicense);
@@ -80,7 +81,7 @@ public class DriverService {
         catch (Exception e) {
             return new Response(e.getMessage());
         }
-    }
+    }*/
 
     public Response<List<String>> getLicenses() {
         List<String> licenses;

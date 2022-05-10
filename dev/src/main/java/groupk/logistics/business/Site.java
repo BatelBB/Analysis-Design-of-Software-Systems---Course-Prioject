@@ -71,6 +71,7 @@ public class Site {
         return street;
     }
 
+    public String getPhoneNumber() { return phoneNumber;}
 
     public Area getArea() {
         return area;

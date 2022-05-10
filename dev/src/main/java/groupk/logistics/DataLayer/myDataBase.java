@@ -52,7 +52,7 @@ abstract class myDataBase<T> {
                 "\ttruck_manager TEXT NOT NULL,\n" +
                 "\tregistration_plate TEXT NOT NULL,\n" +
                 "\tdriver_username TEXT NOT NULL,\n" +
-                "\tdate DATE NOT NULL,\n" +
+                "\tdate TEXT NOT NULL,\n" +
                 "\thours INTEGER NOT NULL,\n" +
                 "\tminutes INTEGER NOT NULL,\n" +
                 "\tFOREIGN KEY(truck_manager) REFERENCES TruckManagers(username)\n" +
