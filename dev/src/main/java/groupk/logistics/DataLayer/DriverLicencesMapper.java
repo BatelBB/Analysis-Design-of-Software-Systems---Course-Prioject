@@ -24,8 +24,8 @@ public class DriverLicencesMapper extends myDataBase {
 
     public List<DLicense> getMyLicenses(String username) throws Exception {
         List<DLicense> DTOList = new LinkedList<DLicense>();
-        String query = "SELECT licence FROM Drivers_Licences Where username = " + username;
-        try (Connection conn = getConnection();
+        String query = "SELECT licence FROM Drivers_Licences Where username = '" + username +"'";
+        try (Connection conn = DriverManager.getConnection(finalCurl);
              PreparedStatement pstmt  = conn.prepareStatement(query)){
             ResultSet rs  = pstmt.executeQuery();
             while (rs.next()) {

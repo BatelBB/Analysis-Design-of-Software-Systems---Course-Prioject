@@ -37,7 +37,7 @@ public class TruckingMapper extends myDataBase {
                 prepStat.setString(5, formattedDateTime);
                 prepStat.setLong(6, trucking.getHours());
                 prepStat.setLong(7, trucking.getMinutes());
-                prepStat.setInt(1, trucking.getWeight());
+                prepStat.setInt(8, trucking.getWeight());
 
                 n = prepStat.executeUpdate();
             }
@@ -52,9 +52,9 @@ public class TruckingMapper extends myDataBase {
     }
 
     public boolean removeTrucking(int truckingID) throws Exception {
-        String Query = "DELETE FROM Truckings WHERE TID = " + truckingID;
+        String Query = "DELETE FROM Truckings WHERE TID = '" + truckingID + "'";
         int n = 0;
-        try (Connection conn = getConnection();
+        try (Connection conn = DriverManager.getConnection(finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(Query)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
@@ -79,7 +79,7 @@ public class TruckingMapper extends myDataBase {
     public boolean setWeightForTrucking(int truckingId, int weight) throws Exception {
         String sql = "UPDATE Truckings SET weight="+weight+" WHERE TID='"+truckingId+"'";
         int n = 0;
-        try (Connection conn = getConnection();
+        try (Connection conn = DriverManager.getConnection(finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
@@ -155,7 +155,7 @@ public class TruckingMapper extends myDataBase {
         List<TruckingDTO> toReturn = new LinkedList<TruckingDTO>();
         String query = "SELECT * FROM Truckings " +
                 "WHERE strftime(date) between strftime('" + date.minusHours(7).format(dateFormat) + "') and strftime('" + date.plusHours(7).format(dateFormat) + "') ORDER BY date";
-        try (Connection conn = this.getConnection();
+        try (Connection conn = DriverManager.getConnection(finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             while (rs.next()) {
@@ -170,9 +170,9 @@ public class TruckingMapper extends myDataBase {
     private List<TruckingDTO> getBoardOfUserOrVehicle(String fieldName, String usernameOrRegistration) throws Exception {
         List<TruckingDTO> toReturn = new LinkedList<TruckingDTO>();
         String query = "SELECT * FROM Truckings " +
-                "WHERE " + fieldName + " = " + usernameOrRegistration +
+                "WHERE " + fieldName + " = '" + usernameOrRegistration + "'"+
                 " ORDER BY date";
-        try (Connection conn = this.getConnection();
+        try (Connection conn = DriverManager.getConnection(finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             while (rs.next()) {
@@ -187,9 +187,9 @@ public class TruckingMapper extends myDataBase {
     private List<TruckingDTO> getFutureTruckingsOfUserOrVehicle(String fieldName, String usernameOrRegistration) throws Exception {
         List<TruckingDTO> toReturn = new LinkedList<TruckingDTO>();
         String query = "SELECT * FROM Truckings " +
-                "WHERE strftime(date) > DATE('now') and " + fieldName + " = " + usernameOrRegistration +
+                "WHERE strftime(date) > DATE('now') and " + fieldName + " = '" + usernameOrRegistration + "'"+
                 " ORDER BY date";
-        try (Connection conn = this.getConnection();
+        try (Connection conn = DriverManager.getConnection(finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             while (rs.next()) {
@@ -204,9 +204,9 @@ public class TruckingMapper extends myDataBase {
     private List<TruckingDTO> getHistoryTruckingsOfUserOrVehicle(String fieldName, String usernameOrRegistration) throws Exception {
         List<TruckingDTO> toReturn = new LinkedList<TruckingDTO>();
         String query = "SELECT * FROM Truckings " +
-                "WHERE strftime(date) <= DATE('now') and "+ fieldName + " = " + usernameOrRegistration +
+                "WHERE strftime(date) <= DATE('now') and "+ fieldName + " = '" + usernameOrRegistration + "'"+
                 " ORDER BY date";
-        try (Connection conn = this.getConnection();
+        try (Connection conn = DriverManager.getConnection(finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             while (rs.next()) {

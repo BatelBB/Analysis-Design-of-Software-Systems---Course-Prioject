@@ -10,8 +10,9 @@ import java.util.List;
 abstract class myDataBase<T> {
     static Connection con;
     protected static String JDBCurl="jdbc:sqlite:";
-    protected static String path = (new File("").getAbsolutePath()).concat("\\superLee.db");
-    protected static String finalCurl;
+    protected static String path = (new File("").getAbsolutePath()).concat("\\superLee2.db");
+    protected static String finalCurl = JDBCurl.concat(path);
+
     private String tableName;
 
     public myDataBase(String tableName) throws Exception {
@@ -107,8 +108,7 @@ abstract class myDataBase<T> {
 ////
 //
 //        try (Connection conn = DriverManager.getConnection(JDBCurl);
-        con = getConnection();
-        try(Statement s = con.createStatement()) {
+        try(Statement s = DriverManager.getConnection(finalCurl).createStatement()) {
             s.addBatch(UsersTable);
             s.addBatch(vehiclesTable);
             s.addBatch(truckManagersTable);
@@ -142,7 +142,7 @@ abstract class myDataBase<T> {
     public List<T> selectAll() throws Exception {
         String query = "SELECT * FROM " + tableName;
         List<T> DTOList=new ArrayList<T>();
-        try (Connection conn = this.getConnection();
+        try (Connection conn = DriverManager.getConnection(finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             while (rs.next()) {

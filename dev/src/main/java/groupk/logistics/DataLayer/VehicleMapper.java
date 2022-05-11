@@ -21,7 +21,7 @@ public class VehicleMapper extends myDataBase {
         int n = 0;
         String query = "INSERT INTO Vehicles(registration_plate, model,license, weight,max_weight) VALUES(?,?,?,?,?)";
 
-        try(Connection conn = getConnection()){
+        try(Connection conn = DriverManager.getConnection(finalCurl)){
             if(conn != null) {
                 PreparedStatement prepStat = conn.prepareStatement(query);
                 prepStat.setString(1, registrationPlate);

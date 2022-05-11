@@ -62,7 +62,7 @@ public class UserMapper extends myDataBase{
     public boolean hasUsername(String username) {
         String query = "SELECT * FROM Users" +
                 "WHERE username='"+username;
-        try (Connection conn = this.getConnection();
+        try (Connection conn = DriverManager.getConnection(finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             while (rs.next()) {

@@ -24,7 +24,7 @@ public class Vehicle {
         if(dLicense.equals("B")) return DLicense.B;
         else if (dLicense.equals("C")) return DLicense.C;
         else if (dLicense.equals("C1")) return DLicense.C1;
-        else if (dLicense.equals("C+E")) return DLicense.C_E;
+        else if (dLicense.equals("C_E")) return DLicense.C_E;
         else throw new IllegalArgumentException("The driver's license \"" + dLicense + "\" doesn't exist");
     }
 

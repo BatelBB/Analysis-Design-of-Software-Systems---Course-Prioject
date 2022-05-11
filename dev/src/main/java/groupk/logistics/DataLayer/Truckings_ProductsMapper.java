@@ -41,9 +41,9 @@ public class Truckings_ProductsMapper extends  myDataBase {
     }
 
     public boolean removeTrucking(int truckingID) throws Exception {
-        String Query = "DELETE FROM Truckings_Products WHERE TID = " + truckingID;
+        String Query = "DELETE FROM Truckings_Products WHERE TID = '" + truckingID+"'";
         int n = 0;
-        try (Connection conn = getConnection();
+        try (Connection conn = DriverManager.getConnection(finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(Query)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
