@@ -48,6 +48,18 @@ public class Truckings_DestsMapper extends myDataBase {
         return Exceptions;
     }
 
+    public boolean removeTrucking(int truckingID) throws Exception {
+        String Query = "DELETE FROM Truckings_Destinations WHERE TID = " + truckingID;
+        int n = 0;
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(Query)) {
+            n = pstmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        return n > 0;
+    }
+
     public List<Site> getDestinationsByTruckingId(int TruckingID) throws Exception {
         List<Site> sites = new LinkedList<Site>();
         String query = "SELECT * FROM Truckings_Destinations Where TID = " + TruckingID;

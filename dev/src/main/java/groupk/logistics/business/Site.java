@@ -10,7 +10,7 @@ public class Site {
     private int apartment;
     private Area area;
 
-    public Site(String contactGuy, String city, String phoneNumber, String street, int houseNumber, int floor, int apartment, String Sarea) {
+    public Site(String contactGuy, String city, String phoneNumber, String street, int houseNumber, int floor, int apartment, String Sarea) throws Exception {
         if (contactGuy == null | contactGuy.length() == 0 | city == null | city.length() == 0 | phoneNumber == null | phoneNumber.length() == 0 | street == null | street.length() == 0)
             throw new IllegalArgumentException("One or more of the site details are empty");
         this.contactGuy = contactGuy;
@@ -35,12 +35,11 @@ public class Site {
         return phoneNumber;
     }
 
-    private Area castStringToArea(String area)
-    {
+    private Area castStringToArea(String area) throws Exception {
         if(area.equals("center")) return Area.center;
         else if(area.equals("north")) return Area.north;
         else  if(area.equals("south")) return Area.south;
-        else throw new IllegalArgumentException("wrong area");
+        else throw new IllegalArgumentException(area + " is invalid area");
     }
 
     public String printSite() {

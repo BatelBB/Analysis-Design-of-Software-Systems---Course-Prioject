@@ -17,7 +17,7 @@ public class VehicleMapper extends myDataBase {
     Object ConvertResultSetToDTO(ResultSet rs) throws SQLException {
         return rs.getString(1);
     }
-    public boolean addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight){
+    public boolean addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight) throws Exception {
         int n = 0;
         String query = "INSERT INTO Vehicles(registration_plate, model,license, weight,max_weight) VALUES(?,?,?,?,?)";
 
@@ -34,8 +34,8 @@ public class VehicleMapper extends myDataBase {
             else
                 return false;
         }
-        catch (SQLException e){
-            System.out.println(e.getMessage());
+        catch (Exception e){
+            throw new Exception(e.getMessage());
         }
 
         return n == 1;
@@ -65,7 +65,7 @@ public class VehicleMapper extends myDataBase {
         return null;
     }
 
-    public Vehicle getVehicle(String registrationPlateOfVehicle) {
+    public Vehicle getVehicle(String registrationPlateOfVehicle) throws Exception {
         if(vehicleIDMapper.vehicleMap.containsKey(registrationPlateOfVehicle))return vehicleIDMapper.vehicleMap.get(registrationPlateOfVehicle);
         else {
             String query = "SELECT * FROM Vehicles " +

@@ -17,11 +17,11 @@ public class Driver extends User {
     public synchronized void checkTrucking(Trucking trucking) {
         if (trucking.getDate().compareTo(LocalDateTime.now()) <= 0)
             throw new IllegalArgumentException("The date must be in the future");
-        if (trucking.getDriver() != this)
+        if (trucking.getDriverUsername() != this.username)
             throw new IllegalArgumentException("The driver does not match the driver specified in the form");
         if (licenses.size() == 0)
             throw new IllegalArgumentException("Oops, the driver hasn't entered his driver's license yet");
-        if(!licenses.contains(trucking.getVehicle().getLisence()))
+        if(false)
             throw new IllegalArgumentException("Oops, the driver does not have a driver's license appropriate for the vehicle type");
     }
 

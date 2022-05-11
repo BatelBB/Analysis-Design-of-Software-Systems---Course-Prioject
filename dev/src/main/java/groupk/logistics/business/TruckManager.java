@@ -46,23 +46,25 @@ public class TruckManager extends User {
         return toReturn;
     }
 
-    public synchronized void addTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products,long hours, long minutes) {
+    public synchronized void addTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products,long hours, long minutes) throws Exception {
         if (registrationPlateOfVehicle == null)
             throw new NullPointerException("The registration plate is empty");
         if (driverUsername == null)
             throw new NullPointerException("The driver's username is empty");
         Driver driver = getDriverByUsername(driverUsername);
         Vehicle vehicle = getVehicleByRegistrationPlate(registrationPlateOfVehicle);
-        Trucking trucking = new Trucking(id, vehicle, date, driver, sources, destinations, productForTruckings(products),hours,minutes);
+        Trucking trucking = new Trucking(id, vehicle.getRegistationPlate(), date, driver.getUsername(), sources, destinations, productForTruckings(products),hours,minutes);
         driver.checkTrucking(trucking);
         truckingsBoard.addTrucking(trucking);
     }
 
-    public  boolean checkTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products,long hours, long minutes) {
+    public static boolean checkTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products,long hours, long minutes) {
         if (registrationPlateOfVehicle == null)
             throw new NullPointerException("The registration plate is empty");
         if (driverUsername == null)
             throw new NullPointerException("The driver's username is empty");
+        if (date == null)
+            throw new NullPointerException("The date is empty");
         return true;
     }
 
@@ -84,62 +86,24 @@ public class TruckManager extends User {
         truckingsBoard.removeTrucking(truckingId);
     }
 
-    public synchronized String printBoard() {
-        return truckingsBoard.printBoard();
-    }
-
-    public synchronized String printTruckingsHistory() {
-        return truckingsBoard.printTruckingsHistory();
-    }
-
-    public synchronized String printFutureTruckings() {
-        return truckingsBoard.printFutureTruckings();
-    }
-
-    public synchronized String printBoardOfDriver(String driverUsername) {
-        Driver driver = getDriverByUsername(driverUsername);
-        return truckingsBoard.printBoardOfDriver(driver.username);
-    }
-
-    public synchronized String printTruckingsHistoryOfDriver(String driverUsername) {
-        Driver driver = getDriverByUsername(driverUsername);
-        return truckingsBoard.printTruckingsHistoryOfDriver(driver.username);
-    }
-
-    public synchronized String printFutureTruckingsOfDriver(String driverUsername) {
-        Driver driver = getDriverByUsername(driverUsername);
-        return truckingsBoard.printFutureTruckingsOfDriver(driver.username);
-    }
-
-    public synchronized String printBoardOfVehicle(String registrationPlate) {
-        return truckingsBoard.printBoardOfVehicle(registrationPlate);
-    }
-
-    public synchronized String printTruckingsHistoryOfVehicle(String registrationPlate) {
-        return truckingsBoard.printTruckingsHistoryOfVehicle(registrationPlate);
-    }
-
-    public synchronized String printFutureTruckingsOfVehicle(String registrationPlate) {
-        return truckingsBoard.printFutureTruckingsOfVehicle(registrationPlate);
-    }
 
     public synchronized void addSourcesToTrucking(int truckingId,List<List<String>> sources) {
-        truckingsBoard.addSourcesToTrucking(truckingId, sources);
+        //TODO
     }
 
     public synchronized void addDestinationsToTrucking(int truckingId, List<List<String>> destinations) {
-        truckingsBoard.addDestinationsToTrucking(truckingId, destinations);
+        //TODO
     }
 
     public synchronized void addProductsToTrucking(int truckingId, String pruductName,int quantity) {
         truckingsBoard.addProductsToTrucking(truckingId, pruductName,quantity);
     }
 
-    public synchronized void updateSourcesOnTrucking(int truckingId, List<List<String>> sources) {
+    public synchronized void updateSourcesOnTrucking(int truckingId, List<List<String>> sources) throws Exception {
         truckingsBoard.updateSourcesOnTrucking(truckingId, sources);
     }
 
-    public synchronized void updateDestinationsOnTrucking(int truckingId,List<List<String>> destinations) {
+    public synchronized void updateDestinationsOnTrucking(int truckingId,List<List<String>> destinations) throws Exception {
         truckingsBoard.updateDestinationsOnTrucking(truckingId, destinations);
     }
 

@@ -11,22 +11,22 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Trucking {
     private final int id;
     private LocalDateTime date;
-    private Driver driver;
+    private String driverUsername;
     private ConcurrentHashMap<Area, List<Site>> sources;
     private ConcurrentHashMap<Area, List<Site>> destinations;
-    private Vehicle vehicle;
+    private String vehicleRegistrationPlate;
     private int weightWithProducts;
     private List<ProductForTrucking> products;
     private long hours;
     private long minutes;
 
-    public Trucking(int id, Vehicle vehicle, LocalDateTime date, Driver driver, List<List<String>> sources, List<List<String>> destinations, List<ProductForTrucking> products,long hours, long minutes) {
-        if (vehicle == null | date == null | driver == null | sources == null | destinations == null | sources.size() == 0 | destinations.size() == 0 | products == null | products.size() == 0)
+    public Trucking(int id, String vehicleRegistrationPlate, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<ProductForTrucking> products,long hours, long minutes) throws Exception {
+        if (vehicleRegistrationPlate == null | vehicleRegistrationPlate == null | date == null | driverUsername == null | sources == null | destinations == null | sources.size() == 0 | destinations.size() == 0 | products == null | products.size() == 0)
             throw new IllegalArgumentException("One or more of the data is empty");
         this.id = id;
-        this.vehicle = vehicle;
+        this.vehicleRegistrationPlate = vehicleRegistrationPlate;
         this.date = date;
-        this.driver = driver;
+        this.driverUsername = driverUsername;
         this.sources = new ConcurrentHashMap<Area, List<Site>>();
         this.destinations = new ConcurrentHashMap<Area, List<Site>>();
         this.products = products;
@@ -76,8 +76,8 @@ public class Trucking {
         toReturn += "TRUCKING DETAILS:\n";
         toReturn += "Date: " + date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear() + "\n";
         toReturn += "Hour: " + date.getHour() + ":" + date.getMinute() + "\n";
-        toReturn += "Vehicle registration plate: " + vehicle.getRegistationPlate() + "\n";
-        toReturn += "Driver: " + driver.getName() + "\n";
+        toReturn += "Vehicle registration plate: " + vehicleRegistrationPlate + "\n";
+        toReturn += "Driver: " + driverUsername + "\n";
         toReturn += printSources();
         toReturn += printDestinations();
         toReturn += printProducts();
@@ -89,21 +89,12 @@ public class Trucking {
 
     }
 
-    public synchronized boolean updateWeight(int newWeight) {
-        if (newWeight <= 0)
-            throw new IllegalArgumentException("The weight of a product must be positive number");
-        if (newWeight > vehicle.getMaxWeight()-vehicle.getWeight())
-            throw new IllegalArgumentException("Oops, the weight with the products is to heavy");
-        weightWithProducts = newWeight + vehicle.getWeight();
-        return true;
-    }
-
-    public synchronized void addSources(List<List<String>> sourcesList) {
+    public synchronized void addSources(List<List<String>> sourcesList) throws Exception {
         checkDateForUpdateTrucking();
         addSites(sourcesList, this.sources);
     }
 
-    public synchronized void addDestinations(List<List<String>> destinationsList) {
+    public synchronized void addDestinations(List<List<String>> destinationsList) throws Exception {
         checkDateForUpdateTrucking();
         addSites(destinationsList, this.destinations);
     }
@@ -140,26 +131,18 @@ public class Trucking {
         }
     }
 
-    public synchronized void updateSources(List<List<String>> sources) {
+    public synchronized void updateSources(List<List<String>> sources) throws Exception {
         checkDateForUpdateTrucking();
         checkSameArea(sources);
         this.sources = new ConcurrentHashMap<Area, List<Site>>();
         addSources(sources);
     }
 
-    public synchronized void updateDestinations(List<List<String>> destinations) {
+    public synchronized void updateDestinations(List<List<String>> destinations) throws Exception {
         checkDateForUpdateTrucking();
         checkSameArea(destinations);
         this.destinations = new ConcurrentHashMap<Area, List<Site>>();
         addDestinations(destinations);
-    }
-
-    public synchronized void updateVehicle(Vehicle vehicle) {
-
-    }
-
-    public synchronized void updateDriver(Driver driver) {
-
     }
 
     public synchronized void updateDate(LocalDateTime date) {
@@ -189,14 +172,6 @@ public class Trucking {
             toReturn += product.printProductForTrucking() + "\n";
         }
         return toReturn;
-    }
-
-    public Driver getDriver() {
-        return driver;
-    }
-
-    public Vehicle getVehicle() {
-        return vehicle;
     }
 
     public LocalDateTime getDate() {
@@ -231,7 +206,7 @@ public class Trucking {
         return true;
     }
 
-    private boolean checkSameArea(List<List<String>> sites) {
+    private boolean checkSameArea(List<List<String>> sites) throws Exception {
         synchronized (sites) {
             if(sites == null | sites.size() == 0)
                 throw new IllegalArgumentException("Oops, the sites cannot be empty");
@@ -249,7 +224,7 @@ public class Trucking {
 
 
 
-    private void addSites(List<List<String>> sites, Map<Area, List<Site>> sourcesOrDestinations) {
+    private void addSites(List<List<String>> sites, Map<Area, List<Site>> sourcesOrDestinations) throws Exception {
         for (List<String> site : sites) {
             Site Source = castFromString(site);
             if(Source == null | Source.getArea() == null)
@@ -264,13 +239,21 @@ public class Trucking {
         }
     }
 
-    private Site castFromString(List<String> detailsOfSite) {
+    private Site castFromString(List<String> detailsOfSite) throws Exception {
         if(!(detailsOfSite.size()==8)) throw new IllegalArgumentException("illegal number of details of site");
         else
             return new Site(detailsOfSite.get(0),detailsOfSite.get(1),detailsOfSite.get(2),detailsOfSite.get(3),
                     Integer.parseInt(detailsOfSite.get(4)),Integer.parseInt(detailsOfSite.get(5)),Integer.parseInt(detailsOfSite.get(6)),
                     detailsOfSite.get(7));
 
+    }
+
+    public String getVehicleRegistrationPlate() {
+        return vehicleRegistrationPlate;
+    }
+
+    public String getDriverUsername() {
+        return driverUsername;
     }
 }
 

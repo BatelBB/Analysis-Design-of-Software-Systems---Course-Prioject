@@ -68,7 +68,7 @@ public class UserMapper extends myDataBase{
             while (rs.next()) {
                 return true;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return false;

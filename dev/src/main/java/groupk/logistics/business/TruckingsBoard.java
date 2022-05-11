@@ -33,8 +33,8 @@ public class TruckingsBoard {
                     return;
                 }
                 if (endTruck.isAfter(startCurr)) {
-                    checkAvailibility(currentTrucking.getVehicle().getRegistationPlate(),trucking.getVehicle().getRegistationPlate(),
-                            currentTrucking.getDriver().getUsername(),trucking.getDriver().getUsername());
+                    checkAvailibility(currentTrucking.getVehicleRegistrationPlate(),trucking.getVehicleRegistrationPlate(),
+                            currentTrucking.getDriverUsername(),trucking.getDriverUsername());
                 }
             }
             insertTrucking(trucking);
@@ -112,7 +112,7 @@ public class TruckingsBoard {
     public synchronized String printBoardOfDriver(String username) {
         String toReturn = "TRUCKINGS BOARD\n\n";
         for (Trucking trucking : truckings) {
-            if(trucking.getDriver().getUsername() == username)
+            if(trucking.getDriverUsername() == username)
                 toReturn += trucking.printTrucking() + line;
         }
         return toReturn;
@@ -123,7 +123,7 @@ public class TruckingsBoard {
         for (Trucking trucking : truckings) {
             if (trucking.getDate().compareTo(LocalDateTime.now()) > 0)
                 return toReturn;
-            else if(trucking.getDriver().getUsername() == username)
+            else if(trucking.getDriverUsername() == username)
                 toReturn += trucking.printTrucking() + line;
         }
         return toReturn;
@@ -135,7 +135,7 @@ public class TruckingsBoard {
         for (Trucking trucking : truckings) {
             if (found | trucking.getDate().compareTo(LocalDateTime.now()) > 0) {
                 found = true;
-                if(trucking.getDriver().getUsername() == username)
+                if(trucking.getDriverUsername() == username)
                     toReturn += trucking.printTrucking() + line;
             }
         }
@@ -145,7 +145,7 @@ public class TruckingsBoard {
     public synchronized String printBoardOfVehicle(String registrationPlate) {
         String toReturn = "             TRUCKINGS BOARD\n\n";
         for (Trucking trucking : truckings) {
-            if(trucking.getVehicle().getRegistationPlate() == registrationPlate)
+            if(trucking.getVehicleRegistrationPlate() == registrationPlate)
                 toReturn += trucking.printTrucking() + line;
         }
         return toReturn;
@@ -156,31 +156,35 @@ public class TruckingsBoard {
         for (Trucking trucking : truckings) {
             if (trucking.getDate().compareTo(LocalDateTime.now()) > 0)
                 return toReturn;
-            else if(trucking.getVehicle().getRegistationPlate() == registrationPlate)
+            else if(trucking.getVehicleRegistrationPlate() == registrationPlate)
                 toReturn += trucking.printTrucking() + line;
         }
         return toReturn;
     }
 
     public synchronized String printFutureTruckingsOfVehicle(String registrationPlate) {
+        /*
         String toReturn = "            FUTURE TRUCKINGS\n\n";
         boolean found = false; //saves time of checking everytime if is it in future, after first future trucking appear.
         for (Trucking trucking : truckings) {
             if (found | trucking.getDate().compareTo(LocalDateTime.now()) > 0) {
                 found = true;
-                if(trucking.getVehicle().getRegistationPlate() == registrationPlate)
+                if(trucking. == registrationPlate)
                     toReturn += trucking.printTrucking() + line;
             }
         }
         return toReturn;
+
+         */
+        return null;
     }
 
-    public void addSourcesToTrucking(int truckingId, List<List<String>> sources) {
+    public void addSourcesToTrucking(int truckingId, List<List<String>> sources) throws Exception {
         Trucking trucking = findTruckingById(truckingId);
         trucking.addSources(sources);
     }
 
-    public void addDestinationsToTrucking(int truckingId, List<List<String>> destinations) {
+    public void addDestinationsToTrucking(int truckingId, List<List<String>> destinations) throws Exception {
         Trucking trucking = findTruckingById(truckingId);
         trucking.addDestinations(destinations);
     }
@@ -190,12 +194,12 @@ public class TruckingsBoard {
         trucking.addProducts(pruductName,quantity);
     }
 
-    public void updateSourcesOnTrucking(int truckingId, List<List<String>> sources) {
+    public void updateSourcesOnTrucking(int truckingId, List<List<String>> sources) throws Exception {
         Trucking trucking = findTruckingById(truckingId);
         trucking.updateSources(sources);
     }
 
-    public void updateDestinationsOnTrucking(int truckingId, List<List<String>> destinations) {
+    public void updateDestinationsOnTrucking(int truckingId, List<List<String>> destinations) throws Exception {
         Trucking trucking = findTruckingById(truckingId);
         trucking.updateDestinations(destinations);
     }
@@ -206,13 +210,9 @@ public class TruckingsBoard {
     }
 
     public synchronized void updateVehicleOnTrucking(int truckingId, Vehicle vehicle) {
-        Trucking trucking = findTruckingById(truckingId);
-        trucking.updateVehicle(vehicle);
     }
 
     public synchronized void updateDriverOnTrucking(int truckingId, Driver driver) {
-        Trucking trucking = findTruckingById(truckingId);
-        trucking.updateDriver(driver);
     }
 
     public synchronized void updateDateOnTrucking(int truckingId, LocalDateTime date) {
@@ -224,10 +224,7 @@ public class TruckingsBoard {
     }
 
     public synchronized void updateTotalWeightOfTrucking(int truckingId, int newWeight, String driverUsername){
-        if(driverUsername == null)
-            throw new IllegalArgumentException("Driver's username is empty");
-        Trucking trucking = findTruckingById(truckingId);
-        trucking.updateWeight(newWeight);
+
     }
 
     private Trucking findTruckingById(int truckingId) {

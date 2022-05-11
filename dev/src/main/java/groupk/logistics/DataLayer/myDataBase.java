@@ -14,12 +14,12 @@ abstract class myDataBase<T> {
     protected static String finalCurl;
     private String tableName;
 
-    public myDataBase(String tableName) throws SQLException {
+    public myDataBase(String tableName) throws Exception {
         this.tableName = tableName;
         createNewTable();
     }
 
-    private void createNewTable() throws SQLException {
+    private void createNewTable() throws Exception {
         String vehiclesTable = "CREATE TABLE IF NOT EXISTS " + "Vehicles" + " (\n" +
                 "\tregistration_plate INTEGER PRIMARY KEY,\n" +
                 "\tmodel TEXT NOT NULL,\n" +
@@ -56,6 +56,7 @@ abstract class myDataBase<T> {
                 "\tdate TEXT NOT NULL,\n" +
                 "\thours INTEGER NOT NULL,\n" +
                 "\tminutes INTEGER NOT NULL,\n" +
+                "\tweight INTEGER NOT NULL,\n" +
                 "\tFOREIGN KEY(truck_manager) REFERENCES TruckManagers(username)\n" +
                 "\tFOREIGN KEY(registration_plate) REFERENCES Vehicles(registration_plate)\n" +
                 "FOREIGN KEY(driver_username) REFERENCES Drivers(username)\n" +
@@ -121,25 +122,25 @@ abstract class myDataBase<T> {
 
         }
         catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new Exception("There was a problem to connect the database: " + e.getMessage());
         }
     }
 
 
-    public static Connection getConnection(){
+    public static Connection getConnection() throws Exception {
         finalCurl = JDBCurl.concat(path);
         if (con!= null) {return con;}
         try {
             con = DriverManager.getConnection(finalCurl);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new Exception("There was a problem to connect the database: " + e.getMessage());
         }
         return con;
     }
 
 
-    public List<T> selectAll(){
-        String query = "SELECT * FROM "+tableName;
+    public List<T> selectAll() throws Exception {
+        String query = "SELECT * FROM " + tableName;
         List<T> DTOList=new ArrayList<T>();
         try (Connection conn = this.getConnection();
              Statement stmt  = conn.createStatement();
@@ -148,7 +149,7 @@ abstract class myDataBase<T> {
                 DTOList.add(ConvertResultSetToDTO(rs));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
         }
         return DTOList;
     }

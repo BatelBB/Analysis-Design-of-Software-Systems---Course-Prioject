@@ -6,9 +6,9 @@ import groupk.logistics.service.Service;
 import java.util.Scanner;
 
 public class RegisterWindow {
-    Service service = new Service();
+    Service service;
     public RegisterWindow() throws Exception {
-
+        service = new Service();
     }
     public void  register() {
         boolean wantToBack = false;
