@@ -42,9 +42,6 @@ public class TruckManagerController extends UserController{
         truckingIdCounter = 1;
     }
 
-
-
-
     public void addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight) throws Exception {
             Vehicle newVehicle = new Vehicle(lisence, registrationPlate, model, weight, maxWeight);
             boolean success = vehicleMapper.addVehicle(lisence, registrationPlate, model, weight, maxWeight);
@@ -55,17 +52,9 @@ public class TruckManagerController extends UserController{
         return null; //TODO
     }
 
-    public List<String> getVehiclesRegistrationPlates() throws Exception { return vehicleMapper.selectAll(); }
-
-//    public void addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products, long hours, long minutes) throws Exception {
-//        synchronized (getActiveUser()) {
-//            checkIfActiveUserIsTruckManager();
-//            ((TruckManager)getActiveUser()).addTrucking(truckingIdCounter, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products, hours, minutes);
-//            truckingIdCounter++;
-//        }
-//    }
-
-
+    public List<String> getVehiclesRegistrationPlates() throws Exception {
+        return vehicleMapper.selectAll();
+    }
 
     public void addTrucking(String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<List<String>> sources, List<List<String>> destinations, List<Map<String,Integer>> products, long hours, long minutes) throws Exception {
         boolean checkTrucking = (TruckManager.checkTrucking(truckingIdCounter, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products, hours, minutes));
@@ -112,7 +101,7 @@ public class TruckManagerController extends UserController{
 
     public String printTruckingsHistory() throws Exception {
         String toReturn = "            TRUCKINGS HISTORY\n\n";
-        List<TruckingDTO> truckings = truckingMapper.getDriverHistoryTruckings(getActiveUser().getUsername());
+        List<TruckingDTO> truckings = truckingMapper.getTruckManagerHistoryTruckings(getActiveUser().getUsername());
         for (TruckingDTO trucking : truckings)
             toReturn += printTrucking(trucking);
         return toReturn;
@@ -175,68 +164,41 @@ public class TruckManagerController extends UserController{
     }
 
     public void addSourcesToTrucking(int truckingId, List<List<String>> sources) throws Exception {
-        synchronized (getActiveUser()) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)getActiveUser()).addSourcesToTrucking(truckingId, sources);
-        }
+        //TODO
     }
 
     public void addDestinationToTrucking(int truckingId, List<List<String>> destinations) throws Exception {
-        synchronized (getActiveUser()) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)getActiveUser()).addDestinationsToTrucking(truckingId, destinations);
-        }
+        //TODO
     }
 
     public void addProductToTrucking(int truckingId, String pruductName,int quantity) throws Exception {
-        synchronized (getActiveUser()) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)getActiveUser()).addProductsToTrucking(truckingId, pruductName,quantity);
-        }
+        //TODO
     }
 
 
 
     public void updateSourcesOnTrucking(int truckingId, List<List<String>> sources) throws Exception {
-        synchronized (getActiveUser()) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)getActiveUser()).updateSourcesOnTrucking(truckingId, sources);
-        }
+        //TODO
     }
 
     public void updateDestinationsOnTrucking(int truckingId, List<List<String>> destinations) throws Exception {
-        synchronized (getActiveUser()) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)getActiveUser()).updateDestinationsOnTrucking(truckingId, destinations);
-        }
+        //TODO
     }
 
     public void moveProductsToTrucking(int truckingId, String productSKU) throws Exception {
-        synchronized (getActiveUser()) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)getActiveUser()).moveProductsToTrucking(truckingId, productSKU);
-        }
+        //TODO
     }
 
     public void updateVehicleOnTrucking(int truckingId, String registrationPlateOfVehicle) throws Exception {
-        synchronized (getActiveUser()) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)getActiveUser()).updateVehicleOnTrucking(truckingId, registrationPlateOfVehicle);
-        }
+        //TODO
     }
 
     public void updateDriverOnTrucking(int truckingId, String driverUsername) throws Exception {
-        synchronized (getActiveUser()) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)getActiveUser()).updateDriverOnTrucking(truckingId, driverUsername);
-        }
+        //TODO
     }
 
     public void updateDateOnTrucking(int truckingId, LocalDateTime date) throws Exception {
-        synchronized (getActiveUser()) {
-            checkIfActiveUserIsTruckManager();
-            ((TruckManager)getActiveUser()).updateDateOnTrucking(truckingId, date);
-        }
+        //TODO
     }
 
     private void checkIfActiveUserIsTruckManager() throws Exception {

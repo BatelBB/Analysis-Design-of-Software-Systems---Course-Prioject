@@ -77,7 +77,7 @@ public class TruckingMapper extends myDataBase {
     }
 
     public boolean setWeightForTrucking(int truckingId, int weight) throws Exception {
-        String sql = "UPDATE Trucking SET weight="+weight+" WHERE TID='"+truckingId+"'";
+        String sql = "UPDATE Truckings SET weight="+weight+" WHERE TID='"+truckingId+"'";
         int n = 0;
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -154,7 +154,7 @@ public class TruckingMapper extends myDataBase {
     private List<TruckingDTO> getRelevantTruckings(LocalDateTime date) throws Exception{
         List<TruckingDTO> toReturn = new LinkedList<TruckingDTO>();
         String query = "SELECT * FROM Truckings " +
-                "WHERE strftime(date) between strftime('" + date.minusHours(7).format(dateFormat) + "') and strftime('" + date.plusHours(7).format(dateFormat) + "')";
+                "WHERE strftime(date) between strftime('" + date.minusHours(7).format(dateFormat) + "') and strftime('" + date.plusHours(7).format(dateFormat) + "') ORDER BY date";
         try (Connection conn = this.getConnection();
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
@@ -170,7 +170,8 @@ public class TruckingMapper extends myDataBase {
     private List<TruckingDTO> getBoardOfUserOrVehicle(String fieldName, String usernameOrRegistration) throws Exception {
         List<TruckingDTO> toReturn = new LinkedList<TruckingDTO>();
         String query = "SELECT * FROM Truckings " +
-                "WHERE " + fieldName + " = " + usernameOrRegistration;
+                "WHERE " + fieldName + " = " + usernameOrRegistration +
+                " ORDER BY date";
         try (Connection conn = this.getConnection();
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
@@ -186,7 +187,8 @@ public class TruckingMapper extends myDataBase {
     private List<TruckingDTO> getFutureTruckingsOfUserOrVehicle(String fieldName, String usernameOrRegistration) throws Exception {
         List<TruckingDTO> toReturn = new LinkedList<TruckingDTO>();
         String query = "SELECT * FROM Truckings " +
-                "WHERE strftime(date) > DATE('now') and " + fieldName + " = " + usernameOrRegistration;
+                "WHERE strftime(date) > DATE('now') and " + fieldName + " = " + usernameOrRegistration +
+                " ORDER BY date";
         try (Connection conn = this.getConnection();
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
@@ -202,7 +204,8 @@ public class TruckingMapper extends myDataBase {
     private List<TruckingDTO> getHistoryTruckingsOfUserOrVehicle(String fieldName, String usernameOrRegistration) throws Exception {
         List<TruckingDTO> toReturn = new LinkedList<TruckingDTO>();
         String query = "SELECT * FROM Truckings " +
-                "WHERE strftime(date) <= DATE('now') and "+ fieldName + " = " + usernameOrRegistration;
+                "WHERE strftime(date) <= DATE('now') and "+ fieldName + " = " + usernameOrRegistration +
+                " ORDER BY date";
         try (Connection conn = this.getConnection();
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
