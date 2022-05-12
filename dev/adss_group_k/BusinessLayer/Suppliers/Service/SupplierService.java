@@ -222,7 +222,7 @@ public class SupplierService {
     }
 
     public Response RemoveProduct(int orderId, String proName) {
-        return ResponseT.fromValue(orders.removeProductFromOrder(orderId, proName));
+        return ResponseT.fromValue(orders.updateAmount(orderId, proName));
     }
 
     public Response AddProduct(int orderId, String proName, int proAmount, int minAmount) {

@@ -79,7 +79,7 @@ public class OrderController {
     }
 
 
-    public int updateAmount(Order order, Item item, int amount) {
+    public int updateAmount(Order order, Item item, int amount) { // needs to check if the item amount is >= the min amount
         ((MutableOrder) order).orderItem(item, amount);
         refreshPricesAndDiscounts(item);
         return ((MutableOrder) order).id;
@@ -89,9 +89,6 @@ public class OrderController {
         throw new NotImplementedException();
     }
 
-    public int removeProductFromOrder(int orderId, String proName) {
-        throw new NotImplementedException();
-    }
 
     public int addProductToOrder(int orderId, String proName, int proAmount, int minAmount) {
         throw new NotImplementedException();

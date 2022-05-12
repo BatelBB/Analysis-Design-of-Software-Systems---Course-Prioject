@@ -181,7 +181,7 @@ public class Service {
         int minAmount = product_service.getMinAmount(proName).value;
         switch (op) {
             case "Remove":
-                return supplierService.RemoveProduct(orderId, proName);
+                return supplierService.updateOrderAmount(orderId, proName); // just enter 0 in the amount, and it will be deleted
             case "Add":
                 return supplierService.AddProduct(orderId, proName, proAmount, minAmount);
             case "UpdateAmount":
