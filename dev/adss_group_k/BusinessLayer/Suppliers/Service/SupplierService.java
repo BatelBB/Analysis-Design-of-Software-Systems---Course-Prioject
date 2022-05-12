@@ -2,6 +2,7 @@ package adss_group_k.BusinessLayer.Suppliers.Service;
 
 import adss_group_k.BusinessLayer.Inventory.Product;
 import adss_group_k.BusinessLayer.Inventory.Service.Response;
+import adss_group_k.BusinessLayer.Inventory.Service.ResponseT;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.Controller.ItemController;
 import adss_group_k.BusinessLayer.Suppliers.Controller.OrderController;
@@ -208,8 +209,8 @@ public class SupplierService {
         orders.setProvided(order, delivered);
     }
 
-    public void updateOrderAmount(Order order, Item item, int amount) {
-        orders.updateAmount(order, item, amount);
+    public Response updateOrderAmount(Order order, Item item, int amount) {
+        return ResponseT.fromValue(orders.updateAmount(order, item, amount));
     }
 
     public Supplier findCheapestSupplierFor(Product product, int amount) {
@@ -217,15 +218,15 @@ public class SupplierService {
     }
 
     public Response createDeficienciesOrder(Map<String, Integer> proAmount) {
-        throw new NotImplementedException();
+        return ResponseT.fromValue(orders.createDeficienciesOrder(proAmount));
     }
 
     public Response RemoveProduct(int orderId, String proName) {
-        throw new NotImplementedException();
+        return ResponseT.fromValue(orders.removeProductFromOrder(orderId, proName));
     }
 
     public Response AddProduct(int orderId, String proName, int proAmount, int minAmount) {
-        throw new NotImplementedException();
+        return ResponseT.fromValue(orders.addProductToOrder(orderId, proName, proAmount, minAmount));
     }
 
     public Response createPeriodicOrder() {

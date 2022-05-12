@@ -6,10 +6,12 @@ import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Order;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
 import adss_group_k.BusinessLayer.Suppliers.Entity.MutableOrder;
 import adss_group_k.BusinessLayer.Suppliers.Entity.MutableSupplier;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 public class OrderController {
     ArrayList<MutableOrder> orders;
@@ -77,8 +79,21 @@ public class OrderController {
     }
 
 
-    public void updateAmount(Order order, Item item, int amount) {
+    public int updateAmount(Order order, Item item, int amount) {
         ((MutableOrder) order).orderItem(item, amount);
         refreshPricesAndDiscounts(item);
+        return ((MutableOrder) order).id;
+    }
+
+    public int createDeficienciesOrder(Map<String, Integer> proAmount) { //returns id of order
+        throw new NotImplementedException();
+    }
+
+    public int removeProductFromOrder(int orderId, String proName) {
+        throw new NotImplementedException();
+    }
+
+    public int addProductToOrder(int orderId, String proName, int proAmount, int minAmount) {
+        throw new NotImplementedException();
     }
 }
