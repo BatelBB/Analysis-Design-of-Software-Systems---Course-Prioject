@@ -7,8 +7,8 @@ public class bySupplierReport extends Report {
     private List<ProductItem> bySupplierPro;
     String suppName;
 
-    public bySupplierReport(String name, Integer id, String report_producer, List<ProductItem> bySupplierPro, String suppName) {
-        super(name, id, report_producer);
+    public bySupplierReport(String name, String report_producer, List<ProductItem> bySupplierPro, String suppName) {
+        super(name, report_producer);
         this.bySupplierPro = bySupplierPro;
         this.suppName=suppName;
     }

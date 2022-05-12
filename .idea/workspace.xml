@@ -25,20 +25,65 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="add updateSupp method">
+      <change beforePath="$PROJECT_DIR$/.idea/adss_group_k.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/adss_group_k.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/DefectiveReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/DefectiveReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/ExpiredReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/ExpiredReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/MissingReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/MissingReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/Report.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/Report.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/ReportController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/SurplusesReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/SurplusesReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/byCategoryReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/byCategoryReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/byProductReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/byProductReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/bySupplierReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/BusinessLayer/bySupplierReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/PresentationLayer/PresentationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/PresentationLayer/PresentationModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/ServiceLayer/Objects/MissingReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/ServiceLayer/Objects/MissingReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/ServiceLayer/Objects/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/ServiceLayer/Objects/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/ServiceLayer/Objects/ProductItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/ServiceLayer/Objects/ProductItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/ServiceLayer/Objects/SurplusesReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/ServiceLayer/Objects/SurplusesReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/ServiceLayer/ReportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/ServiceLayer/ReportService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/ServiceLayer/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/ServiceLayer/Service.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Entity/EntityUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/shared/utils/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Entity/MutableItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Entity/MutableItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/inventory/tests/ServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/inventory/tests/ServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Entity/MutableOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Entity/MutableOrder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Entity/MutableSupplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Entity/MutableSupplier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Entity/QuantityDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Entity/QuantityDiscount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Entity/readonly/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Entity/readonly/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Service/ExampleSeed.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Service/ExampleSeed.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Service/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/suppliers/BusinessLayer/Service/SupplierService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/suppliers/PresentationLayer/PresentationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/suppliers/PresentationLayer/PresentationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/suppliers/Tests/ServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/suppliers/Tests/ServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Response.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Service.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/Category.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/CategoryController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/DefectiveReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/DiscountPair.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ExpiredReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/MissingReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/Product.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ProductController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ProductItem.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/Report$ReportType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/Report.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/ReportController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/SubCategory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/SubSubCategory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/SurplusesReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/byCategoryReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/byProductReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/BusinessLayer/bySupplierReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/PresentationLayer/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/PresentationLayer/PresentationModel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/CategoryService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/Category.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/DefectiveReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/DiscountPair.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/ExpiredReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/MissingReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/Product.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/ProductItem.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/Report.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/SubCategory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/SubSubCategory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/SurplusesReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/byCategoryReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/byProductReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/Objects/bySupplierReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/ProductService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/ReportService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/adss_group_k/ServiceLayer/ResponseT.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/adss_group_k/ServiceLayer/ServiceTest.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,6 +119,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/docs" />
@@ -110,48 +163,12 @@
       </method>
     </configuration>
     <configuration default="true" type="JetRunConfigurationType">
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <module name="" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
       <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <module name="" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -256,7 +273,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -271,20 +287,6 @@
     <MESSAGE value="add updateSupp method" />
     <option name="LAST_COMMIT_MESSAGE" value="add updateSupp method" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="-39" y="40" key="MergeDialog" timestamp="1652017271563">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="-39" y="40" key="MergeDialog/0.0.1536.824@0.0.1536.824" timestamp="1652017271563" />
-    <state x="407" y="174" key="MultipleFileMergeDialog" timestamp="1652017285507">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="407" y="174" key="MultipleFileMergeDialog/0.0.1536.824@0.0.1536.824" timestamp="1652017285507" />
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1652017243668">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1652017243668" />
-  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
@@ -298,26 +300,13 @@
           <line>13</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/dev/adss_group_k/inventory/PresentationLayer/Main.java</url>
-          <line>13</line>
-          <option name="timeStamp" value="38" />
-        </line-breakpoint>
         <line-breakpoint type="java-method">
           <url>file://$PROJECT_DIR$/dev/adss_group_k/inventory/tests/ServiceTest.java</url>
-          <line>34</line>
-          <properties class="ServiceLayer.ServiceTest" method="setData">
+          <line>39</line>
+          <properties class="adss_group_k.inventory.tests.ServiceTest" method="setData">
             <option name="EMULATED" value="true" />
           </properties>
           <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/dev/adss_group_k/inventory/tests/ServiceTest.java</url>
-          <line>116</line>
-          <properties class="ServiceLayer.ServiceTest" method="addProduct">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -330,11 +319,11 @@
     </pin-to-top-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/adss_group_k$ServiceTest_setProvidedDate.ic" NAME="ServiceTest.setProvidedDate Coverage Results" MODIFIED="1650647225824" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>assignment1.Tests.*</FILTER>
-    </SUITE>
     <SUITE FILE_PATH="coverage/adss_group_k$ServiceTest.ic" NAME="ServiceTest Coverage Results" MODIFIED="1650647326837" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>assignment1.BusinessLayer.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/adss_group_k$ServiceTest_setProvidedDate.ic" NAME="ServiceTest.setProvidedDate Coverage Results" MODIFIED="1650647225824" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>assignment1.Tests.*</FILTER>
     </SUITE>
   </component>
 </project>

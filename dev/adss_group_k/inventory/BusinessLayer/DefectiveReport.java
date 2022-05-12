@@ -6,8 +6,8 @@ public class DefectiveReport extends Report {
 
     private List<ProductItem> DefectivePro;
 
-    public DefectiveReport(String name, Integer id, String report_producer, List<ProductItem> DefectivePro) {
-        super(name, id, report_producer);
+    public DefectiveReport(String name,String report_producer, List<ProductItem> DefectivePro) {
+        super(name, report_producer);
         this.DefectivePro = DefectivePro;
     }
 

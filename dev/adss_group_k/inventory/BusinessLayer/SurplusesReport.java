@@ -6,8 +6,8 @@ public class SurplusesReport extends Report {
 
     private List<Product> SurplusesPro;
 
-    public SurplusesReport(String name, Integer id, String report_producer, List<Product> SurplusesPro) {
-        super(name, id, report_producer);
+    public SurplusesReport(String name, String report_producer, List<Product> SurplusesPro) {
+        super(name, report_producer);
         this.SurplusesPro = SurplusesPro;
     }
 

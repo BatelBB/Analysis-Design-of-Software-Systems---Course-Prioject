@@ -55,4 +55,12 @@ public class Product {
         }
         return s;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getMin_qty() {
+        return min_qty;
+    }
 }

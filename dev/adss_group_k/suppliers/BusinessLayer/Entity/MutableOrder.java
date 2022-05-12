@@ -1,6 +1,6 @@
 package adss_group_k.suppliers.BusinessLayer.Entity;
 
-import adss_group_k.shared.utils.EntityUtils;
+
 import adss_group_k.suppliers.BusinessLayer.BusinessLogicException;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Item;
 import adss_group_k.suppliers.BusinessLayer.Entity.readonly.Order;

@@ -4,13 +4,16 @@ import adss_group_k.inventory.ServiceLayer.Objects.*;
 import adss_group_k.suppliers.BusinessLayer.Service.SupplierService;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Service {
     private final ProductService product_service;
     private final CategoryService category_service;
     private final ReportService report_service;
     private final SupplierService supplierService;
+    static int i=0; //index for the missing report name
 
     public Service(SupplierService supplierService) {
         product_service = new ProductService();
@@ -131,32 +134,32 @@ public class Service {
         return product_service.changeItemOnShelf(product_id, item_id, on_shelf);
     }
 
-    public ResponseT<MissingReport> createMissingReport(String name, int id, String report_producer) {
-        return report_service.createMissingReport(name, id, report_producer);
+    public ResponseT<MissingReport> createMissingReport(String name, String report_producer) {
+        return report_service.createMissingReport(name, report_producer);
     }
 
-    public ResponseT<ExpiredReport> createExpiredReport(String name, int id, String report_producer) {
-        return report_service.createExpiredReport(name, id, report_producer);
+    public ResponseT<ExpiredReport> createExpiredReport(String name, String report_producer) {
+        return report_service.createExpiredReport(name, report_producer);
     }
 
-    public ResponseT<SurplusesReport> createSurplusesReport(String name, int id, String report_producer) {
-        return report_service.createSurplusesReport(name, id, report_producer);
+    public ResponseT<SurplusesReport> createSurplusesReport(String name, String report_producer) {
+        return report_service.createSurplusesReport(name, report_producer);
     }
 
-    public ResponseT<DefectiveReport> createDefectiveReport(String name, int id, String report_producer) {
-        return report_service.createDefectiveReport(name, id, report_producer);
+    public ResponseT<DefectiveReport> createDefectiveReport(String name,String report_producer) {
+        return report_service.createDefectiveReport(name,report_producer);
     }
 
-    public ResponseT<bySupplierReport> createBySupplierReport(String name, int id, String report_producer, String suppName) {
-        return report_service.createBySupplierReport(name, id, report_producer, suppName);
+    public ResponseT<bySupplierReport> createBySupplierReport(String name,String report_producer, String suppName) {
+        return report_service.createBySupplierReport(name, report_producer, suppName);
     }
 
-    public ResponseT<byProductReport> createByProductReport(String name, int id, String report_producer, String proName) {
-        return report_service.createByProductReport(name, id, report_producer, proName);
+    public ResponseT<byProductReport> createByProductReport(String name, String report_producer, String proName) {
+        return report_service.createByProductReport(name, report_producer, proName);
     }
 
-    public ResponseT<byCategoryReport> createByCategoryReport(String name, int id, String report_producer, String CatName, String subCatName, String subSubCatName) {
-        return report_service.createByCategoryReport(name, id, report_producer, CatName, subCatName, subSubCatName);
+    public ResponseT<byCategoryReport> createByCategoryReport(String name, String report_producer, String CatName, String subCatName, String subSubCatName) {
+        return report_service.createByCategoryReport(name, report_producer, CatName, subCatName, subSubCatName);
     }
 
     public Response removeReport(int id) {
@@ -165,6 +168,22 @@ public class Service {
 
     public ResponseT<Report> getReport(int id) {
         return report_service.getReport(id);
+    }
+    public Response createPeriodicOrder(Map<String,Integer> proAmount){ //need to check that the order contain the min_qnt
+        return supplierService.createPeriodicOrder(proAmount);}
+    public Response createDeficienciesOrder(){
+        Map<String,Integer> proAmount = report_service.GetProAmount().value;
+        return supplierService.createDeficienciesOrder(proAmount);}
+    public Response updateOrder(String op,String orderId,String proName, int proAmount){//need to check that the order contain the min_qnt
+        switch (op){
+            case "Remove":
+                return supplierService.RemoveProduct(orderId,proName);
+            case "Add":
+                return supplierService.AddProduct(orderId,proName,proAmount);
+            case "UpdateAmount":
+                return supplierService.UpdateAmount(orderId,proName,proAmount);
+        }
+        return null;
     }
 
 

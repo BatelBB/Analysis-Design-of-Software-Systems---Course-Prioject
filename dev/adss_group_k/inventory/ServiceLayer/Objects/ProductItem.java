@@ -15,8 +15,8 @@ public class ProductItem {
     private String location;
     private String supplier;
     private LocalDateTime expirationDate;
-    private List<DiscountPair> man_discount;
-    private List<DiscountPair> cus_discount;
+    private List<adss_group_k.inventory.ServiceLayer.Objects.DiscountPair> man_discount;
+    private List<adss_group_k.inventory.ServiceLayer.Objects.DiscountPair> cus_discount;
     private boolean is_defect;
     private String defect_reporter;
 
@@ -30,11 +30,11 @@ public class ProductItem {
         defect_reporter= PItem.getDefect_reporter();
         List<DiscountPair> BusinessCus_discount = PItem.getCus_discount();
         for (DiscountPair dp: BusinessCus_discount) {
-            cus_discount.add(new DiscountPair(dp));
+            cus_discount.add(new adss_group_k.inventory.ServiceLayer.Objects.DiscountPair(dp));
         }
         List<DiscountPair> BusinessMan_discount = PItem.getMan_discount();
         for (DiscountPair dp: BusinessMan_discount) {
-            man_discount.add(new DiscountPair(dp));
+            man_discount.add(new adss_group_k.inventory.ServiceLayer.Objects.DiscountPair(dp));
         }
     }
 }

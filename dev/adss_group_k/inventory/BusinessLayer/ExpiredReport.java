@@ -6,8 +6,8 @@ public class ExpiredReport extends Report {
 
     private List<ProductItem> ExpiredPro;
 
-    public ExpiredReport(String name, Integer id, String report_producer, List<ProductItem> ExpiredPro) {
-        super(name, id, report_producer);
+    public ExpiredReport(String name,String report_producer, List<ProductItem> ExpiredPro) {
+        super(name, report_producer);
         this.ExpiredPro = ExpiredPro;
     }
 

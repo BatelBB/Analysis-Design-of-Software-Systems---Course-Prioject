@@ -6,6 +6,7 @@ public class MissingReport extends Report {
     private List<Product> missingPro;
 
 
+
     public MissingReport(adss_group_k.inventory.BusinessLayer.MissingReport report) {
         super(report);
         List<adss_group_k.inventory.BusinessLayer.Product> BusinessMissingPro=report.getMissingPro();
@@ -13,4 +14,6 @@ public class MissingReport extends Report {
             missingPro.add(new Product(p));
         }
     }
+
+    public List<Product> getMissingPro() {return missingPro;}
 }

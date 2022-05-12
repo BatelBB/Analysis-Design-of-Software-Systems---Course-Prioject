@@ -1,6 +1,6 @@
 package adss_group_k.inventory.PresentationLayer;
 
-import ServiceLayer.Objects.*;
+import adss_group_k.inventory.ServiceLayer.Objects.*;
 import adss_group_k.inventory.ServiceLayer.Response;
 import adss_group_k.inventory.ServiceLayer.ResponseT;
 import adss_group_k.inventory.ServiceLayer.Service;
@@ -313,7 +313,7 @@ public class PresentationModel {
     public void createMissingReport() {
         ResponseT<MissingReport> r;
         if (args.length == 3 && convertInt(args[1]) != -1) {
-            r = service.createMissingReport(args[0], convertInt(args[1]), args[2]);
+            r = service.createMissingReport(args[0],args[1]);
             if (r.getError_occurred())
                 System.out.println(r.error_message);
             else
@@ -324,7 +324,7 @@ public class PresentationModel {
     public void createExpiredReport() {
         ResponseT<ExpiredReport> r;
         if (args.length == 3 && convertInt(args[1]) != -1) {
-            r = service.createExpiredReport(args[0], convertInt(args[1]), args[2]);
+            r = service.createExpiredReport(args[0],args[1]);
             if (r.getError_occurred())
                 System.out.println(r.error_message);
             else
@@ -335,7 +335,7 @@ public class PresentationModel {
     public void createSurplusesReport() {
         ResponseT<SurplusesReport> r;
         if (args.length == 3 && convertInt(args[1]) != -1) {
-            r = service.createSurplusesReport(args[0], convertInt(args[1]), args[2]);
+            r = service.createSurplusesReport(args[0],args[1]);
             if (r.getError_occurred())
                 System.out.println(r.error_message);
             else
@@ -346,7 +346,7 @@ public class PresentationModel {
     public void createDefectiveReport() {
         ResponseT<DefectiveReport> r;
         if (args.length == 3 && convertInt(args[1]) != -1) {
-            r = service.createDefectiveReport(args[0], convertInt(args[1]), args[2]);
+            r = service.createDefectiveReport(args[0],args[1]);
             if (r.getError_occurred())
                 System.out.println(r.error_message);
             else
@@ -357,7 +357,7 @@ public class PresentationModel {
     public void createBySupplierReport() {
         ResponseT<bySupplierReport> r;
         if (args.length == 4 && convertInt(args[1]) != -1) {
-            r = service.createBySupplierReport(args[0], convertInt(args[1]), args[2], args[3]);
+            r = service.createBySupplierReport(args[0],args[1], args[2]);
             if (r.getError_occurred())
                 System.out.println(r.error_message);
             else
@@ -368,7 +368,7 @@ public class PresentationModel {
     public void createByProductReport() {
         ResponseT<byProductReport> r;
         if (args.length == 4 && convertInt(args[1]) != -1) {
-            r = service.createByProductReport(args[0], convertInt(args[1]), args[2], args[3]);
+            r = service.createByProductReport(args[0], args[1], args[2]);
             if (r.getError_occurred())
                 System.out.println(r.error_message);
             else
@@ -379,7 +379,7 @@ public class PresentationModel {
     public void createByCategoryReport() {
         ResponseT<byCategoryReport> r;
         if (args.length == 6 && convertInt(args[1]) != -1) {
-            r = service.createByCategoryReport(args[0], convertInt(args[1]), args[2], args[3], args[4], args[5]);
+            r = service.createByCategoryReport(args[0], args[1], args[2], args[3], args[4]);
             if (r.getError_occurred())
                 System.out.println(r.error_message);
             else
