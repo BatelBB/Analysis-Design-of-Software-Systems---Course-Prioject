@@ -28,9 +28,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cbe071f3-eafe-4868-8eb2-6a069c019d12" name="Changes" comment="add updateSupp method">
-      <change afterPath="$PROJECT_DIR$/dev/adss_group_k/shared/utils/facade.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/adss_group_k/suppliers/PresentationLayer/PresentationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/adss_group_k/suppliers/PresentationLayer/PresentationController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +157,8 @@
       <workItem from="1650790866917" duration="9169000" />
       <workItem from="1650805401022" duration="2021000" />
       <workItem from="1652023238093" duration="881000" />
-      <workItem from="1652205228395" duration="843000" />
+      <workItem from="1652205228395" duration="1015000" />
+      <workItem from="1652351391690" duration="1858000" />
     </task>
     <task id="LOCAL-00001" summary="products first push">
       <created>1650790019382</created>
@@ -251,20 +250,6 @@
     <MESSAGE value="&quot;add toString to the Report&quot;" />
     <MESSAGE value="add updateSupp method" />
     <option name="LAST_COMMIT_MESSAGE" value="add updateSupp method" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="-39" y="40" key="MergeDialog" timestamp="1652017271563">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="-39" y="40" key="MergeDialog/0.0.1536.824@0.0.1536.824" timestamp="1652017271563" />
-    <state x="407" y="174" key="MultipleFileMergeDialog" timestamp="1652017285507">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="407" y="174" key="MultipleFileMergeDialog/0.0.1536.824@0.0.1536.824" timestamp="1652017285507" />
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1652017243668">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1652017243668" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
