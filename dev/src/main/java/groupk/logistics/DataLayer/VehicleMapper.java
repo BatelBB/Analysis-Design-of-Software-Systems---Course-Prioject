@@ -37,7 +37,6 @@ public class VehicleMapper extends myDataBase {
         catch (Exception e){
             throw new Exception(e.getMessage());
         }
-
         return n == 1;
     }
 
