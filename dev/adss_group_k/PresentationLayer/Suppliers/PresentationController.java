@@ -18,7 +18,7 @@ public class PresentationController {
     private static SupplierService service = new SupplierService();
 
     static Scanner scanner = new Scanner(System.in);
-    
+
     public static void startSupplierMenu() {
             while (true) {
                 int userInput = input.nextInt(Menu.getMainMenu());

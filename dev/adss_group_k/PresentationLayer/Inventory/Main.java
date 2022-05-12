@@ -1,12 +1,14 @@
 package adss_group_k.PresentationLayer.Inventory;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
+import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Service service = new Service();
+        SupplierService supplierService=new SupplierService();
+        Service service = new Service(supplierService);
         Scanner scan = new Scanner(System.in);
         String input = "";
         PresentationModel pm = new PresentationModel(service);

@@ -1,6 +1,7 @@
 package adss_group_k.BusinessLayer.Suppliers.Service;
 
 import adss_group_k.BusinessLayer.Inventory.Product;
+import adss_group_k.BusinessLayer.Inventory.Service.Response;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.Controller.ItemController;
 import adss_group_k.BusinessLayer.Suppliers.Controller.OrderController;
@@ -212,6 +213,22 @@ public class SupplierService {
     }
 
     public Supplier findCheapestSupplierFor(Product product, int amount) {
+        throw new NotImplementedException();
+    }
+
+    public Response createDeficienciesOrder(Map<String, Integer> proAmount) {
+        throw new NotImplementedException();
+    }
+
+    public Response RemoveProduct(int orderId, String proName) {
+        throw new NotImplementedException();
+    }
+
+    public Response AddProduct(int orderId, String proName, int proAmount, int minAmount) {
+        throw new NotImplementedException();
+    }
+
+    public Response createPeriodicOrder() {
         throw new NotImplementedException();
     }
 

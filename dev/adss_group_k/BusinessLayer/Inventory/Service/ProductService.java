@@ -187,4 +187,13 @@ public class ProductService {
     public void restart() {
         product_controller.restart();
     }
+
+    public ResponseT<Integer> getMinAmount(String proName) {
+        try {
+            return ResponseT.fromValue(product_controller.getMinAmount(proName));
+        } catch (Exception e) {
+            return ResponseT.fromError(e.getMessage());
+        }
+    }
+
 }
