@@ -88,7 +88,8 @@ public class SupplierService {
     }
 
     
-    public ServiceResponseWithData<Order> createOrder(Supplier supplier, LocalDate ordered, LocalDate delivered, Order.OrderType type) {
+    public ServiceResponseWithData<Order> createOrder(Supplier supplier, LocalDate ordered, LocalDate delivered,
+                                                      Order.OrderType type) {
         if(!items.supplierHasAnyItems(supplier)) {
             return ServiceResponseWithData.error("This supplier doesn't have any items currently");
         }
