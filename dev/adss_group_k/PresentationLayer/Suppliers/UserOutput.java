@@ -7,13 +7,13 @@ public class UserOutput {
 
     }
 
-    static UserOutput getInstance() {
+    public static UserOutput getInstance() {
         if (instance == null)
             instance = new UserOutput();
         return instance;
     }
 
-    void println(String arg) {
+    public void println(String arg) {
         System.out.println(arg);
     }
 

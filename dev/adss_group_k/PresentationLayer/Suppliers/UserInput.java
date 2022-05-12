@@ -15,13 +15,13 @@ public class UserInput {
 
     }
 
-    static UserInput getInstance() {
+    public static UserInput getInstance() {
         if (instance == null)
             instance = new UserInput();
         return instance;
     }
 
-    int nextInt(String message) {
+    public int nextInt(String message) {
         //goes in a loop to get int and prints the message we provided each time
         boolean retry = true;
         int nextInt = 0;
@@ -40,7 +40,7 @@ public class UserInput {
     }
 
 
-    boolean nextBoolean(String message) {
+    public boolean nextBoolean(String message) {
         //goes in a loop to get boolean and prints the message we provided each time
         boolean retry = true;
         boolean nextBool = false;
