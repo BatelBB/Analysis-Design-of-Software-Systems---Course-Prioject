@@ -13,6 +13,8 @@ public class DriverController extends UserController{
     private TruckingMapper truckingMapper;
     private Truckings_SourcesMapper sourcesMapper;
     private Truckings_DestsMapper truckings_destsMapper;
+    private VehicleMapper vehicleMapper;
+
 
     public static DriverController getInstance() throws Exception {
         if (singletonDriverControllerInstance == null)
@@ -26,6 +28,7 @@ public class DriverController extends UserController{
         truckingMapper = new TruckingMapper();
         sourcesMapper = new Truckings_SourcesMapper();
         truckings_destsMapper = new Truckings_DestsMapper();
+        vehicleMapper = new VehicleMapper();
     }
 
     public List<String> getMyLicenses() throws Exception {
@@ -84,8 +87,16 @@ public class DriverController extends UserController{
     }
 
     public boolean setWeightForTrucking(int truckingId, int weight) throws Exception {
+        String registrationPlate = truckingMapper.getLicencePlate(truckingId);
+        Vehicle vehicle = vehicleMapper.getVehicle(registrationPlate);
+        checkWeight(vehicle,weight);
         checkIfActiveUserIsDriver();
         return truckingMapper.setWeightForTrucking(truckingId,weight);
+    }
+
+    private void checkWeight(Vehicle vehicle,int weight) throws Exception {
+        if(weight<=0) throw new Exception("Negative weight ? are you drunk?");
+        if(vehicle.getMaxWeight()-weight<vehicle.getWeight()) throw new Exception("To heavy boss");
     }
 
     private void checkIfActiveUserIsDriver() throws Exception {

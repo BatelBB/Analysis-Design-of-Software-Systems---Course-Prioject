@@ -343,4 +343,20 @@ public class TruckingMapper extends myDataBase {
         return toReturn;
     }
 
+    public String getLicencePlate(int truckingId) throws Exception {
+        String regisrationPlate = "";
+        String query = "SELECT * Truckings WHERE TID='"+truckingId+"'";
+        int n = 0;
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(query)){
+            if (rs.next()) {
+                regisrationPlate = rs.getString(3);
+            }
+        }
+        catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        return regisrationPlate;
+    }
 }
