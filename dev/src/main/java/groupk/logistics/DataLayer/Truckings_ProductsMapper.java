@@ -46,7 +46,7 @@ public class Truckings_ProductsMapper extends  myDataBase {
 
     public List<ProductForTrucking> getProducts(int truckingID) throws Exception {
         List <ProductForTrucking> productForTruckings = new LinkedList<>();
-        String query = "SELECT * FROM Truckings_Products";
+        String query = "SELECT * FROM Truckings_Products WHERE TID = '" + truckingID + "'" ;
         try (Connection conn = DriverManager.getConnection(finalCurl);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
@@ -57,7 +57,7 @@ public class Truckings_ProductsMapper extends  myDataBase {
             System.out.println(e.getMessage());
         }
 
-        return null;
+        return productForTruckings;
     }
 
     private Products product(String pruductName) throws Exception {
@@ -73,34 +73,42 @@ public class Truckings_ProductsMapper extends  myDataBase {
     }
 
     public boolean removeProductsByTruckingId(int TruckingID,String productSKU) throws Exception {
-        String Query = "DELETE FROM Truckings_Products WHERE TID = '" + TruckingID + "'" + " AND product = '" + productSKU + "'" ;
+        String Query = "DELETE FROM Truckings_Products WHERE TID = '" + TruckingID + "'" + " and product = '" + productSKU + "'" ;
         int n = 0;
         try (Connection conn = DriverManager.getConnection(finalCurl);
-             PreparedStatement pstmt = conn.prepareStatement(Query)) {
-            n = pstmt.executeUpdate();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(Query)) {
+            if (rs.next()) {
+                return true;
+            }
+
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
-        return n > 0;
+        return false;
 
     }
 
     public boolean existProduct(int TruckingID,String productSKU) throws Exception {
-        String Query = "SELECT * FROM Truckings_Products WHERE TID = '" + TruckingID + "'" + " AND product = '" + productSKU + "'" ;
+        String Query = "SELECT * FROM Truckings_Products WHERE TID = '" + TruckingID + "'" + " and product = '" + productSKU + "'" ;
         int n = 0;
         try (Connection conn = DriverManager.getConnection(finalCurl);
-             PreparedStatement pstmt = conn.prepareStatement(Query)) {
-            n = pstmt.executeUpdate();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(Query)) {
+            if (rs.next()) {
+                return true;
+            }
 
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
-        return n > 0;
+        return false;
 
     }
 
     public void increaseQuantity(int TruckingID,String productSKU,int quantity) throws Exception {
-        String Query = "UPDATE Truckings_Products SET quantity = '" + getQuantity(TruckingID,productSKU)+quantity + "'" + " WHERE product = '"+productSKU + "'";
+        int addedQuantity = Integer.parseInt(getQuantity(TruckingID,productSKU)) + quantity;
+        String Query = "UPDATE Truckings_Products SET quantity = '" + addedQuantity + "'" + " WHERE TID = '" + TruckingID + "'" + " AND product = '" + productSKU + "'";
         int n = 0;
         try (Connection conn = DriverManager.getConnection(finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(Query)) {
@@ -112,7 +120,7 @@ public class Truckings_ProductsMapper extends  myDataBase {
 
     }
 
-    private int getQuantity(int truckingID, String productSKU) throws Exception {
+    public String getQuantity(int truckingID, String productSKU) throws Exception {
         String Query = "SELECT * FROM Truckings_Products WHERE TID = '" + truckingID + "'" + " AND product = '" + productSKU + "'" ;
         int n = 0;
         try (Connection conn = DriverManager.getConnection(finalCurl))
@@ -120,13 +128,13 @@ public class Truckings_ProductsMapper extends  myDataBase {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(Query);
             while (rs.next()) {
-                return rs.getInt(3);
+                return rs.getString(3);
             }
 
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
-        return n;
+        return "no product like this";
     }
 
 

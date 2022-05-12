@@ -242,6 +242,7 @@ public class TruckManagerController extends UserController{
     }
 
     public void addProductToTrucking(int truckingId, String pruductName,int quantity) throws Exception {
+        if(quantity<1) throw new Exception("Quantity is positive");
         if(!(pruductName.equals("eggs") | pruductName.equals("water") | pruductName.equals("milk")))
             throw new Exception("Illegal product");
         if(productsMapper.existProduct(truckingId,pruductName))
@@ -265,10 +266,24 @@ public class TruckManagerController extends UserController{
         //TODO
     }
 
-    public void moveProductsToTrucking(int truckingId, String pruductName) throws Exception {
+    public void moveProductsToTrucking(int truckingId, String pruductName, int quantity) throws Exception {
+        if(!productsMapper.existProduct(truckingId,pruductName)) throw new Exception("This product is not in the trucking");
         if(!(pruductName.equals("eggs") | pruductName.equals("water") | pruductName.equals("milk"))) throw new Exception("Illegal product");
-        if(productsMapper.getProducts(truckingId).size()>1) productsMapper.removeProductsByTruckingId(truckingId,pruductName);
-        else throw new Exception("The only product in the trucking cant be deleted");
+        if(productsMapper.getProducts(truckingId).size()>1)
+        {
+            if(Integer.parseInt(productsMapper.getQuantity(truckingId,pruductName))==quantity)
+            productsMapper.removeProductsByTruckingId(truckingId,pruductName);
+            if(Integer.parseInt(productsMapper.getQuantity(truckingId,pruductName))>quantity)
+                productsMapper.increaseQuantity(truckingId,pruductName,(-1)*quantity);
+            else throw new Exception("You dont have this quantity of this item in the order");
+        }
+
+        else
+        {
+            if(Integer.parseInt(productsMapper.getQuantity(truckingId,pruductName))>quantity)
+                productsMapper.increaseQuantity(truckingId,pruductName,(-1)*quantity);
+            else throw new Exception("Your trucking will be emptyy, Sorry man its not gonna work");
+        }
     }
 
     public void updateVehicleOnTrucking(int truckingId, String registrationPlateOfVehicle) throws Exception {
@@ -323,7 +338,7 @@ public class TruckManagerController extends UserController{
         toReturn += "Driver: " + trucking.getDriverUsername() + "\n";
         toReturn += printSources(trucking.getId());
         toReturn += printDestinations(trucking.getId());
-        toReturn += printProducts(trucking.getId());
+        toReturn += printProducts(trucking.getId()) + "\n";
         if (trucking.getWeight() > 0)
             toReturn += "Total weight: " + trucking.getWeight() + "\n";
         else
@@ -356,8 +371,8 @@ public class TruckManagerController extends UserController{
         return toReturn;
     }
 
-    private String printProducts(int TruckingID) {
-        return ""; //TODO: need to implement function that get products by truckingID
+    private String printProducts(int TruckingID) throws Exception {
+        return "\nProduct DETAILS:\n"  + printProductsList(productsMapper.getProducts(TruckingID));
     }
 
     private String printSitesList(List<Site> sourcesOrDestinations) {
@@ -365,6 +380,16 @@ public class TruckManagerController extends UserController{
         int siteCounter = 1;
         for (Site site : sourcesOrDestinations) {
             toReturn += siteCounter + ". " + site.printSite();
+            siteCounter++;
+        }
+        return toReturn;
+    }
+
+    private String printProductsList(List<ProductForTrucking> productForTruckings) {
+        String toReturn  = "";
+        int siteCounter = 1;
+        for (ProductForTrucking productForTrucking : productForTruckings) {
+            toReturn += siteCounter + ". " + productForTrucking.printProductForTrucking() + "\n";
             siteCounter++;
         }
         return toReturn;

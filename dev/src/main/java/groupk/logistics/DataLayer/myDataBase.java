@@ -9,7 +9,7 @@ import java.util.List;
 
 abstract class myDataBase<T> {
     static Connection con;
-    protected static String JDBCurl="jdbc:sqlite:";
+    protected static String JDBCurl = "jdbc:sqlite:";
     protected static String path = (new File("").getAbsolutePath()).concat("\\superLee2.db");
     protected static String finalCurl = JDBCurl.concat(path);
 
@@ -90,9 +90,10 @@ abstract class myDataBase<T> {
                 "\t);\n" +
                 "\n";
         String Truckings_Products = "CREATE TABLE IF NOT EXISTS " + "Truckings_Products" + " (\n" +
-                "\tTID INTEGER PRIMARY KEY,\n" +
+                "\tTID INTEGER  NOT NULL,\n" +
                 "\tproduct TEXT NOT NULL,\n" +
                 "\tquantity INTEGER  NOT NULL,\n" +
+                "\tPRIMARY KEY (TID,product),\n" +
                 "FOREIGN KEY(TID) REFERENCES Truckings(TID)\n" +
                 "\t);\n" +
                 "\n";
@@ -103,12 +104,12 @@ abstract class myDataBase<T> {
                 "\trole TEXT NOT NULL\n" +
                 "\t);\n" +
                 "\n";
-    //    boolean added = truckingMapper.addTrucking(truckingIdCounter,getActiveUser().getUsername(),registrationPlateOfVehicle,driverUsername,date,hours,minutes);
+        //    boolean added = truckingMapper.addTrucking(truckingIdCounter,getActiveUser().getUsername(),registrationPlateOfVehicle,driverUsername,date,hours,minutes);
 
 ////
 //
 //        try (Connection conn = DriverManager.getConnection(JDBCurl);
-        try(Statement s = DriverManager.getConnection(finalCurl).createStatement()) {
+        try (Statement s = DriverManager.getConnection(finalCurl).createStatement()) {
             s.addBatch(UsersTable);
             s.addBatch(vehiclesTable);
             s.addBatch(truckManagersTable);
@@ -120,8 +121,7 @@ abstract class myDataBase<T> {
             s.addBatch(Truckings_Sources);
             s.executeBatch();
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new Exception("There was a problem to connect the database: " + e.getMessage());
         }
     }
@@ -129,7 +129,9 @@ abstract class myDataBase<T> {
 
     public static Connection getConnection() throws Exception {
         finalCurl = JDBCurl.concat(path);
-        if (con!= null) {return con;}
+        if (con != null) {
+            return con;
+        }
         try {
             con = DriverManager.getConnection(finalCurl);
         } catch (SQLException e) {
@@ -141,10 +143,10 @@ abstract class myDataBase<T> {
 
     public List<T> selectAll() throws Exception {
         String query = "SELECT * FROM " + tableName;
-        List<T> DTOList=new ArrayList<T>();
+        List<T> DTOList = new ArrayList<T>();
         try (Connection conn = DriverManager.getConnection(finalCurl);
-             Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(query)){
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 DTOList.add(ConvertResultSetToDTO(rs));
             }
@@ -155,5 +157,4 @@ abstract class myDataBase<T> {
     }
 
     abstract T ConvertResultSetToDTO(ResultSet rs) throws SQLException;
-
 }

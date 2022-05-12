@@ -48,8 +48,8 @@ public class Trucking {
         {
             Map<String,Integer> prod = map.get(0);
             if(prod.containsKey("eggs")) productForTruckings.add(new ProductForTrucking(Products.Eggs_4902505139314,prod.get("eggs")));
-            if(prod.containsKey("milk")) productForTruckings.add(new ProductForTrucking(Products.Eggs_4902505139314,prod.get("milk")));
-            if(prod.containsKey("water")) productForTruckings.add(new ProductForTrucking(Products.Eggs_4902505139314,prod.get("water")));
+            if(prod.containsKey("milk")) productForTruckings.add(new ProductForTrucking(Products.Milk_7290111607400,prod.get("milk")));
+            if(prod.containsKey("water")) productForTruckings.add(new ProductForTrucking(Products.Water_7290019056966,prod.get("water")));
 
         }
         return productForTruckings;

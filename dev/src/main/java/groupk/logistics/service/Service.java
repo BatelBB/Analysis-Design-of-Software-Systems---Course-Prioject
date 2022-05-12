@@ -97,8 +97,8 @@ public class Service {
         return truckManagerService.updateDestinationsOnTrucking(truckingId, destinations);
     }
 
-    public Response moveProductsToTrucking(int truckingId, String productSKU) {
-        return truckManagerService.moveProductsToTrucking(truckingId, productSKU);
+    public Response moveProductsToTrucking(int truckingId, String productSKU, int quantity) {
+        return truckManagerService.moveProductsToTrucking(truckingId, productSKU, quantity);
     }
 
     public Response updateVehicleOnTrucking(int truckingId, String registrationPlateOfVehicle) {

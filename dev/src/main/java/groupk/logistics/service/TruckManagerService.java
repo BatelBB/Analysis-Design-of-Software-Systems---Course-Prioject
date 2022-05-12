@@ -172,9 +172,9 @@ public class TruckManagerService {
             return new Response(e.getMessage());
         }}
 
-    public  Response  moveProductsToTrucking(int truckingId, String productSKU) {
+    public  Response  moveProductsToTrucking(int truckingId, String productSKU, int quantity) {
         try {
-            truckManagerController.moveProductsToTrucking(truckingId,productSKU);
+            truckManagerController.moveProductsToTrucking(truckingId,productSKU, quantity);
             return new Response(true);
         } catch (Exception e) {
             return new Response(e.getMessage());

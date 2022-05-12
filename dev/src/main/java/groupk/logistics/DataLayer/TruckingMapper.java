@@ -1,6 +1,7 @@
 package groupk.logistics.DataLayer;
 
 import groupk.logistics.business.DLicense;
+import groupk.logistics.business.ProductForTrucking;
 import groupk.logistics.business.Trucking;
 
 import java.sql.*;
@@ -345,7 +346,7 @@ public class TruckingMapper extends myDataBase {
 
     public String getLicencePlate(int truckingId) throws Exception {
         String regisrationPlate = "";
-        String query = "SELECT * Truckings WHERE TID='"+truckingId+"'";
+        String query = "SELECT * FROM Truckings WHERE TID='"+truckingId+"'";
         int n = 0;
         try (Connection conn = DriverManager.getConnection(finalCurl);
              Statement stmt  = conn.createStatement();
@@ -359,4 +360,7 @@ public class TruckingMapper extends myDataBase {
         }
         return regisrationPlate;
     }
+
+
+
 }

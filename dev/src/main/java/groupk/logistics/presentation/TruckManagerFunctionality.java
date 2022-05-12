@@ -357,7 +357,9 @@ public class TruckManagerFunctionality extends UserFunctionality {
         System.out.println("2. milk");
         System.out.println("3. water");
         String productName = Main.getChoiceFromArray(new String[]{"eggs", "milk", "water"});
-        Response<String> response = service.moveProductsToTrucking(id, productName);
+        System.out.println("Enter the quantity you want to remove");
+        int quantity = Main.getNumber();
+        Response<String> response = service.moveProductsToTrucking(id, productName,quantity);
         if (response.ErrorOccured())
             System.out.println(response.getErrorMessage());
         else
