@@ -83,7 +83,7 @@ public class Truckings_ProductsMapper extends  myDataBase {
             }
 
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new Exception("Deleted products successfully");
         }
         return false;
 
