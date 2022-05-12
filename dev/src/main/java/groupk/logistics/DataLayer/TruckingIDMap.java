@@ -7,10 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class TruckingIDMap {
 
-    public Map<Integer, User> truckingsMap;
+    public Map<Integer, TruckingDTO> truckingsMap;
     private static TruckingIDMap singletonTruckingIDMapInstance = null;
     private TruckingIDMap() {
-        truckingsMap = new ConcurrentHashMap<Integer, User>();
+        truckingsMap = new ConcurrentHashMap<Integer, TruckingDTO>();
     }
 
 

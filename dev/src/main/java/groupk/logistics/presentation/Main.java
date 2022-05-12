@@ -16,12 +16,22 @@ public class Main {
             System.out.println("Enter 3 to Close the system");
             String answer = myObj.nextLine();
             if (answer.equals("1")) {
-                RegisterWindow registerWindow = new RegisterWindow();
-                registerWindow.register();
+                try {
+                    RegisterWindow registerWindow = new RegisterWindow();
+                    registerWindow.register();
+                }
+                catch (Exception e) {
+                    System.out.println("Error: " + e.getMessage());
+                }
             }
             else if (answer.equals("2")) {
-                LoginWindow loginWindow = new LoginWindow();
-                loginWindow.login();
+                try {
+                    LoginWindow loginWindow = new LoginWindow();
+                    loginWindow.login();
+                }
+                catch (Exception e) {
+                    System.out.println("Error: " + e.getMessage());
+                }
             }
             else if (answer.equals("3"))
                 wantToLeaveTheSystem = true;

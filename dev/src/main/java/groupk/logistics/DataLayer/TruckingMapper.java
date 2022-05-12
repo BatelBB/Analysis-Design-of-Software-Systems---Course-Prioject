@@ -14,10 +14,12 @@ public class TruckingMapper extends myDataBase {
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private DriverLicencesMapper driverLicensesMapper;
     private VehicleMapper vehicleMapper;
+    private TruckingIDMap truckingIDMap;
     public TruckingMapper() throws Exception {
         super("Truckings");
         driverLicensesMapper = new DriverLicencesMapper();
         vehicleMapper = new VehicleMapper();
+        truckingIDMap = TruckingIDMap.getInstance();
     }
 
     public boolean addTrucking(TruckingDTO trucking) throws Exception {
@@ -48,7 +50,8 @@ public class TruckingMapper extends myDataBase {
         catch (SQLException e){
             throw new Exception("Oops, something got wrong and we couldn't add your trucking :( \nbecause: " + e.getMessage());
         }
-
+        if (n == 1)
+            truckingIDMap.truckingsMap.put(trucking.getId(), trucking);
         return n == 1;
     }
 
@@ -61,15 +64,8 @@ public class TruckingMapper extends myDataBase {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+        truckingIDMap.truckingsMap.remove(truckingID);
         return n > 0;
-    }
-
-    public boolean checkAvailibility(String registrationPlate1, String registrationPlate2,String driverUserName1,String driverUserName2) {
-        if (registrationPlate1 == registrationPlate2)
-            throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same vehicle");
-        if (driverUserName1 == driverUserName2)
-            throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same driver");
-        return true;
     }
 
     @Override
@@ -86,6 +82,8 @@ public class TruckingMapper extends myDataBase {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+        if (n > 0)
+            truckingIDMap.truckingsMap.get(truckingId).setWeight(weight);
         return n > 0;
     }
 
@@ -98,6 +96,8 @@ public class TruckingMapper extends myDataBase {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+        if (n > 0)
+            truckingIDMap.truckingsMap.get(truckingId).updateVehicle(vehicleRegistrationPlate);
         return n > 0;
     }
 
@@ -110,10 +110,28 @@ public class TruckingMapper extends myDataBase {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+        if (n > 0)
+            truckingIDMap.truckingsMap.get(truckingId).updateDriverUsername(driverUsername);
+        return n > 0;
+    }
+
+    public boolean updateDate(int truckingID, LocalDateTime date) throws Exception {
+        String sql = "UPDATE Truckings SET date = '" + date.format(dateFormat).replace(' ',' ') + "' WHERE TID = '" + truckingID + "'";
+        int n = 0;
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            n = pstmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        if (n > 0)
+            truckingIDMap.truckingsMap.get(truckingID).updateDate(date.plusHours(0));
         return n > 0;
     }
 
     public String getRegistrationPlateOfTrucking(int TruckingId) throws Exception {
+        if (truckingIDMap.truckingsMap.containsKey(truckingIDMap))
+            return truckingIDMap.truckingsMap.get(truckingIDMap).getVehicleRegistrationPlate();
         String toReturn = "";
         String query = "SELECT registration_plate FROM Truckings " +
                 "WHERE TID = '" + TruckingId + "'";
@@ -132,6 +150,8 @@ public class TruckingMapper extends myDataBase {
     }
 
     public String getDriverUsernameOfTrucking(int TruckingId) throws Exception {
+        if (truckingIDMap.truckingsMap.containsKey(truckingIDMap))
+            return truckingIDMap.truckingsMap.get(truckingIDMap).getDriverUsername();
         String toReturn = "";
         String query = "SELECT driver_username FROM Truckings " +
                 "WHERE TID = '" + TruckingId + "'";
@@ -145,6 +165,26 @@ public class TruckingMapper extends myDataBase {
                 throw new Exception("There is no trucking with id: " + TruckingId);
         } catch (SQLException e) {
             throw new Exception("Oops something got wrong: \n" + e.getMessage());
+        }
+        return toReturn;
+    }
+
+    public TruckingDTO getTruckingByID(int truckingID) throws Exception{
+        if (truckingIDMap.truckingsMap.containsKey(truckingID))
+            return truckingIDMap.truckingsMap.get(truckingID);
+        TruckingDTO toReturn;
+        String query = "SELECT * FROM Truckings " +
+                "WHERE TID = '" + truckingID + "'";
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(query)){
+            if (rs.next()) {
+                toReturn = new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getString(2), rs.getString(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8));
+            }
+            else
+                throw new Exception("There is no trucking with that id");
+        } catch (SQLException e) {
+            throw new Exception("Oops something in verification process got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -273,6 +313,29 @@ public class TruckingMapper extends myDataBase {
              ResultSet rs    = stmt.executeQuery(query)){
             while (rs.next()) {
                 toReturn.add(new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getString(2), rs.getString(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8)));
+            }
+        } catch (SQLException e) {
+            throw new Exception("Oops something got wrong: \n" + e.getMessage());
+        }
+        return toReturn;
+    }
+
+    private boolean checkAvailibility(String registrationPlate1, String registrationPlate2,String driverUserName1,String driverUserName2) {
+        if (registrationPlate1 == registrationPlate2)
+            throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same vehicle");
+        if (driverUserName1 == driverUserName2)
+            throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same driver");
+        return true;
+    }
+
+    public int getNextIdForTrucking() throws Exception {
+        int toReturn = 1;
+        String query = "SELECT TID FROM Truckings ORDER BY TID DESC";
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(query)){
+            if (rs.next()) {
+                toReturn += rs.getInt(1);
             }
         } catch (SQLException e) {
             throw new Exception("Oops something got wrong: \n" + e.getMessage());

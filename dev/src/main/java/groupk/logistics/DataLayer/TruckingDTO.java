@@ -82,4 +82,12 @@ public class TruckingDTO {
     public int getWeight() {
         return weight;
     }
+
+    public void setWeight(int newWeight) {this.weight = newWeight; }
+
+    public void updateVehicle(String vehicleRegistrationPlate) {this.vehicleRegistrationPlate = vehicleRegistrationPlate;}
+
+    public void updateDriverUsername(String driverUsername) { this.driverUsername = driverUsername;}
+
+    public void updateDate(LocalDateTime date) { this.date = date;}
 }

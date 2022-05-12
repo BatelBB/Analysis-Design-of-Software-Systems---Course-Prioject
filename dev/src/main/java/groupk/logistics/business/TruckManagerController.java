@@ -28,9 +28,9 @@ public class TruckManagerController extends UserController{
 
     private TruckManagerController() throws Exception {
         super(null);
-        truckingIdCounter = 1;
-        vehicleMapper = new VehicleMapper();
         truckingMapper = new TruckingMapper();
+        truckingIdCounter = truckingMapper.getNextIdForTrucking();
+        vehicleMapper = new VehicleMapper();
         userMapper = new UserMapper();
         truckings_destsMapper = new Truckings_DestsMapper();
         sourcesMapper= new Truckings_SourcesMapper();
@@ -43,16 +43,20 @@ public class TruckManagerController extends UserController{
     }
 
     public void addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight) throws Exception {
-            Vehicle newVehicle = new Vehicle(lisence, registrationPlate, model, weight, maxWeight);
-            boolean success = vehicleMapper.addVehicle(lisence, registrationPlate, model, weight, maxWeight);
-            if(success)vehicleMapper.addVehicle(newVehicle);
+        checkIfActiveUserIsTruckManager();
+        Vehicle newVehicle = new Vehicle(lisence, registrationPlate, model, weight, maxWeight);
+        boolean success = vehicleMapper.addVehicle(lisence, registrationPlate, model, weight, maxWeight);
+        if(success)
+            vehicleMapper.addVehicle(newVehicle);
     }
 
     public List<String> getDriversUsernames() throws Exception {
+        checkIfActiveUserIsTruckManager();
         return null; //TODO
     }
 
     public List<String> getVehiclesRegistrationPlates() throws Exception {
+        checkIfActiveUserIsTruckManager();
         return vehicleMapper.selectAll();
     }
 
@@ -76,6 +80,7 @@ public class TruckManagerController extends UserController{
     }
 
     private List<Site> checkSites(List<List<String>> Sites) throws Exception {
+        checkIfActiveUserIsTruckManager();
         List<Site> sites = new LinkedList<>();
         for(List<String> site : Sites)
             sites.add(new Site(site.get(0),site.get(1),site.get(2),site.get(3),Integer.parseInt(site.get(4)),Integer.parseInt(site.get(5)),Integer.parseInt(site.get(6)),site.get(7)));
@@ -84,6 +89,7 @@ public class TruckManagerController extends UserController{
 
 
     public void removeTrucking(int truckingId) throws Exception {
+        checkIfActiveUserIsTruckManager();
         sourcesMapper.removeTrucking(truckingId);
         truckings_destsMapper.removeTrucking(truckingId);
         productsMapper.removeTrucking(truckingId);
@@ -92,6 +98,7 @@ public class TruckManagerController extends UserController{
     }
 
     public String printBoard() throws Exception {
+        checkIfActiveUserIsTruckManager();
         String toReturn = "TRUCKINGS BOARD\n\n";
         List<TruckingDTO> truckings = truckingMapper.getTruckManagerBoard(getActiveUser().getUsername());
         if (truckings.size() == 0 | truckings == null) {
@@ -104,6 +111,7 @@ public class TruckManagerController extends UserController{
     }
 
     public String printTruckingsHistory() throws Exception {
+        checkIfActiveUserIsTruckManager();
         String toReturn = "            TRUCKINGS HISTORY\n\n";
         List<TruckingDTO> truckings = truckingMapper.getTruckManagerHistoryTruckings(getActiveUser().getUsername());
         if (truckings.size() == 0 | truckings == null) {
@@ -116,6 +124,7 @@ public class TruckManagerController extends UserController{
     }
 
     public String printFutureTruckings() throws Exception {
+        checkIfActiveUserIsTruckManager();
         String toReturn = "            FUTURE TRUCKINGS\n\n";
         List<TruckingDTO> truckings = truckingMapper.getTruckManagerFutureTruckings(getActiveUser().getUsername());
         if (truckings.size() == 0 | truckings == null) {
@@ -128,6 +137,7 @@ public class TruckManagerController extends UserController{
     }
 
     public String printBoardOfDriver(String driverUsername) throws Exception {
+        checkIfActiveUserIsTruckManager();
         String toReturn = "TRUCKINGS BOARD\n\n";
         List<TruckingDTO> truckings = truckingMapper.getDriverBoard(driverUsername);
         if (truckings.size() == 0 | truckings == null) {
@@ -140,6 +150,7 @@ public class TruckManagerController extends UserController{
     }
 
     public String printTruckingsHistoryOfDriver(String driverUsername) throws Exception {
+        checkIfActiveUserIsTruckManager();
         String toReturn = "            TRUCKINGS HISTORY\n\n";
         List<TruckingDTO> truckings = truckingMapper.getDriverHistoryTruckings(driverUsername);
         if (truckings.size() == 0 | truckings == null) {
@@ -152,6 +163,7 @@ public class TruckManagerController extends UserController{
     }
 
     public String printFutureTruckingsOfDriver(String driverUsername) throws Exception {
+        checkIfActiveUserIsTruckManager();
         String toReturn = "            FUTURE TRUCKINGS\n\n";
         List<TruckingDTO> truckings = truckingMapper.getDriverFutureTruckings(driverUsername);
         if (truckings.size() == 0 | truckings == null) {
@@ -164,6 +176,7 @@ public class TruckManagerController extends UserController{
     }
 
     public String printBoardOfVehicle(String registrationPlate) throws Exception {
+        checkIfActiveUserIsTruckManager();
         String toReturn = "TRUCKINGS BOARD\n\n";
         List<TruckingDTO> truckings = truckingMapper.getVehicleBoard(registrationPlate);
         if (truckings.size() == 0 | truckings == null) {
@@ -176,6 +189,7 @@ public class TruckManagerController extends UserController{
     }
 
     public String printTruckingsHistoryOfVehicle(String registrationPlate) throws Exception {
+        checkIfActiveUserIsTruckManager();
         String toReturn = "            TRUCKINGS HISTORY\n\n";
         List<TruckingDTO> truckings = truckingMapper.getVehicleHistoryTruckings(registrationPlate);
         if (truckings.size() == 0 | truckings == null) {
@@ -188,6 +202,7 @@ public class TruckManagerController extends UserController{
     }
 
     public String printFutureTruckingsOfVehicle(String registrationPlate) throws Exception {
+        checkIfActiveUserIsTruckManager();
         String toReturn = "            FUTURE TRUCKINGS\n\n";
         List<TruckingDTO> truckings = truckingMapper.getVehicleFutureTruckings(registrationPlate);
         if (truckings.size() == 0 | truckings == null) {
@@ -200,6 +215,7 @@ public class TruckManagerController extends UserController{
     }
 
     public List<String> addSourcesToTrucking(int truckingId, List<List<String>> sources) throws Exception {
+        checkIfActiveUserIsTruckManager();
         List<Site> sources_ = checkSites(sources);
         List<String> exceptions = sourcesMapper.addTruckingSources(truckingId, sources_);
         if(exceptions.size() == sources_.size())
@@ -208,6 +224,7 @@ public class TruckManagerController extends UserController{
     }
 
     public List<String> addDestinationToTrucking(int truckingId, List<List<String>> destinations) throws Exception {
+        checkIfActiveUserIsTruckManager();
         List<Site> destinations_ = checkSites(destinations);
         List<String> exceptions = truckings_destsMapper.addTruckingDestinations(truckingId, destinations_);
         if(exceptions.size() == destinations_.size())
@@ -216,40 +233,58 @@ public class TruckManagerController extends UserController{
     }
 
     public void addProductToTrucking(int truckingId, String pruductName,int quantity) throws Exception {
+        checkIfActiveUserIsTruckManager();
         //TODO
     }
 
     public void updateSourcesOnTrucking(int truckingId, List<List<String>> sources) throws Exception {
+        checkIfActiveUserIsTruckManager();
         //TODO
     }
 
     public void updateDestinationsOnTrucking(int truckingId, List<List<String>> destinations) throws Exception {
+        checkIfActiveUserIsTruckManager();
         //TODO
     }
 
     public void moveProductsToTrucking(int truckingId, String productSKU) throws Exception {
+        checkIfActiveUserIsTruckManager();
         //TODO
     }
 
     public void updateVehicleOnTrucking(int truckingId, String registrationPlateOfVehicle) throws Exception {
-        String driverUsername = truckingMapper.getDriverUsernameOfTrucking(truckingId);
-        if (!truckingMapper.checkDriverLicenseMatch(driverUsername, registrationPlateOfVehicle))
+        checkIfActiveUserIsTruckManager();
+        TruckingDTO trucking = truckingMapper.getTruckingByID(truckingId);
+        if (trucking == null)
+            throw new IllegalArgumentException("There is no trucking with id: " + truckingId);
+        if (!truckingMapper.checkDriverLicenseMatch(trucking.getDriverUsername(), registrationPlateOfVehicle))
             throw new IllegalArgumentException("Oops, the driver does not have a driver's license compatible with this vehicle");
+        truckingMapper.checkConflicts(trucking.getDriverUsername(), registrationPlateOfVehicle, trucking.getDate(), trucking.getHours(), trucking.getMinutes());
         if (!truckingMapper.updateVehicle(truckingId, registrationPlateOfVehicle))
             throw new IllegalArgumentException("No change of vehicle was made to order: " + truckingId + ". It maybe the same vehicle of before the change.");
     }
 
     public void updateDriverOnTrucking(int truckingId, String driverUsername) throws Exception {
-        String registrationPlateOfVehicle = truckingMapper.getRegistrationPlateOfTrucking(truckingId);
-        if (!truckingMapper.checkDriverLicenseMatch(driverUsername, registrationPlateOfVehicle))
+        checkIfActiveUserIsTruckManager();
+        TruckingDTO trucking = truckingMapper.getTruckingByID(truckingId);
+        if (trucking == null)
+            throw new IllegalArgumentException("There is no trucking with id: " + truckingId);
+        if (!truckingMapper.checkDriverLicenseMatch(driverUsername, trucking.getVehicleRegistrationPlate()))
             throw new IllegalArgumentException("Oops, the driver does not have a driver's license compatible with this vehicle");
-        if (!truckingMapper.updateVehicle(truckingId, registrationPlateOfVehicle))
+        truckingMapper.checkConflicts(driverUsername, trucking.getVehicleRegistrationPlate(), trucking.getDate(), trucking.getHours(), trucking.getMinutes());
+        if (!truckingMapper.updateDriver(truckingId, driverUsername))
             throw new IllegalArgumentException("No change of driver was made to order: " + truckingId + ". It maybe the same driver of before the change.");
     }
 
     public void updateDateOnTrucking(int truckingId, LocalDateTime date) throws Exception {
+        checkIfActiveUserIsTruckManager();
         checkDate(date);
-        //TODO: it's really complicated, maybe we need to delete that option?
+        TruckingDTO trucking = truckingMapper.getTruckingByID(truckingId);
+        if (trucking == null)
+            throw new IllegalArgumentException("There is no trucking with id: " + truckingId);
+        truckingMapper.checkConflicts(trucking.getDriverUsername(), trucking.getVehicleRegistrationPlate(), date, trucking.getHours(), trucking.getMinutes());
+        if (!truckingMapper.updateDate(truckingId, date))
+            throw new IllegalArgumentException("No change of date was made to order: " + truckingId + ". It maybe the same driver of before the change.");
     }
 
     private void checkIfActiveUserIsTruckManager() throws Exception {
@@ -296,13 +331,13 @@ public class TruckManagerController extends UserController{
         return toReturn;
     }
 
-    public synchronized String printDestinations(int TruckingID) throws Exception {
+    private String printDestinations(int TruckingID) throws Exception {
         String toReturn = "\nDESTINATION DETAILS:\n";
         toReturn += printSitesList(truckings_destsMapper.getDestinationsByTruckingId(TruckingID));
         return toReturn;
     }
 
-    public synchronized String printProducts(int TruckingID) {
+    private String printProducts(int TruckingID) {
         return ""; //TODO: need to implement function that get products by truckingID
     }
 
