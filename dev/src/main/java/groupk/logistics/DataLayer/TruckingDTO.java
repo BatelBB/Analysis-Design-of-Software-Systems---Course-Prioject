@@ -2,6 +2,7 @@ package groupk.logistics.DataLayer;
 
 import groupk.logistics.business.*;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +42,7 @@ public class TruckingDTO {
     private LocalDateTime convertDate(String date, int TruckingID) throws Exception{
         LocalDateTime toReturn;
         try {
+            date = date.substring(0,date.length()-3);
             toReturn = LocalDateTime.parse(date, TruckingMapper.dateFormat);
         }
         catch (Exception e) {

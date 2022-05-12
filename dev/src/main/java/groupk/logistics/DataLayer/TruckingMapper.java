@@ -30,6 +30,7 @@ public class TruckingMapper extends myDataBase {
                 PreparedStatement prepStat = conn.prepareStatement(query);
                 DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
                 String formattedDateTime = trucking.getDate().format(formatter);
+                formattedDateTime = formattedDateTime.replace("T"," ");
                 prepStat.setInt(1, trucking.getId());
                 prepStat.setString(2, trucking.getTruckManager());
                 prepStat.setString(3, trucking.getVehicleRegistrationPlate());
@@ -236,7 +237,8 @@ public class TruckingMapper extends myDataBase {
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             while (rs.next()) {
-                toReturn.add(new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getString(2), rs.getString(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8)));
+                TruckingDTO truckingDTO = new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getString(2), rs.getString(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8));
+                toReturn.add(truckingDTO);
             }
         } catch (SQLException e) {
             throw new Exception("Oops, something got wrong: \n" + e.getMessage());

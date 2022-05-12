@@ -94,6 +94,10 @@ public class TruckManagerController extends UserController{
     public String printBoard() throws Exception {
         String toReturn = "TRUCKINGS BOARD\n\n";
         List<TruckingDTO> truckings = truckingMapper.getTruckManagerBoard(getActiveUser().getUsername());
+        if (truckings.size() == 0 | truckings == null) {
+            toReturn += "[empty]";
+            return toReturn;
+        }
         for (TruckingDTO trucking : truckings)
             toReturn += printTrucking(trucking);
         return toReturn;
@@ -102,6 +106,10 @@ public class TruckManagerController extends UserController{
     public String printTruckingsHistory() throws Exception {
         String toReturn = "            TRUCKINGS HISTORY\n\n";
         List<TruckingDTO> truckings = truckingMapper.getTruckManagerHistoryTruckings(getActiveUser().getUsername());
+        if (truckings.size() == 0 | truckings == null) {
+            toReturn += "[empty]";
+            return toReturn;
+        }
         for (TruckingDTO trucking : truckings)
             toReturn += printTrucking(trucking);
         return toReturn;
@@ -110,6 +118,10 @@ public class TruckManagerController extends UserController{
     public String printFutureTruckings() throws Exception {
         String toReturn = "            FUTURE TRUCKINGS\n\n";
         List<TruckingDTO> truckings = truckingMapper.getTruckManagerFutureTruckings(getActiveUser().getUsername());
+        if (truckings.size() == 0 | truckings == null) {
+            toReturn += "[empty]";
+            return toReturn;
+        }
         for (TruckingDTO trucking : truckings)
             toReturn += printTrucking(trucking);
         return toReturn;
@@ -118,6 +130,10 @@ public class TruckManagerController extends UserController{
     public String printBoardOfDriver(String driverUsername) throws Exception {
         String toReturn = "TRUCKINGS BOARD\n\n";
         List<TruckingDTO> truckings = truckingMapper.getDriverBoard(driverUsername);
+        if (truckings.size() == 0 | truckings == null) {
+            toReturn += "[empty]";
+            return toReturn;
+        }
         for (TruckingDTO trucking : truckings)
             toReturn += printTrucking(trucking);
         return toReturn;
@@ -126,6 +142,10 @@ public class TruckManagerController extends UserController{
     public String printTruckingsHistoryOfDriver(String driverUsername) throws Exception {
         String toReturn = "            TRUCKINGS HISTORY\n\n";
         List<TruckingDTO> truckings = truckingMapper.getDriverHistoryTruckings(driverUsername);
+        if (truckings.size() == 0 | truckings == null) {
+            toReturn += "[empty]";
+            return toReturn;
+        }
         for (TruckingDTO trucking : truckings)
             toReturn += printTrucking(trucking);
         return toReturn;
@@ -134,6 +154,10 @@ public class TruckManagerController extends UserController{
     public String printFutureTruckingsOfDriver(String driverUsername) throws Exception {
         String toReturn = "            FUTURE TRUCKINGS\n\n";
         List<TruckingDTO> truckings = truckingMapper.getDriverFutureTruckings(driverUsername);
+        if (truckings.size() == 0 | truckings == null) {
+            toReturn += "[empty]";
+            return toReturn;
+        }
         for (TruckingDTO trucking : truckings)
             toReturn += printTrucking(trucking);
         return toReturn;
@@ -142,6 +166,10 @@ public class TruckManagerController extends UserController{
     public String printBoardOfVehicle(String registrationPlate) throws Exception {
         String toReturn = "TRUCKINGS BOARD\n\n";
         List<TruckingDTO> truckings = truckingMapper.getVehicleBoard(registrationPlate);
+        if (truckings.size() == 0 | truckings == null) {
+            toReturn += "[empty]";
+            return toReturn;
+        }
         for (TruckingDTO trucking : truckings)
             toReturn += printTrucking(trucking);
         return toReturn;
@@ -150,6 +178,10 @@ public class TruckManagerController extends UserController{
     public String printTruckingsHistoryOfVehicle(String registrationPlate) throws Exception {
         String toReturn = "            TRUCKINGS HISTORY\n\n";
         List<TruckingDTO> truckings = truckingMapper.getVehicleHistoryTruckings(registrationPlate);
+        if (truckings.size() == 0 | truckings == null) {
+            toReturn += "[empty]";
+            return toReturn;
+        }
         for (TruckingDTO trucking : truckings)
             toReturn += printTrucking(trucking);
         return toReturn;
@@ -158,6 +190,10 @@ public class TruckManagerController extends UserController{
     public String printFutureTruckingsOfVehicle(String registrationPlate) throws Exception {
         String toReturn = "            FUTURE TRUCKINGS\n\n";
         List<TruckingDTO> truckings = truckingMapper.getVehicleFutureTruckings(registrationPlate);
+        if (truckings.size() == 0 | truckings == null) {
+            toReturn += "[empty]";
+            return toReturn;
+        }
         for (TruckingDTO trucking : truckings)
             toReturn += printTrucking(trucking);
         return toReturn;
@@ -227,7 +263,8 @@ public class TruckManagerController extends UserController{
         String toReturn = "TRUCKING - " + trucking.getId() + "\n\n";
         toReturn += "TRUCKING DETAILS:\n";
         toReturn += "Date: " + trucking.getDate().getDayOfMonth() + "/" + trucking.getDate().getMonthValue() + "/" + trucking.getDate().getYear() + "\n";
-        toReturn += "Hour: " + trucking.getDate().getHour() + ":" + trucking.getDate().getMinute() + "\n";
+        toReturn += "Start Hour: " + printHour(trucking.getDate()) + "\n";
+        toReturn += "End Hour: " + printHour(trucking.getDate().plusHours(trucking.getHours()).plusMinutes(trucking.getMinutes())) + "\n";
         toReturn += "Vehicle registration plate: " + trucking.getVehicleRegistrationPlate() + "\n";
         toReturn += "Driver: " + trucking.getDriverUsername() + "\n";
         toReturn += printSources(trucking.getId());
@@ -237,6 +274,19 @@ public class TruckManagerController extends UserController{
             toReturn += "Total weight: " + trucking.getWeight() + "\n";
         else
             toReturn += "There is no data about the trucking weight\n";
+        return toReturn;
+    }
+
+    private String printHour(LocalDateTime date) {
+        String toReturn = "";
+        if(date.getHour()<10)
+            toReturn += "0" + date.getHour() + ":";
+        else
+            toReturn += date.getHour() + ":";
+        if(date.getMinute()<10)
+            toReturn += "0" + date.getMinute();
+        else
+            toReturn += date.getHour();
         return toReturn;
     }
 
