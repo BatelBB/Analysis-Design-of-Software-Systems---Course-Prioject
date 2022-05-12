@@ -163,19 +163,25 @@ public class TruckManagerController extends UserController{
         return toReturn;
     }
 
-    public void addSourcesToTrucking(int truckingId, List<List<String>> sources) throws Exception {
-        //TODO
+    public List<String> addSourcesToTrucking(int truckingId, List<List<String>> sources) throws Exception {
+        List<Site> sources_ = checkSites(sources);
+        List<String> exceptions = sourcesMapper.addTruckingSources(truckingId, sources_);
+        if(exceptions.size() == sources_.size())
+            throw new Exception("Oops, We could not add any source");
+        return exceptions;
     }
 
-    public void addDestinationToTrucking(int truckingId, List<List<String>> destinations) throws Exception {
-        //TODO
+    public List<String> addDestinationToTrucking(int truckingId, List<List<String>> destinations) throws Exception {
+        List<Site> destinations_ = checkSites(destinations);
+        List<String> exceptions = truckings_destsMapper.addTruckingDestinations(truckingId, destinations_);
+        if(exceptions.size() == destinations_.size())
+            throw new Exception("Oops, We could not add any destination");
+        return exceptions;
     }
 
     public void addProductToTrucking(int truckingId, String pruductName,int quantity) throws Exception {
         //TODO
     }
-
-
 
     public void updateSourcesOnTrucking(int truckingId, List<List<String>> sources) throws Exception {
         //TODO
@@ -190,15 +196,24 @@ public class TruckManagerController extends UserController{
     }
 
     public void updateVehicleOnTrucking(int truckingId, String registrationPlateOfVehicle) throws Exception {
-        //TODO
+        String driverUsername = truckingMapper.getDriverUsernameOfTrucking(truckingId);
+        if (!truckingMapper.checkDriverLicenseMatch(driverUsername, registrationPlateOfVehicle))
+            throw new IllegalArgumentException("Oops, the driver does not have a driver's license compatible with this vehicle");
+        if (!truckingMapper.updateVehicle(truckingId, registrationPlateOfVehicle))
+            throw new IllegalArgumentException("No change of vehicle was made to order: " + truckingId + ". It maybe the same vehicle of before the change.");
     }
 
     public void updateDriverOnTrucking(int truckingId, String driverUsername) throws Exception {
-        //TODO
+        String registrationPlateOfVehicle = truckingMapper.getRegistrationPlateOfTrucking(truckingId);
+        if (!truckingMapper.checkDriverLicenseMatch(driverUsername, registrationPlateOfVehicle))
+            throw new IllegalArgumentException("Oops, the driver does not have a driver's license compatible with this vehicle");
+        if (!truckingMapper.updateVehicle(truckingId, registrationPlateOfVehicle))
+            throw new IllegalArgumentException("No change of driver was made to order: " + truckingId + ". It maybe the same driver of before the change.");
     }
 
     public void updateDateOnTrucking(int truckingId, LocalDateTime date) throws Exception {
-        //TODO
+        checkDate(date);
+        //TODO: it's really complicated, maybe we need to delete that option?
     }
 
     private void checkIfActiveUserIsTruckManager() throws Exception {
@@ -249,6 +264,12 @@ public class TruckManagerController extends UserController{
             siteCounter++;
         }
         return toReturn;
+    }
+
+    private boolean checkDate(LocalDateTime date) {
+        if (date.compareTo(LocalDateTime.now()) <= 0)
+            throw new IllegalArgumentException("Oops, the date must be in the future");
+        return true;
     }
 
 }

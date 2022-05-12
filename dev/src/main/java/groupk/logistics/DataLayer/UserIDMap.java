@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class UserIDMap {
     public Map<String, User> userMap;
-        private static UserIDMap singletonUserMapInstance = null;
+    private static UserIDMap singletonUserMapInstance = null;
     private UserIDMap() {
         userMap = new ConcurrentHashMap<String, User>();
     }

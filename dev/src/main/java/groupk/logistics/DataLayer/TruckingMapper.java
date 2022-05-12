@@ -88,6 +88,66 @@ public class TruckingMapper extends myDataBase {
         return n > 0;
     }
 
+    public boolean updateVehicle(int truckingId, String vehicleRegistrationPlate) throws Exception {
+        String sql = "UPDATE Truckings SET registration_plate = '" + vehicleRegistrationPlate + "' WHERE TID = '" + truckingId + "'";
+        int n = 0;
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            n = pstmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        return n > 0;
+    }
+
+    public boolean updateDriver(int truckingId, String driverUsername) throws Exception {
+        String sql = "UPDATE Truckings SET driver_username = '" + driverUsername + "' WHERE TID = '" + truckingId + "'";
+        int n = 0;
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            n = pstmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        return n > 0;
+    }
+
+    public String getRegistrationPlateOfTrucking(int TruckingId) throws Exception {
+        String toReturn = "";
+        String query = "SELECT registration_plate FROM Truckings " +
+                "WHERE TID = '" + TruckingId + "'";
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(query)){
+            if (rs.next()) {
+                toReturn += rs.getString(1);
+            }
+            else
+                throw new Exception("There is no trucking with id: " + TruckingId);
+        } catch (SQLException e) {
+            throw new Exception("Oops something got wrong: \n" + e.getMessage());
+        }
+        return toReturn;
+    }
+
+    public String getDriverUsernameOfTrucking(int TruckingId) throws Exception {
+        String toReturn = "";
+        String query = "SELECT driver_username FROM Truckings " +
+                "WHERE TID = '" + TruckingId + "'";
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(query)){
+            if (rs.next()) {
+                toReturn += rs.getString(1);
+            }
+            else
+                throw new Exception("There is no trucking with id: " + TruckingId);
+        } catch (SQLException e) {
+            throw new Exception("Oops something got wrong: \n" + e.getMessage());
+        }
+        return toReturn;
+    }
+
     public List<TruckingDTO> getTruckManagerBoard(String truckManagerUsername) throws Exception {
         return getBoardOfUserOrVehicle("truck_manager", truckManagerUsername);
     }
@@ -179,7 +239,7 @@ public class TruckingMapper extends myDataBase {
                 toReturn.add(new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getString(2), rs.getString(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8)));
             }
         } catch (SQLException e) {
-            throw new Exception("Oops something got wrong: \n" + e.getMessage());
+            throw new Exception("Oops, something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
