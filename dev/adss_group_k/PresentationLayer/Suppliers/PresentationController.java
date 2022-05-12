@@ -18,14 +18,7 @@ public class PresentationController {
     private static SupplierService service = new SupplierService();
 
     static Scanner scanner = new Scanner(System.in);
-
-    public static void main(String[] args) {
-        output.println("Welcome to the supplier module!");
-        if (input.nextBoolean("Would you like to load example data?")) {
-            service.seedExample();
-            output.println("example data loaded.");
-        }
-    }
+    
     public static void startSupplierMenu() {
             while (true) {
                 int userInput = input.nextInt(Menu.getMainMenu());
