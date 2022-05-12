@@ -1,7 +1,7 @@
 package adss_group_k.BusinessLayer.Suppliers.Entity;
 
 
-import adss_group_k.shared.utils.EntityUtils;
+import adss_group_k.shared.utils.Utils;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
 
 import java.time.DayOfWeek;
@@ -87,7 +87,7 @@ public class MutableSupplier implements Supplier {
 
     @Override
     public String toString() {
-        return EntityUtils.table(
+        return Utils.table(
                 2, 25, true,
                 "    **** SUPPLIER **** ", "",
                 "PPN", ppn,

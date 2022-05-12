@@ -1,6 +1,6 @@
 package adss_group_k.BusinessLayer.Suppliers.Entity;
 
-import adss_group_k.shared.utils.EntityUtils;
+import adss_group_k.shared.utils.Utils;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
 
 public class QuantityDiscount {
@@ -20,7 +20,7 @@ public class QuantityDiscount {
 
     @Override
     public String toString() {
-        return  EntityUtils.table(
+        return  Utils.table(
                 2, 30, true,
                 "  **** QUANTITY DISCOUNT **** ", "",
                 "Item name", item.getName(),

@@ -1,6 +1,6 @@
 package adss_group_k.BusinessLayer.Suppliers.Entity;
 
-import adss_group_k.shared.utils.EntityUtils;
+import adss_group_k.shared.utils.Utils;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Order;
@@ -43,6 +43,11 @@ public class MutableOrder implements Order {
             price += e.getKey().priceForAmount(e.getValue());
         }
         totalPrice = price;
+    }
+
+    @Override
+    public OrderType getOrderType() {
+        return null;
     }
 
     @Override
@@ -125,7 +130,7 @@ public class MutableOrder implements Order {
         table.add("");
         table.add("");
 
-        return EntityUtils.table(
+        return Utils.table(
                 4, 25, true,
                 table.toArray()
         );

@@ -1,6 +1,6 @@
 package adss_group_k.BusinessLayer.Suppliers.Entity;
 
-import adss_group_k.shared.utils.EntityUtils;
+import adss_group_k.shared.utils.Utils;
 import adss_group_k.BusinessLayer.Suppliers.Controller.ItemController;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
 
@@ -69,7 +69,7 @@ public class MutableItem implements Item {
 
     @Override
     public String toString() {
-        return EntityUtils.table(
+        return Utils.table(
                 2, 25, true,
                 "    **** ITEM **** ", "",
                 "Name", name,

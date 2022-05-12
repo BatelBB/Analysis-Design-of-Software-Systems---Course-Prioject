@@ -4,7 +4,6 @@ import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.Entity.MutableContact;
 import adss_group_k.BusinessLayer.Suppliers.Entity.PaymentCondition;
 import adss_group_k.BusinessLayer.Suppliers.Entity.QuantityDiscount;
-import assignment1.BusinessLayer.Entity.*;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Order;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
@@ -87,7 +86,7 @@ class ServiceTest {
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
                 new MutableContact("john", "john@email.com", "054")).data;
         Item item = service.createItem(ppn, 1, "item", "category", 1).data;
-        Order order = service.createOrder(supplier, date1, date2).data;
+        Order order = service.createOrder(supplier, date1, date2, Order.OrderType.Periodical).data;
         service.orderItem(order, item, 12);
 
         // delete should work.
@@ -218,13 +217,13 @@ class ServiceTest {
         Item pen = service.createItem(ppn, cnPen, "Pen", "Office", 10).data;
         Item notebook = service.createItem(ppn, cnNotebook, "Notebook", "Office", 7).data;
 
-        Order orderPens = service.createOrder(sup, date1, date2).data;
+        Order orderPens = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
         service.orderItem(orderPens, pen, 10);
 
-        Order orderNotebooks = service.createOrder(sup, date1, date2).data;
+        Order orderNotebooks = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
         service.orderItem(orderNotebooks, notebook, 10);
 
-        Order orderBoth = service.createOrder(sup, date1, date2).data;
+        Order orderBoth = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
         service.orderItem(orderBoth, pen, 10);
         service.orderItem(orderBoth, notebook, 5);
 
@@ -245,7 +244,7 @@ class ServiceTest {
         int ppn = 1, cnPen = 11;
         Supplier sup = createWithPpn(ppn).data;
 
-        ServiceResponseWithData<Order> responseWithEmptySupplier = service.createOrder(sup, date1, date2);
+        ServiceResponseWithData<Order> responseWithEmptySupplier = service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
         assertFalse(responseWithEmptySupplier.success,
                 "shouldn't be able to start ReadOnlyorder if ReadOnlysupplier has no items.");
 
@@ -253,11 +252,11 @@ class ServiceTest {
         service.createItem(ppn, cnPen, "Pen", "Office", 10);
 
 
-        ServiceResponseWithData<Order> responseWithBadDates = service.createOrder(sup, date2, date1);
+        ServiceResponseWithData<Order> responseWithBadDates = service.createOrder(sup, date2, date1, Order.OrderType.Periodical);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        ServiceResponseWithData<Order> response = service.createOrder(sup, date1, date2);
+        ServiceResponseWithData<Order> response = service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
         assertTrue(response.success);
 
     }
@@ -275,7 +274,7 @@ class ServiceTest {
             int amountForThisSupplier = amountOfOrders[i];
             createWithPpn(ppn);
             for (int j = 0; j < amountForThisSupplier; j++) {
-                service.createOrder(sup, date1, date2);
+                service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
             }
         }
 
@@ -290,7 +289,7 @@ class ServiceTest {
 
         Item pen = service.createItem(ppn, cnPen, "Pen", "Office", 10).data;
 
-        Order order = service.createOrder(sup, date1, date2).data;
+        Order order = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
         service.orderItem(order, pen, 10);
 
         ServiceResponse resDelete = service.deleteOrder(order);
@@ -313,13 +312,13 @@ class ServiceTest {
         Item pen = service.createItem(ppn, cnPen, "Pen", "Office", penPrice).data;
         Item notebook = service.createItem(ppn, cnNotebook, "Notebook", "Office", notebookPrice).data;
 
-        Order orderPens = service.createOrder(sup, date1, date2).data;
+        Order orderPens = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
         service.orderItem(orderPens, pen, penAmount);
 
-        Order orderNotebooks = service.createOrder(sup, date1, date2).data;
+        Order orderNotebooks = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
         service.orderItem(orderNotebooks, notebook, notebookAmount);
 
-        Order orderBoth = service.createOrder(sup, date1, date2).data;
+        Order orderBoth = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
         service.orderItem(orderBoth, pen, penAmount);
         service.orderItem(orderBoth, notebook, notebookAmount);
 
@@ -349,7 +348,7 @@ class ServiceTest {
                 THU = WED.plus(ONE_DAY),
                 FRI = THU.plus(ONE_DAY);
 
-        Order order = service.createOrder(supplier, MON, WED).data;
+        Order order = service.createOrder(supplier, MON, WED, Order.OrderType.Periodical).data;
         assertEquals(MON, order.getOrdered());
 
         service.setOrdered(order, SUN);
@@ -386,7 +385,7 @@ class ServiceTest {
                 THU = WED.plus(ONE_DAY),
                 FRI = THU.plus(ONE_DAY);
 
-        Order order = service.createOrder(supplier, TUE, FRI).data;
+        Order order = service.createOrder(supplier, TUE, FRI, Order.OrderType.Periodical).data;
         assertEquals(FRI, order.getProvided());
 
         service.setProvided(order, THU);
@@ -416,7 +415,7 @@ class ServiceTest {
 
         Supplier sup = createWithPpn(ppn).data;
         Item item = service.createItem(ppn, cnCalc, "Calculator", "Office", priceCalc).data;
-        Order order = service.createOrder(sup, date1, date2).data;
+        Order order = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
 
         service.orderItem(order, item, 1);
         assertEquals(priceCalc, order.getTotalPrice());
@@ -465,7 +464,7 @@ class ServiceTest {
 
         Supplier sup = createWithPpn(ppn).data;
         Item item = service.createItem(ppn, cnCalc, "Calculator", "Office", priceCalc).data;
-        Order order = service.createOrder(sup, date1, date2).data;
+        Order order = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
 
         QuantityDiscount over10 = service.createDiscount(item, 10, 0.01f).data;
         QuantityDiscount over50 = service.createDiscount(item, 50, 0.05f).data;
@@ -502,7 +501,7 @@ class ServiceTest {
 
         final int amountBread = 10, amountMilk = 10;
 
-        Order order = service.createOrder(sup, date1, date2).data;
+        Order order = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
         service.orderItem(order, bread, amountBread);
         service.orderItem(order, milk, amountMilk);
 

@@ -3,7 +3,7 @@ package adss_group_k.shared.utils;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-class Utils {
+public class Utils {
     public static String table(int columns, int columnWidth, boolean dashesUnderFirstLine, Object... args) {
 
         StringBuilder sb = new StringBuilder();
