@@ -169,19 +169,20 @@ public class Service {
     public ResponseT<Report> getReport(int id) {
         return report_service.getReport(id);
     }
-    public Response createPeriodicOrder(Map<String,Integer> proAmount){ //need to check that the order contain the min_qnt
-        return supplierService.createPeriodicOrder(proAmount);}
+    public Response createPeriodicOrder(){
+        return supplierService.createPeriodicOrder();}
     public Response createDeficienciesOrder(){
         Map<String,Integer> proAmount = report_service.GetProAmount().value;
         return supplierService.createDeficienciesOrder(proAmount);}
-    public Response updateOrder(String op,String orderId,String proName, int proAmount){//need to check that the order contain the min_qnt
+    public Response updateOrder(String op,int orderId,String proName, int proAmount){//need to check that the order contain the min_qnt
+        int minAmount= product_service.getMinAmount(proName).value;
         switch (op){
             case "Remove":
                 return supplierService.RemoveProduct(orderId,proName);
             case "Add":
-                return supplierService.AddProduct(orderId,proName,proAmount);
+                return supplierService.AddProduct(orderId,proName,proAmount,minAmount);
             case "UpdateAmount":
-                return supplierService.UpdateAmount(orderId,proName,proAmount);
+                return supplierService.updateOrderAmount(orderId,proName,proAmount,minAmount);
         }
         return null;
     }

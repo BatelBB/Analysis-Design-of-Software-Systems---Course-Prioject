@@ -310,4 +310,9 @@ public class ProductController {
     public void restart() {
         products.clear();
     }
+
+    public int getMinAmount(String proName) {
+        Product p=products.get(proName);
+        return p.getMin_qty();
+    }
 }
