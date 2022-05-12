@@ -35,7 +35,7 @@ public class Site {
         return phoneNumber;
     }
 
-    private Area castStringToArea(String area) throws Exception {
+    public static Area castStringToArea(String area) throws Exception {
         if(area.equals("center")) return Area.center;
         else if(area.equals("north")) return Area.north;
         else  if(area.equals("south")) return Area.south;

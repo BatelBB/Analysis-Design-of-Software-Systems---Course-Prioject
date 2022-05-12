@@ -82,10 +82,19 @@ public class TruckManagerController extends UserController{
     private List<Site> checkSites(List<List<String>> Sites) throws Exception {
         checkIfActiveUserIsTruckManager();
         List<Site> sites = new LinkedList<>();
-        for(List<String> site : Sites)
-            sites.add(new Site(site.get(0),site.get(1),site.get(2),site.get(3),Integer.parseInt(site.get(4)),Integer.parseInt(site.get(5)),Integer.parseInt(site.get(6)),site.get(7)));
+        Area area = null;
+        for(List<String> site : Sites) {
+            sites.add(new Site(site.get(0), site.get(1), site.get(2), site.get(3), Integer.parseInt(site.get(4)), Integer.parseInt(site.get(5)), Integer.parseInt(site.get(6)), site.get(7)));
+            if (area == null)
+                area = Site.castStringToArea(site.get(7));
+            else {
+                if (area.equals(Site.castStringToArea(site.get(7))))
+                    throw new IllegalArgumentException("Not all sites from the same area");
+            }
+        }
         return sites;
     }
+
 
 
     public void removeTrucking(int truckingId) throws Exception {
@@ -233,8 +242,17 @@ public class TruckManagerController extends UserController{
     }
 
     public void addProductToTrucking(int truckingId, String pruductName,int quantity) throws Exception {
-        checkIfActiveUserIsTruckManager();
-        //TODO
+        if(!(pruductName.equals("eggs") | pruductName.equals("water") | pruductName.equals("milk")))
+            throw new Exception("Illegal product");
+        if(productsMapper.existProduct(truckingId,pruductName))
+            productsMapper.increaseQuantity(truckingId,pruductName,quantity);
+        else {
+            Products products;
+            if ((pruductName.equals("eggs"))) products = Products.Eggs_4902505139314;
+            else if ((pruductName.equals("milk"))) products = Products.Milk_7290111607400;
+            else products = Products.Water_7290019056966;
+            productsMapper.addTruckingProduct(truckingId, new ProductForTrucking(products, quantity));
+        }
     }
 
     public void updateSourcesOnTrucking(int truckingId, List<List<String>> sources) throws Exception {
@@ -247,9 +265,10 @@ public class TruckManagerController extends UserController{
         //TODO
     }
 
-    public void moveProductsToTrucking(int truckingId, String productSKU) throws Exception {
-        checkIfActiveUserIsTruckManager();
-        //TODO
+    public void moveProductsToTrucking(int truckingId, String pruductName) throws Exception {
+        if(!(pruductName.equals("eggs") | pruductName.equals("water") | pruductName.equals("milk"))) throw new Exception("Illegal product");
+        if(productsMapper.getProducts(truckingId).size()>1) productsMapper.removeProductsByTruckingId(truckingId,pruductName);
+        else throw new Exception("The only product in the trucking cant be deleted");
     }
 
     public void updateVehicleOnTrucking(int truckingId, String registrationPlateOfVehicle) throws Exception {

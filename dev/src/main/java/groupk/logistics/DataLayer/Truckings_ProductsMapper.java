@@ -1,8 +1,12 @@
 package groupk.logistics.DataLayer;
 
 import groupk.logistics.business.ProductForTrucking;
+import groupk.logistics.business.Products;
+import groupk.logistics.business.Site;
+import groupk.logistics.business.Vehicle;
 
 import java.sql.*;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Truckings_ProductsMapper extends  myDataBase {
@@ -20,7 +24,7 @@ public class Truckings_ProductsMapper extends  myDataBase {
         }
     }
 
-    private void addTruckingProduct(int truckingIdCounter, ProductForTrucking productForTrucking) {
+    public void addTruckingProduct(int truckingIdCounter, ProductForTrucking productForTrucking) {
         int n = 0;
         String query = "INSERT INTO Truckings_Products(TID,product,quantity) VALUES(?,?,?)";
 
@@ -39,6 +43,92 @@ public class Truckings_ProductsMapper extends  myDataBase {
         }
 
     }
+
+    public List<ProductForTrucking> getProducts(int truckingID) throws Exception {
+        List <ProductForTrucking> productForTruckings = new LinkedList<>();
+        String query = "SELECT * FROM Truckings_Products";
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                productForTruckings.add(new ProductForTrucking(product(rs.getString(2)),rs.getInt(3)));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
+
+    private Products product(String pruductName) throws Exception {
+        Products products =null;
+        if(!(pruductName.equals("eggs") | pruductName.equals("water") | pruductName.equals("milk"))) throw new Exception("Illegal product");
+        else
+        {
+            if((pruductName.equals("eggs"))) products = Products.Eggs_4902505139314;
+            else if((pruductName.equals("milk"))) products = Products.Milk_7290111607400;
+            else products = Products.Water_7290019056966;
+        }
+        return products;
+    }
+
+    public boolean removeProductsByTruckingId(int TruckingID,String productSKU) throws Exception {
+        String Query = "DELETE FROM Truckings_Products WHERE TID = '" + TruckingID + "'" + " AND product = '" + productSKU + "'" ;
+        int n = 0;
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             PreparedStatement pstmt = conn.prepareStatement(Query)) {
+            n = pstmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        return n > 0;
+
+    }
+
+    public boolean existProduct(int TruckingID,String productSKU) throws Exception {
+        String Query = "SELECT * FROM Truckings_Products WHERE TID = '" + TruckingID + "'" + " AND product = '" + productSKU + "'" ;
+        int n = 0;
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             PreparedStatement pstmt = conn.prepareStatement(Query)) {
+            n = pstmt.executeUpdate();
+
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        return n > 0;
+
+    }
+
+    public void increaseQuantity(int TruckingID,String productSKU,int quantity) throws Exception {
+        String Query = "UPDATE Truckings_Products SET quantity = '" + getQuantity(TruckingID,productSKU)+quantity + "'" + " WHERE product = '"+productSKU + "'";
+        int n = 0;
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             PreparedStatement pstmt = conn.prepareStatement(Query)) {
+            n = pstmt.executeUpdate();
+
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+
+    }
+
+    private int getQuantity(int truckingID, String productSKU) throws Exception {
+        String Query = "SELECT * FROM Truckings_Products WHERE TID = '" + truckingID + "'" + " AND product = '" + productSKU + "'" ;
+        int n = 0;
+        try (Connection conn = DriverManager.getConnection(finalCurl))
+        {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(Query);
+            while (rs.next()) {
+                return rs.getInt(3);
+            }
+
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        return n;
+    }
+
 
     public boolean removeTrucking(int truckingID) throws Exception {
         String Query = "DELETE FROM Truckings_Products WHERE TID = '" + truckingID+"'";
