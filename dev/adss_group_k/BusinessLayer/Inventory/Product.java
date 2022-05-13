@@ -2,6 +2,7 @@ package adss_group_k.BusinessLayer.Inventory;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class Product {
@@ -17,12 +18,12 @@ public class Product {
     private int supply_time;
     private Map<String, ProductItem> items;
 
-    private String cat;
-    private String sub_cat;
-    private String sub_sub_cat;
+    private Category cat;
+    private SubCategory sub_cat;
+    private SubSubCategory sub_sub_cat;
 
     //constructors
-    public Product(int product_id, String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
+    public Product(int product_id, String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, Category category, SubCategory sub_category,SubSubCategory sub_sub_category) {
         this.product_id = product_id;
         this.name = name;
         shelf_qty = 0;
@@ -35,7 +36,7 @@ public class Product {
         items = new HashMap<>();
         this.cat = category;
         this.sub_cat = sub_category;
-        this.sub_sub_cat = subsub_category;
+        this.sub_sub_cat = sub_sub_category;
     }
 
     public Product(int product_id, String name, int shelf_qty, int storage_qty, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, Map<String, ProductItem> items) {
@@ -49,6 +50,22 @@ public class Product {
         this.min_qty = min_qty;
         this.supply_time = supply_time;
         this.items = items;
+    }
+
+    public Product(Product p) {
+        this.product_id = p.product_id;
+        this.name = p.name;
+        shelf_qty = p.shelf_qty;
+        storage_qty = p.storage_qty;
+        this.manufacturer = p.manufacturer;
+        this.man_price = p.man_price;
+        this.cus_price = p.cus_price;
+        this.min_qty = p.min_qty;
+        this.supply_time = p.supply_time;
+        items = p.items;
+        this.cat = p.cat;
+        this.sub_cat = p.sub_cat;
+        this.sub_sub_cat = p.sub_sub_cat;
     }
 
     //methods
@@ -202,26 +219,26 @@ public class Product {
     }
 
     public String getCat() {
-        return cat;
+        return cat.getName();
     }
 
     public String getSub_cat() {
-        return sub_cat;
+        return sub_cat.getName();
     }
 
     public String getSub_sub_cat() {
-        return sub_sub_cat;
+        return sub_sub_cat.getName();
     }
 
-    public void setCat(String cat) {
+    public void setCat(Category cat) {
         this.cat = cat;
     }
 
-    public void setSub_cat(String sub_cat) {
+    public void setSub_cat(SubCategory sub_cat) {
         this.sub_cat = sub_cat;
     }
 
-    public void setSub_sub_cat(String sub_sub_cat) {
+    public void setSub_sub_cat(SubSubCategory sub_sub_cat) {
         this.sub_sub_cat = sub_sub_cat;
     }
 
@@ -229,5 +246,14 @@ public class Product {
     private void itemExists(int item_id) throws Exception {
         if (!items.containsKey(Integer.toString(item_id)))
             throw new Exception("item id doesn't exist");
+    }
+
+    public LinkedList<Integer> getDeficiency() {
+        LinkedList<Integer> deficiency=new LinkedList<>();
+        for (ProductItem p:items.values()) {
+            if (p.is_defect())
+                deficiency.add(p.getId());
+        }
+        return deficiency;
     }
 }

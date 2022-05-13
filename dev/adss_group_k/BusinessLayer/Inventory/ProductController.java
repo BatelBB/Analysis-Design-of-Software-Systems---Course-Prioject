@@ -89,11 +89,6 @@ public class ProductController {
                     i.addManDiscount(new DiscountPair(start_date, end_date, discount));
     }
 
-//    public void updateProductManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) throws Exception {
-//        productExists(product_id);
-//        for (ProductItem i : products.get(Integer.toString(product_id)).getItems().values())
-//            i.addManDiscount(new DiscountPair(start_date, end_date, discount));
-//    }
 
     public void updateProductCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) throws Exception {
         productExists(product_id);
@@ -140,10 +135,10 @@ public class ProductController {
     }
 
     public Product addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
-        boolean b1=category_controller.getCategories().containsKey(category);
-        boolean b2=category_controller.getCategories().get(category).getSubC().containsKey(sub_category);
-        boolean b3=category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().containsKey(subsub_category);
-        if (category_controller.getCategories().containsKey(category) && category_controller.getCategories().get(category).getSubC().containsKey(sub_category) && category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().containsKey(subsub_category)) {
+        if (       category_controller.getCategories().containsKey(category) &&
+                   category_controller.getCategories().get(category).getSubC().containsKey(sub_category) &&
+                   category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().containsKey(subsub_category)
+        ) {
             if (name == null || name.equals("")) throw new Exception("product name empty");
             if (manufacturer == null || manufacturer.equals("")) throw new Exception("product name empty");
             priceLegal(man_price);
@@ -154,7 +149,18 @@ public class ProductController {
             if (sub_category == null || sub_category.equals("")) throw new Exception("sub_category name empty");
             if (subsub_category == null || subsub_category.equals(""))
                 throw new Exception("subsub_category name empty");
-            Product p = new Product(product_ids, name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category);
+            Product p = new Product(
+                    product_ids,
+                    name,
+                    manufacturer,
+                    man_price,
+                    cus_price,
+                    min_qty,
+                    supply_time,
+                    category_controller.getCategories().get(category),
+                    category_controller.getCategories().get(category).getSubC().get(sub_category),
+                    category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().get(subsub_category)
+            );
             products.put(Integer.toString(product_ids), p);
             product_ids++;
             return p;
@@ -213,7 +219,7 @@ public class ProductController {
         List<ProductItem> defective_items = new ArrayList<>();
         for (Product p : products.values())
             for (ProductItem i : p.getItems().values())
-                if (i.isIs_defect()) defective_items.add(i);
+                if (i.is_defect()) defective_items.add(i);
         return defective_items;
     }
 
@@ -316,4 +322,11 @@ public class ProductController {
         return p.getMin_qty();
     }
 
+    public LinkedList<Integer> getDeficiency() {
+        LinkedList<Integer> deficiency=new LinkedList<>();
+        for (Product p:products.values()) {
+            deficiency.addAll(p.getDeficiency());
+        }
+        return deficiency;
+    }
 }

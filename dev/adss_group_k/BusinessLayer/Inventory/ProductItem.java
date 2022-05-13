@@ -6,6 +6,7 @@ import java.util.List;
 
 public class ProductItem {
     private int id;
+    private String productName;
     private String store;
     private String location;
     private String supplier;
@@ -17,7 +18,7 @@ public class ProductItem {
     private String defect_reporter;
 
     //constructors
-    public ProductItem(int id, String store, String location, String supplier, LocalDateTime expirationDate, List<DiscountPair> man_discount, List<DiscountPair> cus_discount, boolean is_defect) {
+    public ProductItem(int id, String store, String productName,String location, String supplier, LocalDateTime expirationDate, List<DiscountPair> man_discount, List<DiscountPair> cus_discount, boolean is_defect) {
         this.id = id;
         this.store = store;
         this.location = location;
@@ -26,6 +27,7 @@ public class ProductItem {
         this.man_discount = man_discount;
         this.cus_discount = cus_discount;
         this.is_defect = is_defect;
+        this.productName=productName;
         defect_reporter = null;
     }
 
@@ -40,6 +42,19 @@ public class ProductItem {
         this.is_defect = false;
         this.on_shelf=on_shelf;
         defect_reporter = null;
+    }
+
+    public ProductItem(ProductItem productItem) {
+        this.id = productItem.id;
+        this.store = productItem.store;
+        this.location = productItem.location;
+        this.supplier = productItem.supplier;
+        this.expirationDate = productItem.expirationDate;
+        this.man_discount = productItem.man_discount;
+        this.cus_discount = productItem.cus_discount;
+        this.is_defect = productItem.is_defect;
+        this.on_shelf=productItem.on_shelf;
+        defect_reporter = productItem.defect_reporter;
     }
 
     //methods
@@ -116,7 +131,7 @@ public class ProductItem {
         this.cus_discount = cus_discount;
     }
 
-    public boolean isIs_defect() {
+    public boolean is_defect() {
         return is_defect;
     }
 
@@ -139,4 +154,6 @@ public class ProductItem {
     public void setOn_shelf(boolean on_shelf) {
         this.on_shelf = on_shelf;
     }
+
+    public String getProductName() {return productName;}
 }

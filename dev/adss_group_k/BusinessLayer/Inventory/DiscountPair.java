@@ -13,6 +13,12 @@ public class DiscountPair {
         this.discount = discount;
     }
 
+    public DiscountPair(DiscountPair dp) {
+        this.start_date = dp.start_date;
+        this.end_date = dp.end_date;
+        this.discount = dp.discount;
+    }
+
     //getters and setters
     public LocalDateTime getStart_date() {
         return start_date;
