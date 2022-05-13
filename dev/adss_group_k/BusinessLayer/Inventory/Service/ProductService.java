@@ -5,6 +5,7 @@ import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class ProductService {
     private final ProductController product_controller;
@@ -196,4 +197,11 @@ public class ProductService {
         }
     }
 
+    public ResponseT<Map<String, Integer>> getDeficiency() {
+        try {
+            return ResponseT.fromValue(product_controller.getDeficiency());
+        } catch (Exception e) {
+            return ResponseT.fromError(e.getMessage());
+        }
+    }
 }

@@ -11,7 +11,7 @@ public class Service {
     private final ProductService product_service;
     private final CategoryService category_service;
     private final ReportService report_service;
-    private final SupplierService supplierService;
+    private final SupplierService_v2 supplierService;
 
     public Service(SupplierService supplierService) {
         product_service = new ProductService();
@@ -52,9 +52,9 @@ public class Service {
         return category_service.removeSubCategory(category, name, product_service.productsInSubCategory(category, name));
     }
 
-//    public ResponseT<SubCategory> getSubCategory(String category, String name) {
-//        return category_service.getSubCategory(category, name);
-//    }
+    public ResponseT<SubCategory> getSubCategory(String category, String name) {
+       return category_service.getSubCategory(category, name);
+    }
 
     public Response addSubSubCategory(String category, String sub_category, String name) {
         return category_service.addSubSubCategory(category, sub_category, name);
@@ -132,31 +132,31 @@ public class Service {
         return product_service.changeItemOnShelf(product_id, item_id, on_shelf);
     }
 
-    public ResponseT<MissingReport> createMissingReport(String name, int id, String report_producer) {
+    public ResponseT<Report> createMissingReport(String name, int id, String report_producer) {
         return report_service.createMissingReport(name, id, report_producer);
     }
 
-    public ResponseT<ExpiredReport> createExpiredReport(String name, int id, String report_producer) {
+    public ResponseT<Report> createExpiredReport(String name, int id, String report_producer) {
         return report_service.createExpiredReport(name, id, report_producer);
     }
 
-    public ResponseT<SurplusesReport> createSurplusesReport(String name, int id, String report_producer) {
+    public ResponseT<Report> createSurplusesReport(String name, int id, String report_producer) {
         return report_service.createSurplusesReport(name, id, report_producer);
     }
 
-    public ResponseT<DefectiveReport> createDefectiveReport(String name, int id, String report_producer) {
+    public ResponseT<Report> createDefectiveReport(String name, int id, String report_producer) {
         return report_service.createDefectiveReport(name, id, report_producer);
     }
 
-    public ResponseT<bySupplierReport> createBySupplierReport(String name, int id, String report_producer, String suppName) {
+    public ResponseT<Report> createBySupplierReport(String name, int id, String report_producer, String suppName) {
         return report_service.createBySupplierReport(name, id, report_producer, suppName);
     }
 
-    public ResponseT<byProductReport> createByProductReport(String name, int id, String report_producer, String proName) {
+    public ResponseT<Report> createByProductReport(String name, int id, String report_producer, String proName) {
         return report_service.createByProductReport(name, id, report_producer, proName);
     }
 
-    public ResponseT<byCategoryReport> createByCategoryReport(String name, int id, String report_producer, String CatName, String subCatName, String subSubCatName) {
+    public ResponseT<Report> createByCategoryReport(String name, int id, String report_producer, String CatName, String subCatName, String subSubCatName) {
         return report_service.createByCategoryReport(name, id, report_producer, CatName, subCatName, subSubCatName);
     }
 
@@ -168,12 +168,12 @@ public class Service {
         return report_service.getReport(id);
     }
 
-    public Response createPeriodicOrder() {
-        return supplierService.createPeriodicOrder();
+    public Response createOrder() {
+        return supplierService.createOrder();
     }
 
     public Response createDeficienciesOrder() {
-        Map<String, Integer> proAmount = report_service.GetProAmount().value;
+        Map<String, Integer> proAmount = product_service.getDeficiency().value;
         return supplierService.createDeficienciesOrder(proAmount);
     }
 

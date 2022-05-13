@@ -1,6 +1,8 @@
 package adss_group_k.Tests.Inventory;
 
-import ServiceLayer.Objects.*;
+import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
+import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterAll;
@@ -15,12 +17,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ServiceTest {
     private static Service service;
+    private static SupplierService_v2 supplierService;
     private static List<String> CategoryList;
     private static List<String> ProductListNames;
     private static List<Integer> ReportList;
 
     static void setService() {
-        service = new Service();
+        supplierService=new SupplierService();
+        service = new Service(supplierService);
     }
 
     @BeforeAll

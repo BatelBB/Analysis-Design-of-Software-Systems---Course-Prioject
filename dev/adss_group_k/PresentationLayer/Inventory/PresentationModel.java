@@ -1,6 +1,6 @@
 package adss_group_k.PresentationLayer.Inventory;
 
-import ServiceLayer.Objects.*;
+import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
 import adss_group_k.BusinessLayer.Inventory.Service.Response;
 import adss_group_k.BusinessLayer.Inventory.Service.ResponseT;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
@@ -311,7 +311,7 @@ public class PresentationModel {
     }
 
     public void createMissingReport() {
-        ResponseT<MissingReport> r;
+        ResponseT<Report> r;
         if (args.length == 3 && convertInt(args[1]) != -1) {
             r = service.createMissingReport(args[0], convertInt(args[1]), args[2]);
             if (r.getError_occurred())
@@ -322,7 +322,7 @@ public class PresentationModel {
     }
 
     public void createExpiredReport() {
-        ResponseT<ExpiredReport> r;
+        ResponseT<Report> r;
         if (args.length == 3 && convertInt(args[1]) != -1) {
             r = service.createExpiredReport(args[0], convertInt(args[1]), args[2]);
             if (r.getError_occurred())
@@ -333,7 +333,7 @@ public class PresentationModel {
     }
 
     public void createSurplusesReport() {
-        ResponseT<SurplusesReport> r;
+        ResponseT<Report> r;
         if (args.length == 3 && convertInt(args[1]) != -1) {
             r = service.createSurplusesReport(args[0], convertInt(args[1]), args[2]);
             if (r.getError_occurred())
@@ -344,7 +344,7 @@ public class PresentationModel {
     }
 
     public void createDefectiveReport() {
-        ResponseT<DefectiveReport> r;
+        ResponseT<Report> r;
         if (args.length == 3 && convertInt(args[1]) != -1) {
             r = service.createDefectiveReport(args[0], convertInt(args[1]), args[2]);
             if (r.getError_occurred())
@@ -355,7 +355,7 @@ public class PresentationModel {
     }
 
     public void createBySupplierReport() {
-        ResponseT<bySupplierReport> r;
+        ResponseT<Report> r;
         if (args.length == 4 && convertInt(args[1]) != -1) {
             r = service.createBySupplierReport(args[0], convertInt(args[1]), args[2], args[3]);
             if (r.getError_occurred())
@@ -366,7 +366,7 @@ public class PresentationModel {
     }
 
     public void createByProductReport() {
-        ResponseT<byProductReport> r;
+        ResponseT<Report> r;
         if (args.length == 4 && convertInt(args[1]) != -1) {
             r = service.createByProductReport(args[0], convertInt(args[1]), args[2], args[3]);
             if (r.getError_occurred())
@@ -377,7 +377,7 @@ public class PresentationModel {
     }
 
     public void createByCategoryReport() {
-        ResponseT<byCategoryReport> r;
+        ResponseT<Report> r;
         if (args.length == 6 && convertInt(args[1]) != -1) {
             r = service.createByCategoryReport(args[0], convertInt(args[1]), args[2], args[3], args[4], args[5]);
             if (r.getError_occurred())
