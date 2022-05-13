@@ -6,8 +6,13 @@ import groupk.shared.service.dto.*;
 import java.util.*;
 
 public class Facade {
+    EmployeesController employees;
+    LogisticsController logistics;
 
-    public Facade() {}
+    public Facade() {
+        employees = new EmployeesController();
+        logistics = new LogisticsController();
+    }
 
     // Previously addEmployee.
     public Employee createEmployee(
@@ -74,7 +79,14 @@ public class Facade {
 
     // Previously removeTrucking
     public Response<Delivery> deleteDelivery(String subjectID, int deliveryID) {
-        throw new UnsupportedOperationException("TODO");
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("Subject must be of trucking manager role.");
+        }
+        return logistics.deleteDelivery(deliveryID);
     }
 
     // Previously printBoard
