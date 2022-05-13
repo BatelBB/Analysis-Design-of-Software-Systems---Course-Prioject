@@ -1,27 +1,25 @@
 package adss_group_k.BusinessLayer.Suppliers.Service;
 
-import adss_group_k.BusinessLayer.Inventory.Product;
-import adss_group_k.BusinessLayer.Inventory.Service.Response;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
-import adss_group_k.BusinessLayer.Suppliers.Entity.MutableContact;
 import adss_group_k.BusinessLayer.Suppliers.Entity.PaymentCondition;
 import adss_group_k.BusinessLayer.Suppliers.Entity.QuantityDiscount;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Order;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
+import adss_group_k.shared.response.Response;
+import adss_group_k.shared.response.ResponseT;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * TEMPORARY NAME!
  */
 public interface ISupplierService_V2 {
-    ServiceResponseWithData<Order> getOrder(int id);
+    ResponseT<Order> getOrder(int id);
 
-    ServiceResponseWithData<Supplier> createSupplier(
+    ResponseT<Supplier> createSupplier(
             int ppn, int bankAccount, String name,
             boolean isDelivering, PaymentCondition paymentCondition,
             DayOfWeek regularSupplyingDays,
@@ -31,30 +29,30 @@ public interface ISupplierService_V2 {
 
     Supplier getSupplier(int ppn) throws BusinessLogicException;
 
-    ServiceResponse deleteSupplier(int ppn);
+    Response deleteSupplier(int ppn);
 
-    ServiceResponseWithData<Item> createItem(int supplierPPN, int catalogNumber,
-                                             int productID,
-                                             String name, String category, float price);
+    ResponseT<Item> createItem(int supplierPPN, int catalogNumber,
+                               int productID,
+                               String name, String category, float price);
 
     Collection<Item> getItems();
 
-    ServiceResponseWithData<Item> getItem(int ppn, int catalog);
+    ResponseT<Item> getItem(int ppn, int catalog);
 
-    ServiceResponse deleteItem(int ppn, int catalogN);
+    Response deleteItem(int ppn, int catalogN);
 
-    ServiceResponseWithData<QuantityDiscount> createDiscount(int supplierPPN, int catalogN, int amount, float discount);
+    ResponseT<QuantityDiscount> createDiscount(int supplierPPN, int catalogN, int amount, float discount);
 
-    ServiceResponse deleteDiscount(QuantityDiscount discount);
+    Response deleteDiscount(QuantityDiscount discount);
 
-    ServiceResponseWithData<Order> createOrder(int supplierPPN, LocalDate ordered, LocalDate delivered,
-                                               Order.OrderType type);
+    ResponseT<Order> createOrder(int supplierPPN, LocalDate ordered, LocalDate delivered,
+                                 Order.OrderType type);
 
     Collection<Order> getOrders();
 
-    ServiceResponse deleteOrder(int orderId);
+    Response deleteOrder(int orderId);
 
-    ServiceResponse seedExample();
+    Response seedExample();
 
     QuantityDiscount getDiscount(int amount, int ppn, int catalog) throws BusinessLogicException;
 

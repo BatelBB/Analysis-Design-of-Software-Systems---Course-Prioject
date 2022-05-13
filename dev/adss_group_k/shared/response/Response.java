@@ -1,12 +1,12 @@
-package adss_group_k.BusinessLayer.Suppliers.Service;
+package adss_group_k.shared.response;
 
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 
-public class ServiceResponse {
+public class Response {
     public final boolean success;
     public final String error;
 
-    ServiceResponse(boolean success, String error) {
+    Response(boolean success, String error) {
         this.success = success;
         this.error = error;
     }

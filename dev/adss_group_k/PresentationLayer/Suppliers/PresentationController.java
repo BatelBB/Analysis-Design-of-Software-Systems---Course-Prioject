@@ -6,7 +6,7 @@ import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Order;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
-import adss_group_k.BusinessLayer.Suppliers.Service.ServiceResponseWithData;
+import adss_group_k.shared.response.ResponseT;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -181,7 +181,7 @@ public class PresentationController {
                                 LocalDate ordered = input.nextDate("What is the order date? ");
                                 LocalDate deliver = input.nextDate("When is the order supposed to be delivered? ");
                                 try {
-                                    ServiceResponseWithData<Order> serviceResponse = service.createOrder(
+                                    ResponseT<Order> serviceResponse = service.createOrder(
                                             service.getSupplier(ppn), ordered, deliver, Order.OrderType.Periodical);
                                     order = serviceResponse.data;
                                     String err = serviceResponse.error;

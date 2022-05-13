@@ -1,8 +1,6 @@
 package adss_group_k.BusinessLayer.Suppliers.Service;
 
 import adss_group_k.BusinessLayer.Inventory.Product;
-import adss_group_k.BusinessLayer.Inventory.Service.Response;
-import adss_group_k.BusinessLayer.Inventory.Service.ResponseT;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.Controller.ItemController;
 import adss_group_k.BusinessLayer.Suppliers.Controller.OrderController;
@@ -13,6 +11,8 @@ import adss_group_k.BusinessLayer.Suppliers.Entity.QuantityDiscount;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Order;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
+import adss_group_k.shared.response.Response;
+import adss_group_k.shared.response.ResponseT;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.time.LocalDate;
@@ -30,11 +30,11 @@ public class SupplierService {
         this.suppliers = new SupplierController(this.orders, this.items);
     }
 
-    public ServiceResponseWithData<Order> getOrder(int id) {
+    public ResponseT<Order> getOrder(int id) {
         return responseFor(() -> orders.get(id));
     }
 
-    public ServiceResponseWithData<Supplier> createSupplier(
+    public ResponseT<Supplier> createSupplier(
             int ppn, int bankAccount, String name,
             boolean isDelivering, PaymentCondition paymentCondition,
             DayOfWeek regularSupplyingDays, MutableContact contact) {
@@ -52,12 +52,12 @@ public class SupplierService {
         return suppliers.get(ppn);
     }
     
-    public ServiceResponse deleteSupplier(int ppn) {
+    public Response deleteSupplier(int ppn) {
         return responseFor(() -> suppliers.delete(ppn));
     }
 
-    public ServiceResponseWithData<Item> createItem(int supplierPPN, int catalogNumber,
-                                                    String name, String category, float price) {
+    public ResponseT<Item> createItem(int supplierPPN, int catalogNumber,
+                                      String name, String category, float price) {
         return responseFor(() -> items.create(
                 suppliers.get(supplierPPN),
                 catalogNumber, name,
@@ -70,30 +70,30 @@ public class SupplierService {
         return items.all();
     }
 
-    public ServiceResponseWithData<Item> getItem(int ppn, int catalog) {
+    public ResponseT<Item> getItem(int ppn, int catalog) {
         return responseFor(() -> items.get(ppn, catalog));
     }
 
     
-    public ServiceResponse deleteItem(Item item) {
+    public Response deleteItem(Item item) {
         return responseFor(() -> items.delete(item));
     }
 
     
-    public ServiceResponseWithData<QuantityDiscount> createDiscount(Item item, int amount, float discount) {
+    public ResponseT<QuantityDiscount> createDiscount(Item item, int amount, float discount) {
         return responseFor(() -> items.createDiscount(item, amount, discount));
     }
 
     
-    public ServiceResponse deleteDiscount(QuantityDiscount discount) {
+    public Response deleteDiscount(QuantityDiscount discount) {
        return responseFor(() -> items.deleteDiscount(discount));
     }
 
     
-    public ServiceResponseWithData<Order> createOrder(Supplier supplier, LocalDate ordered, LocalDate delivered,
-                                                      Order.OrderType type) {
+    public ResponseT<Order> createOrder(Supplier supplier, LocalDate ordered, LocalDate delivered,
+                                        Order.OrderType type) {
         if(!items.supplierHasAnyItems(supplier)) {
-            return ServiceResponseWithData.error("This supplier doesn't have any items currently");
+            return ResponseT.error("This supplier doesn't have any items currently");
         }
         return responseFor(() -> orders.create(supplier, ordered, delivered));
     }
@@ -104,11 +104,11 @@ public class SupplierService {
     }
 
     
-    public ServiceResponse deleteOrder(Order order) {
+    public Response deleteOrder(Order order) {
         return responseFor(() -> orders.delete(order));
     }
 
-    public ServiceResponse seedExample() {
+    public Response seedExample() {
         return responseFor(() -> ExampleSeed.seedDatabase(this));
     }
 
@@ -241,21 +241,21 @@ public class SupplierService {
         void run() throws BusinessLogicException;
     }
 
-    private <T> ServiceResponseWithData<T> responseFor(BusinessLayerOperation<T> operation) {
+    private <T> ResponseT<T> responseFor(BusinessLayerOperation<T> operation) {
         try {
             T result = operation.run();
-            return ServiceResponseWithData.success(result);
+            return ResponseT.success(result);
         } catch (BusinessLogicException e) {
-            return ServiceResponseWithData.error(e.getMessage());
+            return ResponseT.error(e.getMessage());
         }
     }
 
-    private ServiceResponse responseFor(VoidBusinessLayerOperation operation) {
+    private Response responseFor(VoidBusinessLayerOperation operation) {
         try {
             operation.run();
-            return new ServiceResponse(true, null);
+            return new Response(true, null);
         } catch (BusinessLogicException e) {
-            return new ServiceResponse(false, e.getMessage());
+            return new Response(false, e.getMessage());
         }
     }
 }

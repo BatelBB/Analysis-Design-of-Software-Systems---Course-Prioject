@@ -1,8 +1,6 @@
 package adss_group_k.PresentationLayer.Inventory;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
-import adss_group_k.BusinessLayer.Inventory.Service.Response;
-import adss_group_k.BusinessLayer.Inventory.Service.ResponseT;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
 
 import java.time.LocalDateTime;

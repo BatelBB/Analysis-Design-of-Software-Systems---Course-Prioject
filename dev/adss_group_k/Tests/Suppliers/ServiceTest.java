@@ -8,8 +8,8 @@ import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Order;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
-import adss_group_k.BusinessLayer.Suppliers.Service.ServiceResponse;
-import adss_group_k.BusinessLayer.Suppliers.Service.ServiceResponseWithData;
+import adss_group_k.shared.response.Response;
+import adss_group_k.shared.response.ResponseT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,14 +42,14 @@ class ServiceTest {
      **/
     @Test
     void createSupplier() {
-        ServiceResponseWithData<Supplier> response = createWithPpn(1);
+        ResponseT<Supplier> response = createWithPpn(1);
         assertTrue(response.success, response.error);
         Supplier supplier = response.data;
         assertNotNull(supplier);
         assertEquals(1, supplier.getPpn());
         // TODO add tests for other fields if there's time
 
-        ServiceResponseWithData<Supplier> responseErroneous = createWithPpn(1);
+        ResponseT<Supplier> responseErroneous = createWithPpn(1);
         assertFalse(responseErroneous.success, "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
         assertNull(responseErroneous.data, "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
     }
@@ -90,7 +90,7 @@ class ServiceTest {
         service.orderItem(order, item, 12);
 
         // delete should work.
-        ServiceResponse serviceResponse = service.deleteSupplier(ppn);
+        Response serviceResponse = service.deleteSupplier(ppn);
         assertTrue(serviceResponse.success, "delete ReadOnlysupplier failed, but shouldn't have");
 
         // getting this ReadOnlysupplier shouldn't work.
@@ -98,7 +98,7 @@ class ServiceTest {
                 "Getting deleted ReadOnlysupplier should have failed");
 
         // creating new one with same PPN should work.
-        ServiceResponseWithData<Supplier> otherResponse = service.createSupplier(ppn, 222,
+        ResponseT<Supplier> otherResponse = service.createSupplier(ppn, 222,
                 "Ipsum", false,
                 PaymentCondition.Credit, DayOfWeek.MONDAY,
                 new MutableContact("george", "george@email.com", "050"));
@@ -127,7 +127,7 @@ class ServiceTest {
         createWithPpn(ppn2);
 
         // ReadOnlySupplier 1, ReadOnlyItem 1
-        ServiceResponseWithData<Item> resApple =
+        ResponseT<Item> resApple =
                 service.createItem(ppn1, cn1, "Apple", "Fruit", 1);
         assertTrue(resApple.success, "should have succeeded.");
         Item apple = resApple.data;
@@ -135,7 +135,7 @@ class ServiceTest {
         assertEquals("Apple", apple.getName());
 
         // ReadOnlySupplier 1, ReadOnlyItem 2
-        ServiceResponseWithData<Item> resBanana =
+        ResponseT<Item> resBanana =
                 service.createItem(ppn1, cn2, "Banana", "Fruit", 2);
         assertTrue(resBanana.success, "should have succeeded but got " + resBanana.error);
 
@@ -144,7 +144,7 @@ class ServiceTest {
         assertEquals("Banana", banana.getName());
 
         // ReadOnlySupplier 2, ReadOnlyItem 1
-        ServiceResponseWithData<Item> resOtherSupplier =
+        ResponseT<Item> resOtherSupplier =
                 service.createItem(ppn2, cn1, "Pen", "Office stuff", 10);
         assertTrue(resOtherSupplier.success,
                 "creating other ReadOnlyitem with same CN but different PPN should've worked.");
@@ -155,13 +155,13 @@ class ServiceTest {
         assertEquals("Pen", pen.getName());
 
         // create with already existing
-        ServiceResponseWithData<Item> alreadyExisting = service.createItem(ppn1, cn1,
+        ResponseT<Item> alreadyExisting = service.createItem(ppn1, cn1,
                 "Cat in a bag", "Animals & containers", 123
         );
         assertFalse(alreadyExisting.success);
 
         // not existence supplier
-        ServiceResponseWithData<Item> noSuchSupplier = service.createItem(ppnNotExisting, cn1,
+        ResponseT<Item> noSuchSupplier = service.createItem(ppnNotExisting, cn1,
                 "Puzzle", "Games", 60);
         assertFalse(noSuchSupplier.success);
 
@@ -191,20 +191,20 @@ class ServiceTest {
         createWithPpn(ppn);
         service.createItem(ppn, cn, "Pen", "Office stuff", 10);
 
-        ServiceResponseWithData<Item> resSucc = service.getItem(ppn, cn);
+        ResponseT<Item> resSucc = service.getItem(ppn, cn);
         assertTrue(resSucc.success);
         assertNotNull(resSucc.data);
         assertEquals(ppn, resSucc.data.getSupplier().getPpn());
         assertEquals(cn, resSucc.data.getCatalogNumber());
         assertEquals("Pen", resSucc.data.getName());
 
-        ServiceResponseWithData<Item> resWrongPPN = service.getItem(wrongPPN, cn);
+        ResponseT<Item> resWrongPPN = service.getItem(wrongPPN, cn);
         assertFalse(resWrongPPN.success);
 
-        ServiceResponseWithData<Item> resWrongCN = service.getItem(ppn, wrongCN);
+        ResponseT<Item> resWrongCN = service.getItem(ppn, wrongCN);
         assertFalse(resWrongCN.success);
 
-        ServiceResponseWithData<Item> resWrongBoth = service.getItem(wrongPPN, wrongCN);
+        ResponseT<Item> resWrongBoth = service.getItem(wrongPPN, wrongCN);
         assertFalse(resWrongBoth.success);
     }
 
@@ -227,10 +227,10 @@ class ServiceTest {
         service.orderItem(orderBoth, pen, 10);
         service.orderItem(orderBoth, notebook, 5);
 
-        ServiceResponse resDelete = service.deleteItem(pen);
+        Response resDelete = service.deleteItem(pen);
         assertTrue(resDelete.success);
 
-        ServiceResponseWithData<Item> getDeleted = service.getItem(ppn, cnPen);
+        ResponseT<Item> getDeleted = service.getItem(ppn, cnPen);
         assertFalse(getDeleted.success);
 
         assertEquals(0, orderPens.getTotalPrice());
@@ -244,7 +244,7 @@ class ServiceTest {
         int ppn = 1, cnPen = 11;
         Supplier sup = createWithPpn(ppn).data;
 
-        ServiceResponseWithData<Order> responseWithEmptySupplier = service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
+        ResponseT<Order> responseWithEmptySupplier = service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
         assertFalse(responseWithEmptySupplier.success,
                 "shouldn't be able to start ReadOnlyorder if ReadOnlysupplier has no items.");
 
@@ -252,11 +252,11 @@ class ServiceTest {
         service.createItem(ppn, cnPen, "Pen", "Office", 10);
 
 
-        ServiceResponseWithData<Order> responseWithBadDates = service.createOrder(sup, date2, date1, Order.OrderType.Periodical);
+        ResponseT<Order> responseWithBadDates = service.createOrder(sup, date2, date1, Order.OrderType.Periodical);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        ServiceResponseWithData<Order> response = service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
+        ResponseT<Order> response = service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
         assertTrue(response.success);
 
     }
@@ -292,11 +292,11 @@ class ServiceTest {
         Order order = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
         service.orderItem(order, pen, 10);
 
-        ServiceResponse resDelete = service.deleteOrder(order);
+        Response resDelete = service.deleteOrder(order);
         assertTrue(resDelete.success);
 
         // delete already deleted
-        ServiceResponse resDeleteAgain = service.deleteOrder(order);
+        Response resDeleteAgain = service.deleteOrder(order);
         assertFalse(resDeleteAgain.success);
     }
 
@@ -420,7 +420,7 @@ class ServiceTest {
         service.orderItem(order, item, 1);
         assertEquals(priceCalc, order.getTotalPrice());
 
-        ServiceResponseWithData<QuantityDiscount> res = service.createDiscount(item, 10, 0.01f);
+        ResponseT<QuantityDiscount> res = service.createDiscount(item, 10, 0.01f);
         assertTrue(res.success);
         assertEquals(priceCalc, order.getTotalPrice());
 
@@ -560,7 +560,7 @@ class ServiceTest {
      * (private) UTILS
      */
 
-    private ServiceResponseWithData<Supplier> createWithPpn(int ppn) {
+    private ResponseT<Supplier> createWithPpn(int ppn) {
         return service.createSupplier(ppn, 111, "dummy", true,
                 PaymentCondition.Credit, null,
                 new MutableContact("John", "john@email.com", "054"));
