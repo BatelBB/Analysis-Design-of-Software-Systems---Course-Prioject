@@ -6,7 +6,7 @@ import adss_group_k.PresentationLayer.Suppliers.UserOutput;
 import static adss_group_k.PresentationLayer.Suppliers.PresentationController.startSupplierMenu;
 import adss_group_k.PresentationLayer.Inventory.Main;
 
-public class facade {
+public class Facade {
     private static UserInput input = UserInput.getInstance();
     private static UserOutput output = UserOutput.getInstance();
 
