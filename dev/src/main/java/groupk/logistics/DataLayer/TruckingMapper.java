@@ -97,8 +97,12 @@ public class TruckingMapper extends myDataBase {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
-        if (n > 0)
-            truckingIDMap.truckingsMap.get(truckingId).updateVehicle(vehicleRegistrationPlate);
+        if (n > 0) {
+            if(truckingIDMap.truckingsMap.containsKey(truckingId))
+                truckingIDMap.truckingsMap.get(truckingId).updateVehicle(vehicleRegistrationPlate);
+            else
+                truckingIDMap.truckingsMap.put(truckingId,getTruckingByID(truckingId));
+        }
         return n > 0;
     }
 
