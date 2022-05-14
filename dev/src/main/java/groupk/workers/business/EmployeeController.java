@@ -1,7 +1,9 @@
 package groupk.workers.business;
 
-import groupk.workers.data.EmployeeRepository;
+
+import groupk.workers.data.DalController;
 import groupk.workers.data.Employee;
+import groupk.workers.data.EmployeeRepository;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -9,19 +11,19 @@ import java.util.List;
 import java.util.Set;
 
 public class EmployeeController {
-    private final EmployeeRepository repo;
+    private DalController dalColntroller;
 
-    public EmployeeController(){
-        repo = new EmployeeRepository();
+    public EmployeeController(DalController dalColntroller){
+        this.dalColntroller = dalColntroller;
     }
 
     public Employee create(String name, String id, String bank, int bankID, int bankBranch,
                            Calendar employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Employee.Role role, Set<Employee.ShiftDateTime> shiftPreferences){
-        return repo.addEmployee(name, id, bank, bankID, bankBranch, employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed, role, shiftPreferences);
+        return dalColntroller.addEmployee(name, id, bank, bankID, bankBranch, employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed, role, shiftPreferences);
     }
 
     public Employee read(String employeeID) {
-        return repo.getEmployee(employeeID);
+        return dalColntroller.getEmployee(employeeID);
     }
 
     public Employee update(
@@ -50,11 +52,11 @@ public class EmployeeController {
     }
 
     public Employee delete(String employeeID) {
-        return repo.deleteEmployee(employeeID);
+        return dalColntroller.deleteEmployee(employeeID);
     }
 
     public List<Employee> list() {
-        return  repo.getEmployees();
+        return  dalColntroller.getEmployees();
     }
 
     public boolean isFromHumanResources(String employeeID) {

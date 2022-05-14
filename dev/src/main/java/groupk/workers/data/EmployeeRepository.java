@@ -6,19 +6,20 @@ import java.util.stream.Collectors;
 public class EmployeeRepository {
     private HashMap<String, Employee> employees;
 
-    public EmployeeRepository(){
+    public EmployeeRepository() {
         employees = new HashMap<>();
     }
+
     public List<Employee> getEmployees() {
         return new ArrayList<>(employees.values());
-    };
+    }
 
-    public Employee getEmployee(String id){
+    public Employee getEmployee(String id) {
         return employees.get(id);
     }
 
     public Employee addEmployee(String name, String id, String bank, int bankID, int bankBranch,
-                                Calendar employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Employee.Role role, Set<Employee.ShiftDateTime> shiftPreferences){
+                                Calendar employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Employee.Role role, Set<Employee.ShiftDateTime> shiftPreferences) {
         if (employees.containsKey(id)) {
             throw new IllegalArgumentException("Employee ID must be unique.");
         }

@@ -1,5 +1,6 @@
 package groupk.workers.business;
 
+import groupk.workers.data.DalController;
 import groupk.workers.data.Employee;
 import groupk.workers.data.Shift;
 import groupk.workers.data.ShiftRepository;
@@ -7,10 +8,10 @@ import groupk.workers.data.ShiftRepository;
 import java.util.*;
 
 public class ShiftController {
-    private ShiftRepository repo;
+    private DalController dalColntroller;
 
-    public ShiftController(){
-        repo = new ShiftRepository();
+    public ShiftController(DalController dalColntroller){
+        this.dalColntroller = dalColntroller;
     }
 
     public Shift addShifts(groupk.workers.data.Shift shift){
@@ -27,14 +28,14 @@ public class ShiftController {
                 if(shift.getRequiredStaff().get(r) > numOfRoles.get(r))
                     throw new IllegalArgumentException("There are not enough workers to open this shift.");
             }
-            return repo.addShift(shift);
+            return dalColntroller.addShift(shift);
         }
         else
             throw new IllegalArgumentException("Shift already exists.");
     }
 
     public Shift getShift(Calendar date, Shift.Type type){
-        LinkedList<Shift> shifts = repo.getShifts();
+        LinkedList<Shift> shifts = dalColntroller.getShifts();
         for (Shift s: shifts) {
             if(s.getDate().equals(date) && s.getType().equals(type))
                 return s;
@@ -43,7 +44,7 @@ public class ShiftController {
     }
 
     public boolean ifShiftExist(Shift shift){
-        LinkedList<Shift> shifts = repo.getShifts();
+        LinkedList<Shift> shifts = dalColntroller.getShifts();
         for (Shift s: shifts) {
             if(s.getDate().equals(shift.getDate()) && s.getType().equals(shift.getType()))
                 return true;
@@ -52,7 +53,7 @@ public class ShiftController {
     }
 
     public List<Shift> listShifts(){
-        return new ArrayList<>(repo.getShifts());
+        return new ArrayList<>(dalColntroller.getShifts());
     }
 
     public Shift setRequiredRoleInShift(Calendar date, Shift.Type type, Employee.Role role, int count) {

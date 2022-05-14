@@ -1,5 +1,6 @@
 package groupk.workers.business;
 
+import groupk.workers.data.DalController;
 import groupk.workers.service.dto.Employee;
 import groupk.workers.service.dto.Shift;
 
@@ -9,10 +10,12 @@ import java.util.stream.Collectors;
 public class Facade {
     private EmployeeController employees;
     private ShiftController shifts;
+    private DalController dalColntroller;
 
     public Facade() {
-        employees = new EmployeeController();
-        shifts = new ShiftController();
+        dalColntroller = new DalController();
+        employees = new EmployeeController(dalColntroller);
+        shifts = new ShiftController(dalColntroller);
     }
 
     public Employee addEmployee(
