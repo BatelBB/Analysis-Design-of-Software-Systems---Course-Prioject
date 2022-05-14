@@ -1,24 +1,33 @@
 package groupk.workers.data;
+import javax.imageio.IIOException;
 import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
 public class DalController {
-    final static String url = "jdbc:sqlite:EmployeeDB.db";
+    private String url ;
     private ShiftRepository shiftRepository;
     private EmployeeRepository employeeRepository;
 
     public DalController() {
-        File file = new File("EmployeeDB");
-        createTable();
-        load();
+        File file = new File("employeeDB.db");
+        url = ("jdbc:sqlite:").concat(file.getAbsolutePath());
+        try{
+            if(!file.exists()) {
+                createTables();
+                load();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         shiftRepository = new ShiftRepository();
         employeeRepository = new EmployeeRepository();
     }
 
-    public void createTable() {
+    public void createTables() {
         LinkedList<String> tables = new LinkedList<>();
-        tables.add("CREATE TABLE \"Employee\" (\n" +
+        tables.add("CREATE TABLE IF NOT EXISTS \"Employee\" (\n" +
                 "\t\"ID\"\tINTEGER,\n" +
                 "\t\"Name\"\tTEXT,\n" +
                 "\t\"BankName\"\tTEXT,\n" +
@@ -32,18 +41,18 @@ public class DalController {
                 "\tPRIMARY KEY(\"ID\"),\n" +
                 "\tFOREIGN KEY(\"Role\") REFERENCES \"Role\"(\"Name\")\n" +
                 ");");
-        tables.add("CREATE TABLE \"RequiredStaff\" (\n" +
+        tables.add("CREATE TABLE IF NOT EXISTS \"RequiredStaff\" (\n" +
                 "\t\"Count\"\tINTEGER,\n" +
                 "\t\"Role\"\tINTEGER,\n" +
                 "\t\"ID\"\tINTEGER,\n" +
                 "\tPRIMARY KEY(\"ID\",\"Role\"),\n" +
                 "\tFOREIGN KEY(\"Role\") REFERENCES \"Role\"(\"Name\")\n" +
                 ");");
-        tables.add("CREATE TABLE \"Role\" (\n" +
+        tables.add("CREATE TABLE IF NOT EXISTS \"Role\" (\n" +
                 "\t\"Name\"\tINTEGER,\n" +
                 "\tPRIMARY KEY(\"Name\")\n" +
                 ");");
-        tables.add("CREATE TABLE \"Shift\" (\n" +
+        tables.add("CREATE TABLE IF NOT EXISTS \"Shift\" (\n" +
                 "\t\"Type\"\tTEXT,\n" +
                 "\t\"Date\"\tTEXT,\n" +
                 "\t\"RequiredStaffID\"\tINTEGER,\n" +
@@ -51,26 +60,26 @@ public class DalController {
                 "\tFOREIGN KEY(\"RequiredStaffID\") REFERENCES \"RequiredStaff\"(\"ID\"),\n" +
                 "\tPRIMARY KEY(\"ID\")\n" +
                 ");");
-        tables.add("CREATE TABLE \"ShiftPreference\" (\n" +
+        tables.add("CREATE TABLE IF NOT EXISTS \"ShiftPreference\" (\n" +
                 "\t\"EmployeeID\"\tINTEGER,\n" +
                 "\t\"ShiftType\"\tINTEGER,\n" +
                 "\tFOREIGN KEY(\"ShiftType\") REFERENCES \"ShiftSlot\"(\"Type\"),\n" +
                 "\tPRIMARY KEY(\"EmployeeID\",\"ShiftType\"),\n" +
                 "\tFOREIGN KEY(\"EmployeeID\") REFERENCES \"Employee\"(\"ID\")\n" +
                 ");");
-        tables.add("CREATE TABLE \"ShiftSlot\" (\n" +
+        tables.add("CREATE TABLE IF NOT EXISTS \"ShiftSlot\" (\n" +
                 "\t\"Type\"\tTEXT,\n" +
                 "\tPRIMARY KEY(\"Type\")\n" +
                 ");");
-        tables.add("CREATE TABLE \"Workers\" (\n" +
+        tables.add("CREATE TABLE IF NOT EXISTS \"Workers\" (\n" +
                 "\t\"ShiftID\"\tINTEGER,\n" +
                 "\t\"EmployeeID\"\tINTEGER,\n" +
                 "\tFOREIGN KEY(\"ShiftID\") REFERENCES \"Shift\"(\"ID\"),\n" +
                 "\tPRIMARY KEY(\"ShiftID\",\"EmployeeID\")\n" +
                 ");");
-        try {
+        try (
             Connection connection = DriverManager.getConnection(url);
-            Statement statement = connection.createStatement();
+            Statement statement = connection.createStatement()){
             for (String table : tables) {
                 statement.addBatch(table);
             }
