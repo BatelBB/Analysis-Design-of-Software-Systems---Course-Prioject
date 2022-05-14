@@ -6,7 +6,7 @@ public class Response {
     public final boolean success;
     public final String error;
 
-    Response(boolean success, String error) {
+    public Response(boolean success, String error) {
         this.success = success;
         this.error = error;
     }

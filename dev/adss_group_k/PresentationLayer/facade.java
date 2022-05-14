@@ -4,6 +4,7 @@ import adss_group_k.PresentationLayer.Suppliers.UserInput;
 import adss_group_k.PresentationLayer.Suppliers.UserOutput;
 
 import static adss_group_k.PresentationLayer.Suppliers.PresentationController.startSupplierMenu;
+import adss_group_k.PresentationLayer.Inventory.Main;
 
 public class facade {
     private static UserInput input = UserInput.getInstance();
@@ -29,7 +30,7 @@ public class facade {
                 }
                 case (2): {
                     retry = false;
-                    startInventoryMenu();
+                    Main.startInventoryMenu();
                     break;
                 }
                 default:
