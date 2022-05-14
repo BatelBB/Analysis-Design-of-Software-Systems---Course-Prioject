@@ -2,19 +2,25 @@ package groupk.workers;
 
 import static org.junit.jupiter.api.Assertions.*;
 import groupk.workers.business.Facade;
+import groupk.workers.data.DalController;
 import groupk.workers.service.Service;
 import groupk.workers.service.dto.Employee;
 import groupk.workers.service.dto.Shift;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class BusinessTest {
+
     @Test
     public void testCreateEmployee()
     {
         Facade facade = new Facade();
+        facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
                 "111111110",
@@ -39,6 +45,7 @@ public class BusinessTest {
         for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
         Facade facade = new Facade();
+        facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
                 "111111110",
@@ -128,20 +135,31 @@ public class BusinessTest {
                 Employee.Role.ShiftManager,
                 shiftPreferences
         );
+        Employee TM = facade.addEmployee(
+                "Foo2",
+                "111830",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.TruckingManger,
+                shiftPreferences
+        );
         LinkedList<Employee> em = new LinkedList<>();
-        em.add(SM); em.add(HR); em.add(LM); em.add(s); em.add(d); em.add(ShM); em.add(c); em.add(l);
+        em.add(SM); em.add(HR); em.add(LM); em.add(s); em.add(d); em.add(ShM); em.add(c); em.add(l); em.add(TM);
         Shift shift = facade.addShift(HR.id, new GregorianCalendar(),Shift.Type.Morning, em, new HashMap<>());
         assertEquals(facade.listShifts(HR.id).size(), 1);
-        assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().size(),8);
+        assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().size(),9);
         assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().get(Employee.Role.StoreManager),1);
         assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().get(Employee.Role.LogisticsManager),1);
         assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().get(Employee.Role.HumanResources),1);
-        assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getStaff().size(),8);
     }
 
     @Test
     public void testDeleteEmployeeByHR() {
         Facade facade = new Facade();
+        facade.deleteDB();
         facade.addEmployee(
                 "Foo",
                 "111111111",
@@ -174,6 +192,7 @@ public class BusinessTest {
     @Test
     public void testAddEmployeeShiftPreference(){
         Facade facade = new Facade();
+        facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
                 "111111111",
@@ -195,6 +214,7 @@ public class BusinessTest {
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
         Facade facade = new Facade();
+        facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
                 "111111111",
@@ -245,6 +265,7 @@ public class BusinessTest {
     @Test
     public void testAddEmployeeToShiftCanNotWork() {
         Facade facade = new Facade();
+        facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
                 "111111111",
@@ -298,6 +319,7 @@ public class BusinessTest {
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
         Facade facade = new Facade();
+        facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
                 "111111111",
@@ -351,6 +373,7 @@ public class BusinessTest {
     @Test
     public void testWhoCanWork() {
         Facade facade = new Facade();
+        facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
                 "111111111",
@@ -393,6 +416,7 @@ public class BusinessTest {
     @Test
     public void testAddEmployeeToShiftNoEmployee() {
         Facade facade = new Facade();
+        facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
                 "111111110",
@@ -435,6 +459,7 @@ public class BusinessTest {
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
         Facade facade = new Facade();
+        facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
                 "111111110",

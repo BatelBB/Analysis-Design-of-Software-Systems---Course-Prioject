@@ -6,18 +6,18 @@ import java.sql.*;
 import java.util.*;
 
 public class DalController {
-    private String url ;
+    public static String url ;
     private ShiftRepository shiftRepository;
     private EmployeeRepository employeeRepository;
-
+    public static File file;
     public DalController() {
-        File file = new File("employeeDB.db");
+        file = new File("employeeDB.db");
         url = ("jdbc:sqlite:").concat(file.getAbsolutePath());
         try{
             if(!file.exists()) {
                 createTables();
-                load();
             }
+            load();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -28,7 +28,7 @@ public class DalController {
     public void createTables() {
         LinkedList<String> tables = new LinkedList<>();
         tables.add("CREATE TABLE IF NOT EXISTS \"Employee\" (\n" +
-                "\t\"ID\"\tINTEGER,\n" +
+                "\t\"ID\"\tTEXT,\n" +
                 "\t\"Name\"\tTEXT,\n" +
                 "\t\"BankName\"\tTEXT,\n" +
                 "\t\"BankBranch\"\tINTEGER,\n" +
@@ -43,22 +43,21 @@ public class DalController {
                 ");");
         tables.add("CREATE TABLE IF NOT EXISTS \"RequiredStaff\" (\n" +
                 "\t\"Count\"\tINTEGER,\n" +
-                "\t\"Role\"\tINTEGER,\n" +
+                "\t\"Role\"\tTEXT,\n" +
                 "\t\"ID\"\tINTEGER,\n" +
                 "\tPRIMARY KEY(\"ID\",\"Role\"),\n" +
+                "\tFOREIGN KEY(\"ID\") REFERENCES \"Shift\"(\"ID\"),\n" +
                 "\tFOREIGN KEY(\"Role\") REFERENCES \"Role\"(\"Name\")\n" +
                 ");");
         tables.add("CREATE TABLE IF NOT EXISTS \"Role\" (\n" +
-                "\t\"Name\"\tINTEGER,\n" +
+                "\t\"Name\"\tTEXT,\n" +
                 "\tPRIMARY KEY(\"Name\")\n" +
                 ");");
         tables.add("CREATE TABLE IF NOT EXISTS \"Shift\" (\n" +
                 "\t\"Type\"\tTEXT,\n" +
                 "\t\"Date\"\tTEXT,\n" +
-                "\t\"RequiredStaffID\"\tINTEGER,\n" +
                 "\t\"ID\"\tINTEGER,\n" +
-                "\tFOREIGN KEY(\"RequiredStaffID\") REFERENCES \"RequiredStaff\"(\"ID\"),\n" +
-                "\tPRIMARY KEY(\"ID\")\n" +
+                "\tPRIMARY KEY(\"Date\",\"Type\")\n" +
                 ");");
         tables.add("CREATE TABLE IF NOT EXISTS \"ShiftPreference\" (\n" +
                 "\t\"EmployeeID\"\tINTEGER,\n" +
@@ -93,33 +92,26 @@ public class DalController {
         try{
             Connection connection = DriverManager.getConnection(url);
             Statement statement = connection.createStatement();
-            statement.executeUpdate("INSERT INTO Role(Name) VALUES(Logistics)");
-            statement.executeUpdate("INSERT INTO Role(Name) VALUES(HumanResources)");
-            statement.executeUpdate("INSERT INTO Role(Name) VALUES(Cashier)");
-            statement.executeUpdate("INSERT INTO Role(Name) VALUES(LogisticsManager)");
-            statement.executeUpdate("INSERT INTO Role(Name) VALUES(ShiftManager)");
-            statement.executeUpdate("INSERT INTO Role(Name) VALUES(Driver)");
-            statement.executeUpdate("INSERT INTO Role(Name) VALUES(StoreManager)");
-            statement.executeUpdate("INSERT INTO Role(Name) VALUES(TruckingManger)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(SundayMorning)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(SundayEvening)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(MondayMorning)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(MondayEvening)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(TuesdayMorning)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(TuesdayEvening)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(WednesdayMorning)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(WednesdayEvening)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(ThursdayMorning)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(ThursdayEvening)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(FridayMorning)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(FridayEvening)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(SaturdayMorning)");
-            statement.executeUpdate("INSERT INTO ShiftSlot(Type) VALUES(SaturdayEvening)");
+            for (Employee.Role role: Employee.Role.values()) {
+                String insertRole = "INSERT OR IGNORE INTO Role VALUES ('"+ role.name()+"')";
+                statement.executeUpdate(insertRole);
+            }
+            for (Employee.ShiftDateTime shift: Employee.ShiftDateTime.values()) {
+                String insertShift = "INSERT OR IGNORE INTO ShiftSlot VALUES ('" + shift.name() + "')";
+                statement.executeUpdate(insertShift);
+            }
             connection.close();
         }
         catch (SQLException s){
             System.out.println(s.getMessage());
         }
+    }
+
+    //for test use
+    public void deleteDataBase(){
+        File file = new File("employeeDB.db");
+        if(file.exists())
+            file.delete();
     }
 
     public List<Employee> getEmployees() {

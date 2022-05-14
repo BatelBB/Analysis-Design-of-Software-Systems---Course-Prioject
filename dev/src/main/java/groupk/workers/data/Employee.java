@@ -1,7 +1,9 @@
 package groupk.workers.data;
 
 import javax.management.relation.RoleInfoNotFoundException;
+import java.sql.*;
 import java.util.*;
+import groupk.workers.data.DalController;
 
 public class Employee {
     public static enum ShiftDateTime {
@@ -59,12 +61,37 @@ public class Employee {
 
     public Employee(String name, String id, String bank, int bankID, int bankBranch,
                     Calendar employmentStart, int salaryPerHour, int sickDaysUsed, int vacationDaysUsed, Role role, Set<ShiftDateTime> availableShifts){
-        this.name = name;
-        this.id = id;
-        account = new BankAccount(bank, bankID, bankBranch);
-        conditions = new WorkingConditions(employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed);
-        this.role = role;
-        this.availableShifts = availableShifts;
+        try{
+            Connection connection = DriverManager.getConnection(DalController.url);
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Employee VALUES(?,?,?,?,?,?,?,?,?,?)");
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, name);
+            preparedStatement.setString(3 , bank);
+            preparedStatement.setInt(4, bankBranch);
+            preparedStatement.setInt(5, bankID);
+            preparedStatement.setString(6, employmentStart.toString());
+            preparedStatement.setInt(7, sickDaysUsed);
+            preparedStatement.setInt(8, vacationDaysUsed);
+            preparedStatement.setInt(9, salaryPerHour);
+            preparedStatement.setString(10, role.name());
+            preparedStatement.executeUpdate();
+            for (ShiftDateTime shift:availableShifts) {
+                PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO ShiftPreference VALUES(?,?)");
+                preparedStatement2.setString(1, id);
+                preparedStatement2.setString(2, shift.name());
+                preparedStatement2.executeUpdate();
+            }
+            connection.close();
+            this.name = name;
+            this.id = id;
+            account = new BankAccount(bank, bankID, bankBranch);
+            conditions = new WorkingConditions(employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed);
+            this.role = role;
+            this.availableShifts = availableShifts;
+        }
+        catch (SQLException s){
+            System.out.println(s.getMessage());
+        }
     }
 
     public String getId() { return id; }
@@ -80,17 +107,51 @@ public class Employee {
     public Role getRole() { return role;}
 
     public Employee setAvailableShifts(Set<ShiftDateTime> shiftPreferences) {
-        availableShifts = shiftPreferences;
+        try{
+            Connection connection = DriverManager.getConnection(DalController.url);
+            for (ShiftDateTime shift:availableShifts) {
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO ShiftPreference VALUES(?,?)");
+                preparedStatement.setString(1, id);
+                preparedStatement.setString(2, shift.name());
+                preparedStatement.executeUpdate();
+            }
+            connection.close();
+            availableShifts = shiftPreferences;
+        }
+        catch (SQLException s){
+            System.out.println(s.getMessage());
+        }
         return this;
     }
 
     public Employee addEmployeeShiftPreference(ShiftDateTime shift){
-        availableShifts.add(shift);
+        try{
+            Connection connection = DriverManager.getConnection(DalController.url);
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO ShiftPreference VALUES(?,?)");
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, shift.name());
+            preparedStatement.executeUpdate();
+            connection.close();
+            availableShifts.add(shift);
+        }
+        catch (SQLException s){
+            System.out.println(s.getMessage());
+        }
         return this;
     }
 
     public Employee deleteEmployeeShiftPreference(ShiftDateTime shift){
-        availableShifts.remove(shift);
+        try{
+            Connection connection = DriverManager.getConnection(DalController.url);
+            String deleteShift = "DELETE FROM ShiftPreference WHERE ShiftType = '" + shift.name() + "';";
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteShift);
+            preparedStatement.executeUpdate();
+            connection.close();
+            availableShifts.remove(shift);
+        }
+        catch (SQLException s){
+            System.out.println(s.getMessage());
+        }
         return this;
     }
 

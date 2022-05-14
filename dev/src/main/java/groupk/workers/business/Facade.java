@@ -18,6 +18,11 @@ public class Facade {
         shifts = new ShiftController(dalColntroller);
     }
 
+    //for test use
+    public void deleteDB(){
+        dalColntroller.deleteDataBase();
+        dalColntroller = new DalController();
+    }
     public Employee addEmployee(
             String name,
             String id,

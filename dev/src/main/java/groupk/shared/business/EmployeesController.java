@@ -3,10 +3,16 @@ package groupk.shared.business;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
+import groupk.workers.business.Facade;
 
 import java.util.*;
 
 public class EmployeesController {
+    public Facade employeeBusiness;
+
+    public EmployeesController(){
+        Facade employeeBusiness = new Facade();
+    }
     public Employee createEmployee(
             String name,
             String id,
@@ -20,6 +26,11 @@ public class EmployeesController {
             Employee.Role role,
             Set<Employee.ShiftDateTime> shiftPreferences) {
         throw new UnsupportedOperationException("TODO");
+    }
+
+    //for test use
+    public void deleteEmployeeDB(){
+        employeeBusiness.deleteDB();
     }
 
     public Response<Shift> createShift(String subjectID, Calendar date, Shift.Type type,

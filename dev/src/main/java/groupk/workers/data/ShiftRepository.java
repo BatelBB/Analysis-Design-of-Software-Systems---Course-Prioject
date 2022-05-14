@@ -17,7 +17,7 @@ public class ShiftRepository {
     }
 
     public Shift addShift(Shift shift){
-        shifts.add(new Shift(shift.getDate(), shift.getType() ,shift.getStaff(), shift.getRequiredStaff()));
+        shifts.add(shift);
         return  shift;
     }
 }

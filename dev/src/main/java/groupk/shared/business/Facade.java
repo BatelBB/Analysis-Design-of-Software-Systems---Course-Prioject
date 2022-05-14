@@ -2,6 +2,7 @@ package groupk.shared.business;
 
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.*;
+import groupk.workers.data.DalController;
 
 import java.util.*;
 
@@ -12,6 +13,11 @@ public class Facade {
     public Facade() {
         employees = new EmployeesController();
         logistics = new LogisticsController();
+    }
+
+    //fot test use
+    public void deleteEmployeeDB(){
+        employees.deleteEmployeeDB();
     }
 
     // Previously addEmployee.
