@@ -39,6 +39,8 @@ public class EmployeesController {
         employeeBusiness.deleteDB();
     }
 
+    public void loadEmployeeDB(){ employeeBusiness.loadDB();}
+
     public Response<Shift> createShift(String subjectID, Calendar date, Shift.Type type,
                                        LinkedList<Employee> staff,
                                        HashMap<Employee.Role, Integer> requiredStaff) {

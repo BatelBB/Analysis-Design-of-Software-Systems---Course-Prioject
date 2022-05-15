@@ -16,6 +16,8 @@ public class Service {
         facade.deleteEmployeeDB();
     }
 
+    public void loadEmployeeDB(){ facade.loadEmployeeDB();}
+
     public  Response<Employee> createEmployee(
             String name,
             String id,

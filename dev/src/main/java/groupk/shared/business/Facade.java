@@ -20,6 +20,8 @@ public class Facade {
         employees.deleteEmployeeDB();
     }
 
+    public void loadEmployeeDB(){ employees.loadEmployeeDB();}
+
     // Previously addEmployee.
     public Response<Employee> createEmployee(
             String name,
