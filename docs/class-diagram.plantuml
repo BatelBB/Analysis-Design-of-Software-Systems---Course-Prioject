@@ -10,6 +10,8 @@ package shared {
   package shared.service {
     class shared.service.Service {
       -Facade facade
+      +loadEmployeeDB()
+      +deleteEmployeeDB()
       +createShift()
       +readEmployee()
       +readShift()
@@ -107,6 +109,8 @@ package shared {
     class shared.business.Facade {
       -employees.business.Facade employees
       -logistics.business.Facade logistics
+      +loadEmployeeDB()
+      +deleteEmployeeDB()
       +createShift()
       +readEmployee()
       +readShift()
@@ -133,6 +137,8 @@ package shared {
 
     class shared.business.EmployeeController {
       -employees.business.Facade employees
+      +loadEmployeeDB()
+      +deleteEmployeeDB()
       +createShift()
       +readEmployee()
       +readShift()
@@ -180,6 +186,7 @@ package workers {
       -EmployeeController employees
       -ShiftController shifts
       +deleteDB()
+      +loadDB()
       +addShift()
       +readEmployee()
       +readShift()
@@ -224,6 +231,7 @@ package workers {
       +createTables()
       +load()
       +deleteDataBase()
+      +loadDataFromDB()
       +getEmployees()
       +getEmployee()
       +addEmployee()
