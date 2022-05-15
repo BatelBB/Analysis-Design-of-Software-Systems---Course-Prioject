@@ -23,23 +23,6 @@ public class Shift {
             preparedStatement.setString(2, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
             preparedStatement.setInt(3, id);
             preparedStatement.executeUpdate();
-            for (Employee.Role role : requiredStaff.keySet()) {
-                PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO RequiredStaff VALUES(?,?,?)");
-                preparedStatement2.setInt(1, requiredStaff.get(role));
-                preparedStatement2.setString(2, role.name());
-                preparedStatement2.setInt(3, id);
-                preparedStatement2.executeUpdate();
-            }
-            for(Employee employee : staff){
-                PreparedStatement preparedStatement3 = connection.prepareStatement("INSERT INTO Workers VALUES(?,?)");
-                preparedStatement3.setInt(1, id);
-                preparedStatement3.setString(2, employee.getId());
-                preparedStatement3.executeUpdate();
-            }
-            connection.close();
-            this.type = type;
-            this.date = date;
-            this.staff = staff;
             this.requiredStaff = new HashMap<>();
             for (Employee.Role r : Employee.Role.values()) {
                 if(requiredStaff.containsKey(r))
@@ -55,9 +38,27 @@ public class Shift {
                     }
                 }
             }
+            for (Employee.Role role : this.requiredStaff.keySet()) {
+                PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO RequiredStaff VALUES(?,?,?)");
+                preparedStatement2.setInt(1, this.requiredStaff.get(role));
+                preparedStatement2.setString(2, role.name());
+                preparedStatement2.setInt(3, id);
+                preparedStatement2.executeUpdate();
+            }
+            for(Employee employee : staff){
+                PreparedStatement preparedStatement3 = connection.prepareStatement("INSERT INTO Workers VALUES(?,?)");
+                preparedStatement3.setInt(1, id);
+                preparedStatement3.setString(2, employee.getId());
+                preparedStatement3.executeUpdate();
+            }
+            connection.close();
+            this.type = type;
+            this.date = date;
+            this.staff = staff;
         }
         catch (SQLException s){
             System.out.println(s.getMessage());
+            this.requiredStaff = null;
         }
     }
 
