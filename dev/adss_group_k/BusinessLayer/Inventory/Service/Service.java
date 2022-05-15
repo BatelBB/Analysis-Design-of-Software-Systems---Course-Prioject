@@ -2,6 +2,8 @@ package adss_group_k.BusinessLayer.Inventory.Service;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
+import adss_group_k.shared.response.Response;
+import adss_group_k.shared.response.ResponseT;
 
 import java.time.LocalDateTime;
 import java.util.List;
