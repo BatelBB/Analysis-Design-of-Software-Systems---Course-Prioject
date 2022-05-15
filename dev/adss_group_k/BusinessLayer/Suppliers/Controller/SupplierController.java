@@ -1,6 +1,7 @@
 package adss_group_k.BusinessLayer.Suppliers.Controller;
 
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
+import adss_group_k.BusinessLayer.Suppliers.Entity.MutableItem;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
 import adss_group_k.BusinessLayer.Suppliers.Entity.MutableContact;
 import adss_group_k.BusinessLayer.Suppliers.Entity.PaymentCondition;
@@ -96,5 +97,18 @@ public class SupplierController {
         contact.setEmail(email);
     }
 
+    public Supplier bestPriceSupplier(String itemName){
+        MutableItem[] itemsWithName =
+                (MutableItem[]) items.items.values().stream().filter(i -> i.getName().equals(itemName)).toArray();
+        float minPrice = itemsWithName[0].getPrice();
+        Supplier sup = itemsWithName[0].getSupplier();
+        for (MutableItem it: itemsWithName) {
+            minPrice = Math.min(minPrice, it.getPrice());
+            if(minPrice == it.getPrice())
+                sup = it.getSupplier();
+        }
+        return sup;
+
+    }
 
 }
