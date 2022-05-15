@@ -27,9 +27,7 @@ public class SupplierController {
                                   PaymentCondition paymentCondition,
                                   DayOfWeek regularSupplyingDays, MutableContact contact)
             throws BusinessLogicException {
-        if (suppliers.containsKey(ppn)) {
-            throw new BusinessLogicException("A supplier with this ppn already exists: " + ppn);
-        }
+        validatePPNIsNew(ppn);
         MutableSupplier supplier = new MutableSupplier(
                 ppn, bankAccount, name,
                 isDelivering, paymentCondition,
@@ -37,6 +35,12 @@ public class SupplierController {
         );
         suppliers.put(ppn, supplier);
         return supplier;
+    }
+
+    private void validatePPNIsNew(int ppn) throws BusinessLogicException {
+        if (suppliers.containsKey(ppn)) {
+            throw new BusinessLogicException("A supplier with this ppn already exists: " + ppn);
+        }
     }
 
 
