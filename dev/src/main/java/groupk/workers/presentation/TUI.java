@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class TUI {
+    /* From previous work
     private final Service service;
     private final Runnable onStop;
     private String subject;
@@ -917,4 +918,5 @@ public class TUI {
         }
 
     }
+    */
 }

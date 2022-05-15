@@ -1,8 +1,9 @@
 package groupk.workers.business;
 
+import groupk.shared.service.Response;
 import groupk.workers.data.DalController;
-import groupk.workers.service.dto.Employee;
-import groupk.workers.service.dto.Shift;
+import groupk.shared.service.dto.Employee;
+import groupk.shared.service.dto.Shift;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,6 +28,7 @@ public class Facade {
     public void loadDB(){
         dalColntroller.loadDataFromDB();
     }
+
     public Employee addEmployee(
             String name,
             String id,
@@ -37,8 +39,8 @@ public class Facade {
             int salaryPerHour,
             int sickDaysUsed,
             int vacationDaysUsed,
-            Employee.Role role,
-            Set<Employee.ShiftDateTime> shiftPreferences) {
+            groupk.shared.service.dto.Employee.Role role,
+            Set<groupk.shared.service.dto.Employee.ShiftDateTime> shiftPreferences) {
         groupk.workers.data.Employee created = employees.create(
                 name, id, bank,
                 bankID, bankBranch, employmentStart,
@@ -107,10 +109,10 @@ public class Facade {
     public Shift addEmployeeToShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
         if (employees.isFromHumanResources(subjectID)) {
             groupk.workers.data.Shift shift = shifts.getShift(date, serviceTypeToData(type));
+            groupk.workers.data.Employee added = employees.read(employeeID);
             if (shift.isEmployeeWorking(employeeID)) {
                 throw new IllegalArgumentException("Employee already working in this shift.");
             }
-            groupk.workers.data.Employee added = employees.read(employeeID);
             if (!added.getAvailableShifts().contains(groupk.workers.data.Employee.toShiftDateTime(date, type == Shift.Type.Evening))) {
                 throw new IllegalArgumentException("Employee must be able to work at day of week and time.");
             }
@@ -194,6 +196,19 @@ public class Facade {
         throw new IllegalArgumentException("Subject must be authorized to get history of shifts.");
     }
 
+    public List<Shift> listEmployeeShifts(String subjectID, String employeeID) {
+        List<Shift> shifts = listShifts(subjectID);
+        List<Shift> output = new ArrayList<>();
+        for (Shift s: shifts) {
+            List<Employee> staff = s.getStaff();
+            for (Employee e: staff) {
+                if(e.id.equals(employeeID))
+                output.add(s);
+            }
+        }
+        return output;
+    }
+
     public Shift setRequiredRoleInShift(String subjectId, Calendar date, Shift.Type type, Employee.Role role, int count) {
         if(employees.isFromHumanResources(subjectId))
             return dataShiftToService(shifts.setRequiredRoleInShift(date, serviceTypeToData(type) ,serviceRoleToData(role), count));
@@ -208,7 +223,7 @@ public class Facade {
             throw new IllegalArgumentException("Subject must be authorized to set required roles in shifts.");
     }
 
-    public List<Employee> WhoCanWorkWithRole(String subjectId, Employee.ShiftDateTime day, Employee.Role role){
+    public List<Employee> whoCanWorkWithRole(String subjectId, Employee.ShiftDateTime day, Employee.Role role){
         if(employees.isFromHumanResources(subjectId)) {
             List<Employee> employees = listEmployees(subjectId);
             return employees.stream().filter(p -> p.shiftPreferences.contains(day) && p.role.equals(role)).collect(Collectors.toList());
@@ -217,7 +232,7 @@ public class Facade {
             throw new IllegalArgumentException("Subject must be authorized to get list of employees.");
     }
 
-    public List<Employee> WhoCanWork(String subjectId, Employee.ShiftDateTime day) {
+    public List<Employee> whoCanWork(String subjectId, Employee.ShiftDateTime day) {
         if(employees.isFromHumanResources(subjectId)) {
             List<Employee> employees = listEmployees(subjectId);
             return employees.stream().filter(p -> p.shiftPreferences.contains(day)).collect(Collectors.toList());
@@ -228,10 +243,7 @@ public class Facade {
 
     public int numOfShifts(String subjectId, String employeeID){
         if(employees.isFromHumanResources(subjectId)) {
-            employees.getEmployee(employeeID); //checks if employee exist
-            List<Shift> shifts = listShifts(subjectId);
-            return shifts.stream().filter(p -> (p.getStaff().stream()
-                    .filter(x -> x.id.equals(employeeID)).collect(Collectors.toList())).size() != 0).collect(Collectors.toList()).size();
+            return listEmployeeShifts(subjectId, employeeID).size();
         }
         else
             throw new IllegalArgumentException("Subject must be authorized to get history of shifts.");
@@ -240,38 +252,38 @@ public class Facade {
     //private helper function
 
 
-    private static groupk.workers.data.Employee.Role serviceRoleToData(Employee.Role serviceRole) {
+    private static groupk.workers.data.Employee.Role serviceRoleToData(groupk.shared.service.dto.Employee.Role serviceRole) {
         return groupk.workers.data.Employee.Role.values()[serviceRole.ordinal()];
     }
 
-    private static Employee.Role dataRoleToService(groupk.workers.data.Employee.Role dataRole) {
-        return Employee.Role.values()[dataRole.ordinal()];
+    private static groupk.shared.service.dto.Employee.Role dataRoleToService(groupk.workers.data.Employee.Role dataRole) {
+        return groupk.shared.service.dto.Employee.Role.values()[dataRole.ordinal()];
     }
 
-    private static Set<Employee.ShiftDateTime> dataPreferredShiftsToService
+    private static Set<groupk.shared.service.dto.Employee.ShiftDateTime> dataPreferredShiftsToService
             (Set<groupk.workers.data.Employee.ShiftDateTime> dataShifts) {
-        Set<Employee.ShiftDateTime> preferredShifts = new HashSet<>();
+        Set<groupk.shared.service.dto.Employee.ShiftDateTime> preferredShifts = new HashSet<>();
         for (groupk.workers.data.Employee.ShiftDateTime shift : dataShifts) {
-            preferredShifts.add(Employee.ShiftDateTime.values()[shift.ordinal()]);
+            preferredShifts.add(groupk.shared.service.dto.Employee.ShiftDateTime.values()[shift.ordinal()]);
         }
         return preferredShifts;
     }
 
     private static Set<groupk.workers.data.Employee.ShiftDateTime> servicePreferredShiftsToData
-            (Set<Employee.ShiftDateTime> dtoShifts) {
+            (Set<groupk.shared.service.dto.Employee.ShiftDateTime> dtoShifts) {
         Set<groupk.workers.data.Employee.ShiftDateTime> preferredShifts = new HashSet<>();
-        for (Employee.ShiftDateTime shift : dtoShifts) {
+        for (groupk.shared.service.dto.Employee.ShiftDateTime shift : dtoShifts) {
             preferredShifts.add(groupk.workers.data.Employee.ShiftDateTime.values()[shift.ordinal()]);
         }
         return preferredShifts;
     }
 
-    private static groupk.workers.data.Employee.ShiftDateTime serviceWeeklyShiftToData(Employee.ShiftDateTime dtoShift) {
+    private static groupk.workers.data.Employee.ShiftDateTime serviceWeeklyShiftToData(groupk.shared.service.dto.Employee.ShiftDateTime dtoShift) {
         return groupk.workers.data.Employee.ShiftDateTime.values()[dtoShift.ordinal()];
     }
 
-    private static Employee dataEmployeeToService(groupk.workers.data.Employee dataEmployee) {
-        return new Employee(
+    private static groupk.shared.service.dto.Employee dataEmployeeToService(groupk.workers.data.Employee dataEmployee) {
+        return new groupk.shared.service.dto.Employee(
                 dataEmployee.getId(),
                 dataEmployee.getName(),
                 dataRoleToService(dataEmployee.getRole()),
@@ -286,34 +298,34 @@ public class Facade {
         );
     }
 
-    private groupk.workers.data.Employee serviceEmployeeToData(Employee serviceEmployee) {
+    private groupk.workers.data.Employee serviceEmployeeToData(groupk.shared.service.dto.Employee serviceEmployee) {
         return employees.read(serviceEmployee.id);
     }
 
-    private static Shift.Type dataTypeToService(groupk.workers.data.Shift.Type dataType) {
-        return Shift.Type.values()[dataType.ordinal()];
+    private static groupk.shared.service.dto.Shift.Type dataTypeToService(groupk.workers.data.Shift.Type dataType) {
+        return groupk.shared.service.dto.Shift.Type.values()[dataType.ordinal()];
     }
 
-    private static groupk.workers.data.Shift.Type serviceTypeToData(Shift.Type dataType) {
+    private static groupk.workers.data.Shift.Type serviceTypeToData(groupk.shared.service.dto.Shift.Type dataType) {
         return groupk.workers.data.Shift.Type.values()[dataType.ordinal()];
     }
 
 
-    private static Shift dataShiftToService(groupk.workers.data.Shift dataShift) {
-        return new Shift(
+    private static groupk.shared.service.dto.Shift dataShiftToService(groupk.workers.data.Shift dataShift) {
+        return new groupk.shared.service.dto.Shift(
                 dataShift.getDate(),
                 dataTypeToService(dataShift.getType()),
                 dataShift.getStaff().stream().map(Facade::dataEmployeeToService).collect(Collectors.toList()),
                 dataRequiredRoleInShiftToService(dataShift.getRequiredStaff()));
     }
 
-    private static HashMap<Employee.Role, Integer> dataRequiredRoleInShiftToService(HashMap<groupk.workers.data.Employee.Role, Integer> staffData) {
-        HashMap<Employee.Role, Integer> staffDto = new HashMap<>();
+    private static HashMap<groupk.shared.service.dto.Employee.Role, Integer> dataRequiredRoleInShiftToService(HashMap<groupk.workers.data.Employee.Role, Integer> staffData) {
+        HashMap<groupk.shared.service.dto.Employee.Role, Integer> staffDto = new HashMap<>();
         staffData.forEach((k, v) -> staffDto.put(dataRoleToService(k), v));
         return staffDto;
     }
 
-    private static HashMap<groupk.workers.data.Employee.Role, Integer> serviceRequiredRoleInShiftToData(HashMap<Employee.Role, Integer> staffDto) {
+    private static HashMap<groupk.workers.data.Employee.Role, Integer> serviceRequiredRoleInShiftToData(HashMap<groupk.shared.service.dto.Employee.Role, Integer> staffDto) {
         HashMap<groupk.workers.data.Employee.Role, Integer> staffData = new HashMap<>();
         staffDto.forEach((k, v) -> staffData.put(serviceRoleToData(k), v));
         return staffData;

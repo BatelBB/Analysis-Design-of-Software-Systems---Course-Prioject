@@ -3,16 +3,12 @@ package groupk.workers;
 import static org.junit.jupiter.api.Assertions.*;
 import groupk.workers.business.Facade;
 import groupk.workers.data.DalController;
-import groupk.workers.service.Service;
-import groupk.workers.service.dto.Employee;
-import groupk.workers.service.dto.Shift;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import groupk.shared.service.Service;
+import groupk.shared.service.dto.Employee;
+import groupk.shared.service.dto.Shift;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BusinessTest {
 
@@ -409,8 +405,8 @@ public class BusinessTest {
         );
         facade.addEmployeeShiftPreference(created.id, created.id, Employee.ShiftDateTime.FridayEvening);
         facade.addEmployeeShiftPreference(created2.id, created2.id, Employee.ShiftDateTime.FridayEvening);
-        assertEquals(2, facade.WhoCanWork(HR.id, Employee.ShiftDateTime.FridayEvening).size());
-        assertEquals(1, facade.WhoCanWorkWithRole(HR.id, Employee.ShiftDateTime.FridayEvening, Employee.Role.Cashier).size());
+        assertEquals(2, facade.whoCanWork(HR.id, Employee.ShiftDateTime.FridayEvening).size());
+        assertEquals(1, facade.whoCanWorkWithRole(HR.id, Employee.ShiftDateTime.FridayEvening, Employee.Role.Cashier).size());
     }
 
     @Test

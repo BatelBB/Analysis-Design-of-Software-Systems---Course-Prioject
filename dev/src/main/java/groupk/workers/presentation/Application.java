@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Application {
+    /* From previous work
     public static void main( String[] args )
     {
         AtomicBoolean keepGoing = new AtomicBoolean(true);
@@ -20,4 +21,5 @@ public class Application {
             tui.handleCommand(command);
         }
     }
+     */
 }

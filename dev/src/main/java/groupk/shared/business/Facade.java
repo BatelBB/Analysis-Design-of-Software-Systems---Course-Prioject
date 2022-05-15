@@ -21,7 +21,7 @@ public class Facade {
     }
 
     // Previously addEmployee.
-    public Employee createEmployee(
+    public Response<Employee> createEmployee(
             String name,
             String id,
             String bank,
@@ -33,54 +33,82 @@ public class Facade {
             int vacationDaysUsed,
             Employee.Role role,
             Set<Employee.ShiftDateTime> shiftPreferences) {
-        throw new UnsupportedOperationException("TODO");
+        return employees.createEmployee(name, id, bank, bankID, bankBranch, employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed, role, shiftPreferences);
     }
 
     // Previously addShift.
     public Response<Shift> createShift(String subjectID, Calendar date, Shift.Type type,
                                     LinkedList<Employee> staff,
                                     HashMap<Employee.Role, Integer> requiredStaff){
-        throw new UnsupportedOperationException("TODO");
+        return employees.createShift(subjectID, date, type, staff, requiredStaff);
     }
 
     public Response<Employee> readEmployee(String subjectID, String employeeID) {
-        throw new UnsupportedOperationException("TODO");
+        return employees.readEmployee(subjectID, employeeID);
     }
 
     public Response<Shift> readShift(String subjectID, Calendar date , Shift.Type type) {
-        throw new UnsupportedOperationException("TODO");
+        return employees.readShift(subjectID, date, type);
     }
 
     public Response<Employee> deleteEmployee(String subjectID, String employeeID) {
-        throw new UnsupportedOperationException("TODO");
+        return employees.deleteEmployee(subjectID, employeeID);
     }
 
     public Response<List<Employee>> listEmployees(String subjectID) {
-        throw new UnsupportedOperationException("TODO");
+        return employees.listEmployees(subjectID);
     }
 
     public Response<Shift> addEmployeeToShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
-        throw new UnsupportedOperationException("TODO");
+        return employees.addEmployeeToShift(subjectID, date, type, employeeID);
     }
 
     public Response<Shift> removeEmployeeFromShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
-        throw new UnsupportedOperationException("TODO");
+        return employees.removeEmployeeFromShift(subjectID, date, type, employeeID);
     }
 
     public Response<Employee> updateEmployee(String subjectID, Employee changed) {
-        throw new UnsupportedOperationException("TODO");
+        return employees.updateEmployee(subjectID, changed);
     }
 
-    public Response<Employee> updateEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift, boolean canWork) {
-        throw new UnsupportedOperationException("TODO");
+    public Response<Employee> addEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift) {
+        return employees.addEmployeeShiftPreference(subjectID, employeeID, shift);
+    }
+
+    public Response<Employee> setEmployeeShiftsPreference(String subjectID, String employeeID, Set<Employee.ShiftDateTime> shiftPreferences) {
+        return employees.setEmployeeShiftsPreference(subjectID, employeeID, shiftPreferences);
+    }
+
+    public Response<Employee> deleteEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift){
+        return employees.deleteEmployeeShiftPreference(subjectID, employeeID, shift);
     }
 
     public Response<List<Shift>> listShifts(String subjectID) {
-        throw new UnsupportedOperationException("TODO");
+        return employees.listShifts(subjectID);
+    }
+
+    public Response<List<Shift>> listEmployeeShifts(String subjectID, String employeeID) {
+        return employees.listEmployeeShifts(subjectID, employeeID);
+    }
+
+    public Response<Integer> numOfEmployeeShifts(String subjectID, String employeeID) {
+        return employees.numOfEmployeeShifts(subjectID, employeeID);
     }
 
     public Response<Shift> updateRequiredRoleInShift(String subjectId, Calendar date, Shift.Type type, Employee.Role role, int count) {
-        throw new UnsupportedOperationException("TODO");
+        return employees.updateRequiredRoleInShift(subjectId, date, type, role, count);
+    }
+
+    public Response<Shift> setRequiredStaffInShift(String subjectId, Calendar date, Shift.Type type, HashMap<Employee.Role, Integer> requiredStaff) {
+        return employees.setRequiredStaffInShift(subjectId, date, type, requiredStaff);
+    }
+
+    public Response<List<Employee>> whoCanWorkWithRole(String subjectId, Employee.ShiftDateTime day, Employee.Role role) {
+        return employees.whoCanWorkWithRole(subjectId, day, role);
+    }
+
+    public Response<List<Employee>> whoCanWork(String subjectId, Employee.ShiftDateTime day) {
+        return employees.whoCanWork(subjectId, day);
     }
 
     // Previously removeTrucking

@@ -23,7 +23,7 @@ public class EmployeeController {
     }
 
     public Employee read(String employeeID) {
-        return dalColntroller.getEmployee(employeeID);
+        return getEmployee(employeeID);
     }
 
     public Employee update(

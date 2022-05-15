@@ -1,7 +1,8 @@
 package groupk.workers;
+import groupk.shared.service.dto.Employee;
+import groupk.shared.service.dto.Shift;
 import groupk.workers.business.Facade;
-import groupk.workers.service.dto.Employee;
-import groupk.workers.service.dto.Shift;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.*;

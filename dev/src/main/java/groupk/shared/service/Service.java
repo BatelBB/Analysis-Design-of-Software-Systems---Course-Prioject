@@ -8,7 +8,15 @@ import java.util.*;
 public class Service {
     private Facade facade;
 
-    public Employee createEmployee(
+    public Service(){
+        facade = new Facade();
+    }
+
+    public void deleteEmployeeDB(){
+        facade.deleteEmployeeDB();
+    }
+
+    public  Response<Employee> createEmployee(
             String name,
             String id,
             String bank,
@@ -57,16 +65,44 @@ public class Service {
         return facade.updateEmployee(subjectID, changed);
     }
 
-    public Response<Employee> updateEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift, boolean canWork) {
-        return updateEmployeeShiftPreference(subjectID, employeeID, shift, canWork);
+    public Response<Employee> addEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift) {
+        return facade.addEmployeeShiftPreference(subjectID, employeeID, shift);
+    }
+
+    public Response<Employee> setEmployeeShiftsPreference(String subjectID, String employeeID, Set<Employee.ShiftDateTime> shiftPreferences) {
+        return facade.setEmployeeShiftsPreference(subjectID, employeeID, shiftPreferences);
+    }
+
+    public Response<Employee> deleteEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift){
+        return facade.deleteEmployeeShiftPreference(subjectID, employeeID, shift);
     }
 
     public Response<List<Shift>> listShifts(String subjectID) {
         return facade.listShifts(subjectID);
     }
 
+    public Response<List<Shift>> listEmployeeShifts(String subjectID, String employeeID) {
+        return facade.listEmployeeShifts(subjectID, employeeID);
+    }
+
+    public Response<Integer> numOfEmployeeShifts(String subjectID, String employeeID) {
+        return facade.numOfEmployeeShifts(subjectID, employeeID);
+    }
+
+    public Response<List<Employee>> whoCanWorkWithRole(String subjectId, Employee.ShiftDateTime day, Employee.Role role) {
+        return facade.whoCanWorkWithRole(subjectId, day, role);
+    }
+
+    public Response<List<Employee>> whoCanWork(String subjectId, Employee.ShiftDateTime day) {
+        return facade.whoCanWork(subjectId, day);
+    }
+
     public Response<Shift> updateRequiredRoleInShift(String subjectId, Calendar date, Shift.Type type, Employee.Role role, int count) {
         return facade.updateRequiredRoleInShift(subjectId, date, type, role, count);
+    }
+
+    public Response<Shift> setRequiredStaffInShift(String subjectId, Calendar date, Shift.Type type, HashMap<Employee.Role, Integer> requiredStaff) {
+        return facade.setRequiredStaffInShift(subjectId, date, type, requiredStaff);
     }
 
     public Response<Delivery> deleteDelivery(String subjectID, int deliveryID) {

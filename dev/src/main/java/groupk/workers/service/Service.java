@@ -13,6 +13,7 @@ public class Service {
         facade = new Facade();
     }
 
+    /* From previous work
     // Does not require authentication, so no subjectID.
     public Employee createEmployee(Employee toCreate) {
         return facade.addEmployee(
@@ -93,4 +94,5 @@ public class Service {
     public int numOfShifts(String subjectId, String employeeID){
         return facade.numOfShifts(subjectId, employeeID);
     }
+    */
 }
