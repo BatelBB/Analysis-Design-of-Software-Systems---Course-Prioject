@@ -6,7 +6,7 @@ import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void startInventoryMenu() {
         SupplierService supplierService=new SupplierService();
         Service service = new Service(supplierService);
         Scanner scan = new Scanner(System.in);

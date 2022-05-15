@@ -8,11 +8,11 @@ public class ResponseT<T> extends Response {
         this.data = data;
     }
 
-    static <T> ResponseT<T> success(T data) {
+    public static <T> ResponseT<T> success(T data) {
         return new ResponseT<>(true, null, data);
     }
 
-    static <T> ResponseT<T> error(String error) {
+    public static <T> ResponseT<T> error(String error) {
         return new ResponseT<>(false, error, null);
     }
 }

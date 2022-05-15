@@ -2,6 +2,7 @@ package adss_group_k.PresentationLayer.Inventory;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
+import adss_group_k.shared.response.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -120,8 +121,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 1) {
             r = service.addCategory(args[0]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -129,8 +130,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 1) {
             r = service.removeCategory(args[0]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -138,8 +139,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 2) {
             r = service.addSubCategory(args[0], args[1]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -147,8 +148,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 2) {
             r = service.removeSubCategory(args[0], args[1]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -156,8 +157,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 3) {
             r = service.addSubSubCategory(args[0], args[1], args[2]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -165,8 +166,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 3) {
             r = service.removeSubSubCategory(args[0], args[1], args[2]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -174,8 +175,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 6 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null) {
             r = service.updateCategoryCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), args[3], args[4], args[5]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -183,8 +184,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 4 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null) {
             r = service.updateProductSupplierManDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), args[3]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -192,8 +193,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 4 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null && convertDouble(args[3]) != -1) {
             r = service.updateProductCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]));
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -201,8 +202,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 5 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null && convertDouble(args[3]) != -1 && convertDouble(args[4]) != -1) {
             r = service.updateItemCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]), convertInt(args[4]));
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -210,8 +211,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 2 && convertDouble(args[1]) != -1.0 && convertInt(args[0]) != -1) {
             r = service.updateProductManPrice(convertInt(args[0]), convertDouble(args[1]));
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -219,8 +220,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 2 && convertDouble(args[1]) != -1.0 && convertInt(args[0]) != -1) {
             r = service.updateProductCusPrice(convertInt(args[0]), convertDouble(args[1]));
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -232,10 +233,10 @@ public class PresentationModel {
         int supply_time = convertInt(args[5]);
         if (args.length == 9 && man_price != -1.0 && cus_price != -1.0 && min_qty != -1 && supply_time != -1) {
             r = service.addProduct(args[0], args[1], man_price, cus_price, min_qty, supply_time, args[6], args[7], args[8]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
             else
-                System.out.println(r.value);
+                System.out.println(r.data);
         }
     }
 
@@ -243,8 +244,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 1 && convertInt(args[0]) != -1) {
             r = service.removeProduct(convertInt(args[0]));
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -254,8 +255,8 @@ public class PresentationModel {
         LocalDateTime expiration_date = convertDate(args[4]);
         if (args.length == 6 && product_id != -1 && expiration_date != null && convertBoolean(args[5]) != null) {
             r = service.addItem(product_id, args[1], args[2], args[3], expiration_date, Objects.requireNonNull(convertBoolean(args[5])));
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -263,8 +264,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 2 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
             r = service.removeItem(convertInt(args[0]), convertInt(args[0]));
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -274,8 +275,8 @@ public class PresentationModel {
         int item_id = convertInt(args[1]);
         if (args.length == 4 && product_id != -1 && item_id != -1 && convertBoolean(args[2]) != null) {
             r = service.updateItemDefect(product_id, item_id, convertBoolean(args[2]), args[3]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -283,10 +284,10 @@ public class PresentationModel {
         ResponseT<String> r;
         if (args.length == 2 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
             r = service.getItemLocation(convertInt(args[0]), convertInt(args[0]));
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
             else
-                System.out.println(r.value);
+                System.out.println(r.data);
         }
     }
 
@@ -294,8 +295,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
             r = service.changeItemLocation(convertInt(args[0]), convertInt(args[0]), args[2]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -303,8 +304,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1 && convertBoolean(args[2]) != null) {
             r = service.changeItemOnShelf(convertInt(args[0]), convertInt(args[0]), convertBoolean(args[2]));
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -312,10 +313,10 @@ public class PresentationModel {
         ResponseT<Report> r;
         if (args.length == 3 && convertInt(args[1]) != -1) {
             r = service.createMissingReport(args[0], convertInt(args[1]), args[2]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
             else
-                System.out.println(r.value);
+                System.out.println(r.data);
         }
     }
 
@@ -323,10 +324,10 @@ public class PresentationModel {
         ResponseT<Report> r;
         if (args.length == 3 && convertInt(args[1]) != -1) {
             r = service.createExpiredReport(args[0], convertInt(args[1]), args[2]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
             else
-                System.out.println(r.value);
+                System.out.println(r.data);
         }
     }
 
@@ -334,10 +335,10 @@ public class PresentationModel {
         ResponseT<Report> r;
         if (args.length == 3 && convertInt(args[1]) != -1) {
             r = service.createSurplusesReport(args[0], convertInt(args[1]), args[2]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
             else
-                System.out.println(r.value);
+                System.out.println(r.data);
         }
     }
 
@@ -345,10 +346,10 @@ public class PresentationModel {
         ResponseT<Report> r;
         if (args.length == 3 && convertInt(args[1]) != -1) {
             r = service.createDefectiveReport(args[0], convertInt(args[1]), args[2]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
             else
-                System.out.println(r.value);
+                System.out.println(r.data);
         }
     }
 
@@ -356,10 +357,10 @@ public class PresentationModel {
         ResponseT<Report> r;
         if (args.length == 4 && convertInt(args[1]) != -1) {
             r = service.createBySupplierReport(args[0], convertInt(args[1]), args[2], args[3]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
             else
-                System.out.println(r.value);
+                System.out.println(r.data);
         }
     }
 
@@ -367,10 +368,10 @@ public class PresentationModel {
         ResponseT<Report> r;
         if (args.length == 4 && convertInt(args[1]) != -1) {
             r = service.createByProductReport(args[0], convertInt(args[1]), args[2], args[3]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
             else
-                System.out.println(r.value);
+                System.out.println(r.data);
         }
     }
 
@@ -378,10 +379,10 @@ public class PresentationModel {
         ResponseT<Report> r;
         if (args.length == 6 && convertInt(args[1]) != -1) {
             r = service.createByCategoryReport(args[0], convertInt(args[1]), args[2], args[3], args[4], args[5]);
-            if (r.getError_occurred())
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
             else
-                System.out.println(r.value);
+                System.out.println(r.data);
         }
     }
 
@@ -389,8 +390,8 @@ public class PresentationModel {
         Response r;
         if (args.length == 1 && convertInt(args[0]) != -1) {
             r = service.removeReport(convertInt(args[0]));
-            if (r.error_occurred)
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
         }
     }
 
@@ -398,10 +399,10 @@ public class PresentationModel {
         ResponseT<Report> r;
         if (args.length == 1 && convertInt(args[0]) != -1) {
             r = service.getReport(convertInt(args[0]));
-            if (r.error_occurred)
-                System.out.println(r.error_message);
+            if (!r.success)
+                System.out.println(r.error);
             else
-                System.out.println(r.value);
+                System.out.println(r.data);
         }
     }
 

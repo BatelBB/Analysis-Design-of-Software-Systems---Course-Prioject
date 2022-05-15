@@ -1,0 +1,150 @@
+@startuml
+
+together {
+	entity Contact {
+		email: String
+		----
+		name: String
+		phone: String
+	}
+	
+	entity Supplier {
+		ppn: int
+		---
+		bankNumber: int
+		name: String
+		isDelivering: boolean
+		paymentCondition: PaymentCondition
+		regularSupplyingDays: DayOfWeek?
+	}
+	
+	Contact "1" -- "1" Supplier: represents > 
+
+}
+
+together {
+	entity Category {
+		name: String
+	}
+	
+	entity SubCategory {
+		name: String
+	}
+	
+	entity SubSubCategory {
+		name: String
+	}
+	
+	Category "1" -- "*" SubCategory
+	SubCategory "1" -- "*" SubSubCategory
+}
+
+together {
+
+entity Product {
+	id: int
+	----
+	name: String
+	category: String
+	cus_price: double
+	min_qty: int
+	storage_qty: int
+	shelf_qty: int
+}
+
+entity ProductItem {
+	id: int
+	location: String
+	is_defect: bool
+	defect_reporter: String?
+	on_shelf: bool
+	store: String
+	expiration_date: LocalDateTime
+}
+
+entity Item {
+	catalogNumber: int
+	----
+	price: float
+}
+
+
+Product "1" --- "*" Item: sold as >
+Product "*" -- "1" SubSubCategory
+Supplier "1" ---- "*" Item: supplies >
+
+entity QuantityDiscount {
+	quantity: int
+	discount: float
+}
+
+QuantityDiscount "*" ---- "1" Item: has discount <
+}
+
+together {
+
+entity Order {
+	orderType: OrderType
+	price: float
+	ordered: LocalDateTime
+	provided: LocalDateTime
+}
+
+note right of Order
+We need to be able to create periodic orders and
+deficiency order; This is a bit of a headache.
+Idea: instead of creating different entities in DAL,
+we'll give the user an option to "clone" an order
+(create a new order based on previous order).
+end note
+
+Order "*" -- "1" Supplier: is from >
+
+entity ItemInOrder {
+	amount: int
+}
+
+ItemInOrder "*" -- "1" Item: is in <
+ItemInOrder "*" -- "1" Order: is in <
+
+
+
+}
+together {
+	entity Report <<abstract>> {
+		 id: int
+		 report_producer: String
+		 name: String
+		 date: LocalDateTime
+	}
+	
+	entity ProductsReport {
+		type: ProductReportType 
+		query: String
+	}
+	
+	ProductsReport --u--|> Report: extends
+	
+	entity ProductItemsReport {
+		type: ProductItemReportType
+	}
+	
+	ProductItemsReport --u--|> Report: extends
+	
+	entity ProductItemInProductItemsReport  {
+		qty: int
+	} 
+	
+	ProductItemInProductItemsReport "*" -- "1" ProductItem
+	ProductItemInProductItemsReport "*" -- "1" ProductItemsReport
+	
+	entity ProductInProductsReport{
+		qty: int
+	}
+	
+	
+	ProductInProductsReport "*" -- "1" Product
+	ProductInProductsReport "*" -- "1" ProductsReport
+}
+
+@enduml

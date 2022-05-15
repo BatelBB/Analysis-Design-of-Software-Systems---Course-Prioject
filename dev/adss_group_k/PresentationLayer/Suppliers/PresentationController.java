@@ -12,6 +12,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Scanner;
 
+import static adss_group_k.PresentationLayer.PresentationFacade.moduleSelector;
+
 public class PresentationController {
     private static UserInput input = UserInput.getInstance();
     private static UserOutput output = UserOutput.getInstance();
@@ -288,7 +290,10 @@ public class PresentationController {
                         }
                         break;
                     }
-
+                    case (5): {
+                        moduleSelector();
+                        break;
+                    }
                 }
             }
         }

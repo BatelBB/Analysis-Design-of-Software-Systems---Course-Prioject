@@ -1,7 +1,8 @@
 package adss_group_k.BusinessLayer.Inventory.Service;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
-import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
+import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService_V2;
+import adss_group_k.shared.response.*;
 import adss_group_k.shared.response.Response;
 import adss_group_k.shared.response.ResponseT;
 
@@ -13,9 +14,9 @@ public class Service {
     private final ProductService product_service;
     private final CategoryService category_service;
     private final ReportService report_service;
-    private final SupplierService_v2 supplierService;
+    private final ISupplierService_V2 supplierService;
 
-    public Service(SupplierService supplierService) {
+    public Service(ISupplierService_V2 supplierService) {
         product_service = new ProductService();
         report_service = new ReportService();
         category_service = new CategoryService();
