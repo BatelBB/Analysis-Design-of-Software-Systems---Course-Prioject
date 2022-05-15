@@ -544,6 +544,55 @@ class ServiceTest {
     }
 
     /**
+     * Tests for intertwined methods between the modules
+     */
+
+    @Test
+    void orderNewShortageOrder(){
+        int ppn = 1, cnPen = 11;
+        Supplier sup = createWithPpn(ppn).data;
+
+        ResponseT<Order> responseWithEmptySupplier = service.createOrder(sup, date1, date2, Order.OrderType.Shortages);
+        assertFalse(responseWithEmptySupplier.success,
+                "shouldn't be able to start ReadOnlyorder if ReadOnlysupplier has no items.");
+
+
+        service.createItem(ppn, cnPen, "Pen", "Office", 10);
+
+
+        ResponseT<Order> responseWithBadDates = service.createOrder(sup, date2, date1, Order.OrderType.Shortages);
+        assertFalse(responseWithBadDates.success,
+                "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
+
+        ResponseT<Order> response = service.createOrder(sup, date1, date2, Order.OrderType.Shortages);
+        assertTrue(response.success);
+
+    }
+
+    @Test
+    void orderNewPeriodicalOrder(){
+        int ppn = 1, cnPen = 11;
+        Supplier sup = createWithPpn(ppn).data;
+
+        ResponseT<Order> responseWithEmptySupplier = service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
+        assertFalse(responseWithEmptySupplier.success,
+                "shouldn't be able to start ReadOnlyorder if ReadOnlysupplier has no items.");
+
+
+        service.createItem(ppn, cnPen, "Pen", "Office", 10);
+
+
+        ResponseT<Order> responseWithBadDates = service.createOrder(sup, date2, date1, Order.OrderType.Periodical);
+        assertFalse(responseWithBadDates.success,
+                "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
+
+        ResponseT<Order> response = service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
+        assertTrue(response.success);
+
+
+    }
+
+    /**
      * MISC
      */
 
