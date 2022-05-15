@@ -1,5 +1,12 @@
 @startuml
 package shared {
+  package shared.presentation {
+    class Application {
+      -Service service
+      +main()
+    }
+  }
+
   package shared.service {
     class shared.service.Service {
       -Facade facade
@@ -91,6 +98,8 @@ package shared {
       shared.service.dto.Delivery "1" *-- "*" shared.service.dto.Site: To
 
       shared.service.dto.Shift "*" *-- "*" shared.service.dto.Employee: Works
+
+      Application "1" *-- "1" shared.service.Service
     }
   }
 
