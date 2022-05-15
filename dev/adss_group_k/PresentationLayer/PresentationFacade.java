@@ -11,13 +11,17 @@ public class PresentationFacade {
     private static UserOutput output = UserOutput.getInstance();
 
     public static void main(String[] args) {
-        boolean retry = true;
-        int in = 0;
         output.println("Welcome to the supplier module!");
         if (input.nextBoolean("Would you like to load example data?")) {
             //service.seedExample();
             output.println("example data loaded.");
         }
+        moduleSelector();
+    }
+
+    public static void moduleSelector(){
+        boolean retry = true;
+        int in = 0;
         while (retry) {
             in = input.nextInt("Which module do you need?\n" +
                     "1. Supplier module\n" +
@@ -38,6 +42,5 @@ public class PresentationFacade {
             }
 
         }
-
     }
 }
