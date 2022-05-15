@@ -1,5 +1,6 @@
 package groupk.workers.data;
 import javax.imageio.IIOException;
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
@@ -10,6 +11,7 @@ public class DalController {
     private ShiftRepository shiftRepository;
     private EmployeeRepository employeeRepository;
     public static File file;
+
     public DalController() {
         file = new File("employeeDB.db");
         url = ("jdbc:sqlite:").concat(file.getAbsolutePath());
@@ -60,8 +62,8 @@ public class DalController {
                 "\tPRIMARY KEY(\"Date\",\"Type\")\n" +
                 ");");
         tables.add("CREATE TABLE IF NOT EXISTS \"ShiftPreference\" (\n" +
-                "\t\"EmployeeID\"\tINTEGER,\n" +
-                "\t\"ShiftType\"\tINTEGER,\n" +
+                "\t\"EmployeeID\"\tTEXT,\n" +
+                "\t\"ShiftType\"\tTEXT,\n" +
                 "\tFOREIGN KEY(\"ShiftType\") REFERENCES \"ShiftSlot\"(\"Type\"),\n" +
                 "\tPRIMARY KEY(\"EmployeeID\",\"ShiftType\"),\n" +
                 "\tFOREIGN KEY(\"EmployeeID\") REFERENCES \"Employee\"(\"ID\")\n" +
@@ -72,7 +74,7 @@ public class DalController {
                 ");");
         tables.add("CREATE TABLE IF NOT EXISTS \"Workers\" (\n" +
                 "\t\"ShiftID\"\tINTEGER,\n" +
-                "\t\"EmployeeID\"\tINTEGER,\n" +
+                "\t\"EmployeeID\"\tTEXT,\n" +
                 "\tFOREIGN KEY(\"ShiftID\") REFERENCES \"Shift\"(\"ID\"),\n" +
                 "\tPRIMARY KEY(\"ShiftID\",\"EmployeeID\")\n" +
                 ");");
@@ -137,6 +139,42 @@ public class DalController {
 
     public Shift addShift(Shift shift) {
         return shiftRepository.addShift(shift);
+    }
+
+    public void loadDataFromDB(){
+        try {
+            Connection connection = DriverManager.getConnection(DalController.url);
+            PreparedStatement prepStat = connection.prepareStatement("SELECT * FROM  Employee");
+            ResultSet employees = prepStat.executeQuery();
+            while(employees.next()){
+                String id = employees.getString(1);
+                String shiftPrefWithId = "SELECT * FROM ShiftPreference where EmployeeID = " + id;
+                PreparedStatement prepStat2 = connection.prepareStatement(shiftPrefWithId);
+                ResultSet shiftPref = prepStat2.executeQuery();
+                Employee employee = employeeRepository.addEmployee(employees);
+                employee.setAvailableShifts(shiftPref);
+            }
+            PreparedStatement prepStat3 = connection.prepareStatement("select * from Shift");
+            ResultSet shifts = prepStat3.executeQuery();
+            while(shifts.next()){
+                String id = shifts.getString(3);
+                String shiftRequired = "SELECT * FROM RequiredStaff where ID = " + id;
+                PreparedStatement prepStat4 = connection.prepareStatement(shiftRequired);
+                ResultSet shiftReqLoad = prepStat4.executeQuery();
+                String workers = "SELECT EmployeeID FROM Workers where ShiftID = " + id;
+                PreparedStatement prepStat5 = connection.prepareStatement(workers);
+                ResultSet workersLoad = prepStat5.executeQuery();
+                LinkedList<Employee> listOfWorkers = new LinkedList<>();
+                while(workersLoad.next()){
+                    listOfWorkers.add(employeeRepository.getEmployee(workersLoad.getString(1)));
+                }
+                shiftRepository.addShift(shifts, shiftReqLoad, listOfWorkers);
+            }
+            connection.close();
+        }
+        catch (SQLException s){
+            System.out.println(s.getMessage());
+        }
     }
 }
 

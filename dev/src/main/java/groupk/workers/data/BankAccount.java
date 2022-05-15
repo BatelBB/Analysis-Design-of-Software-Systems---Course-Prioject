@@ -1,23 +1,39 @@
 package groupk.workers.data;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class BankAccount {
     private String bank;
     private int bankID;
     private int bankBranch;
 
 
-    public void setBank(String bank) {
-        this.bank = bank;
+    public void setBankAccount(String id, String bank, int bankID, int bankBranch) {
+        try {
+            Connection connection = DriverManager.getConnection(DalController.url);
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Employee set BankName = ? where ID = ?");
+            preparedStatement.setString(1, bank);
+            preparedStatement.setString(2, id);
+            preparedStatement.executeUpdate();
+            PreparedStatement preparedStatement2 = connection.prepareStatement("UPDATE Employee set BankBranch = ? where ID = ?");
+            preparedStatement2.setInt(1, bankBranch);
+            preparedStatement2.setString(2, id);
+            preparedStatement2.executeUpdate();
+            PreparedStatement preparedStatement3 = connection.prepareStatement("UPDATE Employee set BankID = ? where ID = ?");
+            preparedStatement3.setInt(1, bankID);
+            preparedStatement3.setString(2, id);
+            preparedStatement3.executeUpdate();
+            connection.close();
+            this.bank = bank;
+            this.bankID = bankID;
+            this.bankBranch = bankBranch;
+        } catch (SQLException s) {
+            System.out.println(s.getMessage());
+        }
     }
-
-    public void setBankID(int bankID) {
-        this.bankID = bankID;
-    }
-
-    public void setBankBranch(int bankBranch) {
-        this.bankBranch = bankBranch;
-    }
-
     public BankAccount(String bank, int bankID, int bankBranch){
         this.bank = bank;
         this.bankID = bankID;

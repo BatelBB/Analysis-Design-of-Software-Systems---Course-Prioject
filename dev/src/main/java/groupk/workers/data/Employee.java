@@ -32,21 +32,53 @@ public class Employee {
     private String id;
 
     public void setName(String name) {
-        this.name = name;
+        try{
+            Connection connection = DriverManager.getConnection(DalController.url);
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Employee set Name = ? where ID = ?");
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, id);
+            preparedStatement.executeUpdate();
+            connection.close();
+            this.name = name;
+        }
+        catch (SQLException s){
+            System.out.println(s.getMessage());
+        }
     }
 
     public void setId(String id) {
-        this.id = id;
+        try{
+            Connection connection = DriverManager.getConnection(DalController.url);
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Employee set ID = ? where ID = ?");
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, this.id);
+            preparedStatement.executeUpdate();
+            connection.close();
+            this.id = id;
+        }
+        catch (SQLException s){
+            System.out.println(s.getMessage());
+        }
     }
 
     public void setRole(Role role) {
-        this.role = role;
+        try {
+            Connection connection = DriverManager.getConnection(DalController.url);
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Employee set Role = ? where ID = ?");
+            preparedStatement.setString(1, role.name());
+            preparedStatement.setString(2, id);
+            preparedStatement.executeUpdate();
+            connection.close();
+            this.role = role;
+        } catch (SQLException s) {
+            System.out.println(s.getMessage());
+        }
     }
 
     private BankAccount account;
     private WorkingConditions conditions;
     private Set<ShiftDateTime> availableShifts;
-    public enum Role{
+    public static enum Role{
         Logistics,
         HumanResources,
         Stocker,
@@ -69,7 +101,7 @@ public class Employee {
             preparedStatement.setString(3 , bank);
             preparedStatement.setInt(4, bankBranch);
             preparedStatement.setInt(5, bankID);
-            preparedStatement.setString(6, employmentStart.toString());
+            preparedStatement.setString(6, employmentStart.get(Calendar.DATE) + "/" + (employmentStart.get(Calendar.MONTH)+1)  + "/" + employmentStart.get(Calendar.YEAR));
             preparedStatement.setInt(7, sickDaysUsed);
             preparedStatement.setInt(8, vacationDaysUsed);
             preparedStatement.setInt(9, salaryPerHour);
@@ -94,6 +126,30 @@ public class Employee {
         }
     }
 
+    public Employee(ResultSet employee){
+        try{
+            id = employee.getString(1);
+            name = employee.getString(2);
+            account = new BankAccount(employee.getString(3), employee.getInt(5), employee.getInt(4));
+            String [] calendar = (employee.getString(6)).split("/");
+            conditions = new WorkingConditions(new GregorianCalendar(Integer.parseInt(calendar[0]) , Integer.parseInt(calendar[1])-1, Integer.parseInt(calendar[2])) ,employee.getInt(9), employee.getInt(7), employee.getInt(8));
+            role = Role.valueOf(employee.getString(10));
+        } catch (SQLException throwables) {
+            System.out.println(throwables.getMessage());
+        }
+    }
+
+    public void setAvailableShifts(ResultSet shifts) {
+        try {
+            availableShifts = new HashSet<>();
+            while (shifts.next()) {
+                availableShifts.add(ShiftDateTime.valueOf(shifts.getString(2)));
+            }
+        } catch (SQLException throwables) {
+            System.out.println(throwables.getMessage());
+        }
+    }
+
     public String getId() { return id; }
 
     public String getName() { return name; }
@@ -110,7 +166,7 @@ public class Employee {
         try{
             Connection connection = DriverManager.getConnection(DalController.url);
             for (ShiftDateTime shift:availableShifts) {
-                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO ShiftPreference VALUES(?,?)");
+                PreparedStatement preparedStatement = connection.prepareStatement("UPDATE RequiredStaff set Count = ? where Role = ? and ID = ?");
                 preparedStatement.setString(1, id);
                 preparedStatement.setString(2, shift.name());
                 preparedStatement.executeUpdate();

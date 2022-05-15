@@ -40,13 +40,11 @@ public class EmployeeController {
     ) {
         Employee changed = read(id);
         changed.setName(name);
-        changed.getAccount().setBank(bank);
-        changed.getAccount().setBankID(bankID);
-        changed.getAccount().setBankBranch(bankBranch);
-        changed.getConditions().setEmploymentStart(employmentStart);
-        changed.getConditions().setSalaryPerHour(salaryPerHour);
-        changed.getConditions().setSickDaysUsed(sickDaysUsed);
-        changed.getConditions().setVacationDaysUsed(vacationDaysUsed);
+        changed.getAccount().setBankAccount(id, bank, bankID, bankBranch);
+        changed.getConditions().setEmploymentStart(id, employmentStart);
+        changed.getConditions().setSalaryPerHour(id, salaryPerHour);
+        changed.getConditions().setSickDaysUsed(id, sickDaysUsed);
+        changed.getConditions().setVacationDaysUsed(id, vacationDaysUsed);
         changed.setRole(role);
         return changed;
     }

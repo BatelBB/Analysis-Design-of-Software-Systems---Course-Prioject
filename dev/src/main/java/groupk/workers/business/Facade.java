@@ -23,6 +23,10 @@ public class Facade {
         dalColntroller.deleteDataBase();
         dalColntroller = new DalController();
     }
+
+    public void loadDB(){
+        dalColntroller.loadDataFromDB();
+    }
     public Employee addEmployee(
             String name,
             String id,

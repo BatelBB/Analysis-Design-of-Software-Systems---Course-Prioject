@@ -1,5 +1,6 @@
 package groupk.workers.data;
 
+import java.sql.ResultSet;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,12 @@ public class EmployeeRepository {
         Employee created = new Employee(name, id, bank, bankID, bankBranch, employmentStart, salaryPerHour, sickDaysUsed, vacationDaysUsed, role, shiftPreferences);
         employees.put(id, created);
         return created;
+    }
+
+    public Employee addEmployee(ResultSet emplyoee){
+        Employee loadEmployee = new Employee(emplyoee);
+        employees.put(loadEmployee.getId(), loadEmployee);
+        return loadEmployee;
     }
 
     public Employee deleteEmployee(String id) {

@@ -20,7 +20,7 @@ public class Shift {
                 id ++;
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Shift VALUES(?,?,?)");
             preparedStatement.setString(1, type.name());
-            preparedStatement.setString(2, date.toString());
+            preparedStatement.setString(2, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
             preparedStatement.setInt(3, id);
             preparedStatement.executeUpdate();
             for (Employee.Role role : requiredStaff.keySet()) {
@@ -58,6 +58,25 @@ public class Shift {
         }
         catch (SQLException s){
             System.out.println(s.getMessage());
+        }
+    }
+
+    public Shift(ResultSet shift, ResultSet requiredStaff, LinkedList<Employee> workers){
+        try{
+            String [] calendar = (shift.getString(2)).split("/");
+            date = new GregorianCalendar(Integer.parseInt(calendar[2]) , Integer.parseInt(calendar[1])-1 , Integer.parseInt(calendar[0]));
+            type = Type.valueOf(shift.getString(1));
+            this.requiredStaff = new HashMap<>();
+            try {
+                while (requiredStaff.next()) {
+                    this.requiredStaff.put(Employee.Role.valueOf(requiredStaff.getString(2)), requiredStaff.getInt(1));
+                }
+            } catch (SQLException throwables) {
+                System.out.println(throwables.getMessage());
+            }
+            staff = workers;
+        } catch (SQLException throwables) {
+            System.out.println(throwables.getMessage());
         }
     }
 

@@ -1,5 +1,6 @@
 package groupk.workers.data;
 
+import java.sql.ResultSet;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -19,5 +20,11 @@ public class ShiftRepository {
     public Shift addShift(Shift shift){
         shifts.add(shift);
         return  shift;
+    }
+
+    public Shift addShift(ResultSet shift, ResultSet requiredStaff, LinkedList<Employee> workers){
+        Shift loadShift = new Shift(shift, requiredStaff, workers);
+        shifts.add(loadShift);
+        return loadShift;
     }
 }
