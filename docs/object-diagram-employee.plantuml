@@ -1,4 +1,37 @@
 @startuml
+object "Yossi: dto.Employee" as dtoEmployee {
+  name = "Yossi Luchim"
+  id = "111111111"
+  role = Cashier
+  bank = "example"
+  bankID = 1
+  bankBranch = 1
+  salaryPerHour = 35
+  sickDaysUsed = 0
+  vacationDaysUsed = 0
+  availableShifts = {}
+  employmentStart = 2022-04-10
+}
+
+object Service
+object Facade
+object EmployeeController
+object workers.business.Facade
+object workers.business.EmployeeController
+object DALController {
+  url = "jdbc:sqlite:/var/adss/sqlite.db"
+}
+object EmployeeRepository
+
+dtoEmployee -- Service
+Service *-- Facade
+Facade *-- EmployeeController: Authentication is verified
+EmployeeController *-- workers.business.Facade: Authorization to create\nemployees is verified
+workers.business.Facade *-- workers.business.EmployeeController
+workers.business.EmployeeController *-- DALController: Arguments are verified
+DALController *-- EmployeeRepository: Employee inserted to\nthe database
+EmployeeRepository *-- Employee
+
 object "Yossi: Employee" as Employee {
   name = "Yossi Luchim"
   id = "111111111"
@@ -10,6 +43,7 @@ object "workingConditions: WorkingConditions" as WorkingConditions {
   salaryPerHour = 35
   sickDaysUsed = 0
   vacationDaysUsed = 0
+  employmentStart = 2022-04-10
 }
 
 object "bankAccount: BankAccount" as BankAccount {
@@ -20,4 +54,5 @@ object "bankAccount: BankAccount" as BankAccount {
 
 Employee *-- WorkingConditions
 Employee *-- BankAccount
+Employee -- dtoEmployee: DTO representing the Employee\ncreated in the data layer
 @enduml

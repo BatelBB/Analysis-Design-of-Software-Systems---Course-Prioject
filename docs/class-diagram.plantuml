@@ -1,111 +1,316 @@
 @startuml
-package presentation {
-  class Application {}
-
-  class TUI {
-    - Service service
-    - Runnable onStop
-    - String subject
-  }
-
-  Application "1" *-- "1" TUI: Runs
-}
-
-package service {
-  class Service {
-    -Facade facade
-  }
-
-  package dto {
-    class service.dto.Employee {
-      +string id
-      +string name
-      +Role role
-      +string bank
-      +int bankBranch
-      +int bankID
-      +int salaryPerHour
-      +int sickDaysUsed
-      +int vacationDaysUsed
-      +Set<ShiftDateTime> shiftPreferences
-    }
-    
-    class service.dto.Shift {
-      +Employee[] staff
-      +HashMap<Role, Integer> requiredStaff
-      +Calendar date
-      +Type type
+package shared {
+  package shared.service {
+    class shared.service.Service {
+      -Facade facade
+      +createShift()
+      +readEmployee()
+      +readShift()
+      +deleteEmployee()
+      +listEmployees()
+      +addEmployeeToShift()
+      +removeEmployeeFromShift()
+      +updateEmployee()
+      +updateEmployeeShiftPreference()
+      +listShifts()
+      +updateRequiredRoleInShift()
+      +deleteDelivery()
+      +listDeliveries()
+      +listDeliveriesByDriver()
+      +listVehicles()
+      +createDelivery()
+      +listDeliveriesWithVehicle()
+      +updateDelivery()
+      +createVehicle()
+      +createDriver()
+      +updateDriver()
+      +setWeightForDelivery()
     }
 
-    service.dto.Shift "*" *-- "*" service.dto.Employee: Works
+    class shared.service.Response<T> {
+      -T value
+      -String errorMessage
+      +isError()
+      +getValue()
+      +getErrorMessage()
+    }
+
+    package shared.service.dto {
+      class shared.service.dto.Employee {
+        +String id
+        +String name
+        +Role role
+        +String bank
+        +int bankID
+        +int bankBranch
+        +int salaryPerHour
+        +int sickDaysUsed
+        +int vacationDaysUsed
+        +Set<ShiftDateTime> shiftPreferences
+        +Calendar employmentStart
+      }
+
+      class shared.service.dto.Shift {
+        +HashMap<Role, Integer> requiredStaff
+        +Calendar date
+        +Type type
+      }
+
+      class shared.service.dto.Delivery {
+        +int id
+        +Calendar date
+        +Driver driver
+        +String vehicleRegistration
+        +int totalWeight
+        +long durationInMinutes
+      }
+
+      class shared.service.dto.Driver {
+        +String employeeID
+        +Set<License> licenses
+      }
+
+      class shared.service.dto.Product {
+        +int id
+        +int count
+      }
+
+      class shared.service.dto.Site {
+        +String contactName
+        +String contactPhone
+        +Area area
+        +String city
+        +String street
+        +int houseNumber
+        +int apartment
+      }
+
+      shared.service.dto.Delivery "1" *-- "1" shared.service.dto.Driver: Drives
+      shared.service.dto.Delivery "1" *-- "*" shared.service.dto.Product: Loaded
+      shared.service.dto.Delivery "1" *-- "*" shared.service.dto.Site: From
+      shared.service.dto.Delivery "1" *-- "*" shared.service.dto.Site: To
+
+      shared.service.dto.Shift "*" *-- "*" shared.service.dto.Employee: Works
+    }
+  }
+
+  package shared.business {
+    class shared.business.Facade {
+      -employees.business.Facade employees
+      -logistics.business.Facade logistics
+      +createShift()
+      +readEmployee()
+      +readShift()
+      +deleteEmployee()
+      +listEmployees()
+      +addEmployeeToShift()
+      +removeEmployeeFromShift()
+      +updateEmployee()
+      +updateEmployeeShiftPreference()
+      +listShifts()
+      +updateRequiredRoleInShift()
+      +deleteDelivery()
+      +listDeliveries()
+      +listDeliveriesByDriver()
+      +listVehicles()
+      +createDelivery()
+      +listDeliveriesWithVehicle()
+      +updateDelivery()
+      +createVehicle()
+      +createDriver()
+      +updateDriver()
+      +setWeightForDelivery()
+    }
+
+    class shared.business.EmployeeController {
+      -employees.business.Facade employees
+      +createShift()
+      +readEmployee()
+      +readShift()
+      +deleteEmployee()
+      +listEmployees()
+      +addEmployeeToShift()
+      +removeEmployeeFromShift()
+      +updateEmployee()
+      +updateEmployeeShiftPreference()
+      +listShifts()
+      +updateRequiredRoleInShift()
+    }
+
+    class shared.business.LogisticsController {
+      -logistics.business.Facade logistics
+      +deleteDelivery()
+      +listDeliveries()
+      +listDeliveriesByDriver()
+      +listVehicles()
+      +createDelivery()
+      +listDeliveriesWithVehicle()
+      +updateDelivery()
+      +createVehicle()
+      +createDriver()
+      +updateDriver()
+      +setWeightForDelivery()
+    }
+
+    shared.business.Facade "1" *-- "1" shared.business.EmployeeController
+    shared.business.Facade "1" *-- "1" shared.business.LogisticsController
+  }
+
+  shared.service.Service "1" *-- "1" shared.business.Facade
+}
+
+package logistics {
+  package logistics.business {
+    class logistics.business.Facade {}
   }
 }
 
-package business {
-  class Facade {
-    -EmployeeController employees
-    -ShiftController shifts
+package workers {
+  package business {
+    class Facade {
+      -EmployeeController employees
+      -ShiftController shifts
+      +deleteDB()
+      +addShift()
+      +readEmployee()
+      +readShift()
+      +deleteEmployee()
+      +listEmployees()
+      +addEmployeeToShift()
+      +removeEmployeeFromShift()
+      +updateEmployee()
+      +updateEmployeeShiftPreference()
+      +listShifts()
+      +updateRequiredRoleInShift()
+    }
+
+    class EmployeeController {
+      -EmployeeRepository repo
+      +create()
+      +read()
+      +update()
+      +delete()
+      +list()
+      +setEmployeeShiftsPreference()
+      +isFromHumanResources()
+    }
+
+    class ShiftController {
+      -ShiftRepository repo
+      +addShifts()
+      +getShift()
+      +ifShiftExist()
+      +listShifts()
+      +setRequiredStaffInShift()
+    }
+
+    Facade "1" *-- "1" EmployeeController: Uses
+    Facade "1" *-- "1" ShiftController: Uses
   }
 
-  class EmployeeController {
-    -EmployeeRepository repo
+  package data {
+    class DALController {
+      -ShiftRepository shifts
+      -EmployeeRepository employees
+      +createTables()
+      +load()
+      +deleteDataBase()
+      +getEmployees()
+      +getEmployee()
+      +addEmployee()
+      +deleteEmployee()
+      +getShifts()
+      +addShift()
+    }
+
+    class Employee {
+      -string name
+      -string id
+      -BankAccount account
+      -WorkingConditions conditions
+      -Set<ShiftDateTime> availableShifts
+      -Role role
+      +getId()
+      +getName()
+      +getAccount()
+      +getConditions()
+      +getAvailableShifts()
+      +getRole()
+      +setName()
+      +setId()
+      +setRole()
+      +addEmployeeShiftPreference()
+      +deleteEmployeeShiftPreference()
+      +isShiftpreferred()
+    }
+
+    class WorkingConditions {
+      -Calendar employmentStart
+      -int salaryPerHour
+      -int sickDaysUsed
+      -int vacationDaysUsed
+      +setEmploymentStart()
+      +setSalaryPerHour()
+      +setSickDaysUsed()
+      +setVacationDaysUsed()
+      +getEmploymentStart()
+      +getSalaryPerHour()
+      +getSickDaysUsed()
+      +getVacationDaysUsed()
+    }
+
+    class BankAccount {
+      -string bank
+      -int bankBranch
+      -int bankID
+      +setBank()
+      +setBankID()
+      +setBankBranch()
+      +getBank()
+      +getBankID()
+      +getBankBranch()
+    }
+
+    class Shift {
+      -Type type
+      -Calendar date
+      -HashMap<Role, Integer> requiredStaff
+      +getType()
+      +getDate()
+      +getStaff()
+      +getRequiredStaff()
+      +setRequiredStaff()
+      +setRequiredRoleInShift()
+      +isEmployeeWorking()
+      +addEmployee()
+      +removeEmployee()
+    }
+
+    class EmployeeRepository {
+      +getEmployees()
+      +getEmployee()
+      +addEmployee()
+      +deleteEmployee()
+    }
+
+    class ShiftRepository {
+      +getShifts()
+      +addShift()
+    }
+
+    EmployeeRepository "1" *-- "*" Employee: Contains
+    Employee "1" *-- "1" WorkingConditions: Has
+    Employee "1" *-- "1" BankAccount: Has
+    ShiftRepository "1" *-- "*" Shift: Contains
+    Shift "*" *-- "*" Employee: Works
   }
 
-  class ShiftController {
-    -ShiftRepository repo
-  }
-
-  Facade "1" *-- "1" EmployeeController: Uses
-  Facade "1" *-- "1" ShiftController: Uses
+  ShiftController "1" *-- "1" DALController: Uses
+  EmployeeController "1" *-- "1" DALController: Uses
+  DALController "1" *-- "1" ShiftRepository: Uses
+  DALController "1" *-- "1" EmployeeRepository: Uses
 }
 
-package data {
-  class Employee {
-    -string name
-    -string id
-    -BankAccount account
-    -WorkingConditions conditions
-    -Set<ShiftDateTime> availableShifts
-    -Role role
-  }
-
-  class WorkingConditions {
-    -Calendar employmentStart
-    -int salaryPerHour
-    -int sickDaysUsed
-    -int vacationDaysUsed
-  }
-
-  class BankAccount {
-    -string bank
-    -int bankBranch
-    -int bankID
-  }
-
-  class Shift {
-    -Type type
-    -Calendar date
-    -LinkedList<Employee> staff
-    -HashMap<Role, Integer> requiredStaff
-  }
-
-  class EmployeeRepository {
-    -HashMap<String, Employee> employees
-  }
-
-  class ShiftRepository {
-    -LinkedList<Shift> shifts
-  }
-
-  EmployeeRepository "1" *-- "*" Employee: Contains
-  Employee "1" *-- "1" WorkingConditions: Has
-  Employee "1" *-- "1" BankAccount: Has
-  ShiftRepository "1" *-- "*" Shift: Contains
-  Shift "*" *-- "*" Employee: Works
-}
-
-TUI "1" *-- "1" Service: Uses
-Service "1" *-- "1" Facade: Uses
-ShiftController "1" *-- "1" ShiftRepository: Uses
-EmployeeController "1" *-- "1" EmployeeRepository: Uses
+shared.business.EmployeeController "1" *-- "1" Facade: Uses
+shared.business.LogisticsController "1" *-- "1" logistics.business.Facade: Uses
 @enduml
