@@ -65,7 +65,7 @@ public class TruckManagerController {
 
 
     public List<String> getVehiclesRegistrationPlates() throws Exception {
-        return vehicleMapper.selectAll();
+        return vehicleMapper.getAllRegistrationPlates();
     }
 
     public void addTrucking(int truckManagerId,String registrationPlateOfVehicle, LocalDateTime date, int driverUsername, List<String[]> sources, List<String[]> destinations, List<Map<String,Integer>> products, long hours, long minutes) throws Exception {

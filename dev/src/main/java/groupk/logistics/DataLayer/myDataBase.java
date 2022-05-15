@@ -9,14 +9,11 @@ import java.util.List;
 
 public class myDataBase {
     static Connection con;
-    protected static String JDBCurl = "jdbc:sqlite:";
-    protected static String path = (new File("").getAbsolutePath()).concat("\\superLee2.db");
+    private static String JDBCurl = "jdbc:sqlite:";
+    private static String path = (new File("").getAbsolutePath()).concat("\\superLee2.db");
     public static String finalCurl = JDBCurl.concat(path);
 
-    private String tableName;
-
     public myDataBase(String tableName) throws Exception {
-        this.tableName = tableName;
         createNewTable();
     }
 

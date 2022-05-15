@@ -11,7 +11,7 @@ public class VehicleMapper {
     public VehicleMapper() throws Exception {
     }
 
-    String ConvertResultSetToDTO(ResultSet rs) throws SQLException {
+    private String ConvertResultSetToDTO(ResultSet rs) throws SQLException {
         return rs.getString(1);
     }
     public boolean addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight) throws Exception {
@@ -61,7 +61,7 @@ public class VehicleMapper {
         return null;
     }
 
-    public List<String> selectAll() throws Exception {
+    public List<String> getAllRegistrationPlates() throws Exception {
         String query = "SELECT * FROM Vehicles";
         List<String> DTOList = new ArrayList<String>();
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);

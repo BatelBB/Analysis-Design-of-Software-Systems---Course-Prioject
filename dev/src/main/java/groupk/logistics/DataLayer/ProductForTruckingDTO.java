@@ -3,8 +3,8 @@ package groupk.logistics.DataLayer;
 import groupk.logistics.business.Products;
 
 public class ProductForTruckingDTO {
-    public String product;
-    public int quantity;
+    private String product;
+    private int quantity;
 
     public ProductForTruckingDTO(String product, int quantity) {
         this.product = product;

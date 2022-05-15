@@ -1,7 +1,5 @@
 package groupk.logistics.DataLayer;
 
-import groupk.logistics.business.User;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

@@ -9,12 +9,8 @@ import java.util.ListIterator;
 
 public class TruckingMapper {
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private DriverLicencesMapper driverLicensesMapper;
-    private VehicleMapper vehicleMapper;
     private TruckingIDMap truckingIDMap;
     public TruckingMapper() throws Exception {
-        driverLicensesMapper = new DriverLicencesMapper();
-        vehicleMapper = new VehicleMapper();
         truckingIDMap = TruckingIDMap.getInstance();
     }
 
