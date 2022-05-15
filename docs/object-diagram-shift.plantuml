@@ -5,7 +5,7 @@ object Shift {
   requiredStaff = { Logistics: 0, Stocker: 0, Cashier: 1, Driver: 1, HumanResources: 0, LogisticsManager: 0, ShiftManager: 0, StoreManager: 0 }
 }
 
-Shift *-- EmployeeYossi
+Shift *-- EmployeeYossi: Employees working\nthe described shift
 Shift *-- EmployeeAvi
 
 
@@ -29,7 +29,7 @@ object "bankAccount: BankAccount" as BankAccountYossi {
   bankID = 513683
 }
 
-EmployeeYossi *-- WorkingConditionsYossi
+EmployeeYossi *-- WorkingConditionsYossi: Yossi's details
 EmployeeYossi *-- BankAccountYossi
 
 
@@ -55,6 +55,6 @@ object "bankAccount: BankAccount" as BankAccountAvi {
   bankID = 512473
 }
 
-EmployeeAvi *-- WorkingConditionsAvi
+EmployeeAvi *-- WorkingConditionsAvi: Avi's details
 EmployeeAvi *-- BankAccountAvi
 @enduml
