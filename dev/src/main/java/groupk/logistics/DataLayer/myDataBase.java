@@ -13,11 +13,36 @@ public class myDataBase {
     private static String path = (new File("").getAbsolutePath()).concat("\\superLee2.db");
     public static String finalCurl = JDBCurl.concat(path);
 
-    public myDataBase(String tableName) throws Exception {
+    public myDataBase() throws Exception {
         createNewTable();
     }
 
-    private void createNewTable() throws Exception {
+
+    public void deleteDB()
+    {
+        try(Connection conn = DriverManager.getConnection(finalCurl);
+            Statement stmt = conn.createStatement();
+        ) {
+            String table1 = "DROP TABLE Vehicles";
+            String table2 = "DROP TABLE Drivers_Licences";
+            String table3 = "DROP TABLE Truckings";
+            String table4 = "DROP TABLE Truckings_Destinations";
+            String table5 = "DROP TABLE Truckings_Sources";
+            String table6 = "DROP TABLE Truckings_Products";
+
+            stmt.executeUpdate(table1);
+            stmt.executeUpdate(table2);
+            stmt.executeUpdate(table3);
+            stmt.executeUpdate(table4);
+            stmt.executeUpdate(table5);
+            stmt.executeUpdate(table6);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createNewTable() throws Exception {
         String vehiclesTable = "CREATE TABLE IF NOT EXISTS " + "Vehicles" + " (\n" +
                 "\tregistration_plate INTEGER PRIMARY KEY,\n" +
                 "\tmodel TEXT NOT NULL,\n" +

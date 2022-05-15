@@ -27,9 +27,15 @@ public class TruckManagerController {
         return singletonTruckManagerControllerInstance;
     }
 
+
+    public void forTests()
+    {
+        truckingIdCounter=1;
+    }
+
     private TruckManagerController() throws Exception {
         truckingMapper = new TruckingMapper();
-        truckingIdCounter = truckingMapper.getNextIdForTrucking();
+        truckingIdCounter = 1;
         vehicleMapper = new VehicleMapper();
         truckings_destsMapper = new Truckings_DestsMapper();
         sourcesMapper= new Truckings_SourcesMapper();
@@ -72,7 +78,8 @@ public class TruckManagerController {
         boolean checkTrucking = (checkTrucking(truckingIdCounter, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products, hours, minutes));
         if (!checkDriverLicenseMatch(driverUsername, registrationPlateOfVehicle))
             throw new IllegalArgumentException("Oops, the driver does not have a driver's license compatible with this vehicle");
-        checkConflicts(driverUsername, registrationPlateOfVehicle, date, hours, minutes);
+        checkConflictsVehicle(driverUsername, registrationPlateOfVehicle, date, hours, minutes);
+        checkConflictsDriver(driverUsername, registrationPlateOfVehicle, date, hours, minutes);
         if(checkTrucking) {
             List<SiteDTO> sources_ = checkSites(sources);
             List<SiteDTO> destinations_ = checkSites(destinations);
@@ -87,11 +94,11 @@ public class TruckManagerController {
         }
     }
 
-    private List<SiteDTO> checkSites(List<String[]> Sites) throws Exception {
+    public List<SiteDTO> checkSites(List<String[]> Sites) throws Exception {
         List<SiteDTO> sites = new LinkedList<SiteDTO>();
         Area area = null;
         for(String[] site : Sites) {
-            if(site == null | site.length != 7)
+            if(site == null | site.length != 8)
                 throw new IllegalArgumentException("Oops, one or more details about the site is empty");
             try {
                 checkSite(site[0], site[1], site[2], site[3], Integer.parseInt(site[4]), Integer.parseInt(site[5]), Integer.parseInt(site[6]), site[7]);
@@ -293,7 +300,7 @@ public class TruckManagerController {
 
     public void moveProductsToTrucking(int truckingId, String pruductName, int quantity) throws Exception {
         if(!productsMapper.existProduct(truckingId,pruductName)) throw new Exception("This product is not in the trucking");
-        if(!(pruductName.equals("eggs") | pruductName.equals("water") | pruductName.equals("milk"))) throw new Exception("Illegal product");
+        if(!(pruductName.equals("Eggs_4902505139314") | pruductName.equals("Water_7290019056966") | pruductName.equals("Milk_7290111607400"))) throw new Exception("Illegal product");
         if(productsMapper.getProducts(truckingId).size()>1)
         {
             if(Integer.parseInt(productsMapper.getQuantity(truckingId,pruductName))==quantity)
@@ -307,7 +314,7 @@ public class TruckManagerController {
         {
             if(Integer.parseInt(productsMapper.getQuantity(truckingId,pruductName))>quantity)
                 productsMapper.increaseQuantity(truckingId,pruductName,(-1)*quantity);
-            else throw new Exception("Your trucking will be emptyy, Sorry man its not gonna work");
+            else throw new Exception("Your trucking will be empty,, Sorry man its not gonna work");
         }
     }
 
@@ -317,7 +324,7 @@ public class TruckManagerController {
             throw new IllegalArgumentException("There is no trucking with id: " + truckingId);
         if (!checkDriverLicenseMatch(driverUsername, registrationPlateOfVehicle))
             throw new IllegalArgumentException("Oops, the driver does not have a driver's license compatible with this vehicle");
-        checkConflicts(trucking.getDriverUsername(), registrationPlateOfVehicle, trucking.getDate(), trucking.getHours(), trucking.getMinutes());
+        checkConflictsVehicle(trucking.getDriverUsername(), registrationPlateOfVehicle, trucking.getDate(), trucking.getHours(), trucking.getMinutes());
         if (!truckingMapper.updateVehicle(truckingId, registrationPlateOfVehicle))
             throw new IllegalArgumentException("No change of vehicle was made to order: " + truckingId + ". It maybe the same vehicle of before the change.");
     }
@@ -328,7 +335,7 @@ public class TruckManagerController {
             throw new IllegalArgumentException("There is no trucking with id: " + truckingId);
         if (!checkDriverLicenseMatch(driverUsername, trucking.getVehicleRegistrationPlate()))
             throw new IllegalArgumentException("Oops, the driver does not have a driver's license compatible with this vehicle");
-        checkConflicts(driverUsername, trucking.getVehicleRegistrationPlate(), trucking.getDate(), trucking.getHours(), trucking.getMinutes());
+        checkConflictsDriver(driverUsername, trucking.getVehicleRegistrationPlate(), trucking.getDate(), trucking.getHours(), trucking.getMinutes());
         if (!truckingMapper.updateDriver(truckingId, driverUsername))
             throw new IllegalArgumentException("No change of driver was made to order: " + truckingId + ". It maybe the same driver of before the change.");
     }
@@ -338,7 +345,8 @@ public class TruckManagerController {
         TruckingDTO trucking = truckingMapper.getTruckingByID(truckingId);
         if (trucking == null)
             throw new IllegalArgumentException("There is no trucking with id: " + truckingId);
-        checkConflicts(trucking.getDriverUsername(), trucking.getVehicleRegistrationPlate(), date, trucking.getHours(), trucking.getMinutes());
+        checkConflictsVehicle(trucking.getDriverUsername(), trucking.getVehicleRegistrationPlate(), date, trucking.getHours(), trucking.getMinutes());
+        checkConflictsDriver(trucking.getDriverUsername(), trucking.getVehicleRegistrationPlate(), date, trucking.getHours(), trucking.getMinutes());
         if (!truckingMapper.updateDate(truckingId, date))
             throw new IllegalArgumentException("No change of date was made to order: " + truckingId + ". It maybe the same driver of before the change.");
     }
@@ -437,7 +445,7 @@ public class TruckManagerController {
         return false;
     }
 
-    private boolean checkConflicts(int driverUserName, String VehicleRegristationPlate, LocalDateTime date, long hoursOfTrucking, long minutesOfTrucking) throws Exception {
+    private boolean checkConflictsVehicle(int driverUserName, String VehicleRegristationPlate, LocalDateTime date, long hoursOfTrucking, long minutesOfTrucking) throws Exception {
         List<TruckingDTO> conflictingEvents = truckingMapper.getRelevantTruckings(date);
         LocalDateTime endTruck = date.plusHours(hoursOfTrucking).plusMinutes(minutesOfTrucking);
         ListIterator<TruckingDTO> truckingListIterator = conflictingEvents.listIterator();
@@ -446,15 +454,34 @@ public class TruckManagerController {
             LocalDateTime startCurr = currentTrucking.getDate();
             LocalDateTime endCurr = currentTrucking.getDate().plusHours(currentTrucking.getHours()).plusMinutes(currentTrucking.getMinutes());
             if (!(endTruck.isBefore(startCurr) | date.isAfter(endCurr))) {
-                checkAvailibility(currentTrucking.getVehicleRegistrationPlate() ,VehicleRegristationPlate, currentTrucking.getDriverUsername(),driverUserName);
+                checkAvailibilityVehicle(currentTrucking.getVehicleRegistrationPlate() ,VehicleRegristationPlate);
             }
         }
         return true;
     }
 
-    private boolean checkAvailibility(String registrationPlate1, String registrationPlate2,int driverUserName1,int driverUserName2) {
+    private boolean checkConflictsDriver(int driverUserName, String VehicleRegristationPlate, LocalDateTime date, long hoursOfTrucking, long minutesOfTrucking) throws Exception {
+        List<TruckingDTO> conflictingEvents = truckingMapper.getRelevantTruckings(date);
+        LocalDateTime endTruck = date.plusHours(hoursOfTrucking).plusMinutes(minutesOfTrucking);
+        ListIterator<TruckingDTO> truckingListIterator = conflictingEvents.listIterator();
+        while (truckingListIterator.hasNext()) {
+            TruckingDTO currentTrucking = truckingListIterator.next();
+            LocalDateTime startCurr = currentTrucking.getDate();
+            LocalDateTime endCurr = currentTrucking.getDate().plusHours(currentTrucking.getHours()).plusMinutes(currentTrucking.getMinutes());
+            if (!(endTruck.isBefore(startCurr) | date.isAfter(endCurr))) {
+                checkAvailibilityDriver( currentTrucking.getDriverUsername(),driverUserName);
+            }
+        }
+        return true;
+    }
+
+    private boolean checkAvailibilityVehicle(String registrationPlate1, String registrationPlate2) {
         if (registrationPlate1 == registrationPlate2)
             throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same vehicle");
+        return true;
+    }
+
+    private boolean checkAvailibilityDriver(int driverUserName1,int driverUserName2) {
         if (driverUserName1 == driverUserName2)
             throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same driver");
         return true;

@@ -105,7 +105,7 @@ public class DriverController {
         toReturn += printDestinations(trucking.getId());
         toReturn += printProducts(trucking.getId()) + "\n";
         if (trucking.getWeight() > 0)
-            toReturn += "Total weight: " + trucking.getWeight() + "\n";
+            toReturn += "Total weight : " + trucking.getWeight() + "\n";
         else
             toReturn += "There is no data about the trucking weight\n";
         return toReturn;
