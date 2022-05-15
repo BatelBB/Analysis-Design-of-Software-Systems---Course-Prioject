@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TruckManagerService {
+    /*
 
 
     private TruckManagerController truckManagerController = TruckManagerController.getInstance();
@@ -204,5 +205,7 @@ public class TruckManagerService {
         }
     }
 
+
+     */
 
 }

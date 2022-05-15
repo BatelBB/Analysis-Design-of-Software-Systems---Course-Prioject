@@ -1,6 +1,7 @@
 package groupk.logistics.service;
 
 public class Response<T> {
+    /*
 
     private String errorMessage;
     private T value;
@@ -27,4 +28,6 @@ public class Response<T> {
         else
             return null;
     }
+
+     */
 }

@@ -1,9 +1,5 @@
 package groupk.logistics.DataLayer;
 
-import groupk.logistics.business.DLicense;
-import groupk.logistics.business.ProductForTrucking;
-import groupk.logistics.business.Trucking;
-
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,13 +7,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class TruckingMapper extends myDataBase {
+public class TruckingMapper {
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private DriverLicencesMapper driverLicensesMapper;
     private VehicleMapper vehicleMapper;
     private TruckingIDMap truckingIDMap;
     public TruckingMapper() throws Exception {
-        super("Truckings");
         driverLicensesMapper = new DriverLicencesMapper();
         vehicleMapper = new VehicleMapper();
         truckingIDMap = TruckingIDMap.getInstance();
@@ -27,7 +22,7 @@ public class TruckingMapper extends myDataBase {
         int n = 0;
         String query = "INSERT INTO Truckings(TID,truck_manager,registration_plate,driver_username,date,hours,minutes,weight) VALUES(?,?,?,?,?,?,?,?)";
 
-        try (Connection conn = DriverManager.getConnection(finalCurl))
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl))
         {
             if(conn != null) {
                 PreparedStatement prepStat = conn.prepareStatement(query);
@@ -35,9 +30,9 @@ public class TruckingMapper extends myDataBase {
                 String formattedDateTime = trucking.getDate().format(formatter);
                 formattedDateTime = formattedDateTime.replace("T"," ");
                 prepStat.setInt(1, trucking.getId());
-                prepStat.setString(2, trucking.getTruckManager());
+                prepStat.setInt(2, trucking.getTruckManager());
                 prepStat.setString(3, trucking.getVehicleRegistrationPlate());
-                prepStat.setString(4, trucking.getDriverUsername());
+                prepStat.setInt(4, trucking.getDriverUsername());
                 prepStat.setString(5, formattedDateTime);
                 prepStat.setLong(6, trucking.getHours());
                 prepStat.setLong(7, trucking.getMinutes());
@@ -59,7 +54,7 @@ public class TruckingMapper extends myDataBase {
     public boolean removeTrucking(int truckingID) throws Exception {
         String Query = "DELETE FROM Truckings WHERE TID = '" + truckingID + "'";
         int n = 0;
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(Query)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
@@ -69,15 +64,10 @@ public class TruckingMapper extends myDataBase {
         return n > 0;
     }
 
-    @Override
-    Object ConvertResultSetToDTO(ResultSet rs) {
-        return null;
-    }
-
     public boolean setWeightForTrucking(int truckingId, int weight) throws Exception {
         String sql = "UPDATE Truckings SET weight="+weight+" WHERE TID='"+truckingId+"'";
         int n = 0;
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
@@ -91,7 +81,7 @@ public class TruckingMapper extends myDataBase {
     public boolean updateVehicle(int truckingId, String vehicleRegistrationPlate) throws Exception {
         String sql = "UPDATE Truckings SET registration_plate = '" + vehicleRegistrationPlate + "' WHERE TID = '" + truckingId + "'";
         int n = 0;
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
@@ -102,10 +92,10 @@ public class TruckingMapper extends myDataBase {
         return n > 0;
     }
 
-    public boolean updateDriver(int truckingId, String driverUsername) throws Exception {
+    public boolean updateDriver(int truckingId, int driverUsername) throws Exception {
         String sql = "UPDATE Truckings SET driver_username = '" + driverUsername + "' WHERE TID = '" + truckingId + "'";
         int n = 0;
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
@@ -117,9 +107,9 @@ public class TruckingMapper extends myDataBase {
     }
 
     public boolean updateDate(int truckingID, LocalDateTime date) throws Exception {
-        String sql = "UPDATE Truckings SET date = '" + date.format(dateFormat).replace(' ',' ') + "' WHERE TID = '" + truckingID + "'";
+        String sql = "UPDATE Truckings SET date = '" + date.format(dateFormat).replace('T',' ') + "' WHERE TID = '" + truckingID + "'";
         int n = 0;
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
@@ -136,7 +126,7 @@ public class TruckingMapper extends myDataBase {
         String toReturn = "";
         String query = "SELECT registration_plate FROM Truckings " +
                 "WHERE TID = '" + TruckingId + "'";
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             if (rs.next()) {
@@ -150,17 +140,17 @@ public class TruckingMapper extends myDataBase {
         return toReturn;
     }
 
-    public String getDriverUsernameOfTrucking(int TruckingId) throws Exception {
+    public int getDriverUsernameOfTrucking(int TruckingId) throws Exception {
         if (truckingIDMap.truckingsMap.containsKey(truckingIDMap))
             return truckingIDMap.truckingsMap.get(truckingIDMap).getDriverUsername();
-        String toReturn = "";
+        int toReturn = 0;
         String query = "SELECT driver_username FROM Truckings " +
                 "WHERE TID = '" + TruckingId + "'";
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             if (rs.next()) {
-                toReturn += rs.getString(1);
+                toReturn += rs.getInt(1);
             }
             else
                 throw new Exception("There is no trucking with id: " + TruckingId);
@@ -176,11 +166,11 @@ public class TruckingMapper extends myDataBase {
         TruckingDTO toReturn;
         String query = "SELECT * FROM Truckings " +
                 "WHERE TID = '" + truckingID + "'";
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             if (rs.next()) {
-                toReturn = new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getString(2), rs.getString(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8));
+                toReturn = new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getInt(2), rs.getInt(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8));
             }
             else
                 throw new Exception("There is no trucking with that id");
@@ -190,16 +180,16 @@ public class TruckingMapper extends myDataBase {
         return toReturn;
     }
 
-    public List<TruckingDTO> getTruckManagerBoard(String truckManagerUsername) throws Exception {
-        return getBoardOfUserOrVehicle("truck_manager", truckManagerUsername);
+    public List<TruckingDTO> getTruckManagerBoard(int truckManagerUsername) throws Exception {
+        return getBoardOfUserOrVehicle("truck_manager", "" + truckManagerUsername);
     }
 
-    public List<TruckingDTO> getTruckManagerFutureTruckings(String truckManagerUsername) throws Exception {
-        return getFutureTruckingsOfUserOrVehicle("truck_manager", truckManagerUsername);
+    public List<TruckingDTO> getTruckManagerFutureTruckings(int truckManagerUsername) throws Exception {
+        return getFutureTruckingsOfUserOrVehicle("truck_manager", "" + truckManagerUsername);
     }
 
-    public List<TruckingDTO> getTruckManagerHistoryTruckings(String truckManagerUsername) throws Exception {
-        return getHistoryTruckingsOfUserOrVehicle("truck_manager", truckManagerUsername);
+    public List<TruckingDTO> getTruckManagerHistoryTruckings(int truckManagerUsername) throws Exception {
+        return getHistoryTruckingsOfUserOrVehicle("truck_manager", "" + truckManagerUsername);
     }
 
     public List<TruckingDTO> getVehicleBoard(String regristrationPlate) throws Exception {
@@ -214,54 +204,27 @@ public class TruckingMapper extends myDataBase {
         return getHistoryTruckingsOfUserOrVehicle("registration_plate", regristrationPlate);
     }
 
-    public List<TruckingDTO> getDriverBoard(String driverUsername) throws Exception {
-        return getBoardOfUserOrVehicle("driver_username", driverUsername);
+    public List<TruckingDTO> getDriverBoard(int driverUsername) throws Exception {
+        return getBoardOfUserOrVehicle("driver_username", "" + driverUsername);
     }
 
-    public List<TruckingDTO> getDriverFutureTruckings(String driverUsername) throws Exception {
-        return getFutureTruckingsOfUserOrVehicle("driver_username", driverUsername);
+    public List<TruckingDTO> getDriverFutureTruckings(int driverUsername) throws Exception {
+        return getFutureTruckingsOfUserOrVehicle("driver_username", "" + driverUsername);
     }
 
-    public List<TruckingDTO> getDriverHistoryTruckings(String driverUsername) throws Exception {
-        return getHistoryTruckingsOfUserOrVehicle("driver_username", driverUsername);
+    public List<TruckingDTO> getDriverHistoryTruckings(int driverUsername) throws Exception {
+        return getHistoryTruckingsOfUserOrVehicle("driver_username", "" + driverUsername);
     }
 
-    public boolean checkDriverLicenseMatch(String driverUserName, String RegistrationPlate) throws Exception{
-        List<DLicense> driverLicenses = driverLicensesMapper.getMyLicenses(driverUserName);
-        DLicense license = vehicleMapper.getLicense(RegistrationPlate);
-        if (driverLicenses == null)
-            throw new IllegalArgumentException("There is not licenses we can see of that driver");
-        if (license == null)
-            throw new IllegalArgumentException("We cannot found the vehicle's license");
-        if (driverLicenses.contains(license))
-            return true;
-        return false;
-    }
-
-    public boolean checkConflicts(String driverUserName, String VehicleRegristationPlate, LocalDateTime date, long hoursOfTrucking, long minutesOfTrucking) throws Exception {
-        List<TruckingDTO> conflictingEvents = getRelevantTruckings(date);
-        LocalDateTime endTruck = date.plusHours(hoursOfTrucking).plusMinutes(minutesOfTrucking);
-        ListIterator<TruckingDTO> truckingListIterator = conflictingEvents.listIterator();
-        while (truckingListIterator.hasNext()) {
-            TruckingDTO currentTrucking = truckingListIterator.next();
-            LocalDateTime startCurr = currentTrucking.getDate();
-            LocalDateTime endCurr = currentTrucking.getDate().plusHours(currentTrucking.getHours()).plusMinutes(currentTrucking.getMinutes());
-            if (!(endTruck.isBefore(startCurr) | date.isAfter(endCurr))) {
-                checkAvailibility(currentTrucking.getVehicleRegistrationPlate() ,VehicleRegristationPlate, currentTrucking.getDriverUsername(),driverUserName);
-            }
-        }
-        return true;
-    }
-
-    private List<TruckingDTO> getRelevantTruckings(LocalDateTime date) throws Exception{
+    public List<TruckingDTO> getRelevantTruckings(LocalDateTime date) throws Exception{
         List<TruckingDTO> toReturn = new LinkedList<TruckingDTO>();
         String query = "SELECT * FROM Truckings " +
                 "WHERE strftime(date) between strftime('" + date.minusHours(7).format(dateFormat) + "') and strftime('" + date.plusHours(7).format(dateFormat) + "') ORDER BY date";
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             while (rs.next()) {
-                toReturn.add(new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getString(2), rs.getString(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8)));
+                toReturn.add(new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getInt(2), rs.getInt(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8)));
             }
         } catch (SQLException e) {
             throw new Exception("Oops something in verification process got wrong: \n" + e.getMessage());
@@ -274,11 +237,11 @@ public class TruckingMapper extends myDataBase {
         String query = "SELECT * FROM Truckings " +
                 "WHERE " + fieldName + " = '" + usernameOrRegistration + "'"+
                 " ORDER BY date";
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             while (rs.next()) {
-                TruckingDTO truckingDTO = new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getString(2), rs.getString(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8));
+                TruckingDTO truckingDTO = new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getInt(2), rs.getInt(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8));
                 toReturn.add(truckingDTO);
             }
         } catch (SQLException e) {
@@ -292,11 +255,11 @@ public class TruckingMapper extends myDataBase {
         String query = "SELECT * FROM Truckings " +
                 "WHERE strftime(date) > DATE('now') and " + fieldName + " = '" + usernameOrRegistration + "'"+
                 " ORDER BY date";
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             while (rs.next()) {
-                toReturn.add(new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getString(2), rs.getString(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8)));
+                toReturn.add(new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getInt(2), rs.getInt(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8)));
             }
         } catch (SQLException e) {
             throw new Exception("Oops something got wrong: \n" + e.getMessage());
@@ -309,11 +272,11 @@ public class TruckingMapper extends myDataBase {
         String query = "SELECT * FROM Truckings " +
                 "WHERE strftime(date) <= DATE('now') and "+ fieldName + " = '" + usernameOrRegistration + "'"+
                 " ORDER BY date";
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             while (rs.next()) {
-                toReturn.add(new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getString(2), rs.getString(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8)));
+                toReturn.add(new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getInt(2), rs.getInt(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8)));
             }
         } catch (SQLException e) {
             throw new Exception("Oops something got wrong: \n" + e.getMessage());
@@ -321,18 +284,10 @@ public class TruckingMapper extends myDataBase {
         return toReturn;
     }
 
-    private boolean checkAvailibility(String registrationPlate1, String registrationPlate2,String driverUserName1,String driverUserName2) {
-        if (registrationPlate1 == registrationPlate2)
-            throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same vehicle");
-        if (driverUserName1 == driverUserName2)
-            throw new IllegalArgumentException("Oops, there is another trucking at the same date and with the same driver");
-        return true;
-    }
-
     public int getNextIdForTrucking() throws Exception {
         int toReturn = 1;
         String query = "SELECT TID FROM Truckings ORDER BY TID DESC";
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             if (rs.next()) {
@@ -348,7 +303,7 @@ public class TruckingMapper extends myDataBase {
         String regisrationPlate = "";
         String query = "SELECT * FROM Truckings WHERE TID='"+truckingId+"'";
         int n = 0;
-        try (Connection conn = DriverManager.getConnection(finalCurl);
+        try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(query)){
             if (rs.next()) {

@@ -6,6 +6,7 @@ import java.util.List;
 
 
 public class UserService {
+    /*
 
     private UserController userController;
 
@@ -75,4 +76,6 @@ public class UserService {
         {
             return new Response(e.getMessage());
         }    }
+
+     */
 }

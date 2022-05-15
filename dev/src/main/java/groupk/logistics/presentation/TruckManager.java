@@ -1,6 +1,7 @@
 package groupk.logistics.presentation;
 
 public class TruckManager extends User{
+    /*
     public TruckManager() {
     }
 
@@ -182,4 +183,6 @@ public class TruckManager extends User{
             }
         }
     }
+
+     */
 }

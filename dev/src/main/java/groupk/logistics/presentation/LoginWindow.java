@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class LoginWindow {
+    /*
     public void login() throws Exception {
         boolean wantToBack = false;
         Service service = new Service();
@@ -42,4 +43,6 @@ public class LoginWindow {
             }
         }
     }
+
+     */
 }

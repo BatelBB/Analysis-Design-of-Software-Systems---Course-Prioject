@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Service {
+    /*
 
     TruckManagerService truckManagerService;
     DriverService driverService;
@@ -149,5 +150,7 @@ public class Service {
     public Response<List<String>> getLicenses() {
         return driverService.getLicenses();
     }
+
+     */
 
 }

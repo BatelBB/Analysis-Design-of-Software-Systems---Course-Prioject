@@ -10,7 +10,7 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TruckManagerFunctionality extends UserFunctionality {
-
+/*
     public TruckManagerFunctionality() throws Exception {
         super();
 
@@ -479,5 +479,7 @@ public class TruckManagerFunctionality extends UserFunctionality {
         site.add(area);
         return site;
     }
+
+ */
 
 }

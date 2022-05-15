@@ -10,15 +10,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class TruckingDTO {
     private final int id;
-    private String truckManager;
+    private int truckManager;
     private LocalDateTime date;
-    private String driverUsername;
+    private int driverUsername;
     private String vehicleRegistrationPlate;
     private long hours;
     private long minutes;
     private int weight;
 
-    public TruckingDTO(int id, String date,String truckManager, String driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight) throws Exception {
+    public TruckingDTO(int id, String date,int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight) throws Exception {
         this.id = id;
         this.date = convertDate(date, id);
         this.truckManager = truckManager;
@@ -29,7 +29,7 @@ public class TruckingDTO {
         this.weight = weight;
     }
 
-    public TruckingDTO(int id, LocalDateTime date, String truckManager, String driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight) throws Exception {
+    public TruckingDTO(int id, LocalDateTime date, int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight) throws Exception {
         this.id = id;
         this.date = date;
         this.truckManager = truckManager;
@@ -63,11 +63,11 @@ public class TruckingDTO {
         return minutes;
     }
 
-    public String getDriverUsername() {
+    public int getDriverUsername() {
         return driverUsername;
     }
 
-    public String getTruckManager() {
+    public int getTruckManager() {
         return truckManager;
     }
 
@@ -87,7 +87,7 @@ public class TruckingDTO {
 
     public void updateVehicle(String vehicleRegistrationPlate) {this.vehicleRegistrationPlate = vehicleRegistrationPlate;}
 
-    public void updateDriverUsername(String driverUsername) { this.driverUsername = driverUsername;}
+    public void updateDriverUsername(int driverUsername) { this.driverUsername = driverUsername;}
 
     public void updateDate(LocalDateTime date) { this.date = date;}
 }

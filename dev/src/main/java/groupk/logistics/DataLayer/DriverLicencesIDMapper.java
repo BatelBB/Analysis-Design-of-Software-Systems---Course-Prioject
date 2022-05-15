@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DriverLicencesIDMapper {
-    public Map<String, String> driverLicencesIDMapper ;
+    public Map<Integer, String> driverLicencesIDMapper ;
     private static DriverLicencesIDMapper singleton = null;
     private DriverLicencesIDMapper() {
-        driverLicencesIDMapper  = new ConcurrentHashMap<String, String>();
+        driverLicencesIDMapper  = new ConcurrentHashMap<Integer, String>();
     }
 
 

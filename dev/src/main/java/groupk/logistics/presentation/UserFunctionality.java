@@ -6,6 +6,7 @@ import groupk.logistics.service.Service;
 import java.util.Scanner;
 
 public class UserFunctionality {
+    /*
     protected Service service;
     public UserFunctionality() throws Exception {
         service = new Service();
@@ -29,5 +30,8 @@ public class UserFunctionality {
         else
             System.out.println("password successfully changed");
     }
+
+     */
+
 
 }

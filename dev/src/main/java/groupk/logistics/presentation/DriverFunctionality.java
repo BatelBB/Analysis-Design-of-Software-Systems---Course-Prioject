@@ -6,7 +6,7 @@ import groupk.logistics.service.Response;
 import java.util.List;
 
 public class DriverFunctionality extends UserFunctionality{
-
+/*
     public DriverFunctionality() throws Exception {
         super();
     }
@@ -83,4 +83,6 @@ public class DriverFunctionality extends UserFunctionality{
         else
             System.out.println(response.getValue());
     }
+
+ */
 }

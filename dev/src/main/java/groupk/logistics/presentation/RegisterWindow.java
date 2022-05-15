@@ -6,6 +6,7 @@ import groupk.logistics.service.Service;
 import java.util.Scanner;
 
 public class RegisterWindow {
+    /*
     Service service;
     public RegisterWindow() throws Exception {
         service = new Service();
@@ -46,4 +47,6 @@ public class RegisterWindow {
             }
         }
     }
+
+     */
 }

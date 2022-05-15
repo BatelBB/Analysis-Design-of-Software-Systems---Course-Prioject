@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class myDataBase<T> {
+public class myDataBase {
     static Connection con;
     protected static String JDBCurl = "jdbc:sqlite:";
     protected static String path = (new File("").getAbsolutePath()).concat("\\superLee2.db");
-    protected static String finalCurl = JDBCurl.concat(path);
+    public static String finalCurl = JDBCurl.concat(path);
 
     private String tableName;
 
@@ -24,43 +24,27 @@ abstract class myDataBase<T> {
         String vehiclesTable = "CREATE TABLE IF NOT EXISTS " + "Vehicles" + " (\n" +
                 "\tregistration_plate INTEGER PRIMARY KEY,\n" +
                 "\tmodel TEXT NOT NULL,\n" +
-                "\tlicense INTEGER NOT NULL,\n" +
+                "\tlicense TEXT NOT NULL,\n" +
                 "\tweight INTEGER NOT NULL,\n" +
                 "\tmax_weight INTEGER NOT NULL\n" +
                 "\t);\n" +
                 "\n";
-
-        String truckManagersTable = "CREATE TABLE IF NOT EXISTS " + "TruckManagers" + " (\n" +
-                "\tusername Text PRIMARY KEY,\n" +
-                "\tcode TEXT NOT NULL,\n" +
-                "FOREIGN KEY(username) REFERENCES Users(username)\n" +
-                "\t);\n" +
-                "\n";
-
-        String dirversTable = "CREATE TABLE IF NOT EXISTS " + "Drivers" + " (\n" +
-                "\tusername Text PRIMARY KEY,\n" +
-                "FOREIGN KEY(username) REFERENCES Users(username)\n" +
-                "\t);\n" +
-                "\n";
         String dirversLicencesTable = "CREATE TABLE IF NOT EXISTS " + "Drivers_Licences" + " (\n" +
-                "\tusername Text NOT NULL,\n" +
+                "\tusername INTEGER NOT NULL,\n" +
                 "\tlicence TEXT NOT NULL,\n" +
-                "\tPRIMARY KEY (username,licence),\n" +
-                "FOREIGN KEY(username) REFERENCES Drivers(username)\n" +
+                "\tPRIMARY KEY (username,licence)\n" +
                 "\t);\n" +
                 "\n";
         String Truckings = "CREATE TABLE IF NOT EXISTS " + "Truckings" + " (\n" +
                 "\tTID INTEGER PRIMARY KEY,\n" +
-                "\ttruck_manager TEXT NOT NULL,\n" +
+                "\ttruck_manager INTEGER NOT NULL,\n" +
                 "\tregistration_plate TEXT NOT NULL,\n" +
-                "\tdriver_username TEXT NOT NULL,\n" +
+                "\tdriver_username INTEGER NOT NULL,\n" +
                 "\tdate TEXT NOT NULL,\n" +
                 "\thours INTEGER NOT NULL,\n" +
                 "\tminutes INTEGER NOT NULL,\n" +
                 "\tweight INTEGER NOT NULL,\n" +
-                "\tFOREIGN KEY(truck_manager) REFERENCES TruckManagers(username)\n" +
                 "\tFOREIGN KEY(registration_plate) REFERENCES Vehicles(registration_plate)\n" +
-                "FOREIGN KEY(driver_username) REFERENCES Drivers(username)\n" +
                 "\t);\n" +
                 "\n";
         String Truckings_Destinations = "CREATE TABLE IF NOT EXISTS " + "Truckings_Destinations" + " (\n" +
@@ -97,23 +81,13 @@ abstract class myDataBase<T> {
                 "FOREIGN KEY(TID) REFERENCES Truckings(TID)\n" +
                 "\t);\n" +
                 "\n";
-        String UsersTable = "CREATE TABLE IF NOT EXISTS " + "Users" + " (\n" +
-                "\tusername TEXT PRIMARY KEY,\n" +
-                "\tpassword TEXT NOT NULL,\n" +
-                "\tname TEXT NOT NULL,\n" +
-                "\trole TEXT NOT NULL\n" +
-                "\t);\n" +
-                "\n";
         //    boolean added = truckingMapper.addTrucking(truckingIdCounter,getActiveUser().getUsername(),registrationPlateOfVehicle,driverUsername,date,hours,minutes);
 
 ////
 //
 //        try (Connection conn = DriverManager.getConnection(JDBCurl);
         try (Statement s = DriverManager.getConnection(finalCurl).createStatement()) {
-            s.addBatch(UsersTable);
             s.addBatch(vehiclesTable);
-            s.addBatch(truckManagersTable);
-            s.addBatch(dirversTable);
             s.addBatch(dirversLicencesTable);
             s.addBatch(Truckings);
             s.addBatch(Truckings_Destinations);
@@ -140,21 +114,4 @@ abstract class myDataBase<T> {
         return con;
     }
 
-
-    public List<T> selectAll() throws Exception {
-        String query = "SELECT * FROM " + tableName;
-        List<T> DTOList = new ArrayList<T>();
-        try (Connection conn = DriverManager.getConnection(finalCurl);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                DTOList.add(ConvertResultSetToDTO(rs));
-            }
-        } catch (SQLException e) {
-            throw new Exception(e.getMessage());
-        }
-        return DTOList;
-    }
-
-    abstract T ConvertResultSetToDTO(ResultSet rs) throws SQLException;
 }

@@ -1,6 +1,7 @@
 package groupk.logistics.presentation;
 
 public class Driver extends User {
+    /*
 
     public Driver() {
 
@@ -40,4 +41,6 @@ public class Driver extends User {
                 System.out.println("You needed to select from the list...");
         }
     }
+
+     */
 }
