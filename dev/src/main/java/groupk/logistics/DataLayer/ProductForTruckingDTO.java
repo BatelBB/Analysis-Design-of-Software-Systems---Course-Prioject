@@ -1,7 +1,5 @@
 package groupk.logistics.DataLayer;
 
-import groupk.logistics.business.Products;
-
 public class ProductForTruckingDTO {
     private String product;
     private int quantity;

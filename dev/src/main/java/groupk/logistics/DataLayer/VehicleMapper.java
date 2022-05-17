@@ -1,6 +1,5 @@
 package groupk.logistics.DataLayer;
 
-import groupk.logistics.business.DLicense;
 
 import java.sql.*;
 import java.util.ArrayList;

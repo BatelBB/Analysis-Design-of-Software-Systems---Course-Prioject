@@ -1,7 +1,5 @@
 package groupk.logistics.DataLayer;
 
-import groupk.logistics.business.DLicense;
-
 public class VehicleDTO {
     private String lisence;
     private String registationPlate;

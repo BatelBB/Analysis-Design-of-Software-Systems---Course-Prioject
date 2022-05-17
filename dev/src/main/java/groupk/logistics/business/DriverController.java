@@ -10,10 +10,7 @@ public class DriverController {
     private static DriverController singletonDriverControllerInstance = null;
     private DriverLicencesMapper driverLicencesMapper;
     private TruckingMapper truckingMapper;
-    private Truckings_SourcesMapper sourcesMapper;
-    private Truckings_DestsMapper truckings_destsMapper;
     private VehicleMapper vehicleMapper;
-    private Truckings_ProductsMapper productsMapper;
 
 
     public static DriverController getInstance() throws Exception {
@@ -25,10 +22,7 @@ public class DriverController {
     private DriverController() throws Exception {
         driverLicencesMapper = new DriverLicencesMapper();
         truckingMapper = new TruckingMapper();
-        sourcesMapper = new Truckings_SourcesMapper();
-        truckings_destsMapper = new Truckings_DestsMapper();
         vehicleMapper = new VehicleMapper();
-        productsMapper = new Truckings_ProductsMapper();
     }
 
     public List<String> getMyLicenses(int driverUsername) throws Exception {
@@ -126,18 +120,18 @@ public class DriverController {
 
     private String printSources(int TruckingID) throws Exception {
         String toReturn = "\nSOURCE DETAILS:\n";
-        toReturn += printSitesList(sourcesMapper.getSourcesByTruckingId(TruckingID));
+        toReturn += printSitesList(truckingMapper.getSourcesByTruckingId(TruckingID));
         return toReturn;
     }
 
     private String printDestinations(int TruckingID) throws Exception {
         String toReturn = "\nDESTINATION DETAILS:\n";
-        toReturn += printSitesList(truckings_destsMapper.getDestinationsByTruckingId(TruckingID));
+        toReturn += printSitesList(truckingMapper.getDestinationsByTruckingId(TruckingID));
         return toReturn;
     }
 
     private String printProducts(int TruckingID) throws Exception {
-        return "\nProduct DETAILS:\n"  + printProductsList(productsMapper.getProducts(TruckingID));
+        return "\nProduct DETAILS:\n"  + printProductsList(truckingMapper.getProducts(TruckingID));
     }
 
     private String printSitesList(List<SiteDTO> sourcesOrDestinations) {

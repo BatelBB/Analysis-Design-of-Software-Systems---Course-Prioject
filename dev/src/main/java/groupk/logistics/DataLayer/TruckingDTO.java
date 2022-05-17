@@ -17,8 +17,11 @@ public class TruckingDTO {
     private long hours;
     private long minutes;
     private int weight;
+    private List<SiteDTO> sources;
+    private List<SiteDTO> destinations;
+    private List<ProductForTruckingDTO> products;
 
-    public TruckingDTO(int id, String date,int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight) throws Exception {
+    public TruckingDTO(int id, String date,int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight, List<SiteDTO> sources, List<SiteDTO> destinations, List<ProductForTruckingDTO> products) throws Exception {
         this.id = id;
         this.date = convertDate(date, id);
         this.truckManager = truckManager;
@@ -27,9 +30,12 @@ public class TruckingDTO {
         this.hours = hours;
         this.minutes = minutes;
         this.weight = weight;
+        this.sources = sources;
+        this.destinations = destinations;
+        this.products = products;
     }
 
-    public TruckingDTO(int id, LocalDateTime date, int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight) throws Exception {
+    public TruckingDTO(int id, LocalDateTime date, int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight, List<SiteDTO> sources, List<SiteDTO> destinations, List<ProductForTruckingDTO> products) throws Exception {
         this.id = id;
         this.date = date;
         this.truckManager = truckManager;
@@ -38,6 +44,9 @@ public class TruckingDTO {
         this.hours = hours;
         this.minutes = minutes;
         this.weight = weight;
+        this.sources = sources;
+        this.destinations = destinations;
+        this.products = products;
     }
     private LocalDateTime convertDate(String date, int TruckingID) throws Exception{
         LocalDateTime toReturn;
@@ -83,6 +92,12 @@ public class TruckingDTO {
         return weight;
     }
 
+    public List<SiteDTO> getSources() { return sources; }
+
+    public List<SiteDTO> getDestinations() { return destinations; }
+
+    public List<ProductForTruckingDTO> getProducts() { return products; }
+
     public void setWeight(int newWeight) {this.weight = newWeight; }
 
     public void updateVehicle(String vehicleRegistrationPlate) {this.vehicleRegistrationPlate = vehicleRegistrationPlate;}
@@ -90,4 +105,10 @@ public class TruckingDTO {
     public void updateDriverUsername(int driverUsername) { this.driverUsername = driverUsername;}
 
     public void updateDate(LocalDateTime date) { this.date = date;}
+
+    public void updateSources(List<SiteDTO> sources) { this.sources = sources; }
+
+    public void updateDestinations(List<SiteDTO> destinations) { this.destinations = destinations; }
+
+    public void updateProducts(List<ProductForTruckingDTO> products) { this.products = products; }
 }
