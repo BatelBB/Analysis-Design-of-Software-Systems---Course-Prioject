@@ -22,6 +22,8 @@ public class Application {
                 });
 
         Scanner input = new Scanner(System.in);
+
+        runner.introduce();
         while(keepGoing.get()) {
             System.out.print("> ");
             String command = input.nextLine();

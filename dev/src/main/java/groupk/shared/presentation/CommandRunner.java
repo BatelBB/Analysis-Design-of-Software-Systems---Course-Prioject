@@ -32,7 +32,7 @@ public class CommandRunner {
     }
 
     public void introduce() {
-        System.out.println("introduction");
+        System.out.println("For usage information enter 'help'.");
     }
 
     public void stop() {
@@ -52,7 +52,19 @@ public class CommandRunner {
     }
 
     private void help() {
-        System.out.println("help");
+        System.out.println("Supported commands:");
+        int indent = Arrays.stream(commands)
+                .map(command -> command.name().length())
+                .max(Integer::compareTo)
+                .orElse(0) + 2;
+        for (Command command: commands) {
+            System.out.println(
+                    "  "
+                    + command.name()
+                    + " ".repeat(indent - command.name().length())
+                    + command.description());
+        }
+        System.out.println("For command usage, enter the command without arguments.");
     }
 
     // Parses dates in YYYY-MM-DD format, for example 2022-05-17.
