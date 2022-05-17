@@ -6,5 +6,5 @@ public interface Command {
     String name();
     String description();
     boolean isMatching(String line);
-    void execute(String line, CommandRunner runner);
+    void execute(String[] command, CommandRunner runner);
 }
