@@ -223,6 +223,8 @@ public class SharedTests {
         assertEquals(service.readEmployee("111111110", "111111111").getValue().sickDaysUsed, createdUpdate.sickDaysUsed);
         assertEquals(service.listShifts(HR.id).getValue().size(), 1);
         assertEquals(service.listShifts(HR.id).getValue().get(0).getStaff().size(), 2);
+        //service.deleteEmployeeShiftPreference(created.id, created.id, Employee.ShiftDateTime.ThursdayEvening);
+        service.deleteEmployee(HR.id, "11411110");
     }
     @Test
     public void testCreateDeliveryWithLogisticsEmployee() {

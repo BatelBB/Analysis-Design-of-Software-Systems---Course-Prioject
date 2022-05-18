@@ -15,13 +15,9 @@ public class Shift {
             Connection connection = DriverManager.getConnection(DalController.url);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from Shift");
-            id = 1;
-            while(resultSet.next())
-                id ++;
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Shift VALUES(?,?,?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Shift VALUES(?,?)");
             preparedStatement.setString(1, type.name());
             preparedStatement.setString(2, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
-            preparedStatement.setInt(3, id);
             preparedStatement.executeUpdate();
             this.requiredStaff = new HashMap<>();
             for (Employee.Role r : Employee.Role.values()) {
@@ -39,16 +35,18 @@ public class Shift {
                 }
             }
             for (Employee.Role role : this.requiredStaff.keySet()) {
-                PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO RequiredStaff VALUES(?,?,?)");
+                PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO RequiredStaff VALUES(?,?,?,?)");
                 preparedStatement2.setInt(1, this.requiredStaff.get(role));
                 preparedStatement2.setString(2, role.name());
-                preparedStatement2.setInt(3, id);
+                preparedStatement2.setString(3, type.name());
+                preparedStatement2.setString(4, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
                 preparedStatement2.executeUpdate();
             }
             for(Employee employee : staff){
-                PreparedStatement preparedStatement3 = connection.prepareStatement("INSERT INTO Workers VALUES(?,?)");
-                preparedStatement3.setInt(1, id);
-                preparedStatement3.setString(2, employee.getId());
+                PreparedStatement preparedStatement3 = connection.prepareStatement("INSERT INTO Workers VALUES(?,?,?)");
+                preparedStatement3.setString(1, type.name());
+                preparedStatement3.setString(2, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
+                preparedStatement3.setString(3, employee.getId());
                 preparedStatement3.executeUpdate();
             }
             connection.close();
@@ -94,14 +92,16 @@ public class Shift {
     public Shift setRequiredStaff(HashMap<Employee.Role, Integer> requiredStaff){
         try{
             Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM RequiredStaff WHERE ID = ?");
-            preparedStatement.setInt(1 , id);
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM RequiredStaff WHERE Type = ? and Date = ?");
+            preparedStatement.setString(1 , type.name());
+            preparedStatement.setString(2 , date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
             preparedStatement.executeUpdate();
             for (Employee.Role role : requiredStaff.keySet()) {
-                PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO RequiredStaff VALUES(?,?,?)");
-                preparedStatement2.setInt(1, requiredStaff.get(role));
+                PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO RequiredStaff VALUES(?,?,?,?)");
+                preparedStatement2.setInt(1, this.requiredStaff.get(role));
                 preparedStatement2.setString(2, role.name());
-                preparedStatement2.setInt(3, id);
+                preparedStatement2.setString(3, type.name());
+                preparedStatement2.setString(4, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
                 preparedStatement2.executeUpdate();
                 this.requiredStaff.put(role, requiredStaff.get(role));
             }
@@ -116,10 +116,11 @@ public class Shift {
     public Shift setRequiredRoleInShift(Employee.Role role, int number){
         try{
             Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE RequiredStaff set Count = ? where Role = ? and ID = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE RequiredStaff set Count = ? where Role = ? and Type = ? and Date = ?");
             preparedStatement.setInt(1, number);
             preparedStatement.setString(2, role.name());
-            preparedStatement.setInt(3, id);
+            preparedStatement.setString(2, type.name());
+            preparedStatement.setString(3, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
             preparedStatement.executeUpdate();
             connection.close();
             requiredStaff.replace(role, number);
@@ -141,9 +142,10 @@ public class Shift {
     public Shift addEmployee(Employee e){
         try{
             Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement  preparedStatement = connection.prepareStatement("INSERT INTO Workers VALUES(?,?)");
-            preparedStatement.setInt(1, id);
-            preparedStatement.setString(2, e.getId());
+            PreparedStatement  preparedStatement = connection.prepareStatement("INSERT INTO Workers VALUES(?,?,?)");
+            preparedStatement.setString(1, type.name());
+            preparedStatement.setString(2, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
+            preparedStatement.setString(3, e.getId());
             preparedStatement.executeUpdate();
             connection.close();
             staff.add(e);
@@ -157,9 +159,10 @@ public class Shift {
     public Shift removeEmployee(Employee e){
         try{
             Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement  preparedStatement = connection.prepareStatement("DELETE FROM Workers ShiftID = ? and EmployeeID = ?");
-            preparedStatement.setInt(1, id);
-            preparedStatement.setString(2, e.getId());
+            PreparedStatement  preparedStatement = connection.prepareStatement("DELETE FROM Workers Type = ? and Date = ? and EmployeeID = ?");
+            preparedStatement.setString(1, type.name());
+            preparedStatement.setString(2, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
+            preparedStatement.setString(3, e.getId());
             preparedStatement.executeUpdate();
             connection.close();
             staff.remove(e);

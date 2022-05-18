@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.*;
 
 public class DalController {
-    public static String url ;
+    public static String url;
     private ShiftRepository shiftRepository;
     private EmployeeRepository employeeRepository;
     public static File file;
@@ -41,15 +41,17 @@ public class DalController {
                 "\t\"SalaryPerHour\"\tINTEGER,\n" +
                 "\t\"Role\"\tTEXT,\n" +
                 "\tPRIMARY KEY(\"ID\"),\n" +
-                "\tFOREIGN KEY(\"Role\") REFERENCES \"Role\"(\"Name\")\n" +
+                "\tFOREIGN KEY(\"Role\") REFERENCES \"Role\"(\"Name\") ON DELETE CASCADE ON UPDATE CASCADE\n" +
                 ");");
         tables.add("CREATE TABLE IF NOT EXISTS \"RequiredStaff\" (\n" +
                 "\t\"Count\"\tINTEGER,\n" +
                 "\t\"Role\"\tTEXT,\n" +
-                "\t\"ID\"\tINTEGER,\n" +
-                "\tPRIMARY KEY(\"ID\",\"Role\"),\n" +
-                "\tFOREIGN KEY(\"ID\") REFERENCES \"Shift\"(\"ID\"),\n" +
-                "\tFOREIGN KEY(\"Role\") REFERENCES \"Role\"(\"Name\")\n" +
+                "\t\"Type\"\tTEXT,\n" +
+                "\t\"Date\"\tTEXT,\n" +
+                "\tPRIMARY KEY(\"Date\",\"Type\",\"Role\"),\n" +
+                "\tFOREIGN KEY(\"Date\") REFERENCES \"Shift\"(\"Date\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "\tFOREIGN KEY(\"Role\") REFERENCES \"Shift\"(\"Role\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "\tFOREIGN KEY(\"Role\") REFERENCES \"Role\"(\"Name\") ON DELETE CASCADE ON UPDATE CASCADE\n" +
                 ");");
         tables.add("CREATE TABLE IF NOT EXISTS \"Role\" (\n" +
                 "\t\"Name\"\tTEXT,\n" +
@@ -58,25 +60,27 @@ public class DalController {
         tables.add("CREATE TABLE IF NOT EXISTS \"Shift\" (\n" +
                 "\t\"Type\"\tTEXT,\n" +
                 "\t\"Date\"\tTEXT,\n" +
-                "\t\"ID\"\tINTEGER,\n" +
                 "\tPRIMARY KEY(\"Date\",\"Type\")\n" +
                 ");");
         tables.add("CREATE TABLE IF NOT EXISTS \"ShiftPreference\" (\n" +
                 "\t\"EmployeeID\"\tTEXT,\n" +
                 "\t\"ShiftType\"\tTEXT,\n" +
-                "\tFOREIGN KEY(\"ShiftType\") REFERENCES \"ShiftSlot\"(\"Type\"),\n" +
+                "\tFOREIGN KEY(\"ShiftType\") REFERENCES \"ShiftSlot\"(\"Type\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
                 "\tPRIMARY KEY(\"EmployeeID\",\"ShiftType\"),\n" +
-                "\tFOREIGN KEY(\"EmployeeID\") REFERENCES \"Employee\"(\"ID\")\n" +
+                "\tFOREIGN KEY(\"EmployeeID\") REFERENCES \"Employee\"(\"ID\") ON DELETE CASCADE ON UPDATE CASCADE\n" +
                 ");");
         tables.add("CREATE TABLE IF NOT EXISTS \"ShiftSlot\" (\n" +
                 "\t\"Type\"\tTEXT,\n" +
                 "\tPRIMARY KEY(\"Type\")\n" +
                 ");");
         tables.add("CREATE TABLE IF NOT EXISTS \"Workers\" (\n" +
-                "\t\"ShiftID\"\tINTEGER,\n" +
+                "\t\"Type\"\tTEXT,\n" +
+                "\t\"Date\"\tTEXT,\n" +
                 "\t\"EmployeeID\"\tTEXT,\n" +
-                "\tFOREIGN KEY(\"ShiftID\") REFERENCES \"Shift\"(\"ID\"),\n" +
-                "\tPRIMARY KEY(\"ShiftID\",\"EmployeeID\")\n" +
+                "\tFOREIGN KEY(\"Date\") REFERENCES \"Shift\"(\"Date\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "\tFOREIGN KEY(\"EmployeeID\") REFERENCES \"Employee\"(\"ID\") ON DELETE SET NULL ON UPDATE CASCADE\n" +
+                "\tFOREIGN KEY(\"Type\") REFERENCES \"Shift\"(\"Type\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "\tPRIMARY KEY(\"Date\",\"Type\",\"EmployeeID\")\n" +
                 ");");
         try (
             Connection connection = DriverManager.getConnection(url);
@@ -85,6 +89,7 @@ public class DalController {
                 statement.addBatch(table);
             }
             statement.executeBatch();
+            connection.createStatement().execute("PRAGMA foreign_keys = ON");
         } catch (SQLException s) {
             System.out.println(s.getMessage());
         }
@@ -130,6 +135,20 @@ public class DalController {
     }
 
     public Employee deleteEmployee(String id) {
+        try{
+            Connection connection = DriverManager.getConnection(DalController.url);
+            connection.createStatement().execute("PRAGMA foreign_keys = ON");
+            String deleteEmployee = "DELETE FROM Employee WHERE ID = '" + id + "';";
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteEmployee);
+            preparedStatement.executeUpdate();
+//            String shiftPreference = "DELETE FROM ShiftPreference WHERE EmployeeID = '" + id + "';";
+//            PreparedStatement preparedStatement2 = connection.prepareStatement(shiftPreference);
+//            preparedStatement2.executeUpdate();
+            connection.close();
+        }
+        catch (SQLException s){
+            System.out.println(s.getMessage());
+        }
         return employeeRepository.deleteEmployee(id);
     }
 
@@ -157,11 +176,12 @@ public class DalController {
             PreparedStatement prepStat3 = connection.prepareStatement("select * from Shift");
             ResultSet shifts = prepStat3.executeQuery();
             while(shifts.next()){
-                String id = shifts.getString(3);
-                String shiftRequired = "SELECT * FROM RequiredStaff where ID = " + id;
+                String type = shifts.getString(1);
+                String date = shifts.getString(2);
+                String shiftRequired = "SELECT * FROM RequiredStaff where Type = '" + type + "' and Date = '" + date + "'";
                 PreparedStatement prepStat4 = connection.prepareStatement(shiftRequired);
                 ResultSet shiftReqLoad = prepStat4.executeQuery();
-                String workers = "SELECT EmployeeID FROM Workers where ShiftID = " + id;
+                String workers = "SELECT EmployeeID FROM Workers where Type = '" + type + "' and Date = '" + date + "'";
                 PreparedStatement prepStat5 = connection.prepareStatement(workers);
                 ResultSet workersLoad = prepStat5.executeQuery();
                 LinkedList<Employee> listOfWorkers = new LinkedList<>();
