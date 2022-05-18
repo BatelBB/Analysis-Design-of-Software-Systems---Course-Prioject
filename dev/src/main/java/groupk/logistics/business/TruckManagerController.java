@@ -73,11 +73,11 @@ public class TruckManagerController {
         }
     }
 
-    private List<SiteDTO> checkSites(List<String[]> Sites) throws Exception {
+    public List<SiteDTO> checkSites(List<String[]> Sites) throws Exception {
         List<SiteDTO> sites = new LinkedList<SiteDTO>();
         Area area = null;
         for(String[] site : Sites) {
-            if(site == null | site.length != 7)
+            if(site == null | site.length != 8)
                 throw new IllegalArgumentException("Oops, one or more details about the site is empty");
             try {
                 checkSite(site[0], site[1], site[2], site[3], Integer.parseInt(site[4]), Integer.parseInt(site[5]), Integer.parseInt(site[6]), site[7]);
@@ -324,7 +324,7 @@ public class TruckManagerController {
         if (trucking.getTruckManager() != truckManagerID)
             throw new IllegalArgumentException("Oops, you have not any trucking with that id");
         if(!truckingMapper.existProduct(truckingId,pruductName)) throw new Exception("This product is not in the trucking");
-        if(!(pruductName.equals("eggs") | pruductName.equals("water") | pruductName.equals("milk"))) throw new Exception("Illegal product");
+        if(!(pruductName.equals("Eggs_4902505139314") | pruductName.equals("Water_7290019056966") | pruductName.equals("Milk_7290111607400"))) throw new Exception("Illegal product");
         if(truckingMapper.getProducts(truckingId).size()>1)
         {
             if(Integer.parseInt(truckingMapper.getQuantity(truckingId,pruductName))==quantity)
@@ -619,4 +619,8 @@ public class TruckManagerController {
         return true;
     }
 
+    public void forTests() {
+        truckingIdCounter=1;
+
+    }
 }
