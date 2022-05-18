@@ -16,8 +16,6 @@ public class TruckManagerController {
     private TruckingMapper truckingMapper;
     private DriverLicencesMapper driverLicensesMapper;
 
-
-
     public static TruckManagerController getInstance() throws Exception {
         if (singletonTruckManagerControllerInstance == null)
             singletonTruckManagerControllerInstance = new TruckManagerController();
@@ -31,8 +29,7 @@ public class TruckManagerController {
         driverLicensesMapper = new DriverLicencesMapper();
     }
 
-    public void reserForTests()
-    {
+    public void reserForTests() {
         truckingIdCounter = 1;
     }
 
@@ -274,12 +271,52 @@ public class TruckManagerController {
         }
     }
 
-    public void updateSourcesOnTrucking(int truckManagerID, int truckingId, List<List<String>> sources) throws Exception {
-        //TODO
+    public void updateSourcesOnTrucking(int truckManagerID, int truckingId, List<String[]> sources) throws Exception {
+        TruckingDTO trucking = truckingMapper.getTruckingByID(truckingId);
+        if (trucking.getTruckManager() != truckManagerID)
+            throw new IllegalArgumentException("Oops, you have not any trucking with that id");
+        List<SiteDTO> oldSources = truckingMapper.getSourcesByTruckingId(truckingId);
+        List<SiteDTO> sources_ = checkSites(sources);
+        truckingMapper.removeSourcesTrucking(truckingId);
+        try {
+            truckingMapper.addTruckingSources(truckingId, sources_);
+        }
+        catch (Exception e) {
+            try {
+                truckingMapper.addTruckingSources(truckingId, oldSources);
+                throw new IllegalArgumentException("Oops, we tried to update the sources but there was an error: \"" + e.getMessage() + "\nThe trucking didn't change");
+            }
+            catch (Exception ex) {
+                if (ex.getMessage().substring(0,14).equals("Oops, we tried"))
+                    throw ex;
+                truckingMapper.removeTrucking(truckingId);
+                throw new IllegalArgumentException("There was an unexpected error. We were unable to recover the trucking data so we deleted it.");
+            }
+        }
     }
 
-    public void updateDestinationsOnTrucking(int truckManagerID, int truckingId, List<List<String>> destinations) throws Exception {
-        //TODO
+    public void updateDestinationsOnTrucking(int truckManagerID, int truckingId, List<String[]> destinations) throws Exception {
+        TruckingDTO trucking = truckingMapper.getTruckingByID(truckingId);
+        if (trucking.getTruckManager() != truckManagerID)
+            throw new IllegalArgumentException("Oops, you have not any trucking with that id");
+        List<SiteDTO> oldDetinations = truckingMapper.getDestinationsByTruckingId(truckingId);
+        List<SiteDTO> destinations_ = checkSites(destinations);
+        truckingMapper.removeDestinationsTrucking(truckingId);
+        try {
+            truckingMapper.addTruckingDestinations(truckingId, destinations_);
+        }
+        catch (Exception e) {
+            try {
+                truckingMapper.addTruckingDestinations(truckingId, oldDetinations);
+                throw new IllegalArgumentException("Oops, we tried to update the destinations but there was an error: \"" + e.getMessage() + "\nThe trucking didn't change");
+            }
+            catch (Exception ex) {
+                if (ex.getMessage().substring(0,14).equals("Oops, we tried"))
+                    throw ex;
+                truckingMapper.removeTrucking(truckingId);
+                throw new IllegalArgumentException("There was an unexpected error. We were unable to recover the trucking data so we deleted it.");
+            }
+        }
     }
 
     public void moveProductsToTrucking(int truckManagerID, int truckingId, String pruductName, int quantity) throws Exception {
@@ -294,14 +331,14 @@ public class TruckManagerController {
             truckingMapper.removeProductsByTruckingId(truckingId,pruductName);
             if(Integer.parseInt(truckingMapper.getQuantity(truckingId,pruductName))>quantity)
                 truckingMapper.increaseQuantity(truckingId,pruductName,(-1)*quantity);
-            else throw new Exception("You dont have this quantity of this item in the order");
+            else throw new Exception("You don't have this quantity of this item in the order");
         }
 
         else
         {
             if(Integer.parseInt(truckingMapper.getQuantity(truckingId,pruductName))>quantity)
                 truckingMapper.increaseQuantity(truckingId,pruductName,(-1)*quantity);
-            else throw new Exception("Your trucking will be emptyy, Sorry man its not gonna work");
+            else throw new Exception("Your trucking will be empty, Sorry man its not gonna work");
         }
     }
 

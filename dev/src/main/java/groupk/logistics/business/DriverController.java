@@ -75,7 +75,10 @@ public class DriverController {
         return driverLicencesMapper.addLicence(driverID ,license);
     }
 
-    public boolean setWeightForTrucking(int truckingId, int weight) throws Exception {
+    public boolean setWeightForTrucking(int driverID, int truckingId, int weight) throws Exception {
+        TruckingDTO trucking = truckingMapper.getTruckingByID(truckingId);
+        if (trucking.getDriverUsername() != driverID)
+            throw new IllegalArgumentException("Oops, you have not any trucking with that id");
         String registrationPlate = truckingMapper.getLicencePlate(truckingId);
         VehicleDTO vehicle = vehicleMapper.getVehicle(registrationPlate);
         checkWeight(vehicle,weight);

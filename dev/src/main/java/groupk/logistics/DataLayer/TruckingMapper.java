@@ -265,7 +265,7 @@ public class TruckingMapper {
         return Exceptions;
     }
 
-    private boolean removeSourcesTrucking(int truckingID) throws Exception {
+    public boolean removeSourcesTrucking(int truckingID) throws Exception {
         String Query = "DELETE FROM Truckings_Sources WHERE TID = '" + truckingID+"'";
         int n = 0;
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
