@@ -1,0 +1,101 @@
+@startuml
+title Class Diagram - Presentation Layer
+
+package shared {
+    package shared.presentation {
+        class Application {
+            +main()
+        }
+
+        class CommandRunner {
+            -Service service
+            +introduce()
+            +invoke()
+            +stop()
+            +setSubject()
+            +getSubject(): String
+        }
+
+        package shared.presentation.command {
+            interface Command{
+                +name(): String
+                +description(): String
+                +isMatching(): boolean
+                +execute()
+            }
+
+            class AddShiftPreference {}
+
+            class AddShiftStaff {}
+
+            class CanWork {}
+
+            class CreateEmployee {}
+
+            class CreateShift {}
+
+            class DeleteEmployee {}
+
+            class GetEmployee {}
+
+            class ListEmployees {}
+
+            class ListShifts {}
+
+            class Login {}
+
+            class Quit {}
+
+            class UpdateShiftRequiredRole {}
+
+            Command <|-- AddShiftPreference: Is
+            Command <|-- AddShiftStaff: Is
+            Command <|-- CanWork: Is
+            Command <|-- CreateEmployee: Is
+            Command <|-- CreateShift: Is
+            Command <|-- DeleteEmployee: Is
+            Command <|-- GetEmployee: Is
+            Command <|-- ListEmployees: Is
+            Command <|-- ListShifts: Is
+            Command <|-- Login: Is
+            Command <|-- Quit: Is
+            Command <|-- UpdateShiftRequiredRole: Is
+        }
+
+        CommandRunner "1" *-- "*" Command: Runs
+        Application "1" *-- "1" CommandRunner: Applies
+    }
+
+    package shared.service {
+        class shared.service.Service {
+            -Facade facade
+            +loadEmployeeDB()
+            +deleteEmployeeDB()
+            +createShift(): Response<Employee>
+            +readEmployee(): Response<Employee>
+            +readShift(): Response<List<Shift>>
+            +deleteEmployee(): Response<Employee>
+            +listEmployees(): Response<List<Employee>>
+            +addEmployeeToShift(): Response<Shift>
+            +removeEmployeeFromShift() Response<Shift>
+            +updateEmployee(): Response<Employee>
+            +updateEmployeeShiftPreference(): Response<Employee>
+            +listShifts(): Response<List<Shift>>
+            +updateRequiredRoleInShift(): Response<Shift>
+            +deleteDelivery(): Response<Delivery>
+            +listDeliveries(): Response<List<Delivery>>
+            +listDeliveriesByDriver(): Response<List<Delivery>>
+            +listVehicles(): Response<List<String>>
+            +createDelivery(): Response<Delivery>
+            +listDeliveriesWithVehicle(): Response<List<Delivery>>
+            +updateDelivery(): Response<Delivery>
+            +createVehicle(): Response<String>
+            +createDriver(): Response<Driver>
+            +updateDriver(): Response<Driver>
+            +setWeightForDelivery()
+        }
+    }
+
+    CommandRunner "1" *-- "1" shared.service.Service: Uses
+}
+@enduml

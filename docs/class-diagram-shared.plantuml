@@ -1,12 +1,20 @@
+@startuml
 title Class Diagram - Shared Module
 
-@startuml
+
 package shared {
   package shared.presentation {
-    class Application {
+    class CommandRunner {
       -Service service
+    }
+
+    note left: See presentation layer diagram for more information.
+
+    class Application {
       +main()
     }
+
+    Application "1" *-- "1" CommandRunner
   }
 
   package shared.service {
@@ -103,7 +111,7 @@ package shared {
 
       shared.service.dto.Shift "*" *-- "*" shared.service.dto.Employee: Works
 
-      Application "1" *-- "1" shared.service.Service
+      CommandRunner "1" *-- "1" shared.service.Service
     }
   }
 
@@ -195,6 +203,8 @@ package workers {
       +listShifts(): List<Shift>
       +updateRequiredRoleInShift(): Shift
     }
+
+    note left: See workers module diagram for more information.
   }
 }
 
@@ -227,6 +237,9 @@ package BusinessLayer <<Folder>> {
      +updateDriverOnTrucking():void
      +updateDateOnTrucking():void
   }
+
+  note left: See logistics module diagram for more information.
+
   class DriverController <<Singleton>> {
      -singletonDriverControllerInstance:DriverController {static}
      +getInstance():DriverController {static}
