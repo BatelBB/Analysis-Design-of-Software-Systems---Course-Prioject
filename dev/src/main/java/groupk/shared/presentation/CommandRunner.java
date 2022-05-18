@@ -19,6 +19,7 @@ public class CommandRunner {
         this.commands = commands;
         this.onStop = onStop;
         this.service = new Service();
+        this.service.loadEmployeeDB();
     }
 
     public void invoke(String line) {
@@ -64,7 +65,9 @@ public class CommandRunner {
                     + " ".repeat(indent - command.name().length())
                     + command.description());
         }
-        System.out.println("For command usage, enter the command without arguments.");
+        System.out.println("Usage:");
+        System.out.println("  > <command> [arguments...]");
+        System.out.println("For command specific help, enter the command without arguments.");
     }
 
     // Parses dates in YYYY-MM-DD format, for example 2022-05-17.
@@ -93,7 +96,7 @@ public class CommandRunner {
             String roles = Arrays.stream(Employee.Role.values())
                     .map(Enum::toString)
                     .reduce((String acc, String cur) -> acc + ", " + cur)
-                    .get();
+                    .orElse("");
             throw new IllegalArgumentException("must be one of: \n" + roles + ".");
         }
     }
@@ -105,7 +108,19 @@ public class CommandRunner {
             String types = Arrays.stream(Shift.Type.values())
                     .map(Enum::toString)
                     .reduce((String acc, String cur) -> acc + ", " + cur)
-                    .get();
+                    .orElse("");
+            throw new IllegalArgumentException("must be one of: \n" + types + ".");
+        }
+    }
+
+    public static Employee.ShiftDateTime parseShiftDateTime(String dayTime) {
+        try {
+            return Employee.ShiftDateTime.valueOf(dayTime);
+        } catch (IllegalArgumentException e) {
+            String types = Arrays.stream(Employee.ShiftDateTime.values())
+                    .map(Enum::toString)
+                    .reduce((String acc, String cur) -> acc + ", " + cur)
+                    .orElse("");
             throw new IllegalArgumentException("must be one of: \n" + types + ".");
         }
     }

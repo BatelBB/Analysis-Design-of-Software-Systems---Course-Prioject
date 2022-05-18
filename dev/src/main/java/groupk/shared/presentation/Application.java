@@ -1,9 +1,6 @@
 package groupk.shared.presentation;
 
-import groupk.shared.presentation.command.Command;
-import groupk.shared.presentation.command.CreateEmployee;
-import groupk.shared.presentation.command.Login;
-import groupk.shared.presentation.command.Quit;
+import groupk.shared.presentation.command.*;
 
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -15,7 +12,12 @@ public class Application {
                 new Command[] {
                         new Quit(),
                         new Login(),
-                        new CreateEmployee()
+                        new CreateEmployee(),
+                        new GetEmployee(),
+                        new DeleteEmployee(),
+                        new ListEmployees(),
+                        new AddShiftPreference(),
+                        new DeleteShiftPreference()
                 },
                 () -> {
                         keepGoing.set(false);
