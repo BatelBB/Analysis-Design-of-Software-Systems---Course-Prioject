@@ -15,12 +15,13 @@ public class Shift {
     Calendar date;
     Type type;
 
-    public Shift(Calendar date, Type type, List<Employee> staff, HashMap<Employee.Role, Integer> requiredStaff){
+    public Shift(Calendar date, Type type, List<Employee> staff, HashMap<Employee.Role, Integer> requiredStaff) {
         this.date = date;
         this.type = type;
         this.staff = staff;
         this.requiredStaff = requiredStaff;
     }
+
     public Type getType() {
         return type;
     }
