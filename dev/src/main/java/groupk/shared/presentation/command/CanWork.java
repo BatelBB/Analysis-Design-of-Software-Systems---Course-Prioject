@@ -3,45 +3,52 @@ package groupk.shared.presentation.command;
 import groupk.shared.presentation.CommandRunner;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.Employee;
+import groupk.shared.service.dto.Shift;
 
-public class AddShiftPreference implements Command {
+import java.util.Calendar;
+import java.util.List;
+
+public class CanWork implements Command {
     @Override
     public String name() {
-        return "add shift preference";
+        return "can work";
     }
 
     @Override
     public String description() {
-        return "add day and time an employee can work";
+        return "list employees who can work at date and time";
     }
 
     @Override
     public boolean isMatching(String line) {
-        return line.startsWith("add shift preference");
+        return line.startsWith("can work");
     }
 
     @Override
     public void execute(String[] command, CommandRunner runner) {
-        if (command.length != 4) {
+        if (command.length != 3) {
             System.out.println("Error: All arguments must be supplied.");
             System.out.println("Usage:");
-            System.out.println("> add shift preference <shift>");
+            System.out.println("> can work <shift>");
             return;
         }
 
         Employee.ShiftDateTime shift;
         try {
-            shift = CommandRunner.parseShiftDateTime(command[3]);
+            shift = CommandRunner.parseShiftDateTime(command[2]);
         } catch (IllegalArgumentException e) {
             System.out.printf("Error: shift %s\n", e.getMessage());
             return;
         }
 
-        Response<Employee> updated = runner.getService().addEmployeeShiftPreference(runner.getSubject(), runner.getSubject(), shift);
-        if (updated.isError()) {
-            System.out.printf("Error: %s\n", updated.getErrorMessage());
+        Response<List<Employee>> employees = runner.getService().whoCanWork(runner.getSubject(), shift);
+        if (employees.isError()) {
+            System.out.printf("Error: %s\n", employees.getErrorMessage());
             return;
         }
-        System.out.println("Updated employee shift preference.");
+
+        for (Employee e : employees.getValue()) {
+            System.out.printf("%s, %s, %s\n", e.id, e.name, e.role);
+        }
     }
 }

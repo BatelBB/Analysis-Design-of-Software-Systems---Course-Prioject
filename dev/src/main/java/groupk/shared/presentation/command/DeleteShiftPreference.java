@@ -33,7 +33,7 @@ public class DeleteShiftPreference implements Command {
         try {
             shift = CommandRunner.parseShiftDateTime(command[3]);
         } catch (IllegalArgumentException e) {
-            System.out.printf("Error: bank-branch %s\n", e.getMessage());
+            System.out.printf("Error: shift %s\n", e.getMessage());
             return;
         }
 

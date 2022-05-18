@@ -3,7 +3,7 @@ package groupk.shared.presentation;
 import groupk.shared.presentation.command.Command;
 import groupk.shared.service.Service;
 import groupk.shared.service.dto.Employee;
-import groupk.workers.data.Shift;
+import groupk.shared.service.dto.Shift;
 
 import java.util.Arrays;
 import java.util.Calendar;

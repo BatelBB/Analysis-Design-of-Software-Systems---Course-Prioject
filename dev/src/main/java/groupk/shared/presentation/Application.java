@@ -17,7 +17,13 @@ public class Application {
                         new DeleteEmployee(),
                         new ListEmployees(),
                         new AddShiftPreference(),
-                        new DeleteShiftPreference()
+                        new DeleteShiftPreference(),
+                        new CreateShift(),
+                        new ListShifts(),
+                        new AddShiftStaff(),
+                        new DeleteShiftStaff(),
+                        new UpdateShiftRequiredRole(),
+                        new CanWork()
                 },
                 () -> {
                         keepGoing.set(false);
