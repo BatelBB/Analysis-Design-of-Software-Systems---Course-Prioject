@@ -1,6 +1,4 @@
-# ADSS Group K Employees TUI Instructions
-
-![](hrms-welcome.png)
+# ADSS Group K Employees and Deliveries Instructions
 
 ## Quick Start
 
@@ -10,13 +8,8 @@ For general help and command list, type the `help` command.
 For help about a specific command, type said command without arguments.
 For example, for `create employee`, input `create employee` for help.
 
-First thing you should do is load the sample data:
 
-```
-load sample
-```
-
-Once sample data loads, login as an HR user:
+To login:
 
 ```
 login 999871163
@@ -34,13 +27,11 @@ For more information on available commands, refer to the Commands section of thi
 
 The following commands are supported:
 
-* `load sample`.
 * `login`.
 * `quit`.
 * `create employee`.
 * `get employee`.
 * `delete employee`.
-* `update employee`.
 * `list employees`.
 * `add shift preference`.
 * `delete shift preference`.
@@ -52,24 +43,6 @@ The following commands are supported:
 * `can work`.
 
 All example commands should work when using the provided sample data (`load sample` command).
-
-### Load Sample
-
-Load sample data for demonstration purposes.
-
-Any user, including unauthenticated users, can perform this command.
-
-#### Usage
-
-```
-load sample
-```
-
-#### Example
-
-```
-load sample
-```
 
 ### Login
 
@@ -173,35 +146,6 @@ delete employee <id>
 
 ```
 delete employee 999356934
-```
-
-### Update Employee
-
-Update an employee's details.
-
-Only employees authenticated as HumanResources role may invoke this command.
-
-#### Usage
-
-```
-update employee <id> <name> <bank> <bank-id> <bank-branch> <salary-per-hour> <role>
-```
-
-Where `role` is one of the following:
-
-- `Logistics`.
-- `HumanResources`.
-- `Stocker`.
-- `Cashier`.
-- `LogisticsManager`.
-- `ShiftManager`.
-- `Driver`.
-- `StoreManager`.
-
-#### Example
-
-```
-update employee 999356934 Noga Bar 12345 1 30 HumanResources
 ```
 
 ### List Employees
