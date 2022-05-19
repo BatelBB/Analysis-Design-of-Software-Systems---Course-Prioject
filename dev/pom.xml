@@ -48,6 +48,9 @@
           <version>3.8.0</version>
           <configuration>
             <release>8</release>
+            <compilerArgs>
+              <arg>-Xlint:unchecked</arg>
+            </compilerArgs>
           </configuration>
         </plugin>
         <plugin>
@@ -64,7 +67,8 @@
           <configuration>
             <archive>
               <manifest>
-                <mainClass>groupk.workers.presentation.Application</mainClass>
+                <addClasspath>true</addClasspath>
+                <mainClass>groupk.shared.presentation.Application</mainClass>
               </manifest>
             </archive>
           </configuration>
@@ -85,6 +89,22 @@
         <plugin>
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>3.3.0</version>
+          <configuration>
+            <!-- put your configurations here -->
+          </configuration>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>shade</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
