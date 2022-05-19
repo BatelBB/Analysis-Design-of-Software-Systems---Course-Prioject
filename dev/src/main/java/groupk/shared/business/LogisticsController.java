@@ -31,6 +31,15 @@ public class LogisticsController {
         }
     }
 
+    public Response<Delivery> getTruckinfByID(int truckManagerID, int truckingID) {
+        try {
+            return new Response<Delivery>(truckingDTOToDelivery(TruckManagerController.getInstance().getTruckingById(truckManagerID, truckingID)));
+        }
+        catch (Exception e) {
+            return new Response<>(e.getMessage());
+        }
+    }
+
     public Response<List<Delivery>> listDeliveries(int truckManagerID) {
         try {
             List<TruckingDTO> truckings = TruckManagerController.getInstance().printBoard(truckManagerID);
