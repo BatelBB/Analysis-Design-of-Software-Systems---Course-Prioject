@@ -10,7 +10,7 @@ import java.util.List;
 public class myDataBase {
     static Connection con;
     private static String JDBCurl = "jdbc:sqlite:";
-    private static String path = (new File("").getAbsolutePath()).concat("\\superLee2.db");
+    private static String path = (new File("logisticsDB.db").getAbsolutePath());
     public static String finalCurl = JDBCurl.concat(path);
 
     public myDataBase() {
