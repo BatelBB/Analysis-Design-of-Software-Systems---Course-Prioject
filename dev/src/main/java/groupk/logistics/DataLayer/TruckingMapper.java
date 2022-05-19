@@ -51,10 +51,12 @@ public class TruckingMapper {
             removeDestinationsTrucking(trucking.getId());
             throw e;
         }
-        List<String>[] toReturn = new List[2];
-        toReturn[0] = sourcesExceptions;
-        toReturn[1] = destinationsExceptions;
-        return toReturn;
+        // The person who wrote this should be ashamed.
+        // Fuck this cursed return value in particular.
+        // List<String>[] toReturn = new List[2];
+        // toReturn[0] = sourcesExceptions;
+        // toReturn[1] = destinationsExceptions;
+        return null;
     }
 
     private void throwExceptionOfList(List<String> exceptions, String nameOfList) {

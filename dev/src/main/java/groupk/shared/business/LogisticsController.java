@@ -143,7 +143,7 @@ public class LogisticsController {
             return new Response<Boolean>(true);
         }
         catch (Exception e) {
-            return new Response(e.getMessage());
+            return new Response<>(e.getMessage());
         }
     }
 
@@ -156,7 +156,7 @@ public class LogisticsController {
             return new Response<List<String>>(TruckManagerController.getInstance().updateSourcesOnTrucking(truckManagerID, truckingID, sources_));
         }
         catch (Exception e) {
-            return new Response(e.getMessage());
+            return new Response<>(e.getMessage());
         }
     }
 
@@ -169,7 +169,7 @@ public class LogisticsController {
             return new Response<List<String>>(TruckManagerController.getInstance().updateDestinationsOnTrucking(truckManagerID, truckingID, destinations_));
         }
         catch (Exception e) {
-            return new Response(e.getMessage());
+            return new Response<>(e.getMessage());
         }
     }
 
@@ -182,7 +182,7 @@ public class LogisticsController {
             return new Response<List<String>>(TruckManagerController.getInstance().addSourcesToTrucking(truckManagerID, truckingID, sources_));
         }
         catch (Exception e) {
-            return new Response(e.getMessage());
+            return new Response<>(e.getMessage());
         }
     }
 
@@ -195,7 +195,7 @@ public class LogisticsController {
             return new Response<List<String>>(TruckManagerController.getInstance().addDestinationToTrucking(truckManagerID, truckingID, destinations_));
         }
         catch (Exception e) {
-            return new Response(e.getMessage());
+            return new Response<>(e.getMessage());
         }
     }
 
@@ -205,7 +205,7 @@ public class LogisticsController {
             return new Response<Boolean>(true);
         }
         catch (Exception e) {
-            return new Response(e.getMessage());
+            return new Response<>(e.getMessage());
         }
     }
 
@@ -215,7 +215,7 @@ public class LogisticsController {
             return new Response<Boolean>(true);
         }
         catch (Exception e) {
-            return new Response(e.getMessage());
+            return new Response<>(e.getMessage());
         }
     }
 
@@ -225,7 +225,7 @@ public class LogisticsController {
             return new Response<Boolean>(true);
         }
         catch (Exception e) {
-            return new Response(e.getMessage());
+            return new Response<>(e.getMessage());
         }
     }
 
@@ -235,7 +235,7 @@ public class LogisticsController {
             return new Response<Boolean>(true);
         }
         catch (Exception e) {
-            return new Response(e.getMessage());
+            return new Response<>(e.getMessage());
         }
     }
 
@@ -255,7 +255,7 @@ public class LogisticsController {
             return new Response<Boolean>(true);
         }
         catch (Exception e) {
-            return new Response(e.getMessage());
+            return new Response<>(e.getMessage());
         }
     }
 
@@ -336,7 +336,7 @@ public class LogisticsController {
         for (Product product : Products) {
             if (toReturn.containsKey(product.id)) {
                 Integer oldValue = toReturn.get(product.id);
-                toReturn.put(product.id, oldValue.intValue() + product.count);
+                toReturn.put(product.id, oldValue + product.count);
             }
             else {
                 toReturn.put(product.id, product.count);
