@@ -193,13 +193,13 @@ public class Facade {
         if (driver.getValue().role != Employee.Role.Driver) {
             return new Response<>("There is no driver with id: " + driverUsername);
         }
-        if(isLogisticsInShift(subjectID, date))
+        if(isThereWorkerWithThisRoleInShift(subjectID, date, Employee.Role.Logistics))
             return logistics.createDelivery(Integer.parseInt(subjectID), registrationPlateOfVehicle, date, Integer.parseInt(driverUsername), sources, destinations, products, hours, minutes);
         else
             return new Response<>("There is no logistics worker in this shift to except delivery");
     }
 
-        private boolean isLogisticsInShift(String subjectID, LocalDateTime date){
+        private boolean isThereWorkerWithThisRoleInShift(String subjectID, LocalDateTime date, Employee.Role role){
             //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
             Calendar calendar = new GregorianCalendar(date.getYear(),date.getMonthValue()-1, date.getDayOfMonth());
             Shift shift;
@@ -208,7 +208,7 @@ public class Facade {
             else
                 shift = readShift(subjectID, calendar, Shift.Type.Evening).getValue();
             for(Employee employee: shift.getStaff()){
-                if(employee.role.equals(Employee.Role.Logistics))
+                if(employee.role.equals(role))
                     return true;
             }
             return false;
