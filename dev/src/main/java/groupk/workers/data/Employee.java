@@ -42,7 +42,7 @@ public class Employee {
             this.name = name;
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
     }
 
@@ -57,7 +57,7 @@ public class Employee {
             this.id = id;
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class Employee {
             connection.close();
             this.role = role;
         } catch (SQLException s) {
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
     }
 
@@ -122,7 +122,7 @@ public class Employee {
             this.availableShifts = availableShifts;
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
     }
 
@@ -135,7 +135,7 @@ public class Employee {
             conditions = new WorkingConditions(new GregorianCalendar(Integer.parseInt(calendar[0]) , Integer.parseInt(calendar[1])-1, Integer.parseInt(calendar[2])) ,employee.getInt(9), employee.getInt(7), employee.getInt(8));
             role = Role.valueOf(employee.getString(10));
         } catch (SQLException throwables) {
-            System.out.println(throwables.getMessage());
+            throw new IllegalArgumentException(throwables.getMessage());
         }
     }
 
@@ -146,7 +146,7 @@ public class Employee {
                 availableShifts.add(ShiftDateTime.valueOf(shifts.getString(2)));
             }
         } catch (SQLException throwables) {
-            System.out.println(throwables.getMessage());
+            throw new IllegalArgumentException(throwables.getMessage());
         }
     }
 
@@ -175,7 +175,7 @@ public class Employee {
             availableShifts = shiftPreferences;
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
         return this;
     }
@@ -191,7 +191,7 @@ public class Employee {
             availableShifts.add(shift);
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
         return this;
     }
@@ -206,7 +206,7 @@ public class Employee {
             availableShifts.remove(shift);
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
         return this;
     }

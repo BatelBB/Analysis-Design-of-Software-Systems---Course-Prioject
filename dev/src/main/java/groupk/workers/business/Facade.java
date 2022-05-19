@@ -96,6 +96,14 @@ public class Facade {
         }
     }
 
+    public Shift deleteShift(String subjectID, Shift.Type type, Calendar date){
+        if (employees.isFromHumanResources(subjectID)) {
+            return dataShiftToService(shifts.deleteShift(serviceTypeToData(type), date));
+        } else {
+            throw new IllegalArgumentException("Subject must be authorized to delete shift.");
+        }
+    }
+
     public List<Employee> listEmployees(String subjectID) {
         if (employees.isFromHumanResources(subjectID)) {
             return employees.list().stream()

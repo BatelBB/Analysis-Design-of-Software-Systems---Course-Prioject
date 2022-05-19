@@ -34,6 +34,12 @@ public class ShiftController {
             throw new IllegalArgumentException("Shift already exists.");
     }
 
+    public Shift deleteShift(Shift.Type type, Calendar date){
+        if(ifShiftExist(date, type))
+            return dalColntroller.deleteShift(type, date);
+        throw new IllegalArgumentException("Shift does not exists.");
+    }
+
     public Shift getShift(Calendar date, Shift.Type type){
         LinkedList<Shift> shifts = dalColntroller.getShifts();
         for (Shift s: shifts) {
@@ -47,6 +53,15 @@ public class ShiftController {
         LinkedList<Shift> shifts = dalColntroller.getShifts();
         for (Shift s: shifts) {
             if(s.getDate().equals(shift.getDate()) && s.getType().equals(shift.getType()))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean ifShiftExist(Calendar date, Shift.Type type){
+        LinkedList<Shift> shifts = dalColntroller.getShifts();
+        for (Shift s: shifts) {
+            if(s.getDate().equals(date) && s.getType().equals(type))
                 return true;
         }
         return false;
