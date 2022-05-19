@@ -22,7 +22,7 @@ public class TruckingIDMap {
         vehiclesHaveUpdatedData = new LinkedList<String>();
     }
 
-    public static TruckingIDMap getInstance() throws Exception {
+    public static TruckingIDMap getInstance() {
         if (singletonTruckingIDMapInstance == null)
             singletonTruckingIDMapInstance = new TruckingIDMap();
         return singletonTruckingIDMapInstance;

@@ -13,19 +13,19 @@ public class DriverController {
     private VehicleMapper vehicleMapper;
 
 
-    public static DriverController getInstance() throws Exception {
+    public static DriverController getInstance() {
         if (singletonDriverControllerInstance == null)
             singletonDriverControllerInstance = new DriverController();
         return singletonDriverControllerInstance;
     }
 
-    private DriverController() throws Exception {
+    private DriverController() {
         driverLicencesMapper = new DriverLicencesMapper();
         truckingMapper = new TruckingMapper();
         vehicleMapper = new VehicleMapper();
     }
 
-    public List<String> getMyLicenses(int driverUsername) throws Exception {
+    public List<String> getMyLicenses(int driverUsername) {
         List<String> toReturn = new LinkedList<String>();
         List<String> licenses = driverLicencesMapper.getMyLicenses(driverUsername);
         for (String license : licenses) {
@@ -34,7 +34,7 @@ public class DriverController {
         return toReturn;
     }
 
-    public String printMyTruckings(int driverID) throws Exception {
+    public String printMyTruckings(int driverID) {
         String toReturn = "TRUCKINGS BOARD\n\n";
         List<TruckingDTO> truckings = truckingMapper.getDriverBoard(driverID);
         if (truckings.size() == 0 | truckings == null) {
@@ -46,7 +46,7 @@ public class DriverController {
         return toReturn;
     }
 
-    public String printMyTruckingsHistory(int driverID) throws Exception {
+    public String printMyTruckingsHistory(int driverID) {
         String toReturn = "            TRUCKINGS HISTORY\n\n";
         List<TruckingDTO> truckings = truckingMapper.getDriverHistoryTruckings(driverID);
         if (truckings.size() == 0 | truckings == null) {
@@ -58,7 +58,7 @@ public class DriverController {
         return toReturn;
     }
 
-    public String printMyFutureTruckings(int driverID) throws Exception {
+    public String printMyFutureTruckings(int driverID) {
         String toReturn = "            FUTURE TRUCKINGS\n\n";
         List<TruckingDTO> truckings = truckingMapper.getDriverFutureTruckings(driverID);
         if (truckings.size() == 0 | truckings == null) {
@@ -71,12 +71,12 @@ public class DriverController {
 
     }
 
-    public boolean addLicense(int driverID, String license) throws Exception {
+    public boolean addLicense(int driverID, String license) {
         DLicense _license = DLicense.castStringToDlLicense(license);
         return driverLicencesMapper.addLicence(driverID ,_license);
     }
 
-    public boolean setWeightForTrucking(int driverID, int truckingId, int weight) throws Exception {
+    public boolean setWeightForTrucking(int driverID, int truckingId, int weight) {
         TruckingDTO trucking = truckingMapper.getTruckingByID(truckingId);
         if (trucking.getDriverUsername() != driverID)
             throw new IllegalArgumentException("Oops, you have not any trucking with that id");
@@ -86,12 +86,12 @@ public class DriverController {
         return truckingMapper.setWeightForTrucking(truckingId,weight);
     }
 
-    private void checkWeight(VehicleDTO vehicle,int weight) throws Exception {
-        if(weight<=0) throw new Exception("Negative weight ? are you drunk?");
-        if(vehicle.getMaxWeight()-weight<vehicle.getWeight()) throw new Exception("To heavy boss");
+    private void checkWeight(VehicleDTO vehicle,int weight) {
+        if(weight<=0) throw new IllegalArgumentException("Negative weight ? are you drunk?");
+        if(vehicle.getMaxWeight()-weight<vehicle.getWeight()) throw new IllegalArgumentException("To heavy boss");
     }
 
-    private String printTrucking(TruckingDTO trucking) throws Exception {
+    private String printTrucking(TruckingDTO trucking) {
         String toReturn = "TRUCKING - " + trucking.getId() + "\n\n";
         toReturn += "TRUCKING DETAILS:\n";
         toReturn += "Date: " + trucking.getDate().getDayOfMonth() + "/" + trucking.getDate().getMonthValue() + "/" + trucking.getDate().getYear() + "\n";
@@ -122,19 +122,19 @@ public class DriverController {
         return toReturn;
     }
 
-    private String printSources(int TruckingID) throws Exception {
+    private String printSources(int TruckingID) {
         String toReturn = "\nSOURCE DETAILS:\n";
         toReturn += printSitesList(truckingMapper.getSourcesByTruckingId(TruckingID));
         return toReturn;
     }
 
-    private String printDestinations(int TruckingID) throws Exception {
+    private String printDestinations(int TruckingID) {
         String toReturn = "\nDESTINATION DETAILS:\n";
         toReturn += printSitesList(truckingMapper.getDestinationsByTruckingId(TruckingID));
         return toReturn;
     }
 
-    private String printProducts(int TruckingID) throws Exception {
+    private String printProducts(int TruckingID) {
         return "\nProduct DETAILS:\n"  + printProductsList(truckingMapper.getProducts(TruckingID));
     }
 

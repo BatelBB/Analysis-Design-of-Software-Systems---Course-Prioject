@@ -10,9 +10,8 @@ import groupk.logistics.business.TruckManagerController;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
 
 import java.sql.Time;
 import java.time.LocalDate;
@@ -29,14 +28,14 @@ public class Tests {
     private TruckManagerController truckManagerController ;
     private DriverController driverController;
     myDataBase myDataBase = new myDataBase();
-    public Tests() throws Exception {
+    public Tests() {
         truckManagerController = TruckManagerController.getInstance();
         driverController = DriverController.getInstance();
     }
 
 
 
-    private void resetDB () throws Exception {
+    private void resetDB () {
         myDataBase.deleteDB();
         truckManagerController.deleteDB();
         myDataBase.createNewTable();
@@ -46,7 +45,7 @@ public class Tests {
 
 
     @Test
-    public void addLicenses() throws Exception {
+    public void addLicenses() {
         resetDB();
         assertEquals(true, driverController.addLicense(319034121, "B"));
         assertEquals(true, driverController.addLicense(319034121, "C"));
@@ -60,7 +59,7 @@ public class Tests {
     }
 
     @Test
-    public void addVehicle() throws Exception {
+    public void addVehicle() {
         resetDB();
         truckManagerController.addVehicle("B","12345678","volvo",20,40);
         try {
@@ -77,7 +76,7 @@ public class Tests {
 
 
     @Test
-    public void addTrucking() throws Exception {
+    public void addTrucking() {
         resetDB();
         driverController.addLicense(319034121, "B");
         truckManagerController.addVehicle("B","12345678","volvo",20,40);
@@ -103,7 +102,7 @@ public class Tests {
         assertEquals(driverController.printMyTruckings(319034121).contains("tamirStr"), true);
     }
 
-    private void setDetails() throws Exception {
+    private void setDetails() {
         driverController.addLicense(319034121, "B");
         truckManagerController.addVehicle("B","12345678","volvo",20,40);
         truckManagerController.addVehicle("B","12315678","skoda",10,50);
@@ -124,7 +123,7 @@ public class Tests {
     }
 
     @Test
-    public void updateVehicle() throws Exception {
+    public void updateVehicle() {
         resetDB();
         setDetails();
         try {
@@ -137,7 +136,7 @@ public class Tests {
     }
 
     @Test
-    public void setWeight() throws Exception {
+    public void setWeight() {
         resetDB();
         setDetails();
         try {
@@ -151,7 +150,7 @@ public class Tests {
     }
 
     @Test
-    public void addProducts() throws Exception {
+    public void addProducts() {
         resetDB();
         setDetails();
         try {
@@ -165,7 +164,7 @@ public class Tests {
     //
 //
     @Test
-    public void removeProducts() throws Exception {
+    public void removeProducts() {
         resetDB();
         setDetails();
         truckManagerController.moveProductsToTrucking(1,1,"Eggs_4902505139314",1);
@@ -175,7 +174,7 @@ public class Tests {
     }
     //
     @Test
-    public void removeTrucking() throws Exception {
+    public void removeTrucking() {
         resetDB();
         setDetails();
         try {
@@ -188,7 +187,7 @@ public class Tests {
     }
 
     @Test
-    public void getRegistrationPlates() throws Exception {
+    public void getRegistrationPlates() {
         resetDB();
         setDetails();
         truckManagerController.addVehicle("B","12315679","mercedes",4,32);

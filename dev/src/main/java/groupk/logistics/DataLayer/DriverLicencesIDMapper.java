@@ -42,7 +42,7 @@ public class DriverLicencesIDMapper {
         return updatedDriversIDs.contains(driverID);
     }
 
-    public static DriverLicencesIDMapper getInstance() throws Exception {
+    public static DriverLicencesIDMapper getInstance() {
         if (singleton == null)
             singleton = new DriverLicencesIDMapper();
         return singleton;

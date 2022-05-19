@@ -14,7 +14,7 @@ public class VehiclesIDMap {
         vehicleMap = new ConcurrentHashMap<String, VehicleDTO>();
     }
 
-    public static VehiclesIDMap getInstance() throws Exception {
+    public static VehiclesIDMap getInstance() {
         if (singletonVehiclesMapperInstance == null)
             singletonVehiclesMapperInstance = new VehiclesIDMap();
         return singletonVehiclesMapperInstance;

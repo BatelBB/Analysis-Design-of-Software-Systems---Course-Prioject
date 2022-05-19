@@ -13,7 +13,7 @@ public class myDataBase {
     private static String path = (new File("").getAbsolutePath()).concat("\\superLee2.db");
     public static String finalCurl = JDBCurl.concat(path);
 
-    public myDataBase() throws Exception {
+    public myDataBase() {
         createNewTable();
     }
 
@@ -42,7 +42,7 @@ public class myDataBase {
         }
     }
 
-    public void createNewTable() throws Exception {
+    public void createNewTable() {
         String vehiclesTable = "CREATE TABLE IF NOT EXISTS " + "Vehicles" + " (\n" +
                 "\tregistration_plate INTEGER PRIMARY KEY,\n" +
                 "\tmodel TEXT NOT NULL,\n" +
@@ -118,12 +118,12 @@ public class myDataBase {
             s.executeBatch();
 
         } catch (Exception e) {
-            throw new Exception("There was a problem to connect the database: " + e.getMessage());
+            throw new IllegalArgumentException("There was a problem to connect the database: " + e.getMessage());
         }
     }
 
 
-    public static Connection getConnection() throws Exception {
+    public static Connection getConnection() {
         finalCurl = JDBCurl.concat(path);
         if (con != null) {
             return con;
@@ -131,7 +131,7 @@ public class myDataBase {
         try {
             con = DriverManager.getConnection(finalCurl);
         } catch (SQLException e) {
-            throw new Exception("There was a problem to connect the database: " + e.getMessage());
+            throw new IllegalArgumentException("There was a problem to connect the database: " + e.getMessage());
         }
         return con;
     }

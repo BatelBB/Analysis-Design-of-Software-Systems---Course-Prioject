@@ -10,7 +10,7 @@ public class SiteDTO {
     private int apartment;
     private String area;
 
-    public SiteDTO(String contactGuy, String city, String phoneNumber, String street, int houseNumber, int floor, int apartment, String area) throws Exception {
+    public SiteDTO(String contactGuy, String city, String phoneNumber, String street, int houseNumber, int floor, int apartment, String area) {
         this.contactGuy = contactGuy;
         this.city = city;
         this.phoneNumber = phoneNumber;

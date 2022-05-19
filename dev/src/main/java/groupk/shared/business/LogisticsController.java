@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LogisticsController {
     private myDataBase db;
 
-    public LogisticsController() throws Exception {
+    public LogisticsController() {
         db = new myDataBase();
     }
 

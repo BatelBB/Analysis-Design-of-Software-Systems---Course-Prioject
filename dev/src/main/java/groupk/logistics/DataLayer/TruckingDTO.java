@@ -18,7 +18,7 @@ public class TruckingDTO {
     private List<SiteDTO> destinations;
     private List<ProductForTruckingDTO> products;
 
-    public TruckingDTO(int id, String date,int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight, List<SiteDTO> sources, List<SiteDTO> destinations, List<ProductForTruckingDTO> products) throws Exception {
+    public TruckingDTO(int id, String date,int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight, List<SiteDTO> sources, List<SiteDTO> destinations, List<ProductForTruckingDTO> products) {
         this.id = id;
         this.date = convertDate(date, id);
         this.truckManager = truckManager;
@@ -32,7 +32,7 @@ public class TruckingDTO {
         this.products = products;
     }
 
-    public TruckingDTO(int id, LocalDateTime date, int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight, List<SiteDTO> sources, List<SiteDTO> destinations, List<ProductForTruckingDTO> products) throws Exception {
+    public TruckingDTO(int id, LocalDateTime date, int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight, List<SiteDTO> sources, List<SiteDTO> destinations, List<ProductForTruckingDTO> products) {
         this.id = id;
         this.date = date;
         this.truckManager = truckManager;
@@ -45,14 +45,14 @@ public class TruckingDTO {
         this.destinations = destinations;
         this.products = products;
     }
-    private LocalDateTime convertDate(String date, int TruckingID) throws Exception{
+    private LocalDateTime convertDate(String date, int TruckingID){
         LocalDateTime toReturn;
         try {
             date = date.substring(0,date.length()-3);
             toReturn = LocalDateTime.parse(date, TruckingMapper.dateFormat);
         }
         catch (Exception e) {
-            throw new Exception("The date value of trucking: " + TruckingID + " is illegal. please fix that.");
+            throw new IllegalArgumentException("The date value of trucking: " + TruckingID + " is illegal. please fix that.");
         }
         return toReturn;
     }

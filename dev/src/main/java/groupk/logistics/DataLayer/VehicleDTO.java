@@ -7,7 +7,7 @@ public class VehicleDTO {
     private int weight;
     private int maxWeight;
 
-    public VehicleDTO(String lisence, String registationPlate, String model, int weight, int maxWeight) throws Exception {
+    public VehicleDTO(String lisence, String registationPlate, String model, int weight, int maxWeight) {
         this.lisence = lisence;
         this.registationPlate = registationPlate;
         this.maxWeight = maxWeight;

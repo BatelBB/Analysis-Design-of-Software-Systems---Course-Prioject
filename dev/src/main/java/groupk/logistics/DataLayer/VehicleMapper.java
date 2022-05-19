@@ -6,7 +6,7 @@ import java.util.List;
 
 public class VehicleMapper {
     private VehiclesIDMap vehicleIDMapper = VehiclesIDMap.getInstance();
-    public VehicleMapper() throws Exception {
+    public VehicleMapper() {
     }
 
     public void deleteDB() {
@@ -16,7 +16,7 @@ public class VehicleMapper {
     private String ConvertResultSetToDTO(ResultSet rs) throws SQLException {
         return rs.getString(1);
     }
-    public boolean addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight) throws Exception {
+    public boolean addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight) {
         int n = 0;
         String query = "INSERT INTO Vehicles(registration_plate, model,license, weight,max_weight) VALUES(?,?,?,?,?)";
 
@@ -45,7 +45,7 @@ public class VehicleMapper {
         vehicleIDMapper.vehicleMap.put(newVehicle.getRegistationPlate(), newVehicle);
     }
 
-    public String getLicense(String registrationPlateOfVehicle) throws Exception{
+    public String getLicense(String registrationPlateOfVehicle){
         if(vehicleIDMapper.vehicleMap.containsKey(registrationPlateOfVehicle))
             return vehicleIDMapper.vehicleMap.get(registrationPlateOfVehicle).getLisence();
         else {
@@ -57,7 +57,7 @@ public class VehicleMapper {
                 if (rs.next())
                     return rs.getString(1);
                 else
-                    throw new Exception("Oops, there is no vehicle with this registration plate");
+                    throw new IllegalArgumentException("Oops, there is no vehicle with this registration plate");
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -65,7 +65,7 @@ public class VehicleMapper {
         return null;
     }
 
-    public List<String> getAllRegistrationPlates() throws Exception {
+    public List<String> getAllRegistrationPlates() {
         String query = "SELECT * FROM Vehicles";
         List<String> DTOList = new ArrayList<String>();
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
@@ -75,12 +75,12 @@ public class VehicleMapper {
                 DTOList.add(ConvertResultSetToDTO(rs));
             }
         } catch (SQLException e) {
-            throw new Exception(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         return DTOList;
     }
 
-    public VehicleDTO getVehicle(String registrationPlateOfVehicle) throws Exception {
+    public VehicleDTO getVehicle(String registrationPlateOfVehicle) {
         if(vehicleIDMapper.vehicleMap.containsKey(registrationPlateOfVehicle)) return vehicleIDMapper.vehicleMap.get(registrationPlateOfVehicle);
         else {
             String query = "SELECT * FROM Vehicles " +

@@ -10,7 +10,7 @@ import java.util.ListIterator;
 public class TruckingMapper {
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private TruckingIDMap truckingIDMap;
-    public TruckingMapper() throws Exception {
+    public TruckingMapper() {
         truckingIDMap = TruckingIDMap.getInstance();
     }
 
@@ -18,7 +18,7 @@ public class TruckingMapper {
         truckingIDMap.resetData();
     }
 
-    public List<String>[] addTrucking(TruckingDTO trucking) throws Exception {
+    public List<String>[] addTrucking(TruckingDTO trucking) {
         List<String> sourcesExceptions;
         List<String> destinationsExceptions;
         if(!addTruckingToTruckingTable(trucking))
@@ -57,7 +57,7 @@ public class TruckingMapper {
         return toReturn;
     }
 
-    private void throwExceptionOfList(List<String> exceptions, String nameOfList) throws Exception {
+    private void throwExceptionOfList(List<String> exceptions, String nameOfList) {
         String exceptionError = "Oops, we couldnt add any site from your " + nameOfList + ", because that reasons:\n";
         for (String exception : exceptions) {
             exceptionError += exception + "\n";
@@ -65,7 +65,7 @@ public class TruckingMapper {
         throw new IllegalArgumentException(exceptionError);
     }
 
-    public boolean addTruckingToTruckingTable(TruckingDTO trucking) throws Exception {
+    public boolean addTruckingToTruckingTable(TruckingDTO trucking) {
         int n = 0;
         String query = "INSERT INTO Truckings(TID,truck_manager,registration_plate,driver_username,date,hours,minutes,weight) VALUES(?,?,?,?,?,?,?,?)";
 
@@ -91,90 +91,90 @@ public class TruckingMapper {
                 return false;
         }
         catch (SQLException e){
-            throw new Exception("Oops, something got wrong and we couldn't add your trucking :( \nbecause: " + e.getMessage());
+            throw new IllegalArgumentException("Oops, something got wrong and we couldn't add your trucking :( \nbecause: " + e.getMessage());
         }
         if (n == 1)
             truckingIDMap.insertTrucking(trucking);
         return n == 1;
     }
 
-    public boolean removeTrucking(int truckingID) throws Exception {
+    public boolean removeTrucking(int truckingID) {
         removeSourcesTrucking(truckingID);
         removeDestinationsTrucking(truckingID);
         removeProductsTrucking(truckingID);
         return removeTruckingDetails(truckingID);
     }
 
-    public boolean removeTruckingDetails(int truckingID) throws Exception {
+    public boolean removeTruckingDetails(int truckingID) {
         String Query = "DELETE FROM Truckings WHERE TID = '" + truckingID + "'";
         int n = 0;
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(Query)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         truckingIDMap.removeTrucking(truckingID);
         return n > 0;
     }
 
-    public boolean setWeightForTrucking(int truckingId, int weight) throws Exception {
+    public boolean setWeightForTrucking(int truckingId, int weight) {
         String sql = "UPDATE Truckings SET weight="+weight+" WHERE TID='"+truckingId+"'";
         int n = 0;
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         if (n > 0)
             truckingIDMap.getTruckingById(truckingId).setWeight(weight);
         return n > 0;
     }
 
-    public boolean updateVehicle(int truckingId, String vehicleRegistrationPlate) throws Exception {
+    public boolean updateVehicle(int truckingId, String vehicleRegistrationPlate) {
         String sql = "UPDATE Truckings SET registration_plate = '" + vehicleRegistrationPlate + "' WHERE TID = '" + truckingId + "'";
         int n = 0;
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         if (n > 0)
             truckingIDMap.getTruckingById(truckingId).updateVehicle(vehicleRegistrationPlate);
         return n > 0;
     }
 
-    public boolean updateDriver(int truckingId, int driverUsername) throws Exception {
+    public boolean updateDriver(int truckingId, int driverUsername) {
         String sql = "UPDATE Truckings SET driver_username = '" + driverUsername + "' WHERE TID = '" + truckingId + "'";
         int n = 0;
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         if (n > 0)
             truckingIDMap.getTruckingById(truckingId).updateDriverUsername(driverUsername);
         return n > 0;
     }
 
-    public boolean updateDate(int truckingID, LocalDateTime date) throws Exception {
+    public boolean updateDate(int truckingID, LocalDateTime date) {
         String sql = "UPDATE Truckings SET date = '" + date.format(dateFormat).replace('T',' ') + "' WHERE TID = '" + truckingID + "'";
         int n = 0;
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         if (n > 0)
             truckingIDMap.getTruckingById(truckingID).updateDate(date.plusHours(0));
         return n > 0;
     }
 
-    public String getRegistrationPlateOfTrucking(int TruckingId) throws Exception {
+    public String getRegistrationPlateOfTrucking(int TruckingId) {
         if (truckingIDMap.contains(TruckingId))
             return truckingIDMap.getTruckingById(TruckingId).getVehicleRegistrationPlate();
         String toReturn = "";
@@ -187,14 +187,14 @@ public class TruckingMapper {
                 toReturn += rs.getString(1);
             }
             else
-                throw new Exception("There is no trucking with id: " + TruckingId);
+                throw new IllegalArgumentException("There is no trucking with id: " + TruckingId);
         } catch (SQLException e) {
-            throw new Exception("Oops something got wrong: \n" + e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
 
-    public int getDriverUsernameOfTrucking(int TruckingId) throws Exception {
+    public int getDriverUsernameOfTrucking(int TruckingId) {
         if (truckingIDMap.contains(TruckingId))
             return truckingIDMap.getTruckingById(TruckingId).getDriverUsername();
         int toReturn = 0;
@@ -207,14 +207,14 @@ public class TruckingMapper {
                 toReturn += rs.getInt(1);
             }
             else
-                throw new Exception("There is no trucking with id: " + TruckingId);
+                throw new IllegalArgumentException("There is no trucking with id: " + TruckingId);
         } catch (SQLException e) {
-            throw new Exception("Oops something got wrong: \n" + e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
 
-    public TruckingDTO getTruckingByID(int truckingID) throws Exception{
+    public TruckingDTO getTruckingByID(int truckingID){
         if (truckingIDMap.contains(truckingID))
             return truckingIDMap.getTruckingById(truckingID);
         TruckingDTO toReturn;
@@ -231,9 +231,9 @@ public class TruckingMapper {
                 truckingIDMap.insertTrucking(toReturn);
             }
             else
-                throw new Exception("There is no trucking with that id");
+                throw new IllegalArgumentException("There is no trucking with that id");
         } catch (SQLException e) {
-            throw new Exception("Oops something in verification process got wrong: \n" + e.getMessage());
+            throw new IllegalArgumentException("Oops something in verification process got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -257,10 +257,10 @@ public class TruckingMapper {
                     prepStat.setInt(8, source.getFloor());
                     prepStat.setInt(9, source.getApartment());
                     if (prepStat.executeUpdate() < 1)
-                        throw new Exception("The destination is already exist");
+                        throw new IllegalArgumentException("The destination is already exist");
                 }
                 else
-                    throw new Exception("The connection with the data lost");
+                    throw new IllegalArgumentException("The connection with the data lost");
             }
             catch (Exception e){
                 Exceptions.add("There was a problem with the destination with the contact guy: " + source.getContactGuy() + "\nthe error description: " + e.getMessage());
@@ -269,19 +269,19 @@ public class TruckingMapper {
         return Exceptions;
     }
 
-    public boolean removeSourcesTrucking(int truckingID) throws Exception {
+    public boolean removeSourcesTrucking(int truckingID) {
         String Query = "DELETE FROM Truckings_Sources WHERE TID = '" + truckingID+"'";
         int n = 0;
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(Query)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         return n > 0;
     }
 
-    public List<SiteDTO> getSourcesByTruckingId(int TruckingID) throws Exception {
+    public List<SiteDTO> getSourcesByTruckingId(int TruckingID) {
         List<SiteDTO> sites = new LinkedList<SiteDTO>();
         String query = "SELECT * FROM Truckings_Sources Where TID = '" + TruckingID+"'";
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
@@ -291,7 +291,7 @@ public class TruckingMapper {
                 sites.add(new SiteDTO(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getString(6)));
             }
         } catch (Exception e) {
-            throw new Exception("Oops, there was unexpected problem with get the sources of trucking: \"" + TruckingID + "\"\nError description: " + e.getMessage());
+            throw new IllegalArgumentException("Oops, there was unexpected problem with get the sources of trucking: \"" + TruckingID + "\"\nError description: " + e.getMessage());
         }
         return sites;
     }
@@ -315,10 +315,10 @@ public class TruckingMapper {
                     prepStat.setInt(8, destination.getFloor());
                     prepStat.setInt(9, destination.getApartment());
                     if (prepStat.executeUpdate() < 1)
-                        throw new Exception("The destination is already exist");
+                        throw new IllegalArgumentException("The destination is already exist");
                 }
                 else
-                    throw new Exception("The connection with the data lost");
+                    throw new IllegalArgumentException("The connection with the data lost");
             }
             catch (Exception e){
                 Exceptions.add("There was a problem with the destination with the contact guy: " + destination.getContactGuy() + "\nthe error description: " + e.getMessage());
@@ -327,19 +327,19 @@ public class TruckingMapper {
         return Exceptions;
     }
 
-    public boolean removeDestinationsTrucking(int truckingID) throws Exception {
+    public boolean removeDestinationsTrucking(int truckingID) {
         String Query = "DELETE FROM Truckings_Destinations WHERE TID = '" + truckingID +"'";
         int n = 0;
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(Query)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         return n > 0;
     }
 
-    public List<SiteDTO> getDestinationsByTruckingId(int TruckingID) throws Exception {
+    public List<SiteDTO> getDestinationsByTruckingId(int TruckingID) {
         List<SiteDTO> sites = new LinkedList<SiteDTO>();
         String query = "SELECT * FROM Truckings_Destinations Where TID = '" + TruckingID+"'";
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
@@ -349,7 +349,7 @@ public class TruckingMapper {
                 sites.add(new SiteDTO(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getString(6)));
             }
         } catch (Exception e) {
-            throw new Exception("Oops, there was unexpected problem with get the destinations of trucking: \"" + TruckingID + "\"\nError description: " + e.getMessage());
+            throw new IllegalArgumentException("Oops, there was unexpected problem with get the destinations of trucking: \"" + TruckingID + "\"\nError description: " + e.getMessage());
         }
         return sites;
     }
@@ -380,7 +380,7 @@ public class TruckingMapper {
 
     }
 
-    public List<ProductForTruckingDTO> getProducts(int truckingID) throws Exception {
+    public List<ProductForTruckingDTO> getProducts(int truckingID) {
         List <ProductForTruckingDTO> productForTruckings = new LinkedList<>();
         String query = "SELECT * FROM Truckings_Products WHERE TID = '" + truckingID + "'" ;
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
@@ -397,7 +397,7 @@ public class TruckingMapper {
     }
 
 
-    public boolean removeProductsByTruckingId(int TruckingID,String productSKU) throws Exception {
+    public boolean removeProductsByTruckingId(int TruckingID,String productSKU) {
         String Query = "DELETE FROM Truckings_Products WHERE TID = '" + TruckingID + "'" + " and product = '" + productSKU + "'" ;
         int n = 0;
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
@@ -408,12 +408,12 @@ public class TruckingMapper {
             }
 
         } catch (Exception e) {
-            throw new Exception("Deleted products successfully");
+            throw new IllegalArgumentException("Deleted products successfully");
         }
         return false;
     }
 
-    public boolean existProduct(int TruckingID,String productSKU) throws Exception {
+    public boolean existProduct(int TruckingID,String productSKU) {
         String Query = "SELECT * FROM Truckings_Products WHERE TID = '" + TruckingID + "'" + " and product = '" + productSKU + "'" ;
         int n = 0;
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
@@ -424,13 +424,13 @@ public class TruckingMapper {
             }
 
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         return false;
 
     }
 
-    public void increaseQuantity(int TruckingID,String productSKU,int quantity) throws Exception {
+    public void increaseQuantity(int TruckingID,String productSKU,int quantity) {
         int addedQuantity = Integer.parseInt(getQuantity(TruckingID,productSKU)) + quantity;
         String Query = "UPDATE Truckings_Products SET quantity = '" + addedQuantity + "'" + " WHERE TID = '" + TruckingID + "'" + " AND product = '" + productSKU + "'";
         int n = 0;
@@ -439,12 +439,12 @@ public class TruckingMapper {
             n = pstmt.executeUpdate();
 
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
 
     }
 
-    public String getQuantity(int truckingID, String productSKU) throws Exception {
+    public String getQuantity(int truckingID, String productSKU) {
         String Query = "SELECT * FROM Truckings_Products WHERE TID = '" + truckingID + "'" + " AND product = '" + productSKU + "'" ;
         int n = 0;
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl))
@@ -456,25 +456,25 @@ public class TruckingMapper {
             }
 
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         return "no product like this";
     }
 
 
-    public boolean removeProductsTrucking(int truckingID) throws Exception {
+    public boolean removeProductsTrucking(int truckingID) {
         String Query = "DELETE FROM Truckings_Products WHERE TID = '" + truckingID+"'";
         int n = 0;
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
              PreparedStatement pstmt = conn.prepareStatement(Query)) {
             n = pstmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         return n > 0;
     }
 
-    public List<TruckingDTO> getTruckManagerBoard(int truckManagerUsername) throws Exception {
+    public List<TruckingDTO> getTruckManagerBoard(int truckManagerUsername) {
         if (truckingIDMap.isUserHasUpdatedData(truckManagerUsername))
             return truckingIDMap.getTruckingsOfTruckManager(truckManagerUsername);
         else {
@@ -484,21 +484,21 @@ public class TruckingMapper {
         }
     }
 
-    public List<TruckingDTO> getTruckManagerFutureTruckings(int truckManagerUsername) throws Exception {
+    public List<TruckingDTO> getTruckManagerFutureTruckings(int truckManagerUsername) {
         if (truckingIDMap.isUserHasUpdatedData(truckManagerUsername))
             return truckingIDMap.getFutureTruckingsOfTruckManager(truckManagerUsername);
         else
             return getFutureTruckingsOfUserOrVehicle("truck_manager", "" + truckManagerUsername);
     }
 
-    public List<TruckingDTO> getTruckManagerHistoryTruckings(int truckManagerUsername) throws Exception {
+    public List<TruckingDTO> getTruckManagerHistoryTruckings(int truckManagerUsername) {
         if (truckingIDMap.isUserHasUpdatedData(truckManagerUsername))
             return truckingIDMap.getHistoryOfTruckManager(truckManagerUsername);
         else
             return getHistoryTruckingsOfUserOrVehicle("truck_manager", "" + truckManagerUsername);
     }
 
-    public List<TruckingDTO> getVehicleBoard(String regristrationPlate) throws Exception {
+    public List<TruckingDTO> getVehicleBoard(String regristrationPlate) {
         if (truckingIDMap.isVehicleHasUpdatedData(regristrationPlate))
             return truckingIDMap.getTruckingsOfVehicle(regristrationPlate);
         else {
@@ -508,21 +508,21 @@ public class TruckingMapper {
         }
     }
 
-    public List<TruckingDTO> getVehicleFutureTruckings(String regristrationPlate) throws Exception {
+    public List<TruckingDTO> getVehicleFutureTruckings(String regristrationPlate) {
         if (truckingIDMap.isVehicleHasUpdatedData(regristrationPlate))
             return truckingIDMap.getFutureTruckingsOfVehicle(regristrationPlate);
         else
             return getFutureTruckingsOfUserOrVehicle("registration_plate", regristrationPlate);
     }
 
-    public List<TruckingDTO> getVehicleHistoryTruckings(String regristrationPlate) throws Exception {
+    public List<TruckingDTO> getVehicleHistoryTruckings(String regristrationPlate) {
         if (truckingIDMap.isVehicleHasUpdatedData(regristrationPlate))
             return truckingIDMap.getHistoryOfVehicle(regristrationPlate);
         else
             return getHistoryTruckingsOfUserOrVehicle("registration_plate", regristrationPlate);
     }
 
-    public List<TruckingDTO> getDriverBoard(int driverUsername) throws Exception {
+    public List<TruckingDTO> getDriverBoard(int driverUsername) {
         if (truckingIDMap.isUserHasUpdatedData(driverUsername))
             return truckingIDMap.getTruckingsOfDriver(driverUsername);
         else {
@@ -532,21 +532,21 @@ public class TruckingMapper {
         }
     }
 
-    public List<TruckingDTO> getDriverFutureTruckings(int driverUsername) throws Exception {
+    public List<TruckingDTO> getDriverFutureTruckings(int driverUsername) {
         if (truckingIDMap.isUserHasUpdatedData(driverUsername))
             return truckingIDMap.getFutureTruckingsOfDriver(driverUsername);
         else
             return getFutureTruckingsOfUserOrVehicle("driver_username", "" + driverUsername);
     }
 
-    public List<TruckingDTO> getDriverHistoryTruckings(int driverUsername) throws Exception {
+    public List<TruckingDTO> getDriverHistoryTruckings(int driverUsername) {
         if (truckingIDMap.isUserHasUpdatedData(driverUsername))
             return truckingIDMap.getHistoryOfDriver(driverUsername);
         else
             return getHistoryTruckingsOfUserOrVehicle("driver_username", "" + driverUsername);
     }
 
-    public List<TruckingDTO> getRelevantTruckings(LocalDateTime date) throws Exception{
+    public List<TruckingDTO> getRelevantTruckings(LocalDateTime date){
         List<TruckingDTO> toReturn = new LinkedList<TruckingDTO>();
         String query = "SELECT * FROM Truckings " +
                 "WHERE strftime(date) between strftime('" + date.minusHours(7).format(dateFormat) + "') and strftime('" + date.plusHours(7).format(dateFormat) + "') ORDER BY date";
@@ -563,12 +563,12 @@ public class TruckingMapper {
                 truckingIDMap.insertTrucking(newTrucking);
             }
         } catch (SQLException e) {
-            throw new Exception("Oops something in verification process got wrong: \n" + e.getMessage());
+            throw new IllegalArgumentException("Oops something in verification process got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
 
-    private List<TruckingDTO> getBoardOfUserOrVehicle(String fieldName, String usernameOrRegistration) throws Exception {
+    private List<TruckingDTO> getBoardOfUserOrVehicle(String fieldName, String usernameOrRegistration) {
         List<TruckingDTO> toReturn = new LinkedList<TruckingDTO>();
         String query = "SELECT * FROM Truckings " +
                 "WHERE " + fieldName + " = '" + usernameOrRegistration + "'"+
@@ -586,12 +586,12 @@ public class TruckingMapper {
                 truckingIDMap.insertTrucking(newTrucking);
             }
         } catch (SQLException e) {
-            throw new Exception("Oops, something got wrong: \n" + e.getMessage());
+            throw new IllegalArgumentException("Oops, something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
 
-    private List<TruckingDTO> getFutureTruckingsOfUserOrVehicle(String fieldName, String usernameOrRegistration) throws Exception {
+    private List<TruckingDTO> getFutureTruckingsOfUserOrVehicle(String fieldName, String usernameOrRegistration) {
         List<TruckingDTO> toReturn = new LinkedList<TruckingDTO>();
         String query = "SELECT * FROM Truckings " +
                 "WHERE strftime(date) > DATE('now') and " + fieldName + " = '" + usernameOrRegistration + "'"+
@@ -609,12 +609,12 @@ public class TruckingMapper {
                 truckingIDMap.insertTrucking(newTrucking);
             }
         } catch (SQLException e) {
-            throw new Exception("Oops something got wrong: \n" + e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
 
-    private List<TruckingDTO> getHistoryTruckingsOfUserOrVehicle(String fieldName, String usernameOrRegistration) throws Exception {
+    private List<TruckingDTO> getHistoryTruckingsOfUserOrVehicle(String fieldName, String usernameOrRegistration) {
         List<TruckingDTO> toReturn = new LinkedList<TruckingDTO>();
         String query = "SELECT * FROM Truckings " +
                 "WHERE strftime(date) <= DATE('now') and "+ fieldName + " = '" + usernameOrRegistration + "'"+
@@ -632,12 +632,12 @@ public class TruckingMapper {
                 truckingIDMap.insertTrucking(newTrucking);
             }
         } catch (SQLException e) {
-            throw new Exception("Oops something got wrong: \n" + e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
 
-    public int getNextIdForTrucking() throws Exception {
+    public int getNextIdForTrucking() {
         int toReturn = 1;
         String query = "SELECT TID FROM Truckings ORDER BY TID DESC";
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
@@ -647,12 +647,12 @@ public class TruckingMapper {
                 toReturn += rs.getInt(1);
             }
         } catch (SQLException e) {
-            throw new Exception("Oops something got wrong: \n" + e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
 
-    public String getLicencePlate(int truckingId) throws Exception {
+    public String getLicencePlate(int truckingId) {
         String regisrationPlate = "";
         String query = "SELECT * FROM Truckings WHERE TID='"+truckingId+"'";
         int n = 0;
@@ -664,7 +664,7 @@ public class TruckingMapper {
             }
         }
         catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         return regisrationPlate;
     }
