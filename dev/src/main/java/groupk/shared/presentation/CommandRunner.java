@@ -60,10 +60,13 @@ public class CommandRunner {
                 .max(Integer::compareTo)
                 .orElse(0) + 2;
         for (Command command: commands) {
+            // Imagine this is not Java 8:
+            //             " ".repeat(indent - command.name().length())
+            String space = new String(new char[indent - command.name().length()]).replace("\0", " ");
             System.out.println(
                     "  "
                     + command.name()
-                    + " ".repeat(indent - command.name().length())
+                    + space
                     + command.description());
         }
         System.out.println("Usage:");
