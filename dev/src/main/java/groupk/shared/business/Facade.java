@@ -16,7 +16,6 @@ public class Facade {
         logistics = new LogisticsController();
     }
 
-    //fot test use
     public void deleteEmployeeDB(){
         employees.deleteEmployeeDB();
     }
@@ -202,8 +201,6 @@ public class Facade {
             return new Response<>("The driver has no shift at that time");
         if(!isThereWorkerWithThisRoleInShift(subjectID, date, Employee.Role.Logistics))
             return new Response<>("There is no logistics worker in this shift to except delivery");
-        else if(true)
-            return null;
         else
             return logistics.createDelivery(Integer.parseInt(subjectID), registrationPlateOfVehicle, date, Integer.parseInt(driverUsername), sources, destinations, products, hours, minutes);
     }
