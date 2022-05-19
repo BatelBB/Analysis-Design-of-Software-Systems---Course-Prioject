@@ -207,12 +207,14 @@ public class Facade {
         private boolean isThereWorkerWithThisRoleInShift(String subjectID, LocalDateTime date, Employee.Role role){
             //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
             Calendar calendar = new GregorianCalendar(date.getYear(),date.getMonthValue()-1, date.getDayOfMonth());
-            Shift shift;
+            Response<Shift> shift;
             if(date.getHour() + 1 < 16) // the hour is from 0 to 23, therefore 16 is 17
-                shift = readShift(subjectID, calendar, Shift.Type.Morning).getValue();
+                shift = readShift(subjectID, calendar, Shift.Type.Morning);
             else
-                shift = readShift(subjectID, calendar, Shift.Type.Evening).getValue();
-            for(Employee employee: shift.getStaff()){
+                shift = readShift(subjectID, calendar, Shift.Type.Evening);
+            if (shift.isError())
+                return false;
+            for(Employee employee: shift.getValue().getStaff()){
                 if(employee.role.equals(role))
                     return true;
             }
@@ -222,12 +224,14 @@ public class Facade {
     private boolean isLogistHasShift(String subjectID, String ID, LocalDateTime date){
         //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
         Calendar calendar = new GregorianCalendar(date.getYear(),date.getMonthValue()-1, date.getDayOfMonth());
-        Shift shift;
+        Response<Shift> shift;
         if(date.getHour() + 1 < 16) // the hour is from 0 to 23, therefore 16 is 17
-            shift = readShift(subjectID, calendar, Shift.Type.Morning).getValue();
+            shift = readShift(subjectID, calendar, Shift.Type.Morning);
         else
-            shift = readShift(subjectID, calendar, Shift.Type.Evening).getValue();
-        for(Employee employee: shift.getStaff()){
+            shift = readShift(subjectID, calendar, Shift.Type.Evening);
+        if (shift.isError())
+            return false;
+        for(Employee employee: shift.getValue().getStaff()){
             if(employee.role.equals(Employee.Role.Logistics) & !employee.id.equals(ID))
                 return true;
         }
@@ -235,8 +239,11 @@ public class Facade {
     }
 
     private boolean isTheDriverInShift(String subjectID, String driverID, Calendar date, groupk.shared.service.dto.Shift.Type type) {
-        Shift shift = readShift(subjectID, date, type).getValue();
-        for(Employee employee: shift.getStaff()) {
+        Response<Shift> shift = readShift(subjectID, date, type);
+        if (shift.isError()) {
+            return false;
+        }
+        for(Employee employee: shift.getValue().getStaff()) {
             if (employee.id.equals(driverID))
                 return true;
         }
@@ -250,7 +257,12 @@ public class Facade {
         Calendar calendar = new GregorianCalendar(date.getYear(),date.getMonthValue()-1, date.getDayOfMonth());
         Shift shift;
         if(date.getHour() + 1 < 16) { // the hour is from 0 to 23, therefore 16 is 17
-            shift = readShift(subjectID, calendar, Shift.Type.Morning).getValue();
+            Response<Shift> shiftResponse = readShift(subjectID, calendar, Shift.Type.Morning);
+            shift = shiftResponse.getValue();
+            if (shiftResponse.isError()) {
+                return false;
+            }
+
             boolean found = false;
             for(Employee employee: shift.getStaff()) {
                 if (employee.id.equals(driverID))
@@ -259,7 +271,11 @@ public class Facade {
             if (!found)
                 return false;
             if(date.plusHours(hours).plusMinutes(minutes).getHour() >= 16) {
-                shift = readShift(subjectID, calendar, Shift.Type.Evening).getValue();
+                shiftResponse = readShift(subjectID, calendar, Shift.Type.Evening);
+                if (shiftResponse.isError()) {
+                    return false;
+                }
+                shift = shiftResponse.getValue();
                 for (Employee employee : shift.getStaff()) {
                     if (employee.id.equals(driverID))
                         return true;
@@ -270,7 +286,11 @@ public class Facade {
                 return true;
         }
         else {
-            shift = readShift(subjectID, calendar, Shift.Type.Evening).getValue();
+            Response<Shift> shiftResponse = readShift(subjectID, calendar, Shift.Type.Evening);
+            if (shiftResponse.isError()) {
+                return false;
+            }
+            shift = shiftResponse.getValue();
             for (Employee employee : shift.getStaff()) {
                 if (employee.id.equals(driverID))
                     return true;
