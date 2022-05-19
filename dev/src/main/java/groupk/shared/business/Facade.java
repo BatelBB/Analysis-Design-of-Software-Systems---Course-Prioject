@@ -11,7 +11,7 @@ public class Facade {
     EmployeesController employees;
     LogisticsController logistics;
 
-    public Facade() {
+    public Facade() throws Exception {
         employees = new EmployeesController();
         logistics = new LogisticsController();
     }
@@ -91,7 +91,8 @@ public class Facade {
     }
 
     public Response<Shift> removeEmployeeFromShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
-        //TODO: check availability of worker. need to know shift hours for that
+        if(isTheDriverInShift(subjectID, employeeID, date, type))
+            return new Response<>("Oops, the driver has a trucking at that shift. So, we cannot remove the shift");
         return employees.removeEmployeeFromShift(subjectID, date, type, employeeID);
     }
 
@@ -186,15 +187,96 @@ public class Facade {
         if (truckManager.getValue().role != Employee.Role.TruckingManger) {
             return new Response<>("You are not authorized to perform this operation");
         }
-        Response<Employee> driver = employees.readEmployee(subjectID, subjectID);
+        Response<Employee> driver = employees.readEmployee(driverUsername, driverUsername);
         if (driver.isError()) {
             return new Response<>(driver.getErrorMessage());
         }
         if (driver.getValue().role != Employee.Role.Driver) {
             return new Response<>("There is no driver with id: " + driverUsername);
         }
-        //TODO: check if there is storekeeper in shift
-        return logistics.createDelivery(Integer.parseInt(subjectID), registrationPlateOfVehicle, date, Integer.parseInt(driverUsername), sources, destinations, products, hours, minutes);
+        if (!isTheDriverHasShift(subjectID, driverUsername, date, hours, minutes))
+            return new Response<>("The driver has no shift at that time");
+        if(!isThereWorkerWithThisRoleInShift(subjectID, date, Employee.Role.Logistics))
+            return new Response<>("There is no logistics worker in this shift to except delivery");
+        else if(true)
+            return null;
+        else
+            return logistics.createDelivery(Integer.parseInt(subjectID), registrationPlateOfVehicle, date, Integer.parseInt(driverUsername), sources, destinations, products, hours, minutes);
+    }
+
+        private boolean isThereWorkerWithThisRoleInShift(String subjectID, LocalDateTime date, Employee.Role role){
+            //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
+            Calendar calendar = new GregorianCalendar(date.getYear(),date.getMonthValue()-1, date.getDayOfMonth());
+            Shift shift;
+            if(date.getHour() + 1 < 16) // the hour is from 0 to 23, therefore 16 is 17
+                shift = readShift(subjectID, calendar, Shift.Type.Morning).getValue();
+            else
+                shift = readShift(subjectID, calendar, Shift.Type.Evening).getValue();
+            for(Employee employee: shift.getStaff()){
+                if(employee.role.equals(role))
+                    return true;
+            }
+            return false;
+        }
+
+    private boolean isLogistHasShift(String subjectID, String ID, LocalDateTime date){
+        //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
+        Calendar calendar = new GregorianCalendar(date.getYear(),date.getMonthValue()-1, date.getDayOfMonth());
+        Shift shift;
+        if(date.getHour() + 1 < 16) // the hour is from 0 to 23, therefore 16 is 17
+            shift = readShift(subjectID, calendar, Shift.Type.Morning).getValue();
+        else
+            shift = readShift(subjectID, calendar, Shift.Type.Evening).getValue();
+        for(Employee employee: shift.getStaff()){
+            if(employee.role.equals(Employee.Role.Logistics) & !employee.id.equals(ID))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean isTheDriverInShift(String subjectID, String driverID, Calendar date, groupk.shared.service.dto.Shift.Type type) {
+        Shift shift = readShift(subjectID, date, type).getValue();
+        for(Employee employee: shift.getStaff()) {
+            if (employee.id.equals(driverID))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean isTheDriverHasShift(String subjectID, String driverID, LocalDateTime date, long hours, long minutes) {
+        //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
+        if (date.getHour() < 8 | date.plusHours(hours).plusMinutes(minutes).getHour() > 24)
+            return false;
+        Calendar calendar = new GregorianCalendar(date.getYear(),date.getMonthValue()-1, date.getDayOfMonth());
+        Shift shift;
+        if(date.getHour() + 1 < 16) { // the hour is from 0 to 23, therefore 16 is 17
+            shift = readShift(subjectID, calendar, Shift.Type.Morning).getValue();
+            boolean found = false;
+            for(Employee employee: shift.getStaff()) {
+                if (employee.id.equals(driverID))
+                    found = true;
+            }
+            if (!found)
+                return false;
+            if(date.plusHours(hours).plusMinutes(minutes).getHour() >= 16) {
+                shift = readShift(subjectID, calendar, Shift.Type.Evening).getValue();
+                for (Employee employee : shift.getStaff()) {
+                    if (employee.id.equals(driverID))
+                        return true;
+                }
+                return false;
+            }
+            else
+                return true;
+        }
+        else {
+            shift = readShift(subjectID, calendar, Shift.Type.Evening).getValue();
+            for (Employee employee : shift.getStaff()) {
+                if (employee.id.equals(driverID))
+                    return true;
+            }
+            return false;
+        }
     }
 
     public Response<List<Delivery>> listDeliveriesWithVehicle(String subjectID, String registration) {
@@ -315,13 +397,18 @@ public class Facade {
         if (subject.getValue().role != Employee.Role.TruckingManger) {
             return new Response<>("You are not authorized to perform this operation");
         }
-        Response<Employee> driver = employees.readEmployee(subjectID, subjectID);
+        Response<Employee> driver = employees.readEmployee(subjectID, driverUsername);
         if (driver.isError()) {
             return new Response<>(driver.getErrorMessage());
         }
         if (driver.getValue().role != Employee.Role.Driver) {
             return new Response<>("There is no driver with id: " + driverUsername);
         }
+        Response<Delivery> delivery = getTruckingById(subjectID, truckingID);
+        if (delivery.isError())
+            return new Response<>(delivery.getErrorMessage());
+        if (!isTheDriverHasShift(subjectID, driverUsername, delivery.getValue().date, delivery.getValue().durationInMinutes/60, delivery.getValue().durationInMinutes%60))
+            return new Response<>("The driver has no shift at that time");
         return logistics.updateDriverOnTrucking(Integer.parseInt(subjectID), truckingID, Integer.parseInt(driverUsername));
     }
 
@@ -333,6 +420,8 @@ public class Facade {
         if (subject.getValue().role != Employee.Role.TruckingManger) {
             return new Response<>("You are not authorized to perform this operation");
         }
+        if(!isThereWorkerWithThisRoleInShift(subjectID, newDate, Employee.Role.Logistics))
+            return new Response<>("There is no logistics worker in this shift to except delivery");
         return logistics.updateDateOnTrucking(Integer.parseInt(subjectID), truckingID, newDate);
     }
 
@@ -356,6 +445,10 @@ public class Facade {
             return new Response<>("You are not authorized to perform this operation");
         }
         return logistics.getDriverLicenses(Integer.parseInt(subjectID));
+    }
+
+    public Response<Delivery> getTruckingById(String subjectID, int truckingID) {
+        return logistics.getTruckinfByID(Integer.parseInt(subjectID), truckingID);
     }
 
     public Response<String[]> getLicensesList() {
