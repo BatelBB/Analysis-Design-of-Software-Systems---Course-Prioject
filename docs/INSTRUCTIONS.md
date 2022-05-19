@@ -8,17 +8,22 @@ For general help and command list, type the `help` command.
 For help about a specific command, type said command without arguments.
 For example, for `create employee`, input `create employee` for help.
 
-
-To login:
-
-```
-login 999871163
-```
-
-Once logged in, you are authorized to perform commands, such as:
+First load sample data. It might take a minute to load.
 
 ```
-get employee 999871163
+load sample
+```
+
+To login as a sample human resources employee:
+
+```
+login 111
+```
+
+Once logged in, you are authorized to perform commands according to your role, such as:
+
+```
+get employee 111
 ```
 
 For more information on available commands, refer to the Commands section of this document.
@@ -27,6 +32,7 @@ For more information on available commands, refer to the Commands section of thi
 
 The following commands are supported:
 
+* `load sample`.
 * `login`.
 * `quit`.
 * `create employee`.
@@ -41,8 +47,37 @@ The following commands are supported:
 * `update shift required role`.
 * `list shifts`.
 * `can work`.
+* `create delivery`.
+* `add delivery source`.
+* `add delivery destination`.
+* `add delivery product`.
+* `delete delivery product`.
+* `delete delivery`.
+* `list deliveries`.
+* `create vehicle`.
+* `list vehicles`.
+* `add driver license`.
+* `update delivery weight`.
 
 All example commands should work when using the provided sample data (`load sample` command).
+
+### Load Sample
+
+Load sample data.
+
+May take a minute on slower drives.
+
+#### Usage
+
+```
+load sample
+```
+
+#### Example
+
+```
+load sample
+```
 
 ### Login
 
@@ -62,7 +97,7 @@ login <id>
 #### Example
 
 ```
-login 999871163
+login 111
 ```
 
 ### Quit
@@ -109,7 +144,7 @@ Where `role` is one of the following:
 #### Example
 
 ```
-create employee Noga 999074396 Bar 12345 1 30 HumanResources
+create employee Noga 110 Bar 12345 1 30 HumanResources
 ```
 
 ### Get Employee
@@ -145,7 +180,7 @@ delete employee <id>
 #### Example
 
 ```
-delete employee 999356934
+delete employee 614
 ```
 
 ### List Employees
@@ -378,4 +413,98 @@ can work 2022-04-24 Evening
 
 ```
 can work 2022-04-24 Evening Logistics
+```
+
+### Create Delivery
+
+Create a new delivery.
+
+#### Usage
+
+```
+create delivery <registration> <date> <time> <driver-id> <duration-in-minutes>
+```
+
+### Add Delivery Source
+
+Add source site to delivery.
+
+#### Usage
+
+```
+add delivery source <id> <contact-name> <contact-phone> <area> <city> <street> <house-number> <apartment> <floor>
+```
+
+### Add Delivery Destination
+
+Add destination site to delivery.
+
+#### Usage
+
+```
+delete delivery source <id> <contact-name> <contact-phone> <area> <city> <street> <house-number> <apartment> <floor>
+```
+
+### Add Delivery Product
+
+Add product to delivery.
+
+#### Usage
+
+```
+add delivery product <id> <product-id> <count>
+```
+
+### Delete Delivery Product
+
+Remove product from delivery.
+
+#### Usage
+
+```
+
+```
+
+### List Deliveries
+
+Print a list of all deliveries.
+
+#### Usage
+
+```
+delete delivery product <id> <product-id> <count>
+```
+
+### Create Vehicle
+
+Add a delivery vehicle.
+
+### List Vehicles
+
+Print a list of all delivery vehicles.
+
+#### Usage
+
+```
+create vehicle <license> <registration> <model> <weight> <max-weight>
+```
+
+### Add Driver License
+
+Add driver license to currently logged in user.
+
+#### Usage
+
+```
+add driver license <license>
+```
+
+### Update Delivery Weight
+
+Update weight of delivery before departure.
+
+#### Usage
+
+```
+update delivery weight <id> <weight>
 ```
