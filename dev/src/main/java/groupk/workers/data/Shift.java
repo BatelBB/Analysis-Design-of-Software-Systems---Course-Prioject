@@ -12,7 +12,6 @@ public class Shift {
     public Shift(Calendar date, Type type, LinkedList<Employee> staff, HashMap<Employee.Role, Integer> requiredStaff){
         try{
             Connection connection = DriverManager.getConnection(DalController.url);
-            Statement statement = connection.createStatement();
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Shift VALUES(?,?)");
             preparedStatement.setString(1, type.name());
             preparedStatement.setString(2, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
