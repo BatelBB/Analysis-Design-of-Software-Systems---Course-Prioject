@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 public class DalController {
     public static String url;
@@ -21,7 +22,7 @@ public class DalController {
             }
             load();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         shiftRepository = new ShiftRepository();
         employeeRepository = new EmployeeRepository();
@@ -91,7 +92,7 @@ public class DalController {
             statement.executeBatch();
             connection.createStatement().execute("PRAGMA foreign_keys = ON");
         } catch (SQLException s) {
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
     }
 
@@ -110,11 +111,10 @@ public class DalController {
             connection.close();
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
     }
 
-    //for test use
     public void deleteDataBase(){
         File file = new File("employeeDB.db");
         if(file.exists())
@@ -141,15 +141,28 @@ public class DalController {
             String deleteEmployee = "DELETE FROM Employee WHERE ID = '" + id + "';";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteEmployee);
             preparedStatement.executeUpdate();
-//            String shiftPreference = "DELETE FROM ShiftPreference WHERE EmployeeID = '" + id + "';";
-//            PreparedStatement preparedStatement2 = connection.prepareStatement(shiftPreference);
-//            preparedStatement2.executeUpdate();
             connection.close();
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
         return employeeRepository.deleteEmployee(id);
+    }
+
+    public Shift deleteShift(Shift.Type type, Calendar date){
+        try{
+            Connection connection = DriverManager.getConnection(DalController.url);
+            connection.createStatement().execute("PRAGMA foreign_keys = ON");
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Shift WHERE Type = ? and Date = ?");
+            preparedStatement.setString(1 , type.name());
+            preparedStatement.setString(2 , date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
+            preparedStatement.executeUpdate();
+            connection.close();
+        }
+        catch (SQLException s){
+            throw new IllegalArgumentException(s.getMessage());
+        }
+        return shiftRepository.deleteShift(type, date);
     }
 
     public LinkedList<Shift> getShifts() {
@@ -193,7 +206,7 @@ public class DalController {
             connection.close();
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
     }
 }

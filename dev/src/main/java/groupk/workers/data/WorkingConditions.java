@@ -22,7 +22,7 @@ public class WorkingConditions {
             connection.close();
             this.employmentStart = employmentStart;
         } catch (SQLException s) {
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
     }
 
@@ -36,7 +36,7 @@ public class WorkingConditions {
             connection.close();
             this.salaryPerHour = salaryPerHour;
         } catch (SQLException s) {
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
     }
 
@@ -50,7 +50,7 @@ public class WorkingConditions {
             connection.close();
             this.sickDaysUsed = sickDaysUsed;
         } catch (SQLException s) {
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
     }
 
@@ -64,7 +64,7 @@ public class WorkingConditions {
             connection.close();
             this.vacationDaysUsed = vacationDaysUsed;
         } catch (SQLException s) {
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
     }
 

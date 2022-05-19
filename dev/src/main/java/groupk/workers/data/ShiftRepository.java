@@ -1,10 +1,7 @@
 package groupk.workers.data;
 
 import java.sql.ResultSet;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 public class ShiftRepository {
     private LinkedList<Shift> shifts;
@@ -26,5 +23,16 @@ public class ShiftRepository {
         Shift loadShift = new Shift(shift, requiredStaff, workers);
         shifts.add(loadShift);
         return loadShift;
+    }
+
+    public Shift deleteShift(Shift.Type type, Calendar date){
+        Shift returned = null;
+        for(Shift shift : shifts){
+            if(shift.getType().equals(type) && shift.getDate().equals(date)){
+                returned = shift;
+                shifts.remove(returned);
+            }
+        }
+        return returned;
     }
 }

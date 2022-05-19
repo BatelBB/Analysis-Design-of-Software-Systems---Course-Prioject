@@ -8,13 +8,11 @@ public class Shift {
     private Calendar date;
     private LinkedList<Employee> staff;
     private HashMap<Employee.Role, Integer> requiredStaff;
-    private int id;
 
     public Shift(Calendar date, Type type, LinkedList<Employee> staff, HashMap<Employee.Role, Integer> requiredStaff){
         try{
             Connection connection = DriverManager.getConnection(DalController.url);
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from Shift");
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Shift VALUES(?,?)");
             preparedStatement.setString(1, type.name());
             preparedStatement.setString(2, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
@@ -55,8 +53,8 @@ public class Shift {
             this.staff = staff;
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
             this.requiredStaff = null;
+            throw new IllegalArgumentException(s.getMessage());
         }
     }
 
@@ -71,11 +69,11 @@ public class Shift {
                     this.requiredStaff.put(Employee.Role.valueOf(requiredStaff.getString(2)), requiredStaff.getInt(1));
                 }
             } catch (SQLException throwables) {
-                System.out.println(throwables.getMessage());
+                throw new IllegalArgumentException(throwables.getMessage());
             }
             staff = workers;
         } catch (SQLException throwables) {
-            System.out.println(throwables.getMessage());
+            throw new IllegalArgumentException(throwables.getMessage());
         }
     }
 
@@ -108,7 +106,7 @@ public class Shift {
             connection.close();
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
         return this;
     }
@@ -126,7 +124,7 @@ public class Shift {
             requiredStaff.replace(role, number);
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
         return this;
     }
@@ -151,7 +149,7 @@ public class Shift {
             staff.add(e);
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
         return this;
     }
@@ -168,7 +166,7 @@ public class Shift {
             staff.remove(e);
         }
         catch (SQLException s){
-            System.out.println(s.getMessage());
+            throw new IllegalArgumentException(s.getMessage());
         }
         return this;
     }

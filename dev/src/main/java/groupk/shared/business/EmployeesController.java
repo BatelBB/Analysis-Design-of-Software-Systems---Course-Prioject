@@ -75,6 +75,14 @@ public class EmployeesController {
         }
     }
 
+    public Response<Shift> deleteShift(String subjectID, Shift.Type type, Calendar date){
+        try {
+            return new Response<>(employeeBusiness.deleteShift(subjectID, type, date));
+        } catch (Exception e) {
+            return new Response<>(e.getMessage());
+        }
+    }
+
     public Response<List<Employee>> listEmployees(String subjectID) {
         try {
             return new Response<>(employeeBusiness.listEmployees(subjectID));

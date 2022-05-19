@@ -57,6 +57,10 @@ public class Facade {
         return employees.deleteEmployee(subjectID, employeeID);
     }
 
+    public Response<Shift> deleteShift(String subjectID, Shift.Type type, Calendar date){
+        return employees.deleteShift(subjectID, type, date);
+    }
+
     public Response<List<Employee>> listEmployees(String subjectID) {
         return employees.listEmployees(subjectID);
     }
