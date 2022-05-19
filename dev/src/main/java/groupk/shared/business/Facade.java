@@ -193,9 +193,26 @@ public class Facade {
         if (driver.getValue().role != Employee.Role.Driver) {
             return new Response<>("There is no driver with id: " + driverUsername);
         }
-        //TODO: check if there is storekeeper in shift
-        return logistics.createDelivery(Integer.parseInt(subjectID), registrationPlateOfVehicle, date, Integer.parseInt(driverUsername), sources, destinations, products, hours, minutes);
+        if(isLogisticsInShift(subjectID, date))
+            return logistics.createDelivery(Integer.parseInt(subjectID), registrationPlateOfVehicle, date, Integer.parseInt(driverUsername), sources, destinations, products, hours, minutes);
+        else
+            return new Response<>("There is no logistics worker in this shift to except delivery");
     }
+
+        private boolean isLogisticsInShift(String subjectID, LocalDateTime date){
+            //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
+            Calendar calendar = new GregorianCalendar(date.getYear(),date.getMonthValue()-1, date.getDayOfMonth());
+            Shift shift;
+            if(date.getHour()+1 <16) // the hour is from 0 to 23, therefore 16 is 17
+                shift = readShift(subjectID, calendar, Shift.Type.Morning).getValue();
+            else
+                shift = readShift(subjectID, calendar, Shift.Type.Evening).getValue();
+            for(Employee employee: shift.getStaff()){
+                if(employee.role.equals(Employee.Role.Logistics))
+                    return true;
+            }
+            return false;
+        }
 
     public Response<List<Delivery>> listDeliveriesWithVehicle(String subjectID, String registration) {
         Response<Employee> subject = employees.readEmployee(subjectID, subjectID);

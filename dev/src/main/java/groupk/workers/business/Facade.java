@@ -72,15 +72,17 @@ public class Facade {
     }
 
     public Employee readEmployee(String subjectID, String employeeID) {
-        if (subjectID.equals(employeeID) || employees.isFromHumanResources(subjectID)) {
-            return dataEmployeeToService(employees.read(employeeID));
+        Employee employee = dataEmployeeToService(employees.read(employeeID));
+        if (subjectID.equals(employeeID) || employees.isFromHumanResources(subjectID) || employee.role.equals(Employee.Role.TruckingManger)) {
+            return employee;
         } else {
             throw new IllegalArgumentException("Subject must be authorized to read employees.");
         }
     }
 
     public Shift readShift(String subjectID, Calendar date ,Shift.Type type) {
-        if (employees.isFromHumanResources(subjectID)) {
+        Employee employee = dataEmployeeToService(employees.read(subjectID));
+        if (employees.isFromHumanResources(subjectID)|| employee.role.equals(Employee.Role.TruckingManger)) {
             return dataShiftToService(shifts.getShift(date, serviceTypeToData(type)));
         }
         else {
@@ -97,11 +99,13 @@ public class Facade {
     }
 
     public List<Employee> listEmployees(String subjectID) {
-        if (employees.isFromHumanResources(subjectID)) {
+        Employee employee = readEmployee(subjectID, subjectID);
+        if (employees.isFromHumanResources(subjectID) || employee.role.equals(Employee.Role.TruckingManger)) {
             return employees.list().stream()
                     .map(Facade::dataEmployeeToService)
                     .collect(Collectors.toList());
-        } else {
+        }
+        else {
             throw new IllegalArgumentException("Subject must be authorized to read employees.");
         }
     }
