@@ -36,6 +36,8 @@ package shared {
 
             class DeleteEmployee {}
 
+            class DeleteShiftPreference {}
+
             class GetEmployee {}
 
             class ListEmployees {}
@@ -48,18 +50,67 @@ package shared {
 
             class UpdateShiftRequiredRole {}
 
+            class CreateDelivery {}
+
+            class AddDeliverySource {}
+
+            class AddDeliveryDestination {}
+
+            class AddDeliveryProduct {}
+
+            class DeleteDeliveryProduct {}
+
+            class DeleteDelivery {}
+
+            class ListDeliveries {}
+
+            class CreateVehicle {}
+
+            class ListVehicles {}
+
+            class AddDriverLicesnse {}
+
+            class UpdateDeliveryWeight {}
+
+            class LoadSample {}
+
             Command <|-- AddShiftPreference: Is
             Command <|-- AddShiftStaff: Is
             Command <|-- CanWork: Is
             Command <|-- CreateEmployee: Is
             Command <|-- CreateShift: Is
             Command <|-- DeleteEmployee: Is
+            Command <|-- DeleteShiftPreference: Is
             Command <|-- GetEmployee: Is
             Command <|-- ListEmployees: Is
             Command <|-- ListShifts: Is
             Command <|-- Login: Is
+            Command <|-- LoadSample: Is
             Command <|-- Quit: Is
             Command <|-- UpdateShiftRequiredRole: Is
+            Command <|-- CreateDelivery: Is
+            Command <|-- AddDeliverySource: Is
+            Command <|-- AddDeliveryDestination: Is
+            Command <|-- AddDeliveryProduct: Is
+            Command <|-- DeleteDeliveryProduct: Is
+            Command <|-- DeleteDelivery: Is
+            Command <|-- ListDeliveries: Is
+            Command <|-- CreateVehicle: Is
+            Command <|-- ListVehicles: Is
+            Command <|-- AddDriverLicesnse: Is
+            Command <|-- UpdateDeliveryWeight: Is
+
+            Command -[hidden]> CreateDelivery: Is
+            Command -[hidden]> AddDeliverySource: Is
+            Command -[hidden]> AddDeliveryDestination: Is
+            Command -[hidden]> AddDeliveryProduct: Is
+            Command -[hidden]> DeleteDeliveryProduct: Is
+            Command -[hidden]> DeleteDelivery: Is
+            Command -[hidden]> ListDeliveries: Is
+            Command -[hidden]> CreateVehicle: Is
+            Command -[hidden]> ListVehicles: Is
+            Command -[hidden]> AddDriverLicesnse: Is
+            Command -[hidden]> UpdateDeliveryWeight: Is
         }
 
         CommandRunner "1" *-- "*" Command: Runs
