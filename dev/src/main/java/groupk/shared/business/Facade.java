@@ -11,7 +11,7 @@ public class Facade {
     EmployeesController employees;
     LogisticsController logistics;
 
-    public Facade() throws Exception {
+    public Facade() {
         employees = new EmployeesController();
         logistics = new LogisticsController();
     }
