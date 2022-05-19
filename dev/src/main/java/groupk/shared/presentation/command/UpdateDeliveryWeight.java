@@ -3,56 +3,56 @@ package groupk.shared.presentation.command;
 import groupk.shared.presentation.CommandRunner;
 import groupk.shared.service.Response;
 
-public class CreateVehicle implements Command {
+public class UpdateDeliveryWeight implements Command {
     @Override
     public String name() {
-        return "create vehicle";
+        return "update delivery weight";
     }
 
     @Override
     public String description() {
-        return "create a delivery vehicle";
+        return "set weighted weight of delivery";
     }
 
     @Override
     public boolean isMatching(String line) {
-        return false;
+        return line.startsWith("update delivery weight");
     }
 
     @Override
     public void execute(String[] command, CommandRunner runner) {
-        if (command.length != 7) {
+        if (command.length != 5) {
             System.out.println("Error: Wrong number of arguments.");
             System.out.println("Usage:");
-            System.out.println("> create vehicle <license> <registration> <model> <weight> <max-weight>");
+            System.out.println("> update delivery weight <id> <weight>");
             return;
         }
 
-        int weight;
+        int id;
         try {
-            weight = CommandRunner.parseInt(command[5]);
+            id = CommandRunner.parseInt(command[3]);
         } catch (IllegalArgumentException e) {
             System.out.printf("Error: weight %s\n", e.getMessage());
             return;
         }
 
-        int maxWeight;
+        int weight;
         try {
-            maxWeight = CommandRunner.parseInt(command[6]);
+            weight = CommandRunner.parseInt(command[4]);
         } catch (IllegalArgumentException e) {
-            System.out.printf("Error: max-weight %s\n", e.getMessage());
+            System.out.printf("Error: weight %s\n", e.getMessage());
             return;
         }
 
-        Response<Boolean> created = runner.getService().createVehicle(runner.getSubject(), command[2], command[3], command[4], weight, maxWeight);
-        if (created.isError()) {
-            System.out.printf("Error: %s\n", created.getErrorMessage());
+        Response<Boolean> response = runner.getService().setWeightForDelivery(runner.getSubject(), id, weight);
+        if (response.isError()) {
+            System.out.printf("Error: %s\n", response.getErrorMessage());
             return;
         }
-        if (!created.getValue()) {
+        if (!response.getValue()) {
             System.out.println("Error: Something went wrong.");
             return;
         }
-        System.out.println("Vehicle created.");
+        System.out.println("Updated weight of delivery.");
     }
 }

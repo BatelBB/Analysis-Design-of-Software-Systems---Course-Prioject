@@ -26,9 +26,14 @@ public class Application {
                         new CanWork(),
                         new CreateDelivery(),
                         new DeleteDelivery(),
+                        new ListDeliveries(),
                         new AddDeliverySource(),
                         new AddDeliveryDestination(),
+                        new AddDeliveryProduct(),
+                        new UpdateDeliveryWeight(),
+                        new DeleteDeliveryProduct(),
                         new CreateVehicle(),
+                        new ListVehicles(),
                         new AddDriverLicense()
                 },
                 () -> {
