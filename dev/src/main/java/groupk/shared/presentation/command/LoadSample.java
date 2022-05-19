@@ -49,6 +49,32 @@ public class LoadSample implements Command {
         all.add(Employee.ShiftDateTime.FridayEvening);
         all.add(Employee.ShiftDateTime.SaturdayMorning);
         all.add(Employee.ShiftDateTime.SaturdayEvening);
+        HashMap<Employee.Role, Integer> r1 = new HashMap<>();
+        for(Employee.Role role : Employee.Role.values())
+            r1.put(role, 0);
+            r2.put(role, 0);
+
+        String[] source = {"tamirHouse","batYam","0543397995","tamirStr","13","2","3","center"};
+        String[]  destination = {"idoHouse","herzliya","0524321231","idoStr","100","1","6","center"};
+        List<String[]> sources = new LinkedList<>();
+        List<String[]> destinations = new LinkedList<>();
+        sources.add(source);
+        destinations.add(destination);
+        List<Map<String,Integer>> products = new LinkedList<>();
+        Map<String,Integer> product = new ConcurrentHashMap<>();
+        product.put("Eggs_4902505139314",2);
+        products.add(product);
+
+        String[] source2 = {"miri","haifa","0522226668","miriSTR","13","2","3","north"};
+        String[]  destination2 = {"lior","beersheva","0536545648","liorSTR","100","1","6","sourh"};
+        List<String[]> sources2 = new LinkedList<>();
+        List<String[]> destinations2 = new LinkedList<>();
+        sources2.add(source2);
+        destinations2.add(destination2);
+        List<Map<String,Integer>> products2 = new LinkedList<>();
+        Map<String,Integer> product2 = new ConcurrentHashMap<>();
+        product.put("Water_7290019056966",2);
+        products.add(product);
 
         // HR.
         runner.getService().createEmployee(
@@ -288,6 +314,148 @@ public class LoadSample implements Command {
                 Employee.Role.TruckingManger,
                 all);
 
-        // TODO Add more sample data.
+        
+        //create shifts
+          runner.getService().addShift(
+                  111,
+                   new GregorianCalendar(2023, Calendar.APRIL, 21),
+                   Shift.Type.Evening,
+                     new LinkedList<>(),
+                  r1 );
+
+        runner.getService().addShift(
+                  112,
+                   new GregorianCalendar(2023, Calendar.APRIL, 23),
+                   Shift.Type.Evening,
+                     new LinkedList<>(),
+                    r2 );
+
+
+         //create Employee shift prefernces
+
+
+        runner.getService().addEmployeeShiftPreference(
+                311,
+                311,
+                Employee.ShiftDateTime.FridayEvening);
+
+        runner.getService().addEmployeeShiftPreference(
+                313,
+                313,
+                Employee.ShiftDateTime.SundayEvening);
+
+        runner.getService().addEmployeeShiftPreference(
+                911,
+                911,
+                Employee.ShiftDateTime.FridayEvening);
+
+        runner.getService().addEmployeeShiftPreference(
+                913,
+                913,
+                Employee.ShiftDateTime.SundayEvening);
+
+        runner.getService().addEmployeeShiftPreference(
+                412,
+                412,
+                Employee.ShiftDateTime.FridayEvening);
+
+        runner.getService().addEmployeeShiftPreference(
+                414,
+                414,
+                Employee.ShiftDateTime.SundayEvening);
+
+
+
+        //add employees to shifts
+        
+        runner.getService().addEmployeeToShift(111,
+         (2023, Calendar.APRIL, 21), 
+         Shift.Type.Evening,
+         "311");
+''
+         runner.getService().addEmployeeToShift(111,
+         (2023, Calendar.APRIL, 21), 
+         Shift.Type.Evening,
+         "911");
+
+         runner.getService().addEmployeeToShift(111,
+         (2023, Calendar.APRIL, 21), 
+         Shift.Type.Evening,
+         "412");
+
+         runner.getService().addEmployeeToShift(112,
+         (2023, Calendar.APRIL, 23), 
+         Shift.Type.Evening,
+         "313");
+
+         runner.getService().addEmployeeToShift(112,
+         (2023, Calendar.APRIL, 23), 
+         Shift.Type.Evening,
+         "913");
+
+         runner.getService().addEmployeeToShift(112,
+         (2023, Calendar.APRIL, 23), 
+         Shift.Type.Evening,
+         "414");
+
+
+         //add vehicles
+
+        runner.getService().addVehicle(
+                "B",
+                "12315678",
+                "mercedes",
+                4,
+                32);
+
+        runner.getService().addVehicle(
+                "C",
+                "12345678",
+                "volvo",
+                8,
+                22);
+
+
+        
+         //add licences
+
+         runner.getService().addLicense(
+                311,
+         DLicense.B));
+
+
+         runner.getService().addLicense(
+                313,
+                 DLicense.C));
+
+
+
+        //add Truckings7
+
+         runner.getService().addTrucking(
+                913,
+                "12345678",
+                (2023, Calendar.APRIL, 23), 
+                313,
+                sources,
+                destinations,
+                products,
+                2,
+                0);
+
+
+         runner.getService().addTrucking(
+                911,
+                "12315678",
+                (2023, Calendar.APRIL, 21), 
+                311,
+                sources2,
+                destinations2,
+                products2,
+                1,
+                0);
+
+                
+                        // TODO Add more sample data.
     }
 }
