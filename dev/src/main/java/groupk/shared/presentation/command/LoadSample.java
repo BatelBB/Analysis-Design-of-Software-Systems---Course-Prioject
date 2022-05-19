@@ -40,29 +40,29 @@ public class LoadSample implements Command {
         System.out.println("Hang on! This might take a minute on slower drives.");
 
         Set<Employee.ShiftDateTime> all = new LinkedHashSet<Employee.ShiftDateTime>();
-        for(Employee.ShiftDateTime s :Employee.ShiftDateTime.values())
+        for (Employee.ShiftDateTime s : Employee.ShiftDateTime.values())
             all.add(s);
         HashMap<Employee.Role, Integer> r1 = new HashMap<>();
-        for(Employee.Role role : Employee.Role.values())
+        for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Site source = new Site("tamirHouse","0543397995","center","batYam","tamirStr",13,2,3);
-        Site destination = new Site("idoHouse","0524321231", "center","herzliya","idoStr",100,1,6);
+        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314",2);
+        Product product = new Product("Eggs_4902505139314", 2);
         List<Product> products = new LinkedList<>();
         products.add(product);
 
-        Site source2 = new Site("miri","0522226668","north", "haifa","miriSTR",13,2,3);
-        Site destination2 = new Site("lior","0536545648","sourh", "beersheva","liorSTR",100,1,6);
+        Site source2 = new Site("miri", "0522226668", "north", "haifa", "miriSTR", 13, 2, 3);
+        Site destination2 = new Site("lior", "0536545648", "sourh", "beersheva", "liorSTR", 100, 1, 6);
         List<Site> sources2 = new LinkedList<>();
         List<Site> destinations2 = new LinkedList<>();
         sources2.add(source2);
         destinations2.add(destination2);
-        Product product2 = new Product("Water_7290019056966",2);
+        Product product2 = new Product("Water_7290019056966", 2);
         List<Product> products2 = new LinkedList<>();
         products.add(product);
 
@@ -308,23 +308,23 @@ public class LoadSample implements Command {
         LinkedList<Employee> staff = new LinkedList<>();
         staff.add(SM1);
         //create shifts
-          runner.getService().createShift(
-                  HR1.id,
-                   new GregorianCalendar(2023, Calendar.APRIL, 21),
-                   Shift.Type.Evening,
-                  staff,
-                  r1 );
-
-        runner.getService().createShift(
+        Shift shift1 = runner.getService().createShift(
                 HR1.id,
-                   new GregorianCalendar(2023, Calendar.APRIL, 23),
-                   Shift.Type.Morning,
-                    staff,
-                    r1 );
+                new GregorianCalendar(2023, Calendar.APRIL, 21),
+                Shift.Type.Evening,
+                staff,
+                r1).getValue();
 
+        Shift shift2 = runner.getService().createShift(
+                HR1.id,
+                new GregorianCalendar(2023, Calendar.APRIL, 23),
+                Shift.Type.Morning,
+                staff,
+                r1).getValue();
+        runner.getService().addEmployeeToShift(HR1.id, shift1.getDate(), shift1.getType(), D1.id);
+        runner.getService().addEmployeeToShift(HR1.id, shift2.getDate(), shift2.getType(), D2.id);
 
-         //add vehicles
-
+        //add vehicles
         runner.getService().createVehicle(
                 TM1.id,
                 "B",
@@ -342,26 +342,25 @@ public class LoadSample implements Command {
                 22);
 
 
-         //add licences
+        //add licences
 
-         runner.getService().addLicenseForDriver(
+        runner.getService().addLicenseForDriver(
                 D1.id,
                 DLicense.B.name());
 
 
-         runner.getService().addLicenseForDriver(
-                 D2.id,
-                 DLicense.C.name());
-
+        runner.getService().addLicenseForDriver(
+                D2.id,
+                DLicense.C.name());
 
 
         //add Truckings7
 
-         runner.getService().createDelivery(
+        runner.getService().createDelivery(
                 TM1.id,
                 "12345678",
                 LocalDateTime.of(2023, Month.APRIL, 23, 8, 0),
-                 D1.id,
+                D2.id,
                 sources,
                 destinations,
                 products,
@@ -369,11 +368,11 @@ public class LoadSample implements Command {
                 0);
 
 
-         runner.getService().createDelivery(
-                 TM1.id,
+        runner.getService().createDelivery(
+                TM1.id,
                 "12315678",
-                 LocalDateTime.of(2023, Month.APRIL, 21, 18, 0),
-                 D2.id,
+                LocalDateTime.of(2023, Month.APRIL, 21, 18, 0),
+                D1.id,
                 sources2,
                 destinations2,
                 products2,
