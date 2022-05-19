@@ -5,6 +5,7 @@ import groupk.shared.service.Service;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -131,5 +132,21 @@ public class CommandRunner {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("must be an integer.");
         }
+    }
+
+    public static LocalDateTime parseLocalDateTime(String date, String time) {
+        Calendar parsedDate = parseDate(date);
+        String[] split = time.split(":");
+        if (split.length != 2 || split[0].length() != 2 || split[1].length() != 2) {
+            throw new IllegalArgumentException("must follow hh:mm format, for example 16:59.");
+        }
+        try {
+            parsedDate.add(GregorianCalendar.HOUR_OF_DAY, Integer.parseInt(split[0]));
+            parsedDate.add(GregorianCalendar.MINUTE, Integer.parseInt(split[1]));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("must follow hh:mm format, for example 16:59.");
+        }
+        // This introduces a bug when using the program across time zones. It is out of scope.
+        return LocalDateTime.ofInstant(parsedDate.toInstant(), parsedDate.getTimeZone().toZoneId());
     }
 }

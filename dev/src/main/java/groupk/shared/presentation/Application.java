@@ -23,7 +23,13 @@ public class Application {
                         new AddShiftStaff(),
                         new DeleteShiftStaff(),
                         new UpdateShiftRequiredRole(),
-                        new CanWork()
+                        new CanWork(),
+                        new CreateDelivery(),
+                        new DeleteDelivery(),
+                        new AddDeliverySource(),
+                        new AddDeliveryDestination(),
+                        new CreateVehicle(),
+                        new AddDriverLicense()
                 },
                 () -> {
                         keepGoing.set(false);

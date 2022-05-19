@@ -1,6 +1,8 @@
 package groupk.shared.presentation.command;
 
 import groupk.shared.presentation.CommandRunner;
+import groupk.shared.service.Response;
+import groupk.shared.service.dto.Delivery;
 
 public class DeleteDelivery implements Command {
     @Override
@@ -26,5 +28,24 @@ public class DeleteDelivery implements Command {
             System.out.println("> delete delivery <id>");
             return;
         }
+
+        int id;
+        try {
+            id = CommandRunner.parseInt(command[2]);
+        } catch (IllegalArgumentException e) {
+            System.out.printf("Error: id %s\n", e.getMessage());
+            return;
+        }
+
+        Response<Boolean> deleted = runner.getService().deleteDelivery(runner.getSubject(), id);
+        if (deleted.isError()) {
+            System.out.printf("Error: %s\n", deleted.getErrorMessage());
+            return;
+        }
+        if (!deleted.getValue()) {
+            System.out.println("Error: Something went wrong.");
+            return;
+        }
+        System.out.println("Delivery deleted.");
     }
 }
