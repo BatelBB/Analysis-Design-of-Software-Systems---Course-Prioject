@@ -10,6 +10,9 @@ public class VehiclesIDMap {
         vehicleMap = new ConcurrentHashMap<String, VehicleDTO>();
     }
 
+    public void resetData() {
+        vehicleMap = new ConcurrentHashMap<String, VehicleDTO>();
+    }
 
     public static VehiclesIDMap getInstance() throws Exception {
         if (singletonVehiclesMapperInstance == null)

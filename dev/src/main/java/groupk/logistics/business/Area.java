@@ -9,4 +9,8 @@ public enum Area {
         else  if(area.equals("south")) return Area.south;
         else throw new IllegalArgumentException(area + " is invalid area");
     }
+
+    public static String[] getAreasList() {
+        return new String[]{"center", "north", "south"};
+    }
 }

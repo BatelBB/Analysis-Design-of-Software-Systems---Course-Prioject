@@ -964,4 +964,6 @@ public class ServiceTest {
         assertEquals(service.numOfEmployeeShifts(HR.id, created.id).getValue(), 2);
         assertEquals(service.numOfEmployeeShifts(HR.id, HR.id).getValue(), 0);
     }
+
+
 }

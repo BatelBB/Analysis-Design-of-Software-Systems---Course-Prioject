@@ -8,7 +8,7 @@ public enum DLicense {
         else if(dlicense.equals("C")) return DLicense.C;
         else if (dlicense.equals("C1")) return DLicense.C1;
         else if (dlicense.equals("C_E")) return DLicense.C_E;
-        else throw new IllegalArgumentException("The driver's license is illegl");
+        else throw new IllegalArgumentException("The driver's license is illegal");
     }
 
     public static String[] getDLicenseList() {

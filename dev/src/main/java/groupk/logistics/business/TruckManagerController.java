@@ -29,8 +29,14 @@ public class TruckManagerController {
         driverLicensesMapper = new DriverLicencesMapper();
     }
 
-    public void reserForTests() {
-        truckingIdCounter = 1;
+    public void reserForTests() throws Exception {
+        truckingIdCounter = truckingMapper.getNextIdForTrucking();
+    }
+
+    public void deleteDB() {
+        truckingMapper.deleteDB();
+        driverLicensesMapper.deleteDB();
+        vehicleMapper.deleteDB();
     }
 
     public void addVehicle(String lisence, String registrationPlate, String model, int weight, int maxWeight) throws Exception {
@@ -57,7 +63,7 @@ public class TruckManagerController {
         return vehicleMapper.getAllRegistrationPlates();
     }
 
-    public void addTrucking(int truckManagerId,String registrationPlateOfVehicle, LocalDateTime date, int driverUsername, List<String[]> sources, List<String[]> destinations, List<Map<String,Integer>> products, long hours, long minutes) throws Exception {
+    public List<String>[] addTrucking(int truckManagerId,String registrationPlateOfVehicle, LocalDateTime date, int driverUsername, List<String[]> sources, List<String[]> destinations, Map<String,Integer> products, long hours, long minutes) throws Exception {
         boolean checkTrucking = (checkTrucking(truckingIdCounter, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products, hours, minutes));
         if (!checkDriverLicenseMatch(driverUsername, registrationPlateOfVehicle))
             throw new IllegalArgumentException("Oops, the driver does not have a driver's license compatible with this vehicle");
@@ -69,8 +75,9 @@ public class TruckManagerController {
             TruckingDTO trucking = new TruckingDTO(truckingIdCounter,date,truckManagerId,driverUsername,registrationPlateOfVehicle,hours,minutes,0,sources_,destinations_,productForTruckings);
             List<String>[] added = truckingMapper.addTrucking(trucking);
             truckingIdCounter++;
-            //TODO: print the sites which not added
+            return added;
         }
+        throw new IllegalArgumentException("Oops, we couldn't execute your request");
     }
 
     public List<SiteDTO> checkSites(List<String[]> Sites) throws Exception {
@@ -96,20 +103,16 @@ public class TruckManagerController {
         return sites;
     }
 
-    private List<ProductForTruckingDTO> productForTruckings(List <Map<String,Integer>> map)
+    private List<ProductForTruckingDTO> productForTruckings(Map<String,Integer> prod)
     {
         List<ProductForTruckingDTO> productForTruckings = new LinkedList<>();
-        for(int i = 0 ; i < map.size();i++)
-        {
-            Map<String,Integer> prod = map.get(0);
-            String[] productsArr = Products.getProductsSKUList();
-            for (int j = 0; j < productsArr.length; j++) {
-                if(prod.containsKey(productsArr[j])) {
-                    int quantity = prod.get(productsArr[j]);
-                    if (quantity < 1)
-                        throw new IllegalArgumentException("Oops, the quantity of " + productsArr[j] + " most be positive");
-                    productForTruckings.add(new ProductForTruckingDTO(productsArr[j], prod.get(productsArr[j])));
-                }
+        String[] productsArr = Products.getProductsSKUList();
+        for (int j = 0; j < productsArr.length; j++) {
+            if(prod.containsKey(productsArr[j])) {
+                int quantity = prod.get(productsArr[j]);
+                if (quantity < 1)
+                    throw new IllegalArgumentException("Oops, the quantity of " + productsArr[j] + " most be positive");
+                productForTruckings.add(new ProductForTruckingDTO(productsArr[j], prod.get(productsArr[j])));
             }
         }
         return productForTruckings;
@@ -123,112 +126,40 @@ public class TruckManagerController {
             throw new Exception("seem like there is no trucking with that id");
     }
 
-    public String printBoard(int truckManagerID) throws Exception {
-        String toReturn = "TRUCKINGS BOARD\n\n";
-        List<TruckingDTO> truckings = truckingMapper.getTruckManagerBoard(truckManagerID);
-        if (truckings.size() == 0 | truckings == null) {
-            toReturn += "[empty]";
-            return toReturn;
-        }
-        for (TruckingDTO trucking : truckings)
-            toReturn += printTrucking(trucking);
-        return toReturn;
+    public List<TruckingDTO> printBoard(int truckManagerID) throws Exception {
+        return truckingMapper.getTruckManagerBoard(truckManagerID);
     }
 
-    public String printTruckingsHistory(int truckManagerID) throws Exception {
-        String toReturn = "            TRUCKINGS HISTORY\n\n";
-        List<TruckingDTO> truckings = truckingMapper.getTruckManagerHistoryTruckings(truckManagerID);
-        if (truckings.size() == 0 | truckings == null) {
-            toReturn += "[empty]";
-            return toReturn;
-        }
-        for (TruckingDTO trucking : truckings)
-            toReturn += printTrucking(trucking);
-        return toReturn;
+    public List<TruckingDTO> printTruckingsHistory(int truckManagerID) throws Exception {
+        return truckingMapper.getTruckManagerHistoryTruckings(truckManagerID);
     }
 
-    public String printFutureTruckings(int truckManagerID) throws Exception {
-        String toReturn = "            FUTURE TRUCKINGS\n\n";
-        List<TruckingDTO> truckings = truckingMapper.getTruckManagerFutureTruckings(truckManagerID);
-        if (truckings.size() == 0 | truckings == null) {
-            toReturn += "[empty]";
-            return toReturn;
-        }
-        for (TruckingDTO trucking : truckings)
-            toReturn += printTrucking(trucking);
-        return toReturn;
+    public List<TruckingDTO> printFutureTruckings(int truckManagerID) throws Exception {
+        return truckingMapper.getTruckManagerFutureTruckings(truckManagerID);
     }
 
-    public String printBoardOfDriver(int driverUsername) throws Exception {
-        String toReturn = "TRUCKINGS BOARD\n\n";
-        List<TruckingDTO> truckings = truckingMapper.getDriverBoard(driverUsername);
-        if (truckings.size() == 0 | truckings == null) {
-            toReturn += "[empty]";
-            return toReturn;
-        }
-        for (TruckingDTO trucking : truckings)
-            toReturn += printTrucking(trucking);
-        return toReturn;
+    public List<TruckingDTO> printBoardOfDriver(int driverUsername) throws Exception {
+        return truckingMapper.getDriverBoard(driverUsername);
     }
 
-    public String printTruckingsHistoryOfDriver(int driverUsername) throws Exception {
-        String toReturn = "            TRUCKINGS HISTORY\n\n";
-        List<TruckingDTO> truckings = truckingMapper.getDriverHistoryTruckings(driverUsername);
-        if (truckings.size() == 0 | truckings == null) {
-            toReturn += "[empty]";
-            return toReturn;
-        }
-        for (TruckingDTO trucking : truckings)
-            toReturn += printTrucking(trucking);
-        return toReturn;
+    public List<TruckingDTO> printTruckingsHistoryOfDriver(int driverUsername) throws Exception {
+        return truckingMapper.getDriverHistoryTruckings(driverUsername);
     }
 
-    public String printFutureTruckingsOfDriver(int driverUsername) throws Exception {
-        String toReturn = "            FUTURE TRUCKINGS\n\n";
-        List<TruckingDTO> truckings = truckingMapper.getDriverFutureTruckings(driverUsername);
-        if (truckings.size() == 0 | truckings == null) {
-            toReturn += "[empty]";
-            return toReturn;
-        }
-        for (TruckingDTO trucking : truckings)
-            toReturn += printTrucking(trucking);
-        return toReturn;
+    public List<TruckingDTO> printFutureTruckingsOfDriver(int driverUsername) throws Exception {
+        return truckingMapper.getDriverFutureTruckings(driverUsername);
     }
 
-    public String printBoardOfVehicle(String registrationPlate) throws Exception {
-        String toReturn = "TRUCKINGS BOARD\n\n";
-        List<TruckingDTO> truckings = truckingMapper.getVehicleBoard(registrationPlate);
-        if (truckings.size() == 0 | truckings == null) {
-            toReturn += "[empty]";
-            return toReturn;
-        }
-        for (TruckingDTO trucking : truckings)
-            toReturn += printTrucking(trucking);
-        return toReturn;
+    public List<TruckingDTO> printBoardOfVehicle(String registrationPlate) throws Exception {
+        return truckingMapper.getVehicleBoard(registrationPlate);
     }
 
-    public String printTruckingsHistoryOfVehicle(String registrationPlate) throws Exception {
-        String toReturn = "            TRUCKINGS HISTORY\n\n";
-        List<TruckingDTO> truckings = truckingMapper.getVehicleHistoryTruckings(registrationPlate);
-        if (truckings.size() == 0 | truckings == null) {
-            toReturn += "[empty]";
-            return toReturn;
-        }
-        for (TruckingDTO trucking : truckings)
-            toReturn += printTrucking(trucking);
-        return toReturn;
+    public List<TruckingDTO> printTruckingsHistoryOfVehicle(String registrationPlate) throws Exception {
+        return truckingMapper.getVehicleHistoryTruckings(registrationPlate);
     }
 
-    public String printFutureTruckingsOfVehicle(String registrationPlate) throws Exception {
-        String toReturn = "            FUTURE TRUCKINGS\n\n";
-        List<TruckingDTO> truckings = truckingMapper.getVehicleFutureTruckings(registrationPlate);
-        if (truckings.size() == 0 | truckings == null) {
-            toReturn += "[empty]";
-            return toReturn;
-        }
-        for (TruckingDTO trucking : truckings)
-            toReturn += printTrucking(trucking);
-        return toReturn;
+    public List<TruckingDTO> printFutureTruckingsOfVehicle(String registrationPlate) throws Exception {
+        return truckingMapper.getVehicleFutureTruckings(registrationPlate);
     }
 
     public List<String> addSourcesToTrucking(int truckManagerID, int truckingId, List<String[]> sources) throws Exception {
@@ -271,7 +202,7 @@ public class TruckManagerController {
         }
     }
 
-    public void updateSourcesOnTrucking(int truckManagerID, int truckingId, List<String[]> sources) throws Exception {
+    public List<String> updateSourcesOnTrucking(int truckManagerID, int truckingId, List<String[]> sources) throws Exception {
         TruckingDTO trucking = truckingMapper.getTruckingByID(truckingId);
         if (trucking.getTruckManager() != truckManagerID)
             throw new IllegalArgumentException("Oops, you have not any trucking with that id");
@@ -279,7 +210,7 @@ public class TruckManagerController {
         List<SiteDTO> sources_ = checkSites(sources);
         truckingMapper.removeSourcesTrucking(truckingId);
         try {
-            truckingMapper.addTruckingSources(truckingId, sources_);
+            return truckingMapper.addTruckingSources(truckingId, sources_);
         }
         catch (Exception e) {
             try {
@@ -295,7 +226,7 @@ public class TruckManagerController {
         }
     }
 
-    public void updateDestinationsOnTrucking(int truckManagerID, int truckingId, List<String[]> destinations) throws Exception {
+    public List<String> updateDestinationsOnTrucking(int truckManagerID, int truckingId, List<String[]> destinations) throws Exception {
         TruckingDTO trucking = truckingMapper.getTruckingByID(truckingId);
         if (trucking.getTruckManager() != truckManagerID)
             throw new IllegalArgumentException("Oops, you have not any trucking with that id");
@@ -303,7 +234,7 @@ public class TruckManagerController {
         List<SiteDTO> destinations_ = checkSites(destinations);
         truckingMapper.removeDestinationsTrucking(truckingId);
         try {
-            truckingMapper.addTruckingDestinations(truckingId, destinations_);
+            return truckingMapper.addTruckingDestinations(truckingId, destinations_);
         }
         catch (Exception e) {
             try {
@@ -342,13 +273,13 @@ public class TruckManagerController {
         }
     }
 
-    public void updateVehicleOnTrucking(int truckManagerID, int driverUsername, int truckingId, String registrationPlateOfVehicle) throws Exception {
+    public void updateVehicleOnTrucking(int truckManagerID, int truckingId, String registrationPlateOfVehicle) throws Exception {
         TruckingDTO trucking = truckingMapper.getTruckingByID(truckingId);
         if (trucking == null)
             throw new IllegalArgumentException("There is no trucking with id: " + truckingId);
         if (trucking.getTruckManager() != truckManagerID)
             throw new IllegalArgumentException("Oops, you have not any trucking with that id");
-        if (!checkDriverLicenseMatch(driverUsername, registrationPlateOfVehicle))
+        if (!checkDriverLicenseMatch(trucking.getDriverUsername(), registrationPlateOfVehicle))
             throw new IllegalArgumentException("Oops, the driver does not have a driver's license compatible with this vehicle");
         checkConflictsVehicle(trucking.getDriverUsername(), registrationPlateOfVehicle, trucking.getDate(), trucking.getHours(), trucking.getMinutes());
         if (!truckingMapper.updateVehicle(truckingId, registrationPlateOfVehicle))
@@ -540,7 +471,7 @@ public class TruckManagerController {
         return true;
     }
 
-    private boolean checkTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, int driverUsername, List<String[]> sources, List<String[]> destinations, List<Map<String,Integer>> products,long hours, long minutes) {
+    private boolean checkTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, int driverUsername, List<String[]> sources, List<String[]> destinations, Map<String,Integer> products,long hours, long minutes) {
         if (registrationPlateOfVehicle == null)
             throw new NullPointerException("The registration plate is empty");
         if (date == null)
@@ -621,6 +552,5 @@ public class TruckManagerController {
 
     public void forTests() {
         truckingIdCounter=1;
-
     }
 }

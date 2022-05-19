@@ -9,6 +9,10 @@ public class VehicleMapper {
     public VehicleMapper() throws Exception {
     }
 
+    public void deleteDB() {
+        vehicleIDMapper.resetData();
+    }
+
     private String ConvertResultSetToDTO(ResultSet rs) throws SQLException {
         return rs.getString(1);
     }
@@ -30,7 +34,9 @@ public class VehicleMapper {
                 return false;
         }
         catch (Exception e){
-            throw new Exception(e.getMessage());
+            if (e.getMessage().equals("[SQLITE_CONSTRAINT_PRIMARYKEY]  A PRIMARY KEY constraint failed (UNIQUE constraint failed: Vehicles.registration_plate)"))
+                throw new IllegalArgumentException("Oops, there is another vehicle with that registration plate");
+            throw new IllegalArgumentException("There was an error: " + e.getMessage());
         }
         return n == 1;
     }
@@ -51,7 +57,7 @@ public class VehicleMapper {
                 if (rs.next())
                     return rs.getString(1);
                 else
-                    throw new Exception("Oops, there is no vehicle with this driver's license");
+                    throw new Exception("Oops, there is no vehicle with this registration plate");
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }

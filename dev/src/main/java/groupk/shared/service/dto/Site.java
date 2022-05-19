@@ -1,7 +1,7 @@
 package groupk.shared.service.dto;
 
 public class Site {
-    public Site(String contactName, String contactPhone, Area area, String city, String street, int houseNumber, int apartment) {
+    public Site(String contactName, String contactPhone, String area, String city, String street, int houseNumber, int floor, int apartment) {
         this.contactName = contactName;
         this.contactPhone = contactPhone;
         this.area = area;
@@ -9,19 +9,15 @@ public class Site {
         this.street = street;
         this.houseNumber = houseNumber;
         this.apartment = apartment;
-    }
-
-    public static enum Area {
-        South,
-        Center,
-        North
+        this.floor = floor;
     }
 
     public String contactName;
     public String contactPhone;
-    public Area area;
+    public String area;
     public String city;
     public String street;
     public int houseNumber;
     public int apartment;
+    public int floor;
 }

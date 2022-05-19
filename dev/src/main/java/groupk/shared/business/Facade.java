@@ -4,13 +4,14 @@ import groupk.shared.service.Response;
 import groupk.shared.service.dto.*;
 import groupk.workers.data.DalController;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Facade {
     EmployeesController employees;
     LogisticsController logistics;
 
-    public Facade() {
+    public Facade() throws Exception {
         employees = new EmployeesController();
         logistics = new LogisticsController();
     }
@@ -18,6 +19,10 @@ public class Facade {
     //fot test use
     public void deleteEmployeeDB(){
         employees.deleteEmployeeDB();
+    }
+
+    public void deleteLogisticsDB() {
+        logistics.deleteDB();
     }
 
     public void loadEmployeeDB(){ employees.loadEmployeeDB();}
@@ -54,6 +59,26 @@ public class Facade {
     }
 
     public Response<Employee> deleteEmployee(String subjectID, String employeeID) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return subject;
+        }
+        if (subject.getValue().role == Employee.Role.TruckingManger) {
+            Response<List<Delivery>> futureDeliveries = logistics.listFutureDeliveries(Integer.parseInt(subjectID));
+            if (futureDeliveries.isError() | futureDeliveries.getValue() == null)
+                return new Response<>("Oops, we are currently unable to find data on this trucking manager's leads.\n"+
+                        "Therefore, the operation cannot be performed at this time.");
+            if (futureDeliveries.getValue().size() > 0)
+                return new Response<>("Oops, the truck manager has future truckings. Before you address the issue, you will not be able to take action");
+        }
+        else if (subject.getValue().role == Employee.Role.Driver) {
+            Response<List<Delivery>> futureDeliveries = logistics.listFutureDeliveriesByDriver(Integer.parseInt(subjectID));
+            if (futureDeliveries.isError() | futureDeliveries.getValue() == null)
+                return new Response<>("Oops, we are currently unable to find data on this trucking manager's leads.\n"+
+                        "Therefore, the operation cannot be performed at this time.");
+            if (futureDeliveries.getValue().size() > 0)
+                return new Response<>("Oops, the truck manager has future truckings. Before you address the issue, you will not be able to take action");
+        }
         return employees.deleteEmployee(subjectID, employeeID);
     }
 
@@ -66,6 +91,7 @@ public class Facade {
     }
 
     public Response<Shift> removeEmployeeFromShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
+        //TODO: check availability of worker. need to know shift hours for that
         return employees.removeEmployeeFromShift(subjectID, date, type, employeeID);
     }
 
@@ -114,7 +140,7 @@ public class Facade {
     }
 
     // Previously removeTrucking
-    public Response<Delivery> deleteDelivery(String subjectID, int deliveryID) {
+    public Response<Boolean> deleteDelivery(String subjectID, int deliveryID) {
         Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
         if (subject.isError()) {
             return new Response<>(subject.getErrorMessage());
@@ -122,66 +148,226 @@ public class Facade {
         if (subject.getValue().role != Employee.Role.TruckingManger) {
             return new Response<>("Subject must be of trucking manager role.");
         }
-        return logistics.deleteDelivery(deliveryID);
+        return logistics.deleteDelivery(Integer.parseInt(subjectID), deliveryID);
     }
 
     // Previously printBoard
     public Response<List<Delivery>> listDeliveries(String subjectID) {
-        throw new UnsupportedOperationException("TODO");
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role == Employee.Role.TruckingManger) {
+            return logistics.listDeliveries(Integer.parseInt(subjectID));
+        }
+        if (subject.getValue().role == Employee.Role.Driver) {
+            return logistics.listDeliveriesByDriver(Integer.parseInt(subjectID));
+        }
+        else
+            return new Response<>("You are not authorized to perform this operation");
     }
 
-    // Previously printBoardOfDriver, printTruckingsHistoryOfDriver and printFutureTruckingsOfDriver.
-    // Both can be simplified to a single call and filter.
-    public Response<List<Delivery>> listDeliveriesByDriver(String subjectID, String driverID) {
-        throw new UnsupportedOperationException("TODO");
-    }
-
-    // Previously getVehiclesRegistrationPlates.
     public Response<List<String>> listVehicles(String subjectID) {
-        throw new UnsupportedOperationException("TODO");
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.listVehicles();
     }
 
-    // Previously addTrucking.
-    public Response<Delivery> createDelivery(String subjectID, String registrationPlateOfVehicle, Calendar date, String driverUsername, List<Site> sources, List<Site> destinations, List<Product> products, long durationInMinutes) {
-        throw new UnsupportedOperationException("TODO");
+    public Response<List<String>[]> createDelivery(String subjectID, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<Product> products, long hours, long minutes) {
+        Response<Employee> truckManager = employees.readEmployee(subjectID, subjectID);
+        if (truckManager.isError()) {
+            return new Response<>(truckManager.getErrorMessage());
+        }
+        if (truckManager.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        Response<Employee> driver = employees.readEmployee(subjectID, subjectID);
+        if (driver.isError()) {
+            return new Response<>(driver.getErrorMessage());
+        }
+        if (driver.getValue().role != Employee.Role.Driver) {
+            return new Response<>("There is no driver with id: " + driverUsername);
+        }
+        //TODO: check if there is storekeeper in shift
+        return logistics.createDelivery(Integer.parseInt(subjectID), registrationPlateOfVehicle, date, Integer.parseInt(driverUsername), sources, destinations, products, hours, minutes);
     }
 
-    // Previously printBoardOfVehicle.
-    // Since it now returns a list, it can be used like printTruckingsHistoryOfVehicle and printFutureTruckingsOfVehicle by filtering.
     public Response<List<Delivery>> listDeliveriesWithVehicle(String subjectID, String registration) {
-        throw new UnsupportedOperationException("TODO");
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.listDeliveriesWithVehicle(subjectID);
     }
 
-    // Instead of:
-    //   addProductToTrucking
-    //   updateSourcesOnTrucking
-    //   updateDestinationsOnTrucking
-    //   moveProductsToTrucking
-    //   updateVehicleOnTrucking
-    //   updateDriverOnTrucking
-    //   updateDateOnTrucking
-    //   updateDateOnTrucking
-    // Everything can be consistently done through a single method.
-    public Response<Delivery> updateDelivery(String subjectID, Delivery updated) {
-        throw new UnsupportedOperationException("TODO");
+    public Response<Boolean> createVehicle(String subjectID, String license, String registrationPlate, String model, int weight, int maxWeight) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.createVehicle(license, registrationPlate,model, weight, maxWeight);
     }
 
-    // Previously addVehicle.
-    public Response createVehicle(String subjectID, Driver.License license, String registrationPlate, String model, int weight, int maxWeight) {
-        throw new UnsupportedOperationException("TODO");
+    public Response<Boolean> setWeightForDelivery(String subjectID, int deliveryID, int weight) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.Driver) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.setWeightForDelivery(Integer.parseInt(subjectID), deliveryID, weight);
     }
 
-    public Response<Driver> createDriver(String subjectID, String employeeID, Set<Driver.License> licenses) {
-        throw new UnsupportedOperationException("TODO");
+    public Response<Boolean> addProductsToTrucking(String subjectID, int truckingID, Product products) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.addProductsToTrucking(Integer.parseInt(subjectID), truckingID, products);
     }
 
-    public Response<Driver> updateDriver(String subjectID, Driver updated) {
-        throw new UnsupportedOperationException("TODO");
+    public Response<List<String>> updateSources(String subjectID, int truckingID, List<Site> sources) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.updateSources(Integer.parseInt(subjectID), truckingID, sources);
     }
 
-    // Previously setWeightForTrucking.
-    // Haven't touched this one because I believe it might do more than updateDelivery.
-    public Response setWeightForDelivery(String subjectID, int deliveryID, int weight) {
-        throw new UnsupportedOperationException("TODO");
+    public Response<List<String>> updateDestination(String subjectID, int truckingID, List<Site> destinations) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.updateDestination(Integer.parseInt(subjectID), truckingID, destinations);
     }
+
+    public Response<List<String>> addSources(String subjectID, int truckingID, List<Site> sources) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.addSources(Integer.parseInt(subjectID), truckingID, sources);
+    }
+
+    public Response<List<String>> addDestination(String subjectID, int truckingID, List<Site> destinations) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.addDestination(Integer.parseInt(subjectID), truckingID, destinations);
+    }
+
+    public Response<Boolean> moveProducts(String subjectID, int truckingID, Product product) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.moveProducts(Integer.parseInt(subjectID), truckingID, product);
+    }
+
+    public Response<Boolean> updateVehicleOnTrucking(String subjectID, int truckingID, String registrationPlate) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.updateVehicleOnTrucking(Integer.parseInt(subjectID), truckingID, registrationPlate);
+    }
+
+    public Response<Boolean> updateDriverOnTrucking(String subjectID, int truckingID, String driverUsername) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        Response<Employee> driver = employees.readEmployee(subjectID, subjectID);
+        if (driver.isError()) {
+            return new Response<>(driver.getErrorMessage());
+        }
+        if (driver.getValue().role != Employee.Role.Driver) {
+            return new Response<>("There is no driver with id: " + driverUsername);
+        }
+        return logistics.updateDriverOnTrucking(Integer.parseInt(subjectID), truckingID, Integer.parseInt(driverUsername));
+    }
+
+    public Response<Boolean> updateDateOnTrucking(String subjectID, int truckingID, LocalDateTime newDate) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.TruckingManger) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.updateDateOnTrucking(Integer.parseInt(subjectID), truckingID, newDate);
+    }
+
+    public Response<Boolean> addLicenseForDriver(String subjectID, String license) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.Driver) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.addLicenseForDriver(Integer.parseInt(subjectID), license);
+    }
+
+    public Response<List<String>> getDriverLicenses(String subjectID) {
+        Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
+        if (subject.isError()) {
+            return new Response<>(subject.getErrorMessage());
+        }
+        if (subject.getValue().role != Employee.Role.Driver) {
+            return new Response<>("You are not authorized to perform this operation");
+        }
+        return logistics.getDriverLicenses(Integer.parseInt(subjectID));
+    }
+
+    public Response<String[]> getLicensesList() {
+        return logistics.getLicensesList();
+    }
+
+    public Response<String[]> getProductsSKUList() {
+        return logistics.getProductsSKUList();
+    }
+
+    public Response<String[]> getAreasList() {
+        return logistics.getAreasList();
+    }
+
 }

@@ -14,7 +14,13 @@ public class DriverLicencesMapper {
         driverLicencesIDMapper = DriverLicencesIDMapper.getInstance();
     }
 
+    public void deleteDB() {
+        driverLicencesIDMapper.resetData();
+    }
+
     public List<String> getMyLicenses(int username) throws Exception {
+        if (driverLicencesIDMapper.isDriverUpdated(username))
+            return driverLicencesIDMapper.getMyLicenses(username);
         List<String> DTOList = new LinkedList<String>();
         String query = "SELECT licence FROM Drivers_Licences Where username = '" + username +"'";
         try (Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
@@ -22,10 +28,12 @@ public class DriverLicencesMapper {
             ResultSet rs  = pstmt.executeQuery();
             while (rs.next()) {
                 DTOList.add(rs.getString(1));
+                driverLicencesIDMapper.addDLicense(username, rs.getString(1));
             }
         } catch (Exception e) {
             throw new Exception("Oops, there was unexpected problem with get the licenses from the driver: \"" + username + "\"\nError description: " + e.getMessage());
         }
+        driverLicencesIDMapper.updateDriver(username);
         return DTOList;
     }
 
@@ -38,7 +46,8 @@ public class DriverLicencesMapper {
                 prepStat.setInt(1, username);
                 prepStat.setString(2, license.name());
                 n = prepStat.executeUpdate();
-                driverLicencesIDMapper.driverLicencesIDMapper.put(username,license.name());
+                if (driverLicencesIDMapper.isDriverUpdated(username))
+                    driverLicencesIDMapper.addDLicense(username, license.name());
             }
             else
                 throw new Exception("The connection to the data has lost");

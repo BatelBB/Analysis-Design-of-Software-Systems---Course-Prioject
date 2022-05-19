@@ -71,8 +71,9 @@ public class DriverController {
 
     }
 
-    public boolean addLicense(int driverID, DLicense license) throws Exception {
-        return driverLicencesMapper.addLicence(driverID ,license);
+    public boolean addLicense(int driverID, String license) throws Exception {
+        DLicense _license = DLicense.castStringToDlLicense(license);
+        return driverLicencesMapper.addLicence(driverID ,_license);
     }
 
     public boolean setWeightForTrucking(int driverID, int truckingId, int weight) throws Exception {

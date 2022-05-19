@@ -3,12 +3,13 @@ package groupk.shared.service;
 import groupk.shared.business.Facade;
 import groupk.shared.service.dto.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Service {
     private Facade facade;
 
-    public Service(){
+    public Service() throws Exception {
         facade = new Facade();
     }
 
@@ -107,7 +108,7 @@ public class Service {
         return facade.setRequiredStaffInShift(subjectId, date, type, requiredStaff);
     }
 
-    public Response<Delivery> deleteDelivery(String subjectID, int deliveryID) {
+    public Response<Boolean> deleteDelivery(String subjectID, int deliveryID) {
         return facade.deleteDelivery(subjectID, deliveryID);
     }
 
@@ -115,39 +116,80 @@ public class Service {
         return facade.listDeliveries(subjectID);
     }
 
-    public Response<List<Delivery>> listDeliveriesByDriver(String subjectID, String driverID) {
-        return facade.listDeliveriesByDriver(subjectID, driverID);
-    }
-
     public Response<List<String>> listVehicles(String subjectID) {
         return facade.listVehicles(subjectID);
     }
 
-    public Response<Delivery> createDelivery(String subjectID, String registrationPlateOfVehicle, Calendar date, String driverUsername, List<Site> sources, List<Site> destinations, List<Product> products, long durationInMinutes) {
-        return facade.createDelivery(subjectID, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products, durationInMinutes);
+    public Response<List<String>[]> createDelivery(String subjectID, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<Product> products, long hours, long minutes) {
+        return facade.createDelivery(subjectID, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products, hours, minutes);
     }
 
     public Response<List<Delivery>> listDeliveriesWithVehicle(String subjectID, String registration) {
         return facade.listDeliveriesWithVehicle(subjectID, registration);
     }
 
-    public Response<Delivery> updateDelivery(String subjectID, Delivery updated) {
-        return facade.updateDelivery(subjectID, updated);
-    }
-
-    public Response createVehicle(String subjectID, Driver.License license, String registrationPlate, String model, int weight, int maxWeight) {
+    public Response<Boolean> createVehicle(String subjectID, String license, String registrationPlate, String model, int weight, int maxWeight) {
         return facade.createVehicle(subjectID, license, registrationPlate, model, weight, maxWeight);
     }
 
-    public Response<Driver> createDriver(String subjectID, String employeeID, Set<Driver.License> licenses) {
-        return facade.createDriver(subjectID, employeeID, licenses);
-    }
-
-    public Response<Driver> updateDriver(String subjectID, Driver updated) {
-        return facade.updateDriver(subjectID, updated);
-    }
-
-    public Response setWeightForDelivery(String subjectID, int deliveryID, int weight) {
+    public Response<Boolean> setWeightForDelivery(String subjectID, int deliveryID, int weight) {
         return facade.setWeightForDelivery(subjectID, deliveryID, weight);
     }
+
+    public Response<Boolean> addProductsToTrucking(String subjectID, int truckingID, Product products) {
+        return facade.addProductsToTrucking(subjectID, truckingID, products);
+    }
+
+    public Response<List<String>> updateSources(String subjectID, int truckingID, List<Site> sources) {
+        return facade.updateSources(subjectID, truckingID, sources);
+    }
+
+    public Response<List<String>> updateDestination(String subjectID, int truckingID, List<Site> destinations) {
+        return facade.updateDestination(subjectID, truckingID, destinations);
+    }
+
+    public Response<List<String>> addSources(String subjectID, int truckingID, List<Site> sources) {
+        return facade.addSources(subjectID, truckingID, sources);
+    }
+
+    public Response<List<String>> addDestination(String subjectID, int truckingID, List<Site> destinations) {
+        return facade.addDestination(subjectID, truckingID, destinations);
+    }
+
+    public Response<Boolean> moveProducts(String subjectID, int truckingID, Product product) {
+        return facade.moveProducts(subjectID, truckingID, product);
+    }
+
+    public Response<Boolean> updateVehicleOnTrucking(String subjectID, int truckingID, String registrationPlate) {
+        return facade.updateVehicleOnTrucking(subjectID, truckingID, registrationPlate);
+    }
+
+    public Response<Boolean> updateDriverOnTrucking(String subjectID, int truckingID, String driverUsername) {
+        return facade.updateDriverOnTrucking(subjectID, truckingID, driverUsername);
+    }
+
+    public Response<Boolean> updateDateOnTrucking(String subjectID, int truckingID, LocalDateTime newDate) {
+        return facade.updateDateOnTrucking(subjectID, truckingID, newDate);
+    }
+
+    public Response<Boolean> addLicenseForDriver(String subjectID, String license) {
+        return facade.addLicenseForDriver(subjectID, license);
+    }
+
+    public Response<List<String>> getDriverLicenses(String subjectID) {
+        return facade.getDriverLicenses(subjectID);
+    }
+
+    public Response<String[]> getLicensesList() {
+        return facade.getLicensesList();
+    }
+
+    public Response<String[]> getProductsSKUList() {
+        return facade.getProductsSKUList();
+    }
+
+    public Response<String[]> getAreasList() {
+        return facade.getAreasList();
+    }
+
 }

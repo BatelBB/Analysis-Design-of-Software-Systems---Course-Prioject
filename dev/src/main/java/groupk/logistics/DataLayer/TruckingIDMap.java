@@ -28,9 +28,19 @@ public class TruckingIDMap {
         return singletonTruckingIDMapInstance;
     }
 
+    public void resetData() {
+        truckingsMap = new ConcurrentHashMap<Integer, TruckingDTO>();
+        truckingsList = new LinkedList<TruckingDTO>();
+        usersHaveUpdatedData = new LinkedList<Integer>();
+        vehiclesHaveUpdatedData = new LinkedList<String>();
+    }
+
     public void insertTrucking(TruckingDTO trucking) {
-        if (truckingsMap.containsKey(trucking.getId()))
+        if (truckingsMap.containsKey(trucking.getId())) {
+            removeTrucking(trucking.getId());
+            addToList(trucking);
             truckingsMap.put(trucking.getId(), trucking);
+        }
         else {
             addToList(trucking);
             truckingsMap.put(trucking.getId(), trucking);

@@ -14,6 +14,10 @@ public class TruckingMapper {
         truckingIDMap = TruckingIDMap.getInstance();
     }
 
+    public void deleteDB() {
+        truckingIDMap.resetData();
+    }
+
     public List<String>[] addTrucking(TruckingDTO trucking) throws Exception {
         List<String> sourcesExceptions;
         List<String> destinationsExceptions;

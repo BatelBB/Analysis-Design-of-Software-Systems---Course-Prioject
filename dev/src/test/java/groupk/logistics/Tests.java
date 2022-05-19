@@ -1,6 +1,8 @@
 package groupk.logistics;
 
 
+import groupk.logistics.DataLayer.TruckingIDMap;
+import groupk.logistics.DataLayer.TruckingMapper;
 import groupk.logistics.DataLayer.myDataBase;
 import groupk.logistics.business.DLicense;
 import groupk.logistics.business.DriverController;
@@ -8,8 +10,9 @@ import groupk.logistics.business.TruckManagerController;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
 
 import java.sql.Time;
 import java.time.LocalDate;
@@ -35,6 +38,7 @@ public class Tests {
 
     private void resetDB () throws Exception {
         myDataBase.deleteDB();
+        truckManagerController.deleteDB();
         myDataBase.createNewTable();
         truckManagerController.forTests();
     }
@@ -44,10 +48,10 @@ public class Tests {
     @Test
     public void addLicenses() throws Exception {
         resetDB();
-        assertEquals(true, driverController.addLicense(319034121, DLicense.B));
-        assertEquals(true, driverController.addLicense(319034121, DLicense.C));
+        assertEquals(true, driverController.addLicense(319034121, "B"));
+        assertEquals(true, driverController.addLicense(319034121, "C"));
         try {
-            assertEquals(true, driverController.addLicense(319034121, DLicense.B));
+            assertEquals(true, driverController.addLicense(319034121, "B"));
         } catch (Exception e) {
             assertEquals(e.getMessage(), "Oops, there was unexpected problem with add the license 'B' to the driver: '319034121'\n" +
                     "Error description: [SQLITE_CONSTRAINT_PRIMARYKEY]  A PRIMARY KEY constraint failed (UNIQUE constraint failed: Drivers_Licences.username, Drivers_Licences.licence)");
@@ -63,7 +67,7 @@ public class Tests {
             truckManagerController.addVehicle("B","12345678","volvo",20,40);
         }
         catch (Exception e) {
-            assertEquals(e.getMessage(), "[SQLITE_CONSTRAINT_PRIMARYKEY]  A PRIMARY KEY constraint failed (UNIQUE constraint failed: Vehicles.registration_plate)");
+            assertEquals(e.getMessage(), "Oops, there is another vehicle with that registration plate");
         }
         truckManagerController.addVehicle("B", "12315678", "mercedes", 4, 32);
         assertEquals(true, truckManagerController.getVehiclesRegistrationPlates().size() == 2);
@@ -75,7 +79,7 @@ public class Tests {
     @Test
     public void addTrucking() throws Exception {
         resetDB();
-        driverController.addLicense(319034121, DLicense.B);
+        driverController.addLicense(319034121, "B");
         truckManagerController.addVehicle("B","12345678","volvo",20,40);
         LocalDate date =  LocalDate.of(2023,10,18);
         LocalTime time =  LocalTime.of(20,0,0);
@@ -87,14 +91,12 @@ public class Tests {
         List<String[]> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        List<Map<String,Integer>> products = new LinkedList<>();
         Map<String,Integer> product = new ConcurrentHashMap<>();
         product.put("eggs",2);
-        products.add(product);
-        truckManagerController.addTrucking(1,"12345678",localDateTime,319034121,sources,destinations,products,2,0);
+        truckManagerController.addTrucking(1,"12345678",localDateTime,319034121,sources,destinations,product,2,0);
         truckManagerController.forTests();
         try {
-            truckManagerController.addTrucking(1,"12345678",localDateTime,319034121,sources,destinations,products,2,0);
+            truckManagerController.addTrucking(1,"12345678",localDateTime,319034121,sources,destinations,product,2,0);
         } catch (Exception e) {
             assertEquals(e.getMessage(), "Oops, there is another trucking at the same date and with the same driver");
         }
@@ -102,8 +104,9 @@ public class Tests {
     }
 
     private void setDetails() throws Exception {
-        driverController.addLicense(319034121, DLicense.B);
+        driverController.addLicense(319034121, "B");
         truckManagerController.addVehicle("B","12345678","volvo",20,40);
+        truckManagerController.addVehicle("B","12315678","skoda",10,50);
         LocalDate date =  LocalDate.of(2023,10,18);
         LocalTime time =  LocalTime.of(20,0,0);
         LocalDateTime localDateTime =  LocalDateTime.of(date,time);
@@ -114,11 +117,9 @@ public class Tests {
         List<String[]> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        List<Map<String,Integer>> products = new LinkedList<>();
         Map<String,Integer> product = new ConcurrentHashMap<>();
         product.put("Eggs_4902505139314",2);
-        products.add(product);
-        truckManagerController.addTrucking(1,"12345678",localDateTime,319034121,sources,destinations,products,2,0);
+        truckManagerController.addTrucking(1,"12345678",localDateTime,319034121,sources,destinations,product,2,0);
 
     }
 
@@ -127,12 +128,11 @@ public class Tests {
         resetDB();
         setDetails();
         try {
-            truckManagerController.updateVehicleOnTrucking(1,319034121,1,"12315678");
+            truckManagerController.updateVehicleOnTrucking(1,1,"12315678");
         }
         catch (Exception e) {
-            assertEquals(e.getMessage(),"There is a user already connected to the system");
+            assertEquals(e.getMessage(), null);
         }
-       driverController.printMyTruckings(319034121);
         assertEquals(driverController.printMyTruckings(319034121).contains("12315678"),true);
     }
 
@@ -191,8 +191,8 @@ public class Tests {
     public void getRegistrationPlates() throws Exception {
         resetDB();
         setDetails();
-        truckManagerController.addVehicle("B","12315678","mercedes",4,32);
-        assertEquals(truckManagerController.getVehiclesRegistrationPlates().size()==2,true);
+        truckManagerController.addVehicle("B","12315679","mercedes",4,32);
+        assertEquals(truckManagerController.getVehiclesRegistrationPlates().size()==3,true);
     }
     //
     @Test
