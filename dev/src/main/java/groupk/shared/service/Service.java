@@ -17,10 +17,6 @@ public class Service {
         facade.deleteEmployeeDB();
     }
 
-    public void deleteLogisticsDB() {
-        facade.deleteLogisticsDB();
-    }
-
     public void loadEmployeeDB(){ facade.loadEmployeeDB();}
 
     public  Response<Employee> createEmployee(

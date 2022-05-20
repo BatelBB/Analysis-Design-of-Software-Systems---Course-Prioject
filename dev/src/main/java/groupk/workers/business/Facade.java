@@ -72,17 +72,15 @@ public class Facade {
     }
 
     public Employee readEmployee(String subjectID, String employeeID) {
-        Employee employee = dataEmployeeToService(employees.read(employeeID));
-        if (subjectID.equals(employeeID) || employees.isFromHumanResources(subjectID) || employee.role.equals(Employee.Role.TruckingManger)) {
-            return employee;
+        if (subjectID.equals(employeeID) || employees.isFromHumanResources(subjectID)) {
+            return dataEmployeeToService(employees.read(employeeID));
         } else {
             throw new IllegalArgumentException("Subject must be authorized to read employees.");
         }
     }
 
     public Shift readShift(String subjectID, Calendar date ,Shift.Type type) {
-        Employee employee = dataEmployeeToService(employees.read(subjectID));
-        if (employees.isFromHumanResources(subjectID) || employee.role.equals(Employee.Role.TruckingManger)) {
+        if (employees.isFromHumanResources(subjectID)) {
             return dataShiftToService(shifts.getShift(date, serviceTypeToData(type)));
         }
         else {
