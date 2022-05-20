@@ -1,7 +1,5 @@
 # ADSS GROUP K Workers Module
 
-create employee foo 111 1 1 1 1 HumanResources
-
 ## Development
 
 The `dev` directory contains a Maven project.
@@ -15,3 +13,17 @@ mvn idea:idea
 
 An IntelliJ project file should now be present in the `dev` directory.
 Please don't commit IDE configurations to the repository.
+
+### Packaging
+
+Create a JAR by:
+
+```
+mvn clean package shade:shade
+```
+
+Running the JAR can be done with:
+
+```
+java -jar ./target/`workers-0.0.1.jar
+```
