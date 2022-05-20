@@ -84,8 +84,8 @@ public class DalController {
                 "\tPRIMARY KEY(\"Date\",\"Type\",\"EmployeeID\")\n" +
                 ");");
         try (
-            Connection connection = DriverManager.getConnection(url);
-            Statement statement = connection.createStatement()){
+                Connection connection = DriverManager.getConnection(url);
+                Statement statement = connection.createStatement()){
             for (String table : tables) {
                 statement.addBatch(table);
             }

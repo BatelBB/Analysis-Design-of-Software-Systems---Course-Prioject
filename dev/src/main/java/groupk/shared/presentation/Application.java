@@ -38,7 +38,7 @@ public class Application {
                         new AddDriverLicense()
                 },
                 () -> {
-                        keepGoing.set(false);
+                    keepGoing.set(false);
                 });
 
         Scanner input = new Scanner(System.in);

@@ -16,7 +16,6 @@ public class Facade {
         logistics = new LogisticsController();
     }
 
-    //fot test use
     public void deleteEmployeeDB(){
         employees.deleteEmployeeDB();
     }
@@ -45,8 +44,8 @@ public class Facade {
 
     // Previously addShift.
     public Response<Shift> createShift(String subjectID, Calendar date, Shift.Type type,
-                                    LinkedList<Employee> staff,
-                                    HashMap<Employee.Role, Integer> requiredStaff){
+                                       LinkedList<Employee> staff,
+                                       HashMap<Employee.Role, Integer> requiredStaff){
         return employees.createShift(subjectID, date, type, staff, requiredStaff);
     }
 
@@ -202,28 +201,26 @@ public class Facade {
             return new Response<>("The driver has no shift at that time");
         if(!isThereWorkerWithThisRoleInShift(subjectID, date, Employee.Role.Logistics))
             return new Response<>("There is no logistics worker in this shift to except delivery");
-        else if(true)
-            return null;
         else
             return logistics.createDelivery(Integer.parseInt(subjectID), registrationPlateOfVehicle, date, Integer.parseInt(driverUsername), sources, destinations, products, hours, minutes);
     }
 
-        private boolean isThereWorkerWithThisRoleInShift(String subjectID, LocalDateTime date, Employee.Role role){
-            //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
-            Calendar calendar = new GregorianCalendar(date.getYear(),date.getMonthValue()-1, date.getDayOfMonth());
-            Response<Shift> shift;
-            if(date.getHour() + 1 < 16) // the hour is from 0 to 23, therefore 16 is 17
-                shift = readShift(subjectID, calendar, Shift.Type.Morning);
-            else
-                shift = readShift(subjectID, calendar, Shift.Type.Evening);
-            if (shift.isError())
-                return false;
-            for(Employee employee: shift.getValue().getStaff()){
-                if(employee.role.equals(role))
-                    return true;
-            }
+    private boolean isThereWorkerWithThisRoleInShift(String subjectID, LocalDateTime date, Employee.Role role){
+        //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
+        Calendar calendar = new GregorianCalendar(date.getYear(),date.getMonthValue()-1, date.getDayOfMonth());
+        Response<Shift> shift;
+        if(date.getHour() + 1 < 16) // the hour is from 0 to 23, therefore 16 is 17
+            shift = readShift(subjectID, calendar, Shift.Type.Morning);
+        else
+            shift = readShift(subjectID, calendar, Shift.Type.Evening);
+        if (shift.isError())
             return false;
+        for(Employee employee: shift.getValue().getStaff()){
+            if(employee.role.equals(role))
+                return true;
         }
+        return false;
+    }
 
     private boolean isLogistHasShift(String subjectID, String ID, LocalDateTime date){
         //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12

@@ -65,9 +65,9 @@ public class CommandRunner {
             String space = new String(new char[indent - command.name().length()]).replace("\0", " ");
             System.out.println(
                     "  "
-                    + command.name()
-                    + space
-                    + command.description());
+                            + command.name()
+                            + space
+                            + command.description());
         }
         System.out.println("Usage:");
         System.out.println("  > <command> [arguments...]");
