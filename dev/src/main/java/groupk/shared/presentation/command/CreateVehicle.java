@@ -16,7 +16,7 @@ public class CreateVehicle implements Command {
 
     @Override
     public boolean isMatching(String line) {
-        return line.startsWith("create vehicle");
+        return false;
     }
 
     @Override

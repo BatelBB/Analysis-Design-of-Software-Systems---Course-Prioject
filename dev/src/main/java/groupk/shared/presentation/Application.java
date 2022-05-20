@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Application {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         AtomicBoolean keepGoing = new AtomicBoolean(true);
         CommandRunner runner = new CommandRunner(
                 new Command[] {

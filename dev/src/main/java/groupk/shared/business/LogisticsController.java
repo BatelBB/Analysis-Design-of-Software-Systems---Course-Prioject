@@ -242,7 +242,6 @@ public class LogisticsController {
     public Response<Boolean> deleteDB() {
         try {
             TruckManagerController.getInstance().deleteDB();
-            db.deleteDB();
             return new Response<Boolean>(true);
         }
         catch (Exception e) {

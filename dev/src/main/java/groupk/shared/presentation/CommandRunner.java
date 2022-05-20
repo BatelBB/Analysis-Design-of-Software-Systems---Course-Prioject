@@ -16,7 +16,7 @@ public class CommandRunner {
     private String subject;
     private Service service;
 
-    public CommandRunner(Command[] commands, Runnable onStop) throws Exception {
+    public CommandRunner(Command[] commands, Runnable onStop) {
         this.commands = commands;
         this.onStop = onStop;
         this.service = new Service();

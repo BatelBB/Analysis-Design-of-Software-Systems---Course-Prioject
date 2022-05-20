@@ -9,7 +9,7 @@ import java.util.*;
 public class Service {
     private Facade facade;
 
-    public Service() throws Exception {
+    public Service() {
         facade = new Facade();
     }
 
