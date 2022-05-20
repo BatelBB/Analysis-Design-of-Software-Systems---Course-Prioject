@@ -73,7 +73,8 @@ public class Facade {
 
     public Employee readEmployee(String subjectID, String employeeID) {
         Employee employee = dataEmployeeToService(employees.read(employeeID));
-        if (subjectID.equals(employeeID) || employees.isFromHumanResources(subjectID) || employee.role.equals(Employee.Role.TruckingManger)) {
+        Employee subject = dataEmployeeToService(employees.read(subjectID));
+        if (subjectID.equals(employeeID) || employees.isFromHumanResources(subjectID) || subject.role.equals(Employee.Role.TruckingManger)) {
             return employee;
         } else {
             throw new IllegalArgumentException("Subject must be authorized to read employees.");

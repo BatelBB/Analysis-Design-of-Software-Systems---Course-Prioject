@@ -59,10 +59,9 @@ public class VehicleMapper {
                 else
                     throw new IllegalArgumentException("Oops, there is no vehicle with this registration plate");
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                throw new IllegalArgumentException(e.getMessage());
             }
         }
-        return null;
     }
 
     public List<String> getAllRegistrationPlates() {
@@ -95,7 +94,7 @@ public class VehicleMapper {
                     return vehicle;
                 }
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                throw new IllegalArgumentException(e.getMessage());
             }
         }
         return null;

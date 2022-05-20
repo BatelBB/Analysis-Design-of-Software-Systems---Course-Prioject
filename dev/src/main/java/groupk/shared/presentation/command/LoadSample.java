@@ -57,14 +57,14 @@ public class LoadSample implements Command {
         products.add(product);
 
         Site source2 = new Site("miri", "0522226668", "north", "haifa", "miriSTR", 13, 2, 3);
-        Site destination2 = new Site("lior", "0536545648", "sourh", "beersheva", "liorSTR", 100, 1, 6);
+        Site destination2 = new Site("lior", "0536545648", "south", "beersheva", "liorSTR", 100, 1, 6);
         List<Site> sources2 = new LinkedList<>();
         List<Site> destinations2 = new LinkedList<>();
         sources2.add(source2);
         destinations2.add(destination2);
         Product product2 = new Product("Water_7290019056966", 2);
         List<Product> products2 = new LinkedList<>();
-        products.add(product);
+        products2.add(product2);
 
         // HR.
         Employee HR1 = runner.getService().createEmployee(
@@ -323,12 +323,16 @@ public class LoadSample implements Command {
                 r1).getValue();
         runner.getService().addEmployeeToShift(HR1.id, shift1.getDate(), shift1.getType(), D1.id);
         runner.getService().addEmployeeToShift(HR1.id, shift2.getDate(), shift2.getType(), D2.id);
+        runner.getService().addEmployeeToShift(HR1.id, shift1.getDate(), shift1.getType(), L1.id);
+        runner.getService().addEmployeeToShift(HR1.id, shift2.getDate(), shift2.getType(), L2.id);
 
+        String registrainPlate1 = "12315678";
+        String registrainPlate2 = "12345678";
         //add vehicles
         runner.getService().createVehicle(
                 TM1.id,
                 "B",
-                "12315678",
+                registrainPlate1,
                 "mercedes",
                 4,
                 32);
@@ -336,14 +340,13 @@ public class LoadSample implements Command {
         runner.getService().createVehicle(
                 TM1.id,
                 "C",
-                "12345678",
+                registrainPlate2,
                 "volvo",
                 8,
                 22);
 
 
         //add licences
-
         runner.getService().addLicenseForDriver(
                 D1.id,
                 DLicense.B.name());
@@ -353,13 +356,11 @@ public class LoadSample implements Command {
                 D2.id,
                 DLicense.C.name());
 
-
-        //add Truckings7
-
+        //add Truckings
         runner.getService().createDelivery(
                 TM1.id,
-                "12345678",
-                LocalDateTime.of(2023, Month.APRIL, 23, 8, 0),
+                registrainPlate2,
+                LocalDateTime.of(2023, Month.APRIL, 23, 9, 0),
                 D2.id,
                 sources,
                 destinations,
@@ -370,7 +371,7 @@ public class LoadSample implements Command {
 
         runner.getService().createDelivery(
                 TM1.id,
-                "12315678",
+                registrainPlate1,
                 LocalDateTime.of(2023, Month.APRIL, 21, 18, 0),
                 D1.id,
                 sources2,

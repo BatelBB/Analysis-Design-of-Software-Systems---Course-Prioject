@@ -482,15 +482,15 @@ public class TruckManagerController {
 
     private boolean checkTrucking(int id, String registrationPlateOfVehicle, LocalDateTime date, int driverUsername, List<String[]> sources, List<String[]> destinations, Map<String,Integer> products,long hours, long minutes) {
         if (registrationPlateOfVehicle == null)
-            throw new NullPointerException("The registration plate is empty");
+            throw new IllegalArgumentException("The registration plate is empty");
         if (date == null)
-            throw new NullPointerException("The date is empty");
+            throw new IllegalArgumentException("The date is empty");
         if (sources == null | sources.size() == 0)
-            throw new NullPointerException("The sources list is empty");
+            throw new IllegalArgumentException("The sources list is empty");
         if (destinations == null | destinations.size() == 0)
-            throw new NullPointerException("The destinations list is empty");
+            throw new IllegalArgumentException("The destinations list is empty");
         if (products == null | products.size() == 0)
-            throw new NullPointerException("The products list is empty");
+            throw new IllegalArgumentException("The products list is empty");
         return true;
     }
 

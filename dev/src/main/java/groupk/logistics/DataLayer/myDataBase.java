@@ -3,6 +3,9 @@ package groupk.logistics.DataLayer;
 import groupk.logistics.business.Area;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,25 +23,14 @@ public class myDataBase {
 
     public void deleteDB()
     {
-        try(Connection conn = DriverManager.getConnection(finalCurl);
-            Statement stmt = conn.createStatement();
-        ) {
-            String table1 = "DROP TABLE Vehicles";
-            String table2 = "DROP TABLE Drivers_Licences";
-            String table3 = "DROP TABLE Truckings";
-            String table4 = "DROP TABLE Truckings_Destinations";
-            String table5 = "DROP TABLE Truckings_Sources";
-            String table6 = "DROP TABLE Truckings_Products";
-
-            stmt.executeUpdate(table1);
-            stmt.executeUpdate(table2);
-            stmt.executeUpdate(table3);
-            stmt.executeUpdate(table4);
-            stmt.executeUpdate(table5);
-            stmt.executeUpdate(table6);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        try {
+            Connection c = getConnection();
+            c.close();
+        } catch (SQLException throwables) {
+            throw new IllegalArgumentException(throwables.getMessage());
+        }
+        if(new File(path).exists()){
+            new File(path).delete();
         }
     }
 
