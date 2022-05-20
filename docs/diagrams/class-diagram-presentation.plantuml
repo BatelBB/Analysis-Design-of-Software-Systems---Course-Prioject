@@ -1,0 +1,152 @@
+@startuml
+title Class Diagram - Presentation Layer
+
+package shared {
+    package shared.presentation {
+        class Application {
+            +main()
+        }
+
+        class CommandRunner {
+            -Service service
+            +introduce()
+            +invoke()
+            +stop()
+            +setSubject()
+            +getSubject(): String
+        }
+
+        package shared.presentation.command {
+            interface Command{
+                +name(): String
+                +description(): String
+                +isMatching(): boolean
+                +execute()
+            }
+
+            class AddShiftPreference {}
+
+            class AddShiftStaff {}
+
+            class CanWork {}
+
+            class CreateEmployee {}
+
+            class CreateShift {}
+
+            class DeleteEmployee {}
+
+            class DeleteShiftPreference {}
+
+            class GetEmployee {}
+
+            class ListEmployees {}
+
+            class ListShifts {}
+
+            class Login {}
+
+            class Quit {}
+
+            class UpdateShiftRequiredRole {}
+
+            class CreateDelivery {}
+
+            class AddDeliverySource {}
+
+            class AddDeliveryDestination {}
+
+            class AddDeliveryProduct {}
+
+            class DeleteDeliveryProduct {}
+
+            class DeleteDelivery {}
+
+            class ListDeliveries {}
+
+            class CreateVehicle {}
+
+            class ListVehicles {}
+
+            class AddDriverLicesnse {}
+
+            class UpdateDeliveryWeight {}
+
+            class LoadSample {}
+
+            Command <|-- AddShiftPreference: Is
+            Command <|-- AddShiftStaff: Is
+            Command <|-- CanWork: Is
+            Command <|-- CreateEmployee: Is
+            Command <|-- CreateShift: Is
+            Command <|-- DeleteEmployee: Is
+            Command <|-- DeleteShiftPreference: Is
+            Command <|-- GetEmployee: Is
+            Command <|-- ListEmployees: Is
+            Command <|-- ListShifts: Is
+            Command <|-- Login: Is
+            Command <|-- LoadSample: Is
+            Command <|-- Quit: Is
+            Command <|-- UpdateShiftRequiredRole: Is
+            Command <|-- CreateDelivery: Is
+            Command <|-- AddDeliverySource: Is
+            Command <|-- AddDeliveryDestination: Is
+            Command <|-- AddDeliveryProduct: Is
+            Command <|-- DeleteDeliveryProduct: Is
+            Command <|-- DeleteDelivery: Is
+            Command <|-- ListDeliveries: Is
+            Command <|-- CreateVehicle: Is
+            Command <|-- ListVehicles: Is
+            Command <|-- AddDriverLicesnse: Is
+            Command <|-- UpdateDeliveryWeight: Is
+
+            Command -[hidden]> CreateDelivery: Is
+            Command -[hidden]> AddDeliverySource: Is
+            Command -[hidden]> AddDeliveryDestination: Is
+            Command -[hidden]> AddDeliveryProduct: Is
+            Command -[hidden]> DeleteDeliveryProduct: Is
+            Command -[hidden]> DeleteDelivery: Is
+            Command -[hidden]> ListDeliveries: Is
+            Command -[hidden]> CreateVehicle: Is
+            Command -[hidden]> ListVehicles: Is
+            Command -[hidden]> AddDriverLicesnse: Is
+            Command -[hidden]> UpdateDeliveryWeight: Is
+        }
+
+        CommandRunner "1" *-- "*" Command: Runs
+        Application "1" *-- "1" CommandRunner: Applies
+    }
+
+    package shared.service {
+        class shared.service.Service {
+            -Facade facade
+            +loadEmployeeDB()
+            +deleteEmployeeDB()
+            +createShift(): Response<Employee>
+            +readEmployee(): Response<Employee>
+            +readShift(): Response<List<Shift>>
+            +deleteEmployee(): Response<Employee>
+            +listEmployees(): Response<List<Employee>>
+            +addEmployeeToShift(): Response<Shift>
+            +removeEmployeeFromShift() Response<Shift>
+            +updateEmployee(): Response<Employee>
+            +updateEmployeeShiftPreference(): Response<Employee>
+            +listShifts(): Response<List<Shift>>
+            +updateRequiredRoleInShift(): Response<Shift>
+            +deleteDelivery(): Response<Delivery>
+            +listDeliveries(): Response<List<Delivery>>
+            +listDeliveriesByDriver(): Response<List<Delivery>>
+            +listVehicles(): Response<List<String>>
+            +createDelivery(): Response<Delivery>
+            +listDeliveriesWithVehicle(): Response<List<Delivery>>
+            +updateDelivery(): Response<Delivery>
+            +createVehicle(): Response<String>
+            +createDriver(): Response<Driver>
+            +updateDriver(): Response<Driver>
+            +setWeightForDelivery()
+        }
+    }
+
+    CommandRunner "1" *-- "1" shared.service.Service: Uses
+}
+@enduml

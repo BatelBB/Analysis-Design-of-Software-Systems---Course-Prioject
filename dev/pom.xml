@@ -12,8 +12,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <start-class>package.Main</start-class>
   </properties>
 
   <dependencies>
@@ -47,7 +46,8 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.0</version>
           <configuration>
-            <release>8</release>
+            <source>1.8</source>
+            <target>1.8</target>
             <compilerArgs>
               <arg>-Xlint:unchecked</arg>
             </compilerArgs>
@@ -93,10 +93,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>3.3.0</version>
-          <configuration>
-            <!-- put your configurations here -->
-          </configuration>
+          <version>3.2.4</version>
           <executions>
             <execution>
               <phase>package</phase>
