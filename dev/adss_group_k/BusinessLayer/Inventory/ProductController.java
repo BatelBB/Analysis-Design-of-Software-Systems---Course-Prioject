@@ -1,5 +1,7 @@
 package adss_group_k.BusinessLayer.Inventory;
 
+import adss_group_k.shared.response.ResponseT;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -322,11 +324,11 @@ public class ProductController {
         return p.getMin_qty();
     }
 
-    public LinkedList<Integer> getDeficiency() {
-        LinkedList<Integer> deficiency=new LinkedList<>();
+    public ResponseT<Map<String, Integer>> getDeficiency() {
+        Map<String, Integer> deficiency=new HashMap<>();
         for (Product p:products.values()) {
-            deficiency.addAll(p.getDeficiency());
+            deficiency.put(p.getName(),p.getDeficiency().size());
         }
-        return deficiency;
+        return (ResponseT<Map<String, Integer>>) deficiency;
     }
 }
