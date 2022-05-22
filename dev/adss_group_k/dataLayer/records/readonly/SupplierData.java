@@ -1,10 +1,10 @@
-package adss_group_k.BusinessLayer.Suppliers.Entity.readonly;
+package adss_group_k.dataLayer.records.readonly;
 
-import adss_group_k.BusinessLayer.Suppliers.Entity.PaymentCondition;
+import adss_group_k.dataLayer.records.PaymentCondition;
 
 import java.time.DayOfWeek;
 
-public interface Supplier {
+public interface SupplierData {
     int getPpn();
 
     int getBankNumber();
@@ -17,5 +17,5 @@ public interface Supplier {
 
     DayOfWeek getRegularSupplyingDays();
 
-    Contact getContact();
+    ContactData getContact();
 }

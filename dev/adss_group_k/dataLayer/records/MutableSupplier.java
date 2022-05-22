@@ -1,22 +1,22 @@
-package adss_group_k.BusinessLayer.Suppliers.Entity;
+package adss_group_k.dataLayer.records;
 
 
 import adss_group_k.shared.utils.Utils;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
+import adss_group_k.dataLayer.records.readonly.SupplierData;
 
 import java.time.DayOfWeek;
 
-public class MutableSupplier implements Supplier {
+public class MutableSupplier extends BaseRecord<Integer> implements SupplierData {
     int ppn;
     int bankNumber;
     String name;
     boolean isDelivering;
     PaymentCondition paymentCondition;
     DayOfWeek regularSupplyingDays;
-    MutableContact contact;
+    ContactRecord contact;
 
     public MutableSupplier(int ppn, int bankNumber, String name, boolean isDelivering, PaymentCondition pm,
-                           DayOfWeek rsd, MutableContact contact){
+                           DayOfWeek rsd, ContactRecord contact){
         this.ppn = ppn;
         this.bankNumber = bankNumber;
         this.name = name;
@@ -77,11 +77,11 @@ public class MutableSupplier implements Supplier {
     }
 
     @Override
-    public MutableContact getContact() {
+    public ContactRecord getContact() {
         return contact;
     }
 
-    public void setContact(MutableContact contact) {
+    public void setContact(ContactRecord contact) {
         this.contact = contact;
     }
 
@@ -102,4 +102,8 @@ public class MutableSupplier implements Supplier {
         );
     }
 
+    @Override
+    public Integer key() {
+        return ppn;
+    }
 }
