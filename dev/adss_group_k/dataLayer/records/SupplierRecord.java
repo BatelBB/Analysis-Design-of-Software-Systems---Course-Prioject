@@ -6,7 +6,7 @@ import adss_group_k.dataLayer.records.readonly.SupplierData;
 
 import java.time.DayOfWeek;
 
-public class MutableSupplier extends BaseRecord<Integer> implements SupplierData {
+public class SupplierRecord extends BaseRecord<Integer> implements SupplierData {
     int ppn;
     int bankNumber;
     String name;
@@ -15,8 +15,8 @@ public class MutableSupplier extends BaseRecord<Integer> implements SupplierData
     DayOfWeek regularSupplyingDays;
     ContactRecord contact;
 
-    public MutableSupplier(int ppn, int bankNumber, String name, boolean isDelivering, PaymentCondition pm,
-                           DayOfWeek rsd, ContactRecord contact){
+    public SupplierRecord(int ppn, int bankNumber, String name, boolean isDelivering, PaymentCondition pm,
+                          DayOfWeek rsd, ContactRecord contact){
         this.ppn = ppn;
         this.bankNumber = bankNumber;
         this.name = name;

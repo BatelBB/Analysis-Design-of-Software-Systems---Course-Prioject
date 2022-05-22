@@ -2,7 +2,7 @@ package adss_group_k.dataLayer.records;
 
 import adss_group_k.dataLayer.records.readonly.ProductData;
 
-public class MutableProduct extends BaseRecord<Integer> implements ProductData {
+public class ProductRecord extends BaseRecord<Integer> implements ProductData {
     public final int id;
     private String name;
     private float customerPrice;
@@ -11,9 +11,9 @@ public class MutableProduct extends BaseRecord<Integer> implements ProductData {
     private int shelfQty;
     private String category, subcategory, subSubcategory;
 
-    public MutableProduct(int id, String name, float customerPrice,
-                          int minQty, int storageQty, int shelfQty,
-                          String category, String subcategory, String subSubcategory) {
+    public ProductRecord(int id, String name, float customerPrice,
+                         int minQty, int storageQty, int shelfQty,
+                         String category, String subcategory, String subSubcategory) {
         this.id = id;
         this.name = name;
         this.customerPrice = customerPrice;

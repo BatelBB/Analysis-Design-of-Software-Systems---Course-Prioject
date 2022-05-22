@@ -1,11 +1,9 @@
 package adss_group_k.dataLayer.dao;
 
-import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.dataLayer.records.ContactRecord;
-import adss_group_k.dataLayer.records.MutableSupplier;
+import adss_group_k.dataLayer.records.SupplierRecord;
 import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.dataLayer.records.readonly.SupplierData;
-import adss_group_k.shared.response.ResponseT;
 
 import java.sql.*;
 import java.time.DayOfWeek;
@@ -27,7 +25,7 @@ CREATE TABLE "Supplier" (
 	PRIMARY KEY("ppn" AUTOINCREMENT)
 )
  */
-public class SupplierDAO extends BaseDAO<Integer, MutableSupplier> {
+public class SupplierDAO extends BaseDAO<Integer, SupplierRecord> {
     public SupplierDAO(Connection conn) {
         super(conn);
     }
@@ -37,7 +35,7 @@ public class SupplierDAO extends BaseDAO<Integer, MutableSupplier> {
                                                   String contactEmail, String contactName, String contactPhone)
             {
         return create(
-                () -> new MutableSupplier(ppn, bankNumber, name, isDelivering,
+                () -> new SupplierRecord(ppn, bankNumber, name, isDelivering,
                         paymentCondition, regularSupplyDays,
                         new ContactRecord(contactName, contactEmail, contactPhone)),
 
@@ -85,20 +83,20 @@ public class SupplierDAO extends BaseDAO<Integer, MutableSupplier> {
     }
 
     @Override
-    MutableSupplier fetch(Integer ppn) throws SQLException, NoSuchElementException {
+    SupplierRecord fetch(Integer ppn) throws SQLException, NoSuchElementException {
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM Supplier WHERE ppn = ?");
         ps.setInt(1, ppn);
         ResultSet resultSet = ps.executeQuery();
         if(resultSet.next()) {
-            MutableSupplier sup = nextFromResultSet(ppn, resultSet);
+            SupplierRecord sup = nextFromResultSet(ppn, resultSet);
             return sup;
         }
         throw new NoSuchElementException("error finding supplier " + ppn);
     }
 
     @Override
-    Stream<MutableSupplier> fetchAll() throws SQLException {
-        ArrayList<MutableSupplier> all = new ArrayList<>();
+    Stream<SupplierRecord> fetchAll() throws SQLException {
+        ArrayList<SupplierRecord> all = new ArrayList<>();
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM Supplier");
         ResultSet rs = ps.executeQuery();
         while(rs.next()) {
@@ -112,7 +110,7 @@ public class SupplierDAO extends BaseDAO<Integer, MutableSupplier> {
         return runUpdate("DELETE FROM Supplier WHERE ppn=?", ps -> ps.setInt(1, ppn));
     }
 
-    private static MutableSupplier nextFromResultSet(Integer ppn, ResultSet resultSet) throws SQLException {
+    private static SupplierRecord nextFromResultSet(Integer ppn, ResultSet resultSet) throws SQLException {
         int bankNo = resultSet.getInt("bankNumber");
         String name = resultSet.getString("name");
         boolean delivering = resultSet.getBoolean("isDelivering");
@@ -125,7 +123,7 @@ public class SupplierDAO extends BaseDAO<Integer, MutableSupplier> {
                 resultSet.getString("contactEmail"),
                 resultSet.getString("contactPhone")
         );
-        MutableSupplier sup = new MutableSupplier(ppn, bankNo, name, delivering, pm, rsd, contact);
+        SupplierRecord sup = new SupplierRecord(ppn, bankNo, name, delivering, pm, rsd, contact);
         return sup;
     }
 

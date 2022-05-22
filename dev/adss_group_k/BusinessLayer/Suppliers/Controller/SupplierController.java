@@ -1,11 +1,17 @@
 package adss_group_k.BusinessLayer.Suppliers.Controller;
 
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
+import adss_group_k.BusinessLayer.Suppliers.Controller.BussinessObject.Supplier;
 import adss_group_k.BusinessLayer.Suppliers.Entity.MutableItem;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
 import adss_group_k.BusinessLayer.Suppliers.Entity.MutableContact;
 import adss_group_k.BusinessLayer.Suppliers.Entity.PaymentCondition;
 import adss_group_k.BusinessLayer.Suppliers.Entity.MutableSupplier;
+import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.ItemRecord;
+import adss_group_k.dataLayer.records.PaymentCondition;
+import adss_group_k.dataLayer.records.ProductRecord;
+import adss_group_k.dataLayer.records.readonly.SupplierData;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -14,28 +20,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SupplierController {
-    Map<Integer, MutableSupplier> suppliers;
+    Map<Integer, Supplier> suppliers;
     private OrderController orders;
     private ItemController items;
+    private PersistenceController dal;
 
-    public SupplierController(OrderController orders, ItemController items) {
+    public SupplierController(OrderController orders, ItemController items, PersistenceController dal) {
         suppliers = new HashMap<>();
         this.orders = orders;
         this.items = items;
+        this.dal = dal;
     }
 
-    public MutableSupplier create(int ppn, int bankAccount, String name, boolean isDelivering,
+    public Supplier create(int ppn, int bankAccount, String name, boolean isDelivering,
                                   PaymentCondition paymentCondition,
-                                  DayOfWeek regularSupplyingDays, MutableContact contact)
+                                  DayOfWeek regularSupplyingDays, String contactName,
+                           String contactPhone, String contactEmail)
             throws BusinessLogicException {
         validatePPNIsNew(ppn);
-        MutableSupplier supplier = new MutableSupplier(
-                ppn, bankAccount, name,
-                isDelivering, paymentCondition,
-                regularSupplyingDays, contact
+        SupplierData source = dal.suppliers.createSupplier(
+                ppn, bankAccount, name, isDelivering,
+                paymentCondition, regularSupplyingDays,
+                contactEmail, contactName, contactPhone
         );
-        suppliers.put(ppn, supplier);
-        return supplier;
+        Supplier object = new Supplier(source);
+        suppliers.put(ppn, object);
+        return object;
     }
 
     private void validatePPNIsNew(int ppn) throws BusinessLogicException {
@@ -53,62 +63,23 @@ public class SupplierController {
         if (!suppliers.containsKey(ppn)) {
             throw new BusinessLogicException("no such ppn:" + ppn);
         }
-        MutableSupplier s = suppliers.remove(ppn);
+        Supplier s = suppliers.remove(ppn);
         orders.deleteAllFromSupplier(s);
         items.deleteAllFromSupplier(s);
+        dal.suppliers.delete(ppn);
         return s;
     }
 
-    public MutableSupplier get(int ppn) throws BusinessLogicException{
-        if(!suppliers.containsKey(ppn)) {
+    public Supplier get(int ppn) throws BusinessLogicException {
+        if(!dal.suppliers.exists(ppn)) {
             throw new BusinessLogicException("No suppliers with this ppn: " + ppn);
         }
-        return suppliers.get(ppn);
-    }
-
-    public void setBankAccount(Supplier supplier, int bankAct) {
-        ((MutableSupplier) supplier).setBankNumber(bankAct);
-    }
-
-    public void setCompanyName(Supplier supplier, String newName) {
-        ((MutableSupplier) supplier).setName(newName);
-    }
-
-
-    public void setDelivering(Supplier supplier, boolean newValue) {
-        ((MutableSupplier) supplier).setDelivering(newValue);
-    }
-
-
-    public void setPaymentCondition(Supplier supplier, PaymentCondition payment) {
-        ((MutableSupplier) supplier).setPaymentCondition(payment);
-    }
-
-
-    public void setRegularSupplyingDays(Supplier supplier, DayOfWeek dayOfWeek) {
-        ((MutableSupplier) supplier).setRegularSupplyingDays(dayOfWeek);
-    }
-
-
-    public void setContact(Supplier supplier, String name, String phoneNumber, String email) {
-        MutableContact contact = (MutableContact) supplier.getContact();
-        contact.setName(name);
-        contact.setPhoneNumber(phoneNumber);
-        contact.setEmail(email);
-    }
-
-    public Supplier bestPriceSupplier(String itemName){
-        MutableItem[] itemsWithName =
-                (MutableItem[]) items.items.values().stream().filter(i -> i.getName().equals(itemName)).toArray();
-        float minPrice = itemsWithName[0].getPrice();
-        Supplier sup = itemsWithName[0].getSupplier();
-        for (MutableItem it: itemsWithName) {
-            minPrice = Math.min(minPrice, it.getPrice());
-            if(minPrice == it.getPrice())
-                sup = it.getSupplier();
-        }
-        return sup;
+        return suppliers.computeIfAbsent(ppn,
+                k -> new Supplier(dal.suppliers.get(ppn).getOrThrow(RuntimeException::new)));
 
     }
 
+    public void setPaymentCondition(int ppn, PaymentCondition payment) {
+       dal.suppliers.updatePaymentCondition(ppn, payment);
+    }
 }

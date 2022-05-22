@@ -1,6 +1,6 @@
 package adss_group_k.dataLayer.dao;
 
-import adss_group_k.dataLayer.records.MutableProduct;
+import adss_group_k.dataLayer.records.ProductRecord;
 import adss_group_k.dataLayer.records.readonly.ProductData;
 import adss_group_k.shared.response.ResponseT;
 
@@ -22,7 +22,7 @@ CREATE TABLE "Product" (
 	"category"	TEXT NOT NULL,
 )
  */
-public class ProductDAO extends BaseDAO<Integer, MutableProduct> {
+public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
 
     public ProductDAO(Connection conn) {
         super(conn);
@@ -32,7 +32,7 @@ public class ProductDAO extends BaseDAO<Integer, MutableProduct> {
                                          int minQty, int storageQty, int shelfQty,
                                          String category, String subcategory, String subSubcategory) {
         return create(
-            () -> new MutableProduct(id, name, customerPrice,
+            () -> new ProductRecord(id, name, customerPrice,
                 minQty, storageQty, shelfQty,
                 category, subcategory, subSubcategory),
             "INSERT INTO Product(" +
@@ -53,7 +53,7 @@ public class ProductDAO extends BaseDAO<Integer, MutableProduct> {
     }
 
     @Override
-    MutableProduct fetch(Integer id) throws SQLException, NoSuchElementException {
+    ProductRecord fetch(Integer id) throws SQLException, NoSuchElementException {
         PreparedStatement stmt = conn.prepareCall("SELECT * FROM Product WHERE id=?");
         stmt.setInt(1, id);
         ResultSet query = stmt.executeQuery();
@@ -64,10 +64,10 @@ public class ProductDAO extends BaseDAO<Integer, MutableProduct> {
     }
 
     @Override
-    Stream<MutableProduct> fetchAll() throws SQLException {
+    Stream<ProductRecord> fetchAll() throws SQLException {
         PreparedStatement stmt = conn.prepareCall("SELECT * FROM Product");
         ResultSet query = stmt.executeQuery();
-        ArrayList<MutableProduct> res = new ArrayList<>();
+        ArrayList<ProductRecord> res = new ArrayList<>();
         while(query.next()) {
             res.add(readOne(query.getInt("id"), query));
         }
@@ -91,8 +91,8 @@ public class ProductDAO extends BaseDAO<Integer, MutableProduct> {
         );
     }
 
-    private MutableProduct readOne(Integer id, ResultSet query) throws SQLException {
-        return new MutableProduct(
+    private ProductRecord readOne(Integer id, ResultSet query) throws SQLException {
+        return new ProductRecord(
                 id,
                 query.getString("name"),
                 query.getFloat("customerPrice"),
