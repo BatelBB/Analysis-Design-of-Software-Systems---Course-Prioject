@@ -2,6 +2,7 @@ package adss_group_k.Tests.Inventory;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
+import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService_V2;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 import org.junit.After;
 import org.junit.Before;
@@ -17,13 +18,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ServiceTest {
     private static Service service;
-    private static SupplierService_v2 supplierService;
+    private static ISupplierService_V2 supplierService;
     private static List<String> CategoryList;
     private static List<String> ProductListNames;
     private static List<Integer> ReportList;
 
     static void setService() {
-        supplierService=new SupplierService();
+        supplierService= (ISupplierService_V2) new SupplierService();
         service = new Service(supplierService);
     }
 
@@ -54,7 +55,7 @@ class ServiceTest {
 
     @Before
     void setCategoryList() {
-        CategoryList = service.getCategoriesNames().value;
+        CategoryList = service.getCategoriesNames().data;
     }
 
     @After
@@ -95,7 +96,7 @@ class ServiceTest {
         try {
             service.addCategory("Dairy Products");
             setCategoryList();
-            Category category = service.getCategory("Dairy Products").value;
+            Category category = service.getCategory("Dairy Products").data;
             assertEquals(category.getName(), "Dairy Products");
             service.removeCategory("Dairy Products");
             setCategoryList();
@@ -108,7 +109,7 @@ class ServiceTest {
 
     @Before
     void setProductIdes() {
-        ProductListNames = service.getProductIdes().value;
+        ProductListNames = service.getProductIdes().data;
     }
 
     @After
@@ -151,7 +152,7 @@ class ServiceTest {
 
     @Before
     void setReportListNames() {
-        ReportList = service.getReportListNames().value;
+        ReportList = service.getReportListNames().data;
     }
 
     @After
@@ -179,7 +180,7 @@ class ServiceTest {
         try {
             service.createMissingReport("MissingReport", 0, "Michel");
             setReportListNames();
-            Report report = service.getReport(0).value;
+            Report report = service.getReport(0).data;
             assertEquals(report.getName(), "MissingReport");
             service.removeReport(0);
             setReportListNames();
@@ -196,7 +197,7 @@ class ServiceTest {
             service.createMissingReport("MissingReport", 0, "Michel");
             setReportListNames();
             assertTrue(ReportList.contains(0));
-            assertTrue(service.createMissingReport("MissingReport", 1, "Michel").value instanceof MissingReport);
+            service.createMissingReport("MissingReport", 1, "Michel");
             service.removeReport(1);
             service.createMissingReport("MissingReport", 0, "Michel");
         } catch (Exception e) {
@@ -211,7 +212,7 @@ class ServiceTest {
             service.createExpiredReport("ExpiredReport", 0, "Michel");
             setReportListNames();
             assertTrue(ReportList.contains(0));
-            assertTrue(service.createExpiredReport("ExpiredReport", 1, "Michel").value instanceof ExpiredReport);
+            service.createExpiredReport("ExpiredReport", 1, "Michel");
             service.removeReport(1);
             service.createExpiredReport("ExpiredReport", 0, "Michel");
         } catch (Exception e) {
@@ -226,7 +227,7 @@ class ServiceTest {
             service.createBySupplierReport("BySupplierReport", 0, "Michel", "Tnuva");
             setReportListNames();
             assertTrue(ReportList.contains(0));
-            assertTrue(service.createBySupplierReport("MissingReport", 1, "Michel", "Tnuva").value instanceof bySupplierReport);
+            service.createBySupplierReport("MissingReport", 1, "Michel", "Tnuva");
             service.removeReport(1);
             service.createBySupplierReport("ExpiredReport", 0, "Michel", "Tnuva");
         } catch (Exception e) {
