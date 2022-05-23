@@ -1,6 +1,8 @@
 package adss_group_k.BusinessLayer.Inventory.Service;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
+import adss_group_k.BusinessLayer.Suppliers.Entity.MutableOrder;
+import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Order;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService_V2;
 import adss_group_k.shared.response.*;
 import adss_group_k.shared.response.Response;
@@ -176,17 +178,21 @@ public class Service {
     }
 
     public Response createDeficienciesOrder() {
-        Map<String, Integer> proAmount = product_service.getDeficiency().value;
-        return supplierService.createDeficienciesOrder(proAmount);
+        Map<String, Integer> proAmount = product_service.getDeficiency().data;
+        MutableOrder order= supplierService.createOrder();
+        for (Map.Entry<String, Integer> entry : proAmount.entrySet()) {
+            supplierService.orderItem(order.id, entry.getKey(), entry.getValue());
+        }
+        return null;
     }
 
     public Response updateOrder(String op, int orderId, String proName, int proAmount) {//need to check that the order contain the min_qnt
-        int minAmount = product_service.getMinAmount(proName).value;
+        int minAmount = product_service.getMinAmount(proName).data;
         switch (op) {
             case "Remove":
                 return supplierService.updateOrderAmount(orderId, proName); // just enter 0 in the amount, and it will be deleted
             case "Add":
-                return supplierService.AddProduct(orderId, proName, proAmount, minAmount);
+                return supplierService.orderItem(orderId, proName, proAmount, minAmount);
             case "UpdateAmount":
                 return supplierService.updateOrderAmount(orderId, proName, proAmount, minAmount);
         }

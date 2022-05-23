@@ -327,7 +327,8 @@ public class ProductController {
     public ResponseT<Map<String, Integer>> getDeficiency() {
         Map<String, Integer> deficiency=new HashMap<>();
         for (Product p:products.values()) {
-            deficiency.put(p.getName(),p.getDeficiency().size());
+            if (p.getMin_qty()>p.getItems().size())
+            deficiency.put(p.getName(),p.getMin_qty());
         }
         return (ResponseT<Map<String, Integer>>) deficiency;
     }

@@ -200,7 +200,7 @@ public class ProductService {
 
     public ResponseT<Map<String, Integer>> getDeficiency() {
         try {
-            return ResponseT.success(product_controller.getDeficiency());
+            return ResponseT.success(product_controller.getDeficiency().data);
         } catch (Exception e) {
             return ResponseT.error(e.getMessage());
         }

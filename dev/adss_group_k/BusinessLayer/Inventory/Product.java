@@ -248,12 +248,5 @@ public class Product {
             throw new Exception("item id doesn't exist");
     }
 
-    public LinkedList<Integer> getDeficiency() {
-        LinkedList<Integer> deficiency=new LinkedList<>();
-        for (ProductItem p:items.values()) {
-            if (p.is_defect())
-                deficiency.add(p.getId());
-        }
-        return deficiency;
-    }
+
 }
