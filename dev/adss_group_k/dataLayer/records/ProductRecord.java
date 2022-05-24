@@ -11,9 +11,7 @@ public class ProductRecord extends BaseRecord<Integer> implements ProductData {
     private int shelfQty;
     private String category, subcategory, subSubcategory;
 
-    public ProductRecord(int id, String name, float customerPrice,
-                         int minQty, int storageQty, int shelfQty,
-                         String category, String subcategory, String subSubcategory) {
+    public ProductRecord(int id, String name, float customerPrice, int minQty, int storageQty, int shelfQty, String category, String subcategory, String subSubcategory) {
         this.id = id;
         this.name = name;
         this.customerPrice = customerPrice;

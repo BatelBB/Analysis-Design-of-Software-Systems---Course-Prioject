@@ -1,4 +1,8 @@
-package adss_group_k.BusinessLayer.Inventory;
+package adss_group_k.BusinessLayer.Inventory.Controllers;
+
+import adss_group_k.BusinessLayer.Inventory.Product;
+import adss_group_k.BusinessLayer.Inventory.ProductItem;
+import adss_group_k.BusinessLayer.Inventory.Report;
 
 import java.util.*;
 import java.util.List;

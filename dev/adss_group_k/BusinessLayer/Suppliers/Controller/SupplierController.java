@@ -33,8 +33,8 @@ public class SupplierController {
     }
 
     public Supplier create(int ppn, int bankAccount, String name, boolean isDelivering,
-                                  PaymentCondition paymentCondition,
-                                  DayOfWeek regularSupplyingDays, String contactName,
+                           PaymentCondition paymentCondition,
+                           DayOfWeek regularSupplyingDays, String contactName,
                            String contactPhone, String contactEmail)
             throws BusinessLogicException {
         validatePPNIsNew(ppn);
@@ -71,7 +71,7 @@ public class SupplierController {
     }
 
     public Supplier get(int ppn) throws BusinessLogicException {
-        if(!dal.suppliers.exists(ppn)) {
+        if (!dal.suppliers.exists(ppn)) {
             throw new BusinessLogicException("No suppliers with this ppn: " + ppn);
         }
         return suppliers.computeIfAbsent(ppn,
@@ -80,6 +80,6 @@ public class SupplierController {
     }
 
     public void setPaymentCondition(int ppn, PaymentCondition payment) {
-       dal.suppliers.updatePaymentCondition(ppn, payment);
+        dal.suppliers.updatePaymentCondition(ppn, payment);
     }
 }

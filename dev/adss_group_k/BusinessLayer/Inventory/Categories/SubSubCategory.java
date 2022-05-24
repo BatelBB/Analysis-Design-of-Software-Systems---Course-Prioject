@@ -1,10 +1,10 @@
-package adss_group_k.BusinessLayer.Inventory;
+package adss_group_k.BusinessLayer.Inventory.Categories;
 
 import java.util.Map;
 
 public class SubSubCategory {
 
-    String name;
+    public String name;
 
     public SubSubCategory(String subSubCatName) {
         name = subSubCatName;

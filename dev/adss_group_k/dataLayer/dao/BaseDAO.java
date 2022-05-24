@@ -25,17 +25,14 @@ public abstract class BaseDAO<TEntityID, TEntity extends BaseRecord<TEntityID>> 
     public final ResponseT<TEntity> get(TEntityID id) {
         try {
             return ResponseT.success(cache.computeIfAbsent(id, this::fetchWithRuntimeExceptions));
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseT.error("no such entity");
         }
     }
 
     public final Stream<TEntity> all() throws SQLException {
         if (!cachedAll) {
-            fetchAll()
-                    .map(t -> new Tuple<TEntity, TEntityID>(t, t.key()))
-                    .filter(tuple -> !cache.containsKey(tuple.second))
-                    .forEach(tuple -> cache.put(tuple.second, tuple.first));
+            fetchAll().map(t -> new Tuple<TEntity, TEntityID>(t, t.key())).filter(tuple -> !cache.containsKey(tuple.second)).forEach(tuple -> cache.put(tuple.second, tuple.first));
             cachedAll = true;
         }
         return cache.values().stream();
@@ -58,18 +55,16 @@ public abstract class BaseDAO<TEntityID, TEntity extends BaseRecord<TEntityID>> 
             }
 
             return ps.executeUpdate();
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return -1;
         }
     }
 
 
-    protected final ResponseT<TEntity> create(Supplier<TEntity> factory,
-          String statement,
-          StatementInitialization... paramsInit) {
+    protected final ResponseT<TEntity> create(Supplier<TEntity> factory, String statement, StatementInitialization... paramsInit) {
         int res = runUpdate(statement, paramsInit);
-        if(res > 0) {
+        if (res > 0) {
             TEntity created = factory.get();
             cache.put(created.key(), created);
             return ResponseT.success(created);

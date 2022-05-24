@@ -1,6 +1,6 @@
 package adss_group_k.BusinessLayer.Inventory.Service;
 
-import adss_group_k.BusinessLayer.Inventory.ProductController;
+import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
 
 import java.time.LocalDateTime;

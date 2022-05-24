@@ -1,4 +1,4 @@
-package adss_group_k.BusinessLayer.Inventory;
+package adss_group_k.BusinessLayer.Inventory.Categories;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class Category {
 
     public void addSubCategory(String name) {
         if (subC.containsKey(name))
-            throw new IllegalArgumentException("The SubCategories already exists in the system");
+            throw new IllegalArgumentException("The SubCategory already exists in the system");
         else {
             SubCategory subCategory = new SubCategory(name);
             subC.put(name, subCategory);
@@ -34,17 +34,15 @@ public class Category {
     public void removeSubCategory(String name) {
         if (!subC.containsKey(name))
             throw new IllegalArgumentException("Category doesn't exists");
-        else {
+        else
             subC.remove(name);
-        }
     }
 
     public SubCategory getSubCategory(String name) {
         if (!subC.containsKey(name))
             throw new IllegalArgumentException("Category doesn't exists");
-        else {
+        else
             return subC.get(name);
-        }
     }
 }
 

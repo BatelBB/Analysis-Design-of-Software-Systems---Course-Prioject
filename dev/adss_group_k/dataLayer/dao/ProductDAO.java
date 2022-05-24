@@ -28,18 +28,10 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
         super(conn);
     }
 
-    public ResponseT<ProductData> create(int id, String name, float customerPrice,
-                                         int minQty, int storageQty, int shelfQty,
-                                         String category, String subcategory, String subSubcategory) {
+    public ResponseT<ProductData> create(int id, String name, float customerPrice, int minQty, int storageQty, int shelfQty, String category, String subcategory, String subSubcategory) {
         return create(
-            () -> new ProductRecord(id, name, customerPrice,
-                minQty, storageQty, shelfQty,
-                category, subcategory, subSubcategory),
-            "INSERT INTO Product(" +
-                    "id,name,customerPrice," +
-                    "minQty,storageQty,shelfQty," +
-                    "subSubcategory,subcategory,category" +
-                ")",
+                () -> new ProductRecord(id, name, customerPrice, minQty, storageQty, shelfQty, category, subcategory, subSubcategory),
+                "INSERT INTO Product(" + "id,name,customerPrice," + "minQty,storageQty,shelfQty," + "subSubcategory,subcategory,category" + ")",
                 ps -> ps.setInt(1, id),
                 ps -> ps.setString(2, name),
                 ps -> ps.setFloat(3, customerPrice),
@@ -57,7 +49,7 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
         PreparedStatement stmt = conn.prepareCall("SELECT * FROM Product WHERE id=?");
         stmt.setInt(1, id);
         ResultSet query = stmt.executeQuery();
-        if(!query.next()) {
+        if (!query.next()) {
             throw new NoSuchElementException("Product: " + id);
         }
         return readOne(id, query);
@@ -68,7 +60,7 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
         PreparedStatement stmt = conn.prepareCall("SELECT * FROM Product");
         ResultSet query = stmt.executeQuery();
         ArrayList<ProductRecord> res = new ArrayList<>();
-        while(query.next()) {
+        while (query.next()) {
             res.add(readOne(query.getInt("id"), query));
         }
         return res.stream();
@@ -84,25 +76,11 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
     }
 
     private int update(int id, String field, Object value, int type) {
-        return runUpdate(
-                "UPDATE Product SET " + field + "=? WHERE id=?",
-                ps -> ps.setObject(1, value, type),
-                ps -> ps.setInt(2, id)
-        );
+        return runUpdate("UPDATE Product SET " + field + "=? WHERE id=?", ps -> ps.setObject(1, value, type), ps -> ps.setInt(2, id));
     }
 
     private ProductRecord readOne(Integer id, ResultSet query) throws SQLException {
-        return new ProductRecord(
-                id,
-                query.getString("name"),
-                query.getFloat("customerPrice"),
-                query.getInt("minQty"),
-                query.getInt("storageQty"),
-                query.getInt("shelfQty"),
-                query.getString("category"),
-                query.getString("subcategory"),
-                query.getString("subSubcategory")
-        );
+        return new ProductRecord(id, query.getString("name"), query.getFloat("customerPrice"), query.getInt("minQty"), query.getInt("storageQty"), query.getInt("shelfQty"), query.getString("category"), query.getString("subcategory"), query.getString("subSubcategory"));
     }
 
 }

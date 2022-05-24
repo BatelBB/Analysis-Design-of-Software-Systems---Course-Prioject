@@ -1,5 +1,8 @@
-package adss_group_k.BusinessLayer.Inventory;
+package adss_group_k.BusinessLayer.Inventory.Controllers;
 
+import adss_group_k.BusinessLayer.Inventory.DiscountPair;
+import adss_group_k.BusinessLayer.Inventory.Product;
+import adss_group_k.BusinessLayer.Inventory.ProductItem;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.readonly.ProductData;
 import adss_group_k.shared.response.ResponseT;
@@ -16,9 +19,8 @@ public class ProductController {
 
 
     //singleton instance
-    public static ProductController getInstance() {
-        if (product_controller == null)
-            product_controller = new ProductController();
+    public static ProductController getInstance(PersistenceController dal) {
+        if (product_controller == null) product_controller = new ProductController(dal);
         return product_controller;
     }
 
@@ -38,23 +40,19 @@ public class ProductController {
                         if (p.getCat().equals(category) && p.getSub_cat().equals(sub_category) && p.getSub_sub_cat().equals(subsub_category))
                             for (ProductItem i : p.getItems().values())
                                 i.addCusDiscount(new DiscountPair(start_date, end_date, discount));
-                } else
-                    for (Product p : products.values())
-                        if (p.getCat().equals(category) && p.getSub_cat().equals(sub_category))
-                            for (ProductItem i : p.getItems().values())
-                                i.addCusDiscount(new DiscountPair(start_date, end_date, discount));
-            } else
-                for (Product p : products.values())
-                    if (p.getCat().equals(category))
+                } else for (Product p : products.values())
+                    if (p.getCat().equals(category) && p.getSub_cat().equals(sub_category))
                         for (ProductItem i : p.getItems().values())
                             i.addCusDiscount(new DiscountPair(start_date, end_date, discount));
+            } else for (Product p : products.values())
+                if (p.getCat().equals(category)) for (ProductItem i : p.getItems().values())
+                    i.addCusDiscount(new DiscountPair(start_date, end_date, discount));
         } else {
             if (sub_category == null || sub_category.equals("") || subsub_category == null || subsub_category.equals(""))
                 for (Product p : products.values())
                     for (ProductItem i : p.getItems().values())
                         i.addManDiscount(new DiscountPair(start_date, end_date, discount));
-            else
-                throw new Exception("missing category input");
+            else throw new Exception("missing category input");
         }
     }
 
@@ -103,10 +101,7 @@ public class ProductController {
     }
 
     public Product addProduct(String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
-        if (category_controller.getCategories().containsKey(category) &&
-                category_controller.getCategories().get(category).getSubC().containsKey(sub_category) &&
-                category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().containsKey(subsub_category)
-        ) {
+        if (category_controller.getCategories().containsKey(category) && category_controller.getCategories().get(category).getSubC().containsKey(sub_category) && category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().containsKey(subsub_category)) {
             if (name == null || name.equals("")) throw new Exception("product name empty");
             if (manufacturer == null || manufacturer.equals("")) throw new Exception("product name empty");
             priceLegal(man_price);
@@ -115,8 +110,10 @@ public class ProductController {
             if (supply_time < 0) throw new Exception("supply time smaller than 0");
             if (category == null || category.equals("")) throw new Exception("category name empty");
             if (sub_category == null || sub_category.equals("")) throw new Exception("sub_category name empty");
-            if (subsub_category == null || subsub_category.equals("")) throw new Exception("subsub_category name empty");
-            ProductData product = dal.products.create(product_ids,
+            if (subsub_category == null || subsub_category.equals(""))
+                throw new Exception("subsub_category name empty");
+            ProductData product_data = dal.getProducts().create(
+                    product_ids,
                     name,
                     cus_price,
                     min_qty,
@@ -124,24 +121,13 @@ public class ProductController {
                     0,
                     category_controller.getCategories().get(category).getName(),
                     category_controller.getCategories().get(category).getSubC().get(sub_category).getName(),
-                    category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().get(subsub_category).name).data;
-            Product p = new Product(
-                    product_ids,
-                    name,
-                    manufacturer,
-                    man_price,
-                    cus_price,
-                    min_qty,
-                    supply_time,
-                    category_controller.getCategories().get(category),
-                    category_controller.getCategories().get(category).getSubC().get(sub_category),
-                    category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().get(subsub_category)
-            );
+                    category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().get(subsub_category).name
+            ).data;
+            Product p = new Product(product_data);
             products.put(Integer.toString(product_ids), p);
             product_ids++;
             return p;
-        } else
-            throw new Exception("category doesn't exist");
+        } else throw new Exception("category doesn't exist");
     }
 
     public void removeProduct(int product_id) throws Exception {
@@ -232,15 +218,13 @@ public class ProductController {
 
     public boolean productsInCategory(String category) {
         for (Product p : products.values())
-            if (p.getCat().equals(category))
-                return false;
+            if (p.getCat().equals(category)) return false;
         return true;
     }
 
     public boolean productsInSubCategory(String category, String sub_category) {
         for (Product p : products.values())
-            if (p.getCat().equals(category) && p.getSub_cat().equals(sub_category))
-                return false;
+            if (p.getCat().equals(category) && p.getSub_cat().equals(sub_category)) return false;
         return true;
     }
 
@@ -301,8 +285,7 @@ public class ProductController {
     public ResponseT<Map<String, Integer>> getDeficiency() {
         Map<String, Integer> deficiency = new HashMap<>();
         for (Product p : products.values()) {
-            if (p.getMin_qty() > p.getItems().size())
-                deficiency.put(p.getName(), p.getMin_qty());
+            if (p.getMin_qty() > p.getItems().size()) deficiency.put(p.getName(), p.getMin_qty());
         }
         return (ResponseT<Map<String, Integer>>) deficiency;
     }

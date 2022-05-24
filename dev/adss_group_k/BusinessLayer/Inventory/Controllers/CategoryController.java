@@ -1,5 +1,8 @@
-package adss_group_k.BusinessLayer.Inventory;
+package adss_group_k.BusinessLayer.Inventory.Controllers;
 
+
+import adss_group_k.BusinessLayer.Inventory.Categories.Category;
+import adss_group_k.BusinessLayer.Inventory.Categories.SubCategory;
 
 import java.util.ArrayList;
 import java.util.HashMap;

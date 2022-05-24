@@ -1,6 +1,6 @@
 package adss_group_k.BusinessLayer.Inventory.Service;
 
-import adss_group_k.BusinessLayer.Inventory.ReportController;
+import adss_group_k.BusinessLayer.Inventory.Controllers.ReportController;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Report;
 import adss_group_k.shared.response.*;
 

@@ -1,4 +1,4 @@
-package adss_group_k.BusinessLayer.Inventory;
+package adss_group_k.BusinessLayer.Inventory.Categories;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,6 @@
 package adss_group_k.BusinessLayer.Inventory.Service.Objects;
 
-import adss_group_k.BusinessLayer.Inventory.SubCategory;
+import adss_group_k.BusinessLayer.Inventory.Categories.SubCategory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ public class Category {
         return name;
     }
 
-    public Category(adss_group_k.BusinessLayer.Inventory.Category category) {
+    public Category(adss_group_k.BusinessLayer.Inventory.Categories.Category category) {
         name = category.getName();
         subC = new HashMap<>();
         Map<String, SubCategory> BusinessSubC = category.getSubC();

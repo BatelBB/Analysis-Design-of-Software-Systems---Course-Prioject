@@ -1,8 +1,12 @@
 package adss_group_k.BusinessLayer.Inventory;
 
+import adss_group_k.BusinessLayer.Inventory.Categories.Category;
+import adss_group_k.BusinessLayer.Inventory.Categories.SubCategory;
+import adss_group_k.BusinessLayer.Inventory.Categories.SubSubCategory;
+import adss_group_k.dataLayer.records.readonly.ProductData;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class Product {
@@ -50,6 +54,22 @@ public class Product {
         this.min_qty = min_qty;
         this.supply_time = supply_time;
         this.items = items;
+    }
+
+    public Product(ProductData product) {
+        this.product_id = product.getId();
+        this.name = product.getName();
+        this.shelf_qty = product.getShelfQty();
+        this.storage_qty = product.getStorageQty();
+//        this.manufacturer = manufacturer;
+//        this.man_price = man_price;
+        this.cus_price = product.getCustomerPrice();
+        this.min_qty = product.getMinQty();
+//        this.supply_time = supply_time;
+//        this.items = items;
+        this.cat = product.getCategory();
+        this.sub_cat = product.getSubcategory();
+        this.sub_sub_cat = product.getSubSubcategory();
     }
 
     public Product(Product p) {
