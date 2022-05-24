@@ -1,5 +1,7 @@
 package adss_group_k.BusinessLayer.Inventory;
 
+import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.readonly.ProductData;
 import adss_group_k.shared.response.ResponseT;
 
 import java.time.LocalDateTime;
@@ -10,6 +12,8 @@ public class ProductController {
     private Map<String, Product> products;
     private final CategoryController category_controller;
     private static ProductController product_controller;
+    private PersistenceController dal;
+
 
     //singleton instance
     public static ProductController getInstance() {
@@ -19,42 +23,12 @@ public class ProductController {
     }
 
     //constructors
-    private ProductController() {
+    private ProductController(PersistenceController dal) {
         product_ids = 0;
         products = new HashMap<>();
         category_controller = CategoryController.getInstance();
+        this.dal = dal;
     }
-
-    //methods
-
-//    public void updateCategoryManDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) throws Exception {
-//        if (category != null && !category.equals("")) {
-//            if (sub_category != null && !sub_category.equals("")) {
-//                if (subsub_category != null && !subsub_category.equals("")) {
-//                    for (Product p : products.values())
-//                        if (p.getCat().equals(category) && p.getSub_cat().equals(sub_category) && p.getSub_sub_cat().equals(subsub_category))
-//                            for (ProductItem i : p.getItems().values())
-//                                i.addManDiscount(new DiscountPair(start_date, end_date, discount));
-//                } else
-//                    for (Product p : products.values())
-//                        if (p.getCat().equals(category) && p.getSub_cat().equals(sub_category))
-//                            for (ProductItem i : p.getItems().values())
-//                                i.addManDiscount(new DiscountPair(start_date, end_date, discount));
-//            } else
-//                for (Product p : products.values())
-//                    if (p.getCat().equals(category)) {
-//                        for (ProductItem i : p.getItems().values())
-//                            i.addManDiscount(new DiscountPair(start_date, end_date, discount));
-//                    }
-//        } else {
-//            if (sub_category == null || sub_category.equals("") || subsub_category == null || subsub_category.equals(""))
-//                for (Product p : products.values())
-//                    for (ProductItem i : p.getItems().values())
-//                        i.addManDiscount(new DiscountPair(start_date, end_date, discount));
-//            else
-//                throw new Exception("missing category input");
-//        }
-//    }
 
     public void updateCategoryCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) throws Exception {
         if (category != null && !category.equals("")) {
@@ -91,19 +65,11 @@ public class ProductController {
                     i.addManDiscount(new DiscountPair(start_date, end_date, discount));
     }
 
-
     public void updateProductCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) throws Exception {
         productExists(product_id);
         for (ProductItem i : products.get(Integer.toString(product_id)).getItems().values())
             i.addCusDiscount(new DiscountPair(start_date, end_date, discount));
     }
-
-//    public void updateItemManDiscount(int product_id, int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) throws Exception {
-//        discountLegal(discount);
-//        checkDates(start_date, end_date);
-//        productExists(product_id);
-//        products.get(Integer.toString(product_id)).updateItemManDiscount(item_id, discount, start_date, end_date);
-//    }
 
     public void updateItemCusDiscount(int product_id, int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) throws Exception {
         discountLegal(discount);
@@ -118,7 +84,7 @@ public class ProductController {
         products.get(Integer.toString(product_id)).setMan_price(price);
     }
 
-    public void updateProductCusPrice(int product_id, double price) throws Exception {
+    public void updateProductCusPrice(int product_id, float price) throws Exception {
         priceLegal(price);
         productExists(product_id);
         products.get(Integer.toString(product_id)).setCus_price(price);
@@ -136,10 +102,10 @@ public class ProductController {
         return products.get(Integer.toString(product_id)).getItemLocation(item_id);
     }
 
-    public Product addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
-        if (       category_controller.getCategories().containsKey(category) &&
-                   category_controller.getCategories().get(category).getSubC().containsKey(sub_category) &&
-                   category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().containsKey(subsub_category)
+    public Product addProduct(String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
+        if (category_controller.getCategories().containsKey(category) &&
+                category_controller.getCategories().get(category).getSubC().containsKey(sub_category) &&
+                category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().containsKey(subsub_category)
         ) {
             if (name == null || name.equals("")) throw new Exception("product name empty");
             if (manufacturer == null || manufacturer.equals("")) throw new Exception("product name empty");
@@ -149,8 +115,16 @@ public class ProductController {
             if (supply_time < 0) throw new Exception("supply time smaller than 0");
             if (category == null || category.equals("")) throw new Exception("category name empty");
             if (sub_category == null || sub_category.equals("")) throw new Exception("sub_category name empty");
-            if (subsub_category == null || subsub_category.equals(""))
-                throw new Exception("subsub_category name empty");
+            if (subsub_category == null || subsub_category.equals("")) throw new Exception("subsub_category name empty");
+            ProductData product = dal.products.create(product_ids,
+                    name,
+                    cus_price,
+                    min_qty,
+                    0,
+                    0,
+                    category_controller.getCategories().get(category).getName(),
+                    category_controller.getCategories().get(category).getSubC().get(sub_category).getName(),
+                    category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().get(subsub_category).name).data;
             Product p = new Product(
                     product_ids,
                     name,
@@ -320,15 +294,15 @@ public class ProductController {
     }
 
     public int getMinAmount(String proName) {
-        Product p=products.get(proName);
+        Product p = products.get(proName);
         return p.getMin_qty();
     }
 
     public ResponseT<Map<String, Integer>> getDeficiency() {
-        Map<String, Integer> deficiency=new HashMap<>();
-        for (Product p:products.values()) {
-            if (p.getMin_qty()>p.getItems().size())
-            deficiency.put(p.getName(),p.getMin_qty());
+        Map<String, Integer> deficiency = new HashMap<>();
+        for (Product p : products.values()) {
+            if (p.getMin_qty() > p.getItems().size())
+                deficiency.put(p.getName(), p.getMin_qty());
         }
         return (ResponseT<Map<String, Integer>>) deficiency;
     }

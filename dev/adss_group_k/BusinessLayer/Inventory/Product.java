@@ -13,7 +13,7 @@ public class Product {
     private int storage_qty;
     private String manufacturer;
     private double man_price;
-    private double cus_price;
+    private float cus_price;
     private int min_qty;
     private int supply_time;
     private Map<String, ProductItem> items;
@@ -23,7 +23,7 @@ public class Product {
     private SubSubCategory sub_sub_cat;
 
     //constructors
-    public Product(int product_id, String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, Category category, SubCategory sub_category,SubSubCategory sub_sub_category) {
+    public Product(int product_id, String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, Category category, SubCategory sub_category,SubSubCategory sub_sub_category) {
         this.product_id = product_id;
         this.name = name;
         shelf_qty = 0;
@@ -39,7 +39,7 @@ public class Product {
         this.sub_sub_cat = sub_sub_category;
     }
 
-    public Product(int product_id, String name, int shelf_qty, int storage_qty, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, Map<String, ProductItem> items) {
+    public Product(int product_id, String name, int shelf_qty, int storage_qty, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, Map<String, ProductItem> items) {
         this.product_id = product_id;
         this.name = name;
         this.shelf_qty = shelf_qty;
@@ -67,6 +67,7 @@ public class Product {
         this.sub_cat = p.sub_cat;
         this.sub_sub_cat = p.sub_sub_cat;
     }
+
 
     //methods
     public void updateItemManDiscount(int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) throws Exception {
@@ -190,7 +191,7 @@ public class Product {
         return cus_price;
     }
 
-    public void setCus_price(double cus_price) {
+    public void setCus_price(float cus_price) {
         this.cus_price = cus_price;
     }
 

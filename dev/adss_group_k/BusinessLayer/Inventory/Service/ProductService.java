@@ -96,7 +96,7 @@ public class ProductService {
 
     public Response updateProductCusPrice(int product_id, double price) {
         try {
-            product_controller.updateProductCusPrice(product_id, price);
+            product_controller.updateProductCusPrice(product_id, (float) price);
             return new Response(true, null);
         } catch (Exception e) {
             return new Response(false, e.getMessage());
