@@ -1,0 +1,145 @@
+@startuml
+	together {
+
+		together {
+			object "Item" as milk {
+				catalogNumber: 1
+				name: "regular milk (1L)"
+				category: "dairy"
+				price: 5.0
+			}
+			
+			object "Item" as bread {
+				catalogNumber: 2
+				name: "whole bread"
+				category: "bread"
+				price: 6.0
+			}
+		}
+	
+		together {
+			object "Supplier" as foodsrus {
+				ppn: 1
+				bankNumber: 1
+				name: "FoodsRUs"
+				isDelivering: true
+				paymentCondition: Credit
+				regularSupplyingDays: Sunday
+			}
+			object "Contact" as c_foodsrus {
+				name: "John Foodguy"
+				email: "john@foodsrus.com"
+				phoneNumber: "555-1234"
+			}
+			
+			foodsrus -- c_foodsrus: "contacted via"
+		}
+		
+		milk -- foodsrus: supplying
+		bread -- foodsrus: supplying
+		
+		object "Order" as o_food {
+			ordered: 17/04/2022
+			provided: 18/04/2022
+			totalPrice: 850.0
+		}
+		
+		diamond d_bread
+		note left of d_bread: "quantity: 100"
+		d_bread -d- bread: ordering
+		d_bread -u- o_food: ordered
+		
+		diamond d_milk
+		note right of d_milk: "quantity: 50"
+		d_milk -d- milk: ordering
+		d_milk -u- o_food: ordered
+	}
+	
+	together {
+	
+		together {
+			object "Item" as pen {
+				catalogNumber: 1
+				name: "pen"
+				category: "office"
+				price: 10.0
+			}
+			
+			object "Item" as notebook {
+				catalogNumber: 2
+				name: "notebook"
+				category: "office"
+				price: 5.0
+			}
+			
+			together {
+				object "QuantityDiscount" as qd1 {
+					quantity: 100
+					discount: 0.1
+				}
+				
+				object "QuantityDiscount" as qd2 {
+					quantity: 50
+					discount: 0.05
+				}
+			}
+			
+			notebook -- qd1
+			notebook -- qd2
+		}
+	
+		together {
+			object "Supplier" as office {
+				ppn: 2
+				bankNumber: 2
+				name: "Office things"
+				isDelivering: true
+				paymentCondition: Credit
+				regularSupplyingDays: null
+			}
+			
+			object "Contact" as c_office {
+				name: "Emily Q. Office"
+				email: "emily@office.com"
+				phoneNumber: "555-5432"
+			}
+			
+			office -- c_office: "contacted via"
+		}
+		
+		pen -- office: supplying
+		notebook -- office: supplying
+		
+		object "Order" as o_office {
+			ordered: 17/03/2022
+			provided: 19/03/2022
+			totalPrice: 606.25
+		}
+		
+		diamond d_pen
+		note right of d_pen: "quantity: 25"
+		d_pen -d- pen: ordering
+		d_pen -u- o_office: ordered
+		
+		diamond d_notebook
+		note left of d_notebook: "quantity: 75"
+		d_notebook -d- notebook: ordering
+		d_notebook -u- o_office: ordered
+	}
+	
+	object SupplierController
+	object OrderController 
+	object ItemController
+	
+	foodsrus -- SupplierController #1f1f8f
+	office -- SupplierController #1f1f8f
+	
+	o_food -- OrderController #1f1f8f
+	o_office -- OrderController #1f1f8f
+	
+	pen -- ItemController  #1f1f8f
+	notebook -- ItemController #1f1f8f
+	milk -- ItemController #1f1f8f
+	bread -- ItemController #1f1f8f
+
+@enduml
