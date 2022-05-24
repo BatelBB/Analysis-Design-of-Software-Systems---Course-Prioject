@@ -1,8 +1,8 @@
-package adss_group_k.BusinessLayer.Suppliers.Entity;
+package adss_group_k.dataLayer.records;
 
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Contact;
+import adss_group_k.dataLayer.records.readonly.ContactData;
 
-public class MutableContact implements Contact {
+public class ContactRecord implements ContactData {
     String name;
     String email;
     String phoneNumber;
@@ -34,7 +34,7 @@ public class MutableContact implements Contact {
         this.phoneNumber = phoneNumber;
     }
 
-    public MutableContact(String name, String email, String phoneNumber) {
+    public ContactRecord(String name, String email, String phoneNumber) {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
