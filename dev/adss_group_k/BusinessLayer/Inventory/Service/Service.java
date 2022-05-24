@@ -1,6 +1,7 @@
 package adss_group_k.BusinessLayer.Inventory.Service;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
+import adss_group_k.BusinessLayer.Suppliers.Entity.MutableOrder;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService_V2;
 import adss_group_k.shared.response.*;
 import adss_group_k.shared.response.Response;
