@@ -3,6 +3,7 @@ package adss_group_k.BusinessLayer.Inventory;
 import adss_group_k.BusinessLayer.Inventory.Categories.Category;
 import adss_group_k.BusinessLayer.Inventory.Categories.SubCategory;
 import adss_group_k.BusinessLayer.Inventory.Categories.SubSubCategory;
+import adss_group_k.BusinessLayer.Suppliers.Controller.BussinessObject.Supplier;
 import adss_group_k.dataLayer.records.readonly.ProductData;
 
 import java.time.LocalDateTime;
@@ -21,57 +22,43 @@ public class Product {
     private int min_qty;
     private int supply_time;
     private Map<String, ProductItem> items;
+    private Map<Supplier, Double> suppliers;
 
     private Category cat;
     private SubCategory sub_cat;
     private SubSubCategory sub_sub_cat;
 
     //constructors
-    public Product(int product_id, String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, Category category, SubCategory sub_category,SubSubCategory sub_sub_category) {
-        this.product_id = product_id;
-        this.name = name;
-        shelf_qty = 0;
-        storage_qty = 0;
-        this.manufacturer = manufacturer;
-        this.man_price = man_price;
-        this.cus_price = cus_price;
-        this.min_qty = min_qty;
-        this.supply_time = supply_time;
-        items = new HashMap<>();
-        this.cat = category;
-        this.sub_cat = sub_category;
-        this.sub_sub_cat = sub_sub_category;
-    }
-
-    public Product(int product_id, String name, int shelf_qty, int storage_qty, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, Map<String, ProductItem> items) {
-        this.product_id = product_id;
-        this.name = name;
-        this.shelf_qty = shelf_qty;
-        this.storage_qty = storage_qty;
-        this.manufacturer = manufacturer;
-        this.man_price = man_price;
-        this.cus_price = cus_price;
-        this.min_qty = min_qty;
-        this.supply_time = supply_time;
-        this.items = items;
-    }
-
-    public Product(ProductData product) {
-        this.product_id = product.getId();
-        this.name = product.getName();
-        this.shelf_qty = product.getShelfQty();
-        this.storage_qty = product.getStorageQty();
+//    public Product(int product_id, String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, Category category, SubCategory sub_category, SubSubCategory sub_sub_category) {
+//        this.product_id = product_id;
+//        this.name = name;
+//        shelf_qty = 0;
+//        storage_qty = 0;
 //        this.manufacturer = manufacturer;
 //        this.man_price = man_price;
-        this.cus_price = product.getCustomerPrice();
-        this.min_qty = product.getMinQty();
+//        this.cus_price = cus_price;
+//        this.min_qty = min_qty;
+//        this.supply_time = supply_time;
+//        items = new HashMap<>();
+//        this.cat = category;
+//        this.sub_cat = sub_category;
+//        this.sub_sub_cat = sub_sub_category;
+//    }
+
+//    public Product(int product_id, String name, int shelf_qty, int storage_qty, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, Map<String, ProductItem> items) {
+//        this.product_id = product_id;
+//        this.name = name;
+//        this.shelf_qty = shelf_qty;
+//        this.storage_qty = storage_qty;
+//        this.manufacturer = manufacturer;
+//        this.man_price = man_price;
+//        this.cus_price = cus_price;
+//        this.min_qty = min_qty;
 //        this.supply_time = supply_time;
 //        this.items = items;
-        this.cat = product.getCategory();
-        this.sub_cat = product.getSubcategory();
-        this.sub_sub_cat = product.getSubSubcategory();
-    }
+//    }
 
+    //Copy constructor
     public Product(Product p) {
         this.product_id = p.product_id;
         this.name = p.name;
@@ -86,6 +73,23 @@ public class Product {
         this.cat = p.cat;
         this.sub_cat = p.sub_cat;
         this.sub_sub_cat = p.sub_sub_cat;
+    }
+
+    //Product from addProduct
+    public Product(int product_id, String name, float cus_price, int min_qty, int supply_time, Category category, SubCategory sub_category, SubSubCategory sub_sub_category) {
+        this.product_id = product_id;
+        this.name = name;
+        this.cus_price = cus_price;
+        this.min_qty = min_qty;
+        this.supply_time = supply_time;
+        this.cat = category;
+        this.sub_cat = sub_category;
+        this.sub_sub_cat = sub_sub_category;
+
+        item_ids = 0;
+        shelf_qty = 0;
+        storage_qty = 0;
+        items = new HashMap<>();
     }
 
 

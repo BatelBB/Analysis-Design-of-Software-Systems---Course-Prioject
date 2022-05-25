@@ -8,17 +8,9 @@ public class Category {
     private final Map<String, SubCategory> subC;
     private final String name;
 
-    Category(String name) {
+    public Category(String name) {
         this.name = name;
         subC = new HashMap<>();
-    }
-
-    public Map<String, SubCategory> getSubC() {
-        return subC;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void addSubCategory(String name) {
@@ -30,19 +22,29 @@ public class Category {
         }
     }
 
-
     public void removeSubCategory(String name) {
-        if (!subC.containsKey(name))
-            throw new IllegalArgumentException("Category doesn't exists");
-        else
+        if (subCategoryExists(name))
             subC.remove(name);
     }
 
     public SubCategory getSubCategory(String name) {
+        if (subCategoryExists(name))
+            return subC.get(name);
+        return null;
+    }
+
+    public Map<String, SubCategory> getSubC() {
+        return subC;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    private boolean subCategoryExists(String name) {
         if (!subC.containsKey(name))
             throw new IllegalArgumentException("Category doesn't exists");
-        else
-            return subC.get(name);
+        return true;
     }
 }
 

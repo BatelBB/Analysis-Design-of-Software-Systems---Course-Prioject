@@ -1,5 +1,6 @@
 package adss_group_k.BusinessLayer.Inventory.Controllers;
 
+import adss_group_k.BusinessLayer.Inventory.Categories.*;
 import adss_group_k.BusinessLayer.Inventory.DiscountPair;
 import adss_group_k.BusinessLayer.Inventory.Product;
 import adss_group_k.BusinessLayer.Inventory.ProductItem;
@@ -101,33 +102,55 @@ public class ProductController {
     }
 
     public Product addProduct(String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
-        if (category_controller.getCategories().containsKey(category) && category_controller.getCategories().get(category).getSubC().containsKey(sub_category) && category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().containsKey(subsub_category)) {
-            if (name == null || name.equals("")) throw new Exception("product name empty");
-            if (manufacturer == null || manufacturer.equals("")) throw new Exception("product name empty");
+        try {
+            if (!category_controller.getCategories().containsKey(category))
+                throw new Exception("category doesn't exist");
+            if (!category_controller.getCategories().get(category).getSubC().containsKey(sub_category))
+                throw new Exception("sub-category doesn't exist");
+            if (!category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().containsKey(subsub_category))
+                throw new Exception("sub-sub-category doesn't exist");
+            if (name == null || name.equals(""))
+                throw new Exception("product name empty");
+            if (manufacturer == null || manufacturer.equals(""))
+                throw new Exception("product name empty");
             priceLegal(man_price);
             priceLegal(cus_price);
-            if (min_qty < 0) throw new Exception("min quantity smaller than 0");
-            if (supply_time < 0) throw new Exception("supply time smaller than 0");
-            if (category == null || category.equals("")) throw new Exception("category name empty");
-            if (sub_category == null || sub_category.equals("")) throw new Exception("sub_category name empty");
+            if (min_qty < 0)
+                throw new Exception("min quantity smaller than 0");
+            if (supply_time < 0)
+                throw new Exception("supply time smaller than 0");
+            if (category == null || category.equals(""))
+                throw new Exception("category name empty");
+            if (sub_category == null || sub_category.equals(""))
+                throw new Exception("sub_category name empty");
             if (subsub_category == null || subsub_category.equals(""))
-                throw new Exception("subsub_category name empty");
-            ProductData product_data = dal.getProducts().create(
-                    product_ids,
-                    name,
-                    cus_price,
-                    min_qty,
-                    0,
-                    0,
-                    category_controller.getCategories().get(category).getName(),
-                    category_controller.getCategories().get(category).getSubC().get(sub_category).getName(),
-                    category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().get(subsub_category).name
-            ).data;
-            Product p = new Product(product_data);
-            products.put(Integer.toString(product_ids), p);
-            product_ids++;
-            return p;
-        } else throw new Exception("category doesn't exist");
+                throw new Exception("sub-sub-category name empty");
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        dal.getProducts().create(
+                product_ids,
+                name,
+                cus_price,
+                min_qty,
+                0,
+                0,
+                category,
+                sub_category,
+                subsub_category
+        );
+        Product p = new Product(product_ids,
+                name,
+                cus_price,
+                min_qty,
+                supply_time,
+                category_controller.getCategories().get(category),
+                category_controller.getCategories().get(category).getSubC().get(sub_category),
+                category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().get(subsub_category)
+        );
+        products.put(Integer.toString(product_ids), p);
+        product_ids++;
+        return p;
     }
 
     public void removeProduct(int product_id) throws Exception {

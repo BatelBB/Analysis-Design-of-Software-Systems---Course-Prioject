@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class SubSubCategory {
 
-    public String name;
+    private String name;
 
     public SubSubCategory(String subSubCatName) {
         name = subSubCatName;

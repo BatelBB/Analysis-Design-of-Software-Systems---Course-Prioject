@@ -13,6 +13,26 @@ public class SubCategory {
         subSubCategories = new HashMap<>();
     }
 
+    public void addSubSubCategory(String subSubCatName) {
+        if (subSubCategories.containsKey(name))
+            throw new IllegalArgumentException("The SubSubCategory already exists in the system");
+        else {
+            SubSubCategory subSubCategory = new SubSubCategory(subSubCatName);
+            subSubCategories.put(subSubCatName, subSubCategory);
+        }
+    }
+
+    public void removeSubSubCategory(String name) {
+        if (subSubCategoryExists(name))
+            subSubCategories.remove(name);
+    }
+
+    public SubSubCategory getSubSubCategory(String name) {
+        if (subSubCategoryExists(name))
+            return subSubCategories.get(name);
+        return null;
+    }
+
     public Map<String, SubSubCategory> getSubSubCategories() {
         return subSubCategories;
     }
@@ -21,26 +41,9 @@ public class SubCategory {
         return name;
     }
 
-    public void addSubSubCategory(String subSubCatName) {
-        SubSubCategory subSubCategory = new SubSubCategory(subSubCatName);
-        subSubCategories.put(subSubCatName, subSubCategory);
-    }
-
-
-    public void removeSubSubCategory(String name) {
+    private boolean subSubCategoryExists(String name) {
         if (!subSubCategories.containsKey(name))
             throw new IllegalArgumentException("Category doesn't exists");
-        else {
-            subSubCategories.remove(name);
-        }
+        return true;
     }
-
-    public SubSubCategory getSubSubCategory(String name) {
-        if (!subSubCategories.containsKey(name))
-            throw new IllegalArgumentException("Category doesn't exists");
-        else {
-            return subSubCategories.get(name);
-        }
-    }
-
 }
