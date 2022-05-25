@@ -5,7 +5,6 @@ import adss_group_k.BusinessLayer.Suppliers.Entity.PaymentCondition;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Order;
 import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
-import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 import adss_group_k.shared.response.ResponseT;
 
 import java.time.DayOfWeek;

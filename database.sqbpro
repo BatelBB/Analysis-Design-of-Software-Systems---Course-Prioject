@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:\Users\user\uni\semesters\4_2022-spring\adds\adss_group_k\database.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="0"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="2705"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,7:mainProduct"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS &quot;SubSubCategory&quot; (
+	&quot;name&quot;	TEXT NOT NULL,
+	&quot;subcategory&quot;	TEXT NOT NULL,
+	&quot;category&quot;	TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS &quot;Product&quot; (
+	&quot;id&quot;	INTEGER NOT NULL,
+	&quot;name&quot;	TEXT NOT NULL,
+	&quot;customerPrice&quot;	REAL NOT NULL,
+	&quot;minQty&quot;	INTEGER NOT NULL,
+	&quot;storageQty&quot;	INTEGER NOT NULL,
+	&quot;shelfQty&quot;	INTEGER NOT NULL,
+	&quot;subSubcategory&quot;	TEXT NOT NULL,
+	&quot;subcategory&quot;	TEXT NOT NULL,
+	&quot;category&quot;	TEXT NOT NULL,
+	PRIMARY KEY(&quot;id&quot;)
+);
+CREATE TABLE &quot;Order&quot; (
+	&quot;id&quot;	INTEGER NOT NULL,
+	&quot;orderType&quot;	INTEGER NOT NULL,
+	&quot;price&quot;	REAL NOT NULL,
+	&quot;ordered&quot;	DATETIME NOT NULL,
+	&quot;provided&quot;	DATETIME NOT NULL,
+	&quot;ppn&quot;	INTEGER NOT NULL,
+	PRIMARY KEY(&quot;id&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;ItemInOrder&quot; (
+	&quot;qty&quot;	INTEGER NOT NULL,
+	&quot;itemSupplierPPN&quot;	INTEGER NOT NULL,
+	&quot;itemCatalogNumber&quot;	INTEGER NOT NULL,
+	&quot;orderId&quot;	INTEGER NOT NULL,
+	PRIMARY KEY(&quot;itemSupplierPPN&quot;,&quot;itemCatalogNumber&quot;,&quot;orderId&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;QuantityDiscount&quot; (
+	&quot;id&quot;	INTEGER NOT NULL,
+	&quot;quantity&quot;	INTEGER NOT NULL,
+	&quot;discount&quot;	REAL NOT NULL,
+	&quot;itemSupplierPPN&quot;	INTEGER NOT NULL,
+	&quot;itemCatalogNumber&quot;	INTEGER NOT NULL,
+	PRIMARY KEY(&quot;id&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;ProductReport&quot; (
+	&quot;id&quot;	INTEGER NOT NULL,
+	&quot;reportProducer&quot;	TEXT NOT NULL,
+	&quot;name&quot;	TEXT NOT NULL,
+	&quot;date&quot;	DATETIME NOT NULL,
+	&quot;type&quot;	INTEGER NOT NULL,
+	&quot;query&quot;	TEXT NOT NULL,
+	PRIMARY KEY(&quot;id&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;ItemReport&quot; (
+	&quot;id&quot;	INTEGER NOT NULL,
+	&quot;reportProducer&quot;	TEXT NOT NULL,
+	&quot;name&quot;	TEXT NOT NULL,
+	&quot;date&quot;	DATETIME NOT NULL,
+	&quot;type&quot;	INTEGER NOT NULL,
+	&quot;query&quot;	TEXT NOT NULL,
+	PRIMARY KEY(&quot;id&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;ProductInReport&quot; (
+	&quot;qty&quot;	INTEGER NOT NULL,
+	&quot;reportId&quot;	INTEGER NOT NULL,
+	&quot;productId&quot;	INTEGER NOT NULL,
+	PRIMARY KEY(&quot;reportId&quot;,&quot;productId&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;ItemInReport&quot; (
+	&quot;qty&quot;	INTEGER NOT NULL,
+	&quot;reportId&quot;	INTEGER NOT NULL,
+	&quot;itemId&quot;	INTEGER NOT NULL,
+	PRIMARY KEY(&quot;reportId&quot;,&quot;itemId&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;Subcategory&quot; (
+	&quot;Category&quot;	TEXT NOT NULL,
+	&quot;Name&quot;	TEXT NOT NULL,
+	PRIMARY KEY(&quot;Name&quot;,&quot;Category&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;Category&quot; (
+	&quot;Name&quot;	TEXT NOT NULL,
+	PRIMARY KEY(&quot;Name&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;Supplier&quot; (
+	&quot;ppn&quot;	INTEGER NOT NULL,
+	&quot;bankNumber&quot;	INTEGER NOT NULL,
+	&quot;name&quot;	TEXT NOT NULL,
+	&quot;isDelivering&quot;	TINYINT NOT NULL,
+	&quot;paymentCondition&quot;	INTEGER NOT NULL,
+	&quot;regularSupplyingDay&quot;	INTEGER NOT NULL,
+	&quot;contactEmail&quot;	TEXT NOT NULL,
+	&quot;contactName&quot;	TEXT NOT NULL,
+	&quot;contactPhone&quot;	TEXT NOT NULL,
+	PRIMARY KEY(&quot;ppn&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;Item&quot; (
+	&quot;supplierPPN&quot;	INTEGER NOT NULL,
+	&quot;catalogNumber&quot;	INTEGER NOT NULL,
+	&quot;productId&quot;	INTEGER NOT NULL,
+	&quot;price&quot;	FLOAT NOT NULL,
+	PRIMARY KEY(&quot;supplierPPN&quot;,&quot;catalogNumber&quot;)
+);
+INSERT INTO &quot;Category&quot; (&quot;Name&quot;) VALUES ('Occult');
+INSERT INTO &quot;Supplier&quot; (&quot;ppn&quot;,&quot;bankNumber&quot;,&quot;name&quot;,&quot;isDelivering&quot;,&quot;paymentCondition&quot;,&quot;regularSupplyingDay&quot;,&quot;contactEmail&quot;,&quot;contactName&quot;,&quot;contactPhone&quot;) VALUES (1,111,'Office Stuff',1,1,5,'ofir@office.stuff','Ofir Office','05'),
+ (2,222,'Foods &amp; Goods',0,0,-1,'frank@food.stuff','Frank Food','06');
+COMMIT;
+</sql><current_tab id="0"/></tab_sql></sqlb_project>

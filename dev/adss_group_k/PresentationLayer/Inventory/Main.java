@@ -1,7 +1,6 @@
 package adss_group_k.PresentationLayer.Inventory;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
-import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 
 import java.util.Scanner;
 

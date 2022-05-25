@@ -1,6 +1,43 @@
 package adss_group_k;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
 public class SchemaInit {
+
+    public static void main(String[] args) throws SQLException {String url = "jdbc:sqlite:C:/sqlite/db/chinook.db";
+        // create a connection to the database
+        Connection conn = DriverManager.getConnection(url);
+        Scanner s = new Scanner(schemaInit);
+        s.useDelimiter("(;(\r)?\n)|(--\n)");
+        Statement st = null;
+        try
+        {
+            st = conn.createStatement();
+            while (s.hasNext())
+            {
+                String line = s.next();
+                if (line.startsWith("/*!") && line.endsWith("*/"))
+                {
+                    int i = line.indexOf(' ');
+                    line = line.substring(i + 1, line.length() - " */".length());
+                }
+
+                if (line.trim().length() > 0)
+                {
+                    st.execute(line);
+                }
+            }
+        }
+        finally
+        {
+            if (st != null) st.close();
+        }
+    }
+
     public final static String schemaInit =
             "BEGIN TRANSACTION;\n" +
                     "CREATE TABLE IF NOT EXISTS \"SubSubCategory\" (\n" +
@@ -20,7 +57,7 @@ public class SchemaInit {
                     "\t\"category\"\tTEXT NOT NULL,\n" +
                     "\tPRIMARY KEY(\"id\")\n" +
                     ");\n" +
-                    "CREATE TABLE \"Order\" (\n" +
+                    "CREATE TABLE IF NOT EXISTS \"Order\" (\n" +
                     "\t\"id\"\tINTEGER NOT NULL,\n" +
                     "\t\"orderType\"\tINTEGER NOT NULL,\n" +
                     "\t\"price\"\tREAL NOT NULL,\n" +
@@ -28,7 +65,7 @@ public class SchemaInit {
                     "\t\"provided\"\tDATETIME NOT NULL,\n" +
                     "\t\"ppn\"\tINTEGER NOT NULL,\n" +
                     "\tPRIMARY KEY(\"id\")\n" +
-                    ")" +
+                    ");\n" +
                     "CREATE TABLE IF NOT EXISTS \"ItemInOrder\" (\n" +
                     "\t\"qty\"\tINTEGER NOT NULL,\n" +
                     "\t\"itemSupplierPPN\"\tINTEGER NOT NULL,\n" +
@@ -102,8 +139,26 @@ public class SchemaInit {
                     "\t\"price\"\tFLOAT NOT NULL,\n" +
                     "\tPRIMARY KEY(\"supplierPPN\",\"catalogNumber\")\n" +
                     ");\n" +
-                    "INSERT INTO \"Category\" (\"Name\") VALUES ('Occult');\n" +
-                    "INSERT INTO \"Supplier\" (\"ppn\",\"bankNumber\",\"name\",\"isDelivering\",\"paymentCondition\",\"regularSupplyingDay\",\"contactEmail\",\"contactName\",\"contactPhone\") VALUES (1,111,'Office Stuff',1,1,5,'ofir@office.stuff','Ofir Office','05'),\n" +
-                    " (2,222,'Foods & Goods',0,0,-1,'frank@food.stuff','Frank Food','06');\n" +
+                    "CREATE TABLE IF NOT EXISTS \"DiscountPair\" (\n" +
+                    "\t\"ProductId\"\tINTEGER NOT NULL,\n" +
+                    "\t\"ProductItemId\"\tINTEGER NOT NULL,\n" +
+                    "\t\"DiscountPairId\"\tINTEGER NOT NULL,\n" +
+                    "\t\"Discount\"\tFLOAT NOT NULL,\n" +
+                    "\t\"StartDate\"\tDateTime NOT NULL,\n" +
+                    "\t\"EndDate\"\tDateTime NOT NULL,\n" +
+                    "\tPRIMARY KEY(\"DiscountPairId\",\"ProductItemId\",\"ProductId\")\n" +
+                    ");\n" +
+                    "CREATE TABLE IF NOT EXISTS \"ProductItem\" (\n" +
+                    "\t\"ProductId\"\tINTEGER NOT NULL,\n" +
+                    "\t\"Id\"\tNUMERIC NOT NULL,\n" +
+                    "\t\"Store\"\tTEXT NOT NULL,\n" +
+                    "\t\"Location\"\tTEXT NOT NULL,\n" +
+                    "\t\"Supplier\"\tINTEGER NOT NULL,\n" +
+                    "\t\"ExpirationDate\"\tDATETIME NOT NULL,\n" +
+                    "\t\"IsDefect\"\tTINYINT NOT NULL,\n" +
+                    "\t\"OnShelf\"\tTINYINT NOT NULL,\n" +
+                    "\t\"DefectReporter\"\tTEXT,\n" +
+                    "\tPRIMARY KEY(\"ProductId\",\"Id\")\n" +
+                    ");\n" +
                     "COMMIT;\n";
 }
