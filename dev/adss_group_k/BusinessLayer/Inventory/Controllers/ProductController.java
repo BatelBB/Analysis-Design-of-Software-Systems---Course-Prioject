@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class ProductController {
-    private int product_ids;
     private Map<String, Product> products;
     private final CategoryController category_controller;
     private static ProductController product_controller;
@@ -27,7 +26,6 @@ public class ProductController {
 
     //constructors
     private ProductController(PersistenceController dal) {
-        product_ids = 0;
         products = new HashMap<>();
         category_controller = CategoryController.getInstance();
         this.dal = dal;
@@ -128,8 +126,9 @@ public class ProductController {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+        int id = 1 + dal.getProducts().getMaxId();
         dal.getProducts().create(
-                product_ids,
+                id,
                 name,
                 cus_price,
                 min_qty,
@@ -139,7 +138,7 @@ public class ProductController {
                 sub_category,
                 subsub_category
         );
-        Product p = new Product(product_ids,
+        Product p = new Product(id,
                 name,
                 cus_price,
                 min_qty,
@@ -148,8 +147,7 @@ public class ProductController {
                 category_controller.getCategories().get(category).getSubC().get(sub_category),
                 category_controller.getCategories().get(category).getSubC().get(sub_category).getSubSubCategories().get(subsub_category)
         );
-        products.put(Integer.toString(product_ids), p);
-        product_ids++;
+        products.put(Integer.toString(id), p);
         return p;
     }
 
