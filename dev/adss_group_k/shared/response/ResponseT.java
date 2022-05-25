@@ -22,4 +22,8 @@ public class ResponseT<T> extends Response {
         if(success) return data;
         throw ifError.apply(error);
     }
+
+    public <R> ResponseT<R> castUnchecked() {
+        return (ResponseT<R>) this;
+    }
 }

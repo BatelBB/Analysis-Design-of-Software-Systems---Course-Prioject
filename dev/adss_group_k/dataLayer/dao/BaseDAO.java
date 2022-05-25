@@ -6,9 +6,11 @@ import adss_group_k.shared.utils.Tuple;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -79,6 +81,17 @@ public abstract class BaseDAO<TEntityID, TEntity extends BaseRecord<TEntityID>> 
         cache.remove(id);
     }
 
+    protected final <R> R oneResultQuery(String query, ResultSetOperation<R> extractResult) {
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return extractResult.operateOn(rs);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private TEntity fetchWithRuntimeExceptions(TEntityID tEntityID) {
         try {
             return fetch(tEntityID);
@@ -89,6 +102,10 @@ public abstract class BaseDAO<TEntityID, TEntity extends BaseRecord<TEntityID>> 
 
     public interface StatementInitialization {
         void initialize(PreparedStatement statement) throws SQLException;
+    }
+
+    public interface ResultSetOperation<R> {
+        R operateOn(ResultSet rs) throws SQLException;
     }
 }
 

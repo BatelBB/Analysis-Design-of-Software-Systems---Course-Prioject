@@ -24,12 +24,19 @@ CREATE TABLE "Product" (
  */
 public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
 
+    private int maxId;
+
     public ProductDAO(Connection conn) {
         super(conn);
+        maxId = oneResultQuery("SELECT MAX(Id) FROM Product", rs -> rs.getInt(1));
+    }
+
+    public int getMaxId() {
+        return maxId;
     }
 
     public ResponseT<ProductData> create(int id, String name, float customerPrice, int minQty, int storageQty, int shelfQty, String category, String subcategory, String subSubcategory) {
-        return create(
+        ResponseT<ProductRecord> response = create(
                 () -> new ProductRecord(id, name, customerPrice, minQty, storageQty, shelfQty, category, subcategory, subSubcategory),
                 "INSERT INTO Product(" + "id,name,customerPrice," + "minQty,storageQty,shelfQty," + "subSubcategory,subcategory,category" + ")",
                 ps -> ps.setInt(1, id),
@@ -41,7 +48,11 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
                 ps -> ps.setString(7, subSubcategory),
                 ps -> ps.setString(8, subcategory),
                 ps -> ps.setString(9, category)
-        ).castUnchecked();
+        );
+        if(response.success && id > maxId) {
+            maxId = id;
+        }
+        return response.castUnchecked();
     }
 
     @Override
