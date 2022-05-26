@@ -112,7 +112,7 @@ public class ProductService {
         }
     }
 
-    public ResponseT<Product> addProduct(String name, String manufacturer, double man_price, double cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
+    public ResponseT<Product> addProduct(String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
         try {
             return ResponseT.success(new Product(product_controller.addProduct(name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category)));
         } catch (Exception e) {

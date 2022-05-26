@@ -228,7 +228,7 @@ public class PresentationModel {
     private void addProduct() {
         ResponseT<Product> r;
         double man_price = convertDouble(args[2]);
-        double cus_price = convertDouble(args[3]);
+        float cus_price = convertFloat(args[3]);
         int min_qty = convertInt(args[4]);
         int supply_time = convertInt(args[5]);
         if (args.length == 9 && man_price != -1.0 && cus_price != -1.0 && min_qty != -1 && supply_time != -1) {
@@ -294,7 +294,7 @@ public class PresentationModel {
     public void changeItemLocation() {
         Response r;
         if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
-            r = service.changeItemLocation(convertInt(args[0]), convertInt(args[0]), args[2]);
+            r = service.setItemLocation(convertInt(args[0]), convertInt(args[0]), args[2]);
             if (!r.success)
                 System.out.println(r.error);
         }
@@ -303,7 +303,7 @@ public class PresentationModel {
     public void changeItemOnShelf() {
         Response r;
         if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1 && convertBoolean(args[2]) != null) {
-            r = service.changeItemOnShelf(convertInt(args[0]), convertInt(args[0]), convertBoolean(args[2]));
+            r = service.setItemOnShelf(convertInt(args[0]), convertInt(args[0]), convertBoolean(args[2]));
             if (!r.success)
                 System.out.println(r.error);
         }
@@ -423,6 +423,15 @@ public class PresentationModel {
         } catch (Exception e) {
             System.out.println("failed to parse double, " + e.getMessage());
             return -1.0;
+        }
+    }
+
+    private float convertFloat(String input) {
+        try {
+            return Float.parseFloat(input);
+        } catch (Exception e) {
+            System.out.println("failed to parse float, " + e.getMessage());
+            return -1;
         }
     }
 

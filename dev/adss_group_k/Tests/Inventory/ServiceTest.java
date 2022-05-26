@@ -122,11 +122,11 @@ class ServiceTest {
     void addProduct() {
         try {
             assertTrue(ProductListNames.isEmpty());
-            service.addProduct("Milk", "Tnova", 4, 5.9, 350, 6, "Dairy Products","Milks","Cow Milk");
+            service.addProduct("Milk", "Tnova", 4, 5.9f, 350, 6, "Dairy Products","Milks","Cow Milk");
             setProductIdes();
             assertTrue(ProductListNames.contains("Milk"));
             setProductIdes();
-            service.addProduct("", "Tnova", 4, 5.9, 350, 6, "Dairy Products","Milks","Cow Milk");
+            service.addProduct("", "Tnova", 4, 5.9f, 350, 6, "Dairy Products","Milks","Cow Milk");
         } catch (Exception e) {
             assertEquals(e.getMessage(), "product name empty");
             restartService();
@@ -136,7 +136,7 @@ class ServiceTest {
     @org.junit.jupiter.api.Test
     void removeProduct() {
         try {
-            service.addProduct("Milk", "Tnova", 4, 5.9, 350, 6, "Dairy Products","Milks","Cow Milk");
+            service.addProduct("Milk", "Tnova", 4, 5.9f, 350, 6, "Dairy Products","Milks","Cow Milk");
             setProductIdes();
             assertTrue(ProductListNames.contains("Milk"));
             service.removeProduct(0);

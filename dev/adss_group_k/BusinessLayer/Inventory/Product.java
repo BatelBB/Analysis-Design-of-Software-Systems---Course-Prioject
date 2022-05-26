@@ -4,7 +4,6 @@ import adss_group_k.BusinessLayer.Inventory.Categories.Category;
 import adss_group_k.BusinessLayer.Inventory.Categories.SubCategory;
 import adss_group_k.BusinessLayer.Inventory.Categories.SubSubCategory;
 import adss_group_k.BusinessLayer.Suppliers.Controller.BussinessObject.Supplier;
-import adss_group_k.dataLayer.records.readonly.ProductData;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -22,7 +21,6 @@ public class Product {
     private int min_qty;
     private int supply_time;
     private Map<String, ProductItem> items;
-    private Map<Supplier, Double> suppliers;
 
     private Category cat;
     private SubCategory sub_cat;

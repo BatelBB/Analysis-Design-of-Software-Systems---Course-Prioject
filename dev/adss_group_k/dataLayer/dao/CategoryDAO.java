@@ -18,6 +18,14 @@ public class CategoryDAO extends BaseDAO<String, CategoryRecord> {
         super(conn);
     }
 
+    public ResponseT<CategoryData> create(String name) {
+        return create(
+                () -> new CategoryRecord(name),
+                "INSERT INTO Category(name) VALUES((?))",
+                ps -> ps.setString(1, name)
+        ).castUnchecked();
+    }
+
     @Override
     CategoryRecord fetch(String key) throws SQLException, NoSuchElementException {
         PreparedStatement statement = conn.prepareStatement(
@@ -48,14 +56,6 @@ public class CategoryDAO extends BaseDAO<String, CategoryRecord> {
     public int runDeleteQuery(String name) {
         return runUpdate("DELETE FROM Category WHERE name = ?",
                 ps -> ps.setString(1, name));
-    }
-
-    public ResponseT<CategoryData> create(String name) {
-        return create(
-                () -> new CategoryRecord(name),
-                "INSERT INTO Category(name) VALUES((?))",
-                ps -> ps.setString(1, name)
-        ).castUnchecked();
     }
 
 }

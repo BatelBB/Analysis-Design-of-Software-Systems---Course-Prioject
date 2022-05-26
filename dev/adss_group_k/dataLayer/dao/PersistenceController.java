@@ -7,11 +7,20 @@ public class PersistenceController {
 
     private final CategoryDAO categories;
     private final SubcategoryDAO subcategories;
+    private final SubSubcategoryDAO subSubCategories;
     private final SupplierDAO suppliers;
     private final ItemDAO items;
-
     private final ProductDAO products;
-    private final SubSubcategoryDAO subSubCategorys;
+
+    public PersistenceController(Connection conn) {
+        this.conn = conn;
+        categories = new CategoryDAO(conn);
+        subcategories = new SubcategoryDAO(conn);
+        subSubCategories = new SubSubcategoryDAO(conn);
+        products = new ProductDAO(conn);
+        items = new ItemDAO(conn);
+        suppliers = new SupplierDAO(conn);
+    }
 
     public Connection getConn() {
         return conn;
@@ -25,6 +34,10 @@ public class PersistenceController {
         return subcategories;
     }
 
+    public SubSubcategoryDAO getSubSubCategories() {
+        return subSubCategories;
+    }
+
     public SupplierDAO getSuppliers() {
         return suppliers;
     }
@@ -35,15 +48,5 @@ public class PersistenceController {
 
     public ProductDAO getProducts() {
         return products;
-    }
-
-    public PersistenceController(Connection conn) {
-        this.conn = conn;
-        categories = new CategoryDAO(conn);
-        subcategories = new SubcategoryDAO(conn);
-        suppliers = new SupplierDAO(conn);
-        products = new ProductDAO(conn);
-        items = new ItemDAO(conn);
-        subSubCategorys = new SubSubcategoryDAO(conn);
     }
 }

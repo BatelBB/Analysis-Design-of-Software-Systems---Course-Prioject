@@ -1,6 +1,7 @@
 package adss_group_k.dataLayer.dao;
 
 import adss_group_k.dataLayer.records.SubSubCategoryRecord;
+import adss_group_k.dataLayer.records.readonly.SubSubcategoryData;
 import adss_group_k.dataLayer.records.readonly.SubcategoryData;
 import adss_group_k.shared.response.ResponseT;
 
@@ -26,7 +27,7 @@ public class SubSubcategoryDAO extends BaseDAO<SubSubCategoryRecord.SubSubcatego
         super(conn);
     }
 
-    public ResponseT<SubcategoryData> create(String category, String subcategory, String name) {
+    public ResponseT<SubSubcategoryData> create(String category, String subcategory, String name) {
         return create(
                 () -> new SubSubCategoryRecord(category, subcategory, name),
                 "INSERT INTO SubSubcategory(category, subcategory, name) VALUES((?, ?, ?))",
@@ -74,6 +75,15 @@ public class SubSubcategoryDAO extends BaseDAO<SubSubCategoryRecord.SubSubcatego
                 ps -> ps.setString(1, key.name),
                 ps -> ps.setString(2, key.category),
                 ps -> ps.setString(3, key.subcategory)
+        );
+    }
+
+    public int runDeleteQuery(String cat_name, String sub_cat_name, String sub_sub_cat_name) {
+        return runUpdate(
+                "DELETE FROM Subcategory WHERE name=? AND category=? AND subcategory=?",
+                ps -> ps.setString(1, cat_name),
+                ps -> ps.setString(2, sub_cat_name),
+                ps -> ps.setString(3, sub_sub_cat_name)
         );
     }
 }
