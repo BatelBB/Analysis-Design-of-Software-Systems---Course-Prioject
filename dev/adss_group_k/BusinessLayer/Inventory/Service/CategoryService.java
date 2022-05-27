@@ -3,6 +3,7 @@ package adss_group_k.BusinessLayer.Inventory.Service;
 import adss_group_k.BusinessLayer.Inventory.Categories.Category;
 import adss_group_k.BusinessLayer.Inventory.Controllers.CategoryController;
 import adss_group_k.BusinessLayer.Inventory.Categories.SubCategory;
+import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.shared.response.Response;
 import adss_group_k.shared.response.ResponseT;
 
@@ -11,8 +12,8 @@ import java.util.List;
 public class CategoryService {
     private final CategoryController category_controller;
 
-    public CategoryService() {
-        category_controller = CategoryController.getInstance();
+    public CategoryService(PersistenceController pc) {
+        category_controller = CategoryController.getInstance(pc);
     }
 
     public ResponseT<List<String>> getCategoriesNames() {
