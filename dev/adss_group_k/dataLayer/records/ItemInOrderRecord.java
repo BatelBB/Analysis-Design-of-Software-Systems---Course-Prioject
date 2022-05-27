@@ -7,6 +7,13 @@ import java.util.Objects;
 public class ItemInOrderRecord extends BaseRecord<ItemInOrderRecord.ItemInOrderKey> implements ItemInOrderData {
     private int ppn, catalogNumber, orderId, amount;
 
+    public ItemInOrderRecord(int ppn, int catalogNumber, int orderId, int amount) {
+        this.ppn = ppn;
+        this.catalogNumber = catalogNumber;
+        this.orderId = orderId;
+        this.amount = amount;
+    }
+
     public int getPpn() {
         return ppn;
     }

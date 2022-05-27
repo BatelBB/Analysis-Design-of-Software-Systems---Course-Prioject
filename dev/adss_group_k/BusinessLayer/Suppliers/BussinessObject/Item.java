@@ -29,10 +29,6 @@ public class Item {
         return data.getPrice();
     }
 
-    public float priceForAmount(int amount) {
-        return controller.priceForAmount(this, amount);
-    }
-
     @Override
     public String toString() {
         return Utils.table(

@@ -169,7 +169,8 @@ public class Service {
         return null;
     }
 
-    public Response updateOrder(String op, int orderId, String proName, int proAmount) {//need to check that the order contain the min_qnt
+    public Response updateOrder(String op, int orderId, String proName, int proAmount) {
+        //need to check that the order contain the min_qnt
         int minAmount = product_service.getMinAmount(proName).data;
         switch (op) {
             case "Remove":

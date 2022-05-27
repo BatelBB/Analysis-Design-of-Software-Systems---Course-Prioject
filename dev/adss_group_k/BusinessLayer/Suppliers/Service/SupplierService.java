@@ -31,9 +31,9 @@ public class SupplierService implements ISupplierService {
 
     public SupplierService(Connection connection) {
         dal = new PersistenceController(connection);
-        orders = new OrderController();
-        items = new ItemController(orders);
+        items = new ItemController();
         discounts = new QuantityDiscountController(dal, items);
+        orders = new OrderController(discounts);
         suppliers = new SupplierController(orders, items, dal);
     }
 
@@ -221,4 +221,6 @@ public class SupplierService implements ISupplierService {
     public Supplier findCheapestSupplierFor(int productID, int amount) {
         return null;
     }
+
+    private ResponseT 
 }

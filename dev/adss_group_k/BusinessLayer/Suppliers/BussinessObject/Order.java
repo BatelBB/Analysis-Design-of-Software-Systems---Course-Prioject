@@ -1,5 +1,6 @@
 package adss_group_k.BusinessLayer.Suppliers.BussinessObject;
 
+import adss_group_k.BusinessLayer.Suppliers.Controller.QuantityDiscountController;
 import adss_group_k.dataLayer.dao.OrderDAO;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.ItemInOrderRecord;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Order {
+    private final QuantityDiscountController discounts;
     OrderData source;
     float totalPrice;
     Map<Item, Integer> itemsAmounts;
@@ -22,11 +24,12 @@ public class Order {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     private PersistenceController dal;
 
-    public Order(Supplier supplier,OrderData source, PersistenceController dal) {
+    public Order(Supplier supplier, OrderData source, PersistenceController dal, QuantityDiscountController discounts) {
         this.supplier = supplier;
         this.source = source;
         this.itemsAmounts = new HashMap<>();
         this.dal = dal;
+        this.discounts = discounts;
     }
 
     public void removeItemIfExists(Item item) {
@@ -37,9 +40,10 @@ public class Order {
     public void refreshPrice() {
         float price = 0;
         for(Map.Entry<Item, Integer> e: itemsAmounts.entrySet()) {
-            price += e.getKey().priceForAmount(e.getValue());
+            price += discounts.priceForAmount(e.getKey(), e.getValue());
         }
         totalPrice = price;
+        dal.getOrders().setPrice(getId(), price);
     }
 
     public void orderItem(Item item, int amount) {
@@ -54,7 +58,7 @@ public class Order {
             dal.getItemsInOrders().delete(key);
         } else {
             itemsAmounts.put(item, amount);
-            dal.getOrders().updateAmount(getId(), ppn, catalogNumber);
+            dal.getItemsInOrders().updateAmount(getId(), ppn, catalogNumber, amount);
             
         }
         refreshPrice();

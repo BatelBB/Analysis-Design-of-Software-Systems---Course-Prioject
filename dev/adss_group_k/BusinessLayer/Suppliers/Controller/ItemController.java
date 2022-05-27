@@ -15,11 +15,9 @@ import java.util.Map;
 
 public class ItemController {
     Map<String, Item> items;
-    OrderController orderController;
     PersistenceController dal;
-    public ItemController(OrderController orderController) {
+    public ItemController() {
         items = new HashMap<>();
-        this.orderController = orderController;
     }
 
     public Item create(Supplier supplier, int catalogNumber,
@@ -53,13 +51,11 @@ public class ItemController {
         if(!items.containsKey(key)) {
             throw new BusinessLogicException("Supplier " + ppn +" has no item with catalog number " + catalogNumber);
         }
-        orderController.removeItemFromOrders(item);
         items.remove(key);
     }
 
     public void deleteDiscount(QuantityDiscount discount) {
         dal.getQuantityDiscounts().delete(discount.id);
-        orderController.refreshPricesAndDiscounts(discount.item);
     }
 
     public Item get(int ppn, int catalog) throws BusinessLogicException{

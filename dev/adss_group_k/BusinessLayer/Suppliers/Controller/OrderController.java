@@ -5,7 +5,9 @@ import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.OrderType;
+import adss_group_k.dataLayer.records.readonly.OrderData;
 
 
 import java.time.LocalDate;
@@ -14,10 +16,13 @@ import java.util.Collection;
 import java.util.Map;
 
 public class OrderController {
+    private final QuantityDiscountController discounts;
     ArrayList<Order> orders;
+    private PersistenceController dal;
 
-    public OrderController(){
+    public OrderController(QuantityDiscountController discounts){
         orders = new ArrayList<>();
+        this.discounts = discounts;
     }
 
     public Order get(int id) throws BusinessLogicException {
@@ -27,11 +32,12 @@ public class OrderController {
                 .orElseThrow(() -> new BusinessLogicException("No order exists with id "+ id));
     }
 
-    public Order create(Supplier supplier, LocalDate ordered, LocalDate delivered) throws BusinessLogicException {
+    public Order create(Supplier supplier, OrderType type, LocalDate ordered, LocalDate delivered) throws BusinessLogicException {
         if(ordered.isAfter(delivered)) {
             throw new BusinessLogicException("delivery date can't be before ordering date.");
         }
-        Order order = new Order(supplier, ordered, delivered);
+        OrderData data = dal.getOrders().createOrder(supplier.getPpn(), type, ordered, delivered);
+        Order order = new Order(supplier, data, dal, discounts);
         orders.add(order);
         return order;
     }
@@ -49,9 +55,7 @@ public class OrderController {
     }
 
     public void orderItem(Order order, Item item, int amount) {
-        Order mutable = (Order) order;
-        mutable.orderItem(item, amount);
-        mutable.refreshPrice();
+        order.orderItem(item, amount);
     }
 
     public void deleteAllFromSupplier(Supplier s) {
@@ -83,14 +87,5 @@ public class OrderController {
         order.orderItem(item, amount);
         refreshPricesAndDiscounts(item);
         return order.getId();
-    }
-
-    public int createDeficienciesOrder(Map<String, Integer> proAmount) { //returns id of order
-        throw new NotImplementedException();
-    }
-
-
-    public int addProductToOrder(int orderId, String proName, int proAmount, int minAmount) {
-        throw new NotImplementedException();
     }
 }
