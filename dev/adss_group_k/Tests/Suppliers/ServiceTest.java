@@ -1,5 +1,7 @@
 package adss_group_k.Tests.Suppliers;
 
+import adss_group_k.BusinessLayer.Inventory.Product;
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
@@ -34,7 +36,7 @@ class ServiceTest {
 
 
     private ISupplierService service;
-
+    private Service inventory;
 
     @BeforeEach
     void setUp() {
@@ -94,6 +96,7 @@ class ServiceTest {
         Supplier supplier = service.createSupplier(ppn, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
                 "john", "john@email.com", "054").data;
+        Product product = inventory.addProduct();
         Item item = service.createItem(ppn, 1, "item", "category", 1).data;
         Order order = service.createOrder(supplier, date1, date2, Order.OrderType.Periodical).data;
         service.orderItem(order, item, 12);

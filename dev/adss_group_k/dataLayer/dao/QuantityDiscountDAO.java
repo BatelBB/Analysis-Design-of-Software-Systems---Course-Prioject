@@ -14,12 +14,16 @@ import java.util.stream.Stream;
 
 public class QuantityDiscountDAO extends BaseDAO<Integer, QuantityDiscountRecord> {
 
+    private int maxId;
     public QuantityDiscountDAO(Connection conn) {
         super(conn);
+        maxId = 1 + super.oneResultQuery("SELECT MAX(id) FROM QuantityDiscount", rs -> rs.getInt(1));
     }
 
     public ResponseT<QuantityDiscountRecord> createQuantityDiscount(
-            int id, int quantity, float discount, ItemRecord.ItemKey item) {
+            int quantity, float discount, ItemRecord.ItemKey item) {
+        maxId++;
+        int id = maxId;
         return create(
                 () -> new QuantityDiscountRecord(id, item, quantity, discount),
                 "INSERT INTO QuantityDiscount(id, quantity, discount, itemSupplierPPN, itemCatalogNumber)" +
