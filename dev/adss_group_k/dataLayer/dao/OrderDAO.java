@@ -3,10 +3,7 @@ package adss_group_k.dataLayer.dao;
 import adss_group_k.dataLayer.records.OrderRecord;
 import adss_group_k.dataLayer.records.readonly.OrderData;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
@@ -37,6 +34,24 @@ class OrderDAO extends BaseDAO<Integer, OrderRecord> {
             list.add(readOneFromQuery(qu.getInt("id"), qu));
         }
         return list.stream();
+    }
+
+    public void updateProvided(int id, LocalDate provided) {
+        runUpdate(
+                "UPDATE Order SET provided=? WHERE id=?",
+                ps -> ps.setDate(1, Date.valueOf(provided)),
+                ps -> ps.setInt(2, id)
+        );
+        get(id).data.setProvided(provided);
+    }
+
+    public void updateOrdered(int id, LocalDate ordered) {
+        runUpdate(
+                "UPDATE Order SET ordered=? WHERE id=?",
+                ps -> ps.setDate(1, Date.valueOf(ordered)),
+                ps -> ps.setInt(2, id)
+        );
+        get(id).data.setOrdered(ordered);
     }
 
     @Override

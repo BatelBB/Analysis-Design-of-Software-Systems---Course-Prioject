@@ -1,6 +1,8 @@
 package adss_group_k.BusinessLayer.Suppliers.BussinessObject;
 
+import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.OrderType;
+import adss_group_k.dataLayer.records.readonly.OrderData;
 import adss_group_k.shared.utils.Utils;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 
@@ -11,23 +13,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Order {
-    LocalDate ordered;
-    LocalDate provided;
+    OrderData source;
     float totalPrice;
     Map<Item, Integer> itemsAmounts;
     public final Supplier supplier;
-    private final int id;
-    private static int instanceCounter = 0;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    private PersistenceController dal;
 
-    public Order(Supplier supplier, LocalDate ordered, LocalDate provided) {
+    public Order(Supplier supplier,OrderData source, PersistenceController dal) {
         this.supplier = supplier;
-        this.ordered = ordered;
-        this.provided = provided;
+        this.source = source;
         this.itemsAmounts = new HashMap<>();
-
-        instanceCounter++;
-        this.id = instanceCounter;
+        this.dal = dal;
     }
 
     public void removeItemIfExists(Item item) {
@@ -43,16 +40,6 @@ public class Order {
         totalPrice = price;
     }
 
-    @Override
-    public OrderType getOrderType() {
-        return null;
-    }
-
-    @Override
-    public boolean containsItem(Item item) {
-        return itemsAmounts.containsKey(item);
-    }
-
     public void orderItem(Item item, int amount) {
         if(amount == 0) {
             itemsAmounts.remove(item);
@@ -63,17 +50,17 @@ public class Order {
     }
 
     public void updateOrdered(LocalDate ordered) throws BusinessLogicException {
-        if(ordered.isAfter(provided)) {
+        if(ordered.isAfter(getProvided())) {
             throw new BusinessLogicException("ordered date can't be after provided date.");
         }
-        this.ordered = ordered;
+
     }
 
     public void updateProvided(LocalDate provided) throws BusinessLogicException {
-        if(ordered.isAfter(provided)) {
+        if(getOrdered().isAfter(provided)) {
             throw new BusinessLogicException("provided date can't be before ordered date.");
         }
-        this.provided = provided;
+        dal.getOrders().;
     }
 
     @Override
@@ -112,7 +99,7 @@ public class Order {
             Item item = entry.getKey();
             int amount = entry.getValue();
 
-            table.add(item.getName());
+            table.add("");
             table.add(item.getCatalogNumber() + "");
             table.add(amount + " units");
             table.add(String.format("$%.2f / ea", item.getPrice()));

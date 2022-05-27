@@ -25,7 +25,6 @@ public class QuantityDiscount {
         return  Utils.table(
                 2, 30, true,
                 "  **** QUANTITY DISCOUNT **** ", "",
-                "Item name", item.getName(),
                 "Item catalog number", item.getCatalogNumber(),
                 "For amounts over", quantity,
                 "Discount", String.format("%.2f%%", discount * 100),
