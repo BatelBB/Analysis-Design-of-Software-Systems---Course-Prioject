@@ -1,7 +1,6 @@
 package adss_group_k.BusinessLayer.Suppliers.BussinessObject;
 
 import adss_group_k.shared.utils.Utils;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Item;
 
 public class QuantityDiscount {
     public final Item item;

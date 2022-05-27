@@ -62,8 +62,10 @@ class ServiceTest {
         // TODO add tests for other fields if there's time
 
         ResponseT<Supplier> responseErroneous = createWithPpn(1);
-        assertFalse(responseErroneous.success, "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
-        assertNull(responseErroneous.data, "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
+        assertFalse(responseErroneous.success,
+                "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
+        assertNull(responseErroneous.data,
+                "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
     }
 
     @Test
@@ -470,7 +472,8 @@ class ServiceTest {
         service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 1);
         assertEquals(priceCalc, order.getTotalPrice());
 
-        ResponseT<QuantityDiscount> res = service.createDiscount(ppn, item.getCatalogNumber(), 10, 0.01f);
+        ResponseT<QuantityDiscount> res = service.createDiscount(ppn, item.getCatalogNumber(), 10,
+                0.01f);
         assertTrue(res.success);
         assertEquals(priceCalc, order.getTotalPrice());
 
