@@ -3,7 +3,6 @@ package adss_group_k.BusinessLayer.Inventory;
 import adss_group_k.BusinessLayer.Inventory.Categories.Category;
 import adss_group_k.BusinessLayer.Inventory.Categories.SubCategory;
 import adss_group_k.BusinessLayer.Inventory.Categories.SubSubCategory;
-import adss_group_k.BusinessLayer.Suppliers.Controller.BussinessObject.Supplier;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
