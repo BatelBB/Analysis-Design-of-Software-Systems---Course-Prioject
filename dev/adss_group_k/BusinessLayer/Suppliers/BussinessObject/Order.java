@@ -2,6 +2,7 @@ package adss_group_k.BusinessLayer.Suppliers.BussinessObject;
 
 import adss_group_k.dataLayer.dao.OrderDAO;
 import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.ItemInOrderRecord;
 import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.readonly.OrderData;
 import adss_group_k.shared.utils.Utils;
@@ -47,10 +48,14 @@ public class Order {
 
         if(amount == 0) {
             itemsAmounts.remove(item);
-            dal.getOrders().removeItemFromOrder(getId(), ppn, catalogNumber);
+            ItemInOrderRecord.ItemInOrderKey key = new ItemInOrderRecord.ItemInOrderKey(
+                    ppn, catalogNumber, getId()
+            );
+            dal.getItemsInOrders().delete(key);
         } else {
             itemsAmounts.put(item, amount);
             dal.getOrders().updateAmount(getId(), ppn, catalogNumber);
+            
         }
         refreshPrice();
     }
