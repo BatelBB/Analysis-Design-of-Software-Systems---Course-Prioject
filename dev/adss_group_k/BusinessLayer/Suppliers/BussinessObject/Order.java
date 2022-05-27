@@ -16,7 +16,7 @@ public class Order {
     float totalPrice;
     Map<Item, Integer> itemsAmounts;
     public final Supplier supplier;
-    public final int id;
+    private final int id;
     private static int instanceCounter = 0;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
@@ -132,5 +132,9 @@ public class Order {
                 4, 25, true,
                 table.toArray()
         );
+    }
+
+    public int getId(){
+        return id;
     }
 }

@@ -57,4 +57,12 @@ public class Product {
         }
         return s;
     }
+
+    public int getProduct_id(){
+        return product_id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
