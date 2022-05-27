@@ -22,7 +22,7 @@ public class OrderController {
 
     public Order get(int id) throws BusinessLogicException {
         return orders.stream()
-                .filter(o -> o.id == id)
+                .filter(o -> o.getId() == id)
                 .findFirst()
                 .orElseThrow(() -> new BusinessLogicException("No order exists with id "+ id));
     }
@@ -71,18 +71,18 @@ public class OrderController {
     }
 
     public void setOrdered(Order order, LocalDate ordered) throws BusinessLogicException {
-        ((Order) order).updateOrdered(ordered);
+        order.updateOrdered(ordered);
     }
 
     public void setProvided(Order order, LocalDate provided) throws BusinessLogicException {
-        ((Order) order).updateProvided(provided);
+        order.updateProvided(provided);
     }
 
 
     public int updateAmount(Order order, Item item, int amount) { // needs to check if the item amount is >= the min amount
-        ((Order) order).orderItem(item, amount);
+        order.orderItem(item, amount);
         refreshPricesAndDiscounts(item);
-        return ((Order) order).id;
+        return order.getId();
     }
 
     public int createDeficienciesOrder(Map<String, Integer> proAmount) { //returns id of order
