@@ -46,5 +46,4 @@ public class Item {
                 "Catalog number", data.getCatalogNumber()
         );
     }
-
 }

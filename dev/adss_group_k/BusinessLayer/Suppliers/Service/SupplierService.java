@@ -7,6 +7,7 @@ import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
 import adss_group_k.BusinessLayer.Suppliers.Controller.ItemController;
 import adss_group_k.BusinessLayer.Suppliers.Controller.OrderController;
+import adss_group_k.BusinessLayer.Suppliers.Controller.QuantityDiscountController;
 import adss_group_k.BusinessLayer.Suppliers.Controller.SupplierController;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.OrderType;
@@ -24,6 +25,7 @@ public class SupplierService implements ISupplierService {
 
     private final ItemController items;
     private final OrderController orders;
+    private final QuantityDiscountController discounts;
     private PersistenceController dal;
     private SupplierController suppliers;
 
@@ -31,6 +33,7 @@ public class SupplierService implements ISupplierService {
         dal = new PersistenceController(connection);
         orders = new OrderController();
         items = new ItemController(orders);
+        discounts = new QuantityDiscountController(dal, items);
         suppliers = new SupplierController(orders, items, dal);
     }
 
@@ -73,12 +76,13 @@ public class SupplierService implements ISupplierService {
 
     public ResponseT<Item> createItem(int supplierPPN, int catalogNumber, int productID, float price) {
         try {
-            return items.create(
+            Item item = items.create(
                     getSupplier(supplierPPN),
                     catalogNumber,
                     productID,
-
+                    price
             );
+            return ResponseT.success(item);
         } catch (BusinessLogicException e) {
             return ResponseT.error(e.getMessage());        }
     }
@@ -140,7 +144,7 @@ public class SupplierService implements ISupplierService {
 
     @Override
     public void setPrice(int supplier, int catalogNumber, float price) {
-
+        items.setPrice(supplier, catalogNumber, price);
     }
 
     @Override

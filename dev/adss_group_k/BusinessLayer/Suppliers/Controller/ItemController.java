@@ -1,29 +1,25 @@
 package adss_group_k.BusinessLayer.Suppliers.Controller;
 
-import adss_group_k.BusinessLayer.Inventory.Categories.SubSubCategory;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.ItemRecord;
-import adss_group_k.dataLayer.records.QuantityDiscountRecord;
 import adss_group_k.dataLayer.records.readonly.ItemData;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ItemController {
     Map<String, Item> items;
     OrderController orderController;
     PersistenceController dal;
-    QuantityDiscountController quantityDiscounts;
-
-    public ItemController(OrderController orderController, QuantityDiscountController quantityDiscounts) {
+    public ItemController(OrderController orderController) {
         items = new HashMap<>();
         this.orderController = orderController;
-        this.quantityDiscounts = quantityDiscounts;
     }
 
     public Item create(Supplier supplier, int catalogNumber,
@@ -57,7 +53,6 @@ public class ItemController {
         if(!items.containsKey(key)) {
             throw new BusinessLogicException("Supplier " + ppn +" has no item with catalog number " + catalogNumber);
         }
-        quantityDiscounts.deleteAllFor(item);
         orderController.removeItemFromOrders(item);
         items.remove(key);
     }
@@ -79,7 +74,6 @@ public class ItemController {
     public void deleteAllFromSupplier(Supplier s) {
         for(Map.Entry<String, Item> entry: items.entrySet()) {
             items.remove(entry.getKey());
-            quantityDiscounts.deleteAllFor(entry.getValue());
         }
     }
 
@@ -87,8 +81,12 @@ public class ItemController {
         return items.values().stream().anyMatch(i -> i.getSupplier() == supplier);
     }
 
-    public void setItemPrice(Item item, float price) {
-        ((Item) item).setPrice(price);
+    public void setPrice(int supplier, int catalogNumber, float price) {
+        Item item = get(supplier, catalogNumber);
+        dal.getItems().updatePrice(
+                new ItemRecord.ItemKey(supplier, catalogNumber),
+                price
+        );
+        orderController.refreshPricesAndDiscounts(item);
     }
-
 }

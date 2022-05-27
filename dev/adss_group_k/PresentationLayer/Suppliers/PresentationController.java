@@ -1,5 +1,6 @@
 package adss_group_k.PresentationLayer.Suppliers;
 
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.MutableContact;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.PaymentCondition;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
@@ -131,10 +132,9 @@ public class PresentationController {
                                 //Create new item
                                 int ppn = checkPPN("Enter the supplier's ppn number: ");
                                 int catalog = input.nextInt("Enter the item's catalog number: ");
-                                String name = input.nextString("Enter the name of the item: ");
-                                String category = input.nextString("Enter the item's category: ");
+                                int productNumber = input.nextInt("Enter product number:");
                                 float price = (float) input.nextInt("Enter the item's price: ");
-                                output.print(service.createItem(ppn, catalog, name, category, price).data.toString());
+                                output.print(service.createItem(ppn, catalog, productNumber, price).data.toString());
                                 break;
                             }
                             case (2): {

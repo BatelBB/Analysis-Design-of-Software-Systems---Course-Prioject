@@ -31,7 +31,7 @@ public interface ISupplierService {
     Response deleteSupplier(int ppn);
 
     ResponseT<Item> createItem(int supplierPPN, int catalogNumber,
-                               int productID, String category, float price);
+                               int productID, float price);
 
     Collection<Item> getItems();
 
