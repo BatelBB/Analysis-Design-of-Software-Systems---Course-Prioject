@@ -9,6 +9,7 @@ import adss_group_k.BusinessLayer.Suppliers.Controller.ItemController;
 import adss_group_k.BusinessLayer.Suppliers.Controller.OrderController;
 import adss_group_k.BusinessLayer.Suppliers.Controller.SupplierController;
 import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.shared.dto.CreateSupplierDTO;
 import adss_group_k.shared.response.Response;
@@ -70,14 +71,16 @@ public class SupplierService implements ISupplierService {
         return null;
     }
 
-    @Override
-    public ResponseT<Item> createItem(int supplierPPN, int catalogNumber, int productID, String name, String category, float price) {
-        return items.create(
-                getSupplier(supplierPPN),
-                catalogNumber,
-                productID,
+    public ResponseT<Item> createItem(int supplierPPN, int catalogNumber, int productID, float price) {
+        try {
+            return items.create(
+                    getSupplier(supplierPPN),
+                    catalogNumber,
+                    productID,
 
-        );
+            );
+        } catch (BusinessLogicException e) {
+            return ResponseT.error(e.getMessage());        }
     }
 
     @Override
@@ -106,7 +109,7 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
-    public ResponseT<Order> createOrder(int supplierPPN, LocalDate ordered, LocalDate delivered, Order.OrderType type) {
+    public ResponseT<Order> createOrder(int supplierPPN, LocalDate ordered, LocalDate delivered, OrderType type) {
         return null;
     }
 

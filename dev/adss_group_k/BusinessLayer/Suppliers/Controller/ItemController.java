@@ -7,6 +7,8 @@ import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
 import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.ItemRecord;
+import adss_group_k.dataLayer.records.QuantityDiscountRecord;
 import adss_group_k.dataLayer.records.readonly.ItemData;
 
 import java.util.*;
@@ -16,15 +18,17 @@ public class ItemController {
     Map<String, Item> items;
     OrderController orderController;
     PersistenceController dal;
+    QuantityDiscountController quantityDiscounts;
 
-    public ItemController(OrderController orderController) {
+    public ItemController(OrderController orderController, QuantityDiscountController quantityDiscounts) {
         items = new HashMap<>();
         this.orderController = orderController;
+        this.quantityDiscounts = quantityDiscounts;
     }
 
     public Item create(Supplier supplier, int catalogNumber,
                        int productId,
-                       SubSubCategory subSubCategory, float price)
+                       float price)
             throws BusinessLogicException {
         String key = tuple(supplier.getPpn(), catalogNumber);
         if(items.containsKey(key)) {
@@ -33,7 +37,7 @@ public class ItemController {
         ItemData source = dal.getItems()
                 .create(supplier.getPpn(), catalogNumber, productId, price)
                 .getOrThrow(BusinessLogicException::new);
-        Item item = new Item(source, supplier, subSubCategory);
+        Item item = new Item(source, supplier, this);
         items.put(key, item);
         return item;
     }
@@ -53,7 +57,7 @@ public class ItemController {
         if(!items.containsKey(key)) {
             throw new BusinessLogicException("Supplier " + ppn +" has no item with catalog number " + catalogNumber);
         }
-        discounts.remove(item);
+        quantityDiscounts.deleteAllFor(item);
         orderController.removeItemFromOrders(item);
         items.remove(key);
     }
@@ -70,51 +74,12 @@ public class ItemController {
         }
         return items.get(key);
     }
-    public float priceForAmount(Item item, int amount) {
-        float discount = 0;
-        List<QuantityDiscount> discounts = getDiscountList(item);
-        for(QuantityDiscount qd: discounts) {
-            if(qd.quantity > amount) { break; }
-            discount = qd.discount;
-        }
-        return amount * item.getPrice() * (1 - discount);
-    }
 
-    public QuantityDiscount createDiscount(Item item, int amount, float discount) throws BusinessLogicException {
-        int index = 0;
-        List<QuantityDiscount> discounts = getDiscountList(item);
-        QuantityDiscount previous = null;
-        for(; index < discounts.size(); index++) {
-            QuantityDiscount current = discounts.get(index);
-            if(current.quantity == amount) {
-                throw new BusinessLogicException("Item " + this + " already has discount for " + amount);
-            }
-            if(current.quantity > amount) {
-                break;
-            }
-            previous = current;
-        }
-        if(previous != null && previous.discount > discount) {
-            throw new BusinessLogicException(
-                "can't add a discount of " + (100 * discount) + "% for amount over " + amount +
-                " for item " + this + "! Already has a discount of " + (int)(previous.discount * 100)
-                + "% for over " + previous.quantity
-            );
-        }
-        QuantityDiscount created = new QuantityDiscount(item, amount, discount);
-        discounts.add(index, created);
-        orderController.refreshPricesAndDiscounts(item);
-        return created;
-    }
-
-    public List<QuantityDiscount> getDiscountList(Item item) {
-        return discounts.computeIfAbsent(item, __ -> new ArrayList<QuantityDiscount>());
-    }
 
     public void deleteAllFromSupplier(Supplier s) {
         for(Map.Entry<String, Item> entry: items.entrySet()) {
             items.remove(entry.getKey());
-            discounts.remove(entry.getValue());
+            quantityDiscounts.deleteAllFor(entry.getValue());
         }
     }
 
@@ -122,22 +87,8 @@ public class ItemController {
         return items.values().stream().anyMatch(i -> i.getSupplier() == supplier);
     }
 
-    public Collection<QuantityDiscount> getAllDiscounts() {
-        return discounts.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
-    }
-
     public void setItemPrice(Item item, float price) {
         ((Item) item).setPrice(price);
     }
-
-    public void setItemName(Item item, String name) {
-        ((Item) item).setName(name);
-    }
-
-
-    public void setItemCategory(Item item, String category) {
-        ((Item) item).setCategory(category);
-    }
-
 
 }
