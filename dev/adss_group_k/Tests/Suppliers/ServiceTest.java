@@ -344,18 +344,24 @@ class ServiceTest {
         float penPrice = 11, notebookPrice = 7;
         int penAmount = 13, notebookAmount = 5;
 
-        Item pen = service.createItem(ppn, cnPen, "Pen", "Office", penPrice).data;
-        Item notebook = service.createItem(ppn, cnNotebook, "Notebook", "Office", notebookPrice).data;
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+
+        Product product5 = inventory.addProduct("Notebook", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+        Item pen = service.createItem(ppn, cnPen, product4.getProduct_id(), "Office", penPrice).data;
+        Item notebook = service.createItem(ppn, cnNotebook, product5.getProduct_id(), "Office",
+                notebookPrice).data;
 
         Order orderPens = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
-        service.orderItem(orderPens, pen, penAmount);
+        service.orderItem(orderPens.getId(), ppn, pen.getCatalogNumber(), penAmount);
 
         Order orderNotebooks = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
-        service.orderItem(orderNotebooks, notebook, notebookAmount);
+        service.orderItem(orderNotebooks.getId(), ppn, notebook.getCatalogNumber(), notebookAmount);
 
         Order orderBoth = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
-        service.orderItem(orderBoth, pen, penAmount);
-        service.orderItem(orderBoth, notebook, notebookAmount);
+        service.orderItem(orderBoth.getId(), ppn, pen.getCatalogNumber(), penAmount);
+        service.orderItem(orderBoth.getId(), ppn, notebook.getCatalogNumber(), notebookAmount);
 
         assertTrue(orderBoth.containsItem(pen));
         assertTrue(orderPens.containsItem(pen));
@@ -372,7 +378,10 @@ class ServiceTest {
         Supplier supplier = createWithPpn(ppn).data;
 
         // ReadOnlyitem doesn't matter, there just has to be at least one for ReadOnlyorder to create.
-        service.createItem(ppn, 11, "Lorem", "Ipsum", 1);
+
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+        service.createItem(ppn, 11, product4.getProduct_id(), "Ipsum", 1);
 
         final Period ONE_DAY = Period.ofDays(1);
         final LocalDate
@@ -386,19 +395,19 @@ class ServiceTest {
         Order order = service.createOrder(ppn, MON, WED, OrderType.Periodical).data;
         assertEquals(MON, order.getOrdered());
 
-        service.setOrdered(order, SUN);
+        service.setOrdered(order.getId(), SUN);
         assertEquals(SUN, order.getOrdered());
 
-        assertDoesNotThrow(() -> service.setOrdered(order, WED), "should support same-day delivery");
+        assertDoesNotThrow(() -> service.setOrdered(order.getId(), WED), "should support same-day delivery");
         assertEquals(WED, order.getOrdered());
 
-        service.setOrdered(order, TUE);
+        service.setOrdered(order.getId(), TUE);
         assertEquals(TUE, order.getOrdered());
 
-        assertThrows(BusinessLogicException.class, () -> service.setOrdered(order, THU));
+        assertThrows(BusinessLogicException.class, () -> service.setOrdered(order.getId(), THU));
         assertEquals(TUE, order.getOrdered());
 
-        assertThrows(BusinessLogicException.class, () -> service.setOrdered(order, FRI));
+        assertThrows(BusinessLogicException.class, () -> service.setOrdered(order.getId(), FRI));
         assertEquals(TUE, order.getOrdered());
     }
 
@@ -408,8 +417,11 @@ class ServiceTest {
         final int ppn = 1;
         Supplier supplier = createWithPpn(ppn).data;
 
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+
         // ReadOnlyitem doesn't matter, there just has to be at least one for ReadOnlyorder to create.
-        service.createItem(ppn, 11, "Lorem", "Ipsum", 1);
+        service.createItem(ppn, 11, product4.getProduct_id(), "Ipsum", 1);
 
         final Period ONE_DAY = Period.ofDays(1);
         final LocalDate
@@ -423,19 +435,19 @@ class ServiceTest {
         Order order = service.createOrder(ppn, TUE, FRI, OrderType.Periodical).data;
         assertEquals(FRI, order.getProvided());
 
-        service.setProvided(order, THU);
+        service.setProvided(order.getId(), THU);
         assertEquals(THU, order.getProvided());
 
-        assertDoesNotThrow(() -> service.setProvided(order, TUE), "should support same-day delivery");
+        assertDoesNotThrow(() -> service.setProvided(order.getId(), TUE), "should support same-day delivery");
         assertEquals(TUE, order.getProvided());
 
-        service.setProvided(order, WED);
+        service.setProvided(order.getId(), WED);
         assertEquals(WED, order.getProvided());
 
-        assertThrows(BusinessLogicException.class, () -> service.setProvided(order, SUN));
+        assertThrows(BusinessLogicException.class, () -> service.setProvided(order.getId(), SUN));
         assertEquals(WED, order.getProvided());
 
-        assertThrows(BusinessLogicException.class, () -> service.setProvided(order, MON));
+        assertThrows(BusinessLogicException.class, () -> service.setProvided(order.getId(), MON));
         assertEquals(WED, order.getProvided());
     }
 
@@ -448,47 +460,50 @@ class ServiceTest {
         int ppn = 1, cnCalc = 11;
         float priceCalc = 100;
 
+        Product product4 = inventory.addProduct("Calculator", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+
         Supplier sup = createWithPpn(ppn).data;
-        Item item = service.createItem(ppn, cnCalc, "Calculator", "Office", priceCalc).data;
+        Item item = service.createItem(ppn, cnCalc, product4.getProduct_id(), "Office", priceCalc).data;
         Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
 
-        service.orderItem(order, item, 1);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 1);
         assertEquals(priceCalc, order.getTotalPrice());
 
-        ResponseT<QuantityDiscount> res = service.createDiscount(item, 10, 0.01f);
+        ResponseT<QuantityDiscount> res = service.createDiscount(ppn, item.getCatalogNumber(), 10, 0.01f);
         assertTrue(res.success);
         assertEquals(priceCalc, order.getTotalPrice());
 
-        service.orderItem(order, item, 9);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 9);
         assertEquals(priceCalc * 9, order.getTotalPrice(), EPSILON);
 
-        service.orderItem(order, item, 10);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 10);
         assertEquals(priceCalc * 10 * 0.99, order.getTotalPrice(), EPSILON);
 
-        service.orderItem(order, item, 11);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 11);
         assertEquals(priceCalc * 11 * 0.99, order.getTotalPrice(), EPSILON);
 
-        res = service.createDiscount(item, 100, 0.1f);
+        res = service.createDiscount(ppn, item.getCatalogNumber(), 100, 0.1f);
         assertTrue(res.success);
         assertEquals(priceCalc * 11 * 0.99, order.getTotalPrice(), EPSILON);
 
-        service.orderItem(order, item, 100);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 100);
         assertEquals(priceCalc * 100 * 0.9, order.getTotalPrice(), EPSILON);
 
-        service.orderItem(order, item, 101);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 101);
         assertEquals(priceCalc * 101 * 0.9, order.getTotalPrice(), EPSILON);
 
-        service.orderItem(order, item, 250);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 250);
         assertEquals(priceCalc * 250 * 0.9, order.getTotalPrice(), EPSILON);
 
-        res = service.createDiscount(item, 200, 0.25f);
+        res = service.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f);
         assertTrue(res.success);
         assertEquals(priceCalc * 250 * 0.75f, order.getTotalPrice(), EPSILON);
 
-        res = service.createDiscount(item, 200, 0.25f);
+        res = service.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f);
         assertFalse(res.success, "already exists such discount; shouldn't be able to create, but succeeded");
 
-        res = service.createDiscount(item, 100, 0.2f);
+        res = service.createDiscount(ppn, item.getCatalogNumber(), 100, 0.2f);
         assertFalse(res.success, "already exists such discount; shouldn't be able to create, but succeeded");
     }
 
@@ -497,16 +512,18 @@ class ServiceTest {
         int ppn = 1, cnCalc = 11;
         float priceCalc = 100;
 
+        Product product4 = inventory.addProduct("Calculator", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
         Supplier sup = createWithPpn(ppn).data;
-        Item item = service.createItem(ppn, cnCalc, "Calculator", "Office", priceCalc).data;
+        Item item = service.createItem(ppn, cnCalc, product4.getProduct_id(), "Office", priceCalc).data;
         Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
 
-        QuantityDiscount over10 = service.createDiscount(item, 10, 0.01f).data;
-        QuantityDiscount over50 = service.createDiscount(item, 50, 0.05f).data;
-        QuantityDiscount over100 = service.createDiscount(item, 100, 0.1f).data;
-        QuantityDiscount over200 = service.createDiscount(item, 200, 0.25f).data;
+        QuantityDiscount over10 = service.createDiscount(ppn, item.getCatalogNumber(), 10, 0.01f).data;
+        QuantityDiscount over50 = service.createDiscount(ppn, item.getCatalogNumber(), 50, 0.05f).data;
+        QuantityDiscount over100 = service.createDiscount(ppn, item.getCatalogNumber(), 100, 0.1f).data;
+        QuantityDiscount over200 = service.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f).data;
 
-        service.orderItem(order, item, 250);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 250);
 
         assertEquals(priceCalc * 250 * 0.75f, order.getTotalPrice(), EPSILON);
 
@@ -531,8 +548,14 @@ class ServiceTest {
         float priceBread = 5, priceMilk = 7;
         Supplier sup = createWithPpn(ppn).data;
 
-        Item bread = service.createItem(ppn, cnBread, "Bread", "Food", priceBread).data;
-        Item milk = service.createItem(ppn, cnMilk, "Milk", "Food", priceMilk).data;
+        Product product4 = inventory.addProduct("Bread", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+
+        Product product5 = inventory.addProduct("Milk", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+
+        Item bread = service.createItem(ppn, cnBread, product4.getProduct_id(), "Food", priceBread).data;
+        Item milk = service.createItem(ppn, cnMilk, product5.getProduct_id(), "Food", priceMilk).data;
 
         final int amountBread = 10, amountMilk = 10;
 
@@ -545,36 +568,36 @@ class ServiceTest {
         // I guess it's expensive organic or something
         priceBread = 10;
         priceMilk = 10;
-        service.setPrice(ppn,bread, priceBread);
-        service.setPrice(ppn,milk, priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
         // wow the market sure is going crazy
         priceBread = 100;
         priceMilk = 125;
-        service.setPrice(ppn,bread, priceBread);
-        service.setPrice(ppn,milk, priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
         // Ba'al HaBayit Hishtage`a
         priceBread = 0.2f;
         priceMilk = 0.5f;
-        service.setPrice(ppn,bread, priceBread);
-        service.setPrice(ppn,milk, priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
 
         priceBread = 5;
         priceMilk = 7;
-        service.setPrice(ppn,bread, priceBread);
-        service.setPrice(ppn,milk, priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
 
         priceBread = 1;
         priceMilk = 2;
-        service.setPrice(ppn,bread, priceBread);
-        service.setPrice(ppn,milk, priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
     }
 
@@ -592,7 +615,9 @@ class ServiceTest {
                 "shouldn't be able to start ReadOnlyorder if ReadOnlysupplier has no items.");
 
 
-        service.createItem(ppn, cnPen, "Pen", "Office", 10);
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+        service.createItem(ppn, cnPen, product4.getProduct_id(), "Office", 10);
 
 
         ResponseT<Order> responseWithBadDates = service.createOrder(ppn, date2, date1, OrderType.Shortages);
@@ -614,7 +639,9 @@ class ServiceTest {
                 "shouldn't be able to start ReadOnlyorder if ReadOnlysupplier has no items.");
 
 
-        service.createItem(ppn, cnPen, "Pen", "Office", 10);
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+        service.createItem(ppn, cnPen, product4.getProduct_id(), "Office", 10);
 
 
         ResponseT<Order> responseWithBadDates = service.createOrder(ppn, date2, date1, OrderType.Periodical);
