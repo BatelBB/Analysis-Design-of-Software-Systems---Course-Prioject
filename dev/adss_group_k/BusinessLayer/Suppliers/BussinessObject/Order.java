@@ -1,6 +1,11 @@
 package adss_group_k.BusinessLayer.Suppliers.BussinessObject;
 
+import adss_group_k.BusinessLayer.Suppliers.Controller.QuantityDiscountController;
+import adss_group_k.dataLayer.dao.OrderDAO;
+import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.ItemInOrderRecord;
 import adss_group_k.dataLayer.records.OrderType;
+import adss_group_k.dataLayer.records.readonly.OrderData;
 import adss_group_k.shared.utils.Utils;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 
@@ -11,23 +16,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Order {
-    LocalDate ordered;
-    LocalDate provided;
+    private final QuantityDiscountController discounts;
+    OrderData source;
     float totalPrice;
     Map<Item, Integer> itemsAmounts;
     public final Supplier supplier;
-    public final int id;
-    private static int instanceCounter = 0;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    private PersistenceController dal;
 
-    public Order(Supplier supplier, LocalDate ordered, LocalDate provided){
+    public Order(Supplier supplier, OrderData source, PersistenceController dal, QuantityDiscountController discounts) {
         this.supplier = supplier;
-        this.ordered = ordered;
-        this.provided = provided;
+        this.source = source;
         this.itemsAmounts = new HashMap<>();
-
-        instanceCounter++;
-        this.id = instanceCounter;
+        this.dal = dal;
+        this.discounts = discounts;
     }
 
     public void removeItemIfExists(Item item) {
@@ -38,57 +40,54 @@ public class Order {
     public void refreshPrice() {
         float price = 0;
         for(Map.Entry<Item, Integer> e: itemsAmounts.entrySet()) {
-            price += e.getKey().priceForAmount(e.getValue());
+            price += discounts.priceForAmount(e.getKey(), e.getValue());
         }
         totalPrice = price;
-    }
-
-    @Override
-    public OrderType getOrderType() {
-        return null;
-    }
-
-    @Override
-    public boolean containsItem(Item item) {
-        return itemsAmounts.containsKey(item);
+        dal.getOrders().setPrice(getId(), price);
     }
 
     public void orderItem(Item item, int amount) {
+        int catalogNumber = item.getCatalogNumber();
+        int ppn = item.getSupplier().getPpn();
+
         if(amount == 0) {
             itemsAmounts.remove(item);
+            ItemInOrderRecord.ItemInOrderKey key = new ItemInOrderRecord.ItemInOrderKey(
+                    ppn, catalogNumber, getId()
+            );
+            dal.getItemsInOrders().delete(key);
         } else {
             itemsAmounts.put(item, amount);
+            dal.getItemsInOrders().updateAmount(getId(), ppn, catalogNumber, amount);
+            
         }
         refreshPrice();
     }
 
     public void updateOrdered(LocalDate ordered) throws BusinessLogicException {
-        if(ordered.isAfter(provided)) {
+        if(ordered.isAfter(getProvided())) {
             throw new BusinessLogicException("ordered date can't be after provided date.");
         }
-        this.ordered = ordered;
+        dal.getOrders().updateOrdered(getId(), ordered);
     }
 
     public void updateProvided(LocalDate provided) throws BusinessLogicException {
-        if(ordered.isAfter(provided)) {
+        if(getOrdered().isAfter(provided)) {
             throw new BusinessLogicException("provided date can't be before ordered date.");
         }
-        this.provided = provided;
+        dal.getOrders().updateProvided(getId(), provided);
     }
 
-    @Override
     public float getTotalPrice() {
         return totalPrice;
     }
 
-    @Override
     public LocalDate getOrdered() {
-        return ordered;
+        return source.getOrdered();
     }
 
-    @Override
     public LocalDate getProvided() {
-        return provided;
+        return source.getProvided();
     }
 
     @Override
@@ -96,12 +95,12 @@ public class Order {
         ArrayList<String> table = new ArrayList<>();
         table.add(" **** ORDER **** "); table.add(" "); table.add(" "); table.add(" ");
 
-        table.add("Order id: "); table.add(String.valueOf(id)); table.add(" "); table.add(" ");
+        table.add("Order id: "); table.add(String.valueOf(getId())); table.add(" "); table.add(" ");
         table.add("Supplier name: "); table.add(supplier.getName());
         table.add("Supplier PPN: "); table.add(supplier.getPpn() + "");
 
-        table.add("Ordered: "); table.add(ordered.format(DATE_FORMAT));
-        table.add("Provided: "); table.add(provided.format(DATE_FORMAT));
+        table.add("Ordered: "); table.add(getOrdered().format(DATE_FORMAT));
+        table.add("Provided: "); table.add(getProvided().format(DATE_FORMAT));
 
         table.add("----");
         table.add("----");
@@ -112,7 +111,7 @@ public class Order {
             Item item = entry.getKey();
             int amount = entry.getValue();
 
-            table.add(item.getName());
+            table.add("");
             table.add(item.getCatalogNumber() + "");
             table.add(amount + " units");
             table.add(String.format("$%.2f / ea", item.getPrice()));
@@ -132,5 +131,13 @@ public class Order {
                 4, 25, true,
                 table.toArray()
         );
+    }
+
+    public int getId(){
+        return source.getId();
+    }
+
+    public boolean containsItem(Item item) {
+        return itemsAmounts.containsKey(item);
     }
 }

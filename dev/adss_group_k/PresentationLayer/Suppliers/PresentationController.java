@@ -1,12 +1,10 @@
 package adss_group_k.PresentationLayer.Suppliers;
 
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.MutableContact;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.PaymentCondition;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Item;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Order;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Supplier;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
+import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.shared.response.ResponseT;
 
@@ -66,31 +64,31 @@ public class PresentationController {
                                         case (2): {
                                             //Edit bank account
                                             int bankAct = input.nextInt("Enter bank account: ");
-                                            service.setSupplierBankAccount(supplier, bankAct);
+                                            service.setSupplierBankAccount(ppn, bankAct);
                                             break;
                                         }
                                         case (3): {
                                             //Edit company name
                                             String newName = input.nextString("Enter name: ");
-                                            service.setSupplierCompanyName(supplier, newName);
+                                            service.setSupplierCompanyName(ppn, newName);
                                             break;
                                         }
                                         case (4): {
                                             //Edit delivery
                                             boolean newValue = input.nextBoolean("Is delivering?");
-                                            service.setSupplierIsDelivering(supplier, newValue);
+                                            service.setSupplierIsDelivering(ppn, newValue);
                                             break;
                                         }
                                         case (5): {
                                             //edit payment condition
                                             PaymentCondition payment = choosePayment(
                                                     "Which way will the supplier pay? ");
-                                            service.setSupplierPaymentCondition(supplier, payment);
+                                            service.setSupplierPaymentCondition(ppn, payment);
                                             break;
                                         }
                                         case (6): {
                                             //edit supplying days
-                                            service.setSupplierRegularSupplyingDays(supplier, chooseDay());
+                                            service.setSupplierRegularSupplyingDays(ppn, chooseDay());
                                             break;
                                         }
                                         case (7): {
@@ -99,7 +97,7 @@ public class PresentationController {
                                             String email = input.nextString("Enter the supplier's contact email: ");
                                             String phoneNum = input.nextString(
                                                     "Enter the supplier's contact phone number: ");
-                                            service.setSupplierContact(supplier, contactName, phoneNum, email);
+                                            service.setSupplierContact(ppn, contactName, phoneNum, email);
                                             break;
                                         }
 
@@ -118,7 +116,7 @@ public class PresentationController {
                             }
                             case (4): {
                                 //See summery of all suppliers
-                                output.println(service.toStringSupplier());
+                                service.getSuppliers().forEach(s -> output.println(s.toString()));
                                 break;
                             }
                         }
@@ -131,10 +129,9 @@ public class PresentationController {
                                 //Create new item
                                 int ppn = checkPPN("Enter the supplier's ppn number: ");
                                 int catalog = input.nextInt("Enter the item's catalog number: ");
-                                String name = input.nextString("Enter the name of the item: ");
-                                String category = input.nextString("Enter the item's category: ");
+                                int productNumber = input.nextInt("Enter product number:");
                                 float price = (float) input.nextInt("Enter the item's price: ");
-                                output.print(service.createItem(ppn, catalog, name, category, price).data.toString());
+                                output.print(service.createItem(ppn, catalog, productNumber, price).data.toString());
                                 break;
                             }
                             case (2): {
@@ -146,15 +143,18 @@ public class PresentationController {
                                 //edit price of existing item
                                 int[] arr = checkItem();
                                 Item item = service.getItem(arr[0], arr[1]).data;
-                                service.setPrice(item, input.nextFloat("Enter new price: "));
+                                service.setPrice(item.getSupplier().getPpn(), item.getCatalogNumber(), input.nextFloat("Enter new price: "));
                                 break;
                             }
                             case (4): {
                                 //edit name of existing item
                                 int[] arr = checkItem();
                                 Item item = service.getItem(arr[0], arr[1]).data;
+                                int ppn = item.getSupplier().getPpn();
+                                int catalogNumber = item.getCatalogNumber();
                                 String name = input.nextString("Enter new name: ");
-                                service.setItemName(item, name);
+
+                                service.setItemName(ppn, item.getCatalogNumber(), name);
                                 break;
                             }
                             case (5): {
@@ -162,19 +162,21 @@ public class PresentationController {
 
                                 int[] arr = checkItem();
                                 Item item = service.getItem(arr[0], arr[1]).data;
+                                int ppn = item.getSupplier().getPpn();
                                 String category = input.nextString("Enter new category: ");
-                                service.setItemCategory(item, category);
+                                service.setItemCategory(ppn, item.getCatalogNumber(), category);
                                 break;
                             }
                             case (6): {
                                 //delete existing item
                                 int[] arr = checkItem();
-                                service.deleteItem(service.getItem(arr[0], arr[1]).data);
+                                service.deleteItem(service.getItem(arr[0], arr[1]).data.getSupplier().getPpn(),
+                                        service.getItem(arr[0], arr[1]).data.getCatalogNumber());
                                 break;
                             }
                             case (7): {
                                 //see summery of items
-                                output.println(service.toStringItems());
+                                output.println(service.getItems().toString());
                                 break;
                             }
                         }
@@ -191,7 +193,7 @@ public class PresentationController {
                                 LocalDate deliver = input.nextDate("When is the order supposed to be delivered? ");
                                 try {
                                     ResponseT<Order> serviceResponse = service.createOrder(
-                                            service.getSupplier(ppn), ordered, deliver, Order.OrderType.Periodical);
+                                            ppn, ordered, deliver, OrderType.Periodical);
                                     order = serviceResponse.data;
                                     String err = serviceResponse.error;
                                     if (err != null) {
@@ -208,7 +210,9 @@ public class PresentationController {
                                 while (retry) {
                                     int[] arr = checkItem();
                                     int amount = input.nextInt("How much of this item do you want to order? ");
-                                    service.orderItem(order, service.getItem(arr[0], arr[1]).data, amount);
+                                    service.orderItem(order.getId(),
+                                            service.getItem(arr[0], arr[1]).data.getSupplier().getPpn(),
+                                            service.getItem(arr[0], arr[1]).data.getCatalogNumber(), amount);
                                     String more = input.nextString("Do you want to add more items? n/y ");
                                     if (more.equals("n")) {
                                         retry = false;
@@ -220,7 +224,7 @@ public class PresentationController {
                             case (2): {
                                 //delete existing order
                                 int ppn = checkPPN("Enter the supplier's ppn number: ");
-                                service.deleteOrder(service.getOrder(ppn).data);
+                                service.deleteOrder(service.getOrder(ppn).data.getId());
                                 break;
                             }
                             case (3): {
@@ -229,8 +233,7 @@ public class PresentationController {
                                 checkId(id);
                                 LocalDate delivered = input.nextDate("When is the order ordered? ");
                                 try {
-                                    Order order = service.getOrder(id).data;
-                                    service.updateOrderOrdered(order, delivered);
+                                    service.updateOrderOrdered(id, delivered);
                                 } catch (Exception e) {
                                     output.println(e.getMessage());
                                 }
@@ -242,8 +245,7 @@ public class PresentationController {
                                 checkId(id);
                                 LocalDate delivered = input.nextDate("When is the order supposed to be delivered? ");
                                 try {
-                                    Order order = service.getOrder(id).data;
-                                    service.updateOrderProvided(order, delivered);
+                                    service.updateOrderProvided(id, delivered);
                                 } catch (Exception e) {
                                     output.println(e.getMessage());
                                 }
@@ -255,8 +257,8 @@ public class PresentationController {
                                 int[] itemCoords = checkItem();
                                 try {
                                     Item item = service.getItem(itemCoords[0], itemCoords[1]).data;
-                                    Order order = service.getOrder(id).data;
-                                    service.updateOrderAmount(order, item, input.nextInt("Enter amount to order"));
+                                    service.updateOrderAmount(id, item.getSupplier().getPpn(),
+                                            item.getCatalogNumber(), input.nextInt("Enter amount to order"));
                                 } catch (Exception e) {
                                     output.println(e.getMessage());
                                 }
@@ -264,7 +266,7 @@ public class PresentationController {
                             }
                             case (6): {
                                 //see summery of all orders
-                                output.print(service.toStringOrders());
+                                output.print(service.getOrders().toString());
                                 break;
                             }
                         }
@@ -291,7 +293,7 @@ public class PresentationController {
                             }
                             case (4): {
                                 //summery of quantity discount
-                                output.println(service.toStringQuantity());
+                                output.println(service.getDiscounts().toString());
                                 break;
                             }
                         }
@@ -310,7 +312,8 @@ public class PresentationController {
         int[] arr = checkItem();
         int amount = input.nextInt("For which amount is the discount applicable?: ");
         float discount = input.nextFloat("What would be the discount for this amount?: ");
-        output.print(service.createDiscount(service.getItem(arr[0], arr[1]).data, amount, discount)
+        output.print(service.createDiscount(service.getItem(arr[0], arr[1]).data.getSupplier().getPpn(),
+                        service.getItem(arr[0], arr[1]).data.getCatalogNumber(), amount, discount)
                 .data.toString());
 
     }

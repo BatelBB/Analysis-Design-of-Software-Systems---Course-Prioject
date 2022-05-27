@@ -1,6 +1,6 @@
 package adss_group_k.Tests.Suppliers;
 
-import adss_group_k.BusinessLayer.Inventory.Product;
+import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
@@ -9,6 +9,7 @@ import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
+import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.shared.response.Response;
 import adss_group_k.shared.response.ResponseT;
@@ -61,8 +62,10 @@ class ServiceTest {
         // TODO add tests for other fields if there's time
 
         ResponseT<Supplier> responseErroneous = createWithPpn(1);
-        assertFalse(responseErroneous.success, "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
-        assertNull(responseErroneous.data, "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
+        assertFalse(responseErroneous.success,
+                "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
+        assertNull(responseErroneous.data,
+                "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
     }
 
     @Test
@@ -96,10 +99,11 @@ class ServiceTest {
         Supplier supplier = service.createSupplier(ppn, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
                 "john", "john@email.com", "054").data;
-        Product product = inventory.addProduct();
-        Item item = service.createItem(ppn, 1, "item", "category", 1).data;
-        Order order = service.createOrder(supplier, date1, date2, Order.OrderType.Periodical).data;
-        service.orderItem(order, item, 12);
+        Product product = inventory.addProduct("Milk", "Tnoova", 100.0, 50, 10,
+                1200, "Dairy", "Shop,", "10%").data;
+        Item item = service.createItem(ppn, 1, product.getProduct_id(),  1).data;
+        Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 12);
 
         // delete should work.
         Response serviceResponse = service.deleteSupplier(ppn);
@@ -113,7 +117,7 @@ class ServiceTest {
         ResponseT<Supplier> otherResponse = service.createSupplier(ppn, 222,
                 "Ipsum", false,
                 PaymentCondition.Credit, DayOfWeek.MONDAY,
-                "george", "george@email.com", "050"));
+                "george", "george@email.com", "050");
         assertTrue(otherResponse.success,
                 "creating new ReadOnlysupplier with PPN of deleted ReadOnlysupplier should have worked");
         assertNotNull(otherResponse.data,
@@ -139,47 +143,55 @@ class ServiceTest {
         createWithPpn(ppn2);
 
         // ReadOnlySupplier 1, ReadOnlyItem 1
+        Product product = inventory.addProduct("Milk", "Tnoova", 100.0, 50, 10,
+                1200, "Dairy", "Shop,", "10%").data;
         ResponseT<Item> resApple =
-                service.createItem(ppn1, cn1, "Apple", "Fruit", 1);
+                service.createItem(ppn1, cn1, product.getProduct_id(),  1);
         assertTrue(resApple.success, "should have succeeded.");
         Item apple = resApple.data;
         assertNotNull(apple, "creating ReadOnlyitem shouldn't have returned null.");
-        assertEquals("Apple", apple.getName());
+        assertEquals("Milk", product.getName());
 
         // ReadOnlySupplier 1, ReadOnlyItem 2
+        Product product2 = inventory.addProduct("Banana", "Tnoova", 100.0,
+                50, 10, 1200, "Dairy", "Shop,", "10%").data;
         ResponseT<Item> resBanana =
-                service.createItem(ppn1, cn2, "Banana", "Fruit", 2);
+                service.createItem(ppn1, cn2, product2.getProduct_id(),  2);
         assertTrue(resBanana.success, "should have succeeded but got " + resBanana.error);
 
         Item banana = resBanana.data;
         assertNotNull(banana, "creating ReadOnlyitem shouldn't have returned null.");
-        assertEquals("Banana", banana.getName());
+        assertEquals("Banana", product2.getName());
 
         // ReadOnlySupplier 2, ReadOnlyItem 1
+        Product product3 = inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
+                1200, "Dairy", "Shop,", "10%").data;
         ResponseT<Item> resOtherSupplier =
-                service.createItem(ppn2, cn1, "Pen", "Office stuff", 10);
+                service.createItem(ppn2, cn1, product3.getProduct_id(),  10);
         assertTrue(resOtherSupplier.success,
                 "creating other ReadOnlyitem with same CN but different PPN should've worked.");
         Item pen = resOtherSupplier.data;
         assertNotNull(pen, "creating ReadOnlyitem shouldn't have returned null.");
         assertEquals(ppn2, pen.getSupplier().getPpn());
         assertEquals(cn1, pen.getCatalogNumber());
-        assertEquals("Pen", pen.getName());
+        assertEquals("Pen", product3.getName());
 
         // create with already existing
         ResponseT<Item> alreadyExisting = service.createItem(ppn1, cn1,
-                "Cat in a bag", "Animals & containers", 123);
+                product3.getProduct_id(),  123);
         assertFalse(alreadyExisting.success);
 
         // not existence supplier
         ResponseT<Item> noSuchSupplier = service.createItem(ppnNotExisting, cn1,
-                "Puzzle", "Games", 60);
+                product3.getProduct_id(),  60);
         assertFalse(noSuchSupplier.success);
 
     }
 
     @Test
     void getItems() {
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
+                1200, "Dairy", "Shop,", "10%").data;
         final int[] amountsOfItems = {10, 11, 12, 13, 14};
         for (int i = 0; i < amountsOfItems.length; i++) {
             int ppn = (i + 1) * 111;
@@ -187,7 +199,7 @@ class ServiceTest {
             createWithPpn(ppn);
             for (int j = 0; j < amountForThisSupplier; j++) {
                 int cn = (j + 1) * 11111;
-                service.createItem(ppn, cn, "Lorem", "Ipsum", 1);
+                service.createItem(ppn, cn, product4.getProduct_id(),  1);
             }
         }
 
@@ -197,17 +209,19 @@ class ServiceTest {
 
     @Test
     void getItem() {
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
+                1200, "Dairy", "Shop,", "10%").data;
         final int ppn = 1, wrongPPN = 2;
         final int cn = 11, wrongCN = 2;
         createWithPpn(ppn);
-        service.createItem(ppn, cn, "Pen", "Office stuff", 10);
+        service.createItem(ppn, cn, product4.getProduct_id(),  10);
 
         ResponseT<Item> resSucc = service.getItem(ppn, cn);
         assertTrue(resSucc.success);
         assertNotNull(resSucc.data);
         assertEquals(ppn, resSucc.data.getSupplier().getPpn());
         assertEquals(cn, resSucc.data.getCatalogNumber());
-        assertEquals("Pen", resSucc.data.getName());
+        assertEquals("Pen", product4.getName());
 
         ResponseT<Item> resWrongPPN = service.getItem(wrongPPN, cn);
         assertFalse(resWrongPPN.success);
@@ -225,20 +239,25 @@ class ServiceTest {
         int ppn = 1, cnPen = 11, cnNotebook = 12;
         Supplier sup = createWithPpn(ppn).data;
 
-        Item pen = service.createItem(ppn, cnPen, "Pen", "Office", 10).data;
-        Item notebook = service.createItem(ppn, cnNotebook, "Notebook", "Office", 7).data;
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
 
-        Order orderPens = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
-        service.orderItem(orderPens, pen, 10);
+        Product product5 = inventory.addProduct("Notebook", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+        Item pen = service.createItem(ppn, cnPen, product4.getProduct_id(),  10).data;
+        Item notebook = service.createItem(ppn, cnNotebook, product5.getProduct_id(),  7).data;
 
-        Order orderNotebooks = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
-        service.orderItem(orderNotebooks, notebook, 10);
+        Order orderPens = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        service.orderItem(orderPens.getId(),ppn, pen.getCatalogNumber(), 10);
 
-        Order orderBoth = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
-        service.orderItem(orderBoth, pen, 10);
-        service.orderItem(orderBoth, notebook, 5);
+        Order orderNotebooks = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        service.orderItem(orderNotebooks.getId(),ppn, notebook.getCatalogNumber(), 10);
 
-        Response resDelete = service.deleteItem(pen);
+        Order orderBoth = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        service.orderItem(orderBoth.getId(),ppn, pen.getCatalogNumber(), 10);
+        service.orderItem(orderBoth.getId(),ppn, notebook.getCatalogNumber(), 5);
+
+        Response resDelete = service.deleteItem(ppn,pen.getCatalogNumber());
         assertTrue(resDelete.success);
 
         ResponseT<Item> getDeleted = service.getItem(ppn, cnPen);
@@ -255,19 +274,21 @@ class ServiceTest {
         int ppn = 1, cnPen = 11;
         Supplier sup = createWithPpn(ppn).data;
 
-        ResponseT<Order> responseWithEmptySupplier = service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
+        ResponseT<Order> responseWithEmptySupplier = service.createOrder(ppn, date1, date2, OrderType.Periodical);
         assertFalse(responseWithEmptySupplier.success,
                 "shouldn't be able to start ReadOnlyorder if ReadOnlysupplier has no items.");
 
 
-        service.createItem(ppn, cnPen, "Pen", "Office", 10);
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+        service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
-        ResponseT<Order> responseWithBadDates = service.createOrder(sup, date2, date1, Order.OrderType.Periodical);
+        ResponseT<Order> responseWithBadDates = service.createOrder(ppn, date2, date1, OrderType.Periodical);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        ResponseT<Order> response = service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
+        ResponseT<Order> response = service.createOrder(ppn, date1, date2, OrderType.Periodical);
         assertTrue(response.success);
 
     }
@@ -281,11 +302,14 @@ class ServiceTest {
             Supplier sup = createWithPpn(ppn).data;
 
             // ReadOnlysupplier must have >= 1 items or opening ReadOnlyorder fails.
-            service.createItem(ppn, 0, "Lorem", "Ipsum", 1);
+
+            Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                    10, 1200, "Dairy", "Shop,", "10%").data;
+            service.createItem(ppn, 0, product4.getProduct_id(),  1);
             int amountForThisSupplier = amountOfOrders[i];
             createWithPpn(ppn);
             for (int j = 0; j < amountForThisSupplier; j++) {
-                service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
+                service.createOrder(ppn, date1, date2, OrderType.Periodical);
             }
         }
 
@@ -298,16 +322,18 @@ class ServiceTest {
         int ppn = 1, cnPen = 11;
         Supplier sup = createWithPpn(ppn).data;
 
-        Item pen = service.createItem(ppn, cnPen, "Pen", "Office", 10).data;
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+        Item pen = service.createItem(ppn, cnPen, product4.getProduct_id(),  10).data;
 
-        Order order = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
-        service.orderItem(order, pen, 10);
+        Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        service.orderItem(order.getId(), ppn, pen.getCatalogNumber(), 10);
 
-        Response resDelete = service.deleteOrder(order);
+        Response resDelete = service.deleteOrder(order.getId());
         assertTrue(resDelete.success);
 
         // delete already deleted
-        Response resDeleteAgain = service.deleteOrder(order);
+        Response resDeleteAgain = service.deleteOrder(order.getId());
         assertFalse(resDeleteAgain.success);
     }
 
@@ -320,18 +346,24 @@ class ServiceTest {
         float penPrice = 11, notebookPrice = 7;
         int penAmount = 13, notebookAmount = 5;
 
-        Item pen = service.createItem(ppn, cnPen, "Pen", "Office", penPrice).data;
-        Item notebook = service.createItem(ppn, cnNotebook, "Notebook", "Office", notebookPrice).data;
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
 
-        Order orderPens = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
-        service.orderItem(orderPens, pen, penAmount);
+        Product product5 = inventory.addProduct("Notebook", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+        Item pen = service.createItem(ppn, cnPen, product4.getProduct_id(),  penPrice).data;
+        Item notebook = service.createItem(ppn, cnNotebook, product5.getProduct_id(),
+                notebookPrice).data;
 
-        Order orderNotebooks = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
-        service.orderItem(orderNotebooks, notebook, notebookAmount);
+        Order orderPens = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        service.orderItem(orderPens.getId(), ppn, pen.getCatalogNumber(), penAmount);
 
-        Order orderBoth = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
-        service.orderItem(orderBoth, pen, penAmount);
-        service.orderItem(orderBoth, notebook, notebookAmount);
+        Order orderNotebooks = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        service.orderItem(orderNotebooks.getId(), ppn, notebook.getCatalogNumber(), notebookAmount);
+
+        Order orderBoth = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        service.orderItem(orderBoth.getId(), ppn, pen.getCatalogNumber(), penAmount);
+        service.orderItem(orderBoth.getId(), ppn, notebook.getCatalogNumber(), notebookAmount);
 
         assertTrue(orderBoth.containsItem(pen));
         assertTrue(orderPens.containsItem(pen));
@@ -348,7 +380,10 @@ class ServiceTest {
         Supplier supplier = createWithPpn(ppn).data;
 
         // ReadOnlyitem doesn't matter, there just has to be at least one for ReadOnlyorder to create.
-        service.createItem(ppn, 11, "Lorem", "Ipsum", 1);
+
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+        service.createItem(ppn, 11, product4.getProduct_id(),  1);
 
         final Period ONE_DAY = Period.ofDays(1);
         final LocalDate
@@ -359,22 +394,22 @@ class ServiceTest {
                 THU = WED.plus(ONE_DAY),
                 FRI = THU.plus(ONE_DAY);
 
-        Order order = service.createOrder(supplier, MON, WED, Order.OrderType.Periodical).data;
+        Order order = service.createOrder(ppn, MON, WED, OrderType.Periodical).data;
         assertEquals(MON, order.getOrdered());
 
-        service.setOrdered(order, SUN);
+        service.setOrdered(order.getId(), SUN);
         assertEquals(SUN, order.getOrdered());
 
-        assertDoesNotThrow(() -> service.setOrdered(order, WED), "should support same-day delivery");
+        assertDoesNotThrow(() -> service.setOrdered(order.getId(), WED), "should support same-day delivery");
         assertEquals(WED, order.getOrdered());
 
-        service.setOrdered(order, TUE);
+        service.setOrdered(order.getId(), TUE);
         assertEquals(TUE, order.getOrdered());
 
-        assertThrows(BusinessLogicException.class, () -> service.setOrdered(order, THU));
+        assertThrows(BusinessLogicException.class, () -> service.setOrdered(order.getId(), THU));
         assertEquals(TUE, order.getOrdered());
 
-        assertThrows(BusinessLogicException.class, () -> service.setOrdered(order, FRI));
+        assertThrows(BusinessLogicException.class, () -> service.setOrdered(order.getId(), FRI));
         assertEquals(TUE, order.getOrdered());
     }
 
@@ -384,8 +419,11 @@ class ServiceTest {
         final int ppn = 1;
         Supplier supplier = createWithPpn(ppn).data;
 
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+
         // ReadOnlyitem doesn't matter, there just has to be at least one for ReadOnlyorder to create.
-        service.createItem(ppn, 11, "Lorem", "Ipsum", 1);
+        service.createItem(ppn, 11, product4.getProduct_id(),  1);
 
         final Period ONE_DAY = Period.ofDays(1);
         final LocalDate
@@ -396,22 +434,22 @@ class ServiceTest {
                 THU = WED.plus(ONE_DAY),
                 FRI = THU.plus(ONE_DAY);
 
-        Order order = service.createOrder(supplier, TUE, FRI, Order.OrderType.Periodical).data;
+        Order order = service.createOrder(ppn, TUE, FRI, OrderType.Periodical).data;
         assertEquals(FRI, order.getProvided());
 
-        service.setProvided(order, THU);
+        service.setProvided(order.getId(), THU);
         assertEquals(THU, order.getProvided());
 
-        assertDoesNotThrow(() -> service.setProvided(order, TUE), "should support same-day delivery");
+        assertDoesNotThrow(() -> service.setProvided(order.getId(), TUE), "should support same-day delivery");
         assertEquals(TUE, order.getProvided());
 
-        service.setProvided(order, WED);
+        service.setProvided(order.getId(), WED);
         assertEquals(WED, order.getProvided());
 
-        assertThrows(BusinessLogicException.class, () -> service.setProvided(order, SUN));
+        assertThrows(BusinessLogicException.class, () -> service.setProvided(order.getId(), SUN));
         assertEquals(WED, order.getProvided());
 
-        assertThrows(BusinessLogicException.class, () -> service.setProvided(order, MON));
+        assertThrows(BusinessLogicException.class, () -> service.setProvided(order.getId(), MON));
         assertEquals(WED, order.getProvided());
     }
 
@@ -424,47 +462,51 @@ class ServiceTest {
         int ppn = 1, cnCalc = 11;
         float priceCalc = 100;
 
-        Supplier sup = createWithPpn(ppn).data;
-        Item item = service.createItem(ppn, cnCalc, "Calculator", "Office", priceCalc).data;
-        Order order = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
+        Product product4 = inventory.addProduct("Calculator", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
 
-        service.orderItem(order, item, 1);
+        Supplier sup = createWithPpn(ppn).data;
+        Item item = service.createItem(ppn, cnCalc, product4.getProduct_id(),  priceCalc).data;
+        Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 1);
         assertEquals(priceCalc, order.getTotalPrice());
 
-        ResponseT<QuantityDiscount> res = service.createDiscount(item, 10, 0.01f);
+        ResponseT<QuantityDiscount> res = service.createDiscount(ppn, item.getCatalogNumber(), 10,
+                0.01f);
         assertTrue(res.success);
         assertEquals(priceCalc, order.getTotalPrice());
 
-        service.orderItem(order, item, 9);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 9);
         assertEquals(priceCalc * 9, order.getTotalPrice(), EPSILON);
 
-        service.orderItem(order, item, 10);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 10);
         assertEquals(priceCalc * 10 * 0.99, order.getTotalPrice(), EPSILON);
 
-        service.orderItem(order, item, 11);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 11);
         assertEquals(priceCalc * 11 * 0.99, order.getTotalPrice(), EPSILON);
 
-        res = service.createDiscount(item, 100, 0.1f);
+        res = service.createDiscount(ppn, item.getCatalogNumber(), 100, 0.1f);
         assertTrue(res.success);
         assertEquals(priceCalc * 11 * 0.99, order.getTotalPrice(), EPSILON);
 
-        service.orderItem(order, item, 100);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 100);
         assertEquals(priceCalc * 100 * 0.9, order.getTotalPrice(), EPSILON);
 
-        service.orderItem(order, item, 101);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 101);
         assertEquals(priceCalc * 101 * 0.9, order.getTotalPrice(), EPSILON);
 
-        service.orderItem(order, item, 250);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 250);
         assertEquals(priceCalc * 250 * 0.9, order.getTotalPrice(), EPSILON);
 
-        res = service.createDiscount(item, 200, 0.25f);
+        res = service.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f);
         assertTrue(res.success);
         assertEquals(priceCalc * 250 * 0.75f, order.getTotalPrice(), EPSILON);
 
-        res = service.createDiscount(item, 200, 0.25f);
+        res = service.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f);
         assertFalse(res.success, "already exists such discount; shouldn't be able to create, but succeeded");
 
-        res = service.createDiscount(item, 100, 0.2f);
+        res = service.createDiscount(ppn, item.getCatalogNumber(), 100, 0.2f);
         assertFalse(res.success, "already exists such discount; shouldn't be able to create, but succeeded");
     }
 
@@ -473,16 +515,18 @@ class ServiceTest {
         int ppn = 1, cnCalc = 11;
         float priceCalc = 100;
 
+        Product product4 = inventory.addProduct("Calculator", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
         Supplier sup = createWithPpn(ppn).data;
-        Item item = service.createItem(ppn, cnCalc, "Calculator", "Office", priceCalc).data;
-        Order order = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
+        Item item = service.createItem(ppn, cnCalc, product4.getProduct_id(),  priceCalc).data;
+        Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
 
-        QuantityDiscount over10 = service.createDiscount(item, 10, 0.01f).data;
-        QuantityDiscount over50 = service.createDiscount(item, 50, 0.05f).data;
-        QuantityDiscount over100 = service.createDiscount(item, 100, 0.1f).data;
-        QuantityDiscount over200 = service.createDiscount(item, 200, 0.25f).data;
+        QuantityDiscount over10 = service.createDiscount(ppn, item.getCatalogNumber(), 10, 0.01f).data;
+        QuantityDiscount over50 = service.createDiscount(ppn, item.getCatalogNumber(), 50, 0.05f).data;
+        QuantityDiscount over100 = service.createDiscount(ppn, item.getCatalogNumber(), 100, 0.1f).data;
+        QuantityDiscount over200 = service.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f).data;
 
-        service.orderItem(order, item, 250);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 250);
 
         assertEquals(priceCalc * 250 * 0.75f, order.getTotalPrice(), EPSILON);
 
@@ -507,50 +551,56 @@ class ServiceTest {
         float priceBread = 5, priceMilk = 7;
         Supplier sup = createWithPpn(ppn).data;
 
-        Item bread = service.createItem(ppn, cnBread, "Bread", "Food", priceBread).data;
-        Item milk = service.createItem(ppn, cnMilk, "Milk", "Food", priceMilk).data;
+        Product product4 = inventory.addProduct("Bread", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+
+        Product product5 = inventory.addProduct("Milk", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+
+        Item bread = service.createItem(ppn, cnBread, product4.getProduct_id(),  priceBread).data;
+        Item milk = service.createItem(ppn, cnMilk, product5.getProduct_id(),  priceMilk).data;
 
         final int amountBread = 10, amountMilk = 10;
 
-        Order order = service.createOrder(sup, date1, date2, Order.OrderType.Periodical).data;
-        service.orderItem(order, bread, amountBread);
-        service.orderItem(order, milk, amountMilk);
+        Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        service.orderItem(order.getId(), ppn, bread.getCatalogNumber(), amountBread);
+        service.orderItem(order.getId(),ppn,  milk.getCatalogNumber(), amountMilk);
 
         assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
         // I guess it's expensive organic or something
         priceBread = 10;
         priceMilk = 10;
-        service.setPrice(bread, priceBread);
-        service.setPrice(milk, priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
         // wow the market sure is going crazy
         priceBread = 100;
         priceMilk = 125;
-        service.setPrice(bread, priceBread);
-        service.setPrice(milk, priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
         // Ba'al HaBayit Hishtage`a
         priceBread = 0.2f;
         priceMilk = 0.5f;
-        service.setPrice(bread, priceBread);
-        service.setPrice(milk, priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
 
         priceBread = 5;
         priceMilk = 7;
-        service.setPrice(bread, priceBread);
-        service.setPrice(milk, priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
 
         priceBread = 1;
         priceMilk = 2;
-        service.setPrice(bread, priceBread);
-        service.setPrice(milk, priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
     }
 
@@ -563,19 +613,21 @@ class ServiceTest {
         int ppn = 1, cnPen = 11;
         Supplier sup = createWithPpn(ppn).data;
 
-        ResponseT<Order> responseWithEmptySupplier = service.createOrder(sup, date1, date2, Order.OrderType.Shortages);
+        ResponseT<Order> responseWithEmptySupplier = service.createOrder(ppn, date1, date2, OrderType.Shortages);
         assertFalse(responseWithEmptySupplier.success,
                 "shouldn't be able to start ReadOnlyorder if ReadOnlysupplier has no items.");
 
 
-        service.createItem(ppn, cnPen, "Pen", "Office", 10);
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+        service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
-        ResponseT<Order> responseWithBadDates = service.createOrder(sup, date2, date1, Order.OrderType.Shortages);
+        ResponseT<Order> responseWithBadDates = service.createOrder(ppn, date2, date1, OrderType.Shortages);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        ResponseT<Order> response = service.createOrder(sup, date1, date2, Order.OrderType.Shortages);
+        ResponseT<Order> response = service.createOrder(ppn, date1, date2, OrderType.Shortages);
         assertTrue(response.success);
 
     }
@@ -585,19 +637,21 @@ class ServiceTest {
         int ppn = 1, cnPen = 11;
         Supplier sup = createWithPpn(ppn).data;
 
-        ResponseT<Order> responseWithEmptySupplier = service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
+        ResponseT<Order> responseWithEmptySupplier = service.createOrder(ppn, date1, date2, OrderType.Periodical);
         assertFalse(responseWithEmptySupplier.success,
                 "shouldn't be able to start ReadOnlyorder if ReadOnlysupplier has no items.");
 
 
-        service.createItem(ppn, cnPen, "Pen", "Office", 10);
+        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Dairy", "Shop,", "10%").data;
+        service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
-        ResponseT<Order> responseWithBadDates = service.createOrder(sup, date2, date1, Order.OrderType.Periodical);
+        ResponseT<Order> responseWithBadDates = service.createOrder(ppn, date2, date1, OrderType.Periodical);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        ResponseT<Order> response = service.createOrder(sup, date1, date2, Order.OrderType.Periodical);
+        ResponseT<Order> response = service.createOrder(ppn, date1, date2, OrderType.Periodical);
         assertTrue(response.success);
 
 

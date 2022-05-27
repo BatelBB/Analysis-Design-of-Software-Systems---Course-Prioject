@@ -67,4 +67,12 @@ public class Product {
         }
         return s.toString();
     }
+
+    public int getProduct_id(){
+        return product_id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

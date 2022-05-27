@@ -5,7 +5,6 @@ import adss_group_k.PresentationLayer.Suppliers.UserInput;
 import adss_group_k.PresentationLayer.Suppliers.UserOutput;
 
 import static adss_group_k.PresentationLayer.Suppliers.PresentationController.startSupplierMenu;
-import adss_group_k.PresentationLayer.Inventory.Main;
 
 public class PresentationFacade {
     private static UserInput input = UserInput.getInstance();

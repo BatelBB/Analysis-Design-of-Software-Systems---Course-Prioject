@@ -1,21 +1,22 @@
 package adss_group_k.dataLayer.dao;
 
 import adss_group_k.dataLayer.records.OrderRecord;
+import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.readonly.OrderData;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
-class OrderDAO extends BaseDAO<Integer, OrderRecord> {
+public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
+
+    private int maxId;
 
     public OrderDAO(Connection conn) {
         super(conn);
+        maxId = 1 + oneResultQuery("SELECT MAX(id) FROM Order", rs -> rs.getInt(1));
     }
 
     @Override
@@ -39,6 +40,24 @@ class OrderDAO extends BaseDAO<Integer, OrderRecord> {
         return list.stream();
     }
 
+    public void updateProvided(int id, LocalDate provided) {
+        runUpdate(
+                "UPDATE Order SET provided=? WHERE id=?",
+                ps -> ps.setDate(1, Date.valueOf(provided)),
+                ps -> ps.setInt(2, id)
+        );
+        get(id).data.setProvided(provided);
+    }
+
+    public void updateOrdered(int id, LocalDate ordered) {
+        runUpdate(
+                "UPDATE Order SET ordered=? WHERE id=?",
+                ps -> ps.setDate(1, Date.valueOf(ordered)),
+                ps -> ps.setInt(2, id)
+        );
+        get(id).data.setOrdered(ordered);
+    }
+
     @Override
     protected int runDeleteQuery(Integer integer) {
         return 0;
@@ -53,5 +72,27 @@ class OrderDAO extends BaseDAO<Integer, OrderRecord> {
                 qu.getDate("ordered").toLocalDate(),
                 qu.getDate("delivered").toLocalDate()
         );
+    }
+
+    public OrderData createOrder(int ppn, OrderType type, LocalDate ordered, LocalDate delivered) {
+        int id = maxId + 1;
+        maxId++;
+        return create(
+                () -> new OrderRecord(id, ppn, 0, ordered, delivered),
+                "INSERT INTO Order(id, orderType, price, ordered, provided, ppn)",
+                ps -> ps.setInt(1, id),
+                ps -> ps.setInt(2, type.value),
+                ps -> ps.setFloat(3, 0f),
+                ps -> ps.setDate(4, Date.valueOf(ordered)),
+                ps -> ps.setDate(5, Date.valueOf(delivered)),
+                ps -> ps.setInt(6, ppn)
+        ).data;
+    }
+
+    public void setPrice(int id, float price) {
+        runUpdate("UPDATE Order SET price=? WHERE id=?",
+              ps -> ps.setFloat(1, price),
+              ps -> ps.setInt(2, id)
+            );
     }
 }

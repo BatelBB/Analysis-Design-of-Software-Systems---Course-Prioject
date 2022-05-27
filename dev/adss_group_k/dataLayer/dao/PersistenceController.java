@@ -14,6 +14,8 @@ public class PersistenceController {
     private final ProductItemDAO productItems;
     private final DiscountPairDAO discountPairs;
     private final QuantityDiscountDAO quantityDiscounts;
+    private final OrderDAO orders;
+    private final ItemInOrderDAO itemInOrder;
 
     public PersistenceController(Connection conn) {
         this.conn = conn;
@@ -24,6 +26,8 @@ public class PersistenceController {
         items = new ItemDAO(conn);
         suppliers = new SupplierDAO(conn);
         quantityDiscounts = new QuantityDiscountDAO(conn);
+        orders = new OrderDAO(conn);
+        itemInOrder = new ItemInOrderDAO(conn);
         productItems = new ProductItemDAO(conn);
         discountPairs = new DiscountPairDAO(conn);
     }
@@ -66,5 +70,13 @@ public class PersistenceController {
 
     public ProductItemDAO getProductItems() {
         return productItems;
+    }
+
+    public OrderDAO getOrders() {
+        return orders;
+    }
+
+    public ItemInOrderDAO getItemsInOrders() {
+        return itemInOrder;
     }
 }

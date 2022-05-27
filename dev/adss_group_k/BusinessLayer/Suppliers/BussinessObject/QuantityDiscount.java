@@ -1,7 +1,6 @@
 package adss_group_k.BusinessLayer.Suppliers.BussinessObject;
 
 import adss_group_k.shared.utils.Utils;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Item;
 
 public class QuantityDiscount {
     public final Item item;
@@ -25,7 +24,6 @@ public class QuantityDiscount {
         return  Utils.table(
                 2, 30, true,
                 "  **** QUANTITY DISCOUNT **** ", "",
-                "Item name", item.getName(),
                 "Item catalog number", item.getCatalogNumber(),
                 "For amounts over", quantity,
                 "Discount", String.format("%.2f%%", discount * 100),

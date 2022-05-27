@@ -7,8 +7,10 @@ import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
 import adss_group_k.BusinessLayer.Suppliers.Controller.ItemController;
 import adss_group_k.BusinessLayer.Suppliers.Controller.OrderController;
+import adss_group_k.BusinessLayer.Suppliers.Controller.QuantityDiscountController;
 import adss_group_k.BusinessLayer.Suppliers.Controller.SupplierController;
 import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.shared.dto.CreateSupplierDTO;
 import adss_group_k.shared.response.Response;
@@ -23,13 +25,15 @@ public class SupplierService implements ISupplierService {
 
     private final ItemController items;
     private final OrderController orders;
+    private final QuantityDiscountController discounts;
     private PersistenceController dal;
     private SupplierController suppliers;
 
     public SupplierService(Connection connection) {
         dal = new PersistenceController(connection);
-        orders = new OrderController();
-        items = new ItemController(orders);
+        items = new ItemController();
+        discounts = new QuantityDiscountController(dal, items);
+        orders = new OrderController(discounts);
         suppliers = new SupplierController(orders, items, dal);
     }
 
@@ -70,14 +74,17 @@ public class SupplierService implements ISupplierService {
         return null;
     }
 
-    @Override
-    public ResponseT<Item> createItem(int supplierPPN, int catalogNumber, int productID, String name, String category, float price) {
-        return items.create(
-                getSupplier(supplierPPN),
-                catalogNumber,
-                productID,
-
-        );
+    public ResponseT<Item> createItem(int supplierPPN, int catalogNumber, int productID, float price) {
+        try {
+            Item item = items.create(
+                    getSupplier(supplierPPN),
+                    catalogNumber,
+                    productID,
+                    price
+            );
+            return ResponseT.success(item);
+        } catch (BusinessLogicException e) {
+            return ResponseT.error(e.getMessage());        }
     }
 
     @Override
@@ -106,7 +113,7 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
-    public ResponseT<Order> createOrder(int supplierPPN, LocalDate ordered, LocalDate delivered, Order.OrderType type) {
+    public ResponseT<Order> createOrder(int supplierPPN, LocalDate ordered, LocalDate delivered, OrderType type) {
         return null;
     }
 
@@ -137,7 +144,7 @@ public class SupplierService implements ISupplierService {
 
     @Override
     public void setPrice(int supplier, int catalogNumber, float price) {
-
+        items.setPrice(supplier, catalogNumber, price);
     }
 
     @Override
@@ -214,4 +221,6 @@ public class SupplierService implements ISupplierService {
     public Supplier findCheapestSupplierFor(int productID, int amount) {
         return null;
     }
+
+    private ResponseT 
 }

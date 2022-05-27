@@ -2,6 +2,7 @@ package adss_group_k.dataLayer.dao;
 
 import adss_group_k.dataLayer.records.ItemRecord;
 import adss_group_k.dataLayer.records.QuantityDiscountRecord;
+import adss_group_k.dataLayer.records.readonly.ItemData;
 import adss_group_k.shared.response.*;
 
 import java.sql.Connection;
@@ -79,5 +80,12 @@ public class QuantityDiscountDAO extends BaseDAO<Integer, QuantityDiscountRecord
                 query.getInt("quantity"),
                 query.getFloat("discount")
         );
+    }
+
+    public void deleteAllForItem(ItemRecord.ItemKey itemKey) {
+        all()
+                .filter(x -> x.itemKey.equals(itemKey))
+                .map(x -> x.id)
+                .forEach(this::delete);
     }
 }
