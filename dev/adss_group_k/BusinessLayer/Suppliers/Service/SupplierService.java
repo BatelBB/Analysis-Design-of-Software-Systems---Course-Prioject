@@ -1,9 +1,15 @@
 package adss_group_k.BusinessLayer.Suppliers.Service;
 
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import adss_group_k.BusinessLayer.Suppliers.Controller.ItemController;
+import adss_group_k.BusinessLayer.Suppliers.Controller.OrderController;
+import adss_group_k.BusinessLayer.Suppliers.Controller.SupplierController;
 import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.PaymentCondition;
+import adss_group_k.shared.dto.CreateSupplierDTO;
 import adss_group_k.shared.response.Response;
 import adss_group_k.shared.response.ResponseT;
 
@@ -14,10 +20,16 @@ import java.util.Collection;
 
 public class SupplierService implements ISupplierService {
 
+    private final ItemController items;
+    private final OrderController orders;
     private PersistenceController dal;
+    private SupplierController suppliers;
 
     public SupplierService(Connection connection) {
         dal = new PersistenceController(connection);
+        orders = new OrderController();
+        items = new ItemController(orders);
+        suppliers = new SupplierController(orders, items, dal);
     }
 
     @Override
@@ -26,8 +38,20 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
-    public ResponseT<Supplier> createSupplier(int ppn, int bankAccount, String name, boolean isDelivering, PaymentCondition paymentCondition, DayOfWeek regularSupplyingDays, String contactName, String contactPhone, String contactEmail) {
-        return null;
+    public ResponseT<Supplier> createSupplier(int ppn, int bankAccount, String name,
+                                              boolean isDelivering, PaymentCondition paymentCondition,
+                                              DayOfWeek regularSupplyingDays, String contactName,
+                                              String contactPhone, String contactEmail) {
+        try {
+            Supplier supplier = suppliers.create(new CreateSupplierDTO(
+                    ppn, bankAccount, name, isDelivering,
+                    paymentCondition, regularSupplyingDays, contactEmail,
+                    contactName, contactPhone
+            ));
+            return ResponseT.success(supplier);
+        } catch (BusinessLogicException e) {
+            return ResponseT.error(e.getMessage());
+        }
     }
 
     @Override
