@@ -1,9 +1,8 @@
 package adss_group_k.BusinessLayer.Suppliers.Controller;
 
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Item;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Order;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Supplier;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
+
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;

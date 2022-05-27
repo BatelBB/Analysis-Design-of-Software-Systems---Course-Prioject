@@ -28,20 +28,24 @@ public class Service {
         return category_service.addCategory(name);
     }
 
-    public Response removeCategory(String name) {
-        return category_service.removeCategory(name, product_service.productsInCategory(name));
-    }
-
     public Response addSubCategory(String categoryName, String SubCategoryName) {
         return category_service.addSubCategory(categoryName, SubCategoryName);
+    }
+
+    public Response addSubSubCategory(String category, String sub_category, String name) {
+        return category_service.addSubSubCategory(category, sub_category, name);
+    }
+
+    public Response removeCategory(String name) {
+        return category_service.removeCategory(name, product_service.productsInCategory(name));
     }
 
     public Response removeSubCategory(String category, String name) {
         return category_service.removeSubCategory(category, name, product_service.productsInSubCategory(category, name));
     }
 
-    public Response addSubSubCategory(String category, String sub_category, String name) {
-        return category_service.addSubSubCategory(category, sub_category, name);
+    public Response removeSubSubCategory(String category, String sub_category, String name) {
+        return category_service.removeSubSubCategory(category, sub_category, name, product_service.productsInSubSubCategory(category, sub_category, name));
     }
 
     public ResponseT<Category> getCategory(String name) {
@@ -50,10 +54,6 @@ public class Service {
 
     public ResponseT<SubCategory> getSubCategory(String category, String name) {
         return category_service.getSubCategory(category, name);
-    }
-
-    public Response removeSubSubCategory(String category, String sub_category, String name) {
-        return category_service.removeSubSubCategory(category, sub_category, name, product_service.productsInSubSubCategory(category, sub_category, name));
     }
 
     public Response updateCategoryCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {

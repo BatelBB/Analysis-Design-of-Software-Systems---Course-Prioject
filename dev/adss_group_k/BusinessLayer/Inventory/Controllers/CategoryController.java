@@ -5,6 +5,7 @@ import adss_group_k.BusinessLayer.Inventory.Categories.Category;
 import adss_group_k.BusinessLayer.Inventory.Categories.SubCategory;
 import adss_group_k.dataLayer.dao.CategoryDAO;
 import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.CategoryRecord;
 import adss_group_k.dataLayer.records.readonly.CategoryData;
 import adss_group_k.shared.response.ResponseT;
 
@@ -31,6 +32,7 @@ public class CategoryController {
     private CategoryController(PersistenceController pc) {
         categories = new HashMap<>();
         this.pc = pc;
+        pc.getCategories().all().forEach(this::addFromExisting);
     }
 
     public void addCategory(String name) throws Exception {
@@ -39,7 +41,7 @@ public class CategoryController {
         else {
             ResponseT<CategoryData> r = pc.getCategories().create(name);
             if (r.success) {
-                Category category = new Category(name);
+                Category category = new Category(name, pc);
                 categories.put(name, category);
             } else
                 throw new Exception(r.error);
@@ -65,7 +67,7 @@ public class CategoryController {
             throw new IllegalArgumentException("Category doesn't exists");
         else {
             Category category = categories.get(categoryName);
-            category.addSubCategory(SubCategoryName, pc);
+            category.addSubCategory(SubCategoryName);
         }
     }
 
@@ -75,14 +77,14 @@ public class CategoryController {
         if (!categories.containsKey(categoryName))
             throw new IllegalArgumentException("Category doesn't exists");
         else
-            categories.get(categoryName).removeSubCategory(SubCategoryName, pc);
+            categories.get(categoryName).removeSubCategory(SubCategoryName);
     }
 
     public void addSubSubCategory(String categoryName, String sub_category, String name) throws Exception {
         if (!categories.containsKey(categoryName))
             throw new IllegalArgumentException("Category doesn't exists");
         else
-            categories.get(categoryName).getSubCategory(sub_category).addSubSubCategory(categoryName,name,pc);
+            categories.get(categoryName).getSubCategory(sub_category).addSubSubCategory(categoryName, name);
     }
 
     public void removeSubSubCategory(String categoryName, String sub_category, String name, boolean safe_remove) throws Exception {
@@ -93,7 +95,7 @@ public class CategoryController {
         else {
             Category category = categories.get(categoryName);
             SubCategory subCategory = category.getSubCategory(sub_category);
-            subCategory.removeSubSubCategory(categoryName, name, pc);
+            subCategory.removeSubSubCategory(categoryName, name);
         }
     }
 
@@ -128,6 +130,10 @@ public class CategoryController {
 
     public void restart() {
         categories.clear();
+    }
+
+    private void addFromExisting(CategoryRecord category) {
+        categories.put(category.getName(), new Category(category, pc));
     }
 }
 

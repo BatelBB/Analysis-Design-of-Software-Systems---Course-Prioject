@@ -20,7 +20,7 @@ public class Order {
     private static int instanceCounter = 0;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
-    public Order(Supplier supplier, LocalDate ordered, LocalDate provided){
+    public Order(Supplier supplier, LocalDate ordered, LocalDate provided) {
         this.supplier = supplier;
         this.ordered = ordered;
         this.provided = provided;
