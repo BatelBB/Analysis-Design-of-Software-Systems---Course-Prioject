@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
-class OrderDAO extends BaseDAO<Integer, OrderRecord> {
+public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
 
     public OrderDAO(Connection conn) {
         super(conn);

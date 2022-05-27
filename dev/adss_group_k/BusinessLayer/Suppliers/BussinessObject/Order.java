@@ -1,5 +1,6 @@
 package adss_group_k.BusinessLayer.Suppliers.BussinessObject;
 
+import adss_group_k.dataLayer.dao.OrderDAO;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.readonly.OrderData;
@@ -41,10 +42,15 @@ public class Order {
     }
 
     public void orderItem(Item item, int amount) {
+        int catalogNumber = item.getCatalogNumber();
+        int ppn = item.getSupplier().getPpn();
+
         if(amount == 0) {
             itemsAmounts.remove(item);
+            dal.getOrders().removeItemFromOrder(getId(), ppn, catalogNumber);
         } else {
             itemsAmounts.put(item, amount);
+            dal.getOrders().updateAmount(getId(), ppn, catalogNumber);
         }
         refreshPrice();
     }
@@ -53,29 +59,26 @@ public class Order {
         if(ordered.isAfter(getProvided())) {
             throw new BusinessLogicException("ordered date can't be after provided date.");
         }
-
+        dal.getOrders().updateOrdered(getId(), ordered);
     }
 
     public void updateProvided(LocalDate provided) throws BusinessLogicException {
         if(getOrdered().isAfter(provided)) {
             throw new BusinessLogicException("provided date can't be before ordered date.");
         }
-        dal.getOrders().;
+        dal.getOrders().updateProvided(getId(), provided);
     }
 
-    @Override
     public float getTotalPrice() {
         return totalPrice;
     }
 
-    @Override
     public LocalDate getOrdered() {
-        return ordered;
+        return source.getOrdered();
     }
 
-    @Override
     public LocalDate getProvided() {
-        return provided;
+        return source.getProvided();
     }
 
     @Override
@@ -83,12 +86,12 @@ public class Order {
         ArrayList<String> table = new ArrayList<>();
         table.add(" **** ORDER **** "); table.add(" "); table.add(" "); table.add(" ");
 
-        table.add("Order id: "); table.add(String.valueOf(id)); table.add(" "); table.add(" ");
+        table.add("Order id: "); table.add(String.valueOf(getId())); table.add(" "); table.add(" ");
         table.add("Supplier name: "); table.add(supplier.getName());
         table.add("Supplier PPN: "); table.add(supplier.getPpn() + "");
 
-        table.add("Ordered: "); table.add(ordered.format(DATE_FORMAT));
-        table.add("Provided: "); table.add(provided.format(DATE_FORMAT));
+        table.add("Ordered: "); table.add(getOrdered().format(DATE_FORMAT));
+        table.add("Provided: "); table.add(getProvided().format(DATE_FORMAT));
 
         table.add("----");
         table.add("----");
@@ -122,6 +125,10 @@ public class Order {
     }
 
     public int getId(){
-        return id;
+        return source.getId();
+    }
+
+    public boolean containsItem(Item item) {
+        return itemsAmounts.containsKey(item);
     }
 }
