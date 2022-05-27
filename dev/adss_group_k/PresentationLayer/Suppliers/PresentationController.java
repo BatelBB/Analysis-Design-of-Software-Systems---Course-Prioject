@@ -1,10 +1,13 @@
 package adss_group_k.PresentationLayer.Suppliers;
 
-import adss_group_k.BusinessLayer.Suppliers.Entity.MutableContact;
-import adss_group_k.BusinessLayer.Suppliers.Entity.PaymentCondition;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Order;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.MutableContact;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.PaymentCondition;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Item;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Order;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Supplier;
+import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
+import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.shared.response.ResponseT;
 
 import java.time.DayOfWeek;
@@ -16,7 +19,11 @@ import static adss_group_k.PresentationLayer.PresentationFacade.moduleSelector;
 public class PresentationController {
     private static UserInput input = UserInput.getInstance();
     private static UserOutput output = UserOutput.getInstance();
-    private static SupplierService service = new SupplierService();
+    private static ISupplierService service;
+
+    public static void setService(ISupplierService service) {
+        PresentationController.service = service;
+    }
 
     static Scanner scanner = new Scanner(System.in);
 
@@ -39,7 +46,8 @@ public class PresentationController {
                                 String email = input.nextString("Enter the supplier's contact email: ");
                                 String phoneNum = input.nextString("Enter the supplier's contact phone number: ");
                                 output.print(service.createSupplier(ppn, bankAccount, name, isDelivering,
-                                        paymentCondition, day, new MutableContact(contactName, email, phoneNum)).data.toString());
+                                        paymentCondition, day, contactName, phoneNum, email).data.toString());
+
                                 break;
                             }
                             case (2): {

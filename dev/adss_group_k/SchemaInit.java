@@ -8,23 +8,13 @@ import java.util.Scanner;
 
 public class SchemaInit {
 
-    public static void main(String[] args) throws SQLException {String url = "jdbc:sqlite:C:/sqlite/db/chinook.db";
-        // create a connection to the database
-        Connection conn = DriverManager.getConnection(url);
-        Scanner s = new Scanner(schemaInit);
-        s.useDelimiter("(;(\r)?\n)|(--\n)");
+    public static void init(Connection conn) throws SQLException {
+        String[] statements = schemaInit.split(";");
         Statement st = null;
         try
         {
             st = conn.createStatement();
-            while (s.hasNext())
-            {
-                String line = s.next();
-                if (line.startsWith("/*!") && line.endsWith("*/"))
-                {
-                    int i = line.indexOf(' ');
-                    line = line.substring(i + 1, line.length() - " */".length());
-                }
+            for(String line: statements) {
 
                 if (line.trim().length() > 0)
                 {

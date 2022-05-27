@@ -1,13 +1,12 @@
 package adss_group_k.Tests.Suppliers;
 
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
-import adss_group_k.BusinessLayer.Suppliers.Entity.MutableContact;
-import adss_group_k.BusinessLayer.Suppliers.Entity.PaymentCondition;
-import adss_group_k.BusinessLayer.Suppliers.Entity.QuantityDiscount;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Order;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
-import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.PaymentCondition;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Item;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Order;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Supplier;
+import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.shared.response.Response;
 import adss_group_k.shared.response.ResponseT;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +29,7 @@ class ServiceTest {
             date2 = LocalDate.of(2022, Month.APRIL, 2);
 
 
-    private SupplierService service;
+    private ISupplierService service;
 
     @BeforeEach
     void setUp() {

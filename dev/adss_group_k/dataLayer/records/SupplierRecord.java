@@ -1,6 +1,7 @@
 package adss_group_k.dataLayer.records;
 
 
+import adss_group_k.shared.dto.CreateSupplierDTO;
 import adss_group_k.shared.utils.Utils;
 import adss_group_k.dataLayer.records.readonly.SupplierData;
 
@@ -14,6 +15,16 @@ public class SupplierRecord extends BaseRecord<Integer> implements SupplierData 
     PaymentCondition paymentCondition;
     DayOfWeek regularSupplyingDays;
     ContactRecord contact;
+
+    public SupplierRecord(CreateSupplierDTO dto){
+        this.ppn = dto.ppn;
+        this.bankNumber = dto.bankNumber;
+        this.name = dto.name;
+        this.isDelivering = dto.isDelivering;
+        this.paymentCondition = dto.paymentCondition;
+        this.regularSupplyingDays = dto.regularSupplyDays;
+        this.contact = new ContactRecord(dto.contactName, dto.contactEmail, dto.contactPhone);
+    }
 
     public SupplierRecord(int ppn, int bankNumber, String name, boolean isDelivering, PaymentCondition pm,
                           DayOfWeek rsd, ContactRecord contact){

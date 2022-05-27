@@ -1,11 +1,11 @@
 package adss_group_k.BusinessLayer.Suppliers.Service;
 
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
-import adss_group_k.BusinessLayer.Suppliers.Entity.PaymentCondition;
-import adss_group_k.BusinessLayer.Suppliers.Entity.QuantityDiscount;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Order;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
+
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.shared.response.Response;
 import adss_group_k.shared.response.ResponseT;
 
@@ -13,10 +13,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Collection;
 
-/**
- * TEMPORARY NAME!
- */
-public interface ISupplierService_V2 {
+public interface ISupplierService {
     ResponseT<Order> getOrder(int id);
 
     ResponseT<Supplier> createSupplier(

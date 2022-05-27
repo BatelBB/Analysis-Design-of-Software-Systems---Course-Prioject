@@ -1,11 +1,11 @@
 package adss_group_k.BusinessLayer.Suppliers.Controller;
 
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
-import adss_group_k.BusinessLayer.Suppliers.Entity.MutableItem;
-import adss_group_k.BusinessLayer.Suppliers.Entity.QuantityDiscount;
-import adss_group_k.BusinessLayer.Suppliers.Entity.MutableSupplier;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Item;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Supplier;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.MutableItem;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,7 +21,7 @@ public class ItemController {
         this.orderController = orderController;
     }
 
-    public MutableItem create(MutableSupplier supplier, int catalogNumber, String name, String category, float price)
+    public MutableItem create(Supplier supplier, int catalogNumber, String name, String category, float price)
             throws BusinessLogicException {
         String key = tuple(supplier.getPpn(), catalogNumber);
         if(items.containsKey(key)) {
@@ -105,7 +105,7 @@ public class ItemController {
         return discounts.computeIfAbsent(item, __ -> new ArrayList<QuantityDiscount>());
     }
 
-    public void deleteAllFromSupplier(MutableSupplier s) {
+    public void deleteAllFromSupplier(Supplier s) {
         for(Map.Entry<String, MutableItem> entry: items.entrySet()) {
             items.remove(entry.getKey());
             discounts.remove(entry.getValue());

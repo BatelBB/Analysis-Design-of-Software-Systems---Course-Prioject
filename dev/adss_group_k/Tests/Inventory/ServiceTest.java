@@ -2,15 +2,17 @@ package adss_group_k.Tests.Inventory;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
-import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService_V2;
+import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,13 +20,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ServiceTest {
     private static Service service;
-    private static ISupplierService_V2 supplierService;
+    private static ISupplierService supplierService;
     private static List<String> CategoryList;
     private static List<String> ProductListNames;
     private static List<Integer> ReportList;
 
     static void setService() {
-        supplierService= (ISupplierService_V2) new SupplierService();
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:sqlite::memory:");
+        } catch (SQLException throwables) {
+            throw new RuntimeException(throwables);
+        }
+        supplierService = new SupplierService(conn);
         service = new Service(supplierService);
     }
 

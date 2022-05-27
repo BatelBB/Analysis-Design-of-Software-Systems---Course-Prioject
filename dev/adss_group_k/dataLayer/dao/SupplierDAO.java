@@ -4,6 +4,7 @@ import adss_group_k.dataLayer.records.ContactRecord;
 import adss_group_k.dataLayer.records.SupplierRecord;
 import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.dataLayer.records.readonly.SupplierData;
+import adss_group_k.shared.dto.CreateSupplierDTO;
 
 import java.sql.*;
 import java.time.DayOfWeek;
@@ -30,29 +31,25 @@ public class SupplierDAO extends BaseDAO<Integer, SupplierRecord> {
         super(conn);
     }
 
-    public SupplierData createSupplier(int ppn, int bankNumber, String name, boolean isDelivering,
-                                                  PaymentCondition paymentCondition, DayOfWeek regularSupplyDays,
-                                                  String contactEmail, String contactName, String contactPhone)
+    public SupplierData createSupplier(CreateSupplierDTO createSupplierDTO)
             {
         return create(
-                () -> new SupplierRecord(ppn, bankNumber, name, isDelivering,
-                        paymentCondition, regularSupplyDays,
-                        new ContactRecord(contactName, contactEmail, contactPhone)),
+                () -> new SupplierRecord(createSupplierDTO),
 
                 "INSERT INTO " +
                 "Supplier(ppn, bankNumber, name, isDelivering, paymentCondition, regularSupplyingDay," +
                 "contactName, contactPhone, contactEmail)" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
 
-                ps -> ps.setInt(1, ppn),
-                ps -> ps.setInt(2, bankNumber),
-                ps -> ps.setString(3, name),
-                ps -> ps.setBoolean(4, isDelivering),
-                ps -> ps.setInt(5, paymentCondition.value),
-                ps -> ps.setInt(6, valueOf(regularSupplyDays)),
-                ps -> ps.setString(7, contactName),
-                ps -> ps.setString(8, contactPhone),
-                ps -> ps.setString(9, contactEmail)
+                ps -> ps.setInt(1, createSupplierDTO.ppn),
+                ps -> ps.setInt(2, createSupplierDTO.bankNumber),
+                ps -> ps.setString(3, createSupplierDTO.name),
+                ps -> ps.setBoolean(4, createSupplierDTO.isDelivering),
+                ps -> ps.setInt(5, createSupplierDTO.paymentCondition.value),
+                ps -> ps.setInt(6, valueOf(createSupplierDTO.regularSupplyDays)),
+                ps -> ps.setString(7, createSupplierDTO.contactName),
+                ps -> ps.setString(8, createSupplierDTO.contactPhone),
+                ps -> ps.setString(9, createSupplierDTO.contactEmail)
         ).getOrThrow(RuntimeException::new);
     }
                        
@@ -71,7 +68,7 @@ public class SupplierDAO extends BaseDAO<Integer, SupplierRecord> {
         get(ppn).data.setRegularSupplyingDays(day);
     }
 
-    public void updateContactEmail(int ppn,String email) {
+    public void updateContactEmail(int ppn, String email) {
         runUpdate(ppn, "contactEmail", email, Types.VARCHAR);
         get(ppn).data.getContact().setEmail(email);
     }

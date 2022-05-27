@@ -1,9 +1,8 @@
 package adss_group_k.BusinessLayer.Inventory.Service;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
-import adss_group_k.BusinessLayer.Suppliers.Entity.MutableOrder;
-import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService_V2;
-import adss_group_k.shared.response.*;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
+import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.shared.response.Response;
 import adss_group_k.shared.response.ResponseT;
 
@@ -15,9 +14,9 @@ public class Service {
     private final ProductService product_service;
     private final CategoryService category_service;
     private final ReportService report_service;
-    private final ISupplierService_V2 supplierService;
+    private final ISupplierService supplierService;
 
-    public Service(ISupplierService_V2 supplierService) {
+    public Service(ISupplierService supplierService) {
         product_service = new ProductService();
         report_service = new ReportService();
         category_service = new CategoryService();
@@ -163,7 +162,7 @@ public class Service {
 
     public Response createDeficienciesOrder() {
         Map<String, Integer> proAmount = product_service.getDeficiency().data;
-        MutableOrder order= supplierService.createOrder();
+        Order order= supplierService.createOrder();
         for (Map.Entry<String, Integer> entry : proAmount.entrySet()) {
             supplierService.orderItem(order.id, entry.getKey(), entry.getValue());
         }

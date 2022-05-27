@@ -10,12 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public abstract class BaseDAO<TEntityID, TEntity extends BaseRecord<TEntityID>> {
-    private HashMap<TEntityID, TEntity> cache;
+    private final HashMap<TEntityID, TEntity> cache;
     private boolean cachedAll;
     protected final Connection conn;
 
@@ -32,12 +31,17 @@ public abstract class BaseDAO<TEntityID, TEntity extends BaseRecord<TEntityID>> 
         }
     }
 
-    public final Stream<TEntity> all() throws SQLException {
-        if (!cachedAll) {
-            fetchAll().map(t -> new Tuple<TEntity, TEntityID>(t, t.key())).filter(tuple -> !cache.containsKey(tuple.second)).forEach(tuple -> cache.put(tuple.second, tuple.first));
-            cachedAll = true;
+    public final Stream<TEntity> all() {
+        try {
+            if (!cachedAll) {
+                fetchAll().map(t -> new Tuple<TEntity, TEntityID>(t, t.key())).filter(tuple -> !cache.containsKey(tuple.second)).forEach(tuple -> cache.put(tuple.second, tuple.first));
+
+                cachedAll = true;
+            }
+            return cache.values().stream();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return cache.values().stream();
     }
 
     public boolean exists(TEntityID id) {

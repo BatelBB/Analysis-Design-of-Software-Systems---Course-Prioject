@@ -1,10 +1,8 @@
-package adss_group_k.BusinessLayer.Suppliers.Entity;
+package adss_group_k.BusinessLayer.Suppliers.BussinessObject;
 
+import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.shared.utils.Utils;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Item;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Order;
-import adss_group_k.BusinessLayer.Suppliers.Entity.readonly.Supplier;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -12,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MutableOrder implements Order {
+public class Order {
     LocalDate ordered;
     LocalDate provided;
     float totalPrice;
@@ -22,7 +20,7 @@ public class MutableOrder implements Order {
     private static int instanceCounter = 0;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
-    public MutableOrder(Supplier supplier, LocalDate ordered, LocalDate provided){
+    public Order(Supplier supplier, LocalDate ordered, LocalDate provided){
         this.supplier = supplier;
         this.ordered = ordered;
         this.provided = provided;
