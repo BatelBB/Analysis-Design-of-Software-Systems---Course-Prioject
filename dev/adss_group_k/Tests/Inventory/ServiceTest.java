@@ -171,7 +171,7 @@ class ServiceTest {
     @org.junit.jupiter.api.Test
     void removeReport() {
         try {
-            service.createMissingReport("MissingReport", 0, "Michel");
+            service.createMissingReport("MissingReport", "Michel");
             setReportListNames();
             assertTrue(ReportList.contains(0));
             service.removeReport(0);
@@ -186,7 +186,7 @@ class ServiceTest {
     @org.junit.jupiter.api.Test
     void getReport() {
         try {
-            service.createMissingReport("MissingReport", 0, "Michel");
+            service.createMissingReport("MissingReport", "Michel");
             setReportListNames();
             Report report = service.getReport(0).data;
             assertEquals(report.getName(), "MissingReport");
@@ -202,42 +202,44 @@ class ServiceTest {
     @org.junit.jupiter.api.Test
     void createMissingReport() {
         try {
-            service.createMissingReport("MissingReport", 0, "Michel");
+            service.createMissingReport("MissingReport", "Michel");
             setReportListNames();
             assertTrue(ReportList.contains(0));
-            service.createMissingReport("MissingReport", 1, "Michel");
+            service.createMissingReport("MissingReport", "Michel");
             service.removeReport(1);
-            service.createMissingReport("MissingReport", 0, "Michel");
+            service.createMissingReport("MissingReport", "Michel");
         } catch (Exception e) {
             assertEquals(e.getMessage(), "The ReportId already exists in the system");
             clearReportListNames();
         }
+        //TODO: make new test
     }
 
     @org.junit.jupiter.api.Test
     void createExpiredReport() {
         try {
-            service.createExpiredReport("ExpiredReport", 0, "Michel");
+            service.createExpiredReport("ExpiredReport", "Michel");
             setReportListNames();
             assertTrue(ReportList.contains(0));
-            service.createExpiredReport("ExpiredReport", 1, "Michel");
+            service.createExpiredReport("ExpiredReport", "Michel");
             service.removeReport(1);
-            service.createExpiredReport("ExpiredReport", 0, "Michel");
+            service.createExpiredReport("ExpiredReport", "Michel");
         } catch (Exception e) {
             assertEquals(e.getMessage(), "The ReportId already exists in the system");
             clearReportListNames();
         }
+        //TODO: make new test
     }
 
     @org.junit.jupiter.api.Test
     void createBySupplierReport() {
         try {
-            service.createBySupplierReport("BySupplierReport", 0, "Michel", 0);
+            service.createBySupplierReport("BySupplierReport", "Michel", 0);
             setReportListNames();
             assertTrue(ReportList.contains(0));
-            service.createBySupplierReport("MissingReport", 1, "Michel", 0);
+            service.createBySupplierReport("MissingReport", "Michel", 0);
             service.removeReport(1);
-            service.createBySupplierReport("ExpiredReport", 0, "Michel", 0);
+            service.createBySupplierReport("ExpiredReport", "Michel", 0);
         } catch (Exception e) {
             assertEquals(e.getMessage(), "The ReportId already exists in the system");
             clearReportListNames();

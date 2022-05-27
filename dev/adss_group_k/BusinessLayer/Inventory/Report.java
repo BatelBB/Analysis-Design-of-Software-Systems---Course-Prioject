@@ -1,5 +1,6 @@
 package adss_group_k.BusinessLayer.Inventory;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class Report {
 
     protected Integer id;
     protected String name;
-    protected Date date;
+    protected LocalDate date;
     protected String report_producer;
     protected report_type reportType;
     List<Product> productList;
@@ -18,7 +19,7 @@ public class Report {
     public Report(String name, Integer id, report_type reportType, String report_producer, List<Product> productList, List<ProductItem> productItemList) {
         this.name = name;
         this.id = id;
-        date = new Date();
+        date = LocalDate.now();
         this.reportType = reportType;
         this.report_producer = report_producer;
         this.productList = productList;
@@ -33,7 +34,7 @@ public class Report {
         return name;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 

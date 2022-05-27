@@ -54,14 +54,14 @@ public class ReportController {
     }
 
     //CREATIONS
-    public Report createMissingReport(String name, int id, String report_producer) {
+    public Report createMissingReport(String name, String report_producer) {
         List<Product> missingPro = product_controller.getMissingProducts();
         Report report = new Report(name, report_ids, Report.report_type.Missing, report_producer, missingPro, new LinkedList<>());
         reports.put(report_ids, report);
         return report;
     }
 
-    public Report createExpiredReport(String name, int id, String report_producer) {
+    public Report createExpiredReport(String name, String report_producer) {
         List<ProductItem> ExpiredPro = product_controller.getExpiredItems();
         Report report = new Report(name, report_ids, Report.report_type.Expired, report_producer, new LinkedList<>(), ExpiredPro);
         reports.put(report_ids, report);
@@ -69,7 +69,7 @@ public class ReportController {
         return report;
     }
 
-    public Report createSurplusesReport(String name, int id, String report_producer) {
+    public Report createSurplusesReport(String name, String report_producer) {
         List<Product> SurplusesPro = product_controller.getSurplusProducts();
         Report report = new Report(name, report_ids, Report.report_type.Surpluses, report_producer, SurplusesPro, new LinkedList<>());
         reports.put(report_ids, report);
@@ -77,7 +77,7 @@ public class ReportController {
         return report;
     }
 
-    public Report createDefectiveReport(String name, int id, String report_producer) {
+    public Report createDefectiveReport(String name, String report_producer) {
         List<ProductItem> DefectivePro = product_controller.getDefectiveItems();
         Report report = new Report(name, report_ids, Report.report_type.Defective, report_producer, new LinkedList<>(), DefectivePro);
         reports.put(report_ids, report);
@@ -85,7 +85,7 @@ public class ReportController {
         return report;
     }
 
-    public Report createBySupplierReport(String name, int id, String report_producer, int suppName) {
+    public Report createBySupplierReport(String name, String report_producer, int suppName) {
         List<ProductItem> bySupplierPro = product_controller.getItemsBySupplier(suppName);
         Report report = new Report(name, report_ids, Report.report_type.bySupplier, report_producer, new LinkedList<>(), bySupplierPro);
         reports.put(report_ids, report);
@@ -93,7 +93,7 @@ public class ReportController {
         return report;
     }
 
-    public Report createByProductReport(String name, int id, String report_producer, String proName) {
+    public Report createByProductReport(String name, String report_producer, String proName) {
         List<ProductItem> byProductPro = product_controller.getItemsByProduct(proName);
         Report report = new Report(name, report_ids, Report.report_type.byProduct, report_producer, new LinkedList<>(), byProductPro);
         reports.put(report_ids, report);
@@ -101,7 +101,7 @@ public class ReportController {
         return report;
     }
 
-    public Report createByCategoryReport(String name, int id, String report_producer, String CatName, String subCatName, String subSubCatName) {
+    public Report createByCategoryReport(String name, String report_producer, String CatName, String subCatName, String subSubCatName) {
         List<Product> byCategoryPro = product_controller.getItemsByCategory(CatName, subCatName, subSubCatName);
         Report report = new Report(name, report_ids, Report.report_type.byCategory, report_producer, byCategoryPro, new LinkedList<>());
         reports.put(report_ids, report);

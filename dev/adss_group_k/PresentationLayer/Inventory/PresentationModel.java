@@ -287,8 +287,8 @@ public class PresentationModel {
 
     public void createMissingReport() {
         ResponseT<Report> r;
-        if (args.length == 3 && convertInt(args[1]) != -1) {
-            r = service.createMissingReport(args[0], convertInt(args[1]), args[2]);
+        if (args.length == 2) {
+            r = service.createMissingReport(args[0], args[1]);
             if (!r.success)
                 System.out.println(r.error);
             else
@@ -298,8 +298,8 @@ public class PresentationModel {
 
     public void createExpiredReport() {
         ResponseT<Report> r;
-        if (args.length == 3 && convertInt(args[1]) != -1) {
-            r = service.createExpiredReport(args[0], convertInt(args[1]), args[2]);
+        if (args.length == 2) {
+            r = service.createExpiredReport(args[0], args[1]);
             if (!r.success)
                 System.out.println(r.error);
             else
@@ -309,8 +309,8 @@ public class PresentationModel {
 
     public void createSurplusesReport() {
         ResponseT<Report> r;
-        if (args.length == 3 && convertInt(args[1]) != -1) {
-            r = service.createSurplusesReport(args[0], convertInt(args[1]), args[2]);
+        if (args.length == 2) {
+            r = service.createSurplusesReport(args[0], args[1]);
             if (!r.success)
                 System.out.println(r.error);
             else
@@ -320,8 +320,8 @@ public class PresentationModel {
 
     public void createDefectiveReport() {
         ResponseT<Report> r;
-        if (args.length == 3 && convertInt(args[1]) != -1) {
-            r = service.createDefectiveReport(args[0], convertInt(args[1]), args[2]);
+        if (args.length == 2) {
+            r = service.createDefectiveReport(args[0], args[1]);
             if (!r.success)
                 System.out.println(r.error);
             else
@@ -331,8 +331,8 @@ public class PresentationModel {
 
     public void createBySupplierReport() {
         ResponseT<Report> r;
-        if (args.length == 4 && convertInt(args[1]) != -1) {
-            r = service.createBySupplierReport(args[0], convertInt(args[1]), args[2], convertInt(args[3]));
+        if (args.length == 3) {
+            r = service.createBySupplierReport(args[0], args[1], convertInt(args[2]));
             if (!r.success)
                 System.out.println(r.error);
             else
@@ -342,8 +342,8 @@ public class PresentationModel {
 
     public void createByProductReport() {
         ResponseT<Report> r;
-        if (args.length == 4 && convertInt(args[1]) != -1) {
-            r = service.createByProductReport(args[0], convertInt(args[1]), args[2], args[3]);
+        if (args.length == 3) {
+            r = service.createByProductReport(args[0], args[1], args[2]);
             if (!r.success)
                 System.out.println(r.error);
             else
@@ -353,8 +353,8 @@ public class PresentationModel {
 
     public void createByCategoryReport() {
         ResponseT<Report> r;
-        if (args.length == 6 && convertInt(args[1]) != -1) {
-            r = service.createByCategoryReport(args[0], convertInt(args[1]), args[2], args[3], args[4], args[5]);
+        if (args.length == 5) {
+            r = service.createByCategoryReport(args[0], args[1], args[2], args[3], args[4]);
             if (!r.success)
                 System.out.println(r.error);
             else

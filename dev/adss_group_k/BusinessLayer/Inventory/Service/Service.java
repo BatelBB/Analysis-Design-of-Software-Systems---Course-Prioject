@@ -120,32 +120,32 @@ public class Service {
         return report_service.getReportListNames();
     }
 
-    public ResponseT<Report> createMissingReport(String name, int id, String report_producer) {
-        return report_service.createMissingReport(name, id, report_producer);
+    public ResponseT<Report> createMissingReport(String name, String report_producer) {
+        return report_service.createMissingReport(name, report_producer);
     }
 
-    public ResponseT<Report> createExpiredReport(String name, int id, String report_producer) {
-        return report_service.createExpiredReport(name, id, report_producer);
+    public ResponseT<Report> createExpiredReport(String name, String report_producer) {
+        return report_service.createExpiredReport(name, report_producer);
     }
 
-    public ResponseT<Report> createSurplusesReport(String name, int id, String report_producer) {
-        return report_service.createSurplusesReport(name, id, report_producer);
+    public ResponseT<Report> createSurplusesReport(String name, String report_producer) {
+        return report_service.createSurplusesReport(name, report_producer);
     }
 
-    public ResponseT<Report> createDefectiveReport(String name, int id, String report_producer) {
-        return report_service.createDefectiveReport(name, id, report_producer);
+    public ResponseT<Report> createDefectiveReport(String name, String report_producer) {
+        return report_service.createDefectiveReport(name, report_producer);
     }
 
-    public ResponseT<Report> createBySupplierReport(String name, int id, String report_producer, int suppName) {
-        return report_service.createBySupplierReport(name, id, report_producer, suppName);
+    public ResponseT<Report> createBySupplierReport(String name, String report_producer, int suppName) {
+        return report_service.createBySupplierReport(name, report_producer, suppName);
     }
 
-    public ResponseT<Report> createByProductReport(String name, int id, String report_producer, String proName) {
-        return report_service.createByProductReport(name, id, report_producer, proName);
+    public ResponseT<Report> createByProductReport(String name, String report_producer, String proName) {
+        return report_service.createByProductReport(name, report_producer, proName);
     }
 
-    public ResponseT<Report> createByCategoryReport(String name, int id, String report_producer, String CatName, String subCatName, String subSubCatName) {
-        return report_service.createByCategoryReport(name, id, report_producer, CatName, subCatName, subSubCatName);
+    public ResponseT<Report> createByCategoryReport(String name, String report_producer, String CatName, String subCatName, String subSubCatName) {
+        return report_service.createByCategoryReport(name, report_producer, CatName, subCatName, subSubCatName);
     }
 
     public Response removeReport(int id) {
