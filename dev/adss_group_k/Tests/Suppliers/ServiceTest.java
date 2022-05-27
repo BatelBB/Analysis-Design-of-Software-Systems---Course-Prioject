@@ -1,17 +1,23 @@
 package adss_group_k.Tests.Suppliers;
 
+import adss_group_k.BusinessLayer.Inventory.Product;
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.PaymentCondition;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Item;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Order;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Supplier;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
+import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
+import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.shared.response.Response;
 import adss_group_k.shared.response.ResponseT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.*;
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,10 +36,16 @@ class ServiceTest {
 
 
     private ISupplierService service;
+    private Service inventory;
 
     @BeforeEach
     void setUp() {
-        service = new SupplierService();
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:sqlite::memory:");
+        } catch (SQLException throwables) {
+            throw new RuntimeException(throwables);
+        }service = new SupplierService(conn);
     }
 
     /**
@@ -69,7 +81,7 @@ class ServiceTest {
     void getSupplier() throws BusinessLogicException {
         service.createSupplier(1, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
-                new MutableContact("john", "john@email.com", "054"));
+                "john", "john@email.com", "054");
         Supplier supplier = service.getSupplier(1);
         assertNotNull(supplier);
         assertEquals(1, supplier.getPpn());
@@ -83,7 +95,8 @@ class ServiceTest {
 
         Supplier supplier = service.createSupplier(ppn, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
-                new MutableContact("john", "john@email.com", "054")).data;
+                "john", "john@email.com", "054").data;
+        Product product = inventory.addProduct();
         Item item = service.createItem(ppn, 1, "item", "category", 1).data;
         Order order = service.createOrder(supplier, date1, date2, Order.OrderType.Periodical).data;
         service.orderItem(order, item, 12);
@@ -100,7 +113,7 @@ class ServiceTest {
         ResponseT<Supplier> otherResponse = service.createSupplier(ppn, 222,
                 "Ipsum", false,
                 PaymentCondition.Credit, DayOfWeek.MONDAY,
-                new MutableContact("george", "george@email.com", "050"));
+                "george", "george@email.com", "050"));
         assertTrue(otherResponse.success,
                 "creating new ReadOnlysupplier with PPN of deleted ReadOnlysupplier should have worked");
         assertNotNull(otherResponse.data,
@@ -155,8 +168,7 @@ class ServiceTest {
 
         // create with already existing
         ResponseT<Item> alreadyExisting = service.createItem(ppn1, cn1,
-                "Cat in a bag", "Animals & containers", 123
-        );
+                "Cat in a bag", "Animals & containers", 123);
         assertFalse(alreadyExisting.success);
 
         // not existence supplier
@@ -611,6 +623,6 @@ class ServiceTest {
     private ResponseT<Supplier> createWithPpn(int ppn) {
         return service.createSupplier(ppn, 111, "dummy", true,
                 PaymentCondition.Credit, null,
-                new MutableContact("John", "john@email.com", "054"));
+                "John", "john@email.com", "054");
     }
 }

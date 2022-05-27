@@ -1,7 +1,7 @@
 package adss_group_k.BusinessLayer.Suppliers.Controller;
 
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
-import adss_group_k.BusinessLayer.Suppliers.Controller.BussinessObject.Supplier;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.dataLayer.records.SupplierRecord;
@@ -29,7 +29,7 @@ public class SupplierController {
             throws BusinessLogicException {
         validatePPNIsNew(dto.ppn);
         SupplierData source = dal.getSuppliers().createSupplier(dto);
-        Supplier object = new Supplier(source);
+        Supplier object = new Supplier(source, dal.getSuppliers());
         suppliers.put(dto.ppn, object);
         return object;
     }
@@ -56,7 +56,11 @@ public class SupplierController {
             throw new BusinessLogicException("No suppliers with this ppn: " + ppn);
         }
         return suppliers.computeIfAbsent(ppn,
-                k -> new Supplier(dal.getSuppliers().get(ppn).getOrThrow(RuntimeException::new)));
+                k -> {
+                    SupplierData data = dal.getSuppliers().get(ppn).getOrThrow(RuntimeException::new);
+
+                    return new Supplier(data, dal.getSuppliers());
+                });
     }
 
     public void setPaymentCondition(int ppn, PaymentCondition payment) {
@@ -64,6 +68,6 @@ public class SupplierController {
     }
 
     private void addFromExisting(SupplierRecord supplierRecord) {
-        suppliers.put(supplierRecord.getPpn(), new Supplier(supplierRecord));
+        suppliers.put(supplierRecord.getPpn(), new Supplier(supplierRecord, dal.getSuppliers()));
     }
 }
