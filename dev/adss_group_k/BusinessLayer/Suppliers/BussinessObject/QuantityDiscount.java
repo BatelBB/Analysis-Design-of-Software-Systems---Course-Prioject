@@ -7,11 +7,13 @@ public class QuantityDiscount {
     public final Item item;
     public final int quantity;
     public final float discount;
+    public final int id;
 
-    public QuantityDiscount(Item item, int quantity, float discount){
+    public QuantityDiscount(int id, Item item, int quantity, float discount){
         this.item = item;
         this.quantity = quantity;
         this.discount = discount;
+        this.id = id;
     }
 
     public Item getItem() {

@@ -6,6 +6,7 @@ import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
 
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.shared.response.Response;
 import adss_group_k.shared.response.ResponseT;
@@ -44,7 +45,7 @@ public interface ISupplierService {
     Response deleteDiscount(QuantityDiscount discount);
 
     ResponseT<Order> createOrder(int supplierPPN, LocalDate ordered, LocalDate delivered,
-                                 Order.OrderType type);
+                                 OrderType type);
 
     Collection<Order> getOrders();
 

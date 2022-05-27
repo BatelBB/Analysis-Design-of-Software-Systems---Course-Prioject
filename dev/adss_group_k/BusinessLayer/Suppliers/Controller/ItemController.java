@@ -1,33 +1,39 @@
 package adss_group_k.BusinessLayer.Suppliers.Controller;
 
+import adss_group_k.BusinessLayer.Inventory.Categories.SubSubCategory;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Item;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.readonly.Supplier;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.MutableItem;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.readonly.ItemData;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ItemController {
-    Map<String, MutableItem> items;
-    Map<Item, List<QuantityDiscount>> discounts;
+    Map<String, Item> items;
     OrderController orderController;
+    PersistenceController dal;
 
     public ItemController(OrderController orderController) {
         items = new HashMap<>();
-        discounts = new HashMap<>();
         this.orderController = orderController;
     }
 
-    public MutableItem create(Supplier supplier, int catalogNumber, String name, String category, float price)
+    public Item create(Supplier supplier, int catalogNumber,
+                       int productId,
+                       SubSubCategory subSubCategory, float price)
             throws BusinessLogicException {
         String key = tuple(supplier.getPpn(), catalogNumber);
         if(items.containsKey(key)) {
             throw new BusinessLogicException("Supplier " + supplier +" already has item with catalog number " + catalogNumber);
         }
-        MutableItem item = new MutableItem(supplier, catalogNumber, name, category, price, this);
+        ItemData source = dal.getItems()
+                .create(supplier.getPpn(), catalogNumber, productId, price)
+                .getOrThrow(BusinessLogicException::new);
+        Item item = new Item(source, supplier, subSubCategory);
         items.put(key, item);
         return item;
     }
@@ -53,18 +59,18 @@ public class ItemController {
     }
 
     public void deleteDiscount(QuantityDiscount discount) {
-        getDiscountList(discount.item).remove(discount);
+        dal.getQuantityDiscounts().delete(discount.id);
         orderController.refreshPricesAndDiscounts(discount.item);
     }
 
-    public MutableItem get(int ppn, int catalog) throws BusinessLogicException{
+    public Item get(int ppn, int catalog) throws BusinessLogicException{
         String key = tuple(ppn, catalog);
         if(!items.containsKey(key)) {
             throw new BusinessLogicException("The item doesn't exist");
         }
         return items.get(key);
     }
-    public float priceForAmount(MutableItem item, int amount) {
+    public float priceForAmount(Item item, int amount) {
         float discount = 0;
         List<QuantityDiscount> discounts = getDiscountList(item);
         for(QuantityDiscount qd: discounts) {
@@ -106,7 +112,7 @@ public class ItemController {
     }
 
     public void deleteAllFromSupplier(Supplier s) {
-        for(Map.Entry<String, MutableItem> entry: items.entrySet()) {
+        for(Map.Entry<String, Item> entry: items.entrySet()) {
             items.remove(entry.getKey());
             discounts.remove(entry.getValue());
         }
@@ -121,16 +127,16 @@ public class ItemController {
     }
 
     public void setItemPrice(Item item, float price) {
-        ((MutableItem) item).setPrice(price);
+        ((Item) item).setPrice(price);
     }
 
     public void setItemName(Item item, String name) {
-        ((MutableItem) item).setName(name);
+        ((Item) item).setName(name);
     }
 
 
     public void setItemCategory(Item item, String category) {
-        ((MutableItem) item).setCategory(category);
+        ((Item) item).setCategory(category);
     }
 
 

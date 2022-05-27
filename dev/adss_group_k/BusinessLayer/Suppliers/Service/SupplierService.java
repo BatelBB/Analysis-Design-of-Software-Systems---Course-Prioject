@@ -1,6 +1,7 @@
 package adss_group_k.BusinessLayer.Suppliers.Service;
 
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
@@ -71,7 +72,12 @@ public class SupplierService implements ISupplierService {
 
     @Override
     public ResponseT<Item> createItem(int supplierPPN, int catalogNumber, int productID, String name, String category, float price) {
-        return null;
+        return items.create(
+                getSupplier(supplierPPN),
+                catalogNumber,
+                productID,
+
+        );
     }
 
     @Override
