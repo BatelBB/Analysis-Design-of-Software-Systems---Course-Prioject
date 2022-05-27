@@ -167,10 +167,12 @@ public class ProductController {
         products.get(product_id).changeItemOnShelf(item_id, on_shelf);
     }
 
+    //FOR REPORTS
     public List<Product> getMissingProducts() {
         List<Product> missing_products = new ArrayList<>();
         for (Product p : products.values())
-            if (p.getItems().size() < p.getMin_qty()) missing_products.add(p);
+            if (p.getItems().size() < p.getMin_qty())
+                missing_products.add(p);
         return missing_products;
     }
 
