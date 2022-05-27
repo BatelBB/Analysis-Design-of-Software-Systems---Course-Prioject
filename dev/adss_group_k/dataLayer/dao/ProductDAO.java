@@ -9,19 +9,19 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
-/*
-CREATE TABLE "Product" (
-	"id"	INTEGER NOT NULL,
-	"name"	TEXT NOT NULL,
-	"customerPrice"	REAL NOT NULL,
-	"minQty"	INTEGER NOT NULL,
-	"storageQty"	INTEGER NOT NULL,
-	"shelfQty"	INTEGER NOT NULL,
-	"subSubcategory"	TEXT NOT NULL,
-	"subcategory"	TEXT NOT NULL,
-	"category"	TEXT NOT NULL,
-)
- */
+/**
+ * CREATE TABLE "Product" (
+ * "id"	INTEGER NOT NULL,
+ * "name"	TEXT NOT NULL,
+ * "customerPrice"	REAL NOT NULL,
+ * "minQty"	INTEGER NOT NULL,
+ * "storageQty"	INTEGER NOT NULL,
+ * "shelfQty"	INTEGER NOT NULL,
+ * "subSubcategory"	TEXT NOT NULL,
+ * "subcategory"	TEXT NOT NULL,
+ * "category"	TEXT NOT NULL,
+ * )
+ **/
 public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
 
     private int maxId;
@@ -31,25 +31,22 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
         maxId = oneResultQuery("SELECT MAX(Id) FROM Product", rs -> rs.getInt(1));
     }
 
-    public int getMaxId() {
-        return maxId;
-    }
-
-    public ResponseT<ProductData> create(int id, String name, float customerPrice, int minQty, int storageQty, int shelfQty, String category, String subcategory, String subSubcategory) {
+    public ResponseT<ProductData> create(int item_ids, int id, String name, float customerPrice, int minQty, int storageQty, int shelfQty, String category, String subcategory, String subSubcategory) {
         ResponseT<ProductRecord> response = create(
-                () -> new ProductRecord(id, name, customerPrice, minQty, storageQty, shelfQty, category, subcategory, subSubcategory),
-                "INSERT INTO Product(" + "id,name,customerPrice," + "minQty,storageQty,shelfQty," + "subSubcategory,subcategory,category" + ")",
-                ps -> ps.setInt(1, id),
-                ps -> ps.setString(2, name),
-                ps -> ps.setFloat(3, customerPrice),
-                ps -> ps.setInt(4, minQty),
-                ps -> ps.setInt(5, storageQty),
-                ps -> ps.setInt(6, shelfQty),
-                ps -> ps.setString(7, subSubcategory),
-                ps -> ps.setString(8, subcategory),
-                ps -> ps.setString(9, category)
+                () -> new ProductRecord(item_ids, id, name, customerPrice, minQty, storageQty, shelfQty, category, subcategory, subSubcategory),
+                "INSERT INTO Product(" + "item_ids,id,name,customerPrice," + "minQty,storageQty,shelfQty," + "subSubcategory,subcategory,category" + ")",
+                ps -> ps.setInt(1, item_ids),
+                ps -> ps.setInt(2, id),
+                ps -> ps.setString(3, name),
+                ps -> ps.setFloat(4, customerPrice),
+                ps -> ps.setInt(5, minQty),
+                ps -> ps.setInt(6, storageQty),
+                ps -> ps.setInt(7, shelfQty),
+                ps -> ps.setString(8, subSubcategory),
+                ps -> ps.setString(9, subcategory),
+                ps -> ps.setString(10, category)
         );
-        if(response.success && id > maxId) {
+        if (response.success && id > maxId) {
             maxId = id;
         }
         return response.castUnchecked();
@@ -78,12 +75,24 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
     }
 
     @Override
-    protected int runDeleteQuery(Integer id) {
+    public int runDeleteQuery(Integer id) {
         return runUpdate("DELETE FROM Product WHERE id=?", ps -> ps.setInt(1, id));
     }
 
-    public void updateStorageQty(int id, int storageQty) {
-        update(id, "storageQty", storageQty, Types.INTEGER);
+    public int updateCusPrice(int id, float cus_price) {
+        return update(id, "customerPrice", cus_price, Types.FLOAT);
+    }
+
+    public int updateShelfQty(int id, int shelfQty) {
+        return update(id, "shelfQty", shelfQty, Types.INTEGER);
+    }
+
+    public int updateStorageQty(int id, int storageQty) {
+        return update(id, "storageQty", storageQty, Types.INTEGER);
+    }
+
+    public int getMaxId() {
+        return maxId;
     }
 
     private int update(int id, String field, Object value, int type) {
@@ -91,7 +100,17 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
     }
 
     private ProductRecord readOne(Integer id, ResultSet query) throws SQLException {
-        return new ProductRecord(id, query.getString("name"), query.getFloat("customerPrice"), query.getInt("minQty"), query.getInt("storageQty"), query.getInt("shelfQty"), query.getString("category"), query.getString("subcategory"), query.getString("subSubcategory"));
+        return new ProductRecord(
+                query.getInt("itemIds"),
+                id,
+                query.getString("name"),
+                query.getFloat("customerPrice"),
+                query.getInt("minQty"),
+                query.getInt("storageQty"),
+                query.getInt("shelfQty"),
+                query.getString("category"),
+                query.getString("subcategory"),
+                query.getString("subSubcategory"));
     }
 
 }

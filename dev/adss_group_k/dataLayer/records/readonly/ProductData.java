@@ -1,6 +1,7 @@
 package adss_group_k.dataLayer.records.readonly;
 
 /**
+ * "itemIds" INTEGER NOT NULL,
  * "id"	INTEGER NOT NULL,
  * 	"name"	TEXT NOT NULL,
  * 	"customerPrice"	REAL NOT NULL,
@@ -12,6 +13,7 @@ package adss_group_k.dataLayer.records.readonly;
  * 	"subSubCategoryCategory"	TEXT NOT NULL,
  */
 public interface ProductData {
+    int getItemIds();
     int getId();
     String getName();
     float getCustomerPrice();

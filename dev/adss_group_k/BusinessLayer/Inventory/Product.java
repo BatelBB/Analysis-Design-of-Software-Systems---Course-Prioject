@@ -1,166 +1,135 @@
 package adss_group_k.BusinessLayer.Inventory;
 
-import adss_group_k.BusinessLayer.Inventory.Categories.Category;
-import adss_group_k.BusinessLayer.Inventory.Categories.SubCategory;
-import adss_group_k.BusinessLayer.Inventory.Categories.SubSubCategory;
-import adss_group_k.BusinessLayer.Suppliers.Controller.BussinessObject.Supplier;
+import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.DiscountPairRecord;
+import adss_group_k.dataLayer.records.ProductItemRecord;
+import adss_group_k.dataLayer.records.readonly.ProductData;
+import adss_group_k.dataLayer.records.readonly.ProductItemData;
+import adss_group_k.shared.response.ResponseT;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Product {
     private int item_ids;
     private final int product_id;
-    private String name;
+    private final String name;
     private int shelf_qty;
     private int storage_qty;
     private String manufacturer;
-    private double man_price;
     private float cus_price;
-    private int min_qty;
-    private int supply_time;
-    private Map<String, ProductItem> items;
+    private final int min_qty;
+    private final Map<Integer, ProductItem> items;
 
-    private Category cat;
-    private SubCategory sub_cat;
-    private SubSubCategory sub_sub_cat;
+    private final String cat;
+    private final String sub_cat;
+    private final String sub_sub_cat;
 
-    //constructors
-//    public Product(int product_id, String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, Category category, SubCategory sub_category, SubSubCategory sub_sub_category) {
-//        this.product_id = product_id;
-//        this.name = name;
-//        shelf_qty = 0;
-//        storage_qty = 0;
-//        this.manufacturer = manufacturer;
-//        this.man_price = man_price;
-//        this.cus_price = cus_price;
-//        this.min_qty = min_qty;
-//        this.supply_time = supply_time;
-//        items = new HashMap<>();
-//        this.cat = category;
-//        this.sub_cat = sub_category;
-//        this.sub_sub_cat = sub_sub_category;
-//    }
+    private final PersistenceController pc;
 
-//    public Product(int product_id, String name, int shelf_qty, int storage_qty, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, Map<String, ProductItem> items) {
-//        this.product_id = product_id;
-//        this.name = name;
-//        this.shelf_qty = shelf_qty;
-//        this.storage_qty = storage_qty;
-//        this.manufacturer = manufacturer;
-//        this.man_price = man_price;
-//        this.cus_price = cus_price;
-//        this.min_qty = min_qty;
-//        this.supply_time = supply_time;
-//        this.items = items;
-//    }
-
-    //Copy constructor
-    public Product(Product p) {
-        this.product_id = p.product_id;
-        this.name = p.name;
-        shelf_qty = p.shelf_qty;
-        storage_qty = p.storage_qty;
-        this.manufacturer = p.manufacturer;
-        this.man_price = p.man_price;
-        this.cus_price = p.cus_price;
-        this.min_qty = p.min_qty;
-        this.supply_time = p.supply_time;
-        items = p.items;
-        this.cat = p.cat;
-        this.sub_cat = p.sub_cat;
-        this.sub_sub_cat = p.sub_sub_cat;
-    }
-
-    //Product from addProduct
-    public Product(int product_id, String name, float cus_price, int min_qty, int supply_time, Category category, SubCategory sub_category, SubSubCategory sub_sub_category) {
-        this.product_id = product_id;
-        this.name = name;
-        this.cus_price = cus_price;
-        this.min_qty = min_qty;
-        this.supply_time = supply_time;
-        this.cat = category;
-        this.sub_cat = sub_category;
-        this.sub_sub_cat = sub_sub_category;
-
-        item_ids = 0;
-        shelf_qty = 0;
-        storage_qty = 0;
+    //CONSTRUCTORS
+    public Product(ProductData product, PersistenceController pc) {
+        item_ids = product.getItemIds();
+        product_id = product.getId();
+        name = product.getName();
+        shelf_qty = product.getShelfQty();
+        storage_qty = product.getStorageQty();
+        cus_price = product.getCustomerPrice();
+        min_qty = product.getMinQty();
         items = new HashMap<>();
+        cat = product.getCategory();
+        sub_cat = product.getSubcategory();
+        sub_sub_cat = product.getSubSubcategory();
+        this.pc = pc;
+        pc.getProductItems().all().forEach(this::addFromExisting);
     }
 
-
-    //methods
-    public void updateItemManDiscount(int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) throws Exception {
+    //METHODS
+    public void updateItemCusDiscount(int item_id, float discount, LocalDate start_date, LocalDate end_date) throws Exception {
         itemExists(item_id);
-        items.get(Integer.toString(item_id)).addManDiscount(new DiscountPair(start_date, end_date, discount));
-    }
-
-    public void updateItemCusDiscount(int item_id, double discount, LocalDateTime start_date, LocalDateTime end_date) throws Exception {
-        itemExists(item_id);
-        items.get(Integer.toString(item_id)).addCusDiscount(new DiscountPair(start_date, end_date, discount));
+        items.get(item_id).addCusDiscount(start_date, end_date, discount);
     }
 
     public void updateItemDefect(int id, boolean is_defect, String defect_reporter) throws Exception {
         itemExists(id);
-        items.get(Integer.toString(id)).setIs_defect(is_defect);
-        items.get(Integer.toString(id)).setDefect_reporter(defect_reporter);
+        items.get(id).setIs_defect(is_defect);
+        items.get(id).setDefect_reporter(defect_reporter);
     }
 
-    public String getItemLocation(int item_id) throws Exception {
-        itemExists(item_id);
-        return items.get(Integer.toString(item_id)).getLocation();
-    }
-
-    public void addItem(String store, String location, String supplier, LocalDateTime expiration_date, boolean on_shelf) throws Exception {
-        if (store == null || store.equals(""))
-            throw new Exception("store name empty");
-        if (location == null || location.equals(""))
-            throw new Exception("location name empty");
-        if (supplier == null || supplier.equals(""))
-            throw new Exception("supplier name empty");
-        if (expiration_date == null)
-            throw new Exception("expiration date is null");
-        items.put(Integer.toString(item_ids), new ProductItem(item_ids, store, location, supplier, expiration_date, on_shelf));
+    public void addItem(String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) throws Exception {
+        try {
+            if (store == null || store.equals(""))
+                throw new Exception("store name empty");
+            if (location == null || location.equals(""))
+                throw new Exception("location name empty");
+            if (supplier < 0)
+                throw new Exception("supplier name empty");
+            if (expiration_date == null)
+                throw new Exception("expiration date is null");
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        ResponseT<ProductItemData> r = pc.getProductItems().create(
+                product_id,
+                item_ids,
+                store,
+                location,
+                supplier,
+                Date.valueOf(expiration_date),
+                false,
+                on_shelf,
+                ""
+        );
+        if (!r.success)
+            throw new Exception(r.error);
+        items.put(item_ids, new ProductItem(r.data, pc));
         if (on_shelf)
-            shelf_qty++;
+            setShelf_qty(shelf_qty + 1);
         else
-            storage_qty++;
+            setStorage_qty(storage_qty + 1);
         item_ids++;
     }
 
     public void removeItem(int item_id) throws Exception {
         itemExists(item_id);
-        if (items.get(Integer.toString(item_id)).isOn_shelf())
+        for (DiscountPair dp : items.get(item_id).getCus_discount()) {
+            pc.getDiscountPairs().delete(new DiscountPairRecord.DiscountPairKey(product_id, item_id, dp.getId()));
+        }
+        items.remove(item_id);
+        if (items.get(item_id).isOn_shelf())
             shelf_qty--;
         else
             storage_qty--;
-        items.remove(Integer.toString(item_id));
     }
 
     public void changeItemLocation(int item_id, String location) throws Exception {
         itemExists(item_id);
         if (location == null || location.equals(""))
             throw new Exception("location name empty");
-        items.get(Integer.toString(item_id)).setLocation(location);
+        items.get(item_id).setLocation(location);
     }
 
     public void changeItemOnShelf(int item_id, boolean on_shelf) throws Exception {
         itemExists(item_id);
-        if (items.get(Integer.toString(item_id)).isOn_shelf() && !on_shelf) {
-            shelf_qty--;
-            storage_qty++;
-            items.get(Integer.toString(item_id)).setOn_shelf(false);
-        } else if (!items.get(Integer.toString(item_id)).isOn_shelf() && on_shelf) {
-            shelf_qty++;
-            storage_qty--;
-            items.get(Integer.toString(item_id)).setOn_shelf(false);
+        if (items.get(item_id).isOn_shelf() && !on_shelf) {
+            setShelf_qty(shelf_qty - 1);
+            setStorage_qty(storage_qty + 1);
+            items.get(item_id).setOn_shelf(false);
+        } else if (!items.get(item_id).isOn_shelf() && on_shelf) {
+            setShelf_qty(shelf_qty + 1);
+            setStorage_qty(storage_qty - 1);
+            items.get(item_id).setOn_shelf(true);
         }
     }
 
-    //getters and setters
+    public String getItemLocation(int item_id) throws Exception {
+        itemExists(item_id);
+        return items.get(item_id).getLocation();
+    }
 
+    //GETTERS AND SETTERS
     public int getItem_ids() {
         return item_ids;
     }
@@ -173,103 +142,70 @@ public class Product {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getShelf_qty() {
         return shelf_qty;
-    }
-
-    public void setShelf_qty(int shelf_qty) {
-        this.shelf_qty = shelf_qty;
     }
 
     public int getStorage_qty() {
         return storage_qty;
     }
 
-    public void setStorage_qty(int storage_qty) {
-        this.storage_qty = storage_qty;
-    }
-
     public String getManufacturer() {
         return manufacturer;
-    }
-
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
-    }
-
-    public double getMan_price() {
-        return man_price;
-    }
-
-    public void setMan_price(double man_price) {
-        this.man_price = man_price;
     }
 
     public double getCus_price() {
         return cus_price;
     }
 
-    public void setCus_price(float cus_price) {
-        this.cus_price = cus_price;
-    }
-
     public int getMin_qty() {
         return min_qty;
     }
 
-    public void setMin_qty(int min_qty) {
-        this.min_qty = min_qty;
-    }
-
-    public int getSupply_time() {
-        return supply_time;
-    }
-
-    public void setSupply_time(int supply_time) {
-        this.supply_time = supply_time;
-    }
-
-    public Map<String, ProductItem> getItems() {
+    public Map<Integer, ProductItem> getItems() {
         return items;
     }
 
-    public void setItems(Map<String, ProductItem> items) {
-        this.items = items;
-    }
-
     public String getCat() {
-        return cat.getName();
+        return cat;
     }
 
     public String getSub_cat() {
-        return sub_cat.getName();
+        return sub_cat;
     }
 
     public String getSub_sub_cat() {
-        return sub_sub_cat.getName();
+        return sub_sub_cat;
     }
 
-    public void setCat(Category cat) {
-        this.cat = cat;
+    public void setCus_price(float cus_price) throws Exception {
+        int r = pc.getProducts().updateCusPrice(product_id, cus_price);
+        if (r == -1)
+            throw new Exception("Error setting shelf_qty in DAL");
+        this.cus_price = cus_price;
     }
 
-    public void setSub_cat(SubCategory sub_cat) {
-        this.sub_cat = sub_cat;
+    public void setShelf_qty(int shelf_qty) throws Exception {
+        int r = pc.getProducts().updateShelfQty(product_id, shelf_qty);
+        if (r == -1)
+            throw new Exception("Error setting shelf_qty in DAL");
+        this.shelf_qty = shelf_qty;
     }
 
-    public void setSub_sub_cat(SubSubCategory sub_sub_cat) {
-        this.sub_sub_cat = sub_sub_cat;
+    public void setStorage_qty(int storage_qty) throws Exception {
+        int r = pc.getProducts().updateStorageQty(product_id, storage_qty);
+        if (r == -1)
+            throw new Exception("Error setting storage_qty in DAL");
+        this.storage_qty = storage_qty;
     }
 
-    //private methods
+    //PRIVATE METHODS
     private void itemExists(int item_id) throws Exception {
-        if (!items.containsKey(Integer.toString(item_id)))
+        if (!items.containsKey(item_id))
             throw new Exception("item id doesn't exist");
     }
 
-
+    private void addFromExisting(ProductItemRecord product_item) {
+        items.put(product_item.getId(), new ProductItem(product_item, pc));
+    }
 }

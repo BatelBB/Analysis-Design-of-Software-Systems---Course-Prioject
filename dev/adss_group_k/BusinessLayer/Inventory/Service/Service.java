@@ -3,10 +3,11 @@ package adss_group_k.BusinessLayer.Inventory.Service;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
+import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.shared.response.Response;
 import adss_group_k.shared.response.ResponseT;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -16,10 +17,10 @@ public class Service {
     private final ReportService report_service;
     private final ISupplierService supplierService;
 
-    public Service(ISupplierService supplierService) {
-        product_service = new ProductService();
-        report_service = new ReportService();
-        category_service = new CategoryService();
+    public Service(ISupplierService supplierService, PersistenceController pc) {
+        product_service = new ProductService(pc);
+        report_service = new ReportService(pc);
+        category_service = new CategoryService(pc);
         this.supplierService = supplierService;
     }
 
@@ -56,7 +57,7 @@ public class Service {
         return category_service.getSubCategory(category, name);
     }
 
-    public Response updateCategoryCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, String category, String sub_category, String subsub_category) {
+    public Response updateCategoryCusDiscount(float discount, LocalDate start_date, LocalDate end_date, String category, String sub_category, String subsub_category) {
         return product_service.updateCategoryCusDiscount(discount, start_date, end_date, category, sub_category, subsub_category);
     }
 
@@ -73,7 +74,7 @@ public class Service {
         return product_service.removeProduct(id);
     }
 
-    public Response updateProductCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id) {
+    public Response updateProductCusDiscount(float discount, LocalDate start_date, LocalDate end_date, int product_id) {
         return product_service.updateProductCusDiscount(discount, start_date, end_date, product_id);
     }
 
@@ -86,7 +87,7 @@ public class Service {
     }
 
     //Item methods
-    public Response addItem(int product_id, String store, String location, String supplier, LocalDateTime expiration_date, boolean on_shelf) {
+    public Response addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
         return product_service.addItem(product_id, store, location, supplier, expiration_date, on_shelf);
     }
 
@@ -94,7 +95,7 @@ public class Service {
         return product_service.removeItem(product_id, item_id);
     }
 
-    public Response updateItemCusDiscount(double discount, LocalDateTime start_date, LocalDateTime end_date, int product_id, int item_id) {
+    public Response updateItemCusDiscount(float discount, LocalDate start_date, LocalDate end_date, int product_id, int item_id) {
         return product_service.updateItemCusDiscount(product_id, item_id, discount, start_date, end_date);
     }
 
@@ -135,7 +136,7 @@ public class Service {
         return report_service.createDefectiveReport(name, id, report_producer);
     }
 
-    public ResponseT<Report> createBySupplierReport(String name, int id, String report_producer, String suppName) {
+    public ResponseT<Report> createBySupplierReport(String name, int id, String report_producer, int suppName) {
         return report_service.createBySupplierReport(name, id, report_producer, suppName);
     }
 
@@ -162,7 +163,7 @@ public class Service {
 
     public Response createDeficienciesOrder() {
         Map<String, Integer> proAmount = product_service.getDeficiency().data;
-        Order order= supplierService.createOrder();
+        Order order = supplierService.createOrder();
         for (Map.Entry<String, Integer> entry : proAmount.entrySet()) {
             supplierService.orderItem(order.id, entry.getKey(), entry.getValue());
         }

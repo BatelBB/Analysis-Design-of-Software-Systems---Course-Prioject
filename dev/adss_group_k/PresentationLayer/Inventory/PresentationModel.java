@@ -4,7 +4,7 @@ import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.shared.response.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -42,17 +42,11 @@ public class PresentationModel {
                 case "updateCategoryCusDiscount":
                     updateCategoryCusDiscount();
                     break;
-                case "updateProductSupplierManDiscount":
-                    updateProductSupplierManDiscount();
-                    break;
                 case "updateProductCusDiscount":
                     updateProductCusDiscount();
                     break;
                 case "updateItemCusDiscount":
                     updateItemCusDiscount();
-                    break;
-                case "updateProductManPrice":
-                    updateProductManPrice();
                     break;
                 case "updateProductCusPrice":
                     updateProductCusPrice();
@@ -174,16 +168,7 @@ public class PresentationModel {
     private void updateCategoryCusDiscount() {
         Response r;
         if (args.length == 6 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null) {
-            r = service.updateCategoryCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), args[3], args[4], args[5]);
-            if (!r.success)
-                System.out.println(r.error);
-        }
-    }
-
-    private void updateProductSupplierManDiscount() {
-        Response r;
-        if (args.length == 4 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null) {
-            r = service.updateProductSupplierManDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), args[3]);
+            r = service.updateCategoryCusDiscount(convertFloat(args[0]), convertDate(args[1]), convertDate(args[2]), args[3], args[4], args[5]);
             if (!r.success)
                 System.out.println(r.error);
         }
@@ -192,7 +177,7 @@ public class PresentationModel {
     private void updateProductCusDiscount() {
         Response r;
         if (args.length == 4 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null && convertDouble(args[3]) != -1) {
-            r = service.updateProductCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]));
+            r = service.updateProductCusDiscount(convertFloat(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]));
             if (!r.success)
                 System.out.println(r.error);
         }
@@ -201,16 +186,7 @@ public class PresentationModel {
     private void updateItemCusDiscount() {
         Response r;
         if (args.length == 5 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null && convertDouble(args[3]) != -1 && convertDouble(args[4]) != -1) {
-            r = service.updateItemCusDiscount(convertDouble(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]), convertInt(args[4]));
-            if (!r.success)
-                System.out.println(r.error);
-        }
-    }
-
-    private void updateProductManPrice() {
-        Response r;
-        if (args.length == 2 && convertDouble(args[1]) != -1.0 && convertInt(args[0]) != -1) {
-            r = service.updateProductManPrice(convertInt(args[0]), convertDouble(args[1]));
+            r = service.updateItemCusDiscount(convertFloat(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]), convertInt(args[4]));
             if (!r.success)
                 System.out.println(r.error);
         }
@@ -252,9 +228,9 @@ public class PresentationModel {
     private void addItem() {
         Response r;
         int product_id = convertInt(args[0]);
-        LocalDateTime expiration_date = convertDate(args[4]);
+        LocalDate expiration_date = convertDate(args[4]);
         if (args.length == 6 && product_id != -1 && expiration_date != null && convertBoolean(args[5]) != null) {
-            r = service.addItem(product_id, args[1], args[2], args[3], expiration_date, Objects.requireNonNull(convertBoolean(args[5])));
+            r = service.addItem(product_id, args[1], args[2], convertInt(args[3]), expiration_date, Objects.requireNonNull(convertBoolean(args[5])));
             if (!r.success)
                 System.out.println(r.error);
         }
@@ -356,7 +332,7 @@ public class PresentationModel {
     public void createBySupplierReport() {
         ResponseT<Report> r;
         if (args.length == 4 && convertInt(args[1]) != -1) {
-            r = service.createBySupplierReport(args[0], convertInt(args[1]), args[2], args[3]);
+            r = service.createBySupplierReport(args[0], convertInt(args[1]), args[2], convertInt(args[3]));
             if (!r.success)
                 System.out.println(r.error);
             else
@@ -435,14 +411,15 @@ public class PresentationModel {
         }
     }
 
-    private LocalDateTime convertDate(String input) {
+    //TODO: update
+    private LocalDate convertDate(String input) {
         try {
             DateTimeFormatter formatter;
             if (input.contains(":"))
                 formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             else
                 formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            return LocalDateTime.parse(input, formatter);
+            return LocalDate.parse(input, formatter);
         } catch (Exception e) {
             System.out.println("failed to parse date");
             return null;

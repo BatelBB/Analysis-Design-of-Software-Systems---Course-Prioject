@@ -48,7 +48,6 @@ public abstract class BaseDAO<TEntityID, TEntity extends BaseRecord<TEntityID>> 
         return get(id).success;
     }
 
-
     abstract TEntity fetch(TEntityID key) throws SQLException, NoSuchElementException;
 
     abstract Stream<TEntity> fetchAll() throws SQLException;
@@ -67,8 +66,7 @@ public abstract class BaseDAO<TEntityID, TEntity extends BaseRecord<TEntityID>> 
         }
     }
 
-
-    protected final ResponseT<TEntity> create(Supplier<TEntity> factory, String statement, StatementInitialization... paramsInit) {
+    public final ResponseT<TEntity> create(Supplier<TEntity> factory, String statement, StatementInitialization... paramsInit) {
         int res = runUpdate(statement, paramsInit);
         if (res > 0) {
             TEntity created = factory.get();

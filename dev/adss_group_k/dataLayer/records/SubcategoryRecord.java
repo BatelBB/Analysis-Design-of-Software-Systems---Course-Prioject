@@ -5,11 +5,11 @@ import adss_group_k.dataLayer.records.readonly.SubcategoryData;
 import java.util.Objects;
 
 public class SubcategoryRecord extends BaseRecord<SubcategoryRecord.SubcategoryKey> implements SubcategoryData {
-    public final String name, category;
+    public final String category, name;
 
     public SubcategoryRecord(String category, String name) {
-        this.name = name;
         this.category = category;
+        this.name = name;
     }
 
     @Override
@@ -36,15 +36,14 @@ public class SubcategoryRecord extends BaseRecord<SubcategoryRecord.SubcategoryK
 
         public final String name, category;
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(name, category);
-        }
-
-
         public SubcategoryKey(String category, String name) {
             this.name = name;
             this.category = category;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name, category);
         }
 
         @Override

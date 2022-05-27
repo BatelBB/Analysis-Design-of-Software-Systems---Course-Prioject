@@ -232,12 +232,12 @@ class ServiceTest {
     @org.junit.jupiter.api.Test
     void createBySupplierReport() {
         try {
-            service.createBySupplierReport("BySupplierReport", 0, "Michel", "Tnuva");
+            service.createBySupplierReport("BySupplierReport", 0, "Michel", 0);
             setReportListNames();
             assertTrue(ReportList.contains(0));
-            service.createBySupplierReport("MissingReport", 1, "Michel", "Tnuva");
+            service.createBySupplierReport("MissingReport", 1, "Michel", 0);
             service.removeReport(1);
-            service.createBySupplierReport("ExpiredReport", 0, "Michel", "Tnuva");
+            service.createBySupplierReport("ExpiredReport", 0, "Michel", 0);
         } catch (Exception e) {
             assertEquals(e.getMessage(), "The ReportId already exists in the system");
             clearReportListNames();

@@ -11,6 +11,8 @@ public class PersistenceController {
     private final SupplierDAO suppliers;
     private final ItemDAO items;
     private final ProductDAO products;
+    private final ProductItemDAO productItems;
+    private final DiscountPairDAO discountPairs;
     private final QuantityDiscountDAO quantityDiscounts;
 
     public PersistenceController(Connection conn) {
@@ -22,6 +24,8 @@ public class PersistenceController {
         items = new ItemDAO(conn);
         suppliers = new SupplierDAO(conn);
         quantityDiscounts = new QuantityDiscountDAO(conn);
+        productItems = new ProductItemDAO(conn);
+        discountPairs = new DiscountPairDAO(conn);
     }
 
     public Connection getConn() {
@@ -52,7 +56,15 @@ public class PersistenceController {
         return products;
     }
 
+    public DiscountPairDAO getDiscountPairs() {
+        return discountPairs;
+    }
+
     public QuantityDiscountDAO getQuantityDiscounts() {
         return quantityDiscounts;
+    }
+
+    public ProductItemDAO getProductItems() {
+        return productItems;
     }
 }

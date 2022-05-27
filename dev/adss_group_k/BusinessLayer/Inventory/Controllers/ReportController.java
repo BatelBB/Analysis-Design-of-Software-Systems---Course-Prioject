@@ -3,6 +3,7 @@ package adss_group_k.BusinessLayer.Inventory.Controllers;
 import adss_group_k.BusinessLayer.Inventory.Product;
 import adss_group_k.BusinessLayer.Inventory.ProductItem;
 import adss_group_k.BusinessLayer.Inventory.Report;
+import adss_group_k.dataLayer.dao.PersistenceController;
 
 import java.util.*;
 import java.util.List;
@@ -15,14 +16,14 @@ public class ReportController {
 
     private static ReportController reportController;
 
-    public static ReportController getInstance() {
+    public static ReportController getInstance(PersistenceController pc) {
         if (reportController == null)
-            reportController = new ReportController();
+            reportController = new ReportController(pc);
         return reportController;
     }
 
-    private ReportController() {
-        product_controller = ProductController.getInstance();
+    private ReportController(PersistenceController pc) {
+        product_controller = ProductController.getInstance(pc);
         reports = new HashMap<>();
     }
 
@@ -96,7 +97,7 @@ public class ReportController {
         }
     }
 
-    public Report createBySupplierReport(String name, int id, String report_producer, String suppName) {
+    public Report createBySupplierReport(String name, int id, String report_producer, int suppName) {
         if (reports.containsKey(Integer.toString(id)))
             throw new IllegalArgumentException("The ReportId already exists in the system");
         else {

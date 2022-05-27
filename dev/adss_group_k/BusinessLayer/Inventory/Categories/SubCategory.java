@@ -28,38 +28,33 @@ public class SubCategory {
     public SubCategory(SubcategoryRecord sub_category, PersistenceController pc) {
         this.name = sub_category.getName();
         this.pc = pc;
-        pc.getSubSubCategories().all().forEach(this::addFromExisting);
+        pc.getSubSubCategories().all().filter(sc -> sc.getSubcategory().equals(sub_category.getName())).forEach(this::addFromExisting);
     }
 
     //METHODS
     public void addSubSubCategory(String cat_name, String name) throws Exception {
         if (subSubCategories.containsKey(this.name))
             throw new IllegalArgumentException("The SubSubCategory already exists in the system");
-        else {
-            ResponseT<SubSubcategoryData> r = pc.getSubSubCategories().create(cat_name, this.name, name);
-            if (r.success)
-                subSubCategories.put(name, new SubSubCategory(name));
-            else
-                throw new Exception(r.error);
-        }
+        ResponseT<SubSubcategoryData> r = pc.getSubSubCategories().create(cat_name, this.name, name);
+        if (!r.success)
+            throw new Exception(r.error);
+        subSubCategories.put(name, new SubSubCategory(name));
     }
 
     public void removeSubSubCategory(String cat_name, String name) throws Exception {
-        if (subSubCategoryExists(name)) {
-            int r = pc.getSubSubCategories().runDeleteQuery(cat_name, this.name, name);
-            if (r == -1)
-                throw new Exception("Error deleting subSubCategory from DB");
-            else
-                subSubCategories.remove(name);
-        }
+        subSubCategoryExists(name);
+        int r = pc.getSubSubCategories().runDeleteQuery(cat_name, this.name, name);
+        if (r == -1)
+            throw new Exception("Error deleting subSubCategory from DB");
+        subSubCategories.remove(name);
+    }
+
+    public SubSubCategory getSubSubCategory(String name) {
+        subSubCategoryExists(name);
+        return subSubCategories.get(name);
     }
 
     //GETTERS AND SETTERS
-    public SubSubCategory getSubSubCategory(String name) {
-        if (subSubCategoryExists(name))
-            return subSubCategories.get(name);
-        return null;
-    }
 
     public Map<String, SubSubCategory> getSubSubCategories() {
         return subSubCategories;
@@ -70,10 +65,9 @@ public class SubCategory {
     }
 
     //PRIVATE METHODS
-    private boolean subSubCategoryExists(String name) {
+    private void subSubCategoryExists(String name) {
         if (!subSubCategories.containsKey(name))
             throw new IllegalArgumentException("Category doesn't exists");
-        return true;
     }
 
     private void addFromExisting(SubSubCategoryRecord sub_sub_category) {

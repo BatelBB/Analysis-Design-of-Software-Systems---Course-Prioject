@@ -2,6 +2,7 @@ package adss_group_k.BusinessLayer.Inventory.Service;
 
 import adss_group_k.BusinessLayer.Inventory.Controllers.ReportController;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Report;
+import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.shared.response.*;
 
 import java.util.List;
@@ -9,8 +10,8 @@ import java.util.List;
 public class ReportService {
     private final ReportController report_controller;
 
-    public ReportService() {
-        report_controller = ReportController.getInstance();
+    public ReportService(PersistenceController pc) {
+        report_controller = ReportController.getInstance(pc);
     }
 
     public ResponseT<List<Integer>> getReportListNames() {
@@ -74,7 +75,7 @@ public class ReportService {
         }
     }
 
-    public ResponseT<Report> createBySupplierReport(String name, int id, String report_producer, String suppName) {
+    public ResponseT<Report> createBySupplierReport(String name, int id, String report_producer, int suppName) {
         try {
             adss_group_k.BusinessLayer.Inventory.Report report = report_controller.createBySupplierReport(name, id, report_producer, suppName);
             return ResponseT.success(new Report(report));

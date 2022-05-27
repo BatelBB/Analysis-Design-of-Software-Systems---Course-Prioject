@@ -1,27 +1,22 @@
 package adss_group_k.BusinessLayer.Inventory.Service.Objects;
 
-import adss_group_k.BusinessLayer.Inventory.ProductItem;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class Product {
 
-    private int item_ids;
+    private final int item_ids;
     private final int product_id;
-    private String name;
-    private int shelf_qty;
-    private int storage_qty;
-    private String manufacturer;
-    private double man_price;
-    private double cus_price;
-    private int min_qty;
-    private int supply_time;
-    private Map<String, ProductItem> items;
-
-    private String cat;
-    private String sub_cat;
-    private String sub_sub_cat;
+    private final String name;
+    private final int shelf_qty;
+    private final int storage_qty;
+    private final String manufacturer;
+    private final double cus_price;
+    private final int min_qty;
+    private final Map<Integer, ProductItem> items;
+    private final String cat;
+    private final String sub_cat;
+    private final String sub_sub_cat;
 
     public Product(adss_group_k.BusinessLayer.Inventory.Product p) {
         item_ids = p.getItem_ids();
@@ -30,31 +25,46 @@ public class Product {
         shelf_qty = p.getShelf_qty();
         storage_qty = p.getStorage_qty();
         manufacturer = p.getManufacturer();
-        man_price = p.getMan_price();
         cus_price = p.getCus_price();
         min_qty = p.getMin_qty();
-        supply_time = p.getSupply_time();
         cat = p.getCat();
         sub_cat = p.getCat();
         sub_sub_cat = p.getSub_sub_cat();
-        Map<String, ProductItem> BusinessItemsMap = p.getItems();
+        Map<Integer, adss_group_k.BusinessLayer.Inventory.ProductItem> BusinessItemsMap = p.getItems();
         items = new HashMap<>();
-        for (Map.Entry<String, ProductItem> entry : BusinessItemsMap.entrySet()) {
+        for (Map.Entry<Integer, adss_group_k.BusinessLayer.Inventory.ProductItem> entry : BusinessItemsMap.entrySet()) {
             items.put(entry.getKey(), new ProductItem(entry.getValue()));
         }
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getShelf_qty() {
+        return shelf_qty;
+    }
+
+    public int getStorage_qty() {
+        return storage_qty;
+    }
+
+    public String getCat() {
+        return cat;
+    }
+
+    @Override
     public String toString() {
-        String s = "product_id: " + product_id + "\n" + "product name: " + name + "\n"
+        StringBuilder s = new StringBuilder("product_id: " + product_id + "\n" + "product name: " + name + "\n"
                 + "category: " + cat + "\n" + "sub category: " + sub_cat + "\n" +
                 "sub sub category: " + sub_sub_cat + "\n" + "manufacturer: " + manufacturer + "\n" +
-                "manufacturer price: " + man_price + "\n" + "customer price: " + cus_price + "\n" +
-                "supply time: " + supply_time + "\n" + "minimum quantity: " + min_qty + "\n" +
+                "customer price: " + cus_price + "\n" +
+                "minimum quantity: " + min_qty + "\n" +
                 "shelf quantity: " + shelf_qty + "\n" + "storage quantity: " + storage_qty + "\n" +
-                "The items id in this product are:\n";
-        for (Map.Entry<String, ProductItem> entry : items.entrySet()) {
-            s = s + entry.getValue().getId() + "\n";
+                "The items id in this product are:\n");
+        for (Map.Entry<Integer, ProductItem> entry : items.entrySet()) {
+            s.append(entry.getValue().getId()).append("\n");
         }
-        return s;
+        return s.toString();
     }
 }

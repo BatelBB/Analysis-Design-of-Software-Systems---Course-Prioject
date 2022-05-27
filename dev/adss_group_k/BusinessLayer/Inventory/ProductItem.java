@@ -1,141 +1,124 @@
 package adss_group_k.BusinessLayer.Inventory;
 
-import java.time.LocalDateTime;
+import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.DiscountPairRecord;
+import adss_group_k.dataLayer.records.readonly.DiscountPairData;
+import adss_group_k.dataLayer.records.readonly.ProductItemData;
+import adss_group_k.shared.response.ResponseT;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ProductItem {
-    private int id;
-    private String productName;
-    private String store;
+    private final int product_id;
+    private final int id;
+    private int discount_ids;
+    private final String store;
     private String location;
-    private String supplier;
-    private LocalDateTime expirationDate;
-    private List<DiscountPair> man_discount;
-    private List<DiscountPair> cus_discount;
+    private int supplier;
+    private final LocalDate expirationDate;
+    private final List<DiscountPair> cus_discount;
     private boolean is_defect;
     private boolean on_shelf;
     private String defect_reporter;
+    private String productName;
 
-    //constructors
-    public ProductItem(int id, String store, String productName,String location, String supplier, LocalDateTime expirationDate, List<DiscountPair> man_discount, List<DiscountPair> cus_discount, boolean is_defect) {
-        this.id = id;
-        this.store = store;
-        this.location = location;
-        this.supplier = supplier;
-        this.expirationDate = expirationDate;
-        this.man_discount = man_discount;
-        this.cus_discount = cus_discount;
-        this.is_defect = is_defect;
-        this.productName=productName;
-        defect_reporter = null;
+    private final PersistenceController pc;
+
+    //CONSTRUCTORS
+    public ProductItem(ProductItemData productItem, PersistenceController pc) {
+        product_id = productItem.getProductId();
+        id = productItem.getId();
+        store = productItem.getStore();
+        location = productItem.getLocation();
+        supplier = productItem.getSupplier();
+        expirationDate = productItem.getExpirationDate().toLocalDate();
+        cus_discount = new ArrayList<>();
+        pc.getDiscountPairs().all().filter(dp -> dp.getProductId() == product_id && dp.getProductItemId() == id).forEach(this::addFromExisting);
+        is_defect = productItem.getIsDefect();
+        on_shelf = productItem.getOnShelf();
+        defect_reporter = productItem.getDefectReporter();
+        this.pc = pc;
     }
 
-    public ProductItem(int id, String store, String location, String supplier, LocalDateTime expirationDate, boolean on_shelf) {
-        this.id = id;
-        this.store = store;
-        this.location = location;
-        this.supplier = supplier;
-        this.expirationDate = expirationDate;
-        this.man_discount = new ArrayList<>();
-        this.cus_discount = new ArrayList<>();
-        this.is_defect = false;
-        this.on_shelf=on_shelf;
-        defect_reporter = null;
-    }
-
-    public ProductItem(ProductItem productItem) {
-        this.id = productItem.id;
-        this.store = productItem.store;
-        this.location = productItem.location;
-        this.supplier = productItem.supplier;
-        this.expirationDate = productItem.expirationDate;
-        this.man_discount = productItem.man_discount;
-        this.cus_discount = productItem.cus_discount;
-        this.is_defect = productItem.is_defect;
-        this.on_shelf=productItem.on_shelf;
-        defect_reporter = productItem.defect_reporter;
-    }
-
-    //methods
-    public void addManDiscount(DiscountPair pair) {
-        man_discount.add(pair);
-    }
-
-    public void addCusDiscount(DiscountPair pair) {
-        cus_discount.add(pair);
+    //METHODS
+    public void addCusDiscount(LocalDate start_date, LocalDate end_date, float discount) throws Exception {
+        ResponseT<DiscountPairData> r = pc.getDiscountPairs().create(
+                product_id,
+                id,
+                discount_ids,
+                java.sql.Date.valueOf(start_date),
+                java.sql.Date.valueOf(end_date),
+                discount
+        );
+        if (!r.success)
+            throw new Exception(r.error);
+        cus_discount.add(new DiscountPair(r.data));
+        discount_ids++;
     }
 
     public double calculateDiscount() {
+        Iterator<DiscountPair> i = cus_discount.iterator();
         double discount = 1;
-        for (DiscountPair pair : man_discount)
-            if (pair.getStart_date().isBefore(LocalDateTime.now()) && pair.getEnd_date().isAfter(LocalDateTime.now()))
+        while (i.hasNext()) {
+            DiscountPair pair = i.next();
+            boolean between_dates = pair.getStart_date().isBefore(LocalDate.now()) && pair.getEnd_date().isAfter(LocalDate.now());
+            boolean start_today = LocalDate.now().equals(pair.getStart_date());
+            boolean end_today = LocalDate.now().equals(pair.getEnd_date());
+            if (between_dates || start_today || end_today)
                 discount *= (1 - pair.getDiscount());
+            else
+                i.remove();
+        }
         return discount;
     }
 
-    //getters and setters
+    //GETTERS AND SETTERS
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getStore() {
         return store;
     }
 
-    public void setStore(String store) {
-        this.store = store;
-    }
-
     public String getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(String location) throws Exception {
+        int r = pc.getProductItems().updateItemLocation(product_id, id, location);
+        if (r == -1)
+            throw new Exception("Error setting location in DAL");
         this.location = location;
     }
 
-    public String getSupplier() {
+    public int getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(String supplier) {
+    public void setSupplier(int supplier) {
         this.supplier = supplier;
     }
 
-    public LocalDateTime getExpirationDate() {
+    public LocalDate getExpirationDate() {
         return expirationDate;
-    }
-
-    public void setExpirationDate(LocalDateTime expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public List<DiscountPair> getMan_discount() {
-        return man_discount;
-    }
-
-    public void setMan_discount(List<DiscountPair> man_discount) {
-        this.man_discount = man_discount;
     }
 
     public List<DiscountPair> getCus_discount() {
         return cus_discount;
     }
 
-    public void setCus_discount(List<DiscountPair> cus_discount) {
-        this.cus_discount = cus_discount;
-    }
-
     public boolean is_defect() {
         return is_defect;
     }
 
-    public void setIs_defect(boolean is_defect) {
+    public void setIs_defect(boolean is_defect) throws Exception {
+        int r = pc.getProductItems().updateIsDefect(product_id, id, is_defect);
+        if (r == -1)
+            throw new Exception("Error setting is_defect in DAL");
         this.is_defect = is_defect;
     }
 
@@ -143,7 +126,10 @@ public class ProductItem {
         return defect_reporter;
     }
 
-    public void setDefect_reporter(String defect_reporter) {
+    public void setDefect_reporter(String defect_reporter) throws Exception {
+        int r = pc.getProductItems().updateDefectReporter(product_id, id, defect_reporter);
+        if (r == -1)
+            throw new Exception("Error setting defect_reporter in DAL");
         this.defect_reporter = defect_reporter;
     }
 
@@ -151,9 +137,18 @@ public class ProductItem {
         return on_shelf;
     }
 
-    public void setOn_shelf(boolean on_shelf) {
+    public void setOn_shelf(boolean on_shelf) throws Exception {
+        int r = pc.getProductItems().updateOnShelf(product_id, id, on_shelf);
+        if (r == -1)
+            throw new Exception("Error setting is_defect in DAL");
         this.on_shelf = on_shelf;
     }
 
-    public String getProductName() {return productName;}
+    public String getProductName() {
+        return productName;
+    }
+
+    private void addFromExisting(DiscountPairRecord dp) {
+        cus_discount.add(new DiscountPair(dp));
+    }
 }

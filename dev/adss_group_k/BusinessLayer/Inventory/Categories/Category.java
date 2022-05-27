@@ -28,7 +28,7 @@ public class Category {
     public Category(CategoryRecord category, PersistenceController pc) {
         this.name = category.getName();
         this.pc = pc;
-        pc.getSubcategories().all().forEach(this::addFromExisting);
+        pc.getSubcategories().all().filter(c -> c.getCategory().equals(category.getName())).forEach(this::addFromExisting);
     }
 
     //METHODS
@@ -45,20 +45,19 @@ public class Category {
     }
 
     public void removeSubCategory(String name) throws Exception {
-        if (subCategoryExists(name)) {
-            int r = pc.getSubcategories().runDeleteQuery(this.name, name);
-            if (r == -1)
-                throw new Exception("Error deleting subCategory from DB");
-            else
-                subC.remove(name);
-        }
+        subCategoryExists(name);
+        int r = pc.getSubcategories().runDeleteQuery(this.name, name);
+        if (r == -1)
+            throw new Exception("Error deleting subCategory from DB");
+        for (String ssc : subC.get(name).getSubSubCategories().keySet())
+            subC.get(name).removeSubSubCategory(this.name, ssc);
+        subC.remove(name);
     }
 
     //GETTERS AND SETTERS
     public SubCategory getSubCategory(String name) {
-        if (subCategoryExists(name))
-            return subC.get(name);
-        return null;
+        subCategoryExists(name);
+        return subC.get(name);
     }
 
     public Map<String, SubCategory> getSubC() {
@@ -70,10 +69,9 @@ public class Category {
     }
 
     //PRIVATE METHODS
-    private boolean subCategoryExists(String name) {
+    private void subCategoryExists(String name) {
         if (!subC.containsKey(name))
             throw new IllegalArgumentException("Category doesn't exists");
-        return true;
     }
 
     private void addFromExisting(SubcategoryRecord sub_category) {
