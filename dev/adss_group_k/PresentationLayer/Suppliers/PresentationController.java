@@ -67,31 +67,31 @@ public class PresentationController {
                                         case (2): {
                                             //Edit bank account
                                             int bankAct = input.nextInt("Enter bank account: ");
-                                            service.setSupplierBankAccount(supplier, bankAct);
+                                            service.setSupplierBankAccount(ppn, bankAct);
                                             break;
                                         }
                                         case (3): {
                                             //Edit company name
                                             String newName = input.nextString("Enter name: ");
-                                            service.setSupplierCompanyName(supplier, newName);
+                                            service.setSupplierCompanyName(ppn, newName);
                                             break;
                                         }
                                         case (4): {
                                             //Edit delivery
                                             boolean newValue = input.nextBoolean("Is delivering?");
-                                            service.setSupplierIsDelivering(supplier, newValue);
+                                            service.setSupplierIsDelivering(ppn, newValue);
                                             break;
                                         }
                                         case (5): {
                                             //edit payment condition
                                             PaymentCondition payment = choosePayment(
                                                     "Which way will the supplier pay? ");
-                                            service.setSupplierPaymentCondition(supplier, payment);
+                                            service.setSupplierPaymentCondition(ppn, payment);
                                             break;
                                         }
                                         case (6): {
                                             //edit supplying days
-                                            service.setSupplierRegularSupplyingDays(supplier, chooseDay());
+                                            service.setSupplierRegularSupplyingDays(ppn, chooseDay());
                                             break;
                                         }
                                         case (7): {
@@ -100,7 +100,7 @@ public class PresentationController {
                                             String email = input.nextString("Enter the supplier's contact email: ");
                                             String phoneNum = input.nextString(
                                                     "Enter the supplier's contact phone number: ");
-                                            service.setSupplierContact(supplier, contactName, phoneNum, email);
+                                            service.setSupplierContact(ppn, contactName, phoneNum, email);
                                             break;
                                         }
 
@@ -119,7 +119,7 @@ public class PresentationController {
                             }
                             case (4): {
                                 //See summery of all suppliers
-                                output.println(service.toStringSupplier());
+                                service.getSuppliers().forEach(s -> output.println(s.toString()));
                                 break;
                             }
                         }
@@ -146,15 +146,18 @@ public class PresentationController {
                                 //edit price of existing item
                                 int[] arr = checkItem();
                                 Item item = service.getItem(arr[0], arr[1]).data;
-                                service.setPrice(item, input.nextFloat("Enter new price: "));
+                                service.setPrice(item.getSupplier().getPpn(), item.getCatalogNumber(), input.nextFloat("Enter new price: "));
                                 break;
                             }
                             case (4): {
                                 //edit name of existing item
                                 int[] arr = checkItem();
                                 Item item = service.getItem(arr[0], arr[1]).data;
+                                int ppn = item.getSupplier().getPpn();
+                                int catalogNumber = item.getCatalogNumber();
                                 String name = input.nextString("Enter new name: ");
-                                service.setItemName(item, name);
+
+                                service.setItemName(ppn, item.getCatalogNumber() name);
                                 break;
                             }
                             case (5): {
