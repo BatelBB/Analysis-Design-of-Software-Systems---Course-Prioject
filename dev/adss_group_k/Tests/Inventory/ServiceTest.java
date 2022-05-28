@@ -112,16 +112,12 @@ class ServiceTest {
 
     @Test
     void removeReport() {
-        try {
             ResponseT<Report> missingReport = service.createMissingReport("MissingReport", "Michel");
             int reportId = missingReport.data.getId();
-            assertTrue(service.getReportListNames().data.contains("MissingReport"));
-            service.removeReport(reportId);
-            assertFalse(service.getProductNames().data.contains("MissingReport"));
-            service.removeProduct(0);
-        } catch (Exception e) {
-            assertEquals(e.getMessage(), "Report id doesn't exists");
-        }
+            assertTrue(service.getReportListIds().data.contains(reportId));
+            assertTrue(service.removeReport(reportId).success);
+            assertFalse(service.getProductNames().data.contains(reportId));
+            assertFalse(service.removeProduct(reportId).success);
     }
 
     @Test
@@ -142,7 +138,7 @@ class ServiceTest {
         try {
             service.createMissingReport("MissingReport", "Michel");
             
-            assertTrue(service.getReportListNames().data.contains(0));
+            assertTrue(service.getReportListIds().data.contains(0));
             service.createMissingReport("MissingReport", "Michel");
             service.removeReport(1);
             service.createMissingReport("MissingReport", "Michel");
@@ -156,11 +152,9 @@ class ServiceTest {
     @Test
     void createExpiredReport() {
         try {
-            service.createExpiredReport("ExpiredReport", "Michel");
-            
-            assertTrue(service.getReportListNames().data.contains(0));
-            service.createExpiredReport("ExpiredReport", "Michel");
-            service.removeReport(1);
+            Integer id = service.createExpiredReport("ExpiredReport", "Michel").data.getId();
+            assertTrue(service.getReportListIds().data.contains(id));
+            service.removeReport(id);
             service.createExpiredReport("ExpiredReport", "Michel");
         } catch (Exception e) {
             assertEquals(e.getMessage(), "The ReportId already exists in the system");
@@ -174,7 +168,7 @@ class ServiceTest {
         try {
             service.createBySupplierReport("BySupplierReport", "Michel", 0);
             
-            assertTrue(service.getReportListNames().data.contains(0));
+            assertTrue(service.getReportListIds().data.contains(0));
             service.createBySupplierReport("MissingReport", "Michel", 0);
             service.removeReport(1);
             service.createBySupplierReport("ExpiredReport", "Michel", 0);
