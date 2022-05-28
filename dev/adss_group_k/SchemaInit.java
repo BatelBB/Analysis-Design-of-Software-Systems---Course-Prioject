@@ -98,17 +98,16 @@ public class SchemaInit {
                     ");\n" +
 
                     "CREATE TABLE IF NOT EXISTS \"ProductInReport\" (\n" +
-                    "\t\"qty\"\tINTEGER NOT NULL,\n" +
                     "\t\"reportId\"\tINTEGER NOT NULL,\n" +
                     "\t\"productId\"\tINTEGER NOT NULL,\n" +
                     "\tPRIMARY KEY(\"reportId\",\"productId\")\n" +
                     ");\n" +
 
                     "CREATE TABLE IF NOT EXISTS \"ItemInReport\" (\n" +
-                    "\t\"qty\"\tINTEGER NOT NULL,\n" +
                     "\t\"reportId\"\tINTEGER NOT NULL,\n" +
+                    "\t\"productId\"\tINTEGER NOT NULL,\n" +
                     "\t\"itemId\"\tINTEGER NOT NULL,\n" +
-                    "\tPRIMARY KEY(\"reportId\",\"itemId\")\n" +
+                    "\tPRIMARY KEY(\"reportId\",\"itemId\",\"productId\")\n" +
                     ");\n" +
 
                     "CREATE TABLE IF NOT EXISTS \"Subcategory\" (\n" +
