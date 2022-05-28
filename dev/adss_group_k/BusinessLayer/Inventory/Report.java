@@ -6,7 +6,15 @@ import java.util.List;
 
 public class Report {
 
-    public enum report_type {Missing, Expired, Surpluses, Defective, bySupplier, byProduct, byCategory}
+    public enum report_type {
+        byCategory,
+        byProduct,
+        bySupplier,
+        Defective,
+        Expired,
+        Missing,
+        Surpluses,
+    }
 
     protected Integer id;
     protected String name;
