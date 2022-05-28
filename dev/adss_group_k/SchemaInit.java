@@ -8,23 +8,23 @@ import java.util.Scanner;
 
 public class SchemaInit {
 
-    public static void init(Connection conn) throws SQLException {
-        String[] statements = schemaInit.split(";");
-        Statement st = null;
-        try
-        {
-            st = conn.createStatement();
-            for(String line: statements) {
+    public static void init(Connection conn) {
+        try {
+            String[] statements = schemaInit.split(";");
+            Statement st = null;
+            try {
+                st = conn.createStatement();
+                for (String line : statements) {
 
-                if (line.trim().length() > 0)
-                {
-                    st.execute(line);
+                    if (line.trim().length() > 0) {
+                        st.execute(line);
+                    }
                 }
+            } finally {
+                if (st != null) st.close();
             }
-        }
-        finally
-        {
-            if (st != null) st.close();
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

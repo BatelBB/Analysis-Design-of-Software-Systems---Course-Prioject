@@ -2,6 +2,9 @@ package adss_group_k.PresentationLayer.Inventory;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
+import adss_group_k.PresentationLayer.Suppliers.UserInput;
+import adss_group_k.PresentationLayer.Suppliers.UserOutput;
+import adss_group_k.SchemaInit;
 import adss_group_k.dataLayer.dao.PersistenceController;
 
 import java.sql.Connection;
@@ -13,18 +16,34 @@ public class Main {
     private static PersistenceController pc;
     public static void startInventoryMenu() {
         Connection conn = null;
+        String dbPath = "database.db";
+        boolean shouldLoadExample = false;
+        boolean isNew = !new java.io.File(dbPath).exists();
         try {
-            conn = DriverManager.getConnection("jdbc:sqlite::memory:");
+            if(isNew) {
+                UserOutput.getInstance().println(
+                        "You don't have a previous database file stored, so we'll create a new one for you" +
+                        "from scratch.");
+                shouldLoadExample = UserInput.getInstance().nextBoolean("Would you like to start with some example data?");
+            }
+
+            conn = DriverManager.getConnection("jdbc:sqlite:"+dbPath);
         } catch (SQLException throwables) {
             throw new RuntimeException(throwables);
         }
+        if(isNew) {
+            SchemaInit.init(conn);
+        }
+        if(shouldLoadExample) {
+            // TODO load example
+        }
         pc = new PersistenceController(conn);
+
         SupplierService supplierService=new SupplierService(pc);
         Service service = new Service(supplierService, pc);
         Scanner scan = new Scanner(System.in);
         String input = "";
         PresentationModel pm = new PresentationModel(service);
-        example(pm);
         do {
             input = scan.nextLine();
             pm.execute(input);
