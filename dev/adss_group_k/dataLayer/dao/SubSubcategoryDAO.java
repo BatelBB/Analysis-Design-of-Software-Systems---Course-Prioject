@@ -55,7 +55,7 @@ public class SubSubcategoryDAO extends BaseDAO<SubSubCategoryRecord.SubSubcatego
 
     @Override
     Stream<SubSubCategoryRecord> fetchAll() throws SQLException {
-        PreparedStatement ps = conn.prepareStatement("SELECT category, subcategory, name FROM Subcategory");
+        PreparedStatement ps = conn.prepareStatement("SELECT category, subcategory, name FROM SubSubCategory");
         ResultSet resultSet = ps.executeQuery();
         ArrayList<SubSubCategoryRecord> list = new ArrayList<>();
         while(resultSet.next()) {

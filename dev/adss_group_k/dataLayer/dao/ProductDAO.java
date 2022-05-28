@@ -105,7 +105,7 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
 
     private ProductRecord readOne(Integer id, ResultSet query) throws SQLException {
         return new ProductRecord(
-                query.getInt("itemIds"),
+                query.getInt("item_ids"),
                 id,
                 query.getString("name"),
                 query.getFloat("customerPrice"),

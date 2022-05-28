@@ -28,6 +28,7 @@ public class Category {
     public Category(CategoryRecord category, PersistenceController pc) {
         this.name = category.getName();
         this.pc = pc;
+        subC = new HashMap<>();
         pc.getSubcategories().all().filter(c -> c.getCategory().equals(category.getName())).forEach(this::addFromExisting);
     }
 
