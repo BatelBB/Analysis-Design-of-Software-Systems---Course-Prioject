@@ -7,7 +7,7 @@ import adss_group_k.dataLayer.dao.PersistenceController;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("hi");
+        System.out.println("Welcome!");
         new App("database.db").main();
     }
 }
