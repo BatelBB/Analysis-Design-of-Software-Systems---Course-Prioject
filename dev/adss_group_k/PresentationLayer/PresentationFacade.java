@@ -1,6 +1,7 @@
 package adss_group_k.PresentationLayer;
 
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
+import adss_group_k.PresentationLayer.Inventory.Main;
 import adss_group_k.PresentationLayer.Suppliers.UserInput;
 import adss_group_k.PresentationLayer.Suppliers.UserOutput;
 

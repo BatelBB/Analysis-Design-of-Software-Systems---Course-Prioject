@@ -8,6 +8,7 @@ import adss_group_k.dataLayer.records.SupplierRecord;
 import adss_group_k.dataLayer.records.readonly.SupplierData;
 import adss_group_k.shared.dto.CreateSupplierDTO;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -87,5 +88,11 @@ public class SupplierController {
 
     public void setSupplierName(int supplierPPN, String newName) {
         suppliers.get(supplierPPN).setName(newName);
+    }
+
+    public void setRegularSupplyingDays(int supplierPPN, DayOfWeek dayOfWeek) {
+    }
+
+    public void setContact(int supplierPPN, String name, String phoneNumber, String email) {
     }
 }

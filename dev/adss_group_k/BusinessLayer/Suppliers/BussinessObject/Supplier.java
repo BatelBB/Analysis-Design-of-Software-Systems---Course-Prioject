@@ -66,7 +66,7 @@ public class Supplier {
     }
 
     public void setBankAccount(int bankAct) {
-        dao.updateBankAccount(getPpn(), bankAct);
+       dao.updateBankAccount(getPpn(), bankAct);
     }
 
     public void setName(String newName) {
