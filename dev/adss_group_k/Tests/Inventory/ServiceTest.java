@@ -42,16 +42,14 @@ class ServiceTest {
         service = new Service(supplierService, pc);
     }
 
-    @BeforeAll
-    static void setUp() {
-        setService();
-        CategoryList = new LinkedList<>();
-        ProductListNames = new LinkedList<>();
-        ReportList = new LinkedList<>();
-
-    }
     @BeforeEach
     void setData(){
+        setService();
+
+        CategoryList = new LinkedList<>();
+        ProductListNames = new LinkedList<>();
+
+        ReportList = new LinkedList<>();
         service.addCategory("Dairy Products");
         service.addSubCategory("Dairy Products","Milks");
         service.addSubSubCategory("Dairy Products","Milks","Cow Milk");

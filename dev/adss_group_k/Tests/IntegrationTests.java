@@ -10,12 +10,15 @@ import adss_group_k.SchemaInit;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
+import adss_group_k.shared.response.ResponseT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class IntegrationTests {
@@ -213,10 +216,6 @@ public class IntegrationTests {
 
     }
 
-
-
-
-
     @Test
     public void updateDB() {
     }
@@ -248,11 +247,6 @@ public class IntegrationTests {
 
     @Test
     public void testAddQuantityDiscountToItem(){
-
-    }
-
-    @Test
-    public void testAddItemWithNoExistingProduct(){
 
     }
 }

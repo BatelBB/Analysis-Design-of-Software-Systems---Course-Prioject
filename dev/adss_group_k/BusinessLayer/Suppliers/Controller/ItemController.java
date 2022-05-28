@@ -1,5 +1,6 @@
 package adss_group_k.BusinessLayer.Suppliers.Controller;
 
+import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
@@ -81,11 +82,5 @@ public class ItemController {
                 new ItemRecord.ItemKey(supplier, catalogNumber),
                 price
         );
-    }
-
-    public void setName(int supplier, int catalogNumber, String name) {
-    }
-
-    public void setCategory(int supplier, int catalogNumber, String category) {
     }
 }

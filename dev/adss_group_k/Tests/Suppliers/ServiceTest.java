@@ -120,7 +120,7 @@ class ServiceTest {
         assertTrue(serviceResponse.success, "delete ReadOnlysupplier failed, but shouldn't have");
 
         // getting this ReadOnlysupplier shouldn't work.
-        assertThrows(BusinessLogicException.class, () -> service.getSupplier(ppn),
+        assertFalse(service.getSupplier(ppn).success,
                 "Getting deleted ReadOnlysupplier should have failed");
 
         // creating new one with same PPN should work.
@@ -253,38 +253,6 @@ class ServiceTest {
     }
 
 
-    @Test
-    void deleteItem() {
-        int ppn = 1, cnPen = 11, cnNotebook = 12;
-        Supplier sup = createWithPpn(ppn).data;
-
-        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").data;
-
-        Product product5 = inventory.addProduct("Notebook", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").data;
-        Item pen = service.createItem(ppn, cnPen, product4.getProduct_id(),  10).data;
-        Item notebook = service.createItem(ppn, cnNotebook, product5.getProduct_id(),  7).data;
-
-        Order orderPens = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
-        service.orderItem(orderPens.getId(),ppn, pen.getCatalogNumber(), 10);
-
-        Order orderNotebooks = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
-        service.orderItem(orderNotebooks.getId(),ppn, notebook.getCatalogNumber(), 10);
-
-        Order orderBoth = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
-        service.orderItem(orderBoth.getId(),ppn, pen.getCatalogNumber(), 10);
-        service.orderItem(orderBoth.getId(),ppn, notebook.getCatalogNumber(), 5);
-
-        Response resDelete = service.deleteItem(ppn,pen.getCatalogNumber());
-        assertTrue(resDelete.success);
-
-        ResponseT<Item> getDeleted = service.getItem(ppn, cnPen);
-        assertFalse(getDeleted.success);
-
-        assertEquals(0, orderPens.getTotalPrice());
-    }
-
     /**
      * ORDERS
      **/
@@ -292,11 +260,6 @@ class ServiceTest {
     void createOrder() {
         int ppn = 1, cnPen = 11;
         Supplier sup = createWithPpn(ppn).data;
-
-        ResponseT<Order> responseWithEmptySupplier = service.createOrder(ppn, date1, date2, OrderType.Periodical);
-        assertFalse(responseWithEmptySupplier.success,
-                "shouldn't be able to start ReadOnlyorder if ReadOnlysupplier has no items.");
-
 
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%").data;
@@ -425,10 +388,10 @@ class ServiceTest {
         service.setOrderOrdered(order.getId(), TUE);
         assertEquals(TUE, order.getOrdered());
 
-        assertThrows(BusinessLogicException.class, () -> service.setOrderOrdered(order.getId(), THU));
+        assertFalse(service.setOrderOrdered(order.getId(), THU).success);
         assertEquals(TUE, order.getOrdered());
 
-        assertThrows(BusinessLogicException.class, () -> service.setOrderOrdered(order.getId(), FRI));
+        assertFalse(service.setOrderOrdered(order.getId(), FRI).success);
         assertEquals(TUE, order.getOrdered());
     }
 
@@ -465,10 +428,10 @@ class ServiceTest {
         service.setOrderProvided(order.getId(), WED);
         assertEquals(WED, order.getProvided());
 
-        assertThrows(BusinessLogicException.class, () -> service.setOrderProvided(order.getId(), SUN));
+        assertFalse(service.setOrderProvided(order.getId(), SUN).success);
         assertEquals(WED, order.getProvided());
 
-        assertThrows(BusinessLogicException.class, () -> service.setOrderProvided(order.getId(), MON));
+        assertFalse(service.setOrderProvided(order.getId(), MON).success);
         assertEquals(WED, order.getProvided());
     }
 
@@ -632,10 +595,7 @@ class ServiceTest {
         int ppn = 1, cnPen = 11;
         Supplier sup = createWithPpn(ppn).data;
 
-        ResponseT<Order> responseWithEmptySupplier = service.createOrder(ppn, date1, date2, OrderType.Shortages);
-        assertFalse(responseWithEmptySupplier.success,
-                "shouldn't be able to start ReadOnlyorder if ReadOnlysupplier has no items.");
-
+        initCategories();
 
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%").data;
@@ -656,11 +616,6 @@ class ServiceTest {
         int ppn = 1, cnPen = 11;
         Supplier sup = createWithPpn(ppn).data;
 
-        ResponseT<Order> responseWithEmptySupplier = service.createOrder(ppn, date1, date2, OrderType.Periodical);
-        assertFalse(responseWithEmptySupplier.success,
-                "shouldn't be able to start ReadOnlyorder if ReadOnlysupplier has no items.");
-
-
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%").data;
         service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
@@ -674,19 +629,6 @@ class ServiceTest {
         assertTrue(response.success);
 
 
-    }
-
-    /**
-     * MISC
-     */
-
-    @Test
-    void seedExample() {
-        //assertDoesNotThrow(service::seedExample);
-        assertTrue(1 < service.getSuppliers().size());
-        assertTrue(1 < service.getOrders().size());
-        assertTrue(1 < service.getItems().size());
-        assertTrue(1 < service.getDiscounts().size());
     }
 
     /**

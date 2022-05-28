@@ -93,15 +93,12 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
-    public Response deleteItem(int ppn, int catalogN) {
-        return responseFor(() -> items.get(ppn, catalogN));
-    }
-
-    @Override
     public ResponseT<QuantityDiscount> createDiscount(int supplierPPN, int catalogN, int amount, float discount) {
         return responseFor(() -> {
             Item item = items.get(supplierPPN, catalogN);
-            return discounts.createDiscount(item, amount, discount);
+            QuantityDiscount ret = discounts.createDiscount(item, amount, discount);
+            orders.refreshPricesAndDiscounts(item);
+            return ret;
         });
     }
 
@@ -202,23 +199,8 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
-    public Response setItemName(int supplier, int catalogNumber, String name) {
-        return responseForVoid(() -> items.setName(supplier, catalogNumber, name));
-    }
-
-    @Override
-    public Response setItemCategory(int supplier, int catalogNumber, String category) {
-        return responseForVoid(() -> items.setCategory(supplier, catalogNumber, category));
-    }
-
-    @Override
     public Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
         return null;
-    }
-
-    @Override
-    public Supplier findCheapestSupplierFor(int productID, int amount) {
-        return discounts.findCheapestSupplierFor(productID, amount);
     }
 
     private <T> ResponseT<T> responseFor(java.util.function.Supplier<T> operation) {
