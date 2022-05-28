@@ -1,5 +1,7 @@
 package adss_group_k.BusinessLayer.Inventory.Service;
 
+import adss_group_k.BusinessLayer.Inventory.Controllers.CategoryController;
+import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
 import adss_group_k.BusinessLayer.Inventory.Controllers.ReportController;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Report;
 import adss_group_k.dataLayer.dao.PersistenceController;
@@ -10,8 +12,8 @@ import java.util.List;
 public class ReportService {
     private final ReportController report_controller;
 
-    public ReportService(PersistenceController pc) {
-        report_controller = new ReportController(pc);
+    public ReportService(PersistenceController pc, CategoryController catCont, ProductController prodCont) {
+        report_controller = new ReportController(pc, prodCont);
     }
 
     public ResponseT<List<Integer>> getReportListNames() {

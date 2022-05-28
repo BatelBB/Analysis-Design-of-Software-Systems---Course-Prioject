@@ -24,10 +24,10 @@ public class ReportController {
     private PersistenceController pc;
 
 
-    public ReportController(PersistenceController pc) {
+    public ReportController(PersistenceController pc, ProductController product_controller) {
         reports = new HashMap<>();
         this.pc = pc;
-        product_controller = new ProductController(pc);
+        this.product_controller = product_controller;
         pc.getReports().all().forEach(this::addFromExisting);
     }
 

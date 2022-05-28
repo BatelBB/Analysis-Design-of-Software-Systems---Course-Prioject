@@ -1,5 +1,7 @@
 package adss_group_k.BusinessLayer.Inventory.Service;
 
+import adss_group_k.BusinessLayer.Inventory.Controllers.CategoryController;
+import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.dataLayer.dao.PersistenceController;
@@ -16,9 +18,11 @@ public class Service {
     private final ISupplierService supplierService;
 
     public Service(ISupplierService supplierService, PersistenceController pc) {
-        product_service = new ProductService(pc);
-        report_service = new ReportService(pc);
-        category_service = new CategoryService(pc);
+        CategoryController catCont = new CategoryController(pc);
+        ProductController prodCont = new ProductController(pc,catCont);
+        product_service = new ProductService(pc, prodCont);
+        report_service = new ReportService(pc, catCont, prodCont);
+        category_service = new CategoryService(catCont);
         this.supplierService = supplierService;
     }
 

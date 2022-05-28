@@ -12,8 +12,8 @@ import java.util.List;
 public class CategoryService {
     private final CategoryController category_controller;
 
-    public CategoryService(PersistenceController pc) {
-        category_controller = new CategoryController(pc);
+    public CategoryService(CategoryController category_controller) {
+        this.category_controller = category_controller;
     }
 
     public ResponseT<List<String>> getCategoriesNames() {

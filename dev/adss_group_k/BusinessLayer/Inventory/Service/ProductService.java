@@ -12,10 +12,10 @@ import java.util.Map;
 import adss_group_k.shared.response.*;
 
 public class ProductService {
-    private final ProductController product_controller;
+    private ProductController product_controller;
 
-    public ProductService(PersistenceController pc) {
-        product_controller = new ProductController(pc);
+    public ProductService(PersistenceController pc, ProductController product_controller) {
+        this.product_controller = product_controller;
     }
 
     //methods

@@ -17,10 +17,10 @@ public class ProductController {
 
 
     //constructors
-    public ProductController(PersistenceController pc) {
+    public ProductController(PersistenceController pc, CategoryController category_controller) {
         products = new HashMap<>();
         this.pc = pc;
-        category_controller = new CategoryController(pc);
+        this.category_controller = category_controller;
         pc.getProducts().all().forEach(this::addFromExisting);
     }
 
