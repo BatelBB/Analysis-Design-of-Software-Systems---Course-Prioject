@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 public class ReportController {
 
-    private int report_ids;
     private final Map<Integer, Report> reports;
     private final ProductController product_controller;
     private static ReportController reportController;
@@ -33,7 +32,6 @@ public class ReportController {
     }
 
     private ReportController(PersistenceController pc) {
-        report_ids = 0;
         product_controller = ProductController.getInstance(pc);
         reports = new HashMap<>();
         this.pc = pc;
@@ -80,6 +78,7 @@ public class ReportController {
     //Product report
     public Report createByCategoryReport(String name, String report_producer, String CatName, String subCatName, String subSubCatName) throws Exception {
         List<Product> byCategoryPro = product_controller.getItemsByCategory(CatName, subCatName, subSubCatName);
+        int report_ids = pc.getProducts().getMaxId() + 1;
         ResponseT<ReportData> r = pc.getReports().create(
                 report_ids,
                 report_producer,
@@ -93,6 +92,7 @@ public class ReportController {
     //ProductItem report
     public Report createByProductReport(String name, String report_producer, String proName) throws Exception {
         List<ProductItem> byProductPro = product_controller.getItemsByProduct(proName);
+        int report_ids = pc.getProducts().getMaxId() + 1;
         ResponseT<ReportData> r = pc.getReports().create(
                 report_ids,
                 report_producer,
@@ -106,6 +106,7 @@ public class ReportController {
     //ProductItem report
     public Report createBySupplierReport(String name, String report_producer, int suppName) throws Exception {
         List<ProductItem> bySupplierPro = product_controller.getItemsBySupplier(suppName);
+        int report_ids = pc.getProducts().getMaxId() + 1;
         ResponseT<ReportData> r = pc.getReports().create(
                 report_ids,
                 report_producer,
@@ -119,6 +120,7 @@ public class ReportController {
     //ProductItem report
     public Report createDefectiveReport(String name, String report_producer) throws Exception {
         List<ProductItem> DefectivePro = product_controller.getDefectiveItems();
+        int report_ids = pc.getProducts().getMaxId() + 1;
         ResponseT<ReportData> r = pc.getReports().create(
                 report_ids,
                 report_producer,
@@ -132,6 +134,7 @@ public class ReportController {
     //ProductItem report
     public Report createExpiredReport(String name, String report_producer) throws Exception {
         List<ProductItem> ExpiredPro = product_controller.getExpiredItems();
+        int report_ids = pc.getProducts().getMaxId() + 1;
         ResponseT<ReportData> r = pc.getReports().create(
                 report_ids,
                 report_producer,
@@ -145,6 +148,7 @@ public class ReportController {
     //Product report
     public Report createMissingReport(String name, String report_producer) throws Exception {
         List<Product> missingPro = product_controller.getMissingProducts();
+        int report_ids = pc.getProducts().getMaxId() + 1;
         ResponseT<ReportData> r = pc.getReports().create(
                 report_ids,
                 report_producer,
@@ -158,6 +162,7 @@ public class ReportController {
     //Product report
     public Report createSurplusesReport(String name, String report_producer) throws Exception {
         List<Product> SurplusesPro = product_controller.getSurplusProducts();
+        int report_ids = pc.getProducts().getMaxId() + 1;
         ResponseT<ReportData> r = pc.getReports().create(
                 report_ids,
                 report_producer,
@@ -174,13 +179,12 @@ public class ReportController {
             throw new Exception(r.error);
         Report report = new Report(r.data, pc);
         for (Product p : product_list) {
-            ResponseT<ProductInReportData> pir = pc.getProductsInReports().create(report_ids, p.getProduct_id());
+            ResponseT<ProductInReportData> pir = pc.getProductsInReports().create(report.getId(), p.getProduct_id());
             if (!pir.success)
                 throw new Exception(r.error);
             report.addProduct(p);
         }
-        reports.put(report_ids, report);
-        report_ids++;
+        reports.put(report.getId(), report);
         return report;
     }
 
@@ -189,13 +193,12 @@ public class ReportController {
             throw new Exception(r.error);
         Report report = new Report(r.data, pc);
         for (ProductItem pi : expiredPro) {
-            ResponseT<ProductItemInReportData> pir = pc.getProductItemsInReports().create(report_ids, pi.getProduct_id(), pi.getId());
+            ResponseT<ProductItemInReportData> pir = pc.getProductItemsInReports().create(report.getId(), pi.getProduct_id(), pi.getId());
             if (!pir.success)
                 throw new Exception(r.error);
             report.addProductItem(pi);
         }
-        reports.put(report_ids, report);
-        report_ids++;
+        reports.put(report.getId(), report);
         return report;
     }
 

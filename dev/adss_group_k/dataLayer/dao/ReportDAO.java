@@ -18,8 +18,11 @@ public class ReportDAO extends BaseDAO<Integer, ReportRecord> {
     public static final String TYPE = "type";
     public static final String QUERY = "query";
 
+    private int maxId;
+
     public ReportDAO(Connection conn) {
         super(conn);
+        maxId = oneResultQuery("SELECT MAX(" + ID + ") FROM " + TABLE_NAME, rs -> rs.getInt(1));
     }
 
     @Override
@@ -64,6 +67,8 @@ public class ReportDAO extends BaseDAO<Integer, ReportRecord> {
                 ps -> ps.setInt(5, type),
                 ps -> ps.setString(6, query)
         );
+        if (response.success && id > maxId)
+            maxId = id;
         return response.castUnchecked();
     }
 
@@ -83,5 +88,9 @@ public class ReportDAO extends BaseDAO<Integer, ReportRecord> {
                 query.getDate(DATE),
                 query.getInt(TYPE),
                 query.getString(QUERY));
+    }
+
+    public int getMaxId() {
+        return maxId;
     }
 }
