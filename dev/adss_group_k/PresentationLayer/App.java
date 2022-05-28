@@ -29,7 +29,7 @@ public class App {
         try {
             if(isNew) {
                 UserOutput.getInstance().println(
-                        "You don't have a previous database file stored, so we'll create a new one for you" +
+                        "You don't have a previous database file stored, so we'll create a new one for you " +
                                 "from scratch.");
                 shouldLoadExample = UserInput.getInstance().nextBoolean("Would you like to start with some example data?");
             }

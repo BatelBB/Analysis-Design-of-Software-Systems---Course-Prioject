@@ -1,18 +1,16 @@
 package adss_group_k.BusinessLayer.Inventory.Service;
 
 import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
-import adss_group_k.BusinessLayer.Inventory.ProductItem;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
 import adss_group_k.dataLayer.dao.PersistenceController;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 import adss_group_k.shared.response.*;
 
 public class ProductService {
-    private ProductController product_controller;
+    private final ProductController product_controller;
 
     public ProductService(PersistenceController pc, ProductController product_controller) {
         this.product_controller = product_controller;
@@ -90,9 +88,10 @@ public class ProductService {
         }
     }
 
-    public ResponseT<ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
+    public ResponseT<adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
         try {
-            return ResponseT.success(product_controller.addItem(product_id, store, location, supplier, expiration_date, on_shelf));
+            adss_group_k.BusinessLayer.Inventory.ProductItem addItem=product_controller.addItem(product_id, store, location, supplier, expiration_date, on_shelf);
+            return ResponseT.success(new adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem(addItem));
         } catch (Exception e) {
             return ResponseT.error(e.getMessage());
         }
@@ -148,21 +147,5 @@ public class ProductService {
 
     public void restart() {
         product_controller.restart();
-    }
-
-    public ResponseT<Integer> getMinAmount(String proName) {
-        try {
-            return ResponseT.success(product_controller.getMinAmount(proName));
-        } catch (Exception e) {
-            return ResponseT.error(e.getMessage());
-        }
-    }
-
-    public ResponseT<Map<String, Integer>> getDeficiency() {
-        try {
-            return ResponseT.success(product_controller.getDeficiency().data);
-        } catch (Exception e) {
-            return ResponseT.error(e.getMessage());
-        }
     }
 }

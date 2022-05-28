@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 
 public class ReportController {
 
-    private Map<Integer, Report> reports;
-    private ProductController product_controller;
-    private PersistenceController pc;
+    private final Map<Integer, Report> reports;
+    private final ProductController product_controller;
+    private final PersistenceController pc;
 
 
     public ReportController(PersistenceController pc, ProductController product_controller) {

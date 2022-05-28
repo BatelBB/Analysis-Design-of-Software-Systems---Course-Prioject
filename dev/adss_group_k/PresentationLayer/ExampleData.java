@@ -2,6 +2,7 @@ package adss_group_k.PresentationLayer;
 
 import adss_group_k.BusinessLayer.Inventory.Categories.SubSubCategory;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
+import adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
@@ -69,6 +70,53 @@ public class ExampleData {
                 "10%"
         ).data; // same
 
+        ProductItem milk5_0 = inventory.addItem(
+                milk5.getProduct_id(),
+                "Yavne",
+                "shelf 1",
+                2,
+                LocalDate.of(2022, 12, 29),
+                true
+        ).data;
+
+        ProductItem milk5_1 = inventory.addItem(
+                milk5.getProduct_id(),
+                "Yehud",
+                "shelf 1",
+                2,
+                LocalDate.of(2022, 12, 28),
+                true
+        ).data;
+
+        ProductItem milk5_2 = inventory.addItem(
+                milk5.getProduct_id(),
+                "Yeruham",
+                "shelf 1",
+                2,
+                LocalDate.of(2022, 12, 27),
+                true
+        ).data;
+
+        ProductItem milk5_3 = inventory.addItem(
+                milk5.getProduct_id(),
+                "Yad Ha-Shmonah",
+                "shelf 1",
+                2,
+                LocalDate.of(2022, 12, 26),
+                true
+        ).data;
+
+        ProductItem milk5_4 = inventory.addItem(
+                milk5.getProduct_id(),
+                "Yad Binyamin",
+                "shelf 1",
+                2,
+                LocalDate.of(2022, 12, 25),
+                true
+        ).data;
+
+        inventory.updateProductCusDiscount(0.5f, LocalDate.of(2022, 3, 10), LocalDate.of(2022, 3, 20), milk5.getProduct_id());
+
         // Office items
         Item penItem = suppliers.createItem(
                 ppn_office,
@@ -111,10 +159,10 @@ public class ExampleData {
                     discountAmounts[i], discountPercents[i]);
         }
 
-        LocalDate date_jan_1 = LocalDate.of(2022, 01, 01);
-        LocalDate date_jan_2 = LocalDate.of(2022, 01, 02);
-        LocalDate date_feb_1 = LocalDate.of(2022, 02, 01);
-        LocalDate date_feb_2 = LocalDate.of(2022, 02, 02);
+        LocalDate date_jan_1 = LocalDate.of(2022, 1, 1);
+        LocalDate date_jan_2 = LocalDate.of(2022, 1, 2);
+        LocalDate date_feb_1 = LocalDate.of(2022, 2, 1);
+        LocalDate date_feb_2 = LocalDate.of(2022, 2, 2);
 
         int order1 = suppliers.createOrder(ppn_office, date_jan_1, date_jan_2, OrderType.Periodical).data.getId();
         int order2 = suppliers.createOrder(ppn_foods, date_jan_1, date_jan_2, OrderType.Shortages).data.getId();
@@ -123,5 +171,7 @@ public class ExampleData {
         suppliers.orderItem(order1, ppn_office, penItem.getCatalogNumber(), 10);
         suppliers.orderItem(order2, ppn_foods, milk5FromFoodsAreUs.getCatalogNumber(), 5);
         // fill other tables
+        inventory.createByCategoryReport("my first report", "Naziff", "", "", "");
+        inventory.createBySupplierReport("my second report", "Shariff", 2);
     }
 }
