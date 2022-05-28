@@ -160,7 +160,7 @@ class ServiceTest {
         final int ppn1 = 1, cn1 = 111, cn2 = 112, ppn2 = 2, ppnNotExisting = 3;
         createWithPpn(ppn1);
         createWithPpn(ppn2);
-
+        initCategories();
         // ReadOnlySupplier 1, ReadOnlyItem 1
         Product product = inventory.addProduct("Milk", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%").data;
@@ -209,6 +209,7 @@ class ServiceTest {
 
     @Test
     void getItems() {
+        initCategories();
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%").data;
         final int[] amountsOfItems = {10, 11, 12, 13, 14};
@@ -228,12 +229,13 @@ class ServiceTest {
 
     @Test
     void getItem() {
+        initCategories();
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%").data;
         final int ppn = 1, wrongPPN = 2;
         final int cn = 11, wrongCN = 2;
         createWithPpn(ppn);
-        service.createItem(ppn, cn, product4.getProduct_id(),  10);
+        service.createItem(ppn, cn, product4.getProduct_id(),10);
 
         ResponseT<Item> resSucc = service.getItem(ppn, cn);
         assertTrue(resSucc.success);
@@ -260,7 +262,7 @@ class ServiceTest {
     void createOrder() {
         int ppn = 1, cnPen = 11;
         Supplier sup = createWithPpn(ppn).data;
-
+        initCategories();
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%").data;
         service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
@@ -284,7 +286,7 @@ class ServiceTest {
             Supplier sup = createWithPpn(ppn).data;
 
             // ReadOnlysupplier must have >= 1 items or opening ReadOnlyorder fails.
-
+            initCategories();
             Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
                     10, 1200, "Store", "Shop,", "10%").data;
             service.createItem(ppn, 0, product4.getProduct_id(),  1);
@@ -303,13 +305,13 @@ class ServiceTest {
     void deleteOrder() {
         int ppn = 1, cnPen = 11;
         Supplier sup = createWithPpn(ppn).data;
-
+        initCategories();
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%").data;
-        Item pen = service.createItem(ppn, cnPen, product4.getProduct_id(),  10).data;
+        Item pen = service.createItem(ppn, cnPen, product4.getProduct_id(),10).data;
 
         Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
-        service.orderItem(order.getId(), ppn, pen.getCatalogNumber(), 10);
+        service.orderItem(order.getId(), ppn, pen.getCatalogNumber(),10);
 
         Response resDelete = service.deleteOrder(order.getId());
         assertTrue(resDelete.success);
@@ -327,7 +329,7 @@ class ServiceTest {
 
         float penPrice = 11, notebookPrice = 7;
         int penAmount = 13, notebookAmount = 5;
-
+        initCategories();
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%").data;
 
@@ -362,7 +364,7 @@ class ServiceTest {
         Supplier supplier = createWithPpn(ppn).data;
 
         // ReadOnlyitem doesn't matter, there just has to be at least one for ReadOnlyorder to create.
-
+        initCategories();
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%").data;
         service.createItem(ppn, 11, product4.getProduct_id(),  1);
@@ -400,7 +402,7 @@ class ServiceTest {
     void setProvidedDate() throws BusinessLogicException {
         final int ppn = 1;
         Supplier supplier = createWithPpn(ppn).data;
-
+        initCategories();
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%").data;
 
@@ -443,7 +445,7 @@ class ServiceTest {
     void createDiscount() {
         int ppn = 1, cnCalc = 11;
         float priceCalc = 100;
-
+        initCategories();
         Product product4 = inventory.addProduct("Calculator", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%").data;
 
@@ -532,7 +534,7 @@ class ServiceTest {
         int ppn = 1, cnBread = 12, cnMilk = 13;
         float priceBread = 5, priceMilk = 7;
         Supplier sup = createWithPpn(ppn).data;
-
+        initCategories();
         Product product4 = inventory.addProduct("Bread", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%").data;
 
@@ -615,7 +617,7 @@ class ServiceTest {
     void orderNewPeriodicalOrder(){
         int ppn = 1, cnPen = 11;
         Supplier sup = createWithPpn(ppn).data;
-
+        initCategories();
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%").data;
         service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
