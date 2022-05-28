@@ -35,7 +35,7 @@ public class DiscountPairDAO extends BaseDAO<DiscountPairRecord.DiscountPairKey,
                         DISCOUNT_PAIR_ID + "," +
                         START_DATE + "," +
                         END_DATE + "," +
-                        DISCOUNT + "," +
+                        DISCOUNT +
                         ") VALUES(?, ?, ?, ?, ?, ?)",
                 ps -> ps.setInt(1, product_id),
                 ps -> ps.setInt(2, productItem_id),
