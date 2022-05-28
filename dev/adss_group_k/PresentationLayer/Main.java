@@ -6,7 +6,6 @@ import adss_group_k.PresentationLayer.Inventory.InventoryPresentationFacade;
 import adss_group_k.dataLayer.dao.PersistenceController;
 
 public class Main {
-
     public static void main(String[] args) {
         new App("database.db").main();
     }

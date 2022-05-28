@@ -46,14 +46,10 @@ public class App {
         inventoryService = new Service(supplierService, dal);
 
         if(shouldLoadExample) {
-            loadExample();
+            ExampleData.loadExampleData(inventoryService, supplierService);
         }
         supplierPresentation = new SupplierPresentationFacade(supplierService);
         inventoryPresentationFacade = new InventoryPresentationFacade(inventoryService);
-
-    }
-
-    private void loadExample() {
 
     }
 
