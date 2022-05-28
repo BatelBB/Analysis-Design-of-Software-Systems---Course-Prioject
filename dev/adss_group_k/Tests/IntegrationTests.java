@@ -28,8 +28,28 @@ public class IntegrationTests {
 
     private ISupplierService service;
     private Service inventory;
+    private QuantityDiscount discount;
+    private Order order;
+    private Supplier sup;
+
+    private Report missingReport;
+    private Report supplierReport;
+    private Report expiredReport;
+    private Report categoryReport;
+    private Report defectiveReport;
+    private Report surplusesReport;
+    private Report byProductReport;
+
+    private Product prod;
+    private ProductItem pItem;
+
+    int categorySize = 0, discountPairSize = 0, itemSize = 0, itemInOrderSize = 0, reportSize = 0,
+            orderSize = 0, productSize = 0, productInReportSize = 0, productItem = 0,
+            quantityDiscountSize = 0, subSubCategorySize = 0, subCategorySize = 0,
+            supplierSize = 0;
 
     Connection conn = null;
+
     @BeforeEach
     void setUp() {
         try {
@@ -44,43 +64,122 @@ public class IntegrationTests {
 
 
     }
+
     @Test
     public void loadDB() {
-        Supplier sup = service.createSupplier(1,123,"Lorem", true,
+        sup = service.createSupplier(1, 123, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
                 "B@Gmail.com").data;
 
-        Order order = service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
+        order = service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
                 OrderType.Periodical).data;
 
         inventory.addCategory("Dairy");
-        inventory.addSubCategory("Dairy","Shop");
-        inventory.addSubSubCategory("Dairy","Shop", "10%");
+        inventory.addSubCategory("Dairy", "Shop");
+        inventory.addSubSubCategory("Dairy", "Shop", "10%");
 
-        Product prod = inventory.addProduct("Milk","Tnoova",10.0, 20, 10,
-                1200, "Dairy","Shop", "10%").data;
+        prod = inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+                1200, "Dairy", "Shop", "10%").data;
 
-        ProductItem pItem = inventory.addItem(prod.getProduct_id(),"TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX,
+        pItem = inventory.addItem(prod.getProduct_id(), "TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX,
                 true).data;
-        Item item = service.createItem(sup.getPpn(),124,prod.getProduct_id(), 12).data;
-        service.orderItem(order.getId(),sup.getPpn(),item.getCatalogNumber(),50);
-        service.createDiscount(sup.getPpn(),item.getCatalogNumber(), 50, 5);
+        Item item = service.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12).data;
+        service.orderItem(order.getId(), sup.getPpn(), item.getCatalogNumber(), 50);
+        discount = service.createDiscount(sup.getPpn(), item.getCatalogNumber(), 50, 5).data;
 
-        inventory.updateItemCusDiscount(0.1f,LocalDate.now(), LocalDate.MAX, prod.getProduct_id(), pItem.getId());
+        inventory.updateItemCusDiscount(0.1f, LocalDate.now(), LocalDate.MAX, prod.getProduct_id(), pItem.getId());
 
-        inventory.createMissingReport("Missing", "Report1");
-        inventory.createBySupplierReport("Supplier", "Report2", 10);
-        inventory.createExpiredReport("Expired", "Report3");
-        inventory.createByCategoryReport("Category", "Report4","CatName",
-                "SubCatName", "SubSubCatName");
-        inventory.createDefectiveReport("Defective", "Report5");
-        inventory.createSurplusesReport("Surpluses", "Report6");
-        inventory.createByProductReport("Product", "Report7", "ProName");
+        missingReport = inventory.createMissingReport("Missing", "Report1").data;
+        supplierReport = inventory.createBySupplierReport("Supplier", "Report2", 10).data;
+        expiredReport = inventory.createExpiredReport("Expired", "Report3").data;
+        categoryReport = inventory.createByCategoryReport("Category", "Report4", "CatName",
+                "SubCatName", "SubSubCatName").data;
+        defectiveReport = inventory.createDefectiveReport("Defective", "Report5").data;
+        surplusesReport = inventory.createSurplusesReport("Surpluses", "Report6").data;
+        byProductReport = inventory.createByProductReport("Product", "Report7", "ProName").data;
 
-        int categorySize = 0, discountPairSize = 0, itemSize = 0, itemInOrderSize = 0, reportSize = 0,
-                 orderSize = 0, productSize = 0, productInReportSize = 0, productItem = 0,
-                 quantityDiscountSize = 0, subSubCategorySize = 0, subCategorySize = 0,
-                supplierSize = 0;
+        runQuery();
+        assertNotEquals(0, categorySize); //passes
+        assertNotEquals(0, discountPairSize); //passes
+        assertNotEquals(0, itemSize); //passes
+        assertNotEquals(0, itemInOrderSize); //passes
+        assertNotEquals(0, orderSize); //passes
+        assertNotEquals(0, productSize); //passes
+        assertNotEquals(0, productInReportSize);//passes
+        assertNotEquals(0, productItem); //passes
+        assertNotEquals(0, reportSize); //passes
+        assertNotEquals(0, quantityDiscountSize); //passes
+        assertNotEquals(0, subSubCategorySize); //passes
+        assertNotEquals(0, subCategorySize); //passes
+        assertNotEquals(0, supplierSize); //passes
+    }
+
+    @Test
+    public void deleteDB() {
+        loadDB();
+
+        service.deleteDiscount(discount);
+        service.deleteOrder(order.getId());
+        service.deleteSupplier(sup.getPpn());
+
+        inventory.removeReport(missingReport.getId());
+        inventory.removeReport(byProductReport.getId());
+        inventory.removeReport(categoryReport.getId());
+        inventory.removeReport(defectiveReport.getId());
+        inventory.removeReport(supplierReport.getId());
+        inventory.removeReport(expiredReport.getId());
+        inventory.removeReport(surplusesReport.getId());
+        inventory.removeCategory("Dairy");
+        inventory.removeItem(prod.getProduct_id(),pItem.getId());
+        inventory.removeProduct(prod.getProduct_id());
+        inventory.removeSubCategory("Dairy", "Shop");
+        inventory.removeSubSubCategory("Dairy", "Shop","10%");
+
+        runQuery();
+        assertEquals(0,reportSize);
+        assertEquals(0,categorySize);
+        assertEquals(0,itemSize);
+
+
+
+
+    }
+
+    @Test
+    public void updateDB() {
+    }
+
+
+    @Test
+    public void testCreateOrder() {
+    }
+
+
+    @Test
+    public void testCreateSupplierCard() {
+    }
+
+
+    @Test
+    public void testAddProductNotWorking() {
+    }
+
+
+    @Test
+    public void testAddProductWithoutExistingSupplier() {
+    }
+
+    @Test
+    public void testAddItemToNonExistingOrder() {
+
+    }
+
+    @Test
+    public void testAddQuantityDiscountToItem() {
+
+    }
+
+    private void runQuery(){
 
         String categoryQuery = "SELECT count(*) FROM Category", discountPairQuery = "SELECT count(*) FROM DiscountPair",
                 itemQuery = "SELECT count(*) FROM Item", itemInOrderQuery = "SELECT count(*) FROM ItemInOrder",
@@ -115,65 +214,76 @@ public class IntegrationTests {
         ResultSet resCategory, resDiscountPar, resItem, reItemInOrder, resProductItemInReport, resOrder,
                 resProduct, resProductInReport, resProductItem, resQuantityDiscount, resSubSubCategory,
                 resSubCategory, resSupplier, resReport;
-        try{
+        try {
             st = conn.createStatement();
+
             resCategory = st.executeQuery(categoryQuery);
             while (resCategory.next()) {
                 categorySize = resCategory.getInt(1);
             }
+
             resDiscountPar = st.executeQuery(discountPairQuery);
-            while (resDiscountPar.next()){
+            while (resDiscountPar.next()) {
                 discountPairSize = resDiscountPar.getInt(1);
             }
+
             resItem = st.executeQuery(itemQuery);
-            while (resItem.next()){
+            while (resItem.next()) {
                 itemSize = resItem.getInt(1);
             }
+
             resReport = st.executeQuery(reportQuery);
-            while (resReport.next()){
+            while (resReport.next()) {
                 reportSize = resReport.getInt(1);
             }
 
-
             reItemInOrder = st.executeQuery(itemInOrderQuery);
-            while (reItemInOrder.next()){
+            while (reItemInOrder.next()) {
                 itemInOrderSize = reItemInOrder.getInt(1);
             }
+
             resProductItemInReport = st.executeQuery(productItemInReportQuery);
-            while (resProductItemInReport.next()){
+            while (resProductItemInReport.next()) {
                 productInReportSize = resProductItemInReport.getInt(1);
             }
+
             resOrder = st.executeQuery(orderQuery);
-            while (resOrder.next()){
+            while (resOrder.next()) {
                 orderSize = resOrder.getInt(1);
             }
+
             resProduct = st.executeQuery(productQuery);
-            while (resProduct.next()){
+            while (resProduct.next()) {
                 productSize = resProduct.getInt(1);
             }
+
             resProductInReport = st.executeQuery(productInReportQuery);
-            while (resProductInReport.next()){
+            while (resProductInReport.next()) {
                 productInReportSize = resProductInReport.getInt(1);
             }
+
             resProductItem = st.executeQuery(productItemQuery);
-            while (resProductItem.next()){
+            while (resProductItem.next()) {
                 productItem = resProductItem.getInt(1);
             }
 
             resQuantityDiscount = st.executeQuery(quantityDiscountQuery);
-            while (resQuantityDiscount.next()){
+            while (resQuantityDiscount.next()) {
                 quantityDiscountSize = resQuantityDiscount.getInt(1);
             }
+
             resSubSubCategory = st.executeQuery(subSubCategoryQuery);
-            while (resSubSubCategory.next()){
+            while (resSubSubCategory.next()) {
                 subSubCategorySize = resSubSubCategory.getInt(1);
             }
+
             resSubCategory = st.executeQuery(subCategoryQuery);
-            while (resSubCategory.next()){
+            while (resSubCategory.next()) {
                 subCategorySize = resSubCategory.getInt(1);
             }
+
             resSupplier = st.executeQuery(supplierQuery);
-            while (resSupplier.next()){
+            while (resSupplier.next()) {
                 supplierSize = resSupplier.getInt(1);
             }
 
