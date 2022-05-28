@@ -157,32 +157,32 @@ public class Service {
     }
 
     //Order methods
-    public Response createOrder() {
-        return supplierService.createOrder();
-    }
-
-    public Response createDeficienciesOrder() {
-        Map<String, Integer> proAmount = product_service.getDeficiency().data;
-        Order order = supplierService.createOrder();
-        for (Map.Entry<String, Integer> entry : proAmount.entrySet()) {
-            supplierService.orderItem(order.id, entry.getKey(), entry.getValue());
-        }
-        return null;
-    }
-
-    public Response updateOrder(String op, int orderId, String proName, int proAmount) {
-        //need to check that the order contain the min_qnt
-        int minAmount = product_service.getMinAmount(proName).data;
-        switch (op) {
-            case "Remove":
-                return supplierService.updateOrderAmount(orderId, proName); // just enter 0 in the amount, and it will be deleted
-            case "Add":
-                return supplierService.orderItem(orderId, proName, proAmount, minAmount);
-            case "UpdateAmount":
-                return supplierService.updateOrderAmount(orderId, proName, proAmount, minAmount);
-        }
-        return null;
-    }
+//    public Response createOrder() {
+//        return supplierService.createOrder();
+//    }
+//
+//    public Response createDeficienciesOrder() {
+//        Map<String, Integer> proAmount = product_service.getDeficiency().data;
+//        Order order = supplierService.createOrder();
+//        for (Map.Entry<String, Integer> entry : proAmount.entrySet()) {
+//            supplierService.orderItem(order.id, entry.getKey(), entry.getValue());
+//        }
+//        return null;
+//    }
+//
+//    public Response updateOrder(String op, int orderId, String proName, int proAmount) {
+//        //need to check that the order contain the min_qnt
+//        int minAmount = product_service.getMinAmount(proName).data;
+//        switch (op) {
+//            case "Remove":
+//                return supplierService.updateOrderAmount(orderId, proName); // just enter 0 in the amount, and it will be deleted
+//            case "Add":
+//                return supplierService.orderItem(orderId, proName, proAmount, minAmount);
+//            case "UpdateAmount":
+//                return supplierService.updateOrderAmount(orderId, proName, proAmount, minAmount);
+//        }
+//        return null;
+//    }
 
     public void restart() {
         product_service.restart();

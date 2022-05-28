@@ -37,10 +37,6 @@ public class Product {
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
     public int getShelf_qty() {
         return shelf_qty;
     }

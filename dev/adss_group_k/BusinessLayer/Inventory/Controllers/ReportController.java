@@ -4,7 +4,10 @@ import adss_group_k.BusinessLayer.Inventory.Product;
 import adss_group_k.BusinessLayer.Inventory.ProductItem;
 import adss_group_k.BusinessLayer.Inventory.Report;
 import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.readonly.ReportData;
+import adss_group_k.shared.response.ResponseT;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
@@ -14,6 +17,7 @@ public class ReportController {
     private Map<Integer, Report> reports;
     private final ProductController product_controller;
     private static ReportController reportController;
+    private final PersistenceController pc;
 
     //CONSTRUCTORS
     public static ReportController getInstance(PersistenceController pc) {
@@ -26,6 +30,7 @@ public class ReportController {
         report_ids = 0;
         product_controller = ProductController.getInstance(pc);
         reports = new HashMap<>();
+        this.pc = pc;
     }
 
     //METHODS
@@ -56,8 +61,16 @@ public class ReportController {
     //CREATIONS
     public Report createMissingReport(String name, String report_producer) {
         List<Product> missingPro = product_controller.getMissingProducts();
+        ResponseT<ReportData> r = pc.getReports().create(
+                report_ids,
+                report_producer,
+                name,
+                java.sql.Date.valueOf(LocalDate.now()),
+                Report.report_type.Missing.ordinal(),
+                "missing");
         Report report = new Report(name, report_ids, Report.report_type.Missing, report_producer, missingPro, new LinkedList<>());
         reports.put(report_ids, report);
+        report_ids++;
         return report;
     }
 

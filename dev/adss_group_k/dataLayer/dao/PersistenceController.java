@@ -81,4 +81,8 @@ public class PersistenceController {
     public ItemInOrderDAO getItemsInOrders() {
         return itemInOrder;
     }
+
+    public ReportDAO getReports() {
+        return reports;
+    }
 }
