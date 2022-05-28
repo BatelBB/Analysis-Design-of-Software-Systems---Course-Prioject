@@ -34,7 +34,8 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
     public ResponseT<ProductData> create(int item_ids, int id, String name, float customerPrice, int minQty, int storageQty, int shelfQty, String category, String subcategory, String subSubcategory) {
         ResponseT<ProductRecord> response = create(
                 () -> new ProductRecord(item_ids, id, name, customerPrice, minQty, storageQty, shelfQty, category, subcategory, subSubcategory),
-                "INSERT INTO Product(" + "item_ids,id,name,customerPrice," + "minQty,storageQty,shelfQty," + "subSubcategory,subcategory,category" + ")",
+                "INSERT INTO Product(" + "item_ids,id,name,customerPrice," + "minQty,storageQty,shelfQty," + "subSubcategory,subcategory,category" + ")" +
+                        " VALUES(?,?,?,?,?,?,?,?,?,?)",
                 ps -> ps.setInt(1, item_ids),
                 ps -> ps.setInt(2, id),
                 ps -> ps.setString(3, name),

@@ -63,7 +63,7 @@ public class ProductItemDAO extends BaseDAO<ProductItemRecord.ProductItemKey, Pr
                         IS_DEFECT + "," +
                         ON_SHELF + "," +
                         DEFECT_REPORTER +
-                        ")",
+                        ") VALUES(?,?,?,?,?,?,?,?,?)",
                 ps -> ps.setInt(1, product_id),
                 ps -> ps.setInt(2, id),
                 ps -> ps.setString(3, store),

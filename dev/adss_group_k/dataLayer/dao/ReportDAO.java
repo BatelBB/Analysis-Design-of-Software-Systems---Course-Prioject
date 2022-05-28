@@ -56,7 +56,7 @@ public class ReportDAO extends BaseDAO<Integer, ReportRecord> {
                         DATE + "," +
                         TYPE + "," +
                         QUERY +
-                        ")",
+                        ") VALUES(?, ?, ?, ?, ?, ?)",
                 ps -> ps.setInt(1, id),
                 ps -> ps.setString(2, report_producer),
                 ps -> ps.setString(3, name),

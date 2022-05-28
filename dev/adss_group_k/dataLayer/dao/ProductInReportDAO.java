@@ -48,7 +48,7 @@ public class ProductInReportDAO extends BaseDAO<Integer, ProductInReportRecord> 
                 "INSERT INTO " + TABLE_NAME + " (" +
                         REPORT_ID + "," +
                         PRODUCT_ID + "," +
-                        ")",
+                        ") Values(?, ?)",
                 ps -> ps.setInt(1, report_id),
                 ps -> ps.setInt(2, product_id)
         );

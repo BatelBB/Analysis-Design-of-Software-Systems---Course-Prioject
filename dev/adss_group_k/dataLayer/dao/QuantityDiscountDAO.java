@@ -28,7 +28,7 @@ public class QuantityDiscountDAO extends BaseDAO<Integer, QuantityDiscountRecord
         return create(
                 () -> new QuantityDiscountRecord(id, item, quantity, discount),
                 "INSERT INTO QuantityDiscount(id, quantity, discount, itemSupplierPPN, itemCatalogNumber)" +
-                        " VALUES((?, ?, ?, ?, ?))",
+                        " VALUES(?, ?, ?, ?, ?)",
                 ps -> ps.setInt(1, id),
                 ps -> ps.setInt(2, quantity),
                 ps -> ps.setFloat(3, discount),

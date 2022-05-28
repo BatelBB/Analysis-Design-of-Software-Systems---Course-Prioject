@@ -34,7 +34,7 @@ public class IntegrationTests {
         PersistenceController dal = new PersistenceController(conn);
         service = new SupplierService(dal);
         inventory = new Service(service, dal);
-        
+
 
     }
     @Test
