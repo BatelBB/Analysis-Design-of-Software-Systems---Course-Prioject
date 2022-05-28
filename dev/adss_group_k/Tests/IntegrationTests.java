@@ -147,11 +147,12 @@ public class IntegrationTests {
 
     @Test
     public void testCreateOrder() {
-    }
 
+    }
 
     @Test
     public void testAddProductWithoutExistingSupplier() {
+
     }
 
     private void runQuery() {
@@ -333,7 +334,43 @@ public class IntegrationTests {
 
     @Test
     public void testAddProductNotWorking() {
-
+        inventory.addCategory(
+                "Dairy"
+        );
+        inventory.addSubCategory(
+                "Dairy",
+                "Shop"
+        );
+        inventory.addSubSubCategory(
+                "Dairy",
+                "Shop",
+                "10%"
+        );
+        Product prod = inventory.addProduct(
+                "Milk",
+                "Tnoova",
+                10.0,
+                20,
+                10,
+                1200,
+                "Dairies",
+                "Shop",
+                "10%"
+        ).data;
+        String select_query = "SELECT * FROM Product";
+        Statement st = null;
+        ResultSet res_select;
+        int res_count = 0;
+        try {
+            st = conn.createStatement();
+            res_select = st.executeQuery(select_query);
+            while (res_select.next()) {
+                res_count++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertEquals(0, res_count); //passes
     }
 
     @Test
