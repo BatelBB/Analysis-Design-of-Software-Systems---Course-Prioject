@@ -1,5 +1,6 @@
 package adss_group_k.BusinessLayer.Suppliers.Controller;
 
+import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
