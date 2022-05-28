@@ -31,10 +31,10 @@ public class SupplierService implements ISupplierService {
 
     public SupplierService(PersistenceController dal) {
         this.dal = dal;
-        items = new ItemController(dal);
+        suppliers = new SupplierController(dal);
+        items = new ItemController(dal, suppliers);
         discounts = new QuantityDiscountController(dal, items);
         orders = new OrderController(dal, discounts);
-        suppliers = new SupplierController(orders, items, dal);
     }
 
     @Override
@@ -66,7 +66,12 @@ public class SupplierService implements ISupplierService {
 
     @Override
     public Response deleteSupplier(int ppn) {
-        return responseFor(() -> suppliers.delete(ppn));
+        return responseForVoid(() -> {
+            Supplier s = suppliers.get(ppn);
+            items.deleteAllFromSupplier(s);
+            orders.deleteAllFromSupplier(s);
+            suppliers.delete(ppn);
+        });
     }
 
     public ResponseT<Item> createItem(int supplierPPN, int catalogNumber, int productID, float price) {

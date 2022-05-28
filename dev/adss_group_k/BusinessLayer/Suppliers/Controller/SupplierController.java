@@ -16,14 +16,10 @@ import java.util.Map;
 
 public class SupplierController {
     Map<Integer, Supplier> suppliers;
-    private OrderController orders;
-    private ItemController items;
     private PersistenceController dal;
 
-    public SupplierController(OrderController orders, ItemController items, PersistenceController dal) {
+    public SupplierController(PersistenceController dal) {
         suppliers = new HashMap<>();
-        this.orders = orders;
-        this.items = items;
         this.dal = dal;
         dal.getSuppliers().all().forEach(this::addFromExisting);
     }
@@ -48,8 +44,8 @@ public class SupplierController {
             throw new BusinessLogicException("no such ppn: " + ppn);
         }
         Supplier s = suppliers.remove(ppn);
-        orders.deleteAllFromSupplier(s);
-        items.deleteAllFromSupplier(s);
+      //  orders.deleteAllFromSupplier(s);
+//        items.deleteAllFromSupplier(s);
         dal.getSuppliers().delete(ppn);
         return s;
     }

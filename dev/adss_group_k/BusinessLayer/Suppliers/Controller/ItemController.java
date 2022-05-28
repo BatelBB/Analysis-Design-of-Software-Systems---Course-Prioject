@@ -12,11 +12,22 @@ import adss_group_k.dataLayer.records.readonly.ItemData;
 import java.util.*;
 
 public class ItemController {
+    private final SupplierController suppliers;
     Map<String, Item> items;
     PersistenceController dal;
-    public ItemController(PersistenceController dal) {
+    public ItemController(PersistenceController dal, SupplierController suppliers) {
         this.dal = dal;
+        this.suppliers = suppliers;
         items = new HashMap<>();
+
+        this.dal.getItems().all().forEach(this::createFromExisting);
+    }
+
+    private void createFromExisting(ItemRecord itemRecord) {
+        items.put(
+            tuple(itemRecord.getSupplierPPN(), itemRecord.getCatalogNumber()),
+            new Item(itemRecord, suppliers.get(itemRecord.getSupplierPPN()), this)
+        );
     }
 
     public Item create(Supplier supplier, int catalogNumber,

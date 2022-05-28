@@ -31,6 +31,7 @@ public class Product {
 
     //CONSTRUCTORS
     public Product(ProductData product, PersistenceController pc) {
+        this.pc = pc;
         item_ids = product.getItemIds();
         product_id = product.getId();
         name = product.getName();
@@ -43,7 +44,6 @@ public class Product {
         cat = product.getCategory();
         sub_cat = product.getSubcategory();
         sub_sub_cat = product.getSubSubcategory();
-        this.pc = pc;
     }
 
     //METHODS

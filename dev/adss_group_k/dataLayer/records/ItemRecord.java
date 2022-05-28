@@ -21,7 +21,7 @@ public class ItemRecord extends BaseRecord<ItemRecord.ItemKey> implements ItemDa
 
     @Override
     public int getSupplierPPN() {
-        return 0;
+        return ppn;
     }
 
     @Override
