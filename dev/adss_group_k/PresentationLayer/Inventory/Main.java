@@ -1,13 +1,26 @@
 package adss_group_k.PresentationLayer.Inventory;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
+import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
+import adss_group_k.dataLayer.dao.PersistenceController;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
+    private static PersistenceController pc;
     public static void startInventoryMenu() {
-        SupplierService supplierService=new SupplierService();
-        Service service = new Service(supplierService);
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:sqlite::memory:");
+        } catch (SQLException throwables) {
+            throw new RuntimeException(throwables);
+        }
+        pc = new PersistenceController(conn);
+        SupplierService supplierService=new SupplierService(conn);
+        Service service = new Service(supplierService, pc);
         Scanner scan = new Scanner(System.in);
         String input = "";
         PresentationModel pm = new PresentationModel(service);

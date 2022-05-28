@@ -4,6 +4,7 @@ import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
+import adss_group_k.dataLayer.dao.PersistenceController;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
@@ -24,6 +25,7 @@ class ServiceTest {
     private static List<String> CategoryList;
     private static List<String> ProductListNames;
     private static List<Integer> ReportList;
+    private static PersistenceController pc;
 
     static void setService() {
         Connection conn = null;
@@ -32,8 +34,9 @@ class ServiceTest {
         } catch (SQLException throwables) {
             throw new RuntimeException(throwables);
         }
+        pc = new PersistenceController(conn);
         supplierService = new SupplierService(conn);
-        service = new Service(supplierService);
+        service = new Service(supplierService, pc);
     }
 
     @BeforeAll
