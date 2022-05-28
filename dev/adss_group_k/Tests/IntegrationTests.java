@@ -48,7 +48,7 @@ public class IntegrationTests {
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
                 "B@Gmail.com").data;
 
-        Order order = service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.of(2022,04,07),
+        Order order = service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
                 OrderType.Periodical).data;
 
         inventory.createMissingReport("Missing", "Report1");
@@ -173,10 +173,10 @@ public class IntegrationTests {
         assertNotEquals(0,categorySize); //passes
         //assertNotEquals(0,discountPairSize);
         assertNotEquals(0,itemSize); //passes
-//        assertNotEquals(0,itemInOrderSize);
+        assertNotEquals(0,itemInOrderSize);
 //        assertNotEquals(0,itemInReportSize);
 //        assertNotEquals(0,itemReportSize);
-//        assertNotEquals(0,orderSize);
+        assertNotEquals(0,orderSize); //passes
         assertNotEquals(0,productSize); //passes
 //        assertNotEquals(0,productInReportSize);
         assertNotEquals(0,productItem); //passes
