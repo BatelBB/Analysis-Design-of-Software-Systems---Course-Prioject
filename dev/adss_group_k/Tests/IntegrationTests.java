@@ -482,7 +482,7 @@ public class IntegrationTests {
 
         prod = inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10, 1200, "Dairy", "Shop", "10%").data;
 
-        pItem = inventory.addItem(prod.getProduct_id(), "TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX, true).data;
+        adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem pItem = inventory.addItem(prod.getProduct_id(), "TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX, true).data;
         Item item = service.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12).data;
         service.orderItem(order.getId(), sup.getPpn(), item.getCatalogNumber(), 50);
         discount = service.createDiscount(sup.getPpn(), item.getCatalogNumber(), 50, 5).data;
