@@ -155,7 +155,6 @@ public class IntegrationTests {
     }
 
     private void runQuery() {
-
         String categoryQuery = "SELECT count(*) FROM Category", discountPairQuery = "SELECT count(*) FROM DiscountPair",
                 itemQuery = "SELECT count(*) FROM Item", itemInOrderQuery = "SELECT count(*) FROM ItemInOrder",
                 orderQuery = "SELECT count(*) FROM `Order`",

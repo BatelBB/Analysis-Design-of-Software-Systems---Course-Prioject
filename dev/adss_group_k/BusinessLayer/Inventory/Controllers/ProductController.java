@@ -215,9 +215,10 @@ public class ProductController {
     }
 
     public List<ProductItem> getItemsByProduct(String name) {
-        List<ProductItem> items = null;
+        List<ProductItem> items = new ArrayList<>();
         for (Product p : products.values())
-            if (p.getName().equals(name)) items = new ArrayList<>(p.getItems().values());
+            if (p.getName().equals(name))
+                items = new ArrayList<>(p.getItems().values());
         return items;
     }
 
