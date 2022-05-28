@@ -115,7 +115,6 @@ public class SchemaInit {
                     "\t\"IsDefect\"\tTINYINT NOT NULL,\n" +
                     "\t\"OnShelf\"\tTINYINT NOT NULL,\n" +
                     "\t\"DefectReporter\"\tTEXT,\n" +
-                    "\t\"discountIds\"\tINTEGER NOT NULL,\n" +
                     "\tPRIMARY KEY(\"ProductId\",\"Id\")\n" +
                     ");\n" +
 
