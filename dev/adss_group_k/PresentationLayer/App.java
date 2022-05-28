@@ -41,14 +41,20 @@ public class App {
         if(isNew) {
             SchemaInit.init(conn);
         }
-        if(shouldLoadExample) {
-            // TODO load example
-        }
         dal = new PersistenceController(conn);
         supplierService = new SupplierService(dal);
         inventoryService = new Service(supplierService, dal);
+
+        if(shouldLoadExample) {
+            loadExample();
+        }
         supplierPresentation = new SupplierPresentationFacade(supplierService);
         inventoryPresentationFacade = new InventoryPresentationFacade(inventoryService);
+
+    }
+
+    private void loadExample() {
+
     }
 
     public void main() {
