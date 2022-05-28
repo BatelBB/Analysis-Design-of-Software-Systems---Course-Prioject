@@ -156,7 +156,6 @@ class ServiceTest {
             assertEquals(e.getMessage(), "The ReportId already exists in the system");
             
         }
-        //TODO: make new test
     }
 
     @Test
@@ -170,7 +169,6 @@ class ServiceTest {
             assertEquals(e.getMessage(), "The ReportId already exists in the system");
             
         }
-        //TODO: make new test
     }
 
     @Test
