@@ -14,6 +14,7 @@ import adss_group_k.SchemaInit;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
+import adss_group_k.shared.response.Response;
 import adss_group_k.shared.response.ResponseT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -143,10 +144,6 @@ public class IntegrationTests {
 
     }
 
-    @Test
-    public void updateDB() {
-    }
-
 
     @Test
     public void testCreateOrder() {
@@ -154,27 +151,7 @@ public class IntegrationTests {
 
 
     @Test
-    public void testCreateSupplierCard() {
-    }
-
-
-    @Test
-    public void testAddProductNotWorking() {
-    }
-
-
-    @Test
     public void testAddProductWithoutExistingSupplier() {
-    }
-
-    @Test
-    public void testAddItemToNonExistingOrder() {
-
-    }
-
-    @Test
-    public void testAddQuantityDiscountToItem() {
-
     }
 
     private void runQuery() {
@@ -288,5 +265,139 @@ public class IntegrationTests {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        assertNotEquals(0, categorySize); //passes
+        assertNotEquals(0, discountPairSize); //passes
+        assertNotEquals(0, itemSize); //passes
+        assertNotEquals(0, itemInOrderSize); //passes
+        assertNotEquals(0, orderSize); //passes
+        assertNotEquals(0, productSize); //passes
+        assertNotEquals(0, productInReportSize);//passes
+        assertNotEquals(0, productItem); //passes
+        assertNotEquals(0, reportSize); //passes
+        assertNotEquals(0, quantityDiscountSize); //passes
+        assertNotEquals(0, subSubCategorySize); //passes
+        assertNotEquals(0, subCategorySize); //passes
+        assertNotEquals(0, supplierSize); //passes
+    }
+
+    @Test
+    public void updateDB() {
+        inventory.addCategory(
+                "Dairy"
+        );
+        inventory.addSubCategory(
+                "Dairy",
+                "Shop"
+        );
+        inventory.addSubSubCategory(
+                "Dairy",
+                "Shop",
+                "10%"
+        );
+        Product prod = inventory.addProduct(
+                "Milk",
+                "Tnoova",
+                10.0,
+                20,
+                10,
+                1200,
+                "Dairy",
+                "Shop",
+                "10%"
+        ).data;
+        double NEW_PRICE = 21;
+        inventory.updateProductCusPrice(prod.getProduct_id(), NEW_PRICE);
+        String select_query = "SELECT * FROM Product WHERE id=" + prod.getProduct_id();
+        Statement st = null;
+        ResultSet res_update;
+        double new_price = 0;
+        try {
+            st = conn.createStatement();
+            res_update = st.executeQuery(select_query);
+            while (res_update.next()) {
+                new_price = res_update.getFloat(3);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertEquals(NEW_PRICE, new_price); //passes
+    }
+
+
+    @Test
+    public void testCreateSupplierCard() {
+        assertTrue(service.createSupplier(1, 123, "Lorem", true,
+                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
+                "B@Gmail.com").success);
+    }
+
+
+    @Test
+    public void testAddProductNotWorking() {
+
+    }
+
+    @Test
+    public void testAddItemWithoutExistingSupplier() {
+        Supplier sup = service.createSupplier(1, 123, "Lorem", true,
+                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
+                "B@Gmail.com").data;
+
+        inventory.addCategory("Dairy");
+        inventory.addSubCategory("Dairy", "Shop");
+        inventory.addSubSubCategory("Dairy", "Shop", "10%");
+
+        int wrongSupplier = sup.getPpn() + 3;
+        assertFalse(service.createItem(wrongSupplier, 2, 1, 0.5f).success);
+    }
+
+    @Test
+    public void testAddItemToNonExistingOrder() {
+        Supplier sup = service.createSupplier(1, 123, "Lorem", true,
+                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
+                "B@Gmail.com").data;
+
+        Order order = service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
+                OrderType.Periodical).data;
+
+        inventory.addCategory("Dairy");
+        inventory.addSubCategory("Dairy", "Shop");
+        inventory.addSubSubCategory("Dairy", "Shop", "10%");
+
+        Product prod = inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+                1200, "Dairy", "Shop", "10%").data;
+
+        Item item = service.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12).data;
+
+        int wrongOrderId = order.getId() + 3;
+        Response response = service.orderItem(wrongOrderId, sup.getPpn(), item.getCatalogNumber(), 100);
+        assertFalse(response.success);
+    }
+
+    @Test
+    public void testAddQuantityDiscountToItem() throws SQLException {
+        Supplier sup = service.createSupplier(1, 123, "Lorem", true,
+                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
+                "B@Gmail.com").data;
+
+        Order order = service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
+                OrderType.Periodical).data;
+
+        inventory.addCategory("Dairy");
+        inventory.addSubCategory("Dairy", "Shop");
+        inventory.addSubSubCategory("Dairy", "Shop", "10%");
+
+        Product prod = inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+                1200, "Dairy", "Shop", "10%").data;
+
+        Item item = service.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12).data;
+
+        QuantityDiscount qd = service.createDiscount(sup.getPpn(), item.getCatalogNumber()
+                , 100, 0.1f).getOrThrow(RuntimeException::new);
+
+        PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM QuantityDiscount");
+        ResultSet resultSet = ps.executeQuery();
+        assertTrue(resultSet.next());
+        assertTrue(resultSet.getInt(1) > 0);
     }
 }
