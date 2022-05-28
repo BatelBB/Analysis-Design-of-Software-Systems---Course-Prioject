@@ -156,7 +156,7 @@ public class IntegrationTests {
     }
 
     @Test
-    public void testAddProductWithoutExistingSupplier() {
+    public void testAddProductWithoutExistingCategory() {
         inventory.addCategory(
                 "Dairy"
         );
@@ -178,8 +178,24 @@ public class IntegrationTests {
                 1200,
                 "Dairy",
                 "Shop",
-                "10%"
+                "20%"
         ).data;
+
+        String select_query = "SELECT Count(*) FROM Product";
+        Statement st = null;
+        ResultSet res_prod;
+        double res = 0;
+        try {
+            st = conn.createStatement();
+            res_prod = st.executeQuery(select_query);
+            while (res_prod.next()) {
+                res = res_prod.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(0, res);
     }
 
     private void runQuery() {
