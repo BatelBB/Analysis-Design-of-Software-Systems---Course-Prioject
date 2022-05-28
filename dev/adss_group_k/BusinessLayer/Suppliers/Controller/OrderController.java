@@ -20,7 +20,8 @@ public class OrderController {
     ArrayList<Order> orders;
     private PersistenceController dal;
 
-    public OrderController(QuantityDiscountController discounts){
+    public OrderController(PersistenceController dal, QuantityDiscountController discounts) {
+        this.dal = dal;
         orders = new ArrayList<>();
         this.discounts = discounts;
     }

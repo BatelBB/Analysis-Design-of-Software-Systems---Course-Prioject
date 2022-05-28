@@ -33,7 +33,7 @@ public class SupplierService implements ISupplierService {
         this.dal = dal;
         items = new ItemController(dal);
         discounts = new QuantityDiscountController(dal, items);
-        orders = new OrderController(discounts);
+        orders = new OrderController(dal, discounts);
         suppliers = new SupplierController(orders, items, dal);
     }
 
@@ -47,14 +47,11 @@ public class SupplierService implements ISupplierService {
                                               boolean isDelivering, PaymentCondition paymentCondition,
                                               DayOfWeek regularSupplyingDays, String contactName,
                                               String contactPhone, String contactEmail) {
-        return responseFor(() ->  {
-            Supplier supplier = suppliers.create(new CreateSupplierDTO(
-                    ppn, bankAccount, name, isDelivering,
-                    paymentCondition, regularSupplyingDays, contactEmail,
-                    contactName, contactPhone
-            ));
-            return ResponseT.success(supplier);
-        });
+        return responseFor(() -> suppliers.create(new CreateSupplierDTO(
+                ppn, bankAccount, name, isDelivering,
+                paymentCondition, regularSupplyingDays, contactEmail,
+                contactName, contactPhone
+        )));
     }
 
     @Override
@@ -221,7 +218,7 @@ public class SupplierService implements ISupplierService {
         return discounts.findCheapestSupplierFor(productID, amount);
     }
 
-    private <T> ResponseT responseFor(java.util.function.Supplier<T> operation) {
+    private <T> ResponseT<T> responseFor(java.util.function.Supplier<T> operation) {
         try {
             return ResponseT.success(operation.get());
         } catch (Throwable e) {

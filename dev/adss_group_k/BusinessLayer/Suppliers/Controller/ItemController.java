@@ -14,6 +14,7 @@ public class ItemController {
     Map<String, Item> items;
     PersistenceController dal;
     public ItemController(PersistenceController dal) {
+        this.dal = dal;
         items = new HashMap<>();
     }
 
