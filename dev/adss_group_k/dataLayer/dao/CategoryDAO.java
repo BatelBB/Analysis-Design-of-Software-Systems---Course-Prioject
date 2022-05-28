@@ -21,7 +21,7 @@ public class CategoryDAO extends BaseDAO<String, CategoryRecord> {
     public ResponseT<CategoryData> create(String name) {
         return create(
                 () -> new CategoryRecord(name),
-                "INSERT INTO Category(name) VALUES((?))",
+                "INSERT INTO Category(name) VALUES(?)",
                 ps -> ps.setString(1, name)
         ).castUnchecked();
     }

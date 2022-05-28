@@ -16,12 +16,13 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
 
     public OrderDAO(Connection conn) {
         super(conn);
-        maxId = 1 + oneResultQuery("SELECT MAX(id) FROM Order", rs -> rs.getInt(1));
+        Integer maxIdQuery = oneResultQuery("SELECT MAX(id) FROM `Order`", rs -> rs.getInt(1));
+        maxId = maxIdQuery == null ? 0 : 1 + maxIdQuery;
     }
 
     @Override
     OrderRecord fetch(Integer id) throws SQLException, NoSuchElementException {
-        PreparedStatement ps = conn.prepareStatement("SELECT * FROM Order WHERE id=?");
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `Order` WHERE id=?");
         ps.setInt(1, id);
         ResultSet qu = ps.executeQuery();
         if (!qu.next()) {
@@ -31,7 +32,7 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
     }
     @Override
     Stream<OrderRecord> fetchAll() throws SQLException {
-        PreparedStatement ps = conn.prepareStatement("SELECT * FROM Order");
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `Order`");
         ResultSet qu = ps.executeQuery();
         ArrayList<OrderRecord> list = new ArrayList<>();
         while (qu.next()) {
@@ -42,7 +43,7 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
 
     public void updateProvided(int id, LocalDate provided) {
         runUpdate(
-                "UPDATE Order SET provided=? WHERE id=?",
+                "UPDATE `Order` SET provided=? WHERE id=?",
                 ps -> ps.setDate(1, Date.valueOf(provided)),
                 ps -> ps.setInt(2, id)
         );
@@ -51,7 +52,7 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
 
     public void updateOrdered(int id, LocalDate ordered) {
         runUpdate(
-                "UPDATE Order SET ordered=? WHERE id=?",
+                "UPDATE `Order` SET ordered=? WHERE id=?",
                 ps -> ps.setDate(1, Date.valueOf(ordered)),
                 ps -> ps.setInt(2, id)
         );
@@ -79,7 +80,8 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
         maxId++;
         return create(
                 () -> new OrderRecord(id, ppn, 0, ordered, delivered),
-                "INSERT INTO Order(id, orderType, price, ordered, provided, ppn)",
+                "INSERT INTO `Order`(id, orderType, price, ordered, provided, ppn)" +
+                        " VALUES(?, ?, ?, ?, ?, ?)",
                 ps -> ps.setInt(1, id),
                 ps -> ps.setInt(2, type.value),
                 ps -> ps.setFloat(3, 0f),
@@ -90,7 +92,7 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
     }
 
     public void setPrice(int id, float price) {
-        runUpdate("UPDATE Order SET price=? WHERE id=?",
+        runUpdate("UPDATE `Order` SET price=? WHERE id=?",
               ps -> ps.setFloat(1, price),
               ps -> ps.setInt(2, id)
             );

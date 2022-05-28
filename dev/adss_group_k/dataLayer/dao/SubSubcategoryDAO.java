@@ -30,7 +30,7 @@ public class SubSubcategoryDAO extends BaseDAO<SubSubCategoryRecord.SubSubcatego
     public ResponseT<SubSubcategoryData> create(String category, String subcategory, String name) {
         return create(
                 () -> new SubSubCategoryRecord(category, subcategory, name),
-                "INSERT INTO SubSubcategory(category, subcategory, name) VALUES((?, ?, ?))",
+                "INSERT INTO SubSubcategory(category, subcategory, name) VALUES(?, ?, ?)",
                 ps -> ps.setString(1, category),
                 ps -> ps.setString(2, subcategory),
                 ps -> ps.setString(3, name)

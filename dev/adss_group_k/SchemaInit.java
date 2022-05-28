@@ -37,7 +37,7 @@ public class SchemaInit {
                     ");\n" +
 
                     "CREATE TABLE IF NOT EXISTS \"Product\" (\n" +
-                    "\t\"itemIds\"\tINTEGER NOT NULL,\n" +
+                    "\t\"item_ids\"\tINTEGER NOT NULL,\n" +
                     "\t\"id\"\tINTEGER NOT NULL,\n" +
                     "\t\"name\"\tTEXT NOT NULL,\n" +
                     "\t\"customerPrice\"\tREAL NOT NULL,\n" +

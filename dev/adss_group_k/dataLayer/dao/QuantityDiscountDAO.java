@@ -28,7 +28,7 @@ public class QuantityDiscountDAO extends BaseDAO<Integer, QuantityDiscountRecord
         return create(
                 () -> new QuantityDiscountRecord(id, item, quantity, discount),
                 "INSERT INTO QuantityDiscount(id, quantity, discount, itemSupplierPPN, itemCatalogNumber)" +
-                        " VALUES((?, ?, ?, ?, ?))",
+                        " VALUES(?, ?, ?, ?, ?)",
                 ps -> ps.setInt(1, id),
                 ps -> ps.setInt(2, quantity),
                 ps -> ps.setFloat(3, discount),
@@ -38,7 +38,7 @@ public class QuantityDiscountDAO extends BaseDAO<Integer, QuantityDiscountRecord
     }
     @Override
     QuantityDiscountRecord fetch(Integer id) throws SQLException, NoSuchElementException {
-        PreparedStatement stmt = conn.prepareCall(
+        PreparedStatement stmt = conn.prepareStatement(
                 "SELECT * " +
                 "FROM QuantityDiscount WHERE id=?");
         stmt.setInt(1, id);
@@ -52,7 +52,7 @@ public class QuantityDiscountDAO extends BaseDAO<Integer, QuantityDiscountRecord
 
     @Override
     Stream<QuantityDiscountRecord> fetchAll() throws SQLException {
-        PreparedStatement stmt = conn.prepareCall(
+        PreparedStatement stmt = conn.prepareStatement(
                 "SELECT * FROM QuantityDiscount");
         ResultSet query = stmt.executeQuery();
         ArrayList<QuantityDiscountRecord> entities = new ArrayList<>();

@@ -38,7 +38,7 @@ class ServiceTest {
             throw new RuntimeException(throwables);
         }
         pc = new PersistenceController(conn);
-        supplierService = new SupplierService(conn);
+        supplierService = new SupplierService(pc);
         service = new Service(supplierService, pc);
     }
 

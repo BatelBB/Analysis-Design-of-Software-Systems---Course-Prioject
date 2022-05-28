@@ -13,12 +13,8 @@ import java.util.*;
 public class ItemController {
     Map<String, Item> items;
     PersistenceController dal;
-    OrderController orderController;
-    QuantityDiscountController quantityDiscountController;
-    public ItemController() {
+    public ItemController(PersistenceController dal) {
         items = new HashMap<>();
-        quantityDiscountController = new QuantityDiscountController(dal, this);
-        orderController = new OrderController(quantityDiscountController);
     }
 
     public Item create(Supplier supplier, int catalogNumber,
@@ -84,7 +80,6 @@ public class ItemController {
                 new ItemRecord.ItemKey(supplier, catalogNumber),
                 price
         );
-        orderController.refreshPricesAndDiscounts(item);
     }
 
     public void setName(int supplier, int catalogNumber, String name) {
