@@ -19,7 +19,7 @@ public class Main {
             throw new RuntimeException(throwables);
         }
         pc = new PersistenceController(conn);
-        SupplierService supplierService=new SupplierService(conn);
+        SupplierService supplierService=new SupplierService(pc);
         Service service = new Service(supplierService, pc);
         Scanner scan = new Scanner(System.in);
         String input = "";

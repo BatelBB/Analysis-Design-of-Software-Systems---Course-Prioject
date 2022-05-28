@@ -54,7 +54,7 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
 
     @Override
     ProductRecord fetch(Integer id) throws SQLException, NoSuchElementException {
-        PreparedStatement stmt = conn.prepareCall("SELECT * FROM Product WHERE id=?");
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Product WHERE id=?");
         stmt.setInt(1, id);
         ResultSet query = stmt.executeQuery();
         if (!query.next()) {
@@ -65,7 +65,7 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
 
     @Override
     Stream<ProductRecord> fetchAll() throws SQLException {
-        PreparedStatement stmt = conn.prepareCall("SELECT * FROM Product");
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Product");
         ResultSet query = stmt.executeQuery();
         ArrayList<ProductRecord> res = new ArrayList<>();
         while (query.next()) {

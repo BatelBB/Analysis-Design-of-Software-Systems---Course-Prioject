@@ -29,9 +29,9 @@ public class SupplierService implements ISupplierService {
     private PersistenceController dal;
     private SupplierController suppliers;
 
-    public SupplierService(Connection connection) {
-        dal = new PersistenceController(connection);
-        items = new ItemController();
+    public SupplierService(PersistenceController dal) {
+        this.dal = dal;
+        items = new ItemController(dal);
         discounts = new QuantityDiscountController(dal, items);
         orders = new OrderController(discounts);
         suppliers = new SupplierController(orders, items, dal);
@@ -147,7 +147,10 @@ public class SupplierService implements ISupplierService {
 
     @Override
     public Response setPrice(int supplier, int catalogNumber, float price) {
-        return responseForVoid(() -> items.setPrice(supplier, catalogNumber, price));
+        return responseForVoid(() -> {
+            items.setPrice(supplier, catalogNumber, price);
+            orders.refreshPricesAndDiscounts(items.get(supplier, catalogNumber));
+        });
     }
 
     @Override
