@@ -86,13 +86,11 @@ public class ProductItemDAO extends BaseDAO<ProductItemRecord.ProductItemKey, Pr
     }
 
     public int updateDefectReporter(int product_id, int id, String defect_reporter) {
-        return update(DEFECT_REPORTER, defect_reporter, product_id, id, Types.NVARCHAR);
-        //TODO: may cause errors.
+        return update(DEFECT_REPORTER, defect_reporter, product_id, id, Types.VARCHAR);
     }
 
     public int updateItemLocation(int product_id, int id, String location) {
-        return update(LOCATION, location, product_id, id, Types.NVARCHAR);
-        //TODO: may cause errors.
+        return update(LOCATION, location, product_id, id, Types.VARCHAR);
     }
 
     private int update(String field, Object value, int product_id, int id, int type) {
