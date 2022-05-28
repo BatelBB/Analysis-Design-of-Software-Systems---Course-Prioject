@@ -107,7 +107,10 @@ public class SupplierService implements ISupplierService {
 
     @Override
     public Response deleteDiscount(QuantityDiscount discount) {
-        return responseForVoid(() -> discounts.delete(discount.id));
+        return responseForVoid(() -> {
+            discounts.delete(discount.id);
+            orders.refreshPricesAndDiscounts(discount.item);
+        });
     }
 
     @Override

@@ -540,10 +540,10 @@ class ServiceTest {
         Item item = service.createItem(ppn, cnCalc, product4.getProduct_id(),  priceCalc).getOrThrow(RuntimeException::new);
         Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).getOrThrow(RuntimeException::new);
 
-        QuantityDiscount over10 = service.createDiscount(ppn, item.getCatalogNumber(), 10, 0.01f).data;
-        QuantityDiscount over50 = service.createDiscount(ppn, item.getCatalogNumber(), 50, 0.05f).data;
-        QuantityDiscount over100 = service.createDiscount(ppn, item.getCatalogNumber(), 100, 0.1f).data;
-        QuantityDiscount over200 = service.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f).data;
+        QuantityDiscount over10 = service.createDiscount(ppn, item.getCatalogNumber(), 10, 0.01f).getOrThrow(AssertionError::new);
+        QuantityDiscount over50 = service.createDiscount(ppn, item.getCatalogNumber(), 50, 0.05f).getOrThrow(AssertionError::new);;
+        QuantityDiscount over100 = service.createDiscount(ppn, item.getCatalogNumber(), 100, 0.1f).getOrThrow(AssertionError::new);;
+        QuantityDiscount over200 = service.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f).getOrThrow(AssertionError::new);;
 
         service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 250);
 

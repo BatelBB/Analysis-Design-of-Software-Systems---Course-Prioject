@@ -16,15 +16,16 @@ import org.junit.jupiter.api.Test;
 import java.sql.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class IntegrationTests {
 
     private ISupplierService service;
     private Service inventory;
 
+    Connection conn = null;
     @BeforeEach
     void setUp() {
-        Connection conn = null;
         try {
             conn = DriverManager.getConnection("jdbc:sqlite::memory:");
             SchemaInit.init(conn);
@@ -79,7 +80,108 @@ public class IntegrationTests {
                 subSubCategoryQuery = "SELECT count(*) FROM SubSubCategory",
                 subCategoryQuery = "SELECT count(*) FROM SubCategory", supplierQuery = "SELECT count(*) FROM Supplier";
 
-        ResultSet result = statement.executeQuery(query);
+//        Map<String, String> queryMap = new HashMap<String, String>();
+//        queryMap.put("categoryQuery","SELECT count(*) FROM Category");
+//        queryMap.put("discountPairQuery","SELECT count(*) FROM DiscountPair");
+//        queryMap.put("itemQuery","SELECT count(*) FROM Item");
+//        queryMap.put("itemInOrderQuery","SELECT count(*) FROM ItemInOrder");
+//        queryMap.put("itemInReportQuery" , "SELECT count(*) FROM ItemInReport");
+//        queryMap.put("itemReportQuery","SELECT count(*) FROM ItemReport");
+//        queryMap.put("orderQuery" ,"SELECT count(*) FROM `Order`");
+//        queryMap.put("productQuery" , "SELECT count(*) FROM Product");
+//        queryMap.put("productInReportQuery" , "SELECT count(*) FROM ProductInReport");
+//        queryMap.put("productItemQuery" , "SELECT count(*) FROM ProductItem");
+//        queryMap.put("productReportQuery" , "SELECT count(*) FROM ProductReport");
+//        queryMap.put("quantityDiscountQuery" , "SELECT count(*) FROM QuantityDiscount");
+//        queryMap.put("subSubCategoryQuery" , "SELECT count(*) FROM SubSubCategory");
+//        queryMap.put("subCategoryQuery" , "SELECT count(*) FROM SubCategory");
+//        queryMap.put("supplierQuery" , "SELECT count(*) FROM Supplier");
+
+        Statement st = null;
+        ResultSet resCategory, resDiscountPar, resItem, reItemInOrder, resItemInReport, resItemReport, resOrder,
+                resProduct, resProductInReport, resProductItem, resProductReport, resQuantityDiscount, resSubSubCategory,
+                resSubCategory, resSupplier;
+        try{
+            st = conn.createStatement();
+            resCategory = st.executeQuery(categoryQuery);
+            while (resCategory.next()){
+                categorySize = resCategory.getInt(1);
+            }
+            resDiscountPar = st.executeQuery(discountPairQuery);
+            while (resDiscountPar.next()){
+                discountPairSize = resDiscountPar.getInt(1);
+            }
+            resItem = st.executeQuery(itemQuery);
+            while (resItem.next()){
+                itemSize = resItem.getInt(1);
+            }
+            reItemInOrder = st.executeQuery(itemInOrderQuery);
+            while (reItemInOrder.next()){
+                itemInOrderSize = reItemInOrder.getInt(1);
+            }
+            resItemInReport = st.executeQuery(itemInReportQuery);
+            while (resItemInReport.next()){
+                itemInReportSize = resItemInReport.getInt(1);
+            }
+            resItemReport = st.executeQuery(itemReportQuery);
+            while (resItemReport.next()){
+                itemReportSize = resItemReport.getInt(1);
+            }
+            resOrder = st.executeQuery(orderQuery);
+            while (resOrder.next()){
+                orderSize = resOrder.getInt(1);
+            }
+            resProduct = st.executeQuery(productQuery);
+            while (resProduct.next()){
+                productSize = resProduct.getInt(1);
+            }
+            resProductInReport = st.executeQuery(productInReportQuery);
+            while (resProductInReport.next()){
+                productInReportSize = resProductInReport.getInt(1);
+            }
+            resProductItem = st.executeQuery(productItemQuery);
+            while (resProductItem.next()){
+                productItem = resProductItem.getInt(1);
+            }
+            resProductReport = st.executeQuery(productReportQuery);
+            while (resProductReport.next()){
+                productReportSize = resProductReport.getInt(1);
+            }
+            resQuantityDiscount = st.executeQuery(quantityDiscountQuery);
+            while (resQuantityDiscount.next()){
+                quantityDiscountSize = resQuantityDiscount.getInt(1);
+            }
+            resSubSubCategory = st.executeQuery(subSubCategoryQuery);
+            while (resSubSubCategory.next()){
+                subSubCategorySize = resSubSubCategory.getInt(1);
+            }
+            resSubCategory = st.executeQuery(subCategoryQuery);
+            while (resSubCategory.next()){
+                subCategorySize = resSubCategory.getInt(1);
+            }
+            resSupplier = st.executeQuery(supplierQuery);
+            while (resSupplier.next()){
+                supplierSize = resSupplier.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        assertNotEquals(0,categorySize);
+        assertNotEquals(0,discountPairSize);
+        assertNotEquals(0,itemSize);
+        assertNotEquals(0,itemInOrderSize);
+        assertNotEquals(0,itemInReportSize);
+        assertNotEquals(0,itemReportSize);
+        assertNotEquals(0,orderSize);
+        assertNotEquals(0,productSize);
+        assertNotEquals(0,productInReportSize);
+        assertNotEquals(0,productItem);
+        assertNotEquals(0,productReportSize);
+        assertNotEquals(0,quantityDiscountSize);
+        assertNotEquals(0,subSubCategorySize);
+        assertNotEquals(0,subCategorySize);
+        assertNotEquals(0,supplierSize);
     }
 
     @Test

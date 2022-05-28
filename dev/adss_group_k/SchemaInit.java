@@ -35,21 +35,6 @@ public class SchemaInit {
                     "\t\"subcategory\"\tTEXT NOT NULL,\n" +
                     "\t\"category\"\tTEXT NOT NULL\n" +
                     ");\n" +
-
-                    "CREATE TABLE IF NOT EXISTS \"Product\" (\n" +
-                    "\t\"item_ids\"\tINTEGER NOT NULL,\n" +
-                    "\t\"id\"\tINTEGER NOT NULL,\n" +
-                    "\t\"name\"\tTEXT NOT NULL,\n" +
-                    "\t\"customerPrice\"\tREAL NOT NULL,\n" +
-                    "\t\"minQty\"\tINTEGER NOT NULL,\n" +
-                    "\t\"storageQty\"\tINTEGER NOT NULL,\n" +
-                    "\t\"shelfQty\"\tINTEGER NOT NULL,\n" +
-                    "\t\"subSubcategory\"\tTEXT NOT NULL,\n" +
-                    "\t\"subcategory\"\tTEXT NOT NULL,\n" +
-                    "\t\"category\"\tTEXT NOT NULL,\n" +
-                    "\tPRIMARY KEY(\"id\")\n" +
-                    ");\n" +
-
                     "CREATE TABLE IF NOT EXISTS \"Order\" (\n" +
                     "\t\"id\"\tINTEGER NOT NULL,\n" +
                     "\t\"orderType\"\tINTEGER NOT NULL,\n" +
@@ -59,16 +44,13 @@ public class SchemaInit {
                     "\t\"ppn\"\tINTEGER NOT NULL,\n" +
                     "\tPRIMARY KEY(\"id\")\n" +
                     ");\n" +
-
                     "CREATE TABLE IF NOT EXISTS \"ItemInOrder\" (\n" +
                     "\t\"qty\"\tINTEGER NOT NULL,\n" +
                     "\t\"itemSupplierPPN\"\tINTEGER NOT NULL,\n" +
                     "\t\"itemCatalogNumber\"\tINTEGER NOT NULL,\n" +
-                    "\t\"itemCatalogNumber\"\tINTEGER NOT NULL,\n" +
                     "\t\"orderId\"\tINTEGER NOT NULL,\n" +
                     "\tPRIMARY KEY(\"itemSupplierPPN\",\"itemCatalogNumber\",\"orderId\")\n" +
                     ");\n" +
-
                     "CREATE TABLE IF NOT EXISTS \"QuantityDiscount\" (\n" +
                     "\t\"id\"\tINTEGER NOT NULL,\n" +
                     "\t\"quantity\"\tINTEGER NOT NULL,\n" +
@@ -77,51 +59,15 @@ public class SchemaInit {
                     "\t\"itemCatalogNumber\"\tINTEGER NOT NULL,\n" +
                     "\tPRIMARY KEY(\"id\")\n" +
                     ");\n" +
-
-                    "CREATE TABLE IF NOT EXISTS \"ProductReport\" (\n" +
-                    "\t\"id\"\tINTEGER NOT NULL,\n" +
-                    "\t\"reportProducer\"\tTEXT NOT NULL,\n" +
-                    "\t\"name\"\tTEXT NOT NULL,\n" +
-                    "\t\"date\"\tDATETIME NOT NULL,\n" +
-                    "\t\"type\"\tINTEGER NOT NULL,\n" +
-                    "\t\"query\"\tTEXT NOT NULL,\n" +
-                    "\tPRIMARY KEY(\"id\")\n" +
-                    ");\n" +
-
-                    "CREATE TABLE IF NOT EXISTS \"ItemReport\" (\n" +
-                    "\t\"id\"\tINTEGER NOT NULL,\n" +
-                    "\t\"reportProducer\"\tTEXT NOT NULL,\n" +
-                    "\t\"name\"\tTEXT NOT NULL,\n" +
-                    "\t\"date\"\tDATETIME NOT NULL,\n" +
-                    "\t\"type\"\tINTEGER NOT NULL,\n" +
-                    "\t\"query\"\tTEXT NOT NULL,\n" +
-                    "\tPRIMARY KEY(\"id\")\n" +
-                    ");\n" +
-
-                    "CREATE TABLE IF NOT EXISTS \"ProductInReport\" (\n" +
-                    "\t\"reportId\"\tINTEGER NOT NULL,\n" +
-                    "\t\"productId\"\tINTEGER NOT NULL,\n" +
-                    "\tPRIMARY KEY(\"reportId\",\"productId\")\n" +
-                    ");\n" +
-
-                    "CREATE TABLE IF NOT EXISTS \"ProductItemInReport\" (\n" +
-                    "\t\"reportId\"\tINTEGER NOT NULL,\n" +
-                    "\t\"productId\"\tINTEGER NOT NULL,\n" +
-                    "\t\"productItemId\"\tINTEGER NOT NULL,\n" +
-                    "\tPRIMARY KEY(\"reportId\",\"productId\",\"productItemId\")\n" +
-                    ");\n" +
-
                     "CREATE TABLE IF NOT EXISTS \"Subcategory\" (\n" +
                     "\t\"Category\"\tTEXT NOT NULL,\n" +
                     "\t\"Name\"\tTEXT NOT NULL,\n" +
                     "\tPRIMARY KEY(\"Name\",\"Category\")\n" +
                     ");\n" +
-
                     "CREATE TABLE IF NOT EXISTS \"Category\" (\n" +
                     "\t\"Name\"\tTEXT NOT NULL,\n" +
                     "\tPRIMARY KEY(\"Name\")\n" +
                     ");\n" +
-
                     "CREATE TABLE IF NOT EXISTS \"Supplier\" (\n" +
                     "\t\"ppn\"\tINTEGER NOT NULL,\n" +
                     "\t\"bankNumber\"\tINTEGER NOT NULL,\n" +
@@ -134,7 +80,6 @@ public class SchemaInit {
                     "\t\"contactPhone\"\tTEXT NOT NULL,\n" +
                     "\tPRIMARY KEY(\"ppn\")\n" +
                     ");\n" +
-
                     "CREATE TABLE IF NOT EXISTS \"Item\" (\n" +
                     "\t\"supplierPPN\"\tINTEGER NOT NULL,\n" +
                     "\t\"catalogNumber\"\tINTEGER NOT NULL,\n" +
@@ -142,7 +87,6 @@ public class SchemaInit {
                     "\t\"price\"\tFLOAT NOT NULL,\n" +
                     "\tPRIMARY KEY(\"supplierPPN\",\"catalogNumber\")\n" +
                     ");\n" +
-
                     "CREATE TABLE IF NOT EXISTS \"DiscountPair\" (\n" +
                     "\t\"ProductId\"\tINTEGER NOT NULL,\n" +
                     "\t\"ProductItemId\"\tINTEGER NOT NULL,\n" +
@@ -152,7 +96,6 @@ public class SchemaInit {
                     "\t\"EndDate\"\tDateTime NOT NULL,\n" +
                     "\tPRIMARY KEY(\"DiscountPairId\",\"ProductItemId\",\"ProductId\")\n" +
                     ");\n" +
-
                     "CREATE TABLE IF NOT EXISTS \"ProductItem\" (\n" +
                     "\t\"ProductId\"\tINTEGER NOT NULL,\n" +
                     "\t\"Id\"\tNUMERIC NOT NULL,\n" +
@@ -164,6 +107,39 @@ public class SchemaInit {
                     "\t\"OnShelf\"\tTINYINT NOT NULL,\n" +
                     "\t\"DefectReporter\"\tTEXT,\n" +
                     "\tPRIMARY KEY(\"ProductId\",\"Id\")\n" +
+                    ");\n" +
+                    "CREATE TABLE IF NOT EXISTS \"ProductInReport\" (\n" +
+                    "\t\"reportId\"\tINTEGER NOT NULL,\n" +
+                    "\t\"productId\"\tINTEGER NOT NULL,\n" +
+                    "\tPRIMARY KEY(\"reportId\",\"productId\")\n" +
+                    ");\n" +
+                    "CREATE TABLE IF NOT EXISTS \"ProductItemInReport\" (\n" +
+                    "\t\"reportId\"\tINTEGER NOT NULL,\n" +
+                    "\t\"productId\"\tINTEGER NOT NULL,\n" +
+                    "\t\"productItemId\"\tINTEGER NOT NULL,\n" +
+                    "\tPRIMARY KEY(\"reportId\",\"productId\",\"productItemId\")\n" +
+                    ");\n" +
+                    "CREATE TABLE IF NOT EXISTS \"Product\" (\n" +
+                    "\t\"id\"\tINTEGER NOT NULL,\n" +
+                    "\t\"name\"\tTEXT NOT NULL,\n" +
+                    "\t\"customerPrice\"\tREAL NOT NULL,\n" +
+                    "\t\"minQty\"\tINTEGER NOT NULL,\n" +
+                    "\t\"storageQty\"\tINTEGER NOT NULL,\n" +
+                    "\t\"shelfQty\"\tINTEGER NOT NULL,\n" +
+                    "\t\"subSubcategory\"\tTEXT NOT NULL,\n" +
+                    "\t\"subcategory\"\tTEXT NOT NULL,\n" +
+                    "\t\"category\"\tTEXT NOT NULL,\n" +
+                    "\t\"item_ids\"\tINTEGER NOT NULL,\n" +
+                    "\tPRIMARY KEY(\"id\")\n" +
+                    ");\n" +
+                    "CREATE TABLE IF NOT EXISTS \"Report\" (\n" +
+                    "\t\"id\"\tINTEGER NOT NULL,\n" +
+                    "\t\"reportProducer\"\tTEXT NOT NULL,\n" +
+                    "\t\"name\"\tTEXT NOT NULL,\n" +
+                    "\t\"date\"\tDATETIME NOT NULL,\n" +
+                    "\t\"type\"\tINTEGER NOT NULL,\n" +
+                    "\t\"query\"\tTEXT NOT NULL,\n" +
+                    "\tPRIMARY KEY(\"id\")\n" +
                     ");\n" +
                     "COMMIT;\n";
 }

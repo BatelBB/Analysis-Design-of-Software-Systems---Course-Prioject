@@ -4,19 +4,6 @@ CREATE TABLE IF NOT EXISTS "SubSubCategory" (
 	"subcategory"	TEXT NOT NULL,
 	"category"	TEXT NOT NULL
 );
-CREATE TABLE IF NOT EXISTS "Product" (
-	"id"	INTEGER NOT NULL,
-	"name"	TEXT NOT NULL,
-	"customerPrice"	REAL NOT NULL,
-	"minQty"	INTEGER NOT NULL,
-	"storageQty"	INTEGER NOT NULL,
-	"shelfQty"	INTEGER NOT NULL,
-	"subSubcategory"	TEXT NOT NULL,
-	"subcategory"	TEXT NOT NULL,
-	"category"	TEXT NOT NULL,
-	"item_ids" INTEGER NOT NULL
-	PRIMARY KEY("id")
-);
 CREATE TABLE IF NOT EXISTS "Order" (
 	"id"	INTEGER NOT NULL,
 	"orderType"	INTEGER NOT NULL,
@@ -39,24 +26,6 @@ CREATE TABLE IF NOT EXISTS "QuantityDiscount" (
 	"discount"	REAL NOT NULL,
 	"itemSupplierPPN"	INTEGER NOT NULL,
 	"itemCatalogNumber"	INTEGER NOT NULL,
-	PRIMARY KEY("id")
-);
-CREATE TABLE IF NOT EXISTS "ProductReport" (
-	"id"	INTEGER NOT NULL,
-	"reportProducer"	TEXT NOT NULL,
-	"name"	TEXT NOT NULL,
-	"date"	DATETIME NOT NULL,
-	"type"	INTEGER NOT NULL,
-	"query"	TEXT NOT NULL,
-	PRIMARY KEY("id")
-);
-CREATE TABLE IF NOT EXISTS "ItemReport" (
-	"id"	INTEGER NOT NULL,
-	"reportProducer"	TEXT NOT NULL,
-	"name"	TEXT NOT NULL,
-	"date"	DATETIME NOT NULL,
-	"type"	INTEGER NOT NULL,
-	"query"	TEXT NOT NULL,
 	PRIMARY KEY("id")
 );
 CREATE TABLE IF NOT EXISTS "Subcategory" (
@@ -119,6 +88,29 @@ CREATE TABLE IF NOT EXISTS "ProductItemInReport" (
 	"productItemId"	INTEGER NOT NULL,
 	PRIMARY KEY("reportId","productId","productItemId")
 );
+CREATE TABLE IF NOT EXISTS "Product" (
+	"id"	INTEGER NOT NULL,
+	"name"	TEXT NOT NULL,
+	"customerPrice"	REAL NOT NULL,
+	"minQty"	INTEGER NOT NULL,
+	"storageQty"	INTEGER NOT NULL,
+	"shelfQty"	INTEGER NOT NULL,
+	"subSubcategory"	TEXT NOT NULL,
+	"subcategory"	TEXT NOT NULL,
+	"category"	TEXT NOT NULL,
+	"item_ids"	INTEGER NOT NULL,
+	PRIMARY KEY("id")
+);
+CREATE TABLE IF NOT EXISTS "Report" (
+	"id"	INTEGER NOT NULL,
+	"reportProducer"	TEXT NOT NULL,
+	"name"	TEXT NOT NULL,
+	"date"	DATETIME NOT NULL,
+	"type"	INTEGER NOT NULL,
+	"query"	TEXT NOT NULL,
+	PRIMARY KEY("id")
+);
+INSERT INTO "Subcategory" ("Category","Name") VALUES ('hardware','saw');
 INSERT INTO "Category" ("Name") VALUES ('Occult');
 INSERT INTO "Supplier" ("ppn","bankNumber","name","isDelivering","paymentCondition","regularSupplyingDay","contactEmail","contactName","contactPhone") VALUES (1,111,'Office Stuff',1,1,5,'ofir@office.stuff','Ofir Office','05'),
  (2,222,'Foods & Goods',0,0,-1,'frank@food.stuff','Frank Food','06');
