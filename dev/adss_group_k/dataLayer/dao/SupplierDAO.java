@@ -135,4 +135,7 @@ public class SupplierDAO extends BaseDAO<Integer, SupplierRecord> {
     public void updateName(int ppn, String newName) {
         runUpdate(ppn, "name", newName, Types.VARCHAR);
     }
+
+    public void updateBankAccount(int ppn, int bankAct) {
+    }
 }

@@ -54,7 +54,7 @@ public class PresentationController {
                                 output.println("What do you want to edit? ");
                                 int edit = input.nextInt(Menu.getSupplierEditSubmenu());
                                 try {
-                                    Supplier supplier = service.getSupplier(ppn);
+                                    Supplier supplier = service.getSupplier(ppn).data;
                                     switch (edit) {
                                         case (1): {
                                             //PPN NUMBER
@@ -233,7 +233,7 @@ public class PresentationController {
                                 checkId(id);
                                 LocalDate delivered = input.nextDate("When is the order ordered? ");
                                 try {
-                                    service.updateOrderOrdered(id, delivered);
+                                    service.setOrderOrdered(id, delivered);
                                 } catch (Exception e) {
                                     output.println(e.getMessage());
                                 }
@@ -245,7 +245,7 @@ public class PresentationController {
                                 checkId(id);
                                 LocalDate delivered = input.nextDate("When is the order supposed to be delivered? ");
                                 try {
-                                    service.updateOrderProvided(id, delivered);
+                                    service.setOrderProvided(id, delivered);
                                 } catch (Exception e) {
                                     output.println(e.getMessage());
                                 }

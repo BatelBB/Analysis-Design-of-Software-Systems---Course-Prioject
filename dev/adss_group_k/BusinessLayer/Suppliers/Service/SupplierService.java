@@ -132,8 +132,13 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
+    public QuantityDiscount getDiscount(int amount, int ppn, int catalog) throws BusinessLogicException {
+        return null;
+    }
+
+    @Override
     public Response orderItem(int orderId, int supplier, int catalogNumber, int amount) {
-        responseForVoid(() -> orders.orderItem(
+        return responseForVoid(() -> orders.orderItem(
                 orders.get(orderId),
                 items.get(supplier, catalogNumber),
                 amount
@@ -196,6 +201,16 @@ public class SupplierService implements ISupplierService {
     @Override
     public Response setItemName(int supplier, int catalogNumber, String name) {
         return responseForVoid(() -> items.setName(supplier, catalogNumber, name));
+    }
+
+    @Override
+    public Response setItemCategory(int supplier, int catalogNumber, String category) {
+        return responseForVoid(() -> items.setCategory(supplier, catalogNumber, category));
+    }
+
+    @Override
+    public Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
+        return null;
     }
 
     @Override
