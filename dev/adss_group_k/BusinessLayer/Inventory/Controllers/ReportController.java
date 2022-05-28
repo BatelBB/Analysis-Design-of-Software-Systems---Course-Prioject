@@ -148,7 +148,7 @@ public class ReportController {
     //Product report
     public Report createMissingReport(String name, String report_producer) throws Exception {
         List<Product> missingPro = product_controller.getMissingProducts();
-        int report_ids = pc.getProducts().getMaxId() + 1;
+        int report_ids = pc.getReports().getMaxId() + 1;
         ResponseT<ReportData> r = pc.getReports().create(
                 report_ids,
                 report_producer,
