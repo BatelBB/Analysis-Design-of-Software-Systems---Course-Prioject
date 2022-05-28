@@ -5,7 +5,6 @@ import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
 import adss_group_k.dataLayer.dao.PersistenceController;
 
 import java.time.LocalDate;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -19,9 +18,9 @@ public class ProductService {
     }
 
     //methods
-    public ResponseT<List<String>> getProductIdes() {
+    public ResponseT<List<String>> getProductNames() {
         try {
-            return ResponseT.success(product_controller.getProductIdes());
+            return ResponseT.success(product_controller.getProductNames());
         } catch (Exception e) {
             return ResponseT.error(e.getMessage());
         }

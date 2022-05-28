@@ -30,4 +30,7 @@ public class Report {
     }
 
 
+    public Integer getId() {
+        return id;
+    }
 }
