@@ -15,7 +15,7 @@ public class ProductService {
     private final ProductController product_controller;
 
     public ProductService(PersistenceController pc) {
-        product_controller = ProductController.getInstance(pc);
+        product_controller = new ProductController(pc);
     }
 
     //methods
@@ -92,7 +92,6 @@ public class ProductService {
 
     public ResponseT<ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
         try {
-
             return ResponseT.success(product_controller.addItem(product_id, store, location, supplier, expiration_date, on_shelf));
         } catch (Exception e) {
             return ResponseT.error(e.getMessage());

@@ -15,7 +15,7 @@ import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.shared.response.Response;
-import adss_group_k.shared.response.ResponseT;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -62,6 +62,11 @@ public class IntegrationTests {
         PersistenceController dal = new PersistenceController(conn);
         service = new SupplierService(dal);
         inventory = new Service(service, dal);
+
+    }
+
+    @AfterEach
+    void tearDown(){
 
     }
 
@@ -120,13 +125,61 @@ public class IntegrationTests {
 
 
     @Test
-    public void testCreateOrder() {
+    public void testAddItemToOrder() {
+        sup = service.createSupplier(1, 123, "Lorem", true, PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528", "B@Gmail.com").data;
+
+        order = service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX, OrderType.Periodical).data;
+        inventory.addCategory("Dairy");
+        inventory.addSubCategory("Dairy", "Shop");
+        inventory.addSubSubCategory("Dairy", "Shop", "10%");
+
+        Product prod = inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+                1200, "Dairy", "Shop", "10%").data;
+        Item item = service.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12).data;
+
+        String select_query = "SELECT * FROM Item WHERE supplierPPN=" + item.getSupplier().getPpn();
+        Statement st = null;
+        ResultSet res_AddItem;
+        double catalogNum = 0;
+        try {
+            st = conn.createStatement();
+            res_AddItem = st.executeQuery(select_query);
+            while (res_AddItem.next()) {
+                catalogNum = res_AddItem.getFloat(2);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(124, catalogNum);
 
     }
 
     @Test
     public void testAddProductWithoutExistingSupplier() {
-
+        inventory.addCategory(
+                "Dairy"
+        );
+        inventory.addSubCategory(
+                "Dairy",
+                "Shop"
+        );
+        inventory.addSubSubCategory(
+                "Dairy",
+                "Shop",
+                "10%"
+        );
+        Product prod = inventory.addProduct(
+                "Milk",
+                "Tnoova",
+                10.0,
+                20,
+                10,
+                1200,
+                "Dairy",
+                "Shop",
+                "10%"
+        ).data;
     }
 
     private void runQuery() {

@@ -15,19 +15,12 @@ import java.util.Map;
 
 public class CategoryController {
 
-    private final Map<String, Category> categories;
-    private static CategoryController category_controller;
-    private final PersistenceController pc;
+    private Map<String, Category> categories;
+    private PersistenceController pc;
 
-    //singleton instance
-    public static CategoryController getInstance(PersistenceController pc) {
-        if (category_controller == null)
-            category_controller = new CategoryController(pc);
-        return category_controller;
-    }
 
     //CONSTRUCTORS
-    private CategoryController(PersistenceController pc) {
+    public CategoryController(PersistenceController pc) {
         categories = new HashMap<>();
         this.pc = pc;
         pc.getCategories().all().forEach(this::addFromExisting);

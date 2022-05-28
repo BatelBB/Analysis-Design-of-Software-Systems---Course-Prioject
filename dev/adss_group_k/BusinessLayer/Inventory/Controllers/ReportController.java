@@ -19,22 +19,15 @@ import java.util.stream.Collectors;
 
 public class ReportController {
 
-    private final Map<Integer, Report> reports;
-    private final ProductController product_controller;
-    private static ReportController reportController;
-    private final PersistenceController pc;
+    private Map<Integer, Report> reports;
+    private ProductController product_controller;
+    private PersistenceController pc;
 
-    //CONSTRUCTORS
-    public static ReportController getInstance(PersistenceController pc) {
-        if (reportController == null)
-            reportController = new ReportController(pc);
-        return reportController;
-    }
 
-    private ReportController(PersistenceController pc) {
-        product_controller = ProductController.getInstance(pc);
+    public ReportController(PersistenceController pc) {
         reports = new HashMap<>();
         this.pc = pc;
+        product_controller = new ProductController(pc);
         pc.getReports().all().forEach(this::addFromExisting);
     }
 

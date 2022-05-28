@@ -11,7 +11,7 @@ public class ReportService {
     private final ReportController report_controller;
 
     public ReportService(PersistenceController pc) {
-        report_controller = ReportController.getInstance(pc);
+        report_controller = new ReportController(pc);
     }
 
     public ResponseT<List<Integer>> getReportListNames() {

@@ -11,23 +11,16 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class ProductController {
-    private final Map<Integer, Product> products;
-    private final CategoryController category_controller;
-    private static ProductController product_controller;
-    private final PersistenceController pc;
+    private Map<Integer, Product> products;
+    private CategoryController category_controller;
+    private PersistenceController pc;
 
-
-    //singleton instance
-    public static ProductController getInstance(PersistenceController dal) {
-        if (product_controller == null) product_controller = new ProductController(dal);
-        return product_controller;
-    }
 
     //constructors
-    private ProductController(PersistenceController pc) {
+    public ProductController(PersistenceController pc) {
         products = new HashMap<>();
-        category_controller = CategoryController.getInstance(pc);
         this.pc = pc;
+        category_controller = new CategoryController(pc);
         pc.getProducts().all().forEach(this::addFromExisting);
     }
 

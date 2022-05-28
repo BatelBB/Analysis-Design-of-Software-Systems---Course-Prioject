@@ -13,7 +13,7 @@ public class CategoryService {
     private final CategoryController category_controller;
 
     public CategoryService(PersistenceController pc) {
-        category_controller = CategoryController.getInstance(pc);
+        category_controller = new CategoryController(pc);
     }
 
     public ResponseT<List<String>> getCategoriesNames() {
