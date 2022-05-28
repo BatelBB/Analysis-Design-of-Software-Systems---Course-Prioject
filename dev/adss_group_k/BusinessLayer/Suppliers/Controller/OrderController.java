@@ -62,11 +62,12 @@ public class OrderController {
         orders.removeIf(order -> order.supplier == s);
     }
 
-    public void delete(Order order) throws BusinessLogicException {
-        if(!orders.contains(order)) {
-            throw new BusinessLogicException("Tried to delete order, but it doesn't " +
-                    "seem to exist (maybe it was already deleted?)");
-        }
+    public void delete(int orderId) throws BusinessLogicException {
+        Order order = orders.stream()
+                .filter(x -> x.getId() == orderId)
+                .findFirst()
+                .orElseThrow(() -> new BusinessLogicException("Tried to delete order, but it doesn't " +
+                "seem to exist (maybe it was already deleted?)"));
         orders.remove(order);
     }
 

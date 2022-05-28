@@ -47,37 +47,35 @@ public class SupplierService implements ISupplierService {
                                               boolean isDelivering, PaymentCondition paymentCondition,
                                               DayOfWeek regularSupplyingDays, String contactName,
                                               String contactPhone, String contactEmail) {
-        try {
+        return responseFor(() ->  {
             Supplier supplier = suppliers.create(new CreateSupplierDTO(
                     ppn, bankAccount, name, isDelivering,
                     paymentCondition, regularSupplyingDays, contactEmail,
                     contactName, contactPhone
             ));
             return ResponseT.success(supplier);
-        } catch (BusinessLogicException e) {
-            return ResponseT.error(e.getMessage());
-        }
+        });
     }
 
     @Override
     public Collection<Supplier> getSuppliers() {
-        return null;
+        return suppliers.all();
     }
 
     @Override
-    public Supplier getSupplier(int ppn) throws BusinessLogicException {
-        return null;
+    public ResponseT<Supplier> getSupplier(int ppn) throws BusinessLogicException {
+        return responseFor(() -> suppliers.get(ppn));
     }
 
     @Override
     public Response deleteSupplier(int ppn) {
-        return null;
+        return responseFor(() -> suppliers.delete(ppn));
     }
 
     public ResponseT<Item> createItem(int supplierPPN, int catalogNumber, int productID, float price) {
         try {
             Item item = items.create(
-                    getSupplier(supplierPPN),
+                    getSupplier(supplierPPN).getOrThrow(BusinessLogicException::new),
                     catalogNumber,
                     productID,
                     price
@@ -89,138 +87,136 @@ public class SupplierService implements ISupplierService {
 
     @Override
     public Collection<Item> getItems() {
-        return null;
+        return items.all();
     }
 
     @Override
     public ResponseT<Item> getItem(int ppn, int catalog) {
-        return null;
+        return responseFor(() -> items.get(ppn, catalog));
     }
 
     @Override
     public Response deleteItem(int ppn, int catalogN) {
-        return null;
+        return responseFor(() -> items.get(ppn, catalogN));
     }
 
     @Override
     public ResponseT<QuantityDiscount> createDiscount(int supplierPPN, int catalogN, int amount, float discount) {
-        return null;
+        return responseFor(() -> {
+            Item item = items.get(supplierPPN, catalogN);
+            return discounts.createDiscount(item, amount, discount);
+        });
     }
 
     @Override
     public Response deleteDiscount(QuantityDiscount discount) {
-        return null;
+        return responseForVoid(() -> discounts.delete(discount.id));
     }
 
     @Override
     public ResponseT<Order> createOrder(int supplierPPN, LocalDate ordered, LocalDate delivered, OrderType type) {
-        return null;
+        return responseFor(() ->  {
+            Supplier supplier = getSupplier(supplierPPN).getOrThrow(BusinessLogicException::new);
+            return orders.create(supplier, type, ordered, delivered); }
+        );
     }
 
     @Override
     public Collection<Order> getOrders() {
-        return null;
+        return orders.all();
     }
 
     @Override
     public Response deleteOrder(int orderId) {
-        return null;
+        return responseForVoid(() -> orders.delete(orderId));
     }
 
     @Override
-    public Response seedExample() {
-        return null;
+    public Response orderItem(int orderId, int supplier, int catalogNumber, int amount) {
+        responseForVoid(() -> orders.orderItem(
+                orders.get(orderId),
+                items.get(supplier, catalogNumber),
+                amount
+        ));
     }
 
     @Override
-    public QuantityDiscount getDiscount(int amount, int ppn, int catalog) throws BusinessLogicException {
-        return null;
-    }
-
-    @Override
-    public void orderItem(int orderId, int supplier, int catalogNumber, int amount) {
-
-    }
-
-    @Override
-    public void setPrice(int supplier, int catalogNumber, float price) {
-        items.setPrice(supplier, catalogNumber, price);
+    public Response setPrice(int supplier, int catalogNumber, float price) {
+        return responseForVoid(() -> items.setPrice(supplier, catalogNumber, price));
     }
 
     @Override
     public Collection<QuantityDiscount> getDiscounts() {
-        return null;
+        return discounts.getAllDiscounts();
     }
 
     @Override
-    public void setOrdered(int orderID, LocalDate ordered) throws BusinessLogicException {
-
+    public Response setOrderOrdered(int orderID, LocalDate ordered) throws BusinessLogicException {
+        return responseForVoid(() -> orders.setOrdered(orders.get(orderID), ordered));
     }
 
     @Override
-    public void setProvided(int orderID, LocalDate provided) throws BusinessLogicException {
-
+    public Response setOrderProvided(int orderID, LocalDate provided) throws BusinessLogicException {
+        return responseForVoid(() -> orders.setProvided(orders.get(orderID), provided));
     }
 
     @Override
-    public void setSupplierBankAccount(int supplierPPN, int bankAct) {
-
+    public Response setSupplierBankAccount(int supplierPPN, int bankAct) {
+        return responseForVoid(() -> suppliers.setBankAccount(supplierPPN, bankAct));
     }
 
     @Override
-    public void setSupplierCompanyName(int supplierPPN, String newName) {
-
+    public Response setSupplierCompanyName(int supplierPPN, String newName) {
+        return responseForVoid(() -> suppliers.setSupplierName(supplierPPN, newName));
     }
 
     @Override
-    public void setSupplierIsDelivering(int supplierPPN, boolean newValue) {
-
+    public Response setSupplierIsDelivering(int supplierPPN, boolean newValue) {
+        return responseForVoid(() -> suppliers.setIsDelivering(supplierPPN, newValue));
     }
 
     @Override
-    public void setSupplierPaymentCondition(int supplierPPN, PaymentCondition payment) {
+    public Response setSupplierPaymentCondition(int supplierPPN, PaymentCondition payment) {
 
+        return responseForVoid(() -> suppliers.setPaymentCondition(supplierPPN, payment));
     }
 
     @Override
-    public void setSupplierRegularSupplyingDays(int supplierPPN, DayOfWeek dayOfWeek) {
-
+    public Response setSupplierRegularSupplyingDays(int supplierPPN, DayOfWeek dayOfWeek)
+    {
+        return responseForVoid(() -> suppliers.setRegularSupplyingDays(supplierPPN, dayOfWeek));
     }
 
     @Override
-    public void setSupplierContact(int supplierPPN, String name, String phoneNumber, String email) {
+    public Response setSupplierContact(int supplierPPN, String name, String phoneNumber, String email) {
 
+        return responseForVoid(() -> suppliers.setContact(supplierPPN, name, phoneNumber, email));
     }
 
     @Override
-    public void setItemName(int supplier, int catalogNumber, String name) {
-
-    }
-
-    @Override
-    public void setItemCategory(int supplier, int catalogNumber, String category) {
-
-    }
-
-    @Override
-    public void updateOrderOrdered(int orderID, LocalDate ordered) throws BusinessLogicException {
-
-    }
-
-    @Override
-    public void updateOrderProvided(int orderID, LocalDate delivered) throws BusinessLogicException {
-
-    }
-
-    @Override
-    public Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
-        return null;
+    public Response setItemName(int supplier, int catalogNumber, String name) {
+        return responseForVoid(() -> items.setName(supplier, catalogNumber, name));
     }
 
     @Override
     public Supplier findCheapestSupplierFor(int productID, int amount) {
-        return null;
+        return discounts.findCheapestSupplierFor(productID, amount);
     }
 
-    private ResponseT 
+    private <T> ResponseT responseFor(java.util.function.Supplier<T> operation) {
+        try {
+            return ResponseT.success(operation.get());
+        } catch (Throwable e) {
+            return ResponseT.error(e.getMessage());
+        }
+    }
+
+    private Response responseForVoid(Runnable runnable) {
+        try {
+            runnable.run();
+            return new Response(true, null);
+        } catch (Throwable e) {
+            return new Response(false, e.getMessage());
+        }
+    }
 }

@@ -8,6 +8,8 @@ import adss_group_k.dataLayer.records.SupplierRecord;
 import adss_group_k.dataLayer.records.readonly.SupplierData;
 import adss_group_k.shared.dto.CreateSupplierDTO;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,5 +71,21 @@ public class SupplierController {
 
     private void addFromExisting(SupplierRecord supplierRecord) {
         suppliers.put(supplierRecord.getPpn(), new Supplier(supplierRecord, dal.getSuppliers()));
+    }
+
+    public Collection<Supplier> all() {
+        return suppliers.values();
+    }
+
+    public void setBankAccount(int supplierPPN, int bankAct) {
+        suppliers.get(supplierPPN).setBankAccount(bankAct);
+    }
+
+    public void setIsDelivering(int supplierPPN, boolean newValue) {
+        suppliers.get(supplierPPN).setIsDelivering(newValue);
+    }
+
+    public void setSupplierName(int supplierPPN, String newName) {
+        suppliers.get(supplierPPN).setName(newName);
     }
 }

@@ -61,4 +61,15 @@ public class Supplier {
         );
     }
 
+    public void setIsDelivering(boolean newValue) {
+        dao.updateIsDelivering(getPpn(), newValue);
+    }
+
+    public void setBankAccount(int bankAct) {
+        dao.updateBankAccount(getPpn(), bankAct);
+    }
+
+    public void setName(String newName) {
+        dao.updateName(getPpn(), newName);
+    }
 }

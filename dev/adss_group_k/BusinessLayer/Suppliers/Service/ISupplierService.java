@@ -26,7 +26,7 @@ public interface ISupplierService {
 
     Collection<Supplier> getSuppliers();
 
-    Supplier getSupplier(int ppn) throws BusinessLogicException;
+    ResponseT<Supplier> getSupplier(int ppn) throws BusinessLogicException;
 
     Response deleteSupplier(int ppn);
 
@@ -50,39 +50,34 @@ public interface ISupplierService {
 
     Response deleteOrder(int orderId);
 
-    Response seedExample();
-
     QuantityDiscount getDiscount(int amount, int ppn, int catalog) throws BusinessLogicException;
 
-    void orderItem(int orderId, int supplier, int catalogNumber, int amount);
+    Response orderItem(int orderId, int supplier, int catalogNumber, int amount);
 
-    void setPrice(int supplier, int catalogNumber, float price);
+    Response setPrice(int supplier, int catalogNumber, float price);
 
     Collection<QuantityDiscount> getDiscounts();
 
-    void setOrdered(int orderID, LocalDate ordered) throws BusinessLogicException;
+    Response setOrderOrdered(int orderID, LocalDate ordered) throws BusinessLogicException;
 
-    void setProvided(int orderID, LocalDate provided) throws BusinessLogicException;
+    Response setOrderProvided(int orderID, LocalDate provided) throws BusinessLogicException;
 
-    void setSupplierBankAccount(int supplierPPN, int bankAct);
+    Response setSupplierBankAccount(int supplierPPN, int bankAct);
 
-    void setSupplierCompanyName(int supplierPPN, String newName);
+    Response setSupplierCompanyName(int supplierPPN, String newName);
 
-    void setSupplierIsDelivering(int supplierPPN, boolean newValue);
+    Response setSupplierIsDelivering(int supplierPPN, boolean newValue);
 
-    void setSupplierPaymentCondition(int supplierPPN, PaymentCondition payment);
+    Response setSupplierPaymentCondition(int supplierPPN, PaymentCondition payment);
 
-    void setSupplierRegularSupplyingDays(int supplierPPN, DayOfWeek dayOfWeek);
+    Response setSupplierRegularSupplyingDays(int supplierPPN, DayOfWeek dayOfWeek);
 
-    void setSupplierContact(int supplierPPN, String name, String phoneNumber, String email);
+    Response setSupplierContact(int supplierPPN, String name, String phoneNumber, String email);
 
-    void setItemName(int supplier, int catalogNumber, String name);
+    Response setItemName(int supplier, int catalogNumber, String name);
 
-    void setItemCategory(int supplier, int catalogNumber, String category);
+    Response setItemCategory(int supplier, int catalogNumber, String category);
 
-    void updateOrderOrdered(int orderID, LocalDate ordered) throws BusinessLogicException;
-
-    void updateOrderProvided(int orderID, LocalDate delivered) throws BusinessLogicException;
 
     Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount);
 

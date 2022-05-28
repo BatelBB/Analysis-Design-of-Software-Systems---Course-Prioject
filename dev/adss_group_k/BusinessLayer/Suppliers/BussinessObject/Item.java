@@ -42,4 +42,8 @@ public class Item {
                 "Catalog number", data.getCatalogNumber()
         );
     }
+
+    public int getProductId() {
+        return data.getProductId();
+    }
 }

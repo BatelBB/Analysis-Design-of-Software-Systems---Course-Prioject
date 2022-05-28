@@ -3,6 +3,7 @@ package adss_group_k.BusinessLayer.Suppliers.Controller;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.ItemRecord;
 import adss_group_k.dataLayer.records.QuantityDiscountRecord;
@@ -92,5 +93,12 @@ public class QuantityDiscountController {
         QuantityDiscount created = new QuantityDiscount(dbCreated.id, item, amount, discount);
         discounts.add(created.id, created);
         return created;
+    }
+
+    public Supplier findCheapestSupplierFor(int productID, int amount) {
+        return map.entrySet().stream()
+                .filter(e -> e.getKey().getProductId() == productID)
+                .min(Comparator.comparing(e -> priceForAmount(e.getKey(), amount)))
+                .map(x -> x.getKey().getSupplier()).orElseThrow(NoSuchElementException::new);
     }
 }

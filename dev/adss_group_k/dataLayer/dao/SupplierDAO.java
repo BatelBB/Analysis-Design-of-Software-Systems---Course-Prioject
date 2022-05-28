@@ -131,4 +131,8 @@ public class SupplierDAO extends BaseDAO<Integer, SupplierRecord> {
     private static DayOfWeek valueOf(int asInt) {
         return asInt < 0 ? null : DayOfWeek.of(asInt);
     }
+
+    public void updateName(int ppn, String newName) {
+        runUpdate(ppn, "name", newName, Types.VARCHAR);
+    }
 }

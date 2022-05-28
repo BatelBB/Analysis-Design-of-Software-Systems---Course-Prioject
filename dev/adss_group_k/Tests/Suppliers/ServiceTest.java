@@ -397,19 +397,19 @@ class ServiceTest {
         Order order = service.createOrder(ppn, MON, WED, OrderType.Periodical).data;
         assertEquals(MON, order.getOrdered());
 
-        service.setOrdered(order.getId(), SUN);
+        service.setOrderOrdered(order.getId(), SUN);
         assertEquals(SUN, order.getOrdered());
 
-        assertDoesNotThrow(() -> service.setOrdered(order.getId(), WED), "should support same-day delivery");
+        assertDoesNotThrow(() -> service.setOrderOrdered(order.getId(), WED), "should support same-day delivery");
         assertEquals(WED, order.getOrdered());
 
-        service.setOrdered(order.getId(), TUE);
+        service.setOrderOrdered(order.getId(), TUE);
         assertEquals(TUE, order.getOrdered());
 
-        assertThrows(BusinessLogicException.class, () -> service.setOrdered(order.getId(), THU));
+        assertThrows(BusinessLogicException.class, () -> service.setOrderOrdered(order.getId(), THU));
         assertEquals(TUE, order.getOrdered());
 
-        assertThrows(BusinessLogicException.class, () -> service.setOrdered(order.getId(), FRI));
+        assertThrows(BusinessLogicException.class, () -> service.setOrderOrdered(order.getId(), FRI));
         assertEquals(TUE, order.getOrdered());
     }
 
@@ -437,19 +437,19 @@ class ServiceTest {
         Order order = service.createOrder(ppn, TUE, FRI, OrderType.Periodical).data;
         assertEquals(FRI, order.getProvided());
 
-        service.setProvided(order.getId(), THU);
+        service.setOrderProvided(order.getId(), THU);
         assertEquals(THU, order.getProvided());
 
-        assertDoesNotThrow(() -> service.setProvided(order.getId(), TUE), "should support same-day delivery");
+        assertDoesNotThrow(() -> service.setOrderProvided(order.getId(), TUE), "should support same-day delivery");
         assertEquals(TUE, order.getProvided());
 
-        service.setProvided(order.getId(), WED);
+        service.setOrderProvided(order.getId(), WED);
         assertEquals(WED, order.getProvided());
 
-        assertThrows(BusinessLogicException.class, () -> service.setProvided(order.getId(), SUN));
+        assertThrows(BusinessLogicException.class, () -> service.setOrderProvided(order.getId(), SUN));
         assertEquals(WED, order.getProvided());
 
-        assertThrows(BusinessLogicException.class, () -> service.setProvided(order.getId(), MON));
+        assertThrows(BusinessLogicException.class, () -> service.setOrderProvided(order.getId(), MON));
         assertEquals(WED, order.getProvided());
     }
 

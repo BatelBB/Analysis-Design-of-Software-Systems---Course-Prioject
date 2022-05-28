@@ -8,10 +8,7 @@ import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.ItemRecord;
 import adss_group_k.dataLayer.records.readonly.ItemData;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ItemController {
     Map<String, Item> items;
