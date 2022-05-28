@@ -59,7 +59,7 @@ public class App {
             in = UserInput.getInstance().nextInt("Which module do you need?\n" +
                     "1. Supplier module\n" +
                     "2. Inventory module\n" +
-                    "3. Exit");
+                    "3. Exit\n");
             switch (in) {
                 case (1): {
                     supplierPresentation.startSupplierMenu();

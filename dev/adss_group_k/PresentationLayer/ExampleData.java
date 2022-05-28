@@ -46,8 +46,28 @@ public class ExampleData {
                 "writing",
                 "pens"
         ).data;
-        Product milk5 = null; // same
-        Product milk10 = null; // same
+        Product milk5 = inventory.addProduct(
+                "Mister milk",
+                "Mister Milker",
+                30,
+                40,
+                3,
+                5,
+                "food",
+                "dairy",
+                "5%"
+        ).data; // same
+        Product milk10 = inventory.addProduct(
+                "Miss milk",
+                "Miss Milker",
+                30,
+                40,
+                3,
+                5,
+                "food",
+                "dairy",
+                "10%"
+        ).data; // same
 
         // Office items
         Item penItem = suppliers.createItem(
@@ -83,7 +103,7 @@ public class ExampleData {
                 5.5f
         ).data;
 
-        int[] discountAmounts = { 10, 50, 100, 200 };
+        int[] discountAmounts = {10, 50, 100, 200};
         float[] discountPercents = {0.01f, 0.05f, 0.1f, 0.25f};
 
         for (int i = 0; i < discountAmounts.length; i++) {
@@ -100,7 +120,8 @@ public class ExampleData {
         int order2 = suppliers.createOrder(ppn_foods, date_jan_1, date_jan_2, OrderType.Shortages).data.getId();
 
         // order things
-
+        suppliers.orderItem(order1, ppn_office, penItem.getCatalogNumber(), 10);
+        suppliers.orderItem(order2, ppn_foods, milk5FromFoodsAreUs.getCatalogNumber(), 5);
         // fill other tables
     }
 }
