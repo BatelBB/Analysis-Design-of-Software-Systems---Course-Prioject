@@ -52,7 +52,7 @@ public class ProductItemInReportDAO extends BaseDAO<Integer, ProductItemInReport
                 "INSERT INTO " + TABLE_NAME + " (" +
                         REPORT_ID + "," +
                         PRODUCT_ID + "," +
-                        PRODUCT_ITEM_ID + "," +
+                        PRODUCT_ITEM_ID +
                         ") VALUES(?, ?, ?)",
                 ps -> ps.setInt(1, report_id),
                 ps -> ps.setInt(2, product_id),
