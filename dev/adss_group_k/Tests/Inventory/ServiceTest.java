@@ -85,23 +85,33 @@ class ServiceTest {
     void addProduct() {
         try {
             assertTrue(service.getProductNames().data.isEmpty());
-            service.addProduct("Milk", "Tnova", 4, 5.9f, 350, 6, "Dairy Products","Milks","Cow Milk");
+            initCategories();
+            service.addProduct("Milk", "Tnova", 4, 5.9f, 350, 6,
+                    "Dairy Products","Milks","Cow Milk");
             assertTrue(service.getProductNames().data.contains("Milk"));
-            service.addProduct("", "Tnova", 4, 5.9f, 350, 6, "Dairy Products","Milks","Cow Milk");
+            service.addProduct("", "Tnova", 4, 5.9f, 350, 6,
+                    "Dairy Products","Milks","Cow Milk");
         } catch (Exception e) {
             assertEquals(e.getMessage(), "product name empty");
             restartService();
         }
     }
 
+    private void initCategories() {
+        service.addCategory("Dairy Products");
+        service.addSubCategory("Dairy Products", "Milks");
+        service.addSubSubCategory("Dairy Products", "Milks", "Cow Milk");
+    }
+
     @Test
     void removeProduct() {
         try {
+            initCategories();
             String productName = service.addProduct("Milk", "Tnova", 4, 5.9f,
                     350, 6, "Dairy Products","Milks","Cow Milk")
                     .data.getName();
             assertTrue(service.getProductNames().data.contains("Milk"));
-            service.removeProduct(0);
+            service.removeProduct(1);
             assertFalse(service.getProductNames().data.contains("Milk"));
             service.removeProduct(0);
         } catch (Exception e) {
@@ -138,7 +148,7 @@ class ServiceTest {
         try {
             service.createMissingReport("MissingReport", "Michel");
             
-            assertTrue(service.getReportListIds().data.contains(0));
+            assertTrue(service.getReportListIds().data.contains(1));
             service.createMissingReport("MissingReport", "Michel");
             service.removeReport(1);
             service.createMissingReport("MissingReport", "Michel");
@@ -168,7 +178,7 @@ class ServiceTest {
         try {
             service.createBySupplierReport("BySupplierReport", "Michel", 0);
             
-            assertTrue(service.getReportListIds().data.contains(0));
+            assertTrue(service.getReportListIds().data.contains(1));
             service.createBySupplierReport("MissingReport", "Michel", 0);
             service.removeReport(1);
             service.createBySupplierReport("ExpiredReport", "Michel", 0);
