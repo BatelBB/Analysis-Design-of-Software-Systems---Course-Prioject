@@ -64,7 +64,6 @@ public class SchemaInit {
                     "\t\"qty\"\tINTEGER NOT NULL,\n" +
                     "\t\"itemSupplierPPN\"\tINTEGER NOT NULL,\n" +
                     "\t\"itemCatalogNumber\"\tINTEGER NOT NULL,\n" +
-                    "\t\"itemCatalogNumber\"\tINTEGER NOT NULL,\n" +
                     "\t\"orderId\"\tINTEGER NOT NULL,\n" +
                     "\tPRIMARY KEY(\"itemSupplierPPN\",\"itemCatalogNumber\",\"orderId\")\n" +
                     ");\n" +
