@@ -130,17 +130,15 @@ public class IntegrationTests {
         inventory.removeReport(expiredReport.getId());
         inventory.removeReport(surplusesReport.getId());
         inventory.removeCategory("Dairy");
-        inventory.removeItem(prod.getProduct_id(),pItem.getId());
+        inventory.removeItem(prod.getProduct_id(), pItem.getId());
         inventory.removeProduct(prod.getProduct_id());
         inventory.removeSubCategory("Dairy", "Shop");
-        inventory.removeSubSubCategory("Dairy", "Shop","10%");
+        inventory.removeSubSubCategory("Dairy", "Shop", "10%");
 
         runQuery();
-        assertEquals(0,reportSize);
-        assertEquals(0,categorySize);
-        assertEquals(0,itemSize);
-
-
+        assertEquals(0, reportSize);
+        assertEquals(0, categorySize);
+        assertEquals(0, itemSize);
 
 
     }
@@ -179,7 +177,7 @@ public class IntegrationTests {
 
     }
 
-    private void runQuery(){
+    private void runQuery() {
 
         String categoryQuery = "SELECT count(*) FROM Category", discountPairQuery = "SELECT count(*) FROM DiscountPair",
                 itemQuery = "SELECT count(*) FROM Item", itemInOrderQuery = "SELECT count(*) FROM ItemInOrder",
