@@ -4,12 +4,14 @@ import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
+import adss_group_k.SchemaInit;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,6 +33,7 @@ class ServiceTest {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection("jdbc:sqlite::memory:");
+            SchemaInit.init(conn);
         } catch (SQLException throwables) {
             throw new RuntimeException(throwables);
         }
@@ -74,7 +77,7 @@ class ServiceTest {
         CategoryList.clear();
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void addCategory() {
         try {
             assertTrue(CategoryList.isEmpty());
@@ -87,7 +90,7 @@ class ServiceTest {
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void removeCategory() {
         try {
             service.addCategory("Dairy Products");
@@ -102,7 +105,7 @@ class ServiceTest {
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getCategory() {
         try {
             service.addCategory("Dairy Products");
@@ -129,7 +132,7 @@ class ServiceTest {
     }
 
 
-    @org.junit.jupiter.api.Test
+    @Test
     void addProduct() {
         try {
             assertTrue(ProductListNames.isEmpty());
@@ -144,7 +147,7 @@ class ServiceTest {
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void removeProduct() {
         try {
             service.addProduct("Milk", "Tnova", 4, 5.9f, 350, 6, "Dairy Products","Milks","Cow Milk");
@@ -171,7 +174,7 @@ class ServiceTest {
         ReportList.clear();
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void removeReport() {
         try {
             service.createMissingReport("MissingReport", "Michel");
@@ -186,7 +189,7 @@ class ServiceTest {
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getReport() {
         try {
             service.createMissingReport("MissingReport", "Michel");
@@ -202,7 +205,7 @@ class ServiceTest {
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void createMissingReport() {
         try {
             service.createMissingReport("MissingReport", "Michel");
@@ -218,7 +221,7 @@ class ServiceTest {
         //TODO: make new test
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void createExpiredReport() {
         try {
             service.createExpiredReport("ExpiredReport", "Michel");
@@ -234,7 +237,7 @@ class ServiceTest {
         //TODO: make new test
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void createBySupplierReport() {
         try {
             service.createBySupplierReport("BySupplierReport", "Michel", 0);
