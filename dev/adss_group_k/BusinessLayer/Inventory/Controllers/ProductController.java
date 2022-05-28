@@ -1,9 +1,9 @@
 package adss_group_k.BusinessLayer.Inventory.Controllers;
 
-import adss_group_k.BusinessLayer.Inventory.DiscountPair;
 import adss_group_k.BusinessLayer.Inventory.Product;
 import adss_group_k.BusinessLayer.Inventory.ProductItem;
 import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.ProductRecord;
 import adss_group_k.dataLayer.records.readonly.ProductData;
 import adss_group_k.shared.response.ResponseT;
 
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class ProductController {
-    private Map<Integer, Product> products;
+    private final Map<Integer, Product> products;
     private final CategoryController category_controller;
     private static ProductController product_controller;
     private final PersistenceController pc;
@@ -28,6 +28,7 @@ public class ProductController {
         products = new HashMap<>();
         category_controller = CategoryController.getInstance(pc);
         this.pc = pc;
+        pc.getProducts().all().forEach(this::addFromExisting);
     }
 
     public void updateCategoryCusDiscount(float discount, LocalDate start_date, LocalDate end_date, String category, String sub_category, String subsub_category) throws Exception {
@@ -169,6 +170,10 @@ public class ProductController {
         products.get(product_id).changeItemOnShelf(item_id, on_shelf);
     }
 
+    public Product getProduct(int id) {
+        return products.get(id);
+    }
+
     //FOR REPORTS
     public List<Product> getMissingProducts() {
         List<Product> missing_products = new ArrayList<>();
@@ -272,6 +277,10 @@ public class ProductController {
 
     private void priceLegal(double price) throws Exception {
         if (price < 0) throw new Exception("price illegal");
+    }
+
+    private void addFromExisting(ProductRecord product) {
+        products.put(product.getId(), new Product(product, pc));
     }
 
     public List<String> getProductIdes() {

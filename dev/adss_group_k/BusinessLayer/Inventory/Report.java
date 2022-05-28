@@ -1,11 +1,10 @@
 package adss_group_k.BusinessLayer.Inventory;
 
-import adss_group_k.dataLayer.records.ReportRecord;
+import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.readonly.ReportData;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Report {
@@ -20,25 +19,15 @@ public class Report {
         Surpluses,
     }
 
-    private Integer id;
-    private String name;
-    private LocalDate date;
-    private String report_producer;
-    private report_type reportType;
-    private List<Product> productList;
-    private List<ProductItem> productItemList;
+    private final Integer id;
+    private final String name;
+    private final LocalDate date;
+    private final String report_producer;
+    private final report_type reportType;
+    private final List<Product> productList;
+    private final List<ProductItem> productItemList;
 
-    public Report(String name, Integer id, report_type reportType, String report_producer, List<Product> productList, List<ProductItem> productItemList) {
-        this.name = name;
-        this.id = id;
-        date = LocalDate.now();
-        this.reportType = reportType;
-        this.report_producer = report_producer;
-        this.productList = productList;
-        this.productItemList = productItemList;
-    }
-
-    public Report(ReportData report) {
+    public Report(ReportData report, PersistenceController pc) {
         this.name = report.getName();
         this.id = report.getId();
         this.date = report.getDate().toLocalDate();

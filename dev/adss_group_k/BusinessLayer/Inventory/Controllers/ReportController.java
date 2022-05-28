@@ -4,6 +4,9 @@ import adss_group_k.BusinessLayer.Inventory.Product;
 import adss_group_k.BusinessLayer.Inventory.ProductItem;
 import adss_group_k.BusinessLayer.Inventory.Report;
 import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.ProductInReportRecord;
+import adss_group_k.dataLayer.records.ProductItemInReportRecord;
+import adss_group_k.dataLayer.records.ReportRecord;
 import adss_group_k.dataLayer.records.readonly.ProductInReportData;
 import adss_group_k.dataLayer.records.readonly.ProductItemInReportData;
 import adss_group_k.dataLayer.records.readonly.ReportData;
@@ -12,6 +15,7 @@ import adss_group_k.shared.response.ResponseT;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ReportController {
 
@@ -33,6 +37,7 @@ public class ReportController {
         product_controller = ProductController.getInstance(pc);
         reports = new HashMap<>();
         this.pc = pc;
+        pc.getReports().all().forEach(this::addFromExisting);
     }
 
     //METHODS
@@ -44,12 +49,22 @@ public class ReportController {
 
     }
 
-    public void removeReport(int id) {
+    public void removeReport(int id) throws Exception {
         if (!reports.containsKey(id))
-            throw new IllegalArgumentException("Report id doesn't exists");
-        else {
-            reports.remove(id);
-        }
+            throw new IllegalArgumentException("Report id doesn't exist");
+        int r;
+        if (reports.get(id).getReportType().equals(Report.report_type.byCategory) ||
+                reports.get(id).getReportType().equals(Report.report_type.Missing) ||
+                reports.get(id).getReportType().equals(Report.report_type.Surpluses))
+            r = pc.getProductsInReports().runDeleteQuery(id);
+        else
+            r = pc.getProductItemsInReports().runDeleteQuery(id);
+        if (r == -1)
+            throw new Exception("Error deleting Report records from DB");
+        r = pc.getReports().runDeleteQuery(id);
+        if (r == -1)
+            throw new Exception("Error deleting Report from DB");
+        reports.remove(id);
     }
 
     public Report getReportForProduct(int id) {
@@ -157,7 +172,7 @@ public class ReportController {
     private Report getReportForProduct(List<Product> product_list, ResponseT<ReportData> r) throws Exception {
         if (!r.success)
             throw new Exception(r.error);
-        Report report = new Report(r.data);
+        Report report = new Report(r.data, pc);
         for (Product p : product_list) {
             ResponseT<ProductInReportData> pir = pc.getProductsInReports().create(report_ids, p.getProduct_id());
             if (!pir.success)
@@ -172,7 +187,7 @@ public class ReportController {
     private Report getReportForProductItem(List<ProductItem> expiredPro, ResponseT<ReportData> r) throws Exception {
         if (!r.success)
             throw new Exception(r.error);
-        Report report = new Report(r.data);
+        Report report = new Report(r.data, pc);
         for (ProductItem pi : expiredPro) {
             ResponseT<ProductItemInReportData> pir = pc.getProductItemsInReports().create(report_ids, pi.getProduct_id(), pi.getId());
             if (!pir.success)
@@ -182,6 +197,19 @@ public class ReportController {
         reports.put(report_ids, report);
         report_ids++;
         return report;
+    }
+
+    private void addFromExisting(ReportRecord report) {
+        Report r = new Report(report, pc);
+        if (Report.report_type.values()[report.getType()].equals(Report.report_type.byCategory) ||
+                Report.report_type.values()[report.getType()].equals(Report.report_type.Missing) ||
+                Report.report_type.values()[report.getType()].equals(Report.report_type.Surpluses))
+            for (ProductInReportRecord p : pc.getProductsInReports().all().filter(p -> p.getReportId() == report.getId()).collect(Collectors.toList()))
+                r.addProduct(product_controller.getProduct(p.getProductId()));
+            else
+            for (ProductItemInReportRecord pi : pc.getProductItemsInReports().all().filter(p -> p.getReportId() == report.getId()).collect(Collectors.toList()))
+                r.addProductItem(product_controller.getProduct(pi.getProductId()).getItems().get(pi.getProductItemId()));
+        reports.put(report.getId(), new Report(report, pc));
     }
 
     public void restart() {

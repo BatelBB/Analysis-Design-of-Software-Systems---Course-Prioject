@@ -56,7 +56,7 @@ public class ProductInReportDAO extends BaseDAO<Integer, ProductInReportRecord> 
     }
 
     @Override
-    protected int runDeleteQuery(Integer integer) {
+    public int runDeleteQuery(Integer integer) {
         return runUpdate(
                 "DELETE FROM " + TABLE_NAME + " WHERE " + REPORT_ID + " = ?",
                 ps -> ps.setInt(1, integer)

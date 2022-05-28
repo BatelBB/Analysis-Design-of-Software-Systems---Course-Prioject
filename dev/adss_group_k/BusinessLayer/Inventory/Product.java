@@ -39,11 +39,11 @@ public class Product {
         cus_price = product.getCustomerPrice();
         min_qty = product.getMinQty();
         items = new HashMap<>();
+        pc.getProductItems().all().filter(pi -> pi.getProductId() == product_id).forEach(this::addFromExisting);
         cat = product.getCategory();
         sub_cat = product.getSubcategory();
         sub_sub_cat = product.getSubSubcategory();
         this.pc = pc;
-        pc.getProductItems().all().forEach(this::addFromExisting);
     }
 
     //METHODS
