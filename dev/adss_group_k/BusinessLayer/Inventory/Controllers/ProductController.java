@@ -283,7 +283,7 @@ public class ProductController {
         products.put(product.getId(), new Product(product, pc));
     }
 
-    public List<String> getProductIdes() {
+    public List<String> getProductNames() {
         List<String> ProductIdes = new LinkedList<>();
         for (Map.Entry<Integer, Product> entry : products.entrySet()) {
             ProductIdes.add(entry.getValue().getName());

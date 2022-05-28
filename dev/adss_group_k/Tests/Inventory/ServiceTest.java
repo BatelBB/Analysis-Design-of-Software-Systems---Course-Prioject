@@ -6,27 +6,20 @@ import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 import adss_group_k.SchemaInit;
 import adss_group_k.dataLayer.dao.PersistenceController;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
+import adss_group_k.shared.response.ResponseT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ServiceTest {
     private static Service service;
     private static ISupplierService supplierService;
-    private static List<String> CategoryList;
-    private static List<String> ProductListNames;
-    private static List<Integer> ReportList;
+
     private static PersistenceController pc;
 
     static void setService() {
@@ -45,43 +38,18 @@ class ServiceTest {
     @BeforeEach
     void setData(){
         setService();
-
-        CategoryList = new LinkedList<>();
-        ProductListNames = new LinkedList<>();
-
-        ReportList = new LinkedList<>();
-        service.addCategory("Dairy Products");
-        service.addSubCategory("Dairy Products","Milks");
-        service.addSubSubCategory("Dairy Products","Milks","Cow Milk");
-    }
-    @AfterEach
-    void resetData(){
-        service.removeCategory("Dairy Products");
-        service.removeSubCategory("Dairy Products","Milks");
-        service.removeSubSubCategory("Dairy Products","Milks","Cow Milk");
     }
 
     void restartService(){
         service.restart();
     }
 
-    @Before
-    void setCategoryList() {
-        CategoryList = service.getCategoriesNames().data;
-    }
-
-    @After
-    void clearCategoryList() {
-        CategoryList.clear();
-    }
-
     @Test
     void addCategory() {
         try {
-            assertTrue(CategoryList.isEmpty());
+            assertTrue(service.getCategoriesNames().data.isEmpty());
             service.addCategory("Dairy Products");
-            setCategoryList();
-            assertTrue(CategoryList.contains("Dairy Products"));
+            assertTrue(service.getCategoriesNames().data.contains("Dairy Products"));
             service.addCategory("Dairy Products");
         } catch (Exception e) {
             assertEquals(e.getMessage(), "The categories already exists in the system");
@@ -92,14 +60,11 @@ class ServiceTest {
     void removeCategory() {
         try {
             service.addCategory("Dairy Products");
-            setCategoryList();
             service.removeCategory("Dairy Products");
-            setCategoryList();
-            assertFalse(CategoryList.contains("Dairy Products"));
+            assertFalse(service.getCategoriesNames().data.contains("Dairy Products"));
             service.removeCategory("Dairy Products");
         } catch (Exception e) {
             assertEquals(e.getMessage(), "Category doesn't exists");
-            clearCategoryList();
         }
     }
 
@@ -107,37 +72,21 @@ class ServiceTest {
     void getCategory() {
         try {
             service.addCategory("Dairy Products");
-            setCategoryList();
             Category category = service.getCategory("Dairy Products").data;
             assertEquals(category.getName(), "Dairy Products");
             service.removeCategory("Dairy Products");
-            setCategoryList();
             service.getCategory("Dairy Products");
         } catch (Exception e) {
             assertEquals(e.getMessage(), "Category doesn't exists");
-            clearCategoryList();
         }
     }
-
-    @Before
-    void setProductIdes() {
-        ProductListNames = service.getProductIdes().data;
-    }
-
-    @After
-    void clearProductIdes() {
-        ProductListNames.clear();
-    }
-
 
     @Test
     void addProduct() {
         try {
-            assertTrue(ProductListNames.isEmpty());
+            assertTrue(service.getProductNames().data.isEmpty());
             service.addProduct("Milk", "Tnova", 4, 5.9f, 350, 6, "Dairy Products","Milks","Cow Milk");
-            setProductIdes();
-            assertTrue(ProductListNames.contains("Milk"));
-            setProductIdes();
+            assertTrue(service.getProductNames().data.contains("Milk"));
             service.addProduct("", "Tnova", 4, 5.9f, 350, 6, "Dairy Products","Milks","Cow Milk");
         } catch (Exception e) {
             assertEquals(e.getMessage(), "product name empty");
@@ -148,39 +97,27 @@ class ServiceTest {
     @Test
     void removeProduct() {
         try {
-            service.addProduct("Milk", "Tnova", 4, 5.9f, 350, 6, "Dairy Products","Milks","Cow Milk");
-            setProductIdes();
-            assertTrue(ProductListNames.contains("Milk"));
+            String productName = service.addProduct("Milk", "Tnova", 4, 5.9f,
+                    350, 6, "Dairy Products","Milks","Cow Milk")
+                    .data.getName();
+            assertTrue(service.getProductNames().data.contains("Milk"));
             service.removeProduct(0);
-            setProductIdes();
-            assertFalse(ProductListNames.contains("Milk"));
+            assertFalse(service.getProductNames().data.contains("Milk"));
             service.removeProduct(0);
         } catch (Exception e) {
             assertEquals(e.getMessage(), "product id does not exist");
-            clearProductIdes();
             restartService();
         }
-    }
-
-    @Before
-    void setReportListNames() {
-        ReportList = service.getReportListNames().data;
-    }
-
-    @After
-    void clearReportListNames() {
-        ReportList.clear();
     }
 
     @Test
     void removeReport() {
         try {
-            service.createMissingReport("MissingReport", "Michel");
-            setReportListNames();
-            assertTrue(ReportList.contains(0));
-            service.removeReport(0);
-            setReportListNames();
-            assertFalse(ProductListNames.contains("MissingReport"));
+            ResponseT<Report> missingReport = service.createMissingReport("MissingReport", "Michel");
+            int reportId = missingReport.data.getId();
+            assertTrue(service.getReportListNames().data.contains("MissingReport"));
+            service.removeReport(reportId);
+            assertFalse(service.getProductNames().data.contains("MissingReport"));
             service.removeProduct(0);
         } catch (Exception e) {
             assertEquals(e.getMessage(), "Report id doesn't exists");
@@ -190,16 +127,13 @@ class ServiceTest {
     @Test
     void getReport() {
         try {
-            service.createMissingReport("MissingReport", "Michel");
-            setReportListNames();
-            Report report = service.getReport(0).data;
+            Integer id = service.createMissingReport("MissingReport", "Michel").data.getId();
+            Report report = service.getReport(id).data;
             assertEquals(report.getName(), "MissingReport");
-            service.removeReport(0);
-            setReportListNames();
-            service.getReport(0);
+            service.removeReport(id);
+            service.getReport(id);
         } catch (Exception e) {
             assertEquals(e.getMessage(), "Report id doesn't exists");
-            clearReportListNames();
         }
     }
 
@@ -207,14 +141,14 @@ class ServiceTest {
     void createMissingReport() {
         try {
             service.createMissingReport("MissingReport", "Michel");
-            setReportListNames();
-            assertTrue(ReportList.contains(0));
+            
+            assertTrue(service.getReportListNames().data.contains(0));
             service.createMissingReport("MissingReport", "Michel");
             service.removeReport(1);
             service.createMissingReport("MissingReport", "Michel");
         } catch (Exception e) {
             assertEquals(e.getMessage(), "The ReportId already exists in the system");
-            clearReportListNames();
+            
         }
         //TODO: make new test
     }
@@ -223,14 +157,14 @@ class ServiceTest {
     void createExpiredReport() {
         try {
             service.createExpiredReport("ExpiredReport", "Michel");
-            setReportListNames();
-            assertTrue(ReportList.contains(0));
+            
+            assertTrue(service.getReportListNames().data.contains(0));
             service.createExpiredReport("ExpiredReport", "Michel");
             service.removeReport(1);
             service.createExpiredReport("ExpiredReport", "Michel");
         } catch (Exception e) {
             assertEquals(e.getMessage(), "The ReportId already exists in the system");
-            clearReportListNames();
+            
         }
         //TODO: make new test
     }
@@ -239,14 +173,14 @@ class ServiceTest {
     void createBySupplierReport() {
         try {
             service.createBySupplierReport("BySupplierReport", "Michel", 0);
-            setReportListNames();
-            assertTrue(ReportList.contains(0));
+            
+            assertTrue(service.getReportListNames().data.contains(0));
             service.createBySupplierReport("MissingReport", "Michel", 0);
             service.removeReport(1);
             service.createBySupplierReport("ExpiredReport", "Michel", 0);
         } catch (Exception e) {
             assertEquals(e.getMessage(), "The ReportId already exists in the system");
-            clearReportListNames();
+            
         }
     }
 }

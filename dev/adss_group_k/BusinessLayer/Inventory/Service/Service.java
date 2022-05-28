@@ -1,7 +1,6 @@
 package adss_group_k.BusinessLayer.Inventory.Service;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.shared.response.Response;
@@ -9,7 +8,6 @@ import adss_group_k.shared.response.ResponseT;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 public class Service {
     private final ProductService product_service;
@@ -82,8 +80,8 @@ public class Service {
         return product_service.updateProductCusPrice(product_id, price);
     }
 
-    public ResponseT<List<String>> getProductIdes() {
-        return product_service.getProductIdes();
+    public ResponseT<List<String>> getProductNames() {
+        return product_service.getProductNames();
     }
 
     //Item methods
