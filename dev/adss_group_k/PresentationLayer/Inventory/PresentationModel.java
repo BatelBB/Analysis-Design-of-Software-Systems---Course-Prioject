@@ -411,14 +411,10 @@ public class PresentationModel {
         }
     }
 
-    //TODO: update
     private LocalDate convertDate(String input) {
         try {
             DateTimeFormatter formatter;
-            if (input.contains(":"))
-                formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            else
-                formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             return LocalDate.parse(input, formatter);
         } catch (Exception e) {
             System.out.println("failed to parse date");
