@@ -17,12 +17,13 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ServiceTest {
-    private static Service service;
-    private static ISupplierService supplierService;
+    private Service service;
+    private ISupplierService supplierService;
 
-    private static PersistenceController pc;
+    private PersistenceController pc;
 
-    static void setService() {
+    @BeforeEach
+    void setService() {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection("jdbc:sqlite::memory:");
@@ -33,11 +34,6 @@ class ServiceTest {
         pc = new PersistenceController(conn);
         supplierService = new SupplierService(pc);
         service = new Service(supplierService, pc);
-    }
-
-    @BeforeEach
-    void setData(){
-        setService();
     }
 
     void restartService(){
