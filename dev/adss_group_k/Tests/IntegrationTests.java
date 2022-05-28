@@ -89,7 +89,6 @@ public class IntegrationTests {
     public void deleteDB() {
         addToDB();
 
-        service.deleteDiscount(discount);
         service.deleteOrder(order.getId());
         service.deleteSupplier(sup.getPpn());
 
@@ -100,17 +99,21 @@ public class IntegrationTests {
         inventory.removeReport(supplierReport.getId());
         inventory.removeReport(expiredReport.getId());
         inventory.removeReport(surplusesReport.getId());
-        inventory.removeCategory("Dairy");
-        inventory.removeItem(prod.getProduct_id(), pItem.getId());
         inventory.removeProduct(prod.getProduct_id());
-        inventory.removeSubCategory("Dairy", "Shop");
         inventory.removeSubSubCategory("Dairy", "Shop", "10%");
+        inventory.removeSubCategory("Dairy", "Shop");
+        inventory.removeCategory("Dairy");
 
         runQuery();
 
+        assertEquals(0, orderSize);
+        assertEquals(0, supplierSize);
+
         assertEquals(0, reportSize);
-        //assertEquals(0, categorySize);
-//        assertEquals(0, itemSize);
+        assertEquals(0, categorySize);
+        assertEquals(0, productSize);
+        assertEquals(0, subCategorySize);
+        assertEquals(0, subSubCategorySize);
 
 
     }

@@ -66,8 +66,8 @@ public class SubcategoryDAO extends BaseDAO<SubcategoryRecord.SubcategoryKey, Su
     public int runDeleteQuery(String category, String sub_category) {
         return runUpdate(
                 "DELETE FROM Subcategory WHERE name=? AND category=?",
-                ps -> ps.setString(1, category),
-                ps -> ps.setString(2, sub_category)
+                ps -> ps.setString(1, sub_category),
+                ps -> ps.setString(2, category)
         );
     }
 }

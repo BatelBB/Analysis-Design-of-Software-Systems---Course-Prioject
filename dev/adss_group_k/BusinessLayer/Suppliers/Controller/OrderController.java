@@ -70,6 +70,7 @@ public class OrderController {
                 .orElseThrow(() -> new BusinessLogicException("Tried to delete order, but it doesn't " +
                 "seem to exist (maybe it was already deleted?)"));
         orders.remove(order);
+        dal.getOrders().delete(orderId);
     }
 
     public Collection<Order> all() {

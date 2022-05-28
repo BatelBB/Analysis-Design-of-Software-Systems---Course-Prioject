@@ -61,7 +61,7 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
 
     @Override
     protected int runDeleteQuery(Integer integer) {
-        return 0;
+        return runUpdate("DELETE FROM \"Order\" WHERE id=?", ps->ps.setInt(1, integer));
     }
 
 

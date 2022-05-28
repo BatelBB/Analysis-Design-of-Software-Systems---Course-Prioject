@@ -2,6 +2,7 @@ package adss_group_k.BusinessLayer.Inventory;
 
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.DiscountPairRecord;
+import adss_group_k.dataLayer.records.ItemRecord;
 import adss_group_k.dataLayer.records.ProductItemRecord;
 import adss_group_k.dataLayer.records.readonly.ProductData;
 import adss_group_k.dataLayer.records.readonly.ProductItemData;
@@ -100,11 +101,12 @@ public class Product {
         for (DiscountPair dp : items.get(item_id).getCus_discount()) {
             pc.getDiscountPairs().delete(new DiscountPairRecord.DiscountPairKey(product_id, item_id, dp.getId()));
         }
-        items.remove(item_id);
+        pc.getProductItems().delete(new ProductItemRecord.ProductItemKey(product_id, item_id));
         if (items.get(item_id).isOn_shelf())
             shelf_qty--;
         else
             storage_qty--;
+        items.remove(item_id);
     }
 
     public void changeItemLocation(int item_id, String location) throws Exception {
