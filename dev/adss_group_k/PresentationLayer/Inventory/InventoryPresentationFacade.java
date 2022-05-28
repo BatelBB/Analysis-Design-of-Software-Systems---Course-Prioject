@@ -8,15 +8,16 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class PresentationModel {
+public class InventoryPresentationFacade {
     private String[] args;
     private final Service service;
 
-    public PresentationModel(Service service) {
+    public InventoryPresentationFacade(Service service) {
         this.service = service;
     }
 
     public void execute(String input) {
+        try{
         if (!input.equals("exit")) {
             String command = input.substring(0, input.indexOf(" "));
             args = input.substring(input.indexOf(" ") + 1).split(",", -1);
@@ -106,6 +107,8 @@ public class PresentationModel {
                     System.out.println("unknown command, aborting..");
                     break;
             }
+        }} catch (Exception e) {
+            System.out.println("Invalid syntax for inventory module command");
         }
     }
 

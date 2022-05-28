@@ -1,39 +1,17 @@
-package adss_group_k.PresentationLayer.Inventory;
+package adss_group_k.PresentationLayer;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
+import adss_group_k.PresentationLayer.Inventory.InventoryPresentationFacade;
 import adss_group_k.dataLayer.dao.PersistenceController;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Scanner;
-
 public class Main {
-    private static PersistenceController pc;
-    public static void startInventoryMenu() {
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection("jdbc:sqlite::memory:");
-        } catch (SQLException throwables) {
-            throw new RuntimeException(throwables);
-        }
-        pc = new PersistenceController(conn);
-        SupplierService supplierService=new SupplierService(pc);
-        Service service = new Service(supplierService, pc);
-        Scanner scan = new Scanner(System.in);
-        String input = "";
-        PresentationModel pm = new PresentationModel(service);
-        example(pm);
-        do {
-            input = scan.nextLine();
-            pm.execute(input);
-        }
-        while (!input.equals("exit"));
-        System.out.println("thank you");
+
+    public static void main(String[] args) {
+        new App("database.db").main();
     }
 
-    private static void example(PresentationModel pm) {
+    private static void example(InventoryPresentationFacade pm) {
         pm.execute("addCategory Dairy Products");
         pm.execute("addSubCategory Dairy Products,Milks");
         pm.execute("addSubSubCategory Dairy Products,Milks,3%");
@@ -52,6 +30,5 @@ public class Main {
         pm.execute("addSubSubCategory Meats,Chicken,Chicken Breast");
         pm.execute("addProduct Mama-Off,Tnuva,55.00,60.01,5,2,Meats,Chicken,Chicken Breast");
         pm.execute("addItem 2,Rishon,storage 3,Alil,2021-02-12 01:02,false");
-
     }
 }

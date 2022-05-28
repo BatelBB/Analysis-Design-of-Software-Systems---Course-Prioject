@@ -12,20 +12,18 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-import static adss_group_k.PresentationLayer.PresentationFacade.moduleSelector;
+public class SupplierPresentationFacade {
+    private UserInput input = UserInput.getInstance();
+    private UserOutput output = UserOutput.getInstance();
+    private final ISupplierService service;
 
-public class PresentationController {
-    private static UserInput input = UserInput.getInstance();
-    private static UserOutput output = UserOutput.getInstance();
-    private static ISupplierService service;
-
-    public static void setService(ISupplierService service) {
-        PresentationController.service = service;
+    public SupplierPresentationFacade(ISupplierService supplierService) {
+        this.service = supplierService;
     }
-
+    
     static Scanner scanner = new Scanner(System.in);
 
-    public static void startSupplierMenu() {
+    public void startSupplierMenu() {
             while (true) {
                 int userInput = input.nextInt(Menu.getMainMenu());
                 switch (userInput) {
@@ -43,9 +41,13 @@ public class PresentationController {
                                 String contactName = input.nextString("Enter the supplier's contact name: ");
                                 String email = input.nextString("Enter the supplier's contact email: ");
                                 String phoneNum = input.nextString("Enter the supplier's contact phone number: ");
-                                output.print(service.createSupplier(ppn, bankAccount, name, isDelivering,
-                                        paymentCondition, day, contactName, phoneNum, email).data.toString());
-
+                                ResponseT<Supplier> supplier = service.createSupplier(ppn, bankAccount, name, isDelivering,
+                                        paymentCondition, day, contactName, phoneNum, email);
+                                if(supplier.success) {
+                                    output.print(supplier.data.toString());
+                                }else {
+                                    output.println(supplier.error);
+                                }
                                 break;
                             }
                             case (2): {
@@ -279,15 +281,17 @@ public class PresentationController {
                         break;
                     }
                     case (5): {
-                        moduleSelector();
-                        break;
+                        return;
+                    }
+                    default: {
+                        UserOutput.getInstance().println("Please select valid option.");
                     }
                 }
             }
         }
 
 
-    private static void createDiscount() {
+    private void createDiscount() {
         int[] arr = checkItem();
         int amount = input.nextInt("For which amount is the discount applicable?: ");
         float discount = input.nextFloat("What would be the discount for this amount?: ");
@@ -297,7 +301,7 @@ public class PresentationController {
 
     }
 
-    private static void deleteDiscount() {
+    private void deleteDiscount() {
         int[] arr = checkDiscount();
         try {
             service.deleteDiscount(service.getDiscount(arr[2], arr[0], arr[1]));
@@ -306,7 +310,7 @@ public class PresentationController {
         }
     }
 
-    private static int[] checkDiscount() {
+    private int[] checkDiscount() {
         boolean retry = true;
         int[] arr = new int[]{};
         int amount = 0;
@@ -323,7 +327,7 @@ public class PresentationController {
         return new int[]{arr[0], arr[1], amount};
     }
 
-    private static void checkId(int id) {
+    private void checkId(int id) {
         boolean retry = true;
         int nextInt = 0;
         int curId = id;
@@ -337,7 +341,7 @@ public class PresentationController {
     }
 
 
-    private static int[] checkItem() {
+    private int[] checkItem() {
         boolean retry = true;
         int nextInt = 0;
         int ppn = 0, catalog = 0;
@@ -353,7 +357,7 @@ public class PresentationController {
 
     }
 
-    private static int checkPPN(String message) {
+    private int checkPPN(String message) {
         boolean retry = true;
         int nextInt = 0;
         while (retry) {
@@ -369,7 +373,7 @@ public class PresentationController {
     }
 
 
-    private static DayOfWeek chooseDay() {
+    private DayOfWeek chooseDay() {
         boolean retry = true;
         DayOfWeek day = null;
         String nextString = "";
@@ -385,7 +389,7 @@ public class PresentationController {
         return DayOfWeek.valueOf(nextString.toUpperCase());
     }
 
-    private static PaymentCondition choosePayment(String s) {
+    private PaymentCondition choosePayment(String s) {
         output.println(s);
         int pay = input.nextInt("1. Direct Debit\n2. Credit\n");
         return pay == 1 ? PaymentCondition.DirectDebit : PaymentCondition.Credit;
