@@ -10,12 +10,15 @@ import adss_group_k.SchemaInit;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
+import adss_group_k.shared.response.ResponseT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class IntegrationTests {
@@ -213,10 +216,6 @@ public class IntegrationTests {
 
     }
 
-
-
-
-
     @Test
     public void updateDB() {
     }
@@ -253,6 +252,15 @@ public class IntegrationTests {
 
     @Test
     public void testAddItemWithNoExistingProduct(){
+        Supplier sup = service.createSupplier(1,123,"Lorem", true,
+                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528", "B@Gmail.com").data;
+        Product prod = inventory.addProduct("Milk","Tnoova",10.0, 20, 10,
+                1200, "Dairy","Shop", "10%").getOrThrow(RuntimeException::new);
+        ResponseT<Item> itemWithWrongProduct = service.createItem(
+                sup.getPpn(), 124,
+                1000 + prod.getProduct_id(),
+                12);
 
+        assertFalse(itemWithWrongProduct.success);
     }
 }

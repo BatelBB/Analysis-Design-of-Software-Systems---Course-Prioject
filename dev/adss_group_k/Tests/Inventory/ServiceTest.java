@@ -48,7 +48,6 @@ class ServiceTest {
         CategoryList = new LinkedList<>();
         ProductListNames = new LinkedList<>();
         ReportList = new LinkedList<>();
-
     }
     @BeforeEach
     void setData(){
