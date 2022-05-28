@@ -90,7 +90,7 @@ public class Product {
             setShelf_qty(shelf_qty + 1);
         else
             setStorage_qty(storage_qty + 1);
-        item_ids++;
+        setItem_ids(item_ids + 1);
 
         return pItem;
     }
@@ -100,11 +100,12 @@ public class Product {
         for (DiscountPair dp : items.get(item_id).getCus_discount()) {
             pc.getDiscountPairs().delete(new DiscountPairRecord.DiscountPairKey(product_id, item_id, dp.getId()));
         }
-        items.remove(item_id);
+
         if (items.get(item_id).isOn_shelf())
-            shelf_qty--;
+            setShelf_qty(shelf_qty - 1);
         else
-            storage_qty--;
+            setStorage_qty(storage_qty - 1);
+        items.remove(item_id);
     }
 
     public void changeItemLocation(int item_id, String location) throws Exception {
@@ -200,6 +201,13 @@ public class Product {
         if (r == -1)
             throw new Exception("Error setting storage_qty in DAL");
         this.storage_qty = storage_qty;
+    }
+
+    public void setItem_ids(int item_ids) throws Exception {
+        int r = pc.getProducts().updateStorageQty(product_id, storage_qty);
+        if (r == -1)
+            throw new Exception("Error setting storage_qty in DAL");
+        this.item_ids = item_ids;
     }
 
     //PRIVATE METHODS

@@ -127,16 +127,19 @@ public class IntegrationTests {
     }
 
     private void runQuery() {
-        String categoryQuery = "SELECT count(*) FROM Category", discountPairQuery = "SELECT count(*) FROM DiscountPair",
-                itemQuery = "SELECT count(*) FROM Item", itemInOrderQuery = "SELECT count(*) FROM ItemInOrder",
+        String subSubCategoryQuery = "SELECT count(*) FROM SubSubCategory",
                 orderQuery = "SELECT count(*) FROM `Order`",
-                productQuery = "SELECT count(*) FROM Product",
-                productInReportQuery = "SELECT count(*) FROM ProductInReport",
-                productItemQuery = "SELECT count(*) FROM ProductItem",
-                productItemInReportQuery = "SELECT count(*) FROM ProductItemInReport",
+                itemInOrderQuery = "SELECT count(*) FROM ItemInOrder",
                 quantityDiscountQuery = "SELECT count(*) FROM QuantityDiscount",
-                subSubCategoryQuery = "SELECT count(*) FROM SubSubCategory",
-                subCategoryQuery = "SELECT count(*) FROM SubCategory", supplierQuery = "SELECT count(*) FROM Supplier",
+                subCategoryQuery = "SELECT count(*) FROM SubCategory",
+                categoryQuery = "SELECT count(*) FROM Category",
+                supplierQuery = "SELECT count(*) FROM Supplier",
+                itemQuery = "SELECT count(*) FROM Item",
+                discountPairQuery = "SELECT count(*) FROM DiscountPair",
+                productItemQuery = "SELECT count(*) FROM ProductItem",
+                productInReportQuery = "SELECT count(*) FROM ProductInReport",
+                productItemInReportQuery = "SELECT count(*) FROM ProductItemInReport",
+                productQuery = "SELECT count(*) FROM Product",
                 reportQuery = "SELECT count(*) FROM Report";
 
 //        Map<String, String> queryMap = new HashMap<String, String>();
@@ -396,23 +399,18 @@ public class IntegrationTests {
         assertTrue(resultSet.getInt(1) > 0);
     }
 
-    private void addToDB(){
-        sup = service.createSupplier(1, 123, "Lorem", true,
-                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
-                "B@Gmail.com").data;
+    private void addToDB() {
+        sup = service.createSupplier(1, 123, "Lorem", true, PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528", "B@Gmail.com").data;
 
-        order = service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
-                OrderType.Periodical).data;
+        order = service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX, OrderType.Periodical).data;
 
         inventory.addCategory("Dairy");
         inventory.addSubCategory("Dairy", "Shop");
         inventory.addSubSubCategory("Dairy", "Shop", "10%");
 
-        prod = inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
-                1200, "Dairy", "Shop", "10%").data;
+        prod = inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10, 1200, "Dairy", "Shop", "10%").data;
 
-        pItem = inventory.addItem(prod.getProduct_id(), "TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX,
-                true).data;
+        pItem = inventory.addItem(prod.getProduct_id(), "TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX, true).data;
         Item item = service.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12).data;
         service.orderItem(order.getId(), sup.getPpn(), item.getCatalogNumber(), 50);
         discount = service.createDiscount(sup.getPpn(), item.getCatalogNumber(), 50, 5).data;
@@ -422,8 +420,7 @@ public class IntegrationTests {
         missingReport = inventory.createMissingReport("Missing", "Report1").data;
         supplierReport = inventory.createBySupplierReport("Supplier", "Report2", 10).data;
         expiredReport = inventory.createExpiredReport("Expired", "Report3").data;
-        categoryReport = inventory.createByCategoryReport("Category", "Report4", "CatName",
-                "SubCatName", "SubSubCatName").data;
+        categoryReport = inventory.createByCategoryReport("Category", "Report4", "CatName", "SubCatName", "SubSubCatName").data;
         defectiveReport = inventory.createDefectiveReport("Defective", "Report5").data;
         surplusesReport = inventory.createSurplusesReport("Surpluses", "Report6").data;
         byProductReport = inventory.createByProductReport("Product", "Report7", "ProName").data;

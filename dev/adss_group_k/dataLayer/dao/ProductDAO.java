@@ -91,6 +91,10 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
         return update(id, "storageQty", storageQty, Types.INTEGER);
     }
 
+    public int updateItemIds(int id, int item_ids) {
+        return update(id, "item_ids", item_ids, Types.INTEGER);
+    }
+
     public int getMaxId() {
         return maxId;
     }
