@@ -82,10 +82,4 @@ public class ItemController {
                 price
         );
     }
-
-    public void setName(int supplier, int catalogNumber, String name) {
-    }
-
-    public void setCategory(int supplier, int catalogNumber, String category) {
-    }
 }

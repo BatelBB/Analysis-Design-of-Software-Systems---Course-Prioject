@@ -37,8 +37,6 @@ public interface ISupplierService {
 
     ResponseT<Item> getItem(int ppn, int catalog);
 
-    Response deleteItem(int ppn, int catalogN);
-
     ResponseT<QuantityDiscount> createDiscount(int supplierPPN, int catalogN, int amount, float discount);
 
     Response deleteDiscount(QuantityDiscount discount);
@@ -74,12 +72,5 @@ public interface ISupplierService {
 
     Response setSupplierContact(int supplierPPN, String name, String phoneNumber, String email);
 
-    Response setItemName(int supplier, int catalogNumber, String name);
-
-    Response setItemCategory(int supplier, int catalogNumber, String category);
-
-
     Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount);
-
-    Supplier findCheapestSupplierFor(int productID, int amount);
 }

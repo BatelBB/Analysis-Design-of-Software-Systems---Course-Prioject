@@ -146,32 +146,11 @@ public class PresentationController {
                                 service.setPrice(item.getSupplier().getPpn(), item.getCatalogNumber(), input.nextFloat("Enter new price: "));
                                 break;
                             }
-                            case (4): {
+                            case (4):
+                            case (5):
+                            case (6):{
                                 //edit name of existing item
-                                int[] arr = checkItem();
-                                Item item = service.getItem(arr[0], arr[1]).data;
-                                int ppn = item.getSupplier().getPpn();
-                                int catalogNumber = item.getCatalogNumber();
-                                String name = input.nextString("Enter new name: ");
-
-                                service.setItemName(ppn, item.getCatalogNumber(), name);
-                                break;
-                            }
-                            case (5): {
-                                //edit category of existing item
-
-                                int[] arr = checkItem();
-                                Item item = service.getItem(arr[0], arr[1]).data;
-                                int ppn = item.getSupplier().getPpn();
-                                String category = input.nextString("Enter new category: ");
-                                service.setItemCategory(ppn, item.getCatalogNumber(), category);
-                                break;
-                            }
-                            case (6): {
-                                //delete existing item
-                                int[] arr = checkItem();
-                                service.deleteItem(service.getItem(arr[0], arr[1]).data.getSupplier().getPpn(),
-                                        service.getItem(arr[0], arr[1]).data.getCatalogNumber());
+                                output.println("this option is no longer supported.");
                                 break;
                             }
                             case (7): {
