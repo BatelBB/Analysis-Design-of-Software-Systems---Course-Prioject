@@ -19,6 +19,8 @@ public class PersistenceController {
     private final ReportDAO reports;
     private final ProductInReportDAO productsInReports;
 
+    private final ProductItemInReportDAO productItemsInReports;
+
     public PersistenceController(Connection conn) {
         this.conn = conn;
         categories = new CategoryDAO(conn);
@@ -34,6 +36,7 @@ public class PersistenceController {
         discountPairs = new DiscountPairDAO(conn);
         reports = new ReportDAO(conn);
         productsInReports = new ProductInReportDAO(conn);
+        productItemsInReports = new ProductItemInReportDAO(conn);
     }
 
     public Connection getConn() {
@@ -86,5 +89,13 @@ public class PersistenceController {
 
     public ReportDAO getReports() {
         return reports;
+    }
+
+    public ProductInReportDAO getProductsInReports() {
+        return productsInReports;
+    }
+
+    public ProductItemInReportDAO getProductItemsInReports() {
+        return productItemsInReports;
     }
 }

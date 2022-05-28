@@ -76,6 +76,10 @@ public class ProductItem {
     }
 
     //GETTERS AND SETTERS
+    public int getProduct_id() {
+        return product_id;
+    }
+
     public int getId() {
         return id;
     }

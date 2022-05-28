@@ -64,6 +64,7 @@ public class SchemaInit {
                     "\t\"qty\"\tINTEGER NOT NULL,\n" +
                     "\t\"itemSupplierPPN\"\tINTEGER NOT NULL,\n" +
                     "\t\"itemCatalogNumber\"\tINTEGER NOT NULL,\n" +
+                    "\t\"itemCatalogNumber\"\tINTEGER NOT NULL,\n" +
                     "\t\"orderId\"\tINTEGER NOT NULL,\n" +
                     "\tPRIMARY KEY(\"itemSupplierPPN\",\"itemCatalogNumber\",\"orderId\")\n" +
                     ");\n" +
@@ -103,10 +104,10 @@ public class SchemaInit {
                     "\tPRIMARY KEY(\"reportId\",\"productId\")\n" +
                     ");\n" +
 
-                    "CREATE TABLE IF NOT EXISTS \"ItemInReport\" (\n" +
+                    "CREATE TABLE IF NOT EXISTS \"ProductItemInReport\" (\n" +
                     "\t\"reportId\"\tINTEGER NOT NULL,\n" +
                     "\t\"productId\"\tINTEGER NOT NULL,\n" +
-                    "\t\"itemId\"\tINTEGER NOT NULL,\n" +
+                    "\t\"productItemId\"\tINTEGER NOT NULL,\n" +
                     "\tPRIMARY KEY(\"reportId\",\"itemId\",\"productId\")\n" +
                     ");\n" +
 
