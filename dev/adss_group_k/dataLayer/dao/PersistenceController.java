@@ -17,6 +17,7 @@ public class PersistenceController {
     private final OrderDAO orders;
     private final ItemInOrderDAO itemInOrder;
     private final ReportDAO reports;
+    private final ProductInReportDAO productsInReports;
 
     public PersistenceController(Connection conn) {
         this.conn = conn;
@@ -32,6 +33,7 @@ public class PersistenceController {
         productItems = new ProductItemDAO(conn);
         discountPairs = new DiscountPairDAO(conn);
         reports = new ReportDAO(conn);
+        productsInReports = new ProductInReportDAO(conn);
     }
 
     public Connection getConn() {
