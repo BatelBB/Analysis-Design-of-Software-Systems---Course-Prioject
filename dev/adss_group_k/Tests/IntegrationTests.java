@@ -249,21 +249,4 @@ public class IntegrationTests {
     public void testAddQuantityDiscountToItem(){
 
     }
-
-    @Test
-    public void testAddItemWithNoExistingProduct(){
-        Supplier sup = service.createSupplier(1,123,"Lorem", true,
-                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528", "B@Gmail.com").data;
-        inventory.addCategory("Dairy");
-        inventory.addSubCategory("Dairy", "Shop");
-        inventory.addSubSubCategory("Dairy", "Shop", "10%");
-        Product prod = inventory.addProduct("Milk","Tnoova",10.0, 20, 10,
-                1200, "Dairy","Shop", "10%").getOrThrow(RuntimeException::new);
-        ResponseT<Item> itemWithWrongProduct = service.createItem(
-                sup.getPpn(), 124,
-                1000 + prod.getProduct_id(),
-                12);
-
-        assertFalse(itemWithWrongProduct.success);
-    }
 }
