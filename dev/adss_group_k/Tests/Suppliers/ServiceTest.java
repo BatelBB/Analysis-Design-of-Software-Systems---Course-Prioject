@@ -9,6 +9,7 @@ import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
+import adss_group_k.SchemaInit;
 import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.shared.response.Response;
@@ -44,9 +45,11 @@ class ServiceTest {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection("jdbc:sqlite::memory:");
+            SchemaInit.init(conn);
         } catch (SQLException throwables) {
             throw new RuntimeException(throwables);
         }service = new SupplierService(conn);
+
     }
 
     /**

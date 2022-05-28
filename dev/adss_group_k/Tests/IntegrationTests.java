@@ -5,30 +5,17 @@ import org.junit.jupiter.api.Test;
 public class IntegrationTests {
 
     @Test
-    public void deleteSuppliersDB() {
+    public void deleteDB() {
 
     }
 
     @Test
-    public void deleteInventoryDB() {
-    }
-
-    @Test
-    public void loadSuppliersDB() {
+    public void loadDB() {
     }
 
 
     @Test
-    public void loadInventoryDB() {
-    }
-
-
-    @Test
-    public void updateSuppliersDB() {
-    }
-
-    @Test
-    public void UpdateInventoryDB() {
+    public void updateDB() {
     }
 
 
@@ -49,5 +36,20 @@ public class IntegrationTests {
 
     @Test
     public void testAddProductWithoutExistingSupplier() {
+    }
+
+    @Test
+    public void testAddItemToNonExistingOrder(){
+
+    }
+
+    @Test
+    public void testAddQuantityDiscountToItem(){
+
+    }
+
+    @Test
+    public void testAddItemWithNoExistingProduct(){
+        
     }
 }
