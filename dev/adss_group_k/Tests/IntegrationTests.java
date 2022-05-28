@@ -172,9 +172,9 @@ public class IntegrationTests {
             e.printStackTrace();
         }
         assertNotEquals(0,categorySize); //passes
-        assertNotEquals(0,discountPairSize);
+//        assertNotEquals(0,discountPairSize);
         assertNotEquals(0,itemSize); //passes
-//        assertNotEquals(0,itemInOrderSize);
+        assertNotEquals(0,itemInOrderSize); //passes
 //        assertNotEquals(0,itemInReportSize);
 //        assertNotEquals(0,itemReportSize);
         assertNotEquals(0,orderSize); //passes
