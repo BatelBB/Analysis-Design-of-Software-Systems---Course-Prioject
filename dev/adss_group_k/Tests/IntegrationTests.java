@@ -41,28 +41,29 @@ public class IntegrationTests {
     @Test
     public void loadDB() {
         Supplier sup = service.createSupplier(1,123,"Lorem", true,
-                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528", "B@Gmail.com").data;
-        Product prod = inventory.addProduct("Milk","Tnoova",10.0, 20, 10,
-                1200, "Dairy","Shop", "10%").data;
-        Item item = service.createItem(sup.getPpn(),124,prod.getProduct_id(), 12).data;
+                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
+                "B@Gmail.com").data;
         service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.of(2022,04,07),
                 OrderType.Periodical);
-        service.createDiscount(sup.getPpn(),item.getCatalogNumber(), 50, 5);
 
-        inventory.createMissingReport("Missing", "Report");
-        inventory.createBySupplierReport("Supplier", "Report", 10);
-        inventory.createExpiredReport("Expired", "Report");
-        inventory.createByCategoryReport("Category", "Report","CatName",
+        inventory.createMissingReport("Missing", "Report1");
+        inventory.createBySupplierReport("Supplier", "Report2", 10);
+        inventory.createExpiredReport("Expired", "Report3");
+        inventory.createByCategoryReport("Category", "Report4","CatName",
                 "SubCatName", "SubSubCatName");
-        inventory.createDefectiveReport("Defective", "Report");
-        inventory.createSurplusesReport("Surpluses", "Report");
-        inventory.createByProductReport("Product", "Report", "ProName");
-        inventory.addCategory("Store");
-        inventory.addSubSubCategory("Store","Shop", "TopMarket");
+        inventory.createDefectiveReport("Defective", "Report5");
+        inventory.createSurplusesReport("Surpluses", "Report6");
+        inventory.createByProductReport("Product", "Report7", "ProName");
+        inventory.addCategory("Dairy");
+        inventory.addSubCategory("Dairy","Shop");
+        inventory.addSubSubCategory("Dairy","Shop", "10%");
+
+        Product prod = inventory.addProduct("Milk","Tnoova",10.0, 20, 10,
+                1200, "Dairy","Shop", "10%").data;
         inventory.addItem(prod.getProduct_id(),"TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX,
                 true);
-        inventory.addSubCategory("Store","Shop");
-
+        Item item = service.createItem(sup.getPpn(),124,prod.getProduct_id(), 12).data;
+        service.createDiscount(sup.getPpn(),item.getCatalogNumber(), 50, 5);
         int categorySize = 0, discountPairSize = 0, itemSize = 0, itemInOrderSize = 0, itemInReportSize = 0,
                 itemReportSize = 0, orderSize = 0, productSize = 0, productInReportSize = 0, productItem = 0,
                 productReportSize = 0, quantityDiscountSize = 0, subSubCategorySize = 0, subCategorySize = 0,
@@ -104,7 +105,7 @@ public class IntegrationTests {
         try{
             st = conn.createStatement();
             resCategory = st.executeQuery(categoryQuery);
-            while (resCategory.next()){
+            while (resCategory.next()) {
                 categorySize = resCategory.getInt(1);
             }
             resDiscountPar = st.executeQuery(discountPairQuery);
