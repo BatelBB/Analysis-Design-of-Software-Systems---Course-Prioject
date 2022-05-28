@@ -108,7 +108,7 @@ public class SchemaInit {
                     "\t\"reportId\"\tINTEGER NOT NULL,\n" +
                     "\t\"productId\"\tINTEGER NOT NULL,\n" +
                     "\t\"productItemId\"\tINTEGER NOT NULL,\n" +
-                    "\tPRIMARY KEY(\"reportId\",\"itemId\",\"productId\")\n" +
+                    "\tPRIMARY KEY(\"reportId\",\"productId\",\"productItemId\")\n" +
                     ");\n" +
 
                     "CREATE TABLE IF NOT EXISTS \"Subcategory\" (\n" +
