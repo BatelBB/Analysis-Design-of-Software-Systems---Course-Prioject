@@ -33,7 +33,7 @@ public class ReportService {
 
     public ResponseT<Report> getReport(int id) {
         try {
-            return ResponseT.success(new Report(report_controller.getReport(id)));
+            return ResponseT.success(new Report(report_controller.getReportForProduct(id)));
         } catch (Exception e) {
             return ResponseT.error(e.getMessage());
         }

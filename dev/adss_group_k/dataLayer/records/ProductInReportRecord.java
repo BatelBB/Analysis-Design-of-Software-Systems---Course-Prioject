@@ -3,12 +3,12 @@ package adss_group_k.dataLayer.records;
 import adss_group_k.dataLayer.records.readonly.ProductInReportData;
 
 public class ProductInReportRecord extends BaseRecord<Integer> implements ProductInReportData {
-    private int product_id;
     private int report_id;
+    private int product_id;
 
-    public ProductInReportRecord(int product_id, int report_id) {
-        this.product_id = product_id;
+    public ProductInReportRecord(int report_id, int product_id) {
         this.report_id = report_id;
+        this.product_id = product_id;
     }
 
     @Override

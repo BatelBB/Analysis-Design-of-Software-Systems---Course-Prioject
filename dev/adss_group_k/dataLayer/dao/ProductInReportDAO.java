@@ -33,7 +33,7 @@ public class ProductInReportDAO extends BaseDAO<Integer, ProductInReportRecord> 
 
     @Override
     Stream<ProductInReportRecord> fetchAll() throws SQLException {
-        PreparedStatement stmt = conn.prepareCall("SELECT * FROM " + TABLE_NAME);
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + TABLE_NAME);
         ResultSet query = stmt.executeQuery();
         ArrayList<ProductInReportRecord> res = new ArrayList<>();
         while (query.next()) {

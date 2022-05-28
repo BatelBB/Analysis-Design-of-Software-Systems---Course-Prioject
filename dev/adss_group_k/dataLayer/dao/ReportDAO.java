@@ -37,7 +37,7 @@ public class ReportDAO extends BaseDAO<Integer, ReportRecord> {
 
     @Override
     Stream<ReportRecord> fetchAll() throws SQLException {
-        PreparedStatement stmt = conn.prepareCall("SELECT * FROM " + TABLE_NAME);
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + TABLE_NAME);
         ResultSet query = stmt.executeQuery();
         ArrayList<ReportRecord> res = new ArrayList<>();
         while (query.next()) {

@@ -10,6 +10,7 @@ import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 import adss_group_k.SchemaInit;
+import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.shared.response.Response;
@@ -48,8 +49,10 @@ class ServiceTest {
             SchemaInit.init(conn);
         } catch (SQLException throwables) {
             throw new RuntimeException(throwables);
-        }service = new SupplierService(conn);
-
+        }
+        PersistenceController dal = new PersistenceController(conn);
+        service = new SupplierService(dal);
+        inventory = new Service(service, dal);
     }
 
     /**
@@ -99,11 +102,13 @@ class ServiceTest {
     void deleteSupplier() throws BusinessLogicException {
         final int ppn = 1;
 
+        initCategories();
+
         Supplier supplier = service.createSupplier(ppn, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
                 "john", "john@email.com", "054").data;
         Product product = inventory.addProduct("Milk", "Tnoova", 100.0, 50, 10,
-                1200, "Dairy", "Shop,", "10%").data;
+                1200, subcategoryStoreDairy, "Shop,", "10%").data;
         Item item = service.createItem(ppn, 1, product.getProduct_id(),  1).data;
         Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
         service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 12);
@@ -136,6 +141,21 @@ class ServiceTest {
                 "new ReadOnlysupplier should have fields of new one.");
     }
 
+    private final String categoryStore = "Store",
+        subcategoryStoreDairy = "Dairy", subcategoryStoreBread = "Bread",
+        subsubcategoryStoreDairy10 = "10%", subsubcategoryDairy5 = "5%",
+        subsubcategoryStoreBreadWheat = "wheat", subsubcategoryStoreBreadRye = "rye";
+    
+    private void initCategories() {
+        inventory.addCategory(categoryStore);
+        inventory.addSubCategory(categoryStore, subcategoryStoreDairy);
+        inventory.addSubCategory(categoryStore, subcategoryStoreBread);
+        inventory.addSubSubCategory(categoryStore, subcategoryStoreDairy, subsubcategoryDairy5);
+        inventory.addSubSubCategory(categoryStore, subcategoryStoreDairy, subsubcategoryStoreDairy10);
+        inventory.addSubSubCategory(categoryStore, subcategoryStoreBread, subsubcategoryStoreBreadRye);
+        inventory.addSubSubCategory(categoryStore, subcategoryStoreBread, subsubcategoryStoreBreadWheat);
+    }
+
     /**
      * ITEMS
      **/
@@ -147,7 +167,7 @@ class ServiceTest {
 
         // ReadOnlySupplier 1, ReadOnlyItem 1
         Product product = inventory.addProduct("Milk", "Tnoova", 100.0, 50, 10,
-                1200, "Dairy", "Shop,", "10%").data;
+                1200, subcategoryStoreDairy, "Shop,", "10%").data;
         ResponseT<Item> resApple =
                 service.createItem(ppn1, cn1, product.getProduct_id(),  1);
         assertTrue(resApple.success, "should have succeeded.");
@@ -157,7 +177,7 @@ class ServiceTest {
 
         // ReadOnlySupplier 1, ReadOnlyItem 2
         Product product2 = inventory.addProduct("Banana", "Tnoova", 100.0,
-                50, 10, 1200, "Dairy", "Shop,", "10%").data;
+                50, 10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
         ResponseT<Item> resBanana =
                 service.createItem(ppn1, cn2, product2.getProduct_id(),  2);
         assertTrue(resBanana.success, "should have succeeded but got " + resBanana.error);
@@ -168,7 +188,7 @@ class ServiceTest {
 
         // ReadOnlySupplier 2, ReadOnlyItem 1
         Product product3 = inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
-                1200, "Dairy", "Shop,", "10%").data;
+                1200, subcategoryStoreDairy, "Shop,", "10%").data;
         ResponseT<Item> resOtherSupplier =
                 service.createItem(ppn2, cn1, product3.getProduct_id(),  10);
         assertTrue(resOtherSupplier.success,
@@ -194,7 +214,7 @@ class ServiceTest {
     @Test
     void getItems() {
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
-                1200, "Dairy", "Shop,", "10%").data;
+                1200, subcategoryStoreDairy, "Shop,", "10%").data;
         final int[] amountsOfItems = {10, 11, 12, 13, 14};
         for (int i = 0; i < amountsOfItems.length; i++) {
             int ppn = (i + 1) * 111;
@@ -213,7 +233,7 @@ class ServiceTest {
     @Test
     void getItem() {
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
-                1200, "Dairy", "Shop,", "10%").data;
+                1200, subcategoryStoreDairy, "Shop,", "10%").data;
         final int ppn = 1, wrongPPN = 2;
         final int cn = 11, wrongCN = 2;
         createWithPpn(ppn);
@@ -243,10 +263,10 @@ class ServiceTest {
         Supplier sup = createWithPpn(ppn).data;
 
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
 
         Product product5 = inventory.addProduct("Notebook", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
         Item pen = service.createItem(ppn, cnPen, product4.getProduct_id(),  10).data;
         Item notebook = service.createItem(ppn, cnNotebook, product5.getProduct_id(),  7).data;
 
@@ -283,7 +303,7 @@ class ServiceTest {
 
 
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
         service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
@@ -307,7 +327,7 @@ class ServiceTest {
             // ReadOnlysupplier must have >= 1 items or opening ReadOnlyorder fails.
 
             Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                    10, 1200, "Dairy", "Shop,", "10%").data;
+                    10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
             service.createItem(ppn, 0, product4.getProduct_id(),  1);
             int amountForThisSupplier = amountOfOrders[i];
             createWithPpn(ppn);
@@ -326,7 +346,7 @@ class ServiceTest {
         Supplier sup = createWithPpn(ppn).data;
 
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
         Item pen = service.createItem(ppn, cnPen, product4.getProduct_id(),  10).data;
 
         Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
@@ -350,10 +370,10 @@ class ServiceTest {
         int penAmount = 13, notebookAmount = 5;
 
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
 
         Product product5 = inventory.addProduct("Notebook", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
         Item pen = service.createItem(ppn, cnPen, product4.getProduct_id(),  penPrice).data;
         Item notebook = service.createItem(ppn, cnNotebook, product5.getProduct_id(),
                 notebookPrice).data;
@@ -385,7 +405,7 @@ class ServiceTest {
         // ReadOnlyitem doesn't matter, there just has to be at least one for ReadOnlyorder to create.
 
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
         service.createItem(ppn, 11, product4.getProduct_id(),  1);
 
         final Period ONE_DAY = Period.ofDays(1);
@@ -423,7 +443,7 @@ class ServiceTest {
         Supplier supplier = createWithPpn(ppn).data;
 
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
 
         // ReadOnlyitem doesn't matter, there just has to be at least one for ReadOnlyorder to create.
         service.createItem(ppn, 11, product4.getProduct_id(),  1);
@@ -466,7 +486,7 @@ class ServiceTest {
         float priceCalc = 100;
 
         Product product4 = inventory.addProduct("Calculator", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
 
         Supplier sup = createWithPpn(ppn).data;
         Item item = service.createItem(ppn, cnCalc, product4.getProduct_id(),  priceCalc).data;
@@ -519,7 +539,7 @@ class ServiceTest {
         float priceCalc = 100;
 
         Product product4 = inventory.addProduct("Calculator", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
         Supplier sup = createWithPpn(ppn).data;
         Item item = service.createItem(ppn, cnCalc, product4.getProduct_id(),  priceCalc).data;
         Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
@@ -555,10 +575,10 @@ class ServiceTest {
         Supplier sup = createWithPpn(ppn).data;
 
         Product product4 = inventory.addProduct("Bread", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
 
         Product product5 = inventory.addProduct("Milk", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
 
         Item bread = service.createItem(ppn, cnBread, product4.getProduct_id(),  priceBread).data;
         Item milk = service.createItem(ppn, cnMilk, product5.getProduct_id(),  priceMilk).data;
@@ -622,7 +642,7 @@ class ServiceTest {
 
 
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
         service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
@@ -646,7 +666,7 @@ class ServiceTest {
 
 
         Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Dairy", "Shop,", "10%").data;
+                10, 1200, subcategoryStoreDairy, "Shop,", "10%").data;
         service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 

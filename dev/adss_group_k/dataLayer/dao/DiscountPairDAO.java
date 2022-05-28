@@ -65,7 +65,7 @@ public class DiscountPairDAO extends BaseDAO<DiscountPairRecord.DiscountPairKey,
 
     @Override
     Stream<DiscountPairRecord> fetchAll() throws SQLException {
-        PreparedStatement stmt = conn.prepareCall("SELECT * FROM " + TABLE_NAME);
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + TABLE_NAME);
         ResultSet query = stmt.executeQuery();
         ArrayList<DiscountPairRecord> res = new ArrayList<>();
         while (query.next()) {
