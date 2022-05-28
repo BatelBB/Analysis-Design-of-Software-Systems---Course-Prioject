@@ -114,7 +114,7 @@ public class Service {
     }
 
     //Report methods
-    public ResponseT<List<Integer>> getReportListNames() {
+    public ResponseT<List<Integer>> getReportListIds() {
         return report_service.getReportListNames();
     }
 
