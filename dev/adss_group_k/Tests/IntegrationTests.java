@@ -2,6 +2,7 @@ package adss_group_k.Tests;
 
 import adss_group_k.BusinessLayer.Inventory.ProductItem;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
+import adss_group_k.BusinessLayer.Inventory.Service.Objects.Report;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
@@ -130,23 +131,17 @@ public class IntegrationTests {
         inventory.removeReport(expiredReport.getId());
         inventory.removeReport(surplusesReport.getId());
         inventory.removeCategory("Dairy");
-        inventory.removeItem(prod.getProduct_id(),pItem.getId());
+        inventory.removeItem(prod.getProduct_id(), pItem.getId());
         inventory.removeProduct(prod.getProduct_id());
         inventory.removeSubCategory("Dairy", "Shop");
-        inventory.removeSubSubCategory("Dairy", "Shop","10%");
+        inventory.removeSubSubCategory("Dairy", "Shop", "10%");
 
         runQuery();
-        assertEquals(0,reportSize);
-        assertEquals(0,categorySize);
-        assertEquals(0,itemSize);
+        assertEquals(0, reportSize);
+        assertEquals(0, categorySize);
+        assertEquals(0, itemSize);
 
 
-
-
-    }
-
-    @Test
-    public void updateDB() {
     }
 
 
@@ -156,30 +151,10 @@ public class IntegrationTests {
 
 
     @Test
-    public void testCreateSupplierCard() {
-    }
-
-
-    @Test
-    public void testAddProductNotWorking() {
-    }
-
-
-    @Test
     public void testAddProductWithoutExistingSupplier() {
     }
 
-    @Test
-    public void testAddItemToNonExistingOrder() {
-
-    }
-
-    @Test
-    public void testAddQuantityDiscountToItem() {
-
-    }
-
-    private void runQuery(){
+    private void runQuery() {
 
         String categoryQuery = "SELECT count(*) FROM Category", discountPairQuery = "SELECT count(*) FROM DiscountPair",
                 itemQuery = "SELECT count(*) FROM Item", itemInOrderQuery = "SELECT count(*) FROM ItemInOrder",
@@ -290,27 +265,19 @@ public class IntegrationTests {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        assertNotEquals(0,categorySize); //passes
-        assertNotEquals(0,discountPairSize); //passes
-        assertNotEquals(0,itemSize); //passes
-        assertNotEquals(0,itemInOrderSize); //passes
-        assertNotEquals(0,orderSize); //passes
-        assertNotEquals(0,productSize); //passes
-        assertNotEquals(0,productInReportSize);//passes
-        assertNotEquals(0,productItem); //passes
-        assertNotEquals(0,reportSize); //passes
-        assertNotEquals(0,quantityDiscountSize); //passes
-        assertNotEquals(0,subSubCategorySize); //passes
-        assertNotEquals(0,subCategorySize); //passes
-        assertNotEquals(0,supplierSize); //passes
-    }
-
-    @Test
-    public void deleteDB() {
-        loadDB();
-
-
-
+        assertNotEquals(0, categorySize); //passes
+        assertNotEquals(0, discountPairSize); //passes
+        assertNotEquals(0, itemSize); //passes
+        assertNotEquals(0, itemInOrderSize); //passes
+        assertNotEquals(0, orderSize); //passes
+        assertNotEquals(0, productSize); //passes
+        assertNotEquals(0, productInReportSize);//passes
+        assertNotEquals(0, productItem); //passes
+        assertNotEquals(0, reportSize); //passes
+        assertNotEquals(0, quantityDiscountSize); //passes
+        assertNotEquals(0, subSubCategorySize); //passes
+        assertNotEquals(0, subCategorySize); //passes
+        assertNotEquals(0, supplierSize); //passes
     }
 
     @Test
@@ -358,14 +325,8 @@ public class IntegrationTests {
 
 
     @Test
-    public void testCreateOrder() {
-
-    }
-
-
-    @Test
     public void testCreateSupplierCard() {
-        assertTrue(service.createSupplier(1,123,"Lorem", true,
+        assertTrue(service.createSupplier(1, 123, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
                 "B@Gmail.com").success);
     }
@@ -378,21 +339,21 @@ public class IntegrationTests {
 
     @Test
     public void testAddItemWithoutExistingSupplier() {
-        Supplier sup = service.createSupplier(1,123,"Lorem", true,
+        Supplier sup = service.createSupplier(1, 123, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
                 "B@Gmail.com").data;
 
         inventory.addCategory("Dairy");
-        inventory.addSubCategory("Dairy","Shop");
-        inventory.addSubSubCategory("Dairy","Shop", "10%");
+        inventory.addSubCategory("Dairy", "Shop");
+        inventory.addSubSubCategory("Dairy", "Shop", "10%");
 
         int wrongSupplier = sup.getPpn() + 3;
         assertFalse(service.createItem(wrongSupplier, 2, 1, 0.5f).success);
     }
 
     @Test
-    public void testAddItemToNonExistingOrder(){
-        Supplier sup = service.createSupplier(1,123,"Lorem", true,
+    public void testAddItemToNonExistingOrder() {
+        Supplier sup = service.createSupplier(1, 123, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
                 "B@Gmail.com").data;
 
@@ -400,13 +361,13 @@ public class IntegrationTests {
                 OrderType.Periodical).data;
 
         inventory.addCategory("Dairy");
-        inventory.addSubCategory("Dairy","Shop");
-        inventory.addSubSubCategory("Dairy","Shop", "10%");
+        inventory.addSubCategory("Dairy", "Shop");
+        inventory.addSubSubCategory("Dairy", "Shop", "10%");
 
-        Product prod = inventory.addProduct("Milk","Tnoova",10.0, 20, 10,
-                1200, "Dairy","Shop", "10%").data;
+        Product prod = inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+                1200, "Dairy", "Shop", "10%").data;
 
-        Item item = service.createItem(sup.getPpn(),124,prod.getProduct_id(), 12).data;
+        Item item = service.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12).data;
 
         int wrongOrderId = order.getId() + 3;
         Response response = service.orderItem(wrongOrderId, sup.getPpn(), item.getCatalogNumber(), 100);
@@ -415,7 +376,7 @@ public class IntegrationTests {
 
     @Test
     public void testAddQuantityDiscountToItem() throws SQLException {
-        Supplier sup = service.createSupplier(1,123,"Lorem", true,
+        Supplier sup = service.createSupplier(1, 123, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
                 "B@Gmail.com").data;
 
@@ -423,13 +384,13 @@ public class IntegrationTests {
                 OrderType.Periodical).data;
 
         inventory.addCategory("Dairy");
-        inventory.addSubCategory("Dairy","Shop");
-        inventory.addSubSubCategory("Dairy","Shop", "10%");
+        inventory.addSubCategory("Dairy", "Shop");
+        inventory.addSubSubCategory("Dairy", "Shop", "10%");
 
-        Product prod = inventory.addProduct("Milk","Tnoova",10.0, 20, 10,
-                1200, "Dairy","Shop", "10%").data;
+        Product prod = inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+                1200, "Dairy", "Shop", "10%").data;
 
-        Item item = service.createItem(sup.getPpn(),124,prod.getProduct_id(), 12).data;
+        Item item = service.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12).data;
 
         QuantityDiscount qd = service.createDiscount(sup.getPpn(), item.getCatalogNumber()
                 , 100, 0.1f).getOrThrow(RuntimeException::new);
