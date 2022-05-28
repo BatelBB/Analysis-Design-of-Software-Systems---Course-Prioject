@@ -150,9 +150,9 @@ public class ProductController {
         products.remove(product_id);
     }
 
-    public void addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) throws Exception {
+    public ProductItem addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) throws Exception {
         productExists(product_id);
-        products.get(product_id).addItem(store, location, supplier, expiration_date, on_shelf);
+        return products.get(product_id).addItem(store, location, supplier, expiration_date, on_shelf);
     }
 
     public void removeItem(int product_id, int item_id) throws Exception {

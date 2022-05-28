@@ -58,7 +58,7 @@ public class Product {
         items.get(id).setDefect_reporter(defect_reporter);
     }
 
-    public void addItem(String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) throws Exception {
+    public ProductItem addItem(String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) throws Exception {
         try {
             if (store == null || store.equals(""))
                 throw new Exception("store name empty");
@@ -84,12 +84,15 @@ public class Product {
         );
         if (!r.success)
             throw new Exception(r.error);
-        items.put(item_ids, new ProductItem(r.data, pc));
+        ProductItem pItem = new ProductItem(r.data, pc);
+        items.put(item_ids, pItem);
         if (on_shelf)
             setShelf_qty(shelf_qty + 1);
         else
             setStorage_qty(storage_qty + 1);
         item_ids++;
+
+        return pItem;
     }
 
     public void removeItem(int item_id) throws Exception {

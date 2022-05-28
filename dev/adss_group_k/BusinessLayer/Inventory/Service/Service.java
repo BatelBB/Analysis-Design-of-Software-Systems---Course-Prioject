@@ -85,7 +85,7 @@ public class Service {
     }
 
     //Item methods
-    public Response addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
+    public ResponseT<adss_group_k.BusinessLayer.Inventory.ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
         return product_service.addItem(product_id, store, location, supplier, expiration_date, on_shelf);
     }
 

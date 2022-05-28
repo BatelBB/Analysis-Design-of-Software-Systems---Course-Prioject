@@ -1,6 +1,7 @@
 package adss_group_k.BusinessLayer.Inventory.Service;
 
 import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
+import adss_group_k.BusinessLayer.Inventory.ProductItem;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
 import adss_group_k.dataLayer.dao.PersistenceController;
 
@@ -89,12 +90,12 @@ public class ProductService {
         }
     }
 
-    public Response addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
+    public ResponseT<ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
         try {
-            product_controller.addItem(product_id, store, location, supplier, expiration_date, on_shelf);
-            return new Response(true, null);
+
+            return ResponseT.success(product_controller.addItem(product_id, store, location, supplier, expiration_date, on_shelf));
         } catch (Exception e) {
-            return new Response(false, e.getMessage());
+            return ResponseT.error(e.getMessage());
         }
     }
 

@@ -1,5 +1,6 @@
 package adss_group_k.Tests;
 
+import adss_group_k.BusinessLayer.Inventory.ProductItem;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
@@ -66,12 +67,12 @@ public class IntegrationTests {
         Product prod = inventory.addProduct("Milk","Tnoova",10.0, 20, 10,
                 1200, "Dairy","Shop", "10%").data;
 
-        inventory.addItem(prod.getProduct_id(),"TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX,
-                true);
+        ProductItem pItem = inventory.addItem(prod.getProduct_id(),"TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX,
+                true).data;
         Item item = service.createItem(sup.getPpn(),124,prod.getProduct_id(), 12).data;
-
         service.orderItem(order.getId(),sup.getPpn(),item.getCatalogNumber(),50);
         service.createDiscount(sup.getPpn(),item.getCatalogNumber(), 50, 5);
+        inventory.updateItemCusDiscount(5,LocalDate.now(), LocalDate.MAX, prod.getProduct_id(), pItem.getId());
 
 
         int categorySize = 0, discountPairSize = 0, itemSize = 0, itemInOrderSize = 0, itemInReportSize = 0,
@@ -171,9 +172,9 @@ public class IntegrationTests {
             e.printStackTrace();
         }
         assertNotEquals(0,categorySize); //passes
-        //assertNotEquals(0,discountPairSize);
+        assertNotEquals(0,discountPairSize);
         assertNotEquals(0,itemSize); //passes
-        assertNotEquals(0,itemInOrderSize);
+//        assertNotEquals(0,itemInOrderSize);
 //        assertNotEquals(0,itemInReportSize);
 //        assertNotEquals(0,itemReportSize);
         assertNotEquals(0,orderSize); //passes

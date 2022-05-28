@@ -5,7 +5,7 @@ import java.util.function.Function;
 public class ResponseT<T> extends Response {
     public final T data;
 
-    ResponseT(boolean success, String error, T data) {
+    public ResponseT(boolean success, String error, T data) {
         super(success, error);
         this.data = data;
     }
