@@ -22,6 +22,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IntegrationTests {
 
@@ -218,6 +219,45 @@ public class IntegrationTests {
 
     @Test
     public void updateDB() {
+        inventory.addCategory(
+                "Dairy"
+        );
+        inventory.addSubCategory(
+                "Dairy",
+                "Shop"
+        );
+        inventory.addSubSubCategory(
+                "Dairy",
+                "Shop",
+                "10%"
+        );
+        Product prod = inventory.addProduct(
+                "Milk",
+                "Tnoova",
+                10.0,
+                20,
+                10,
+                1200,
+                "Dairy",
+                "Shop",
+                "10%"
+        ).data;
+        double NEW_PRICE = 21;
+        inventory.updateProductCusPrice(prod.getProduct_id(), NEW_PRICE);
+        String select_query = "SELECT * FROM Product WHERE id=" + prod.getProduct_id();
+        Statement st = null;
+        ResultSet res_update;
+        double new_price = 0;
+        try {
+            st = conn.createStatement();
+            res_update = st.executeQuery(select_query);
+            while (res_update.next()) {
+                new_price = res_update.getFloat(3);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertEquals(NEW_PRICE, new_price); //passes
     }
 
 
