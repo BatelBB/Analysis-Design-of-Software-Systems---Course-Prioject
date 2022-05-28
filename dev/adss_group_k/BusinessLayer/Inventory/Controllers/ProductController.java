@@ -134,7 +134,9 @@ public class ProductController {
         );
         if (!r.success)
             throw new Exception(r.error);
-        return products.put(id, new Product(r.data, pc));
+        Product ret = new Product(r.data, pc);
+        products.put(id, ret);
+        return ret;
     }
 
     public void removeProduct(int product_id) throws Exception {

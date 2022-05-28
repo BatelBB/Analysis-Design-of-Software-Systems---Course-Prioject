@@ -22,9 +22,9 @@ public class SubcategoryDAO extends BaseDAO<SubcategoryRecord.SubcategoryKey, Su
     public ResponseT<SubcategoryData> create(String category, String name) {
         return create(
                 () -> new SubcategoryRecord(category, name) ,
-                "INSERT INTO Subcategory(category, name) VALUES((?, ?))",
+                "INSERT INTO Subcategory(category, name) VALUES(?, ?)",
                 ps -> ps.setString(1, category),
-                ps -> ps.setString(2, category)
+                ps -> ps.setString(2, name)
         ).castUnchecked();
     }
 

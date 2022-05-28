@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS "Product" (
 	"subSubcategory"	TEXT NOT NULL,
 	"subcategory"	TEXT NOT NULL,
 	"category"	TEXT NOT NULL,
+	"item_ids" INTEGER NOT NULL
 	PRIMARY KEY("id")
 );
 CREATE TABLE IF NOT EXISTS "Order" (
@@ -57,18 +58,6 @@ CREATE TABLE IF NOT EXISTS "ItemReport" (
 	"type"	INTEGER NOT NULL,
 	"query"	TEXT NOT NULL,
 	PRIMARY KEY("id")
-);
-CREATE TABLE IF NOT EXISTS "ProductInReport" (
-	"qty"	INTEGER NOT NULL,
-	"reportId"	INTEGER NOT NULL,
-	"productId"	INTEGER NOT NULL,
-	PRIMARY KEY("reportId","productId")
-);
-CREATE TABLE IF NOT EXISTS "ItemInReport" (
-	"qty"	INTEGER NOT NULL,
-	"reportId"	INTEGER NOT NULL,
-	"itemId"	INTEGER NOT NULL,
-	PRIMARY KEY("reportId","itemId")
 );
 CREATE TABLE IF NOT EXISTS "Subcategory" (
 	"Category"	TEXT NOT NULL,
@@ -118,6 +107,17 @@ CREATE TABLE IF NOT EXISTS "ProductItem" (
 	"OnShelf"	TINYINT NOT NULL,
 	"DefectReporter"	TEXT,
 	PRIMARY KEY("ProductId","Id")
+);
+CREATE TABLE IF NOT EXISTS "ProductInReport" (
+	"reportId"	INTEGER NOT NULL,
+	"productId"	INTEGER NOT NULL,
+	PRIMARY KEY("reportId","productId")
+);
+CREATE TABLE IF NOT EXISTS "ProductItemInReport" (
+	"reportId"	INTEGER NOT NULL,
+	"productId"	INTEGER NOT NULL,
+	"productItemId"	INTEGER NOT NULL,
+	PRIMARY KEY("reportId","productId","productItemId")
 );
 INSERT INTO "Category" ("Name") VALUES ('Occult');
 INSERT INTO "Supplier" ("ppn","bankNumber","name","isDelivering","paymentCondition","regularSupplyingDay","contactEmail","contactName","contactPhone") VALUES (1,111,'Office Stuff',1,1,5,'ofir@office.stuff','Ofir Office','05'),

@@ -22,7 +22,7 @@ public class ItemDAO extends BaseDAO<ItemRecord.ItemKey, ItemRecord> {
         return create(
                 () -> new ItemRecord(supplierPPN, catalogNumber, productId, price),
                 "INSERT INTO Item(supplierPPN, catalogNumber, productId, price) " +
-                        "VALUES((?, ?, ?, ?))",
+                        "VALUES(?, ?, ?, ?)",
                 ps -> ps.setInt(1, supplierPPN),
                 ps -> ps.setInt(2, catalogNumber),
                 ps -> ps.setInt(3, productId),

@@ -80,7 +80,8 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
         maxId++;
         return create(
                 () -> new OrderRecord(id, ppn, 0, ordered, delivered),
-                "INSERT INTO `Order`(id, orderType, price, ordered, provided, ppn)",
+                "INSERT INTO `Order`(id, orderType, price, ordered, provided, ppn)" +
+                        " VALUES(?, ?, ?, ?, ?, ?)",
                 ps -> ps.setInt(1, id),
                 ps -> ps.setInt(2, type.value),
                 ps -> ps.setFloat(3, 0f),
