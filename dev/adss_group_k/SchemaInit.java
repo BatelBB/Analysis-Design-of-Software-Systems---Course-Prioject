@@ -59,24 +59,6 @@ public class SchemaInit {
                     "\t\"itemCatalogNumber\"\tINTEGER NOT NULL,\n" +
                     "\tPRIMARY KEY(\"id\")\n" +
                     ");\n" +
-                    "CREATE TABLE IF NOT EXISTS \"ProductReport\" (\n" +
-                    "\t\"id\"\tINTEGER NOT NULL,\n" +
-                    "\t\"reportProducer\"\tTEXT NOT NULL,\n" +
-                    "\t\"name\"\tTEXT NOT NULL,\n" +
-                    "\t\"date\"\tDATETIME NOT NULL,\n" +
-                    "\t\"type\"\tINTEGER NOT NULL,\n" +
-                    "\t\"query\"\tTEXT NOT NULL,\n" +
-                    "\tPRIMARY KEY(\"id\")\n" +
-                    ");\n" +
-                    "CREATE TABLE IF NOT EXISTS \"ItemReport\" (\n" +
-                    "\t\"id\"\tINTEGER NOT NULL,\n" +
-                    "\t\"reportProducer\"\tTEXT NOT NULL,\n" +
-                    "\t\"name\"\tTEXT NOT NULL,\n" +
-                    "\t\"date\"\tDATETIME NOT NULL,\n" +
-                    "\t\"type\"\tINTEGER NOT NULL,\n" +
-                    "\t\"query\"\tTEXT NOT NULL,\n" +
-                    "\tPRIMARY KEY(\"id\")\n" +
-                    ");\n" +
                     "CREATE TABLE IF NOT EXISTS \"Subcategory\" (\n" +
                     "\t\"Category\"\tTEXT NOT NULL,\n" +
                     "\t\"Name\"\tTEXT NOT NULL,\n" +
@@ -148,6 +130,15 @@ public class SchemaInit {
                     "\t\"subcategory\"\tTEXT NOT NULL,\n" +
                     "\t\"category\"\tTEXT NOT NULL,\n" +
                     "\t\"item_ids\"\tINTEGER NOT NULL,\n" +
+                    "\tPRIMARY KEY(\"id\")\n" +
+                    ");\n" +
+                    "CREATE TABLE IF NOT EXISTS \"Report\" (\n" +
+                    "\t\"id\"\tINTEGER NOT NULL,\n" +
+                    "\t\"reportProducer\"\tTEXT NOT NULL,\n" +
+                    "\t\"name\"\tTEXT NOT NULL,\n" +
+                    "\t\"date\"\tDATETIME NOT NULL,\n" +
+                    "\t\"type\"\tINTEGER NOT NULL,\n" +
+                    "\t\"query\"\tTEXT NOT NULL,\n" +
                     "\tPRIMARY KEY(\"id\")\n" +
                     ");\n" +
                     "COMMIT;\n";

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class QuantityDiscountController {
     private PersistenceController dal;
-    private Map<Item, ArrayList<QuantityDiscount>> map;
+    private Map<Item, Map<Integer, QuantityDiscount>> map;
 
     public QuantityDiscountController(PersistenceController dal, ItemController items) {
         this.dal = dal;
@@ -22,7 +22,7 @@ public class QuantityDiscountController {
         dal.getQuantityDiscounts().all().forEach(record -> {
             try {
                 Item item = items.get(record.itemKey.ppn, record.itemKey.catalogNumber);
-                getList(item).add(new QuantityDiscount(
+                getList(item).put(record.id, new QuantityDiscount(
                         record.id, item, record.quantity, record.discount
                 ));
             } catch (BusinessLogicException e) {
@@ -31,8 +31,8 @@ public class QuantityDiscountController {
         });
     }
 
-    private ArrayList<QuantityDiscount> getList(Item item) {
-        return map.computeIfAbsent(item, key -> new ArrayList<>());
+    private Map<Integer, QuantityDiscount> getList(Item item) {
+        return map.computeIfAbsent(item, key -> new HashMap<>());
     }
 
     public void deleteAllFor(Item item) {
@@ -42,18 +42,18 @@ public class QuantityDiscountController {
     }
 
     public Collection<QuantityDiscount> discountsFor(Item item) {
-        return new ArrayList<>(getList(item));
+        return new ArrayList<>(getList(item).values());
     }
 
     public void delete(int id) {
         dal.getQuantityDiscounts().delete(id);
-        map.values().forEach(list -> list.removeIf(discount -> discount.id == id));
+        map.values().forEach(list -> list.remove(id));
     }
 
 
     public float priceForAmount(Item item, int amount) {
         float discount = 0;
-        List<QuantityDiscount> discounts = getList(item);
+        List<QuantityDiscount> discounts = getListOfDiscountsIncreasing(item);
         for(QuantityDiscount qd: discounts) {
             if(qd.quantity > amount) { break; }
             discount = qd.discount;
@@ -62,12 +62,12 @@ public class QuantityDiscountController {
     }
 
     public Collection<QuantityDiscount> getAllDiscounts() {
-        return map.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
+        return map.values().stream().map(Map::values).flatMap(Collection::stream).collect(Collectors.toList());
     }
 
 
     public QuantityDiscount createDiscount(Item item, int amount, float discount) throws BusinessLogicException {
-        List<QuantityDiscount> discounts = getList(item);
+        List<QuantityDiscount> discounts = getListOfDiscountsIncreasing(item);
         QuantityDiscount previous = null;
         for(int i = 0; i < discounts.size(); i++) {
             QuantityDiscount current = discounts.get(i);
@@ -91,8 +91,13 @@ public class QuantityDiscountController {
                 new ItemRecord.ItemKey(item.getSupplier().getPpn(), item.getCatalogNumber())
         ).getOrThrow(BusinessLogicException::new);
         QuantityDiscount created = new QuantityDiscount(dbCreated.id, item, amount, discount);
-        discounts.add(created.id, created);
+        getList(item).put(created.id, created);
         return created;
+    }
+
+    private List<QuantityDiscount> getListOfDiscountsIncreasing(Item item) {
+        return getList(item).values()
+                .stream().sorted(Comparator.comparing(x -> x.quantity)).collect(Collectors.toList());
     }
 
     public Supplier findCheapestSupplierFor(int productID, int amount) {

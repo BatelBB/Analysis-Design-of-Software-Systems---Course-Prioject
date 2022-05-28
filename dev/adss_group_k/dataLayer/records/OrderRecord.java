@@ -62,4 +62,8 @@ public class OrderRecord extends BaseRecord<Integer> implements OrderData {
     public Integer key() {
         return id;
     }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
 }

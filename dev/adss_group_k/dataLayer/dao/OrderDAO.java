@@ -92,9 +92,12 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
     }
 
     public void setPrice(int id, float price) {
-        runUpdate("UPDATE `Order` SET price=? WHERE id=?",
+        int rowsAffects = runUpdate("UPDATE `Order` SET price=? WHERE id=?",
               ps -> ps.setFloat(1, price),
               ps -> ps.setInt(2, id)
             );
+        if(rowsAffects > 0) {
+            get(id).data.setPrice(price);
+        }
     }
 }

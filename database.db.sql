@@ -28,24 +28,6 @@ CREATE TABLE IF NOT EXISTS "QuantityDiscount" (
 	"itemCatalogNumber"	INTEGER NOT NULL,
 	PRIMARY KEY("id")
 );
-CREATE TABLE IF NOT EXISTS "ProductReport" (
-	"id"	INTEGER NOT NULL,
-	"reportProducer"	TEXT NOT NULL,
-	"name"	TEXT NOT NULL,
-	"date"	DATETIME NOT NULL,
-	"type"	INTEGER NOT NULL,
-	"query"	TEXT NOT NULL,
-	PRIMARY KEY("id")
-);
-CREATE TABLE IF NOT EXISTS "ItemReport" (
-	"id"	INTEGER NOT NULL,
-	"reportProducer"	TEXT NOT NULL,
-	"name"	TEXT NOT NULL,
-	"date"	DATETIME NOT NULL,
-	"type"	INTEGER NOT NULL,
-	"query"	TEXT NOT NULL,
-	PRIMARY KEY("id")
-);
 CREATE TABLE IF NOT EXISTS "Subcategory" (
 	"Category"	TEXT NOT NULL,
 	"Name"	TEXT NOT NULL,
@@ -117,6 +99,15 @@ CREATE TABLE IF NOT EXISTS "Product" (
 	"subcategory"	TEXT NOT NULL,
 	"category"	TEXT NOT NULL,
 	"item_ids"	INTEGER NOT NULL,
+	PRIMARY KEY("id")
+);
+CREATE TABLE IF NOT EXISTS "Report" (
+	"id"	INTEGER NOT NULL,
+	"reportProducer"	TEXT NOT NULL,
+	"name"	TEXT NOT NULL,
+	"date"	DATETIME NOT NULL,
+	"type"	INTEGER NOT NULL,
+	"query"	TEXT NOT NULL,
 	PRIMARY KEY("id")
 );
 INSERT INTO "Subcategory" ("Category","Name") VALUES ('hardware','saw');
