@@ -85,6 +85,10 @@ public class ProductItemDAO extends BaseDAO<ProductItemRecord.ProductItemKey, Pr
         return update(ON_SHELF, on_shelf, product_id, id, Types.BOOLEAN);
     }
 
+    public int updateDiscountIds(int product_id, int id, int discount_ids) {
+        return update(ON_SHELF, discount_ids, product_id, id, Types.INTEGER);
+    }
+
     public int updateDefectReporter(int product_id, int id, String defect_reporter) {
         return update(DEFECT_REPORTER, defect_reporter, product_id, id, Types.VARCHAR);
     }

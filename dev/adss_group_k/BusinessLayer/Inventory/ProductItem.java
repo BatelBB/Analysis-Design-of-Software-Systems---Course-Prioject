@@ -14,6 +14,7 @@ import java.util.List;
 public class ProductItem {
     private final int product_id;
     private final int id;
+
     private int discount_ids;
     private final String store;
     private String location;
@@ -56,7 +57,7 @@ public class ProductItem {
         if (!r.success)
             throw new Exception(r.error);
         cus_discount.add(new DiscountPair(r.data));
-        discount_ids++;
+        setDiscount_ids(discount_ids+1);
     }
 
     public double calculateDiscount() {
@@ -78,6 +79,13 @@ public class ProductItem {
     //GETTERS AND SETTERS
     public int getProduct_id() {
         return product_id;
+    }
+
+    public void setDiscount_ids(int discount_ids) throws Exception {
+        int r = pc.getProductItems().updateDiscountIds(product_id, id, discount_ids);
+        if (r == -1)
+            throw new Exception("Error setting storage_qty in DAL");
+        this.discount_ids = discount_ids;
     }
 
     public int getId() {

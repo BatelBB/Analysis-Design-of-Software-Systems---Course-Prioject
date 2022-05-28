@@ -2,7 +2,6 @@ package adss_group_k.BusinessLayer.Inventory;
 
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.DiscountPairRecord;
-import adss_group_k.dataLayer.records.ItemRecord;
 import adss_group_k.dataLayer.records.ProductItemRecord;
 import adss_group_k.dataLayer.records.readonly.ProductData;
 import adss_group_k.dataLayer.records.readonly.ProductItemData;
@@ -103,9 +102,9 @@ public class Product {
         }
         pc.getProductItems().delete(new ProductItemRecord.ProductItemKey(product_id, item_id));
         if (items.get(item_id).isOn_shelf())
-            shelf_qty--;
+            setShelf_qty(shelf_qty - 1);
         else
-            storage_qty--;
+            setStorage_qty(storage_qty - 1);
         items.remove(item_id);
     }
 
@@ -202,6 +201,13 @@ public class Product {
         if (r == -1)
             throw new Exception("Error setting storage_qty in DAL");
         this.storage_qty = storage_qty;
+    }
+
+    public void setItem_ids(int item_ids) throws Exception {
+        int r = pc.getProducts().updateStorageQty(product_id, storage_qty);
+        if (r == -1)
+            throw new Exception("Error setting storage_qty in DAL");
+        this.item_ids = item_ids;
     }
 
     //PRIVATE METHODS
