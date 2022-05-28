@@ -47,9 +47,8 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
                 ps -> ps.setString(9, subcategory),
                 ps -> ps.setString(10, category)
         );
-        if (response.success && id > maxId) {
+        if (response.success && id > maxId)
             maxId = id;
-        }
         return response.castUnchecked();
     }
 
