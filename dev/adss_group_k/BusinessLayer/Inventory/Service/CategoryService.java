@@ -3,13 +3,11 @@ package adss_group_k.BusinessLayer.Inventory.Service;
 import adss_group_k.BusinessLayer.Inventory.Categories.Category;
 import adss_group_k.BusinessLayer.Inventory.Controllers.CategoryController;
 import adss_group_k.BusinessLayer.Inventory.Categories.SubCategory;
-import adss_group_k.dataLayer.dao.PersistenceController;
-import adss_group_k.shared.response.Response;
-import adss_group_k.shared.response.ResponseT;
+import adss_group_k.serviceLayer.ServiceBase;
 
 import java.util.List;
 
-public class CategoryService {
+public class CategoryService extends ServiceBase {
     private final CategoryController category_controller;
 
     public CategoryService(CategoryController category_controller) {
@@ -17,88 +15,41 @@ public class CategoryService {
     }
 
     public ResponseT<List<String>> getCategoriesNames() {
-        try {
-            return ResponseT.success(category_controller.getCategoriesNames());
-        } catch (Exception e) {
-            return ResponseT.error(e.getMessage());
-        }
+        return responseFor(category_controller::getCategoriesNames);
     }
-
 
     public Response addCategory(String name) {
-        try {
-            category_controller.addCategory(name);
-            return new Response(true,null);
-        } catch (Exception e) {
-            return new Response(false, e.getMessage());
-        }
+        return responseForVoid(() -> category_controller.addCategory(name));
     }
 
-    public Response addSubCategory(String categoryName, String SubCategoryName) {
-        try {
-            category_controller.addSubCategory(categoryName, SubCategoryName);
-            return new Response(true,null);
-        } catch (Exception e) {
-            return new Response(false, e.getMessage());
-        }
+    public Response addSubCategory(String categoryName, String subCategoryName) {
+        return responseForVoid(() -> category_controller.addSubCategory(categoryName, subCategoryName));
     }
 
     public Response addSubSubCategory(String category, String sub_category, String name) {
-        try {
-            category_controller.addSubSubCategory(category, sub_category, name);
-            return new Response(true,null);
-        } catch (Exception e) {
-            return new Response(false, e.getMessage());
-        }
+        return responseForVoid(() -> category_controller.addSubSubCategory(category, sub_category, name));
     }
 
     public Response removeCategory(String name, boolean safe_remove) {
-        try {
-            category_controller.removeCategory(name, safe_remove);
-            return new Response(true,null);
-        } catch (Exception e) {
-            return new Response(false, e.getMessage());
-        }
+        return responseForVoid(() -> category_controller.removeCategory(name, safe_remove));
     }
 
     public Response removeSubCategory(String category, String name, boolean safe_remove) {
-        try {
-            category_controller.removeSubCategory(category, name, safe_remove);
-            return new Response(true,null);
-        } catch (Exception e) {
-            return new Response(false, e.getMessage());
-        }
+        return responseForVoid(() -> category_controller.removeSubCategory(category, name, safe_remove));
     }
 
     public Response removeSubSubCategory(String category, String sub_category, String name, boolean safe_remove) {
-        try {
-            category_controller.removeSubSubCategory(category, sub_category, name, safe_remove);
-            return new Response(true,null);
-        } catch (Exception e) {
-            return new Response(false, e.getMessage());
-        }
-
+        return responseForVoid(() -> category_controller.removeSubSubCategory(category, sub_category, name, safe_remove))
     }
 
-    public ResponseT<adss_group_k.BusinessLayer.Inventory.Service.Objects.Category> getCategory(String name) {
-        try {
-            Category category = category_controller.getCategory(name);
-            return ResponseT.success(new adss_group_k.BusinessLayer.Inventory.Service.Objects.Category(category));
-        } catch (Exception e) {
-            return ResponseT.error(e.getMessage());
-        }
+    public ResponseT<Category> getCategory(String name) {
+        return responseFor(() -> category_controller.getCategory(name));
     }
 
     public ResponseT<adss_group_k.BusinessLayer.Inventory.Service.Objects.SubCategory> getSubCategory(String categoryName, String SubCategoryName) {
-        try {
+        return responseFor(() -> {
             SubCategory subCategory = category_controller.getSubCategory(categoryName, SubCategoryName);
-            return ResponseT.success(new adss_group_k.BusinessLayer.Inventory.Service.Objects.SubCategory(subCategory));
-        } catch (Exception e) {
-            return ResponseT.error(e.getMessage());
-        }
-    }
-
-    public void restart() {
-        category_controller.restart();
+            return new adss_group_k.BusinessLayer.Inventory.Service.Objects.SubCategory(subCategory);
+        });
     }
 }

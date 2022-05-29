@@ -1,7 +1,6 @@
 package adss_group_k.Tests.Suppliers;
 
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
-import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
@@ -13,8 +12,8 @@ import adss_group_k.SchemaInit;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
-import adss_group_k.shared.response.Response;
-import adss_group_k.shared.response.ResponseT;
+
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

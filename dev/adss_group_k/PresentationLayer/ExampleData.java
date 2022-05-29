@@ -1,9 +1,7 @@
 package adss_group_k.PresentationLayer;
 
-import adss_group_k.BusinessLayer.Inventory.Categories.SubSubCategory;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem;
-import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 import adss_group_k.dataLayer.records.OrderType;

@@ -12,16 +12,15 @@ import adss_group_k.BusinessLayer.Suppliers.Controller.SupplierController;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
+import adss_group_k.serviceLayer.ServiceBase;
 import adss_group_k.shared.dto.CreateSupplierDTO;
-import adss_group_k.shared.response.Response;
-import adss_group_k.shared.response.ResponseT;
-
+import static adss_group_k.serviceLayer.ServiceBase.*;
 import java.sql.Connection;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Collection;
 
-public class SupplierService implements ISupplierService {
+public class SupplierService extends ServiceBase implements ISupplierService {
 
     private final ItemController items;
     private final OrderController orders;

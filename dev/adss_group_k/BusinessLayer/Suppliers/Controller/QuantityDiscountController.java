@@ -89,7 +89,7 @@ public class QuantityDiscountController {
         QuantityDiscountRecord dbCreated = dal.getQuantityDiscounts().createQuantityDiscount(
                 amount, discount,
                 new ItemRecord.ItemKey(item.getSupplier().getPpn(), item.getCatalogNumber())
-        ).getOrThrow(BusinessLogicException::new);
+        );
         QuantityDiscount created = new QuantityDiscount(dbCreated.id, item, amount, discount);
         getList(item).put(created.id, created);
         return created;

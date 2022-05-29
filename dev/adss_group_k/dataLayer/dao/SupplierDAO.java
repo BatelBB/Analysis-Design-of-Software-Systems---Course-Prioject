@@ -50,27 +50,27 @@ public class SupplierDAO extends BaseDAO<Integer, SupplierRecord> {
                 ps -> ps.setString(7, createSupplierDTO.contactName),
                 ps -> ps.setString(8, createSupplierDTO.contactPhone),
                 ps -> ps.setString(9, createSupplierDTO.contactEmail)
-        ).getOrThrow(RuntimeException::new);
+        );
     }
                        
     public void updateIsDelivering(int ppn, boolean isDelivering) {
         runUpdate(ppn, "isDelivering", isDelivering, Types.BOOLEAN);
-        get(ppn).data.setDelivering(isDelivering);
+        get(ppn).setDelivering(isDelivering);
     }
 
     public void updatePaymentCondition(int ppn,PaymentCondition paymentCondition) {
         runUpdate(ppn, "paymentCondition", paymentCondition.value, Types.INTEGER);
-        get(ppn).data.setPaymentCondition(paymentCondition);
+        get(ppn).setPaymentCondition(paymentCondition);
     }
 
     public void updateSupplyingDay(int ppn, DayOfWeek day) {
         runUpdate(ppn, "regularSupplyingDay", valueOf(day), Types.INTEGER);
-        get(ppn).data.setRegularSupplyingDays(day);
+        get(ppn).setRegularSupplyingDays(day);
     }
 
     public void updateContactEmail(int ppn, String email) {
         runUpdate(ppn, "contactEmail", email, Types.VARCHAR);
-        get(ppn).data.getContact().setEmail(email);
+        get(ppn).getContact().setEmail(email);
     }
 
     private void runUpdate(int ppn, String field, Object value, int sqlType) {

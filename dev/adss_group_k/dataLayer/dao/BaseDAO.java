@@ -1,7 +1,7 @@
 package adss_group_k.dataLayer.dao;
 
 import adss_group_k.dataLayer.records.BaseRecord;
-import adss_group_k.shared.response.ResponseT;
+
 import adss_group_k.shared.utils.Tuple;
 
 import java.sql.Connection;
@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -23,11 +24,11 @@ public abstract class BaseDAO<TEntityID, TEntity extends BaseRecord<TEntityID>> 
         this.conn = conn;
     }
 
-    public final ResponseT<TEntity> get(TEntityID id) {
+    public final TEntity get(TEntityID id) {
         try {
-            return ResponseT.success(cache.computeIfAbsent(id, this::fetchWithRuntimeExceptions));
+            return (cache.computeIfAbsent(id, this::fetchWithRuntimeExceptions));
         } catch (Exception e) {
-            return ResponseT.error("no such entity");
+            throw new NoSuchElementException("no such entity");
         }
     }
 
@@ -45,7 +46,11 @@ public abstract class BaseDAO<TEntityID, TEntity extends BaseRecord<TEntityID>> 
     }
 
     public boolean exists(TEntityID id) {
-        return get(id).success;
+        try {
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 
     abstract TEntity fetch(TEntityID key) throws SQLException, NoSuchElementException;
@@ -66,14 +71,14 @@ public abstract class BaseDAO<TEntityID, TEntity extends BaseRecord<TEntityID>> 
         }
     }
 
-    public final ResponseT<TEntity> create(Supplier<TEntity> factory, String statement, StatementInitialization... paramsInit) {
+    public final TEntity create(Supplier<TEntity> factory, String statement, StatementInitialization... paramsInit) {
         int res = runUpdate(statement, paramsInit);
         if (res > 0) {
             TEntity created = factory.get();
             cache.put(created.key(), created);
-            return ResponseT.success(created);
+            return (created);
         }
-        return ResponseT.error("Error with CREATE");
+        throw new RuntimeException("Error with CREATE");
     }
 
     protected abstract int runDeleteQuery(TEntityID id);

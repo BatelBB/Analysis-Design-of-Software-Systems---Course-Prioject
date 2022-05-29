@@ -2,7 +2,7 @@ package adss_group_k.dataLayer.dao;
 
 import adss_group_k.dataLayer.records.ReportRecord;
 import adss_group_k.dataLayer.records.readonly.ReportData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -49,8 +49,8 @@ public class ReportDAO extends BaseDAO<Integer, ReportRecord> {
         return res.stream();
     }
 
-    public ResponseT<ReportData> create(int id, String report_producer, String name, Date date, int type, String query) {
-        ResponseT<ReportRecord> response = create(
+    public ReportData create(int id, String report_producer, String name, Date date, int type, String query) {
+        ReportRecord response = create(
                 () -> new ReportRecord(id, report_producer, name, date, type, query),
                 "INSERT INTO " + TABLE_NAME + " (" +
                         ID + "," +
@@ -69,7 +69,7 @@ public class ReportDAO extends BaseDAO<Integer, ReportRecord> {
         );
         if (response.success && id > maxId)
             maxId = id;
-        return response.castUnchecked();
+        return response();
     }
 
     @Override

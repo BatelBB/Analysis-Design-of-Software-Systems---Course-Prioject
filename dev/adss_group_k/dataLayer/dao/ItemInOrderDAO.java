@@ -84,7 +84,7 @@ public class ItemInOrderDAO extends BaseDAO<ItemInOrderRecord.ItemInOrderKey, It
     public ItemInOrderRecord getOrCreate(int orderId, int ppn, int catalogNumber) {
         ItemInOrderRecord.ItemInOrderKey key = new ItemInOrderRecord.ItemInOrderKey(ppn, catalogNumber, orderId);
         if (exists(key)) {
-            return get(key).data;
+            return get(key);
         }
         return create(ppn, catalogNumber, orderId);
     }
@@ -99,6 +99,6 @@ public class ItemInOrderDAO extends BaseDAO<ItemInOrderRecord.ItemInOrderKey, It
                 ps -> ps.setInt(1, ppn),
                 ps -> ps.setInt(2, catalogNumber),
                 ps -> ps.setInt(3, orderId)
-        ).getOrThrow(RuntimeException::new);
+        );
     }
 }

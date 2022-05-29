@@ -56,7 +56,7 @@ public class SupplierController {
         }
         return suppliers.computeIfAbsent(ppn,
                 k -> {
-                    SupplierData data = dal.getSuppliers().get(ppn).getOrThrow(RuntimeException::new);
+                    SupplierData data = dal.getSuppliers().get(ppn);
 
                     return new Supplier(data, dal.getSuppliers());
                 });

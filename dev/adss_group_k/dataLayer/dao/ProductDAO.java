@@ -2,7 +2,7 @@ package adss_group_k.dataLayer.dao;
 
 import adss_group_k.dataLayer.records.ProductRecord;
 import adss_group_k.dataLayer.records.readonly.ProductData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -31,8 +31,8 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
         maxId = oneResultQuery("SELECT MAX(Id) FROM Product", rs -> rs.getInt(1));
     }
 
-    public ResponseT<ProductData> create(int item_ids, int id, String name, float customerPrice, int minQty, int storageQty, int shelfQty, String category, String subcategory, String subSubcategory) {
-        ResponseT<ProductRecord> response = create(
+    public ProductData create(int item_ids, int id, String name, float customerPrice, int minQty, int storageQty, int shelfQty, String category, String subcategory, String subSubcategory) {
+        ProductRecord response = create(
                 () -> new ProductRecord(item_ids, id, name, customerPrice, minQty, storageQty, shelfQty, category, subcategory, subSubcategory),
                 "INSERT INTO Product(" + "item_ids,id,name,customerPrice," + "minQty,storageQty,shelfQty," + "subSubcategory,subcategory,category" + ")" +
                         " VALUES(?,?,?,?,?,?,?,?,?,?)",
@@ -49,7 +49,7 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
         );
         if (response.success && id > maxId)
             maxId = id;
-        return response.castUnchecked();
+        return response();
     }
 
     @Override

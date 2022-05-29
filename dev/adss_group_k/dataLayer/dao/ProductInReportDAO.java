@@ -2,7 +2,7 @@ package adss_group_k.dataLayer.dao;
 
 import adss_group_k.dataLayer.records.ProductInReportRecord;
 import adss_group_k.dataLayer.records.readonly.ProductInReportData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -42,8 +42,8 @@ public class ProductInReportDAO extends BaseDAO<Integer, ProductInReportRecord> 
         return res.stream();
     }
 
-    public ResponseT<ProductInReportData> create(int report_id, int product_id) {
-        ResponseT<ProductInReportRecord> response = create(
+    public ProductInReportData create(int report_id, int product_id) {
+        ProductInReportRecord response = create(
                 () -> new ProductInReportRecord(report_id, product_id),
                 "INSERT INTO " + TABLE_NAME + " (" +
                         REPORT_ID + "," +
@@ -52,7 +52,7 @@ public class ProductInReportDAO extends BaseDAO<Integer, ProductInReportRecord> 
                 ps -> ps.setInt(1, report_id),
                 ps -> ps.setInt(2, product_id)
         );
-        return response.castUnchecked();
+        return response;
     }
 
     @Override

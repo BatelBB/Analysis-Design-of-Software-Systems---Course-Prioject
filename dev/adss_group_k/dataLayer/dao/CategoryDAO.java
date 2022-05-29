@@ -2,7 +2,7 @@ package adss_group_k.dataLayer.dao;
 
 import adss_group_k.dataLayer.records.CategoryRecord;
 import adss_group_k.dataLayer.records.readonly.CategoryData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,12 +18,12 @@ public class CategoryDAO extends BaseDAO<String, CategoryRecord> {
         super(conn);
     }
 
-    public ResponseT<CategoryData> create(String name) {
+    public CategoryData create(String name) {
         return create(
                 () -> new CategoryRecord(name),
                 "INSERT INTO Category(name) VALUES(?)",
                 ps -> ps.setString(1, name)
-        ).castUnchecked();
+        )();
     }
 
     @Override

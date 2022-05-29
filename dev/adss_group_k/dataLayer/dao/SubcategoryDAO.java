@@ -2,7 +2,7 @@ package adss_group_k.dataLayer.dao;
 
 import adss_group_k.dataLayer.records.SubcategoryRecord;
 import adss_group_k.dataLayer.records.readonly.SubcategoryData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,13 +19,13 @@ public class SubcategoryDAO extends BaseDAO<SubcategoryRecord.SubcategoryKey, Su
         super(conn);
     }
 
-    public ResponseT<SubcategoryData> create(String category, String name) {
+    public SubcategoryData create(String category, String name) {
         return create(
                 () -> new SubcategoryRecord(category, name) ,
                 "INSERT INTO Subcategory(category, name) VALUES(?, ?)",
                 ps -> ps.setString(1, category),
                 ps -> ps.setString(2, name)
-        ).castUnchecked();
+        );
     }
 
     @Override

@@ -5,7 +5,7 @@ import adss_group_k.dataLayer.records.DiscountPairRecord;
 import adss_group_k.dataLayer.records.ProductItemRecord;
 import adss_group_k.dataLayer.records.readonly.ProductData;
 import adss_group_k.dataLayer.records.readonly.ProductItemData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -71,7 +71,7 @@ public class Product {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
-        ResponseT<ProductItemData> r = pc.getProductItems().create(
+        ProductItemData r = pc.getProductItems().create(
                 product_id,
                 item_ids,
                 store,
@@ -84,7 +84,7 @@ public class Product {
         );
         if (!r.success)
             throw new Exception(r.error);
-        ProductItem pItem = new ProductItem(r.data, pc);
+        ProductItem pItem = new ProductItem(r, pc);
         items.put(item_ids, pItem);
         if (on_shelf)
             setShelf_qty(shelf_qty + 1);

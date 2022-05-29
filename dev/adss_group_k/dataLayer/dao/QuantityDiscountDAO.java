@@ -3,8 +3,6 @@ package adss_group_k.dataLayer.dao;
 import adss_group_k.dataLayer.records.ItemRecord;
 import adss_group_k.dataLayer.records.QuantityDiscountRecord;
 import adss_group_k.dataLayer.records.readonly.ItemData;
-import adss_group_k.shared.response.*;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +19,7 @@ public class QuantityDiscountDAO extends BaseDAO<Integer, QuantityDiscountRecord
         maxId = 1 + super.oneResultQuery("SELECT MAX(id) FROM QuantityDiscount", rs -> rs.getInt(1));
     }
 
-    public ResponseT<QuantityDiscountRecord> createQuantityDiscount(
+    public QuantityDiscountRecord createQuantityDiscount(
             int quantity, float discount, ItemRecord.ItemKey item) {
         maxId++;
         int id = maxId;
