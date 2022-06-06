@@ -6,6 +6,7 @@ import adss_group_k.BusinessLayer.Inventory.Service.CategoryService;
 import adss_group_k.BusinessLayer.Inventory.Service.ProductService;
 import adss_group_k.BusinessLayer.Inventory.Service.ReportService;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
+import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 import adss_group_k.PresentationLayer.Inventory.InventoryPresentationFacade;
 import adss_group_k.PresentationLayer.Suppliers.SupplierPresentationFacade;
@@ -22,48 +23,34 @@ import java.util.Scanner;
 
 public class App {
     private final PersistenceController dal;
-    private final SupplierService supplierService;
-    private final Service inventoryService;
+    private final ISupplierService supplierService;
     private final SupplierPresentationFacade supplierPresentation;
     private final InventoryPresentationFacade inventoryPresentationFacade;
+    private final Service inventoryService;
 
     public App(String dbPath) {
-        Connection conn = null;
-        boolean shouldLoadExample = false;
         boolean isNew = !new java.io.File(dbPath).exists();
-        try {
-            if(isNew) {
-                UserOutput.getInstance().println(
-                        "You don't have a previous database file stored, so we'll create a new one for you " +
-                                "from scratch.");
-                shouldLoadExample = UserInput.getInstance().nextBoolean("Would you like to start with some example data?");
-            }
+        boolean shouldLoadExample = false;
 
-            conn = DriverManager.getConnection("jdbc:sqlite:"+dbPath);
-        } catch (SQLException throwables) {
-            throw new RuntimeException(throwables);
+        AppContainer ioc = new AppContainer(dbPath);
+        Connection appConnection = ioc.get(Connection.class);
+
+        if (isNew) {
+            SchemaInit.init(appConnection);
+            UserOutput.getInstance().println(
+                    "You don't have a previous database file stored, so we'll create a new one for you " +
+                            "from scratch.");
+            shouldLoadExample = UserInput.getInstance().nextBoolean("Would you like to start with some example data?");
         }
-        if(isNew) {
-            SchemaInit.init(conn);
-        }
-        dal = new PersistenceController(conn);
-        PersistenceController dal = new PersistenceController(conn);
-        supplierService = new SupplierService(dal);
 
-        CategoryController categoryController = new CategoryController(dal);
-
-        ProductService products = new ProductService(dal, new ProductController(dal, categoryController));
-        ProductController productController = new ProductController(dal, categoryController);
-        ReportService reports = new ReportService(dal, categoryController, productController);
-        CategoryService categories = new CategoryService(categoryController);
-        inventoryService = new Service(supplierService, products, reports, categories);
-
-        if(shouldLoadExample) {
+        dal = ioc.get(PersistenceController.class);
+        inventoryPresentationFacade = ioc.get(InventoryPresentationFacade.class);
+        supplierPresentation = ioc.get(SupplierPresentationFacade.class);
+        inventoryService = ioc.get(Service.class);
+        supplierService = ioc.get(ISupplierService.class);
+        if (shouldLoadExample) {
             ExampleData.loadExampleData(inventoryService, supplierService);
         }
-        supplierPresentation = new SupplierPresentationFacade(supplierService);
-        inventoryPresentationFacade = new InventoryPresentationFacade(categories, products, reports);
-
     }
 
     public void main() {
@@ -82,7 +69,7 @@ public class App {
                     startInventoryMenu();
                     break;
                 }
-                case (3) : {
+                case (3): {
                     UserOutput.getInstance().println("Goodbye!");
                     return;
                 }

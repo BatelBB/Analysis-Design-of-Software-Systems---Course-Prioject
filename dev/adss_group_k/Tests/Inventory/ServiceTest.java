@@ -11,6 +11,7 @@ import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 import adss_group_k.SchemaInit;
+import adss_group_k.Tests.TestsBase;
 import adss_group_k.dataLayer.dao.PersistenceController;
 
 import adss_group_k.serviceLayer.ServiceBase;
@@ -24,31 +25,7 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 import static adss_group_k.serviceLayer.ServiceBase.*;
 
-class ServiceTest {
-    private Service inventory;
-    private ISupplierService suppliers;
-
-    private PersistenceController pc;
-
-    @BeforeEach
-    void setService() {
-        Connection conn;
-        try {
-            conn = DriverManager.getConnection("jdbc:sqlite::memory:");
-            SchemaInit.init(conn);
-        } catch (SQLException throwables) {
-            throw new RuntimeException(throwables);
-        }
-        PersistenceController dal = new PersistenceController(conn);
-        suppliers = new SupplierService(dal);
-        CategoryController categoryController = new CategoryController(dal);
-
-        ProductService products = new ProductService(dal, new ProductController(dal, categoryController));
-        ProductController productController = new ProductController(dal, categoryController);
-        ReportService reports = new ReportService(dal, categoryController, productController);
-        CategoryService categories = new CategoryService(categoryController);
-        inventory = new Service(suppliers, products, reports, categories);
-    }
+class ServiceTest extends TestsBase {
 
     @Test
     void addCategory() {

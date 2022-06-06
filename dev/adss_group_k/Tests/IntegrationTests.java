@@ -32,10 +32,8 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 import static adss_group_k.serviceLayer.ServiceBase.*;
 
-public class IntegrationTests {
+public class IntegrationTests extends TestsBase {
 
-    private ISupplierService suppliers;
-    private Service inventory;
     private QuantityDiscount discount;
     private Order order;
     private Supplier sup;
@@ -55,28 +53,6 @@ public class IntegrationTests {
             orderSize = 0, productSize = 0, productInReportSize = 0, productItem = 0,
             quantityDiscountSize = 0, subSubCategorySize = 0, subCategorySize = 0,
             supplierSize = 0;
-
-    Connection conn = null;
-
-    @BeforeEach
-    void setUp() {
-        try {
-            conn = DriverManager.getConnection("jdbc:sqlite::memory:");
-            SchemaInit.init(conn);
-        } catch (SQLException throwables) {
-            throw new RuntimeException(throwables);
-        }
-        PersistenceController dal = new PersistenceController(conn);
-        suppliers = new SupplierService(dal);
-        CategoryController categoryController = new CategoryController(dal);
-
-        ProductService products = new ProductService(dal, new ProductController(dal, categoryController));
-        ProductController productController = new ProductController(dal, categoryController);
-        ReportService reports = new ReportService(dal, categoryController, productController);
-        CategoryService categories = new CategoryService(categoryController);
-        inventory = new Service(suppliers, products, reports, categories);
-        
-    }
 
     @AfterEach
     void tearDown(){
@@ -244,7 +220,7 @@ public class IntegrationTests {
 //        queryMap.put("subCategoryQuery" , "SELECT count(*) FROM SubCategory");
 //        queryMap.put("supplierQuery" , "SELECT count(*) FROM Supplier");
 
-        Statement st = null;
+        Statement st;
         ResultSet resCategory, resDiscountPar, resItem, reItemInOrder, resProductItemInReport, resOrder,
                 resProduct, resProductInReport, resProductItem, resQuantityDiscount, resSubSubCategory,
                 resSubCategory, resSupplier, resReport;
