@@ -1,6 +1,8 @@
 package adss_group_k.Tests.Suppliers;
 
+import adss_group_k.BusinessLayer.Inventory.Controllers.CategoryController;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
@@ -14,6 +16,7 @@ import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
 
 
+import adss_group_k.serviceLayer.ServiceBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static adss_group_k.serviceLayer.ServiceBase.*;
 
 class ServiceTest {
 
@@ -37,12 +41,14 @@ class ServiceTest {
             date2 = LocalDate.of(2022, Month.APRIL, 2);
 
 
-    private ISupplierService service;
     private Service inventory;
+    private ISupplierService service;
+
+    private PersistenceController pc;
 
     @BeforeEach
-    void setUp() {
-        Connection conn = null;
+    void setService() {
+        Connection conn;
         try {
             conn = DriverManager.getConnection("jdbc:sqlite::memory:");
             SchemaInit.init(conn);
@@ -51,7 +57,6 @@ class ServiceTest {
         }
         PersistenceController dal = new PersistenceController(conn);
         service = new SupplierService(dal);
-        inventory = new Service(service, dal);
     }
 
     /**
@@ -59,14 +64,14 @@ class ServiceTest {
      **/
     @Test
     void createSupplier() {
-        ResponseT<Supplier> response = createWithPpn(1);
+        ServiceBase.ResponseT<Supplier> response = createWithPpn(1);
         assertTrue(response.success, response.error);
-        Supplier supplier = response.data;
+        Supplier supplier = assertSuccess(response);
         assertNotNull(supplier);
         assertEquals(1, supplier.getPpn());
         // TODO add tests for other fields if there's time
 
-        ResponseT<Supplier> responseErroneous = createWithPpn(1);
+        ServiceBase.ResponseT<Supplier> responseErroneous = createWithPpn(1);
         assertFalse(responseErroneous.success,
                 "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
         assertNull(responseErroneous.data,
@@ -90,7 +95,7 @@ class ServiceTest {
         service.createSupplier(1, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
                 "john", "john@email.com", "054");
-        Supplier supplier = service.getSupplier(1).data;
+        Supplier supplier = assertSuccess(service.getSupplier(1));
         assertNotNull(supplier);
         assertEquals(1, supplier.getPpn());
         assertEquals(111, supplier.getBankNumber());
@@ -105,13 +110,13 @@ class ServiceTest {
 
         initCategories();
         
-        Supplier supplier = service.createSupplier(ppn, 111, "Lorem", true,
+        Supplier supplier = assertSuccess(service.createSupplier(ppn, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
-                "john", "john@email.com", "054").data;
-        Product product = inventory.addProduct("Milk", "Tnoova", 100.0, 50, 10,
-                1200, "Store", "Shop,", "10%").data;
-        Item item = service.createItem(ppn, 1, product.getProduct_id(),  1).data;
-        Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+                "john", "john@email.com", "054"));
+        Product product = assertSuccess(inventory.addProduct("Milk", "Tnoova", 100.0, 50, 10,
+                1200, "Store", "Shop,", "10%"));
+        Item item = assertSuccess(service.createItem(ppn, 1, product.getProduct_id(),  1));
+        Order order = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
         service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 12);
 
         // delete should work.
@@ -134,7 +139,7 @@ class ServiceTest {
         assertEquals(ppn, otherResponse.data.getPpn());
 
         // getting new one should work.
-        Supplier findNew = service.getSupplier(ppn).data;
+        Supplier findNew = assertSuccess(service.getSupplier(ppn));
         assertNotNull(findNew,
                 "creating new ReadOnlysupplier with PPN of deleted ReadOnlysupplier should have worked");
         assertEquals(ppn, findNew.getPpn());
@@ -161,34 +166,34 @@ class ServiceTest {
         createWithPpn(ppn2);
         initCategories();
         // ReadOnlySupplier 1, ReadOnlyItem 1
-        Product product = inventory.addProduct("Milk", "Tnoova", 100.0, 50, 10,
-                1200, "Store", "Shop,", "10%").data;
+        Product product = assertSuccess(inventory.addProduct("Milk", "Tnoova", 100.0, 50, 10,
+                1200, "Store", "Shop,", "10%"));
         ResponseT<Item> resApple =
                 service.createItem(ppn1, cn1, product.getProduct_id(),  1);
         assertTrue(resApple.success, "should have succeeded.");
-        Item apple = resApple.data;
+        Item apple = assertSuccess(resApple);
         assertNotNull(apple, "creating ReadOnlyitem shouldn't have returned null.");
         assertEquals("Milk", product.getName());
 
         // ReadOnlySupplier 1, ReadOnlyItem 2
-        Product product2 = inventory.addProduct("Banana", "Tnoova", 100.0,
-                50, 10, 1200, "Store", "Shop,", "10%").data;
+        Product product2 = assertSuccess(inventory.addProduct("Banana", "Tnoova", 100.0,
+                50, 10, 1200, "Store", "Shop,", "10%"));
         ResponseT<Item> resBanana =
                 service.createItem(ppn1, cn2, product2.getProduct_id(),  2);
         assertTrue(resBanana.success, "should have succeeded but got " + resBanana.error);
 
-        Item banana = resBanana.data;
+        Item banana = assertSuccess(resBanana);
         assertNotNull(banana, "creating ReadOnlyitem shouldn't have returned null.");
         assertEquals("Banana", product2.getName());
 
         // ReadOnlySupplier 2, ReadOnlyItem 1
-        Product product3 = inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
-                1200, "Store", "Shop,", "10%").data;
+        Product product3 =assertSuccess (inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
+                1200, "Store", "Shop,", "10%"));
         ResponseT<Item> resOtherSupplier =
                 service.createItem(ppn2, cn1, product3.getProduct_id(),  10);
         assertTrue(resOtherSupplier.success,
                 "creating other ReadOnlyitem with same CN but different PPN should've worked.");
-        Item pen = resOtherSupplier.data;
+        Item pen = assertSuccess(resOtherSupplier);
         assertNotNull(pen, "creating ReadOnlyitem shouldn't have returned null.");
         assertEquals(ppn2, pen.getSupplier().getPpn());
         assertEquals(cn1, pen.getCatalogNumber());
@@ -209,8 +214,8 @@ class ServiceTest {
     @Test
     void getItems() {
         initCategories();
-        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
-                1200, "Store", "Shop,", "10%").data;
+        Product product4 = assertSuccess(inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
+                1200, "Store", "Shop,", "10%"));
         final int[] amountsOfItems = {10, 11, 12, 13, 14};
         for (int i = 0; i < amountsOfItems.length; i++) {
             int ppn = (i + 1) * 111;
@@ -229,8 +234,8 @@ class ServiceTest {
     @Test
     void getItem() {
         initCategories();
-        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
-                1200, "Store", "Shop,", "10%").data;
+        Product product4 =assertSuccess (inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
+                1200, "Store", "Shop,", "10%"));
         final int ppn = 1, wrongPPN = 2;
         final int cn = 11, wrongCN = 2;
         createWithPpn(ppn);
@@ -260,10 +265,10 @@ class ServiceTest {
     @Test
     void createOrder() {
         int ppn = 1, cnPen = 11;
-        Supplier sup = createWithPpn(ppn).data;
+        Supplier sup = assertSuccess(createWithPpn(ppn));
         initCategories();
-        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").data;
+        Product product4 = assertSuccess(inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Store", "Shop,", "10%"));
         service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
@@ -282,12 +287,12 @@ class ServiceTest {
         for (int i = 0; i < amountOfOrders.length; i++) {
             int ppn = (i + 1) * 111;
 
-            Supplier sup = createWithPpn(ppn).data;
+            Supplier sup = assertSuccess(createWithPpn(ppn));
 
             // ReadOnlysupplier must have >= 1 items or opening ReadOnlyorder fails.
             initCategories();
-            Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                    10, 1200, "Store", "Shop,", "10%").data;
+            Product product4 =assertSuccess (inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                    10, 1200, "Store", "Shop,", "10%"));
             service.createItem(ppn, 0, product4.getProduct_id(),  1);
             int amountForThisSupplier = amountOfOrders[i];
             createWithPpn(ppn);
@@ -303,13 +308,13 @@ class ServiceTest {
     @Test
     void deleteOrder() {
         int ppn = 1, cnPen = 11;
-        Supplier sup = createWithPpn(ppn).data;
+        Supplier sup = assertSuccess(createWithPpn(ppn));
         initCategories();
-        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").data;
-        Item pen = service.createItem(ppn, cnPen, product4.getProduct_id(),10).data;
+        Product product4 = assertSuccess(inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Store", "Shop,", "10%"));
+        Item pen = assertSuccess(service.createItem(ppn, cnPen, product4.getProduct_id(),10));
 
-        Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        Order order = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
         service.orderItem(order.getId(), ppn, pen.getCatalogNumber(),10);
 
         Response resDelete = service.deleteOrder(order.getId());
@@ -324,27 +329,27 @@ class ServiceTest {
     @Test
     void orderItem() {
         int ppn = 1, cnPen = 11, cnNotebook = 12;
-        Supplier sup = createWithPpn(ppn).data;
+        Supplier sup = assertSuccess(createWithPpn(ppn));
 
         float penPrice = 11, notebookPrice = 7;
         int penAmount = 13, notebookAmount = 5;
         initCategories();
-        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").data;
+        Product product4 = assertSuccess(inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Store", "Shop,", "10%"));
 
-        Product product5 = inventory.addProduct("Notebook", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").data;
-        Item pen = service.createItem(ppn, cnPen, product4.getProduct_id(),  penPrice).data;
-        Item notebook = service.createItem(ppn, cnNotebook, product5.getProduct_id(),
-                notebookPrice).data;
+        Product product5 = assertSuccess(inventory.addProduct("Notebook", "Tnoova", 100.0, 50,
+                10, 1200, "Store", "Shop,", "10%"));
+        Item pen = assertSuccess(service.createItem(ppn, cnPen, product4.getProduct_id(),  penPrice));
+        Item notebook = assertSuccess(service.createItem(ppn, cnNotebook, product5.getProduct_id(),
+                notebookPrice));
 
-        Order orderPens = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        Order orderPens = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
         service.orderItem(orderPens.getId(), ppn, pen.getCatalogNumber(), penAmount);
 
-        Order orderNotebooks = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        Order orderNotebooks = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
         service.orderItem(orderNotebooks.getId(), ppn, notebook.getCatalogNumber(), notebookAmount);
 
-        Order orderBoth = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        Order orderBoth = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
         service.orderItem(orderBoth.getId(), ppn, pen.getCatalogNumber(), penAmount);
         service.orderItem(orderBoth.getId(), ppn, notebook.getCatalogNumber(), notebookAmount);
 
@@ -360,12 +365,12 @@ class ServiceTest {
     @Test
     void setOrderingDate() throws BusinessLogicException {
         final int ppn = 1;
-        Supplier supplier = createWithPpn(ppn).data;
+        Supplier supplier = assertSuccess(createWithPpn(ppn));
 
         // ReadOnlyitem doesn't matter, there just has to be at least one for ReadOnlyorder to create.
         initCategories();
-        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").data;
+        Product product4 = assertSuccess(inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Store", "Shop,", "10%"));
         service.createItem(ppn, 11, product4.getProduct_id(),  1);
 
         final Period ONE_DAY = Period.ofDays(1);
@@ -377,7 +382,7 @@ class ServiceTest {
                 THU = WED.plus(ONE_DAY),
                 FRI = THU.plus(ONE_DAY);
 
-        Order order = service.createOrder(ppn, MON, WED, OrderType.Periodical).data;
+        Order order = assertSuccess(service.createOrder(ppn, MON, WED, OrderType.Periodical));
         assertEquals(MON, order.getOrdered());
 
         service.setOrderOrdered(order.getId(), SUN);
@@ -400,10 +405,10 @@ class ServiceTest {
     @Test
     void setProvidedDate() throws BusinessLogicException {
         final int ppn = 1;
-        Supplier supplier = createWithPpn(ppn).data;
+        Supplier supplier = assertSuccess(createWithPpn(ppn));
         initCategories();
-        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").data;
+        Product product4 = assertSuccess(inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Store", "Shop,", "10%"));
 
         // ReadOnlyitem doesn't matter, there just has to be at least one for ReadOnlyorder to create.
         service.createItem(ppn, 11, product4.getProduct_id(),  1);
@@ -417,7 +422,7 @@ class ServiceTest {
                 THU = WED.plus(ONE_DAY),
                 FRI = THU.plus(ONE_DAY);
 
-        Order order = service.createOrder(ppn, TUE, FRI, OrderType.Periodical).data;
+        Order order = assertSuccess(service.createOrder(ppn, TUE, FRI, OrderType.Periodical));
         assertEquals(FRI, order.getProvided());
 
         service.setOrderProvided(order.getId(), THU);
@@ -445,12 +450,12 @@ class ServiceTest {
         int ppn = 1, cnCalc = 11;
         float priceCalc = 100;
         initCategories();
-        Product product4 = inventory.addProduct("Calculator", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").data;
+        Product product4 = assertSuccess(inventory.addProduct("Calculator", "Tnoova", 100.0, 50,
+                10, 1200, "Store", "Shop,", "10%"));
 
-        Supplier sup = createWithPpn(ppn).data;
-        Item item = service.createItem(ppn, cnCalc, product4.getProduct_id(),  priceCalc).data;
-        Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        Supplier sup = assertSuccess(createWithPpn(ppn));
+        Item item = assertSuccess(service.createItem(ppn, cnCalc, product4.getProduct_id(),  priceCalc));
+        Order order = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
 
         service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 1);
         assertEquals(priceCalc, order.getTotalPrice());
@@ -498,16 +503,17 @@ class ServiceTest {
         int ppn = 1, cnCalc = 11;
         float priceCalc = 100;
         initCategories();
-        Product product4 = inventory.addProduct("Calculator", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").getOrThrow(RuntimeException::new);
-        Supplier sup = createWithPpn(ppn).getOrThrow(RuntimeException::new);
-        Item item = service.createItem(ppn, cnCalc, product4.getProduct_id(),  priceCalc).getOrThrow(RuntimeException::new);
-        Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).getOrThrow(RuntimeException::new);
+        Product product4 = assertSuccess(inventory.addProduct("Calculator", "Tnoova", 100.0, 50,
+                10, 1200, "Store", "Shop,", "10%"));
+        Supplier sup = assertSuccess(createWithPpn(ppn));
 
-        QuantityDiscount over10 = service.createDiscount(ppn, item.getCatalogNumber(), 10, 0.01f).getOrThrow(AssertionError::new);
-        QuantityDiscount over50 = service.createDiscount(ppn, item.getCatalogNumber(), 50, 0.05f).getOrThrow(AssertionError::new);;
-        QuantityDiscount over100 = service.createDiscount(ppn, item.getCatalogNumber(), 100, 0.1f).getOrThrow(AssertionError::new);;
-        QuantityDiscount over200 = service.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f).getOrThrow(AssertionError::new);;
+        Item item = assertSuccess(service.createItem(ppn, cnCalc, product4.getProduct_id(), priceCalc));
+        Order order = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
+
+        QuantityDiscount over10 = assertSuccess(service.createDiscount(ppn, item.getCatalogNumber(), 10, 0.01f));
+        QuantityDiscount over50 = assertSuccess(service.createDiscount(ppn, item.getCatalogNumber(), 50, 0.05f));
+        QuantityDiscount over100 = assertSuccess(service.createDiscount(ppn, item.getCatalogNumber(), 100, 0.1f));
+        QuantityDiscount over200 = assertSuccess(service.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f));
 
         service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 250);
 
@@ -528,24 +534,29 @@ class ServiceTest {
 
     }
 
+    private <T> T assertSuccess(ResponseT<T> response) {
+        assertTrue(response.success);
+        return response.data;
+    }
+
     @Test
     void setPrice() {
         int ppn = 1, cnBread = 12, cnMilk = 13;
         float priceBread = 5, priceMilk = 7;
-        Supplier sup = createWithPpn(ppn).data;
+        Supplier sup = assertSuccess(createWithPpn(ppn));
         initCategories();
-        Product product4 = inventory.addProduct("Bread", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").data;
+        Product product4 = assertSuccess(inventory.addProduct("Bread", "Tnoova", 100.0, 50,
+                10, 1200, "Store", "Shop,", "10%"));
 
-        Product product5 = inventory.addProduct("Milk", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").data;
+        Product product5 = assertSuccess(inventory.addProduct("Milk", "Tnoova", 100.0, 50,
+                10, 1200, "Store", "Shop,", "10%"));
 
-        Item bread = service.createItem(ppn, cnBread, product4.getProduct_id(),  priceBread).data;
-        Item milk = service.createItem(ppn, cnMilk, product5.getProduct_id(),  priceMilk).data;
+        Item bread = assertSuccess(service.createItem(ppn, cnBread, product4.getProduct_id(),  priceBread));
+        Item milk = assertSuccess(service.createItem(ppn, cnMilk, product5.getProduct_id(),  priceMilk));
 
         final int amountBread = 10, amountMilk = 10;
 
-        Order order = service.createOrder(ppn, date1, date2, OrderType.Periodical).data;
+        Order order = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
         service.orderItem(order.getId(), ppn, bread.getCatalogNumber(), amountBread);
         service.orderItem(order.getId(),ppn,  milk.getCatalogNumber(), amountMilk);
 
@@ -594,12 +605,12 @@ class ServiceTest {
     @Test
     void orderNewShortageOrder(){
         int ppn = 1, cnPen = 11;
-        Supplier sup = createWithPpn(ppn).data;
+        Supplier sup = assertSuccess(createWithPpn(ppn));
 
         initCategories();
 
-        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").data;
+        Product product4 = assertSuccess(inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Store", "Shop,", "10%"));
         service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
@@ -615,10 +626,10 @@ class ServiceTest {
     @Test
     void orderNewPeriodicalOrder(){
         int ppn = 1, cnPen = 11;
-        Supplier sup = createWithPpn(ppn).data;
+        Supplier sup = assertSuccess(createWithPpn(ppn));
         initCategories();
-        Product product4 = inventory.addProduct("Pen", "Tnoova", 100.0, 50,
-                10, 1200, "Store", "Shop,", "10%").data;
+        Product product4 = assertSuccess(inventory.addProduct("Pen", "Tnoova", 100.0, 50,
+                10, 1200, "Store", "Shop,", "10%"));
         service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 

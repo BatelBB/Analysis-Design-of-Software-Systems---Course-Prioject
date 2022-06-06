@@ -67,9 +67,9 @@ public class ReportDAO extends BaseDAO<Integer, ReportRecord> {
                 ps -> ps.setInt(5, type),
                 ps -> ps.setString(6, query)
         );
-        if (response.success && id > maxId)
+        if (id > maxId)
             maxId = id;
-        return response();
+        return response;
     }
 
     @Override

@@ -14,7 +14,9 @@ import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.serviceLayer.ServiceBase;
 import adss_group_k.shared.dto.CreateSupplierDTO;
+
 import static adss_group_k.serviceLayer.ServiceBase.*;
+
 import java.sql.Connection;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -25,8 +27,8 @@ public class SupplierService extends ServiceBase implements ISupplierService {
     private final ItemController items;
     private final OrderController orders;
     private final QuantityDiscountController discounts;
-    private PersistenceController dal;
-    private SupplierController suppliers;
+    private final PersistenceController dal;
+    private final SupplierController suppliers;
 
     public SupplierService(PersistenceController dal) {
         this.dal = dal;
@@ -74,16 +76,18 @@ public class SupplierService extends ServiceBase implements ISupplierService {
     }
 
     public ResponseT<Item> createItem(int supplierPPN, int catalogNumber, int productID, float price) {
-        try {
-            Item item = items.create(
-                    getSupplier(supplierPPN).getOrThrow(BusinessLogicException::new),
+        return responseFor(() -> {
+            ResponseT<Supplier> response = getSupplier(supplierPPN);
+            if (!response.success) {
+                throw new BusinessLogicException(response.error);
+            }
+            return items.create(
+                    response.data,
                     catalogNumber,
                     productID,
                     price
             );
-            return ResponseT.success(item);
-        } catch (BusinessLogicException e) {
-            return ResponseT.error(e.getMessage());        }
+        });
     }
 
     @Override
@@ -116,9 +120,13 @@ public class SupplierService extends ServiceBase implements ISupplierService {
 
     @Override
     public ResponseT<Order> createOrder(int supplierPPN, LocalDate ordered, LocalDate delivered, OrderType type) {
-        return responseFor(() ->  {
-            Supplier supplier = getSupplier(supplierPPN).getOrThrow(BusinessLogicException::new);
-            return orders.create(supplier, type, ordered, delivered); }
+        return responseFor(() -> {
+                    ResponseT<Supplier> supplier = getSupplier(supplierPPN);
+                    if (!supplier.success) {
+                        throw new BusinessLogicException(supplier.error);
+                    }
+                    return orders.create(supplier.data, type, ordered, delivered);
+                }
         );
     }
 
@@ -191,8 +199,7 @@ public class SupplierService extends ServiceBase implements ISupplierService {
     }
 
     @Override
-    public Response setSupplierRegularSupplyingDays(int supplierPPN, DayOfWeek dayOfWeek)
-    {
+    public Response setSupplierRegularSupplyingDays(int supplierPPN, DayOfWeek dayOfWeek) {
         return responseForVoid(() -> suppliers.setRegularSupplyingDays(supplierPPN, dayOfWeek));
     }
 
@@ -205,22 +212,5 @@ public class SupplierService extends ServiceBase implements ISupplierService {
     @Override
     public Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
         return null;
-    }
-
-    private <T> ResponseT<T> responseFor(java.util.function.Supplier<T> operation) {
-        try {
-            return ResponseT.success(operation.get());
-        } catch (Throwable e) {
-            return ResponseT.error(e.getMessage());
-        }
-    }
-
-    private Response responseForVoid(Runnable runnable) {
-        try {
-            runnable.run();
-            return new Response(true, null);
-        } catch (Throwable e) {
-            return new Response(false, e.getMessage());
-        }
     }
 }

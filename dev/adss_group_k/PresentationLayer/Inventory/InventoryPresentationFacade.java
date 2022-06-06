@@ -5,10 +5,12 @@ import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Report;
 import adss_group_k.BusinessLayer.Inventory.Service.ProductService;
 import adss_group_k.BusinessLayer.Inventory.Service.ReportService;
+import adss_group_k.serviceLayer.ServiceBase;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public class InventoryPresentationFacade {
     private String[] args;
@@ -23,97 +25,98 @@ public class InventoryPresentationFacade {
     }
 
     public void execute(String input) {
-        try{
-        if (!input.equals("exit")) {
-            String command = input.substring(0, input.indexOf(" "));
-            args = input.substring(input.indexOf(" ") + 1).split(",", -1);
-            switch (command) {
-                case "addCategory":
-                    addCategory();
-                    break;
-                case "removeCategory":
-                    removeCategory();
-                    break;
-                case "addSubCategory":
-                    addSubCategory();
-                    break;
-                case "removeSubCategory":
-                    removeSubCategory();
-                    break;
-                case "addSubSubCategory":
-                    addSubSubCategory();
-                    break;
-                case "removeSubSubCategory":
-                    removeSubSubCategory();
-                    break;
-                case "updateCategoryCusDiscount":
-                    updateCategoryCusDiscount();
-                    break;
-                case "updateProductCusDiscount":
-                    updateProductCusDiscount();
-                    break;
-                case "updateItemCusDiscount":
-                    updateItemCusDiscount();
-                    break;
-                case "updateProductCusPrice":
-                    updateProductCusPrice();
-                    break;
-                case "addProduct":
-                    addProduct();
-                    break;
-                case "removeProduct":
-                    removeProduct();
-                    break;
-                case "addItem":
-                    addItem();
-                    break;
-                case "removeItem":
-                    removeItem();
-                    break;
-                case "updateItemDefect":
-                    updateItemDefect();
-                    break;
-                case "getItemLocation":
-                    getItemLocation();
-                    break;
-                case "changeItemLocation":
-                    changeItemLocation();
-                    break;
-                case "changeItemOnShelf":
-                    changeItemOnShelf();
-                    break;
-                case "createMissingReport":
-                    createMissingReport();
-                    break;
-                case "createExpiredReport":
-                    createExpiredReport();
-                    break;
-                case "createSurplusesReport":
-                    createSurplusesReport();
-                    break;
-                case "createDefectiveReport":
-                    createDefectiveReport();
-                    break;
-                case "createBySupplierReport":
-                    createBySupplierReport();
-                    break;
-                case "createByProductReport":
-                    createByProductReport();
-                    break;
-                case "createByCategoryReport":
-                    createByCategoryReport();
-                    break;
-                case "removeReport":
-                    removeReport();
-                    break;
-                case "getReport":
-                    getReport();
-                    break;
-                default:
-                    System.out.println("unknown command, aborting..");
-                    break;
+        try {
+            if (!input.equals("exit")) {
+                String command = input.substring(0, input.indexOf(" "));
+                args = input.substring(input.indexOf(" ") + 1).split(",", -1);
+                switch (command) {
+                    case "addCategory":
+                        addCategory();
+                        break;
+                    case "removeCategory":
+                        removeCategory();
+                        break;
+                    case "addSubCategory":
+                        addSubCategory();
+                        break;
+                    case "removeSubCategory":
+                        removeSubCategory();
+                        break;
+                    case "addSubSubCategory":
+                        addSubSubCategory();
+                        break;
+                    case "removeSubSubCategory":
+                        removeSubSubCategory();
+                        break;
+                    case "updateCategoryCusDiscount":
+                        updateCategoryCusDiscount();
+                        break;
+                    case "updateProductCusDiscount":
+                        updateProductCusDiscount();
+                        break;
+                    case "updateItemCusDiscount":
+                        updateItemCusDiscount();
+                        break;
+                    case "updateProductCusPrice":
+                        updateProductCusPrice();
+                        break;
+                    case "addProduct":
+                        addProduct();
+                        break;
+                    case "removeProduct":
+                        removeProduct();
+                        break;
+                    case "addItem":
+                        addItem();
+                        break;
+                    case "removeItem":
+                        removeItem();
+                        break;
+                    case "updateItemDefect":
+                        updateItemDefect();
+                        break;
+                    case "getItemLocation":
+                        getItemLocation();
+                        break;
+                    case "changeItemLocation":
+                        changeItemLocation();
+                        break;
+                    case "changeItemOnShelf":
+                        changeItemOnShelf();
+                        break;
+                    case "createMissingReport":
+                        createMissingReport();
+                        break;
+                    case "createExpiredReport":
+                        createExpiredReport();
+                        break;
+                    case "createSurplusesReport":
+                        createSurplusesReport();
+                        break;
+                    case "createDefectiveReport":
+                        createDefectiveReport();
+                        break;
+                    case "createBySupplierReport":
+                        createBySupplierReport();
+                        break;
+                    case "createByProductReport":
+                        createByProductReport();
+                        break;
+                    case "createByCategoryReport":
+                        createByCategoryReport();
+                        break;
+                    case "removeReport":
+                        removeReport();
+                        break;
+                    case "getReport":
+                        getReport();
+                        break;
+                    default:
+                        System.out.println("unknown command, aborting..");
+                        break;
+                }
             }
-        }} catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Invalid syntax for inventory module command");
         }
     }
@@ -121,203 +124,135 @@ public class InventoryPresentationFacade {
 
     //service callers
     private void addCategory() {
-
-        if (args.length == 1) {
-            try {
-                categories.addCategory(args[0]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 1, () ->  categories.addCategory(args[0]));
     }
 
     private void removeCategory() {
-
-        if (args.length == 1) {
-            try {
-                categories.removeCategory(args[0]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 1, () ->  categories.removeCategory(args[0], true));
     }
 
     private void addSubCategory() {
-        if (args.length == 2) {
-            try {
-                categories.addSubCategory(args[0], args[1]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 2,
+                () -> categories.addSubCategory(args[0], args[1]));
     }
 
     private void removeSubCategory() {
-        if (args.length == 2) {
-            try {
-                categories.removeSubCategory(args[0], args[1]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 2, () ->
+                categories.removeSubCategory(args[0], args[1], true)
+        );
     }
 
     private void addSubSubCategory() {
-
-        if (args.length == 3) {
-            try {
-                categories.addSubSubCategory(args[0], args[1], args[2]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 3,
+                () -> categories.addSubSubCategory(args[0], args[1], args[2])
+        );
     }
 
     private void removeSubSubCategory() {
-
-        if (args.length == 3) {
-            try {
-                categories.removeSubSubCategory(args[0], args[1], args[2]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 3,
+                () -> categories.removeSubSubCategory(args[0], args[1], args[2], true)
+        );
     }
 
     private void updateCategoryCusDiscount() {
-
-        if (args.length == 6 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null) {
-            try {
-                products.updateCategoryCusDiscount(convertFloat(args[0]), convertDate(args[1]), convertDate(args[2]), args[3], args[4], args[5]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 6,
+                () ->  products.updateCategoryCusDiscount(
+                        convertFloat(args[0]), convertDate(args[1]),
+                        convertDate(args[2]),
+                        args[3], args[4], args[5])
+        );
     }
 
     private void updateProductCusDiscount() {
-
-        if (args.length == 4 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null && convertDouble(args[3]) != -1) {
-            try {
-                products.updateProductCusDiscount(convertFloat(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 4, () ->
+                products.updateProductCusDiscount(
+                        convertFloat(args[0]), convertDate(args[1]),
+                        convertDate(args[2]), convertInt(args[3]))
+        );
     }
 
     private void updateItemCusDiscount() {
-
-        if (args.length == 5 && convertDouble(args[0]) != -1.0 && convertDate(args[1]) != null && convertDate(args[2]) != null && convertDouble(args[3]) != -1 && convertDouble(args[4]) != -1) {
-            try {
-                products.updateItemCusDiscount(convertFloat(args[0]), convertDate(args[1]), convertDate(args[2]), convertInt(args[3]), convertInt(args[4]));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 5, () ->
+                products.updateItemCusDiscount(
+                        convertInt(args[0]),
+                        convertInt(args[1]),
+                        convertFloat(args[2]),
+                        convertDate(args[3]),
+                        convertDate(args[4])
+            )
+        );
     }
 
     private void updateProductCusPrice() {
-
-        if (args.length == 2 && convertDouble(args[1]) != -1.0 && convertInt(args[0]) != -1) {
-            try {
-                products.updateProductCusPrice(convertInt(args[0]), convertDouble(args[1]));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 2, () ->
+                products.updateProductCusPrice(convertInt(args[0]), convertFloat(args[1]))
+        );
     }
 
     private void addProduct() {
-        Product r;
-        double man_price = convertDouble(args[2]);
-        float cus_price = convertFloat(args[3]);
-        int min_qty = convertInt(args[4]);
-        int supply_time = convertInt(args[5]);
-        if (args.length == 9 && man_price != -1.0 && cus_price != -1.0 && min_qty != -1 && supply_time != -1) {
-            try {
-                r = products.addProduct(args[0], args[1], man_price, cus_price, min_qty, supply_time, args[6], args[7], args[8]).;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 9, () -> products.addProduct(
+                args[0], args[1], convertDouble(args[2]), convertFloat(args[3]),
+                convertInt(args[4]), convertInt(args[5]),
+                args[6], args[7], args[8])
+        );
     }
 
     private void removeProduct() {
-
-        if (args.length == 1 && convertInt(args[0]) != -1) {
-            try {
-                categories.removeProduct(convertInt(args[0]));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 1,
+                () -> products.removeProduct(convertInt(args[0])));
     }
 
     private void addItem() {
-
-        int product_id = convertInt(args[0]);
-        LocalDate expiration_date = convertDate(args[4]);
-        if (args.length == 6 && product_id != -1 && expiration_date != null && convertBoolean(args[5]) != null) {
-            r = products.addItem(product_id, args[1], args[2],
-                    convertInt(args[3]), expiration_date,
-                    Objects.requireNonNull(convertBoolean(args[5])));
-            if (!r.success) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 6,
+                () -> products.addItem(
+                        convertInt(args[0]), args[1], args[2],
+                        convertInt(args[3]), convertDate(args[4]),
+                        Objects.requireNonNull(convertBoolean(args[5]))
+                )
+        );
     }
 
     private void removeItem() {
-
-        if (args.length == 2 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
-            try {
-                categories.removeItem(convertInt(args[0]), convertInt(args[0]));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 2,
+                () -> products.removeItem(convertInt(args[0]), convertInt(args[0]))
+        );
     }
 
     public void updateItemDefect() {
-
-        int product_id = convertInt(args[0]);
-        int item_id = convertInt(args[1]);
-        if (args.length == 4 && product_id != -1 && item_id != -1 && convertBoolean(args[2]) != null) {
-            try {
-                products.updateItemDefect(product_id, item_id, convertBoolean(args[2]), args[3]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 4,
+            () -> products.updateItemDefect(
+                    convertInt(args[0]),
+                    convertInt(args[1]),
+                    convertBoolean(args[2]),
+                    args[3]
+            )
+        );
     }
 
     public void getItemLocation() {
-        String r;
-        if (args.length == 2 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
-            try {
-                products.getItemLocation(convertInt(args[0]), convertInt(args[0]));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            else
-            System.out.println(r);
-        }
+        useService(args, 2, () -> products.getItemLocation(convertInt(args[0]), convertInt(args[0])));
     }
 
     public void changeItemLocation() {
+        useService(
+                args, 3,
+                () -> products.changeItemLocation(convertInt(args[0]), convertInt(args[0]), args[2])
+        );
 
         if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
             try {
-                products.setItemLocation(convertInt(args[0]), convertInt(args[0]), args[2]);
-            } catch (Exception e) {
+                } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
     }
 
     public void changeItemOnShelf() {
-
+        throw new RuntimeException(); // TODO
+/*
+        useService(args, 3,
+                () -> // ?
+        );
         if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1 && convertBoolean(args[2]) != null) {
             try {
                 products.setItemOnShelf(convertInt(args[0]), convertInt(args[0]), convertBoolean(args[2]));
@@ -325,169 +260,89 @@ public class InventoryPresentationFacade {
                 System.out.println(e.getMessage());
             }
         }
+*/
     }
 
     public void createMissingReport() {
-        Report r;
-        if (args.length == 2) {
-            try {
-                products.createMissingReport(args[0], args[1]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            else
-            System.out.println(r);
-        }
+        useService(args, 2,
+                () -> reports.createMissingReport(args[0], args[1]));
     }
 
     public void createExpiredReport() {
-        Report r;
-        if (args.length == 2) {
-            try {
-                reports.createExpiredReport(args[0], args[1]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            else
-            System.out.println(r);
-        }
+        useService(args, 2,
+                () -> reports.createExpiredReport(args[0], args[1]));
     }
 
     public void createSurplusesReport() {
-        Report r;
-        if (args.length == 2) {
-            try {
-                reports.createSurplusesReport(args[0], args[1]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            else
-            System.out.println(r);
-        }
+        useService(args, 2,
+                () -> reports.createSurplusesReport(args[0], args[1])
+        );
     }
 
     public void createDefectiveReport() {
-        Report r;
-        if (args.length == 2) {
-            try {
-                reports.createDefectiveReport(args[0], args[1]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            else
-            System.out.println(r);
-        }
+        useService(args, 2, () -> reports.createDefectiveReport(args[0], args[1]));
     }
 
     public void createBySupplierReport() {
-        Report r;
-        if (args.length == 3) {
-            try {
-                reports.createBySupplierReport(args[0], args[1], convertInt(args[2]));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            else
-            System.out.println(r);
-        }
+        useService(args, 3,
+                () -> reports.createBySupplierReport(args[0], args[1], convertInt(args[2]))
+        );
     }
 
     public void createByProductReport() {
-        Report r;
-        if (args.length == 3) {
-            try {
-                reports.createByProductReport(args[0], args[1], args[2]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            else
-            System.out.println(r);
-        }
+        useService(args, 3,
+                () -> reports.createByProductReport(args[0], args[1], args[2])
+        );
     }
 
     public void createByCategoryReport() {
-        Report r;
-        if (args.length == 5) {
-            try {
-                reports.createByCategoryReport(args[0], args[1], args[2], args[3], args[4]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            else
-            System.out.println(r);
-        }
+        useService(args, 5,
+            () -> reports.createByCategoryReport(args[0], args[1], args[2], args[3], args[4])
+        );
     }
 
     public void removeReport() {
-
-        if (args.length == 1 && convertInt(args[0]) != -1) {
-            try {
-                reports.removeReport(convertInt(args[0]));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        useService(args, 1,
+                () -> reports.removeReport(convertInt(args[0])));
     }
 
     public void getReport() {
-        Report r;
-        if (args.length == 1 && convertInt(args[0]) != -1) {
-            try {
-                reports.getReport(convertInt(args[0]));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            else
-            System.out.println(r);
-        }
+        useService(args, 1,
+                () -> reports.getReport(convertInt(args[0])));
     }
 
-
     //converters
-    private Boolean convertBoolean(String input) {
-        try {
-            return Boolean.parseBoolean(input);
-        } catch (Exception e) {
-            System.out.println("failed to parse boolean, " + e.getMessage());
-            return null;
-        }
+    private boolean convertBoolean(String input) {
+        return Boolean.parseBoolean(input);
     }
 
     private double convertDouble(String input) {
-        try {
-            return Double.parseDouble(input);
-        } catch (Exception e) {
-            System.out.println("failed to parse double, " + e.getMessage());
-            return -1.0;
-        }
+        return Double.parseDouble(input);
     }
 
     private float convertFloat(String input) {
-        try {
-            return Float.parseFloat(input);
-        } catch (Exception e) {
-            System.out.println("failed to parse float, " + e.getMessage());
-            return -1;
-        }
+        return Float.parseFloat(input);
     }
 
     private LocalDate convertDate(String input) {
-        try {
-            DateTimeFormatter formatter;
-            formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            return LocalDate.parse(input, formatter);
-        } catch (Exception e) {
-            System.out.println("failed to parse date");
-            return null;
-        }
+        DateTimeFormatter formatter;
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(input, formatter);
     }
 
     private int convertInt(String input) {
+        return Integer.parseInt(input);
+    }
+
+    private void useService(String[] args, int argumentCount, Supplier<ServiceBase.Response> serviceUsage) {
         try {
-            return Integer.parseInt(input);
+            if (args.length != argumentCount) {
+                throw new IllegalArgumentException("Expected " + argumentCount +
+                        " arguments, but got " + args.length);
+            }
+            System.out.println(serviceUsage.get());
         } catch (Exception e) {
-            System.out.println("failed to parse int, " + e.getMessage());
-            return -1;
+            System.out.println(e.getMessage());
         }
     }
 }

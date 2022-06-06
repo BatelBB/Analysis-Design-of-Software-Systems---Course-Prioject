@@ -32,7 +32,7 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
     }
 
     public ProductData create(int item_ids, int id, String name, float customerPrice, int minQty, int storageQty, int shelfQty, String category, String subcategory, String subSubcategory) {
-        ProductRecord response = create(
+        ProductRecord record = create(
                 () -> new ProductRecord(item_ids, id, name, customerPrice, minQty, storageQty, shelfQty, category, subcategory, subSubcategory),
                 "INSERT INTO Product(" + "item_ids,id,name,customerPrice," + "minQty,storageQty,shelfQty," + "subSubcategory,subcategory,category" + ")" +
                         " VALUES(?,?,?,?,?,?,?,?,?,?)",
@@ -47,9 +47,9 @@ public class ProductDAO extends BaseDAO<Integer, ProductRecord> {
                 ps -> ps.setString(9, subcategory),
                 ps -> ps.setString(10, category)
         );
-        if (response.success && id > maxId)
+        if (id > maxId)
             maxId = id;
-        return response();
+        return record;
     }
 
     @Override

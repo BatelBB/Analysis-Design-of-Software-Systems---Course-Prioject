@@ -13,7 +13,7 @@ public class Item {
 
     public Item(ItemData data, Supplier supplier, ItemController controller) {
         this.supplier = supplier;
-        this = data;
+        this.data = data;
         this.controller = controller;
     }
 

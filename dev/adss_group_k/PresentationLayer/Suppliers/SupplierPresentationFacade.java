@@ -12,6 +12,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Scanner;
 
+import static adss_group_k.serviceLayer.ServiceBase.*;
+
 public class SupplierPresentationFacade {
     private UserInput input = UserInput.getInstance();
     private UserOutput output = UserOutput.getInstance();

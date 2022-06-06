@@ -44,7 +44,7 @@ public class DiscountPairDAO extends BaseDAO<DiscountPairRecord.DiscountPairKey,
                 ps -> ps.setDate(5, end_date),
                 ps -> ps.setFloat(6, discount)
         );
-        return response();
+        return response;
     }
 
     @Override

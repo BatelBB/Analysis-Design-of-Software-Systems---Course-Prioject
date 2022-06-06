@@ -82,8 +82,6 @@ public class Product {
                 on_shelf,
                 ""
         );
-        if (!r.success)
-            throw new Exception(r.error);
         ProductItem pItem = new ProductItem(r, pc);
         items.put(item_ids, pItem);
         if (on_shelf)

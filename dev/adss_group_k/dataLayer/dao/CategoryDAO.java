@@ -23,7 +23,7 @@ public class CategoryDAO extends BaseDAO<String, CategoryRecord> {
                 () -> new CategoryRecord(name),
                 "INSERT INTO Category(name) VALUES(?)",
                 ps -> ps.setString(1, name)
-        )();
+        );
     }
 
     @Override

@@ -1,8 +1,14 @@
 package adss_group_k.Tests;
 
+import adss_group_k.BusinessLayer.Inventory.Controllers.CategoryController;
+import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
 import adss_group_k.BusinessLayer.Inventory.ProductItem;
+import adss_group_k.BusinessLayer.Inventory.Service.CategoryService;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Report;
+import adss_group_k.BusinessLayer.Inventory.Service.ProductService;
+import adss_group_k.BusinessLayer.Inventory.Service.ReportService;
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
@@ -14,6 +20,7 @@ import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
 
+import adss_group_k.serviceLayer.ServiceBase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,10 +30,11 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static adss_group_k.serviceLayer.ServiceBase.*;
 
 public class IntegrationTests {
 
-    private ISupplierService service;
+    private ISupplierService suppliers;
     private Service inventory;
     private QuantityDiscount discount;
     private Order order;
@@ -59,9 +67,15 @@ public class IntegrationTests {
             throw new RuntimeException(throwables);
         }
         PersistenceController dal = new PersistenceController(conn);
-        service = new SupplierService(dal);
-        inventory = new Service(service, dal);
+        suppliers = new SupplierService(dal);
+        CategoryController categoryController = new CategoryController(dal);
 
+        ProductService products = new ProductService(dal, new ProductController(dal, categoryController));
+        ProductController productController = new ProductController(dal, categoryController);
+        ReportService reports = new ReportService(dal, categoryController, productController);
+        CategoryService categories = new CategoryService(categoryController);
+        inventory = new Service(suppliers, products, reports, categories);
+        
     }
 
     @AfterEach
@@ -93,8 +107,8 @@ public class IntegrationTests {
     public void deleteDB() {
         addToDB();
 
-        service.deleteOrder(order.getId());
-        service.deleteSupplier(sup.getPpn());
+        suppliers.deleteOrder(order.getId());
+        suppliers.deleteSupplier(sup.getPpn());
 
         inventory.removeReport(missingReport.getId());
         inventory.removeReport(byProductReport.getId());
@@ -125,16 +139,16 @@ public class IntegrationTests {
 
     @Test
     public void testAddItemToOrder() {
-        sup = service.createSupplier(1, 123, "Lorem", true, PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528", "B@Gmail.com").data;
+        sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem", true, PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528", "B@Gmail.com"));
 
-        order = service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX, OrderType.Periodical).data;
+        order = assertSuccess(suppliers.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX, OrderType.Periodical));
         inventory.addCategory("Dairy");
         inventory.addSubCategory("Dairy", "Shop");
         inventory.addSubSubCategory("Dairy", "Shop", "10%");
 
-        Product prod = inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
-                1200, "Dairy", "Shop", "10%").data;
-        Item item = service.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12).data;
+        Product prod = assertSuccess(inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+                1200, "Dairy", "Shop", "10%"));
+        Item item = assertSuccess(suppliers.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
 
         String select_query = "SELECT * FROM Item WHERE supplierPPN=" + item.getSupplier().getPpn();
         Statement st = null;
@@ -168,7 +182,7 @@ public class IntegrationTests {
                 "Shop",
                 "10%"
         );
-        Product prod = inventory.addProduct(
+        assertFalse(inventory.addProduct(
                 "Milk",
                 "Tnoova",
                 10.0,
@@ -177,8 +191,8 @@ public class IntegrationTests {
                 1200,
                 "Dairy",
                 "Shop",
-                "20%"
-        ).data;
+                "20%" // <-- wrong subsubcat
+        ).success);
 
         String select_query = "SELECT Count(*) FROM Product";
         Statement st = null;
@@ -327,7 +341,7 @@ public class IntegrationTests {
                 "Shop",
                 "10%"
         );
-        Product prod = inventory.addProduct(
+        Product prod = assertSuccess(inventory.addProduct(
                 "Milk",
                 "Tnoova",
                 10.0,
@@ -337,8 +351,8 @@ public class IntegrationTests {
                 "Dairy",
                 "Shop",
                 "10%"
-        ).data;
-        double NEW_PRICE = 21;
+        ));
+        float NEW_PRICE = 21;
         inventory.updateProductCusPrice(prod.getProduct_id(), NEW_PRICE);
         String select_query = "SELECT * FROM Product WHERE id=" + prod.getProduct_id();
         Statement st = null;
@@ -359,7 +373,7 @@ public class IntegrationTests {
 
     @Test
     public void testCreateSupplierCard() {
-        assertTrue(service.createSupplier(1, 123, "Lorem", true,
+        assertTrue(suppliers.createSupplier(1, 123, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
                 "B@Gmail.com").success);
     }
@@ -379,17 +393,17 @@ public class IntegrationTests {
                 "Shop",
                 "10%"
         );
-        Product prod = inventory.addProduct(
+        assertFalse(inventory.addProduct(
                 "Milk",
                 "Tnoova",
                 10.0,
                 20,
                 10,
                 1200,
-                "Dairies",
+                "Dairies", // <-- wrong category
                 "Shop",
                 "10%"
-        ).data;
+        ).success);
         String select_query = "SELECT * FROM Product";
         Statement st = null;
         ResultSet res_select;
@@ -408,61 +422,61 @@ public class IntegrationTests {
 
     @Test
     public void testAddItemWithoutExistingSupplier() {
-        Supplier sup = service.createSupplier(1, 123, "Lorem", true,
+        Supplier sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
-                "B@Gmail.com").data;
+                "B@Gmail.com"));
 
         inventory.addCategory("Dairy");
         inventory.addSubCategory("Dairy", "Shop");
         inventory.addSubSubCategory("Dairy", "Shop", "10%");
 
         int wrongSupplier = sup.getPpn() + 3;
-        assertFalse(service.createItem(wrongSupplier, 2, 1, 0.5f).success);
+        assertFalse(suppliers.createItem(wrongSupplier, 2, 1, 0.5f).success);
     }
 
     @Test
     public void testAddItemToNonExistingOrder() {
-        Supplier sup = service.createSupplier(1, 123, "Lorem", true,
+        Supplier sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
-                "B@Gmail.com").data;
+                "B@Gmail.com"));
 
-        Order order = service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
-                OrderType.Periodical).data;
+        Order order = assertSuccess(suppliers.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
+                OrderType.Periodical));
 
         inventory.addCategory("Dairy");
         inventory.addSubCategory("Dairy", "Shop");
         inventory.addSubSubCategory("Dairy", "Shop", "10%");
 
-        Product prod = inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
-                1200, "Dairy", "Shop", "10%").data;
+        Product prod = assertSuccess(inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+                1200, "Dairy", "Shop", "10%"));
 
-        Item item = service.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12).data;
+        Item item = assertSuccess(suppliers.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
 
         int wrongOrderId = order.getId() + 3;
-        Response response = service.orderItem(wrongOrderId, sup.getPpn(), item.getCatalogNumber(), 100);
+        Response response = suppliers.orderItem(wrongOrderId, sup.getPpn(), item.getCatalogNumber(), 100);
         assertFalse(response.success);
     }
 
     @Test
     public void testAddQuantityDiscountToItem() throws SQLException {
-        Supplier sup = service.createSupplier(1, 123, "Lorem", true,
+        Supplier sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
-                "B@Gmail.com").data;
+                "B@Gmail.com"));
 
-        Order order = service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
-                OrderType.Periodical).data;
+        Order order = assertSuccess(suppliers.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
+                OrderType.Periodical));
 
         inventory.addCategory("Dairy");
         inventory.addSubCategory("Dairy", "Shop");
         inventory.addSubSubCategory("Dairy", "Shop", "10%");
 
-        Product prod = inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
-                1200, "Dairy", "Shop", "10%").data;
+        Product prod = assertSuccess(inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+                1200, "Dairy", "Shop", "10%"));
 
-        Item item = service.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12).data;
+        Item item = assertSuccess(suppliers.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
 
-        QuantityDiscount qd = service.createDiscount(sup.getPpn(), item.getCatalogNumber()
-                , 100, 0.1f).getOrThrow(RuntimeException::new);
+        QuantityDiscount qd = assertSuccess(suppliers.createDiscount(sup.getPpn(), item.getCatalogNumber()
+                , 100, 0.1f));
 
         PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM QuantityDiscount");
         ResultSet resultSet = ps.executeQuery();
@@ -470,30 +484,49 @@ public class IntegrationTests {
         assertTrue(resultSet.getInt(1) > 0);
     }
 
+    private void assertSuccess(Response response) {
+        assertTrue(response.success, response.error);
+    }
+
+    private <T> T assertSuccess(ResponseT<T> responseT) {
+        assertTrue(responseT.success, responseT.error);
+        return responseT.data;
+    }
+
     private void addToDB() {
-        sup = service.createSupplier(1, 123, "Lorem", true, PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528", "B@Gmail.com").data;
+        sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem",
+                true, PaymentCondition.Credit, DayOfWeek.SUNDAY,
+                "Moti", "0509954528", "B@Gmail.com"));
 
-        order = service.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX, OrderType.Periodical).data;
+        order = assertSuccess(suppliers.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX, OrderType.Periodical));
 
-        inventory.addCategory("Dairy");
-        inventory.addSubCategory("Dairy", "Shop");
-        inventory.addSubSubCategory("Dairy", "Shop", "10%");
+        assertSuccess(inventory.addCategory("Dairy"));
+        assertSuccess(inventory.addSubCategory("Dairy", "Shop"));
+        assertSuccess(inventory.addSubSubCategory("Dairy", "Shop", "10%"));
 
-        prod = inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10, 1200, "Dairy", "Shop", "10%").data;
+        prod = assertSuccess(
+                inventory.addProduct(
+                        "Milk", "Tnoova",
+                        10.0, 20, 10, 1200,
+                        "Dairy", "Shop", "10%"));
 
-        adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem pItem = inventory.addItem(prod.getProduct_id(), "TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX, true).data;
-        Item item = service.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12).data;
-        service.orderItem(order.getId(), sup.getPpn(), item.getCatalogNumber(), 50);
-        discount = service.createDiscount(sup.getPpn(), item.getCatalogNumber(), 50, 5).data;
+        adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem pItem = assertSuccess(inventory.addItem(prod.getProduct_id(), "TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX, true));
+        Item item = assertSuccess(suppliers.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
+        assertSuccess(suppliers.orderItem(
+                order.getId(),
+                sup.getPpn(),
+                item.getCatalogNumber(),
+                50));
+        discount = assertSuccess(suppliers.createDiscount(sup.getPpn(), item.getCatalogNumber(), 50, 5));
 
         inventory.updateItemCusDiscount(0.1f, LocalDate.now(), LocalDate.MAX, prod.getProduct_id(), pItem.getId());
 
-        missingReport = inventory.createMissingReport("Missing", "Report1").data;
-        supplierReport = inventory.createBySupplierReport("Supplier", "Report2", 10).data;
-        expiredReport = inventory.createExpiredReport("Expired", "Report3").data;
-        categoryReport = inventory.createByCategoryReport("Category", "Report4", "CatName", "SubCatName", "SubSubCatName").data;
-        defectiveReport = inventory.createDefectiveReport("Defective", "Report5").data;
-        surplusesReport = inventory.createSurplusesReport("Surpluses", "Report6").data;
-        byProductReport = inventory.createByProductReport("Product", "Report7", "ProName").data;
+        missingReport = assertSuccess(inventory.createMissingReport("Missing", "Report1"));
+        supplierReport = assertSuccess(inventory.createBySupplierReport("Supplier", "Report2", sup.getPpn()));
+        expiredReport = assertSuccess(inventory.createExpiredReport("Expired", "Report3"));
+        categoryReport = assertSuccess(inventory.createByCategoryReport("Category", "Report4", "CatName", "SubCatName", "SubSubCatName"));
+        defectiveReport = assertSuccess(inventory.createDefectiveReport("Defective", "Report5"));
+        surplusesReport = assertSuccess(inventory.createSurplusesReport("Surpluses", "Report6"));
+        byProductReport = assertSuccess(inventory.createByProductReport("Product", "Report7", "ProName"));
     }
 }

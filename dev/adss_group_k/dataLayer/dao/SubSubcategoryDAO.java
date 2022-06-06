@@ -34,7 +34,7 @@ public class SubSubcategoryDAO extends BaseDAO<SubSubCategoryRecord.SubSubcatego
                 ps -> ps.setString(1, category),
                 ps -> ps.setString(2, subcategory),
                 ps -> ps.setString(3, name)
-        )();
+        );
     }
 
     @Override

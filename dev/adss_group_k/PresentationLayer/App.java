@@ -1,5 +1,11 @@
 package adss_group_k.PresentationLayer;
 
+import adss_group_k.BusinessLayer.Inventory.Controllers.CategoryController;
+import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
+import adss_group_k.BusinessLayer.Inventory.Service.CategoryService;
+import adss_group_k.BusinessLayer.Inventory.Service.ProductService;
+import adss_group_k.BusinessLayer.Inventory.Service.ReportService;
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 import adss_group_k.PresentationLayer.Inventory.InventoryPresentationFacade;
 import adss_group_k.PresentationLayer.Suppliers.SupplierPresentationFacade;
@@ -41,14 +47,22 @@ public class App {
             SchemaInit.init(conn);
         }
         dal = new PersistenceController(conn);
+        PersistenceController dal = new PersistenceController(conn);
         supplierService = new SupplierService(dal);
-        inventoryService = new Service(supplierService, dal);
+
+        CategoryController categoryController = new CategoryController(dal);
+
+        ProductService products = new ProductService(dal, new ProductController(dal, categoryController));
+        ProductController productController = new ProductController(dal, categoryController);
+        ReportService reports = new ReportService(dal, categoryController, productController);
+        CategoryService categories = new CategoryService(categoryController);
+        inventoryService = new Service(supplierService, products, reports, categories);
 
         if(shouldLoadExample) {
             ExampleData.loadExampleData(inventoryService, supplierService);
         }
         supplierPresentation = new SupplierPresentationFacade(supplierService);
-        inventoryPresentationFacade = new InventoryPresentationFacade(inventoryService);
+        inventoryPresentationFacade = new InventoryPresentationFacade(categories, products, reports);
 
     }
 

@@ -25,7 +25,7 @@ public class ItemDAO extends BaseDAO<ItemRecord.ItemKey, ItemRecord> {
                 ps -> ps.setInt(2, catalogNumber),
                 ps -> ps.setInt(3, productId),
                 ps -> ps.setFloat(4, price)
-        )();
+        );
     }
 
     @Override

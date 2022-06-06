@@ -46,7 +46,7 @@ public class ProductItem {
 
     //METHODS
     public void addCusDiscount(LocalDate start_date, LocalDate end_date, float discount) throws Exception {
-        ResponseT<DiscountPairData> r = pc.getDiscountPairs().create(
+        DiscountPairData r = pc.getDiscountPairs().create(
                 product_id,
                 id,
                 discount_ids,
@@ -54,9 +54,7 @@ public class ProductItem {
                 java.sql.Date.valueOf(end_date),
                 discount
         );
-        if (!r.success)
-            throw new Exception(r.error);
-        cus_discount.add(new DiscountPair(r.data));
+        cus_discount.add(new DiscountPair(r));
         setDiscount_ids(discount_ids+1);
     }
 

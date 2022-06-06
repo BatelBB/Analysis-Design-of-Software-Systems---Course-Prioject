@@ -36,13 +36,8 @@ public class Category {
     public void addSubCategory(String name) throws Exception {
         if (subC.containsKey(name))
             throw new IllegalArgumentException("The SubCategory already exists in the system");
-        else {
-            SubcategoryData r = pc.getSubcategories().create(this.name, name);
-            if (r.success)
-                subC.put(name, new SubCategory(name, pc));
-            else
-                throw new Exception(r.error);
-        }
+        SubcategoryData r = pc.getSubcategories().create(this.name, name);
+        subC.put(name, new SubCategory(name, pc));
     }
 
     public void removeSubCategory(String name) throws Exception {
@@ -72,7 +67,7 @@ public class Category {
     //PRIVATE METHODS
     private void subCategoryExists(String name) {
         if (!subC.containsKey(name))
-            throw new IllegalArgumentException("Category doesn't exists");
+            throw new IllegalArgumentException("Category doesn't exists: " + name);
     }
 
     private void addFromExisting(SubcategoryRecord sub_category) {

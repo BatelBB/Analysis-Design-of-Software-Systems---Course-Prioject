@@ -37,8 +37,6 @@ public class SubCategory {
         if (subSubCategories.containsKey(this.name))
             throw new IllegalArgumentException("The SubSubCategory already exists in the system");
         SubSubcategoryData r = pc.getSubSubCategories().create(cat_name, this.name, name);
-        if (!r.success)
-            throw new Exception(r.error);
         subSubCategories.put(name, new SubSubCategory(name));
     }
 

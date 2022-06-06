@@ -31,6 +31,7 @@ public abstract class ServiceBase {
 
     protected Response responseForVoid(ThrowingRunnable lambda) {
         try {
+            lambda.run();
             return voidOk();
         } catch (Exception e) {
             return voidError(e.getMessage());

@@ -58,7 +58,7 @@ public class ProductItemInReportDAO extends BaseDAO<Integer, ProductItemInReport
                 ps -> ps.setInt(2, product_id),
                 ps -> ps.setInt(3, productItem_id)
         );
-        return response();
+        return response;
     }
 
     @Override

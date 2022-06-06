@@ -30,9 +30,7 @@ public class CategoryController {
     public void addCategory(String name) throws Exception {
         if (categories.containsKey(name))
             throw new IllegalArgumentException("Category name already exists in the system");
-        CategoryData r = pc.getCategories().create(name);
-        if (!r.success)
-            throw new Exception(r.error);
+        pc.getCategories().create(name);
         Category category = new Category(name, pc);
         categories.put(name, category);
     }

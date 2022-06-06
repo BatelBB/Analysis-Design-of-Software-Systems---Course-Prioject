@@ -39,7 +39,8 @@ public class CategoryService extends ServiceBase {
     }
 
     public Response removeSubSubCategory(String category, String sub_category, String name, boolean safe_remove) {
-        return responseForVoid(() -> category_controller.removeSubSubCategory(category, sub_category, name, safe_remove))
+        return responseForVoid(() -> category_controller.removeSubSubCategory(
+                category, sub_category, name, safe_remove));
     }
 
     public ResponseT<Category> getCategory(String name) {

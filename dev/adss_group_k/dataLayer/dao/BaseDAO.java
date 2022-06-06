@@ -47,6 +47,7 @@ public abstract class BaseDAO<TEntityID, TEntity extends BaseRecord<TEntityID>> 
 
     public boolean exists(TEntityID id) {
         try {
+            get(id);
             return true;
         } catch (NoSuchElementException e) {
             return false;

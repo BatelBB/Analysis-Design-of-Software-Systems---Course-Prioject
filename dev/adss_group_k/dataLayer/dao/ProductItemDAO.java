@@ -74,7 +74,7 @@ public class ProductItemDAO extends BaseDAO<ProductItemRecord.ProductItemKey, Pr
                 ps -> ps.setBoolean(8, on_shelf),
                 ps -> ps.setString(9, defect_reporter)
         );
-        return response();
+        return response;
     }
 
     public int updateIsDefect(int product_id, int id, boolean is_defect) {
