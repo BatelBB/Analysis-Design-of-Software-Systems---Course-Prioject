@@ -40,7 +40,7 @@ public class ItemController {
         }
         ItemData source = dal.getItems()
                 .create(supplier.getPpn(), catalogNumber, productId, price)
-                .getOrThrow(BusinessLogicException::new);
+                ;
         Item item = new Item(source, supplier, this);
         items.put(key, item);
         return item;

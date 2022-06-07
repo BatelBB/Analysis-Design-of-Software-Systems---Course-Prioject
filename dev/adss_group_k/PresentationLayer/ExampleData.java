@@ -1,10 +1,10 @@
 package adss_group_k.PresentationLayer;
 
-import adss_group_k.BusinessLayer.Inventory.Categories.SubSubCategory;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
+import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
@@ -13,7 +13,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 public class ExampleData {
-    public static void loadExampleData(Service inventory, SupplierService suppliers) {
+    public static void loadExampleData(Service inventory, ISupplierService suppliers) {
         int ppn_office = suppliers.createSupplier(1, 1, "OfficeLi",
                 true, PaymentCondition.Credit, DayOfWeek.SUNDAY,
                 "Ofir", "1-800-office", "ofir@office.li").data.getPpn();

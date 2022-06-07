@@ -6,7 +6,7 @@ import adss_group_k.BusinessLayer.Inventory.Categories.SubCategory;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.CategoryRecord;
 import adss_group_k.dataLayer.records.readonly.CategoryData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,9 +30,7 @@ public class CategoryController {
     public void addCategory(String name) throws Exception {
         if (categories.containsKey(name))
             throw new IllegalArgumentException("Category name already exists in the system");
-        ResponseT<CategoryData> r = pc.getCategories().create(name);
-        if (!r.success)
-            throw new Exception(r.error);
+        pc.getCategories().create(name);
         Category category = new Category(name, pc);
         categories.put(name, category);
     }

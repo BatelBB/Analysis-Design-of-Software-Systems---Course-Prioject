@@ -2,7 +2,7 @@ package adss_group_k.dataLayer.dao;
 
 import adss_group_k.dataLayer.records.ProductItemRecord;
 import adss_group_k.dataLayer.records.readonly.ProductItemData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -50,8 +50,8 @@ public class ProductItemDAO extends BaseDAO<ProductItemRecord.ProductItemKey, Pr
         return res.stream();
     }
 
-    public ResponseT<ProductItemData> create(int product_id, int id, String store, String location, int supplier, Date expiration_date, boolean is_defect, boolean on_shelf, String defect_reporter) {
-        ResponseT<ProductItemRecord> response = create(
+    public ProductItemData create(int product_id, int id, String store, String location, int supplier, Date expiration_date, boolean is_defect, boolean on_shelf, String defect_reporter) {
+        ProductItemRecord response = create(
                 () -> new ProductItemRecord(product_id, id, store, location, supplier, expiration_date, is_defect, on_shelf, defect_reporter),
                 "INSERT INTO " + TABLE_NAME + " (" +
                         PRODUCT_ID + "," +
@@ -74,7 +74,7 @@ public class ProductItemDAO extends BaseDAO<ProductItemRecord.ProductItemKey, Pr
                 ps -> ps.setBoolean(8, on_shelf),
                 ps -> ps.setString(9, defect_reporter)
         );
-        return response.castUnchecked();
+        return response;
     }
 
     public int updateIsDefect(int product_id, int id, boolean is_defect) {

@@ -10,7 +10,7 @@ import adss_group_k.dataLayer.records.ReportRecord;
 import adss_group_k.dataLayer.records.readonly.ProductInReportData;
 import adss_group_k.dataLayer.records.readonly.ProductItemInReportData;
 import adss_group_k.dataLayer.records.readonly.ReportData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.time.LocalDate;
 import java.util.*;
@@ -72,7 +72,7 @@ public class ReportController {
     public Report createByCategoryReport(String name, String report_producer, String CatName, String subCatName, String subSubCatName) throws Exception {
         List<Product> byCategoryPro = product_controller.getItemsByCategory(CatName, subCatName, subSubCatName);
         int report_ids = pc.getReports().getMaxId() + 1;
-        ResponseT<ReportData> r = pc.getReports().create(
+        ReportData r = pc.getReports().create(
                 report_ids,
                 report_producer,
                 name,
@@ -86,7 +86,7 @@ public class ReportController {
     public Report createByProductReport(String name, String report_producer, String proName) throws Exception {
         List<ProductItem> byProductPro = product_controller.getItemsByProduct(proName);
         int report_ids = pc.getReports().getMaxId() + 1;
-        ResponseT<ReportData> r = pc.getReports().create(
+        ReportData r = pc.getReports().create(
                 report_ids,
                 report_producer,
                 name,
@@ -100,7 +100,7 @@ public class ReportController {
     public Report createBySupplierReport(String name, String report_producer, int suppName) throws Exception {
         List<ProductItem> bySupplierPro = product_controller.getItemsBySupplier(suppName);
         int report_ids = pc.getReports().getMaxId() + 1;
-        ResponseT<ReportData> r = pc.getReports().create(
+        ReportData r = pc.getReports().create(
                 report_ids,
                 report_producer,
                 name,
@@ -114,7 +114,7 @@ public class ReportController {
     public Report createDefectiveReport(String name, String report_producer) throws Exception {
         List<ProductItem> DefectivePro = product_controller.getDefectiveItems();
         int report_ids = pc.getReports().getMaxId() + 1;
-        ResponseT<ReportData> r = pc.getReports().create(
+        ReportData r = pc.getReports().create(
                 report_ids,
                 report_producer,
                 name,
@@ -128,7 +128,7 @@ public class ReportController {
     public Report createExpiredReport(String name, String report_producer) throws Exception {
         List<ProductItem> ExpiredPro = product_controller.getExpiredItems();
         int report_ids = pc.getReports().getMaxId() + 1;
-        ResponseT<ReportData> r = pc.getReports().create(
+        ReportData r = pc.getReports().create(
                 report_ids,
                 report_producer,
                 name,
@@ -142,7 +142,7 @@ public class ReportController {
     public Report createMissingReport(String name, String report_producer) throws Exception {
         List<Product> missingPro = product_controller.getMissingProducts();
         int report_ids = pc.getReports().getMaxId() + 1;
-        ResponseT<ReportData> r = pc.getReports().create(
+        ReportData r = pc.getReports().create(
                 report_ids,
                 report_producer,
                 name,
@@ -156,7 +156,7 @@ public class ReportController {
     public Report createSurplusesReport(String name, String report_producer) throws Exception {
         List<Product> SurplusesPro = product_controller.getSurplusProducts();
         int report_ids = pc.getReports().getMaxId() + 1;
-        ResponseT<ReportData> r = pc.getReports().create(
+        ReportData r = pc.getReports().create(
                 report_ids,
                 report_producer,
                 name,
@@ -167,28 +167,20 @@ public class ReportController {
     }
 
     //PRIVATE METHODS
-    private Report getReportForProduct(List<Product> product_list, ResponseT<ReportData> r) throws Exception {
-        if (!r.success)
-            throw new Exception(r.error);
-        Report report = new Report(r.data, pc);
+    private Report getReportForProduct(List<Product> product_list, ReportData r) throws Exception {
+        Report report = new Report(r, pc);
         for (Product p : product_list) {
-            ResponseT<ProductInReportData> pir = pc.getProductsInReports().create(report.getId(), p.getProduct_id());
-            if (!pir.success)
-                throw new Exception(r.error);
+            ProductInReportData pir = pc.getProductsInReports().create(report.getId(), p.getProduct_id());
             report.addProduct(p);
         }
         reports.put(report.getId(), report);
         return report;
     }
 
-    private Report getReportForProductItem(List<ProductItem> expiredPro, ResponseT<ReportData> r) throws Exception {
-        if (!r.success)
-            throw new Exception(r.error);
-        Report report = new Report(r.data, pc);
+    private Report getReportForProductItem(List<ProductItem> expiredPro, ReportData r) throws Exception {
+        Report report = new Report(r, pc);
         for (ProductItem pi : expiredPro) {
-            ResponseT<ProductItemInReportData> pir = pc.getProductItemsInReports().create(report.getId(), pi.getProduct_id(), pi.getId());
-            if (!pir.success)
-                throw new Exception(r.error);
+            ProductItemInReportData pir = pc.getProductItemsInReports().create(report.getId(), pi.getProduct_id(), pi.getId());
             report.addProductItem(pi);
         }
         reports.put(report.getId(), report);

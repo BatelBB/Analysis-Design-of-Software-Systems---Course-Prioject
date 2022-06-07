@@ -4,7 +4,7 @@ import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.SubSubCategoryRecord;
 import adss_group_k.dataLayer.records.SubcategoryRecord;
 import adss_group_k.dataLayer.records.readonly.SubSubcategoryData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,9 +36,7 @@ public class SubCategory {
     public void addSubSubCategory(String cat_name, String name) throws Exception {
         if (subSubCategories.containsKey(this.name))
             throw new IllegalArgumentException("The SubSubCategory already exists in the system");
-        ResponseT<SubSubcategoryData> r = pc.getSubSubCategories().create(cat_name, this.name, name);
-        if (!r.success)
-            throw new Exception(r.error);
+        SubSubcategoryData r = pc.getSubSubCategories().create(cat_name, this.name, name);
         subSubCategories.put(name, new SubSubCategory(name));
     }
 

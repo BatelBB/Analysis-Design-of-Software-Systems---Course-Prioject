@@ -10,14 +10,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
-import adss_group_k.shared.response.*;
-
 public class ItemDAO extends BaseDAO<ItemRecord.ItemKey, ItemRecord> {
     public ItemDAO(Connection conn) {
         super(conn);
     }
 
-    public ResponseT<ItemData> create(int supplierPPN, int catalogNumber,
+    public ItemData create(int supplierPPN, int catalogNumber,
                    int productId, float price) {
         return create(
                 () -> new ItemRecord(supplierPPN, catalogNumber, productId, price),
@@ -27,7 +25,7 @@ public class ItemDAO extends BaseDAO<ItemRecord.ItemKey, ItemRecord> {
                 ps -> ps.setInt(2, catalogNumber),
                 ps -> ps.setInt(3, productId),
                 ps -> ps.setFloat(4, price)
-        ).castUnchecked();
+        );
     }
 
     @Override
@@ -54,7 +52,7 @@ public class ItemDAO extends BaseDAO<ItemRecord.ItemKey, ItemRecord> {
                 ps -> ps.setInt(2, item.ppn),
                 ps -> ps.setInt(3, item.catalogNumber)
         );
-        get(item).data.setPrice(price);
+        get(item).setPrice(price);
     }
 
     @Override

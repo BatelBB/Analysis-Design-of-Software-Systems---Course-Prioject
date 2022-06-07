@@ -47,7 +47,7 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
                 ps -> ps.setDate(1, Date.valueOf(provided)),
                 ps -> ps.setInt(2, id)
         );
-        get(id).data.setProvided(provided);
+        get(id).setProvided(provided);
     }
 
     public void updateOrdered(int id, LocalDate ordered) {
@@ -56,7 +56,7 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
                 ps -> ps.setDate(1, Date.valueOf(ordered)),
                 ps -> ps.setInt(2, id)
         );
-        get(id).data.setOrdered(ordered);
+        get(id).setOrdered(ordered);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
                 ps -> ps.setDate(4, Date.valueOf(ordered)),
                 ps -> ps.setDate(5, Date.valueOf(delivered)),
                 ps -> ps.setInt(6, ppn)
-        ).data;
+        );
     }
 
     public void setPrice(int id, float price) {
@@ -97,7 +97,7 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
               ps -> ps.setInt(2, id)
             );
         if(rowsAffects > 0) {
-            get(id).data.setPrice(price);
+            get(id).setPrice(price);
         }
     }
 }

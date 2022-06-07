@@ -5,7 +5,7 @@ import adss_group_k.BusinessLayer.Inventory.ProductItem;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.ProductRecord;
 import adss_group_k.dataLayer.records.readonly.ProductData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.time.LocalDate;
 import java.util.*;
@@ -114,7 +114,7 @@ public class ProductController {
             throw new Exception(e.getMessage());
         }
         int id = pc.getProducts().getMaxId() + 1;
-        ResponseT<ProductData> r = pc.getProducts().create(
+        ProductData r = pc.getProducts().create(
                 0,
                 id,
                 name,
@@ -126,9 +126,7 @@ public class ProductController {
                 sub_category,
                 subsub_category
         );
-        if (!r.success)
-            throw new Exception(r.error);
-        Product ret = new Product(r.data, pc);
+        Product ret = new Product(r, pc);
         products.put(id, ret);
         return ret;
     }
@@ -294,11 +292,11 @@ public class ProductController {
         return p.getMin_qty();
     }
 
-    public ResponseT<Map<String, Integer>> getDeficiency() {
+    public Map<String, Integer> getDeficiency() {
         Map<String, Integer> deficiency = new HashMap<>();
         for (Product p : products.values()) {
             if (p.getMin_qty() > p.getItems().size()) deficiency.put(p.getName(), p.getMin_qty());
         }
-        return (ResponseT<Map<String, Integer>>) deficiency;
+        return (Map<String, Integer>) deficiency;
     }
 }

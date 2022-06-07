@@ -1,28 +1,25 @@
 package adss_group_k.BusinessLayer.Inventory.Service;
 
-import adss_group_k.BusinessLayer.Inventory.Controllers.CategoryController;
-import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
 import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
-import adss_group_k.dataLayer.dao.PersistenceController;
-import adss_group_k.shared.response.Response;
-import adss_group_k.shared.response.ResponseT;
+import adss_group_k.serviceLayer.ServiceBase;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public class Service {
+public class Service extends ServiceBase {
     private final ProductService product_service;
     private final CategoryService category_service;
     private final ReportService report_service;
     private final ISupplierService supplierService;
 
-    public Service(ISupplierService supplierService, PersistenceController pc) {
-        CategoryController catCont = new CategoryController(pc);
-        ProductController prodCont = new ProductController(pc,catCont);
-        product_service = new ProductService(pc, prodCont);
-        report_service = new ReportService(pc, catCont, prodCont);
-        category_service = new CategoryService(catCont);
+    public Service(ISupplierService supplierService,
+                   ProductService productService,
+                   ReportService reportService,
+                   CategoryService categoryService) {
+        this.product_service = productService;
+        this.report_service = reportService;
+        this.category_service = categoryService;
         this.supplierService = supplierService;
     }
 
@@ -51,7 +48,7 @@ public class Service {
         return category_service.removeSubSubCategory(category, sub_category, name, product_service.productsInSubSubCategory(category, sub_category, name));
     }
 
-    public ResponseT<Category> getCategory(String name) {
+    public ResponseT<adss_group_k.BusinessLayer.Inventory.Categories.Category> getCategory(String name) {
         return category_service.getCategory(name);
     }
 
@@ -80,7 +77,7 @@ public class Service {
         return product_service.updateProductCusDiscount(discount, start_date, end_date, product_id);
     }
 
-    public Response updateProductCusPrice(int product_id, double price) {
+    public Response updateProductCusPrice(int product_id, float price) {
         return product_service.updateProductCusPrice(product_id, price);
     }
 
@@ -185,10 +182,4 @@ public class Service {
 //        }
 //        return null;
 //    }
-
-    public void restart() {
-        product_service.restart();
-        report_service.restart();
-        category_service.restart();
-    }
 }

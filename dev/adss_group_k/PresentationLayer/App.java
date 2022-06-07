@@ -1,6 +1,12 @@
 package adss_group_k.PresentationLayer;
 
+import adss_group_k.BusinessLayer.Inventory.Controllers.CategoryController;
+import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
+import adss_group_k.BusinessLayer.Inventory.Service.CategoryService;
+import adss_group_k.BusinessLayer.Inventory.Service.ProductService;
+import adss_group_k.BusinessLayer.Inventory.Service.ReportService;
 import adss_group_k.BusinessLayer.Inventory.Service.Service;
+import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
 import adss_group_k.PresentationLayer.Inventory.InventoryPresentationFacade;
 import adss_group_k.PresentationLayer.Suppliers.SupplierPresentationFacade;
@@ -17,40 +23,34 @@ import java.util.Scanner;
 
 public class App {
     private final PersistenceController dal;
-    private final SupplierService supplierService;
-    private final Service inventoryService;
+    private final ISupplierService supplierService;
     private final SupplierPresentationFacade supplierPresentation;
     private final InventoryPresentationFacade inventoryPresentationFacade;
+    private final Service inventoryService;
 
     public App(String dbPath) {
-        Connection conn = null;
-        boolean shouldLoadExample = false;
         boolean isNew = !new java.io.File(dbPath).exists();
-        try {
-            if(isNew) {
-                UserOutput.getInstance().println(
-                        "You don't have a previous database file stored, so we'll create a new one for you " +
-                                "from scratch.");
-                shouldLoadExample = UserInput.getInstance().nextBoolean("Would you like to start with some example data?");
-            }
+        boolean shouldLoadExample = false;
 
-            conn = DriverManager.getConnection("jdbc:sqlite:"+dbPath);
-        } catch (SQLException throwables) {
-            throw new RuntimeException(throwables);
-        }
-        if(isNew) {
-            SchemaInit.init(conn);
-        }
-        dal = new PersistenceController(conn);
-        supplierService = new SupplierService(dal);
-        inventoryService = new Service(supplierService, dal);
+        AppContainer ioc = new AppContainer(dbPath);
+        Connection appConnection = ioc.get(Connection.class);
 
-        if(shouldLoadExample) {
+        if (isNew) {
+            SchemaInit.init(appConnection);
+            UserOutput.getInstance().println(
+                    "You don't have a previous database file stored, so we'll create a new one for you " +
+                            "from scratch.");
+            shouldLoadExample = UserInput.getInstance().nextBoolean("Would you like to start with some example data?");
+        }
+
+        dal = ioc.get(PersistenceController.class);
+        inventoryPresentationFacade = ioc.get(InventoryPresentationFacade.class);
+        supplierPresentation = ioc.get(SupplierPresentationFacade.class);
+        inventoryService = ioc.get(Service.class);
+        supplierService = ioc.get(ISupplierService.class);
+        if (shouldLoadExample) {
             ExampleData.loadExampleData(inventoryService, supplierService);
         }
-        supplierPresentation = new SupplierPresentationFacade(supplierService);
-        inventoryPresentationFacade = new InventoryPresentationFacade(inventoryService);
-
     }
 
     public void main() {
@@ -69,7 +69,7 @@ public class App {
                     startInventoryMenu();
                     break;
                 }
-                case (3) : {
+                case (3): {
                     UserOutput.getInstance().println("Goodbye!");
                     return;
                 }

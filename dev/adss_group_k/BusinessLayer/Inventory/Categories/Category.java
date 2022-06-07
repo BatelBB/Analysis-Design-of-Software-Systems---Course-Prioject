@@ -4,7 +4,7 @@ import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.CategoryRecord;
 import adss_group_k.dataLayer.records.SubcategoryRecord;
 import adss_group_k.dataLayer.records.readonly.SubcategoryData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,13 +36,8 @@ public class Category {
     public void addSubCategory(String name) throws Exception {
         if (subC.containsKey(name))
             throw new IllegalArgumentException("The SubCategory already exists in the system");
-        else {
-            ResponseT<SubcategoryData> r = pc.getSubcategories().create(this.name, name);
-            if (r.success)
-                subC.put(name, new SubCategory(name, pc));
-            else
-                throw new Exception(r.error);
-        }
+        SubcategoryData r = pc.getSubcategories().create(this.name, name);
+        subC.put(name, new SubCategory(name, pc));
     }
 
     public void removeSubCategory(String name) throws Exception {
@@ -72,7 +67,7 @@ public class Category {
     //PRIVATE METHODS
     private void subCategoryExists(String name) {
         if (!subC.containsKey(name))
-            throw new IllegalArgumentException("Category doesn't exists");
+            throw new IllegalArgumentException("Category doesn't exists: " + name);
     }
 
     private void addFromExisting(SubcategoryRecord sub_category) {

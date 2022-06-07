@@ -4,7 +4,7 @@ import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.DiscountPairRecord;
 import adss_group_k.dataLayer.records.readonly.DiscountPairData;
 import adss_group_k.dataLayer.records.readonly.ProductItemData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class ProductItem {
 
     //METHODS
     public void addCusDiscount(LocalDate start_date, LocalDate end_date, float discount) throws Exception {
-        ResponseT<DiscountPairData> r = pc.getDiscountPairs().create(
+        DiscountPairData r = pc.getDiscountPairs().create(
                 product_id,
                 id,
                 discount_ids,
@@ -54,9 +54,7 @@ public class ProductItem {
                 java.sql.Date.valueOf(end_date),
                 discount
         );
-        if (!r.success)
-            throw new Exception(r.error);
-        cus_discount.add(new DiscountPair(r.data));
+        cus_discount.add(new DiscountPair(r));
         setDiscount_ids(discount_ids+1);
     }
 

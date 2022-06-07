@@ -4,7 +4,7 @@ import adss_group_k.BusinessLayer.Inventory.DiscountPair;
 import adss_group_k.dataLayer.records.DiscountPairRecord;
 import adss_group_k.dataLayer.records.ProductItemRecord;
 import adss_group_k.dataLayer.records.readonly.DiscountPairData;
-import adss_group_k.shared.response.ResponseT;
+
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -26,8 +26,8 @@ public class DiscountPairDAO extends BaseDAO<DiscountPairRecord.DiscountPairKey,
         super(conn);
     }
 
-    public ResponseT<DiscountPairData> create(int product_id, int productItem_id, int id, Date start_date, Date end_date, float discount){
-        ResponseT<DiscountPairRecord> response = create(
+    public DiscountPairData create(int product_id, int productItem_id, int id, Date start_date, Date end_date, float discount){
+        DiscountPairRecord response = create(
                 () -> new DiscountPairRecord(product_id, productItem_id, id, start_date, end_date, discount),
                 "INSERT INTO " + TABLE_NAME + " (" +
                         PRODUCT_ID + "," +
@@ -44,7 +44,7 @@ public class DiscountPairDAO extends BaseDAO<DiscountPairRecord.DiscountPairKey,
                 ps -> ps.setDate(5, end_date),
                 ps -> ps.setFloat(6, discount)
         );
-        return response.castUnchecked();
+        return response;
     }
 
     @Override
