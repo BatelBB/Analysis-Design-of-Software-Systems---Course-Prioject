@@ -195,5 +195,13 @@ public class EmployeesController {
         }
     }
 
+    public Response<Boolean> isFromRole(String subjectId, Employee.Role role) {
+        try {
+            return new Response<>(employeeBusiness.isFromRole(subjectId, role));
+        } catch (Exception e) {
+            return new Response<>(e.getMessage());
+        }
+    }
+
 
 }

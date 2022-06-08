@@ -75,7 +75,7 @@ public class LogisticsController {
             for (TruckingDTO trucking : truckings) {
                 toReturn.add(truckingDTOToDelivery(trucking));
             }
-            return new Response<List<Delivery>>(toReturn);
+            return new Response<>(toReturn);
         }
         catch (Exception e) {
             return new Response<>(e.getMessage());
@@ -105,7 +105,7 @@ public class LogisticsController {
         }
     }
 
-    public Response<List<String>[]> createDelivery(int truckManagerID, String registrationPlateOfVehicle, LocalDateTime date, int driverUsername, List<Site> sources, List<Site> destinations, List<Product> products, long hours, long minutes) {
+    public Response<Delivery> createDelivery(int truckManagerID, String registrationPlateOfVehicle, LocalDateTime date, int driverUsername, List<Site> sources, List<Site> destinations, List<Product> products, long hours, long minutes) {
         try {
             List<String[]> sources_ = new LinkedList<String[]>();
             List<String[]> destinations_ = new LinkedList<String[]>();
@@ -116,7 +116,7 @@ public class LogisticsController {
                 destinations_.add(SiteToArray(destination));
             }
             Map<String, Integer> products_ = ProductToMap(products);
-            return new Response<List<String>[]>(TruckManagerController.getInstance().addTrucking(truckManagerID, registrationPlateOfVehicle, date, driverUsername, sources_, destinations_, products_, hours, minutes));
+            return new Response<>(truckingDTOToDelivery(TruckManagerController.getInstance().addTrucking(truckManagerID, registrationPlateOfVehicle, date, driverUsername, sources_, destinations_, products_, hours, minutes)));
         }
         catch (Exception e) {
             return new Response<>(e.getMessage());

@@ -1,6 +1,7 @@
 package groupk.logistics.business;
 
 import groupk.logistics.DataLayer.*;
+import groupk.shared.service.dto.Delivery;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -34,6 +35,7 @@ public class TruckManagerController {
     }
 
     public void deleteDB() {
+        truckingIdCounter = 1;
         truckingMapper.deleteDB();
         driverLicensesMapper.deleteDB();
         vehicleMapper.deleteDB();
@@ -63,7 +65,7 @@ public class TruckManagerController {
         return vehicleMapper.getAllRegistrationPlates();
     }
 
-    public List<String>[] addTrucking(int truckManagerId,String registrationPlateOfVehicle, LocalDateTime date, int driverUsername, List<String[]> sources, List<String[]> destinations, Map<String,Integer> products, long hours, long minutes) {
+    public TruckingDTO addTrucking(int truckManagerId, String registrationPlateOfVehicle, LocalDateTime date, int driverUsername, List<String[]> sources, List<String[]> destinations, Map<String,Integer> products, long hours, long minutes) {
         boolean checkTrucking = (checkTrucking(truckingIdCounter, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products, hours, minutes));
         if (!checkDriverLicenseMatch(driverUsername, registrationPlateOfVehicle))
             throw new IllegalArgumentException("Oops, the driver does not have a driver's license compatible with this vehicle");
@@ -73,7 +75,7 @@ public class TruckManagerController {
             List<SiteDTO> destinations_ = checkSites(destinations);
             List<ProductForTruckingDTO> productForTruckings = productForTruckings(products);
             TruckingDTO trucking = new TruckingDTO(truckingIdCounter,date,truckManagerId,driverUsername,registrationPlateOfVehicle,hours,minutes,0,sources_,destinations_,productForTruckings);
-            List<String>[] added = truckingMapper.addTrucking(trucking);
+            TruckingDTO added = truckingMapper.addTrucking(trucking);
             truckingIdCounter++;
             return added;
         }

@@ -14,12 +14,10 @@ public class DalController {
     public static File file;
 
     public DalController() {
-        file = new File("employeeDB.db");
+        file = new File("employee_logisticsDB.db");
         url = ("jdbc:sqlite:").concat(file.getAbsolutePath());
         try{
-            if(!file.exists()) {
-                createTables();
-            }
+            createTables();
             load();
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
@@ -116,9 +114,25 @@ public class DalController {
     }
 
     public void deleteDataBase(){
-        File file = new File("employeeDB.db");
-        if(file.exists())
-            file.delete();
+        LinkedList<String> tables = new LinkedList<>();
+        tables.add("DROP TABLE IF EXISTS Employee");
+        tables.add("DROP TABLE IF EXISTS RequiredStaff");
+        tables.add("DROP TABLE IF EXISTS Role");
+        tables.add("DROP TABLE IF EXISTS Shift");
+        tables.add("DROP TABLE IF EXISTS ShiftPreference");
+        tables.add("DROP TABLE IF EXISTS ShiftSlot");
+        tables.add("DROP TABLE IF EXISTS Workers");
+        try (
+                Connection connection = DriverManager.getConnection(url);
+                Statement statement = connection.createStatement()){
+            for (String table : tables) {
+                statement.addBatch(table);
+            }
+            statement.executeBatch();
+        } catch (SQLException s) {
+            throw new IllegalArgumentException(s.getMessage());
+        }
+        createTables();
     }
 
     public List<Employee> getEmployees() {

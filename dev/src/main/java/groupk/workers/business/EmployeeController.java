@@ -57,8 +57,8 @@ public class EmployeeController {
         return  dalColntroller.getEmployees();
     }
 
-    public boolean isFromHumanResources(String employeeID) {
-        return getEmployee(employeeID).getRole() == Employee.Role.HumanResources;
+    public boolean isFromRole(String employeeID, Employee.Role role) {
+        return getEmployee(employeeID).getRole() == role;
     }
 
     public Employee getEmployee(String id){

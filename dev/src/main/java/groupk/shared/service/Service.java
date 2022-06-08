@@ -1,5 +1,6 @@
 package groupk.shared.service;
 
+import groupk.logistics.DataLayer.TruckingDTO;
 import groupk.shared.business.Facade;
 import groupk.shared.service.dto.*;
 
@@ -129,7 +130,7 @@ public class Service {
         return facade.listVehicles(subjectID);
     }
 
-    public Response<List<String>[]> createDelivery(String subjectID, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<Product> products, long hours, long minutes) {
+    public Response<Delivery> createDelivery(String subjectID, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<Product> products, long hours, long minutes) {
         return facade.createDelivery(subjectID, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products, hours, minutes);
     }
 

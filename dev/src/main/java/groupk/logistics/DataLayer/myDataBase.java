@@ -8,30 +8,44 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class myDataBase {
     static Connection con;
-    private static String JDBCurl = "jdbc:sqlite:";
-    private static String path = (new File("logisticsDB.db").getAbsolutePath());
-    public static String finalCurl = JDBCurl.concat(path);
+    public static String finalCurl;
+    public static File file;
 
     public myDataBase() {
-        createNewTable();
+        file = new File("employee_logisticsDB.db");
+        finalCurl = ("jdbc:sqlite:").concat(file.getAbsolutePath());
+        try {
+            createNewTable();
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 
 
-    public void deleteDB()
-    {
-        try {
-            Connection c = getConnection();
-            c.close();
-        } catch (SQLException throwables) {
-            throw new IllegalArgumentException(throwables.getMessage());
+    public void deleteDB() {
+        LinkedList<String> tables = new LinkedList<>();
+        tables.add("DROP TABLE IF EXISTS Vehicles");
+        tables.add("DROP TABLE IF EXISTS Drivers_Licences");
+        tables.add("DROP TABLE IF EXISTS Truckings");
+        tables.add("DROP TABLE IF EXISTS Truckings_Destinations");
+        tables.add("DROP TABLE IF EXISTS Truckings_Sources");
+        tables.add("DROP TABLE IF EXISTS Truckings_Products");
+        try (
+                Connection connection = DriverManager.getConnection(finalCurl);
+                Statement statement = connection.createStatement()) {
+            for (String table : tables) {
+                statement.addBatch(table);
+            }
+            statement.executeBatch();
+        } catch (SQLException s) {
+            throw new IllegalArgumentException(s.getMessage());
         }
-        if(new File(path).exists()){
-            new File(path).delete();
-        }
+        createNewTable();
     }
 
     public void createNewTable() {
@@ -95,12 +109,8 @@ public class myDataBase {
                 "FOREIGN KEY(TID) REFERENCES Truckings(TID)\n" +
                 "\t);\n" +
                 "\n";
-        //    boolean added = truckingMapper.addTrucking(truckingIdCounter,getActiveUser().getUsername(),registrationPlateOfVehicle,driverUsername,date,hours,minutes);
-
-////
-//
-//        try (Connection conn = DriverManager.getConnection(JDBCurl);
-        try (Statement s = DriverManager.getConnection(finalCurl).createStatement()) {
+        try (Connection conn = DriverManager.getConnection(finalCurl);
+             Statement s = conn.createStatement()) {
             s.addBatch(vehiclesTable);
             s.addBatch(dirversLicencesTable);
             s.addBatch(Truckings);
@@ -108,24 +118,8 @@ public class myDataBase {
             s.addBatch(Truckings_Products);
             s.addBatch(Truckings_Sources);
             s.executeBatch();
-
-        } catch (Exception e) {
-            throw new IllegalArgumentException("There was a problem to connect the database: " + e.getMessage());
-        }
-    }
-
-
-    public static Connection getConnection() {
-        finalCurl = JDBCurl.concat(path);
-        if (con != null) {
-            return con;
-        }
-        try {
-            con = DriverManager.getConnection(finalCurl);
         } catch (SQLException e) {
-            throw new IllegalArgumentException("There was a problem to connect the database: " + e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
-        return con;
     }
-
 }

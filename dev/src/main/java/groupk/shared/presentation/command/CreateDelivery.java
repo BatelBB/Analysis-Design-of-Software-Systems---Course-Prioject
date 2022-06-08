@@ -1,7 +1,9 @@
 package groupk.shared.presentation.command;
 
+import groupk.logistics.DataLayer.TruckingDTO;
 import groupk.shared.presentation.CommandRunner;
 import groupk.shared.service.Response;
+import groupk.shared.service.dto.Delivery;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -48,8 +50,7 @@ public class CreateDelivery implements Command {
             return;
         }
 
-        // Why in the actual fuck does this method return Response<List<String>[]>???
-        Response<List<String>[]> response = runner.getService().createDelivery(
+        Response<Delivery> response = runner.getService().createDelivery(
                 runner.getSubject(),
                 command[2],
                 datetime,
