@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c77a5b6-734e-4e92-888f-5057311874ff" name="Default Changelist" comment="Fix logisticsDB,&#10;Add employee_logisticsDB.db&#10;Change Response&lt;List&lt;String&gt; []&gt; to Response&lt;Delivery&gt;." />
+    <list default="true" id="4c77a5b6-734e-4e92-888f-5057311874ff" name="Default Changelist" comment="Fix deleteEmployee." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -419,7 +419,13 @@
       <option name="presentableId" value="LOCAL‎00001" />
       <updated>1654682774857</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL‎00002" summary="Fix deleteEmployee.">
+      <created>1654684110111</created>
+      <option name="number" value="LOCAL‎00002" />
+      <option name="presentableId" value="LOCAL‎00002" />
+      <updated>1654684110111</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -471,7 +477,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fix logisticsDB,&#10;Add employee_logisticsDB.db&#10;Change Response&lt;List&lt;String&gt; []&gt; to Response&lt;Delivery&gt;." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix logisticsDB,&#10;Add employee_logisticsDB.db&#10;Change Response&lt;List&lt;String&gt; []&gt; to Response&lt;Delivery&gt;." />
+    <MESSAGE value="Fix deleteEmployee." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix deleteEmployee." />
   </component>
   <component name="VssConfiguration">
     <CheckoutOptions>
