@@ -58,7 +58,12 @@ public class EmployeeController {
     }
 
     public boolean isFromRole(String employeeID, Employee.Role role) {
-        return getEmployee(employeeID).getRole() == role;
+        try{
+            return getEmployee(employeeID).getRole() == role;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
     public Employee getEmployee(String id){

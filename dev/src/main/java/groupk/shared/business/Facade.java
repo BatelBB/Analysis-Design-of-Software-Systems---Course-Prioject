@@ -204,7 +204,6 @@ public class Facade {
         return false;
     }
 
-
     private boolean isTheDriverInShift(String subjectID, String driverID, Calendar date, groupk.shared.service.dto.Shift.Type type) {
         Response<Shift> shift = readShift(subjectID, date, type);
         if (shift.isError()) {
