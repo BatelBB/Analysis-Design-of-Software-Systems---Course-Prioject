@@ -62,7 +62,7 @@ public class Facade {
     }
 
     public Response<Employee> deleteEmployee(String subjectID, String employeeID) {
-        if (isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()||isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (isFromRole(employeeID, Employee.Role.Driver).getValue()) {
             Response<List<Delivery>> futureDeliveries = logistics.listFutureDeliveries(Integer.parseInt(subjectID));
             if (futureDeliveries.isError() | futureDeliveries.getValue() == null)
                 return new Response<>("Oops, we are currently unable to find data on this logistics manager's leads.\n" +
