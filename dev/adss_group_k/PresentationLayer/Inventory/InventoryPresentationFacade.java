@@ -248,19 +248,13 @@ public class InventoryPresentationFacade {
     }
 
     public void changeItemOnShelf() {
-        throw new RuntimeException(); // TODO
-/*
         useService(args, 3,
-                () -> // ?
+                () ->  products.changeItemOnShelf(
+                        convertInt(args[0]),
+                        convertInt(args[1]),
+                        convertBoolean(args[2])
+                )
         );
-        if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1 && convertBoolean(args[2]) != null) {
-            try {
-                products.setItemOnShelf(convertInt(args[0]), convertInt(args[0]), convertBoolean(args[2]));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-*/
     }
 
     public void createMissingReport() {
