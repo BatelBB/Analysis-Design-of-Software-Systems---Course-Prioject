@@ -1,11 +1,9 @@
 package groupk.shared.PresentationLayer.Inventory;
 
-import adss_group_k.BusinessLayer.Inventory.Service.CategoryService;
-import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
-import adss_group_k.BusinessLayer.Inventory.Service.Objects.Report;
-import adss_group_k.BusinessLayer.Inventory.Service.ProductService;
-import adss_group_k.BusinessLayer.Inventory.Service.ReportService;
-import adss_group_k.serviceLayer.ServiceBase;
+import groupk.shared.business.Inventory.Service.CategoryService;
+import groupk.shared.business.Inventory.Service.ProductService;
+import groupk.shared.business.Inventory.Service.ReportService;
+import groupk.shared.service.ServiceBase;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
