@@ -1,16 +1,23 @@
 package groupk.shared.Tests;
 
-import adss_group_k.BusinessLayer.Inventory.ProductItem;
-import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
-import adss_group_k.BusinessLayer.Inventory.Service.Objects.Report;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
-import adss_group_k.dataLayer.records.OrderType;
-import adss_group_k.dataLayer.records.PaymentCondition;
+import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
+import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
+import groupk.shared.business.Inventory.ProductItem;
+import groupk.shared.business.Inventory.Service.Objects.Product;
+import groupk.shared.business.Inventory.Service.Objects.Report;
+import groupk.shared.business.Suppliers.BussinessObject.Item;
+import groupk.shared.business.Suppliers.BussinessObject.Order;
+import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
+import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 
+import groupk.shared.business.Suppliers.BussinessObject.Order;
+import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
+import groupk.shared.business.Suppliers.BussinessObject.Supplier;
+import groupk.shared.service.ServiceBase;
+import groupk.shared.service.ServiceBase.ResponseT;
+import groupk.shared.service.ServiceBase.Response;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.sql.*;
@@ -18,7 +25,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static adss_group_k.serviceLayer.ServiceBase.*;
 
 public class IntegrationTests extends TestsBase {
 
@@ -448,7 +454,7 @@ public class IntegrationTests extends TestsBase {
         Assertions.assertTrue(resultSet.getInt(1) > 0);
     }
 
-    private void assertSuccess(Response response) {
+    private void assertSuccess(ServiceBase.Response response) {
         assertTrue(response.success, response.error);
     }
 
@@ -474,7 +480,7 @@ public class IntegrationTests extends TestsBase {
                         10.0, 20, 10, 1200,
                         "Dairy", "Shop", "10%"));
 
-        adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem pItem = assertSuccess(inventory.addItem(prod.getProduct_id(), "TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX, true));
+        groupk.shared.business.Inventory.Service.Objects.ProductItem pItem = assertSuccess(inventory.addItem(prod.getProduct_id(), "TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX, true));
         Item item = assertSuccess(suppliers.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
         assertSuccess(suppliers.orderItem(
                 order.getId(),

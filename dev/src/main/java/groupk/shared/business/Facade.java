@@ -47,6 +47,19 @@ public class Facade {
         orders = new OrderController(p, discounts);
     }
 
+    //just for test
+    //employee logistics facade
+    public Facade() {
+        employees = new EmployeesController();
+        logistics = new LogisticsController();
+        category_controller = null;
+        product_controller = null;
+        suppliers = null;
+        items = null;
+        discounts = null;
+        orders = null;
+    }
+
     public void deleteEmployeeDB() {
         employees.deleteEmployeeDB();
     }
@@ -201,7 +214,7 @@ public class Facade {
         return logistics.listVehicles();
     }
 
-    public Response<Delivery> createDelivery(String subjectID, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<Product> products, long hours, long minutes) {
+    public Response<Delivery> createDelivery(String subjectID, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<groupk.shared.service.dto.Product> products, long hours, long minutes) {
         if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
@@ -286,7 +299,7 @@ public class Facade {
         return logistics.setWeightForDelivery(Integer.parseInt(subjectID), deliveryID, weight);
     }
 
-    public Response<Boolean> addProductsToTrucking(String subjectID, int truckingID, Product products) {
+    public Response<Boolean> addProductsToTrucking(String subjectID, int truckingID, groupk.shared.service.dto.Product products) {
         if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
@@ -321,7 +334,7 @@ public class Facade {
         return logistics.addDestination(Integer.parseInt(subjectID), truckingID, destinations);
     }
 
-    public Response<Boolean> moveProducts(String subjectID, int truckingID, Product product) {
+    public Response<Boolean> moveProducts(String subjectID, int truckingID, groupk.shared.service.dto.Product product) {
         if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }

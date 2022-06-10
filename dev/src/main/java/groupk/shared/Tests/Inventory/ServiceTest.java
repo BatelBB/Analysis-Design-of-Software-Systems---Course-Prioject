@@ -1,14 +1,14 @@
 package groupk.shared.Tests.Inventory;
 
-import adss_group_k.BusinessLayer.Inventory.Categories.Category;
-import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
+import groupk.shared.business.Inventory.Service.Objects.*;
 import groupk.shared.Tests.TestsBase;
 
-import adss_group_k.serviceLayer.ServiceBase;
+import groupk.shared.business.Inventory.Categories.Category;
+import groupk.shared.service.ServiceBase;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static adss_group_k.serviceLayer.ServiceBase.*;
 
 class ServiceTest extends TestsBase {
 
@@ -93,7 +93,7 @@ class ServiceTest extends TestsBase {
 
     @Test
     void removeReport() {
-            ResponseT<Report> missingReport = inventory.createMissingReport("MissingReport", "Michel");
+            ServiceBase.ResponseT<Report> missingReport = inventory.createMissingReport("MissingReport", "Michel");
             int reportId = missingReport.data.getId();
             Assertions.assertTrue(inventory.getReportListIds().data.contains(reportId));
             Assertions.assertTrue(inventory.removeReport(reportId).success);

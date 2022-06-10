@@ -12,6 +12,7 @@ import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 
 
 import groupk.shared.service.ServiceBase;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.*;
@@ -19,7 +20,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static adss_group_k.serviceLayer.ServiceBase.*;
 
 class ServiceTest extends TestsBase {
 
@@ -92,7 +92,7 @@ class ServiceTest extends TestsBase {
         suppliers.orderItem(order.getId(), ppn, item.getCatalogNumber(), 12);
 
         // delete should work.
-        Response serviceResponse = suppliers.deleteSupplier(ppn);
+        ServiceBase.Response serviceResponse = suppliers.deleteSupplier(ppn);
         assertTrue(serviceResponse.success, "delete ReadOnlysupplier failed, but shouldn't have");
 
         // getting this ReadOnlysupplier shouldn't work.
@@ -100,7 +100,7 @@ class ServiceTest extends TestsBase {
                 "Getting deleted ReadOnlysupplier should have failed");
 
         // creating new one with same PPN should work.
-        ResponseT<Supplier> otherResponse = suppliers.createSupplier(ppn, 222,
+        ServiceBase.ResponseT<Supplier> otherResponse = suppliers.createSupplier(ppn, 222,
                 "Ipsum", false,
                 PaymentCondition.Credit, DayOfWeek.MONDAY,
                 "george", "george@email.com", "050");
@@ -140,7 +140,7 @@ class ServiceTest extends TestsBase {
         // ReadOnlySupplier 1, ReadOnlyItem 1
         Product product = assertSuccess(inventory.addProduct("Milk", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%"));
-        ResponseT<Item> resApple =
+        ServiceBase.ResponseT<Item> resApple =
                 suppliers.createItem(ppn1, cn1, product.getProduct_id(),  1);
         assertTrue(resApple.success, "should have succeeded.");
         Item apple = assertSuccess(resApple);
@@ -150,7 +150,7 @@ class ServiceTest extends TestsBase {
         // ReadOnlySupplier 1, ReadOnlyItem 2
         Product product2 = assertSuccess(inventory.addProduct("Banana", "Tnoova", 100.0,
                 50, 10, 1200, "Store", "Shop,", "10%"));
-        ResponseT<Item> resBanana =
+        ServiceBase.ResponseT<Item> resBanana =
                 suppliers.createItem(ppn1, cn2, product2.getProduct_id(),  2);
         assertTrue(resBanana.success, "should have succeeded but got " + resBanana.error);
 
@@ -161,7 +161,7 @@ class ServiceTest extends TestsBase {
         // ReadOnlySupplier 2, ReadOnlyItem 1
         Product product3 =assertSuccess (inventory.addProduct("Pen", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%"));
-        ResponseT<Item> resOtherSupplier =
+        ServiceBase.ResponseT<Item> resOtherSupplier =
                 suppliers.createItem(ppn2, cn1, product3.getProduct_id(),  10);
         assertTrue(resOtherSupplier.success,
                 "creating other ReadOnlyitem with same CN but different PPN should've worked.");
@@ -172,12 +172,12 @@ class ServiceTest extends TestsBase {
         Assertions.assertEquals("Pen", product3.getName());
 
         // create with already existing
-        ResponseT<Item> alreadyExisting = suppliers.createItem(ppn1, cn1,
+        ServiceBase.ResponseT<Item> alreadyExisting = suppliers.createItem(ppn1, cn1,
                 product3.getProduct_id(),  123);
         assertFalse(alreadyExisting.success);
 
         // not existence supplier
-        ResponseT<Item> noSuchSupplier = suppliers.createItem(ppnNotExisting, cn1,
+        ServiceBase.ResponseT<Item> noSuchSupplier = suppliers.createItem(ppnNotExisting, cn1,
                 product3.getProduct_id(),  60);
         assertFalse(noSuchSupplier.success);
 
@@ -213,20 +213,20 @@ class ServiceTest extends TestsBase {
         createWithPpn(ppn);
         suppliers.createItem(ppn, cn, product4.getProduct_id(),10);
 
-        ResponseT<Item> resSucc = suppliers.getItem(ppn, cn);
+        ServiceBase.ResponseT<Item> resSucc = suppliers.getItem(ppn, cn);
         assertTrue(resSucc.success);
         Assertions.assertNotNull(resSucc.data);
         assertEquals(ppn, resSucc.data.getSupplier().getPpn());
         assertEquals(cn, resSucc.data.getCatalogNumber());
         Assertions.assertEquals("Pen", product4.getName());
 
-        ResponseT<Item> resWrongPPN = suppliers.getItem(wrongPPN, cn);
+        ServiceBase.ResponseT<Item> resWrongPPN = suppliers.getItem(wrongPPN, cn);
         assertFalse(resWrongPPN.success);
 
-        ResponseT<Item> resWrongCN = suppliers.getItem(ppn, wrongCN);
+        ServiceBase.ResponseT<Item> resWrongCN = suppliers.getItem(ppn, wrongCN);
         assertFalse(resWrongCN.success);
 
-        ResponseT<Item> resWrongBoth = suppliers.getItem(wrongPPN, wrongCN);
+        ServiceBase.ResponseT<Item> resWrongBoth = suppliers.getItem(wrongPPN, wrongCN);
         assertFalse(resWrongBoth.success);
     }
 
@@ -244,11 +244,11 @@ class ServiceTest extends TestsBase {
         suppliers.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
-        ResponseT<Order> responseWithBadDates = suppliers.createOrder(ppn, date2, date1, OrderType.Periodical);
+        ServiceBase.ResponseT<Order> responseWithBadDates = suppliers.createOrder(ppn, date2, date1, OrderType.Periodical);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        ResponseT<Order> response = suppliers.createOrder(ppn, date1, date2, OrderType.Periodical);
+        ServiceBase.ResponseT<Order> response = suppliers.createOrder(ppn, date1, date2, OrderType.Periodical);
         assertTrue(response.success);
 
     }
@@ -289,11 +289,11 @@ class ServiceTest extends TestsBase {
         Order order = assertSuccess(suppliers.createOrder(ppn, date1, date2, OrderType.Periodical));
         suppliers.orderItem(order.getId(), ppn, pen.getCatalogNumber(),10);
 
-        Response resDelete = suppliers.deleteOrder(order.getId());
+        ServiceBase.Response resDelete = suppliers.deleteOrder(order.getId());
         assertTrue(resDelete.success);
 
         // delete already deleted
-        Response resDeleteAgain = suppliers.deleteOrder(order.getId());
+        ServiceBase.Response resDeleteAgain = suppliers.deleteOrder(order.getId());
         assertFalse(resDeleteAgain.success);
     }
 
@@ -432,7 +432,7 @@ class ServiceTest extends TestsBase {
         suppliers.orderItem(order.getId(), ppn, item.getCatalogNumber(), 1);
         Assertions.assertEquals(priceCalc, order.getTotalPrice());
 
-        ResponseT<QuantityDiscount> res = suppliers.createDiscount(ppn, item.getCatalogNumber(), 10,
+        ServiceBase.ResponseT<QuantityDiscount> res = suppliers.createDiscount(ppn, item.getCatalogNumber(), 10,
                 0.01f);
         assertTrue(res.success);
         Assertions.assertEquals(priceCalc, order.getTotalPrice());
@@ -506,7 +506,7 @@ class ServiceTest extends TestsBase {
 
     }
 
-    private <T> T assertSuccess(ResponseT<T> response) {
+    private <T> T assertSuccess(ServiceBase.ResponseT<T> response) {
         assertTrue(response.success);
         return response.data;
     }
@@ -586,11 +586,11 @@ class ServiceTest extends TestsBase {
         suppliers.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
-        ResponseT<Order> responseWithBadDates = suppliers.createOrder(ppn, date2, date1, OrderType.Shortages);
+        ServiceBase.ResponseT<Order> responseWithBadDates = suppliers.createOrder(ppn, date2, date1, OrderType.Shortages);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        ResponseT<Order> response = suppliers.createOrder(ppn, date1, date2, OrderType.Shortages);
+        ServiceBase.ResponseT<Order> response = suppliers.createOrder(ppn, date1, date2, OrderType.Shortages);
         assertTrue(response.success);
 
     }
@@ -605,11 +605,11 @@ class ServiceTest extends TestsBase {
         suppliers.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
-        ResponseT<Order> responseWithBadDates = suppliers.createOrder(ppn, date2, date1, OrderType.Periodical);
+        ServiceBase.ResponseT<Order> responseWithBadDates = suppliers.createOrder(ppn, date2, date1, OrderType.Periodical);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        ResponseT<Order> response = suppliers.createOrder(ppn, date1, date2, OrderType.Periodical);
+        ServiceBase.ResponseT<Order> response = suppliers.createOrder(ppn, date1, date2, OrderType.Periodical);
         assertTrue(response.success);
 
 
@@ -619,7 +619,7 @@ class ServiceTest extends TestsBase {
      * (private) UTILS
      */
 
-    private ResponseT<Supplier> createWithPpn(int ppn) {
+    private ServiceBase.ResponseT<Supplier> createWithPpn(int ppn) {
         return suppliers.createSupplier(ppn, 111, "dummy", true,
                 PaymentCondition.Credit, null,
                 "John", "john@email.com", "054");

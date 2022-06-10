@@ -1,10 +1,10 @@
 package groupk.shared.Tests;
 
-import adss_group_k.BusinessLayer.Inventory.Service.Service;
-import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
-import adss_group_k.PresentationLayer.AppContainer;
-import adss_group_k.SchemaInit;
-import adss_group_k.dataLayer.dao.PersistenceController;
+import groupk.inventory_suppliers.SchemaInit;
+import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
+import groupk.shared.PresentationLayer.AppContainer;
+import groupk.shared.business.Inventory.Service.Service;
+import groupk.shared.business.Suppliers.Service.ISupplierService;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.sql.Connection;
