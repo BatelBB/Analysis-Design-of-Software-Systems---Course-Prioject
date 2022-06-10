@@ -1,9 +1,12 @@
 package groupk.shared.business.Inventory.Service;
 
-import adss_group_k.BusinessLayer.Inventory.Service.Objects.*;
+import groupk.shared.business.Inventory.Service.Objects.*;
 import groupk.shared.business.Inventory.Categories.Category;
+import groupk.shared.business.Inventory.Service.Objects.Product;
+import groupk.shared.business.Inventory.Service.Objects.Report;
+import groupk.shared.business.Inventory.Service.Objects.SubCategory;
 import groupk.shared.business.Suppliers.Service.ISupplierService;
-import adss_group_k.serviceLayer.ServiceBase;
+import groupk.shared.service.ServiceBase;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -87,7 +90,7 @@ public class Service extends ServiceBase {
     }
 
     //Item methods
-    public ResponseT<adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
+    public ResponseT<groupk.shared.business.Inventory.Service.Objects.ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
         return product_service.addItem(product_id, store, location, supplier, expiration_date, on_shelf);
     }
 

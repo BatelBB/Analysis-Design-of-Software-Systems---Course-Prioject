@@ -1,19 +1,19 @@
 package groupk.shared.PresentationLayer;
 
-import adss_group_k.BusinessLayer.Inventory.Controllers.CategoryController;
-import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
-import adss_group_k.BusinessLayer.Inventory.Service.CategoryService;
-import adss_group_k.BusinessLayer.Inventory.Service.ProductService;
-import adss_group_k.BusinessLayer.Inventory.Service.ReportService;
-import adss_group_k.BusinessLayer.Inventory.Service.Service;
-import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
-import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
-import adss_group_k.PresentationLayer.Inventory.InventoryPresentationFacade;
-import adss_group_k.PresentationLayer.Suppliers.SupplierPresentationFacade;
-import adss_group_k.PresentationLayer.Suppliers.UserInput;
-import adss_group_k.PresentationLayer.Suppliers.UserOutput;
-import adss_group_k.dataLayer.dao.PersistenceController;
-import adss_group_k.shared.ioc.ClassContainer;
+import groupk.shared.business.CategoryController;
+import groupk.shared.business.ProductController;
+import groupk.shared.business.Inventory.Service.CategoryService;
+import groupk.shared.business.Inventory.Service.ProductService;
+import groupk.shared.business.Inventory.Service.ReportService;
+import groupk.shared.business.Inventory.Service.Service;
+import groupk.shared.business.Suppliers.Service.ISupplierService;
+import groupk.shared.business.Suppliers.Service.SupplierService;
+import groupk.shared.PresentationLayer.Inventory.InventoryPresentationFacade;
+import groupk.shared.PresentationLayer.Suppliers.SupplierPresentationFacade;
+import groupk.shared.PresentationLayer.Suppliers.UserInput;
+import groupk.shared.PresentationLayer.Suppliers.UserOutput;
+import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
+import groupk.inventory_suppliers.shared.ioc.ClassContainer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -3,7 +3,7 @@ package groupk.shared.business.Inventory.Service;
 import groupk.shared.business.Inventory.Categories.Category;
 import groupk.shared.business.CategoryController;
 import groupk.shared.business.Inventory.Categories.SubCategory;
-import adss_group_k.serviceLayer.ServiceBase;
+import groupk.shared.service.ServiceBase;
 
 import java.util.List;
 
@@ -47,10 +47,10 @@ public class CategoryService extends ServiceBase {
         return responseFor(() -> category_controller.getCategory(name));
     }
 
-    public ResponseT<adss_group_k.BusinessLayer.Inventory.Service.Objects.SubCategory> getSubCategory(String categoryName, String SubCategoryName) {
+    public ResponseT<groupk.shared.business.Inventory.Service.Objects.SubCategory> getSubCategory(String categoryName, String SubCategoryName) {
         return responseFor(() -> {
             SubCategory subCategory = category_controller.getSubCategory(categoryName, SubCategoryName);
-            return new adss_group_k.BusinessLayer.Inventory.Service.Objects.SubCategory(subCategory);
+            return new groupk.shared.business.Inventory.Service.Objects.SubCategory(subCategory);
         });
     }
 }

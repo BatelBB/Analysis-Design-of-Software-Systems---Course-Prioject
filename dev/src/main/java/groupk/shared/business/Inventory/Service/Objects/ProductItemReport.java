@@ -2,6 +2,8 @@ package groupk.shared.business.Inventory.Service.Objects;
 
 import java.util.List;
 
+import static groupk.shared.business.Inventory.Report.report_type.*;
+
 public class ProductItemReport extends Report{
 
     private List<ProductItem> productItemList;
@@ -10,20 +12,20 @@ public class ProductItemReport extends Report{
         super(report);
         List<groupk.shared.business.Inventory.ProductItem> BusinessProductItemList=report.getProductItemList();
         for (groupk.shared.business.Inventory.ProductItem p:BusinessProductItemList) {
-            productItemList.add(new adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem(p));
+            productItemList.add(new groupk.shared.business.Inventory.Service.Objects.ProductItem(p));
         }
     }
 
     public String toString(){
         String s= "Id: "+id+"\n"+ "name: "+name+"\n"+ "date: "+date+"\n"+ "report_producer: "+report_producer+"\n";
         switch (reportType){
-            case groupk.shared.business.Inventory.Report.report_type.byProduct:
+            case byProduct:
                 return s + "The Items ids are" + productItemList.get(0).getProductName() + "product:" + "\n" + productItemList();
-            case groupk.shared.business.Inventory.Report.report_type.bySupplier:
+            case bySupplier:
                 return s+ "The Items that "+ productItemList.get(0).getSupplier()+" is provides are:"+"\n" + productItemList();
-            case groupk.shared.business.Inventory.Report.report_type.Defective:
+            case Defective:
                 return s+"The defective products are:"+"\n" + productItemList();
-            case groupk.shared.business.Inventory.Report.report_type.Expired:
+            case Expired:
                 return s+ "The expired products items are:\n"+ productItemList();
         }
         return null;

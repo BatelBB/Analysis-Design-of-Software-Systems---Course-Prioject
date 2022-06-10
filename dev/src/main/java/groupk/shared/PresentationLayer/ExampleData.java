@@ -1,13 +1,13 @@
 package groupk.shared.PresentationLayer;
 
-import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
-import adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem;
-import adss_group_k.BusinessLayer.Inventory.Service.Service;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
-import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
-import adss_group_k.BusinessLayer.Suppliers.Service.SupplierService;
-import adss_group_k.dataLayer.records.OrderType;
-import adss_group_k.dataLayer.records.PaymentCondition;
+import groupk.shared.business.Inventory.Service.Objects.Product;
+import groupk.shared.business.Inventory.Service.Objects.ProductItem;
+import groupk.shared.business.Inventory.Service.Service;
+import groupk.shared.business.Suppliers.BussinessObject.Item;
+import groupk.shared.business.Suppliers.Service.ISupplierService;
+import groupk.shared.business.Suppliers.Service.SupplierService;
+import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
+import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

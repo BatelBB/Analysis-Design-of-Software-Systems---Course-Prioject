@@ -1,8 +1,8 @@
 package groupk.inventory_suppliers.dataLayer.dao.records;
 
 
-import adss_group_k.shared.dto.CreateSupplierDTO;
-import adss_group_k.shared.utils.Utils;
+import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
+import groupk.inventory_suppliers.shared.utils.Utils;
 import groupk.inventory_suppliers.dataLayer.dao.records.readonly.SupplierData;
 
 import java.time.DayOfWeek;

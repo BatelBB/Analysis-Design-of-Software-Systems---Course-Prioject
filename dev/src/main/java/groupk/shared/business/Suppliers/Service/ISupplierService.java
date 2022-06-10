@@ -6,10 +6,11 @@ import groupk.shared.business.Suppliers.BussinessObject.Order;
 import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
 
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
-import adss_group_k.dataLayer.records.OrderType;
-import adss_group_k.dataLayer.records.PaymentCondition;
+import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
+import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
+import groupk.shared.service.ServiceBase;
 
-import static adss_group_k.serviceLayer.ServiceBase.*;
+import static groupk.shared.service.ServiceBase.*;
 
 
 import java.time.DayOfWeek;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 public interface ISupplierService {
-    ResponseT<Order> getOrder(int id);
+    ServiceBase.ResponseT<Order> getOrder(int id);
 
     ResponseT<Supplier> createSupplier(
             int ppn, int bankAccount, String name,

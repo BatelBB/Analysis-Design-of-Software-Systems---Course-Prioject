@@ -1,7 +1,9 @@
 package groupk.shared.business;
 
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
+import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
+import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
 import groupk.shared.business.Inventory.Categories.Category;
 import groupk.shared.business.Inventory.Service.Objects.Product;
 import groupk.shared.business.Inventory.Service.Objects.ProductItem;

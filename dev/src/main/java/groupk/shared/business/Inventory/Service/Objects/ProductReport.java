@@ -5,13 +5,13 @@ import groupk.shared.business.Inventory.Product;
 import java.util.List;
 
 public class ProductReport extends Report {
-    List<adss_group_k.BusinessLayer.Inventory.Service.Objects.Product> productList;
+    List<groupk.shared.business.Inventory.Service.Objects.Product> productList;
 
     public ProductReport(groupk.shared.business.Inventory.Report report) {
         super(report);
         List<groupk.shared.business.Inventory.Product> BusinessProductList = report.getProductList();
         for (Product p : BusinessProductList) {
-            productList.add(new adss_group_k.BusinessLayer.Inventory.Service.Objects.Product(p));
+            productList.add(new groupk.shared.business.Inventory.Service.Objects.Product(p));
         }
     }
 
@@ -24,7 +24,7 @@ public class ProductReport extends Report {
                 return s + "The surpluses products items are:\n" + productList();
             case Missing: {
                 s.append("The missing products items are:\n");
-                for (adss_group_k.BusinessLayer.Inventory.Service.Objects.Product p : productList) {
+                for (groupk.shared.business.Inventory.Service.Objects.Product p : productList) {
                     s.append(p.getName()).append(", current Shelf_qty: ").append(p.getShelf_qty()).append(", current Storage_qty: ").append(p.getStorage_qty()).append("\n");
                 }
                 return s.toString();
@@ -35,7 +35,7 @@ public class ProductReport extends Report {
 
     private String productList() {
         StringBuilder s = new StringBuilder();
-        for (adss_group_k.BusinessLayer.Inventory.Service.Objects.Product p : productList) {
+        for (groupk.shared.business.Inventory.Service.Objects.Product p : productList) {
             s.append(p.getName()).append("\n");
         }
         return s.toString();

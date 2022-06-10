@@ -1,6 +1,6 @@
 package groupk.inventory_suppliers.dataLayer.dao.records;
 
-import adss_group_k.shared.utils.Utils;
+import groupk.inventory_suppliers.shared.utils.Utils;
 
 public class QuantityDiscountRecord extends BaseRecord<Integer> {
     public final int id;

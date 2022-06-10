@@ -1,18 +1,18 @@
 package groupk.shared.PresentationLayer.Suppliers;
 
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
-import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
-import adss_group_k.dataLayer.records.OrderType;
-import adss_group_k.dataLayer.records.PaymentCondition;
+import groupk.shared.business.Suppliers.BussinessObject.Item;
+import groupk.shared.business.Suppliers.BussinessObject.Order;
+import groupk.shared.business.Suppliers.BussinessObject.Supplier;
+import groupk.shared.business.Suppliers.Service.ISupplierService;
+import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
+import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-import static adss_group_k.serviceLayer.ServiceBase.*;
+import static groupk.shared.service.ServiceBase.*;
 
 public class SupplierPresentationFacade {
     private UserInput input = UserInput.getInstance();

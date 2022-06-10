@@ -1,17 +1,17 @@
 package groupk.shared.Tests.Suppliers;
 
-import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
-import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import groupk.shared.business.Inventory.Service.Objects.Product;
+import groupk.shared.business.Suppliers.BusinessLogicException;
+import groupk.shared.business.Suppliers.BussinessObject.Item;
+import groupk.shared.business.Suppliers.BussinessObject.Order;
+import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
+import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 import groupk.shared.Tests.TestsBase;
-import adss_group_k.dataLayer.records.OrderType;
-import adss_group_k.dataLayer.records.PaymentCondition;
+import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
+import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 
 
-import adss_group_k.serviceLayer.ServiceBase;
+import groupk.shared.service.ServiceBase;
 import org.junit.jupiter.api.Test;
 
 import java.time.*;

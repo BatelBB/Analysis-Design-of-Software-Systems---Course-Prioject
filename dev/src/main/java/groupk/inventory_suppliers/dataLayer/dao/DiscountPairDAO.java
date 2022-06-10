@@ -1,6 +1,6 @@
 package groupk.inventory_suppliers.dataLayer.dao;
 
-import adss_group_k.BusinessLayer.Inventory.DiscountPair;
+import groupk.shared.business.Inventory.DiscountPair;
 import groupk.inventory_suppliers.dataLayer.dao.records.DiscountPairRecord;
 import groupk.inventory_suppliers.dataLayer.dao.records.readonly.DiscountPairData;
 

@@ -1,6 +1,6 @@
 package groupk.shared.business.Suppliers.BussinessObject;
 
-import adss_group_k.shared.utils.Utils;
+import groupk.inventory_suppliers.shared.utils.Utils;
 
 public class QuantityDiscount {
     public final Item item;
