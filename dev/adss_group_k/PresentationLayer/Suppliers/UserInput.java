@@ -1,5 +1,7 @@
 package adss_group_k.PresentationLayer.Suppliers;
 
+import adss_group_k.dataLayer.records.OrderType;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
@@ -118,5 +120,22 @@ public class UserInput {
             }
         }
         return nextDate;
+    }
+
+    public <TEnum extends Enum<TEnum>> TEnum nextEnum(
+            String prompt, Class<TEnum> enumType) {
+        TEnum selected = null;
+        TEnum[] values = enumType.getEnumConstants();
+        while(true) {
+            try {
+                UserOutput.getInstance().println(prompt);
+                for (int i = 0; i < values.length; i++) {
+                    UserOutput.getInstance().println((i+1) + ": " + values[i]);
+                }
+                return values[Integer.parseInt(scanner.nextLine().trim()) - 1];
+            } catch (Exception e) {
+                UserOutput.getInstance().println("please try again");
+            }
+        }
     }
 }

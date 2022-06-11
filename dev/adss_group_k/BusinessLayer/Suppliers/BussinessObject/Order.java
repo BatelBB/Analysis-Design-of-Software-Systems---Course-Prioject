@@ -112,7 +112,7 @@ public class Order {
             int amount = entry.getValue();
 
             table.add("");
-            table.add(item.getCatalogNumber() + "");
+            table.add("Catalog #: " + item.getCatalogNumber());
             table.add(amount + " units");
             table.add(String.format("$%.2f / ea", item.getPrice()));
         }

@@ -174,9 +174,10 @@ public class SupplierPresentationFacade {
                                 int ppn = checkPPN("Enter the supplier's ppn number: ");
                                 LocalDate ordered = input.nextDate("What is the order date? ");
                                 LocalDate deliver = input.nextDate("When is the order supposed to be delivered? ");
+                                OrderType orderType = input.nextEnum("choose order type", OrderType.class);
                                 try {
                                     ResponseT<Order> serviceResponse = service.createOrder(
-                                            ppn, ordered, deliver, OrderType.Periodical);
+                                            ppn, ordered, deliver, orderType);
                                     order = serviceResponse.data;
                                     String err = serviceResponse.error;
                                     if (err != null) {
