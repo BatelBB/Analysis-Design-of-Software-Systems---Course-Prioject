@@ -2,6 +2,7 @@ package groupk.shared.Tests;
 
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
+import groupk.shared.business.Facade;
 import groupk.shared.business.Inventory.ProductItem;
 import groupk.shared.business.Inventory.Service.Objects.Product;
 import groupk.shared.business.Inventory.Service.Objects.Report;
@@ -102,10 +103,7 @@ public class IntegrationTests extends TestsBase {
         Assertions.assertEquals(0, productSize);
         Assertions.assertEquals(0, subCategorySize);
         Assertions.assertEquals(0, subSubCategorySize);
-
-
     }
-
 
     @Test
     public void testAddItemToOrder() {

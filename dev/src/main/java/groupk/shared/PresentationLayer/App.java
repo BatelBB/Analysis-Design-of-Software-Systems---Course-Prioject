@@ -34,9 +34,8 @@ public class App {
 
         AppContainer ioc = new AppContainer(dbPath);
         Connection appConnection = ioc.get(Connection.class);
-
+        SchemaInit.init(appConnection);
         if (isNew) {
-            SchemaInit.init(appConnection);
             UserOutput.getInstance().println(
                     "You don't have a previous database file stored, so we'll create a new one for you " +
                             "from scratch.");

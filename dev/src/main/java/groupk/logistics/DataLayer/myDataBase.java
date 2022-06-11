@@ -17,7 +17,7 @@ public class myDataBase {
     public static File file;
 
     public myDataBase() {
-        file = new File("employee_logisticsDB.db");
+        file = new File("database.db");
         finalCurl = ("jdbc:sqlite:").concat(file.getAbsolutePath());
         try {
             createNewTable();

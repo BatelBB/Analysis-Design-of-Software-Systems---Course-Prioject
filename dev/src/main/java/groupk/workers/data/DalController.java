@@ -14,7 +14,7 @@ public class DalController {
     public static File file;
 
     public DalController() {
-        file = new File("employee_logisticsDB.db");
+        file = new File("database.db");
         url = ("jdbc:sqlite:").concat(file.getAbsolutePath());
         try{
             createTables();

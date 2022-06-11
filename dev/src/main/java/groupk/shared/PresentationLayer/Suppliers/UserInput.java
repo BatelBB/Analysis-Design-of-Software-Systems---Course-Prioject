@@ -1,6 +1,5 @@
 package groupk.shared.PresentationLayer.Suppliers;
 
-import adss_group_k.dataLayer.records.OrderType;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
