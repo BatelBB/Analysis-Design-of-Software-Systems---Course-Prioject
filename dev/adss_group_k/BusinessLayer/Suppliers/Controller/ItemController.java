@@ -83,7 +83,10 @@ public class ItemController {
 
     public void deleteAllFromSupplier(Supplier s) {
         for(Map.Entry<String, Item> entry: items.entrySet()) {
-            items.remove(entry.getKey());
+            String key = entry.getKey();
+            Item item = entry.getValue();
+            items.remove(key);
+            dal.getItems().delete(new ItemRecord.ItemKey(item.getSupplier().getPpn(), item.getCatalogNumber()));
             UserOutput.getInstance().println("Item with catalog number: " +entry.getValue().getCatalogNumber() +
                     " is deleted.");
         }
