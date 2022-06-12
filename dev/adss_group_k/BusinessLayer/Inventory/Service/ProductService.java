@@ -110,11 +110,11 @@ public class ProductService extends ServiceBase {
         return responseFor(product_controller::getProducts);
     }
 
-    public Response addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {
-        return responseForVoid(()->product_controller.addOrderRecord(orderId,productAmount));
-    }
+//    public Response addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {
+//        return responseForVoid(()->product_controller.addOrderRecord(orderId,productAmount));
+//    }
 
-    public Response receiveTrucking(int trucking_id){
-        return responseForVoid(()->product_controller.receiveTrucking(trucking_id));
-    }
+//    public Response receiveTrucking(int trucking_id){
+//        return responseForVoid(()->product_controller.receiveTrucking(trucking_id));
+//    }
 }
