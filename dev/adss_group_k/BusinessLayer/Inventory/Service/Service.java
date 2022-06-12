@@ -86,7 +86,7 @@ public class Service extends ServiceBase {
         return product_service.getProductNames();
     }
 
-    public ResponseT<List<adss_group_k.BusinessLayer.Inventory.Product>> getProducts(){
+    public static ResponseT<List<adss_group_k.BusinessLayer.Inventory.Product>> getProducts(){
         return product_service.getProducts();
     }
 
@@ -165,9 +165,9 @@ public class Service extends ServiceBase {
     //Order methods
     public Response createPeriodicOrder(Map<Integer,Integer> productAmount, int weekDay) {
         /*יוצרים הזמנה תקופתית שתגיע ביום מסוים בשבוע. הארגומנטים הם
-                                                                 מפה של הID של המוצר והכמות עבורו. בנוסף היום בשבוע שבו נרצה שההזמנה תגיע*/
-        int orderId= supplierService.createOrder(productAmount,weekDay);
-//        return product_service.addOrderRecord(orderId,productAmount);
+                                מפה של הID של המוצר והכמות עבורו. בנוסף היום בשבוע שבו נרצה שההזמנה תגיע*/
+        int orderId= supplierService.createOrderPeriodic(productAmount,weekDay).data;
+        return product_service.addOrderRecord(orderId,productAmount);
 
     }
 

@@ -5,6 +5,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * @author Yuval Dolev
@@ -27,7 +28,11 @@ public class ClassContainer {
     public <T> T get(Class<T> service) {
         mustSupport(service);
         if(singletons.contains(service)) {
-            return (T) singletonInstances.computeIfAbsent(service, s -> suppliers.get(s).get());
+            if(!singletonInstances.containsKey(service)) {
+                Object instance = suppliers.get(service).get();
+                singletonInstances.put(service, instance);
+            }
+            return (T) singletonInstances.get(service);
         }
         return (T) suppliers.get(service).get();
     }

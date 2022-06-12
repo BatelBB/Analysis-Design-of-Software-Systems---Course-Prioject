@@ -13,7 +13,7 @@ public class UserOutput {
         return instance;
     }
 
-    public void println(String arg) {
+    public static void println(String arg) {
         System.out.println(arg);
     }
 

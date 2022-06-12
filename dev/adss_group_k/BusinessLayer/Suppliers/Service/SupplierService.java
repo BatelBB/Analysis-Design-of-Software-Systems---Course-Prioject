@@ -1,5 +1,6 @@
 package adss_group_k.BusinessLayer.Suppliers.Service;
 
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
@@ -21,6 +22,10 @@ import java.sql.Connection;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SupplierService extends ServiceBase implements ISupplierService {
 
@@ -36,6 +41,7 @@ public class SupplierService extends ServiceBase implements ISupplierService {
         items = new ItemController(dal, suppliers);
         discounts = new QuantityDiscountController(dal, items);
         orders = new OrderController(dal, discounts);
+
     }
 
     @Override
@@ -212,5 +218,28 @@ public class SupplierService extends ServiceBase implements ISupplierService {
     @Override
     public Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
         return null;
+    }
+
+    @Override
+    public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty) {
+        if(r.success){
+            Item item = items.getItemsFromProdID(product_id);
+            Supplier supplier = items.checkBestSupplier(item);
+            return responseFor(()->orders.createShortage(supplier, item, min_qty, OrderType.Shortages,
+                    LocalDate.now(), LocalDate.now().plusDays(7)));
+        }else{
+            return responseFor(()-> {throw new BusinessLogicException("NO NEED FOR SHORTAGE ORDER!");});
+        }
+    }
+
+    @Override
+    public ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
+        Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
+        Supplier supplier = items.checkBestSupplier((Item) itemsWithAmount.keySet().toArray()[0]);
+        Order order = orders.create(supplier, OrderType.Periodical,
+                LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
+        orders.orderItemFromMap(order, itemsWithAmount);
+
+        return responseFor(() -> order.getId());
     }
 }
