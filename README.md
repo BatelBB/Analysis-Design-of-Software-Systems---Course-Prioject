@@ -15,28 +15,26 @@
 
 ## Development
 
-The `dev` directory contains a Maven project.
-If you use IntelliJ, use the following command.
-If you use something else, you better know how to use Maven with it.
+For IntelliJ users:
 
 ```
+git clean -d -X --force
 cd dev
 mvn idea:idea
 ```
 
-An IntelliJ project file should now be present in the `dev` directory.
-Please don't commit IDE configurations to the repository.
+Double click on `dev/adss.ipr` to open the IntelliJ project.
 
 ### Packaging
 
-Create a JAR by:
+Build a Jar:
 
 ```
 mvn clean package shade:shade
 ```
 
-Running the JAR can be done with:
+Run the Jar:
 
 ```
-java -jar ./target/`workers-0.0.1.jar
+java -jar ./target/`adss-0.0.1.jar
 ```
