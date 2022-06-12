@@ -73,4 +73,6 @@ public interface ISupplierService {
     Response setSupplierContact(int supplierPPN, String name, String phoneNumber, String email);
 
     Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount);
+
+    Response createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty);
 }
