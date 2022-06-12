@@ -5,6 +5,7 @@ import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import adss_group_k.PresentationLayer.Suppliers.UserOutput;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.ItemRecord;
 import adss_group_k.dataLayer.records.readonly.ItemData;
@@ -80,6 +81,8 @@ public class ItemController {
     public void deleteAllFromSupplier(Supplier s) {
         for(Map.Entry<String, Item> entry: items.entrySet()) {
             items.remove(entry.getKey());
+            UserOutput.getInstance().println("Item with catalog number: " +entry.getValue().getCatalogNumber() +
+                    " is deleted.");
         }
     }
 

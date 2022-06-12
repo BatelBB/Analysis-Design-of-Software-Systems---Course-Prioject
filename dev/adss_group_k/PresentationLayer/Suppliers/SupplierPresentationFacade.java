@@ -1,5 +1,7 @@
 package adss_group_k.PresentationLayer.Suppliers;
 
+import adss_group_k.BusinessLayer.Inventory.Product;
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
@@ -10,7 +12,11 @@ import adss_group_k.dataLayer.records.PaymentCondition;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static adss_group_k.serviceLayer.ServiceBase.*;
 
@@ -18,9 +24,11 @@ public class SupplierPresentationFacade {
     private UserInput input = UserInput.getInstance();
     private UserOutput output = UserOutput.getInstance();
     private final ISupplierService service;
+    private final Service inventory;
 
-    public SupplierPresentationFacade(ISupplierService supplierService) {
+    public SupplierPresentationFacade(ISupplierService supplierService, Service inventory) {
         this.service = supplierService;
+        this.inventory = inventory;
     }
     
     static Scanner scanner = new Scanner(System.in);
@@ -193,10 +201,15 @@ public class SupplierPresentationFacade {
                                 int nextInt = 0;
                                 while (retry) {
                                     int[] arr = checkItem();
+                                    Supplier sup = checkBestSupplier(service.getItem(arr[0], arr[1]).data);
+                                    output.println("There is a better supplier that supplying this item: "
+                                            + sup.getName() + " with the better price: " + " instead of the price: " +
+                                            service.getItem(arr[0], arr[1]).data.getPrice());
                                     int amount = input.nextInt("How much of this item do you want to order? ");
                                     service.orderItem(order.getId(),
-                                            service.getItem(arr[0], arr[1]).data.getSupplier().getPpn(),
+                                            sup.getPpn(),
                                             service.getItem(arr[0], arr[1]).data.getCatalogNumber(), amount);
+
                                     String more = input.nextString("Do you want to add more items? n/y ");
                                     if (more.equals("n")) {
                                         retry = false;
@@ -292,6 +305,33 @@ public class SupplierPresentationFacade {
                 }
             }
         }
+
+    private Supplier checkBestSupplier(Item item) {
+//        List<Supplier> supplierList = service.getSuppliers().stream().collect(Collectors.toList());
+//        for (Supplier sup:supplierList) {
+//
+//        }
+          List<Product> productList = inventory.getProducts().data;
+//
+        Map<Integer, String> productMap = new HashMap<Integer, String>();
+        for(Product prod:productList){
+            productMap.put(prod.getProduct_id(), prod.getName());
+        }
+        String nameProduct = "";
+        List<Item> itemList = service.getItems().stream().collect(Collectors.toList());
+        int minPrice = 1000000;
+        for(Item it : itemList){
+            if(productMap.containsKey(item.getProductId()))
+                nameProduct = productMap.get(item.getProductId());
+            if(productMap.containsKey(it.getProductId()) && productMap.get(it.getProductId()).equals(nameProduct)){
+                minPrice = (int) Math.min(it.getPrice(), minPrice);
+            }
+            if(it.getPrice() == minPrice)
+                return it.getSupplier();
+        }
+
+        return item.getSupplier();
+    }
 
 
     private void createDiscount() {

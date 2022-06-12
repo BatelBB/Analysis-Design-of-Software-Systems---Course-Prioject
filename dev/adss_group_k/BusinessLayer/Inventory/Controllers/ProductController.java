@@ -9,6 +9,7 @@ import adss_group_k.dataLayer.records.readonly.ProductData;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProductController {
     private Map<Integer, Product> products;
@@ -298,5 +299,9 @@ public class ProductController {
             if (p.getMin_qty() > p.getItems().size()) deficiency.put(p.getName(), p.getMin_qty());
         }
         return (Map<String, Integer>) deficiency;
+    }
+
+    public List<Product> getProducts() {
+        return products.values().stream().collect(Collectors.toList());
     }
 }

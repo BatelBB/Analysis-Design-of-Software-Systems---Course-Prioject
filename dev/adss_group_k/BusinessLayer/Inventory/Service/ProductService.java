@@ -100,4 +100,8 @@ public class ProductService extends ServiceBase {
     public boolean productsInSubSubCategory(String category, String sub_category, String sub_sub_category) {
         return product_controller.productsInSubSubCategory(category, sub_category, sub_sub_category);
     }
+
+    public ResponseT<List<adss_group_k.BusinessLayer.Inventory.Product>> getProducts() {
+        return responseFor(product_controller::getProducts);
+    }
 }
