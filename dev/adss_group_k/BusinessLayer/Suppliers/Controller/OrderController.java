@@ -107,4 +107,12 @@ public class OrderController {
         orders.add(order);
         return order.getId();
     }
+
+    public void orderItemFromMap(Order order, Map<Item, Integer> itemsWithAmount) {
+        for(int i=0; i<itemsWithAmount.size(); i++){
+            order.orderItem((Item) itemsWithAmount.keySet().toArray()[i],
+                    itemsWithAmount.get(itemsWithAmount.keySet().toArray()[i]));
+
+        }
+    }
 }

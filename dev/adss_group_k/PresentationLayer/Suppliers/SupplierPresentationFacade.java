@@ -177,48 +177,48 @@ public class SupplierPresentationFacade {
                 case (3): {
                     userInput = input.nextInt(Menu.getOrderSubmenu());
                     switch (userInput) {
-                        case (0): { //DELETE IT
-                            //create new order
-                            Order order = null;
-                            int ppn = checkPPN("Enter the supplier's ppn number: ");
-                            LocalDate ordered = input.nextDate("What is the order date? ");
-                            LocalDate deliver = input.nextDate("When is the order supposed to be delivered? ");
-                            OrderType orderType = input.nextEnum("choose order type", OrderType.class);
-                            try {
-                                ResponseT<Order> serviceResponse = service.createOrder(
-                                        ppn, ordered, deliver, orderType);
-                                order = serviceResponse.data;
-                                String err = serviceResponse.error;
-                                if (err != null) {
-                                    output.println(err);
-                                    break;
-                                }
-
-                            } catch (Exception e) {
-                                output.println(e.getMessage());
-                            }
-                            output.println("Now it's time to add items to the order");
-                            boolean retry = true;
-                            int nextInt = 0;
-                            while (retry) {
-                                int[] arr = checkItem();
-                                Supplier sup = checkBestSupplier(service.getItem(arr[0], arr[1]).data);
-                                output.println("There is a better supplier that supplying this item: "
-                                        + sup.getName() + " with the better price: " + minPrice + " instead of the price: " +
-                                        service.getItem(arr[0], arr[1]).data.getPrice());
-                                int amount = input.nextInt("How much of this item do you want to order? ");
-                                service.orderItem(order.getId(),
-                                        sup.getPpn(),
-                                        service.getItem(arr[0], arr[1]).data.getCatalogNumber(), amount);
-
-                                String more = input.nextString("Do you want to add more items? n/y ");
-                                if (more.equals("n")) {
-                                    retry = false;
-                                }
-                            }
-                            output.println(order.toString());
-                            break;
-                        }
+//                        case (0): { //DELETE IT
+//                            //create new order
+//                            Order order = null;
+//                            int ppn = checkPPN("Enter the supplier's ppn number: ");
+//                            LocalDate ordered = input.nextDate("What is the order date? ");
+//                            LocalDate deliver = input.nextDate("When is the order supposed to be delivered? ");
+//                            OrderType orderType = input.nextEnum("choose order type", OrderType.class);
+//                            try {
+//                                ResponseT<Order> serviceResponse = service.createOrder(
+//                                        ppn, ordered, deliver, orderType);
+//                                order = serviceResponse.data;
+//                                String err = serviceResponse.error;
+//                                if (err != null) {
+//                                    output.println(err);
+//                                    break;
+//                                }
+//
+//                            } catch (Exception e) {
+//                                output.println(e.getMessage());
+//                            }
+//                            output.println("Now it's time to add items to the order");
+//                            boolean retry = true;
+//                            int nextInt = 0;
+//                            while (retry) {
+//                                int[] arr = checkItem();
+//                                Supplier sup = checkBestSupplier(service.getItem(arr[0], arr[1]).data);
+//                                output.println("There is a better supplier that supplying this item: "
+//                                        + sup.getName() + " with the better price: " + minPrice + " instead of the price: " +
+//                                        service.getItem(arr[0], arr[1]).data.getPrice());
+//                                int amount = input.nextInt("How much of this item do you want to order? ");
+//                                service.orderItem(order.getId(),
+//                                        sup.getPpn(),
+//                                        service.getItem(arr[0], arr[1]).data.getCatalogNumber(), amount);
+//
+//                                String more = input.nextString("Do you want to add more items? n/y ");
+//                                if (more.equals("n")) {
+//                                    retry = false;
+//                                }
+//                            }
+//                            output.println(order.toString());
+//                            break;
+//                        }
                         case (1): {
                             //delete existing order
                             int ppn = checkPPN("Enter the supplier's ppn number: ");

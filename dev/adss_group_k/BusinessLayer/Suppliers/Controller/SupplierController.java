@@ -1,6 +1,7 @@
 package adss_group_k.BusinessLayer.Suppliers.Controller;
 
 import adss_group_k.BusinessLayer.Inventory.Product;
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
@@ -93,24 +94,5 @@ public class SupplierController {
     }
 
 
-    public Supplier checkBestSupplier(Item item) {
-        List<Product> productList = inventory.getProducts().data;
-        Map<Integer, String> productMap = new HashMap<Integer, String>();
-        for (Product prod : productList) {
-            productMap.put(prod.getProduct_id(), prod.getName());
-        }
-        String nameProduct = "";
-        List<Item> itemList = service.getItems().stream().collect(Collectors.toList());
-        for (Item it : itemList) {
-            if (productMap.containsKey(item.getProductId()))
-                nameProduct = productMap.get(item.getProductId());
-            if (productMap.containsKey(it.getProductId()) && productMap.get(it.getProductId()).equals(nameProduct)) {
-                minPrice = (int) Math.min(it.getPrice(), minPrice);
-            }
-            if (it.getPrice() == minPrice)
-                return it.getSupplier();
-        }
 
-        return item.getSupplier();
-    }
 }

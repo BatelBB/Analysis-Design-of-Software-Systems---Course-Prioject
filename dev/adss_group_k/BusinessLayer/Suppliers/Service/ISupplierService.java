@@ -78,4 +78,5 @@ public interface ISupplierService {
     Response createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty);
 
 
+    ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay);
 }
