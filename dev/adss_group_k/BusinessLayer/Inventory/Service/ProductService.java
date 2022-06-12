@@ -3,6 +3,7 @@ package adss_group_k.BusinessLayer.Inventory.Service;
 import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem;
+import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
 import adss_group_k.dataLayer.dao.PersistenceController;
 
 import java.time.LocalDate;
@@ -73,12 +74,15 @@ public class ProductService extends ServiceBase {
         );
     }
 
-    public Response removeItem(int product_id, int item_id) {
-        return responseForVoid(() -> product_controller.removeItem(product_id, item_id));
+    public ResponseT<Boolean> removeItem(int product_id, int item_id) {
+        return responseFor(() -> product_controller.removeItem(product_id, item_id));
     }
 
     public ResponseT<String> getItemLocation(int product_id, int item_id) {
         return responseFor(() -> product_controller.getItemLocation(product_id, item_id));
+    }
+    public ResponseT<Integer> getMinQty(int product_id){
+        return responseFor(() ->product_controller.getMinQty(product_id));
     }
 
     public Response changeItemLocation(int product_id, int item_id, String location) {

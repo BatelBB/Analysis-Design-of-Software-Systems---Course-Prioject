@@ -6,6 +6,7 @@ import adss_group_k.serviceLayer.ServiceBase;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public class Service extends ServiceBase {
     private final ProductService product_service;
@@ -95,7 +96,9 @@ public class Service extends ServiceBase {
     }
 
     public Response removeItem(int product_id, int item_id) {
-        return product_service.removeItem(product_id, item_id);
+        ResponseT<Boolean> r=product_service.removeItem(product_id, item_id);
+        int min_qty=product_service.getMinQty(product_id).data;
+        return supplierService.createOrderShortage(r,product_id,min_qty);
     }
 
     public Response updateItemCusDiscount(float discount, LocalDate start_date, LocalDate end_date, int product_id, int item_id) {
@@ -160,30 +163,10 @@ public class Service extends ServiceBase {
     }
 
     //Order methods
-//    public Response createOrder() {
-//        return supplierService.createOrder();
-//    }
-//
-//    public Response createDeficienciesOrder() {
-//        Map<String, Integer> proAmount = product_service.getDeficiency().data;
-//        Order order = supplierService.createOrder();
-//        for (Map.Entry<String, Integer> entry : proAmount.entrySet()) {
-//            supplierService.orderItem(order.id, entry.getKey(), entry.getValue());
-//        }
-//        return null;
-//    }
-//
-//    public Response updateOrder(String op, int orderId, String proName, int proAmount) {
-//        //need to check that the order contain the min_qnt
-//        int minAmount = product_service.getMinAmount(proName).data;
-//        switch (op) {
-//            case "Remove":
-//                return supplierService.updateOrderAmount(orderId, proName); // just enter 0 in the amount, and it will be deleted
-//            case "Add":
-//                return supplierService.orderItem(orderId, proName, proAmount, minAmount);
-//            case "UpdateAmount":
-//                return supplierService.updateOrderAmount(orderId, proName, proAmount, minAmount);
-//        }
-//        return null;
-//    }
+    public Response createPeriodicOrder(Map<Integer,Integer> productAmount, int weekDay) {
+        return supplierService.createOrder(productAmount,weekDay);/*יוצרים הזמנה תקופתית שתגיע ביום מסוים בשבוע. הארגומנטים הם
+                                                                 מפה של הID של המוצר והכמות עבורו. בנוסף היום בשבוע שבו נרצה שההזמנה תגיע
+    }
+
+
 }

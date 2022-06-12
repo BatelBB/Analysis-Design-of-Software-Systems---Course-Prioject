@@ -93,7 +93,7 @@ public class Product {
         return pItem;
     }
 
-    public void removeItem(int item_id) throws Exception {
+    public boolean removeItem(int item_id) throws Exception {
         itemExists(item_id);
         for (DiscountPair dp : items.get(item_id).getCus_discount()) {
             pc.getDiscountPairs().delete(new DiscountPairRecord.DiscountPairKey(product_id, item_id, dp.getId()));
@@ -104,6 +104,7 @@ public class Product {
         else
             setStorage_qty(storage_qty - 1);
         items.remove(item_id);
+        return shelf_qty+storage_qty<min_qty;
     }
 
     public void changeItemLocation(int item_id, String location) throws Exception {

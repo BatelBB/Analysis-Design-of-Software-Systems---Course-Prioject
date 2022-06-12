@@ -86,6 +86,10 @@ public class ProductController {
         productExists(product_id);
         return products.get(product_id).getItemLocation(item_id);
     }
+    public int getMinQty(int product_id) throws Exception {
+        productExists(product_id);
+        return products.get(product_id).getMin_qty();
+    }
 
     public Product addProduct(String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
         try {
@@ -147,9 +151,9 @@ public class ProductController {
         return products.get(product_id).addItem(store, location, supplier, expiration_date, on_shelf);
     }
 
-    public void removeItem(int product_id, int item_id) throws Exception {
+    public boolean removeItem(int product_id, int item_id) throws Exception {
         productExists(product_id);
-        products.get(product_id).removeItem(item_id);
+        return products.get(product_id).removeItem(item_id);
     }
 
     public void changeItemLocation(int product_id, int item_id, String location) throws Exception {
