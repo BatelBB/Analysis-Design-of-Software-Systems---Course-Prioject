@@ -5,20 +5,25 @@ import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
 import adss_group_k.BusinessLayer.Inventory.Service.Objects.Report;
 import adss_group_k.BusinessLayer.Inventory.Service.ProductService;
 import adss_group_k.BusinessLayer.Inventory.Service.ReportService;
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
 import adss_group_k.serviceLayer.ServiceBase;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
 public class InventoryPresentationFacade {
     private String[] args;
+    private final Service inventory_service;
     private final CategoryService categories;
     private final ProductService products;
     private final ReportService reports;
 
-    public InventoryPresentationFacade(CategoryService categories, ProductService products, ReportService reports) {
+    public InventoryPresentationFacade(Service inventory_service, CategoryService categories, ProductService products, ReportService reports) {
+        this.inventory_service=inventory_service;
         this.categories = categories;
         this.products = products;
         this.reports = reports;
@@ -110,6 +115,9 @@ public class InventoryPresentationFacade {
                         break;
                     case "getReport":
                         getReport();
+                        break;
+                    case "createPeriodicOrder":
+                        createPeriodicOrder();
                         break;
                     default:
                         System.out.println("unknown command, aborting..");
@@ -304,8 +312,20 @@ public class InventoryPresentationFacade {
         useService(args, 1,
                 () -> reports.getReport(convertInt(args[0])));
     }
+    public void createPeriodicOrder(){
+        useService(args, 2, ()->inventory_service.createPeriodicOrder(convertMap(args[0]), convertInt(args[1])));
+    }
 
     //converters
+    private Map<Integer,Integer> convertMap(String input){
+        Map<Integer,Integer> values=new HashMap<>();
+        String[] pairs=input.split("_");
+        for(String pair : pairs){
+            String[] kv=pair.split("-");
+            values.put(convertInt(kv[0]),convertInt(kv[1]));
+        }
+        return values;
+    }
     private boolean convertBoolean(String input) {
         return Boolean.parseBoolean(input);
     }

@@ -14,6 +14,7 @@ import static adss_group_k.serviceLayer.ServiceBase.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Map;
 
 public interface ISupplierService {
     ResponseT<Order> getOrder(int id);
@@ -75,4 +76,6 @@ public interface ISupplierService {
     Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount);
 
     Response createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty);
+
+
 }

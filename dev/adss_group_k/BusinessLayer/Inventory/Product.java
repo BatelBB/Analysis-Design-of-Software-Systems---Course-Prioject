@@ -1,5 +1,6 @@
 package adss_group_k.BusinessLayer.Inventory;
 
+import adss_group_k.PresentationLayer.Suppliers.UserOutput;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.DiscountPairRecord;
 import adss_group_k.dataLayer.records.ProductItemRecord;
@@ -104,6 +105,9 @@ public class Product {
         else
             setStorage_qty(storage_qty - 1);
         items.remove(item_id);
+        if(shelf_qty+storage_qty<min_qty){
+            UserOutput.getInstance().println("Product ID: " + product_id + " has reached below minimum quantity, creating order.");
+        }
         return shelf_qty+storage_qty<min_qty;
     }
 

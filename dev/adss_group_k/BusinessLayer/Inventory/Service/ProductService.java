@@ -8,6 +8,7 @@ import adss_group_k.dataLayer.dao.PersistenceController;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import adss_group_k.serviceLayer.ServiceBase;
 
@@ -107,5 +108,13 @@ public class ProductService extends ServiceBase {
 
     public ResponseT<List<adss_group_k.BusinessLayer.Inventory.Product>> getProducts() {
         return responseFor(product_controller::getProducts);
+    }
+
+    public Response addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {
+        return responseForVoid(()->product_controller.addOrderRecord(orderId,productAmount));
+    }
+
+    public Response receiveTrucking(int trucking_id){
+        return responseForVoid(()->product_controller.receiveTrucking(trucking_id));
     }
 }
