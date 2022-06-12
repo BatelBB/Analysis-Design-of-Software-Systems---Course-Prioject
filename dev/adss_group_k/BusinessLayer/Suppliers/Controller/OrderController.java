@@ -91,4 +91,20 @@ public class OrderController {
         refreshPricesAndDiscounts(item);
         return order.getId();
     }
+
+    public int createShortage(Supplier supplier, Item item, int amountOfProd, OrderType type, LocalDate ordered, LocalDate delivered){
+        if(ordered.isAfter(delivered)) {
+            throw new BusinessLogicException("delivery date can't be before ordering date.");
+        }
+
+        OrderData data = dal.getOrders().createOrder(supplier.getPpn(), type, ordered, delivered);
+        Order order = new Order(supplier, data, dal, discounts);
+
+        if(type == OrderType.Shortages){
+            order.orderItem(item, amountOfProd);
+        }
+
+        orders.add(order);
+        return order.getId();
+    }
 }

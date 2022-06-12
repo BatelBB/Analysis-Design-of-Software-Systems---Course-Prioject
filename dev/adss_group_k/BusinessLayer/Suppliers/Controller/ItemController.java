@@ -97,4 +97,13 @@ public class ItemController {
                 price
         );
     }
+
+    public Item getItemsFromProdID(int prodId){
+        Item it = null;
+        for(Map.Entry<String, Item> entry: items.entrySet()) {
+            if(entry.getValue().getProductId() == prodId)
+                it = entry.getValue();
+        }
+        return it;
+    }
 }

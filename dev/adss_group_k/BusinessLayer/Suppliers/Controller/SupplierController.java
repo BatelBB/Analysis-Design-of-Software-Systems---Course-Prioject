@@ -1,6 +1,8 @@
 package adss_group_k.BusinessLayer.Suppliers.Controller;
 
+import adss_group_k.BusinessLayer.Inventory.Product;
 import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
 import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.PaymentCondition;
@@ -9,10 +11,8 @@ import adss_group_k.dataLayer.records.readonly.SupplierData;
 import adss_group_k.shared.dto.CreateSupplierDTO;
 
 import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SupplierController {
     Map<Integer, Supplier> suppliers;
@@ -90,5 +90,27 @@ public class SupplierController {
     }
 
     public void setContact(int supplierPPN, String name, String phoneNumber, String email) {
+    }
+
+
+    public Supplier checkBestSupplier(Item item) {
+        List<Product> productList = inventory.getProducts().data;
+        Map<Integer, String> productMap = new HashMap<Integer, String>();
+        for (Product prod : productList) {
+            productMap.put(prod.getProduct_id(), prod.getName());
+        }
+        String nameProduct = "";
+        List<Item> itemList = service.getItems().stream().collect(Collectors.toList());
+        for (Item it : itemList) {
+            if (productMap.containsKey(item.getProductId()))
+                nameProduct = productMap.get(item.getProductId());
+            if (productMap.containsKey(it.getProductId()) && productMap.get(it.getProductId()).equals(nameProduct)) {
+                minPrice = (int) Math.min(it.getPrice(), minPrice);
+            }
+            if (it.getPrice() == minPrice)
+                return it.getSupplier();
+        }
+
+        return item.getSupplier();
     }
 }

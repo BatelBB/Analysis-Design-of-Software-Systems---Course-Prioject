@@ -21,6 +21,8 @@ import java.sql.Connection;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SupplierService extends ServiceBase implements ISupplierService {
 
@@ -212,5 +214,17 @@ public class SupplierService extends ServiceBase implements ISupplierService {
     @Override
     public Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
         return null;
+    }
+
+    @Override
+    public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty) {
+        if(r.success){
+            Item item = items.getItemsFromProdID(product_id);
+            Supplier supplier = suppliers.checkBestSupplier(item);
+            return responseFor(()->orders.createShortage(supplier, item, min_qty, OrderType.Shortages,
+                    LocalDate.now(), LocalDate.now().plusDays(7)));
+        }else{
+            return responseFor(()-> {throw new BusinessLogicException("NO NEED FOR SHORTAGE ORDER!");});
+        }
     }
 }
