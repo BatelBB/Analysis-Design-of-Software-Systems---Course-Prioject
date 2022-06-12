@@ -138,7 +138,7 @@ public class ExampleData {
 
         Item cheaperPenItem = suppliers.createItem(
                 ppn_lorem,
-                20,
+                10,
                 cheaperPen.getProduct_id(),
                 5
         ).data;
