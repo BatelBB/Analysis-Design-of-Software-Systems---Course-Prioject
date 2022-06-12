@@ -177,7 +177,7 @@ public class SupplierPresentationFacade {
                 case (3): {
                     userInput = input.nextInt(Menu.getOrderSubmenu());
                     switch (userInput) {
-                        case (1): {
+                        case (0): { //DELETE IT
                             //create new order
                             Order order = null;
                             int ppn = checkPPN("Enter the supplier's ppn number: ");
@@ -219,13 +219,13 @@ public class SupplierPresentationFacade {
                             output.println(order.toString());
                             break;
                         }
-                        case (2): {
+                        case (1): {
                             //delete existing order
                             int ppn = checkPPN("Enter the supplier's ppn number: ");
                             service.deleteOrder(service.getOrder(ppn).data.getId());
                             break;
                         }
-                        case (3): {
+                        case (2): {
                             //edit ordered date
                             int id = input.nextInt("Enter order's id number, see summery for info ");
                             checkId(id);
@@ -237,7 +237,7 @@ public class SupplierPresentationFacade {
                             }
                             break;
                         }
-                        case (4): {
+                        case (3): {
                             //edit delivery date
                             int id = input.nextInt("Enter order's id number, see summery for info ");
                             checkId(id);
@@ -249,7 +249,7 @@ public class SupplierPresentationFacade {
                             }
                             break;
                         }
-                        case (5): {
+                        case (4): {
                             int id = input.nextInt("Enter order's id number, see summery for info ");
                             checkId(id);
                             int[] itemCoords = checkItem();
@@ -262,7 +262,7 @@ public class SupplierPresentationFacade {
                             }
                             break;
                         }
-                        case (6): {
+                        case (5): {
                             //see summery of all orders
                             output.print(service.getOrders().toString());
                             break;
