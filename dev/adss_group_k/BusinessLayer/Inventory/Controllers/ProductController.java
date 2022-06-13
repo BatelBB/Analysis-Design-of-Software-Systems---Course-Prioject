@@ -5,7 +5,6 @@ import adss_group_k.BusinessLayer.Inventory.ProductItem;
 import adss_group_k.dataLayer.dao.PersistenceController;
 import adss_group_k.dataLayer.records.ProductRecord;
 import adss_group_k.dataLayer.records.readonly.ProductData;
-import adss_group_k.serviceLayer.ServiceBase;
 
 
 import java.time.LocalDate;
@@ -16,7 +15,7 @@ public class ProductController {
     private Map<Integer, Product> products;
     private CategoryController category_controller;
     private PersistenceController pc;
-    private Map<Integer,Map<Integer,Integer>> orders;
+//    private Map<Integer,Map<Integer,Integer>> orders;
 
 
     //constructors
@@ -311,16 +310,18 @@ public class ProductController {
         return products.values().stream().collect(Collectors.toList());
     }
 
-    public void addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {
-        orders.put(orderId,productAmount);
-    }
+//    public void addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {
+//        orders.put(orderId,productAmount);
+//    }
 
-    public void receiveTrucking(int trucking_id) {
-        Map<Integer,Integer> order_products = orders.get(trucking_id);
+//    public void receiveTrucking(int trucking_id) {
+//        Map<Integer,Integer> order_products = orders.get(trucking_id);
+//        for(Map.Entry<Integer, Integer> pair : order_products.entrySet()){
+//            pair.getKey()
+//        }
+//    }
 
-    }
-
-    private ProductItem randomizeProductItem(){
-        return null;
-    }
+//    private ProductItem randomizeProductItem(){
+//        return null;
+//    }
 }

@@ -242,4 +242,14 @@ public class SupplierService extends ServiceBase implements ISupplierService {
 
         return responseFor(() -> order.getId());
     }
+
+    @Override
+    public Response createOrderPeriodicVoid(Map<Integer, Integer> productAmount, int weekDay) {
+        Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
+        Supplier supplier = items.checkBestSupplier((Item) itemsWithAmount.keySet().toArray()[0]);
+        Order order = orders.create(supplier, OrderType.Periodical,
+                LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
+
+        return responseForVoid(() -> orders.orderItemFromMap(order, itemsWithAmount));
+    }
 }

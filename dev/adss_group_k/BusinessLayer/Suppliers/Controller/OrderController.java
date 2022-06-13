@@ -60,7 +60,12 @@ public class OrderController {
     }
 
     public void deleteAllFromSupplier(Supplier s) {
-        orders.removeIf(order -> order.supplier == s);
+        orders.stream()
+            .filter(order -> order.supplier.getPpn() == s.getPpn())
+            .forEach(order -> {
+                orders.remove(order);
+                dal.getOrders().delete(order.getId());
+            });
     }
 
     public void delete(int orderId) throws BusinessLogicException {

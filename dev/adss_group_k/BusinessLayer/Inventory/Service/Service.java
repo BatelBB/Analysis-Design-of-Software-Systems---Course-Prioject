@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Service extends ServiceBase {
-    private static ProductService product_service = null;
+    private final ProductService product_service;
     private final CategoryService category_service;
     private final ReportService report_service;
     private final ISupplierService supplierService;
@@ -86,7 +86,7 @@ public class Service extends ServiceBase {
         return product_service.getProductNames();
     }
 
-    public static ResponseT<List<adss_group_k.BusinessLayer.Inventory.Product>> getProducts(){
+    public static ResponseT<List<adss_group_k.BusinessLayer.Inventory.Product>> getProducts() {
         return product_service.getProducts();
     }
 
@@ -96,9 +96,9 @@ public class Service extends ServiceBase {
     }
 
     public Response removeItem(int product_id, int item_id) {
-        ResponseT<Boolean> r=product_service.removeItem(product_id, item_id);
-        int min_qty=product_service.getMinQty(product_id).data;
-        return supplierService.createOrderShortage(r,product_id,min_qty);
+        ResponseT<Boolean> r = product_service.removeItem(product_id, item_id);
+        int min_qty = product_service.getMinQty(product_id).data;
+        return supplierService.createOrderShortage(r, product_id, min_qty);
     }
 
     public Response updateItemCusDiscount(float discount, LocalDate start_date, LocalDate end_date, int product_id, int item_id) {
@@ -163,11 +163,12 @@ public class Service extends ServiceBase {
     }
 
     //Order methods
-    public Response createPeriodicOrder(Map<Integer,Integer> productAmount, int weekDay) {
+    public Response createPeriodicOrder(Map<Integer, Integer> productAmount, int weekDay) {
         /*יוצרים הזמנה תקופתית שתגיע ביום מסוים בשבוע. הארגומנטים הם
                                 מפה של הID של המוצר והכמות עבורו. בנוסף היום בשבוע שבו נרצה שההזמנה תגיע*/
-        int orderId= supplierService.createOrderPeriodic(productAmount,weekDay).data;
-        return product_service.addOrderRecord(orderId,productAmount);
+        return supplierService.createOrderPeriodicVoid(productAmount, weekDay);
+//        int orderId= supplierService.createOrderPeriodic(productAmount,weekDay).data;
+//        return product_service.addOrderRecord(orderId,productAmount);
 
     }
 
