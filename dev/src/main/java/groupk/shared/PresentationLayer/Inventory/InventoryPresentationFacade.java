@@ -1,18 +1,17 @@
-package groupk.PresentationLayer.Inventory;
+package groupk.shared.PresentationLayer.Inventory;
 
-import groupk.BusinessLayer.Inventory.Service.CategoryService;
-import groupk.BusinessLayer.Inventory.Service.Objects.Product;
-import groupk.BusinessLayer.Inventory.Service.Objects.Report;
-import groupk.BusinessLayer.Inventory.Service.ProductService;
-import groupk.BusinessLayer.Inventory.Service.ReportService;
-import groupk.BusinessLayer.Inventory.Service.Service;
-import groupk.serviceLayer.ServiceBase;
+import groupk.shared.business.Inventory.Service.CategoryService;
+import groupk.shared.business.Inventory.Service.ProductService;
+import groupk.shared.business.Inventory.Service.ReportService;
+import groupk.shared.business.Inventory.Service.Service;
+import groupk.shared.service.ServiceBase;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.function.Supplier;
 
 public class InventoryPresentationFacade {
@@ -23,7 +22,7 @@ public class InventoryPresentationFacade {
     private final ReportService reports;
 
     public InventoryPresentationFacade(Service inventory_service, CategoryService categories, ProductService products, ReportService reports) {
-        this.inventory_service=inventory_service;
+        this.inventory_service = inventory_service;
         this.categories = categories;
         this.products = products;
         this.reports = reports;
@@ -132,11 +131,11 @@ public class InventoryPresentationFacade {
 
     //service callers
     private void addCategory() {
-        useService(args, 1, () ->  categories.addCategory(args[0]));
+        useService(args, 1, () -> categories.addCategory(args[0]));
     }
 
     private void removeCategory() {
-        useService(args, 1, () ->  categories.removeCategory(args[0], true));
+        useService(args, 1, () -> categories.removeCategory(args[0], true));
     }
 
     private void addSubCategory() {
@@ -164,7 +163,7 @@ public class InventoryPresentationFacade {
 
     private void updateCategoryCusDiscount() {
         useService(args, 6,
-                () ->  products.updateCategoryCusDiscount(
+                () -> products.updateCategoryCusDiscount(
                         convertFloat(args[0]), convertDate(args[1]),
                         convertDate(args[2]),
                         args[3], args[4], args[5])
@@ -187,7 +186,7 @@ public class InventoryPresentationFacade {
                         convertFloat(args[2]),
                         convertDate(args[3]),
                         convertDate(args[4])
-            )
+                )
         );
     }
 
@@ -228,12 +227,12 @@ public class InventoryPresentationFacade {
 
     public void updateItemDefect() {
         useService(args, 4,
-            () -> products.updateItemDefect(
-                    convertInt(args[0]),
-                    convertInt(args[1]),
-                    convertBoolean(args[2]),
-                    args[3]
-            )
+                () -> products.updateItemDefect(
+                        convertInt(args[0]),
+                        convertInt(args[1]),
+                        convertBoolean(args[2]),
+                        args[3]
+                )
         );
     }
 
@@ -249,7 +248,7 @@ public class InventoryPresentationFacade {
 
         if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
             try {
-                } catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -257,7 +256,7 @@ public class InventoryPresentationFacade {
 
     public void changeItemOnShelf() {
         useService(args, 3,
-                () ->  products.changeItemOnShelf(
+                () -> products.changeItemOnShelf(
                         convertInt(args[0]),
                         convertInt(args[1]),
                         convertBoolean(args[2])
@@ -299,7 +298,7 @@ public class InventoryPresentationFacade {
 
     public void createByCategoryReport() {
         useService(args, 5,
-            () -> reports.createByCategoryReport(args[0], args[1], args[2], args[3], args[4])
+                () -> reports.createByCategoryReport(args[0], args[1], args[2], args[3], args[4])
         );
     }
 
@@ -312,20 +311,34 @@ public class InventoryPresentationFacade {
         useService(args, 1,
                 () -> reports.getReport(convertInt(args[0])));
     }
-    public void createPeriodicOrder(){
-        useService(args, 2, ()->inventory_service.createPeriodicOrder(convertMap(args[0]), convertInt(args[1])));
+
+    public void createPeriodicOrder() {
+        useService(args, 2, () -> inventory_service.createPeriodicOrder(convertMap(args[0]), convertInt(args[1])));
+    }
+
+    public void confirmOrder() {
+        Map<Integer, Integer> order_details = inventory_service.confirmOrder(convertInt(args[0])).data;
+        System.out.println("Order details");
+        for (Map.Entry<Integer, Integer> pair : order_details.entrySet()) {
+            System.out.println(pair.getKey() + " - " + pair.getValue());
+        }
+        System.out.println("please enter actual amount delivered:");
+        Scanner scan = new Scanner(System.in);
+        String input = scan.nextLine();
+        useService(args, 1, () -> inventory_service.confirmOrderAmount(convertMap(input)));
     }
 
     //converters
-    private Map<Integer,Integer> convertMap(String input){
-        Map<Integer,Integer> values=new HashMap<>();
-        String[] pairs=input.split("_");
-        for(String pair : pairs){
-            String[] kv=pair.split("-");
-            values.put(convertInt(kv[0]),convertInt(kv[1]));
+    private Map<Integer, Integer> convertMap(String input) {
+        Map<Integer, Integer> values = new HashMap<>();
+        String[] pairs = input.split("_");
+        for (String pair : pairs) {
+            String[] kv = pair.split("-");
+            values.put(convertInt(kv[0]), convertInt(kv[1]));
         }
         return values;
     }
+
     private boolean convertBoolean(String input) {
         return Boolean.parseBoolean(input);
     }

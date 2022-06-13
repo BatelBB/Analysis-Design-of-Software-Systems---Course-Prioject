@@ -1,11 +1,11 @@
-package groupk.BusinessLayer.Inventory;
+package groupk.shared.business.Inventory;
 
-import groupk.PresentationLayer.Suppliers.UserOutput;
-import groupk.dataLayer.dao.PersistenceController;
-import groupk.dataLayer.records.DiscountPairRecord;
-import groupk.dataLayer.records.ProductItemRecord;
-import groupk.dataLayer.records.readonly.ProductData;
-import groupk.dataLayer.records.readonly.ProductItemData;
+import groupk.shared.PresentationLayer.Suppliers.UserOutput;
+import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
+import groupk.inventory_suppliers.dataLayer.dao.records.DiscountPairRecord;
+import groupk.inventory_suppliers.dataLayer.dao.records.ProductItemRecord;
+import groupk.inventory_suppliers.dataLayer.dao.records.readonly.ProductData;
+import groupk.inventory_suppliers.dataLayer.dao.records.readonly.ProductItemData;
 
 
 import java.sql.Date;

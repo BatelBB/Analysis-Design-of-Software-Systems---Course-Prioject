@@ -1,15 +1,15 @@
-package groupk.BusinessLayer.Suppliers.Controller;
+package groupk.shared.business;
 
-import groupk.BusinessLayer.Inventory.Product;
-import groupk.BusinessLayer.Inventory.Service.Service;
-import groupk.BusinessLayer.Suppliers.BusinessLogicException;
-import groupk.BusinessLayer.Suppliers.BussinessObject.Item;
-import groupk.BusinessLayer.Suppliers.BussinessObject.Supplier;
-import groupk.dataLayer.dao.PersistenceController;
-import groupk.dataLayer.records.PaymentCondition;
-import groupk.dataLayer.records.SupplierRecord;
-import groupk.dataLayer.records.readonly.SupplierData;
-import groupk.shared.dto.CreateSupplierDTO;
+import groupk.shared.business.Inventory.Product;
+import groupk.shared.business.Inventory.Service.Service;
+import groupk.shared.business.Suppliers.BusinessLogicException;
+import groupk.shared.business.Suppliers.BussinessObject.Item;
+import groupk.shared.business.Suppliers.BussinessObject.Supplier;
+import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
+import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
+import groupk.inventory_suppliers.dataLayer.dao.records.SupplierRecord;
+import groupk.inventory_suppliers.dataLayer.dao.records.readonly.SupplierData;
+import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
 
 import java.time.DayOfWeek;
 import java.util.*;

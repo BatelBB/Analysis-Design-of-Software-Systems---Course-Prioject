@@ -1,22 +1,22 @@
-package groupk.BusinessLayer.Suppliers.Service;
+package groupk.shared.business.Suppliers.Service;
 
-import groupk.BusinessLayer.Inventory.Service.Service;
-import groupk.BusinessLayer.Suppliers.BusinessLogicException;
-import groupk.BusinessLayer.Suppliers.BussinessObject.Item;
-import groupk.BusinessLayer.Suppliers.BussinessObject.Order;
-import groupk.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
-import groupk.BusinessLayer.Suppliers.BussinessObject.Supplier;
-import groupk.BusinessLayer.Suppliers.Controller.ItemController;
-import groupk.BusinessLayer.Suppliers.Controller.OrderController;
-import groupk.BusinessLayer.Suppliers.Controller.QuantityDiscountController;
-import groupk.BusinessLayer.Suppliers.Controller.SupplierController;
-import groupk.dataLayer.dao.PersistenceController;
-import groupk.dataLayer.records.OrderType;
-import groupk.dataLayer.records.PaymentCondition;
-import groupk.serviceLayer.ServiceBase;
-import groupk.shared.dto.CreateSupplierDTO;
+import groupk.shared.business.Inventory.Service.Service;
+import groupk.shared.business.Suppliers.BusinessLogicException;
+import groupk.shared.business.Suppliers.BussinessObject.Item;
+import groupk.shared.business.Suppliers.BussinessObject.Order;
+import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
+import groupk.shared.business.Suppliers.BussinessObject.Supplier;
+import groupk.shared.business.ItemController;
+import groupk.shared.business.OrderController;
+import groupk.shared.business.QuantityDiscountController;
+import groupk.shared.business.SupplierController;
+import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
+import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
+import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
+import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
+import groupk.shared.service.ServiceBase;
 
-import static groupk.serviceLayer.ServiceBase.*;
+import static groupk.shared.service.ServiceBase.*;
 
 import java.sql.Connection;
 import java.time.DayOfWeek;

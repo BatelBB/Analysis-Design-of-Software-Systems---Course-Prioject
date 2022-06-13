@@ -1,16 +1,16 @@
-package groupk.BusinessLayer.Suppliers.Controller;
+package groupk.shared.business;
 
-import groupk.BusinessLayer.Inventory.Controllers.ProductController;
-import groupk.BusinessLayer.Inventory.Product;
-import groupk.BusinessLayer.Inventory.Service.Service;
-import groupk.BusinessLayer.Suppliers.BusinessLogicException;
-import groupk.BusinessLayer.Suppliers.BussinessObject.Item;
-import groupk.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
-import groupk.BusinessLayer.Suppliers.BussinessObject.Supplier;
-import groupk.PresentationLayer.Suppliers.UserOutput;
-import groupk.dataLayer.dao.PersistenceController;
-import groupk.dataLayer.records.ItemRecord;
-import groupk.dataLayer.records.readonly.ItemData;
+import groupk.shared.business.ProductController;
+import groupk.shared.business.Inventory.Product;
+import groupk.shared.business.Inventory.Service.Service;
+import groupk.shared.business.Suppliers.BusinessLogicException;
+import groupk.shared.business.Suppliers.BussinessObject.Item;
+import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
+import groupk.shared.business.Suppliers.BussinessObject.Supplier;
+import groupk.shared.PresentationLayer.Suppliers.UserOutput;
+import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
+import groupk.inventory_suppliers.dataLayer.dao.records.ItemRecord;
+import groupk.inventory_suppliers.dataLayer.dao.records.readonly.ItemData;
 
 import java.util.*;
 import java.util.stream.Collectors;

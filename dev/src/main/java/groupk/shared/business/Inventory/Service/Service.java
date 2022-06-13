@@ -90,7 +90,7 @@ public class Service extends ServiceBase {
         return product_service.getProductNames();
     }
 
-    public static ResponseT<List<groupk.BusinessLayer.Inventory.Product>> getProducts() {
+    public static ResponseT<List<groupk.shared.business.Inventory.Product>> getProducts() {
         return product_service.getProducts();
     }
 
@@ -177,4 +177,11 @@ public class Service extends ServiceBase {
     }
 
 
+    public ResponseT<Map<Integer, Integer>> confirmOrder(int order_id) {
+        return product_service.confirmOrder(order_id);
+    }
+
+    public Response confirmOrderAmount(Map<Integer, Integer> actual_amount) {
+        return product_service.confirmOrderAmount(actual_amount);
+    }
 }

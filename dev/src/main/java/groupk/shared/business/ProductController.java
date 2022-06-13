@@ -8,6 +8,7 @@ import groupk.inventory_suppliers.dataLayer.dao.records.readonly.ProductData;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,7 @@ public class ProductController {
     private Map<Integer, Product> products;
     private CategoryController category_controller;
     private PersistenceController pc;
-//    private Map<Integer,Map<Integer,Integer>> orders;
+    private Map<Integer, Map<Integer, Integer>> orders;
 
 
     //constructors
@@ -87,6 +88,7 @@ public class ProductController {
         productExists(product_id);
         return products.get(product_id).getItemLocation(item_id);
     }
+
     public int getMinQty(int product_id) throws Exception {
         productExists(product_id);
         return products.get(product_id).getMin_qty();
@@ -310,6 +312,18 @@ public class ProductController {
         return products.values().stream().collect(Collectors.toList());
     }
 
+    public Map<Integer, Integer> confirmOrder(int order_id) {
+        return orders.get(order_id);
+    }
+
+    public void confirmOrderAmount(Map<Integer, Integer> actual_amount) throws Exception {
+        for (Map.Entry<Integer, Integer> pair : actual_amount.entrySet()) {
+            for (int i = 0; i < pair.getValue(); i++) {
+                randomizeProductItem(pair.getKey());
+            }
+        }
+    }
+
 //    public void addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {
 //        orders.put(orderId,productAmount);
 //    }
@@ -321,7 +335,11 @@ public class ProductController {
 //        }
 //    }
 
-//    private ProductItem randomizeProductItem(){
-//        return null;
-//    }
+    private void randomizeProductItem(int product_id) throws Exception {
+        String random_location="";
+        int random_supplier=0;
+        LocalDate random_date=LocalDate.now();
+        boolean random_onShelf=false;
+        addItem(product_id, "Yavne", random_location, random_supplier, random_date, random_onShelf);
+    }
 }
