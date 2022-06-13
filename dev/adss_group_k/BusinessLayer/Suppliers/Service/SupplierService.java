@@ -15,6 +15,7 @@ import adss_group_k.dataLayer.records.OrderType;
 import adss_group_k.dataLayer.records.PaymentCondition;
 import adss_group_k.serviceLayer.ServiceBase;
 import adss_group_k.shared.dto.CreateSupplierDTO;
+import adss_group_k.shared.utils.Tuple;
 
 import static adss_group_k.serviceLayer.ServiceBase.*;
 
@@ -223,10 +224,9 @@ public class SupplierService extends ServiceBase implements ISupplierService {
     @Override
     public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty) {
         if(r.success){
-            Item item = items.getItemsFromProdID(product_id);
-            Supplier supplier = items.checkBestSupplier(item); //Maybe we can combine both methods and this method needs to get prodid
-            return responseFor(()->orders.createShortage(supplier, item, min_qty, OrderType.Shortages,
-                    LocalDate.now(), LocalDate.now().plusDays(7)));
+            Tuple<Supplier, Item> supplierItemTuple = items.checkBestSupplier(product_id); //Maybe we can combine both methods and this method needs to get prodid
+            return responseFor(()->orders.createShortage(supplierItemTuple.first, supplierItemTuple.second,
+                    min_qty, OrderType.Shortages, LocalDate.now(), LocalDate.now().plusDays(7)));
         }else{
             return responseFor(()-> {throw new BusinessLogicException("NO NEED FOR SHORTAGE ORDER!");});
         }
@@ -235,8 +235,9 @@ public class SupplierService extends ServiceBase implements ISupplierService {
     @Override
     public ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
         Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
-        Supplier supplier = items.checkBestSupplier((Item) itemsWithAmount.keySet().toArray()[0]);
-        Order order = orders.create(supplier, OrderType.Periodical,
+        Tuple<Supplier, Item> supplierItemTuple =
+                items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
+        Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
                 LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
         orders.orderItemFromMap(order, itemsWithAmount);
 
@@ -246,8 +247,9 @@ public class SupplierService extends ServiceBase implements ISupplierService {
     @Override
     public Response createOrderPeriodicVoid(Map<Integer, Integer> productAmount, int weekDay) {
         Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
-        Supplier supplier = items.checkBestSupplier((Item) itemsWithAmount.keySet().toArray()[0]);
-        Order order = orders.create(supplier, OrderType.Periodical,
+        Tuple<Supplier, Item> supplierItemTuple =
+                items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
+        Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
                 LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
 
         return responseForVoid(() -> orders.orderItemFromMap(order, itemsWithAmount));

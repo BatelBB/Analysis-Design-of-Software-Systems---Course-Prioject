@@ -86,7 +86,7 @@ public class Service extends ServiceBase {
         return product_service.getProductNames();
     }
 
-    public static ResponseT<List<adss_group_k.BusinessLayer.Inventory.Product>> getProducts() {
+    public ResponseT<List<adss_group_k.BusinessLayer.Inventory.Product>> getProducts() {
         return product_service.getProducts();
     }
 
