@@ -1,22 +1,22 @@
-package adss_group_k.BusinessLayer.Suppliers.Service;
+package groupk.BusinessLayer.Suppliers.Service;
 
-import adss_group_k.BusinessLayer.Inventory.Service.Service;
-import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
-import adss_group_k.BusinessLayer.Suppliers.Controller.ItemController;
-import adss_group_k.BusinessLayer.Suppliers.Controller.OrderController;
-import adss_group_k.BusinessLayer.Suppliers.Controller.QuantityDiscountController;
-import adss_group_k.BusinessLayer.Suppliers.Controller.SupplierController;
-import adss_group_k.dataLayer.dao.PersistenceController;
-import adss_group_k.dataLayer.records.OrderType;
-import adss_group_k.dataLayer.records.PaymentCondition;
-import adss_group_k.serviceLayer.ServiceBase;
-import adss_group_k.shared.dto.CreateSupplierDTO;
+import groupk.BusinessLayer.Inventory.Service.Service;
+import groupk.BusinessLayer.Suppliers.BusinessLogicException;
+import groupk.BusinessLayer.Suppliers.BussinessObject.Item;
+import groupk.BusinessLayer.Suppliers.BussinessObject.Order;
+import groupk.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
+import groupk.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import groupk.BusinessLayer.Suppliers.Controller.ItemController;
+import groupk.BusinessLayer.Suppliers.Controller.OrderController;
+import groupk.BusinessLayer.Suppliers.Controller.QuantityDiscountController;
+import groupk.BusinessLayer.Suppliers.Controller.SupplierController;
+import groupk.dataLayer.dao.PersistenceController;
+import groupk.dataLayer.records.OrderType;
+import groupk.dataLayer.records.PaymentCondition;
+import groupk.serviceLayer.ServiceBase;
+import groupk.shared.dto.CreateSupplierDTO;
 
-import static adss_group_k.serviceLayer.ServiceBase.*;
+import static groupk.serviceLayer.ServiceBase.*;
 
 import java.sql.Connection;
 import java.time.DayOfWeek;

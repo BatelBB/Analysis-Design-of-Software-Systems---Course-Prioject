@@ -1,13 +1,13 @@
-package adss_group_k.PresentationLayer.Suppliers;
+package groupk.PresentationLayer.Suppliers;
 
-import adss_group_k.BusinessLayer.Inventory.Product;
-import adss_group_k.BusinessLayer.Inventory.Service.Service;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
-import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
-import adss_group_k.dataLayer.records.OrderType;
-import adss_group_k.dataLayer.records.PaymentCondition;
+import groupk.BusinessLayer.Inventory.Product;
+import groupk.BusinessLayer.Inventory.Service.Service;
+import groupk.BusinessLayer.Suppliers.BussinessObject.Item;
+import groupk.BusinessLayer.Suppliers.BussinessObject.Order;
+import groupk.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import groupk.BusinessLayer.Suppliers.Service.ISupplierService;
+import groupk.dataLayer.records.OrderType;
+import groupk.dataLayer.records.PaymentCondition;
 
 
 import java.time.DayOfWeek;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import static adss_group_k.serviceLayer.ServiceBase.*;
+import static groupk.serviceLayer.ServiceBase.*;
 
 public class SupplierPresentationFacade {
     private UserInput input = UserInput.getInstance();

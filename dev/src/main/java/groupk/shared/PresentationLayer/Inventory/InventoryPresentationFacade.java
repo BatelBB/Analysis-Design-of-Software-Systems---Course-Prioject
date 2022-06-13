@@ -1,12 +1,12 @@
-package adss_group_k.PresentationLayer.Inventory;
+package groupk.PresentationLayer.Inventory;
 
-import adss_group_k.BusinessLayer.Inventory.Service.CategoryService;
-import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
-import adss_group_k.BusinessLayer.Inventory.Service.Objects.Report;
-import adss_group_k.BusinessLayer.Inventory.Service.ProductService;
-import adss_group_k.BusinessLayer.Inventory.Service.ReportService;
-import adss_group_k.BusinessLayer.Inventory.Service.Service;
-import adss_group_k.serviceLayer.ServiceBase;
+import groupk.BusinessLayer.Inventory.Service.CategoryService;
+import groupk.BusinessLayer.Inventory.Service.Objects.Product;
+import groupk.BusinessLayer.Inventory.Service.Objects.Report;
+import groupk.BusinessLayer.Inventory.Service.ProductService;
+import groupk.BusinessLayer.Inventory.Service.ReportService;
+import groupk.BusinessLayer.Inventory.Service.Service;
+import groupk.serviceLayer.ServiceBase;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

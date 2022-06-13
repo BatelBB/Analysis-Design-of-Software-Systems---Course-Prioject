@@ -1,16 +1,16 @@
-package adss_group_k.BusinessLayer.Inventory.Service;
+package groupk.BusinessLayer.Inventory.Service;
 
-import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
-import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
-import adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem;
-import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
-import adss_group_k.dataLayer.dao.PersistenceController;
+import groupk.BusinessLayer.Inventory.Controllers.ProductController;
+import groupk.BusinessLayer.Inventory.Service.Objects.Product;
+import groupk.BusinessLayer.Inventory.Service.Objects.ProductItem;
+import groupk.BusinessLayer.Suppliers.Service.ISupplierService;
+import groupk.dataLayer.dao.PersistenceController;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import adss_group_k.serviceLayer.ServiceBase;
+import groupk.serviceLayer.ServiceBase;
 
 public class ProductService extends ServiceBase {
     private final ProductController product_controller;
@@ -63,7 +63,7 @@ public class ProductService extends ServiceBase {
         return responseForVoid(() -> product_controller.removeProduct(id));
     }
 
-    public ResponseT<adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
+    public ResponseT<groupk.BusinessLayer.Inventory.Service.Objects.ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
         return responseFor(() ->
                 new ProductItem(
                         product_controller.addItem(
@@ -106,7 +106,7 @@ public class ProductService extends ServiceBase {
         return product_controller.productsInSubSubCategory(category, sub_category, sub_sub_category);
     }
 
-    public ResponseT<List<adss_group_k.BusinessLayer.Inventory.Product>> getProducts() {
+    public ResponseT<List<groupk.BusinessLayer.Inventory.Product>> getProducts() {
         return responseFor(product_controller::getProducts);
     }
 

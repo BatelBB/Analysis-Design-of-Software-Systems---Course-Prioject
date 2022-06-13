@@ -1,11 +1,11 @@
-package adss_group_k.BusinessLayer.Inventory;
+package groupk.BusinessLayer.Inventory;
 
-import adss_group_k.PresentationLayer.Suppliers.UserOutput;
-import adss_group_k.dataLayer.dao.PersistenceController;
-import adss_group_k.dataLayer.records.DiscountPairRecord;
-import adss_group_k.dataLayer.records.ProductItemRecord;
-import adss_group_k.dataLayer.records.readonly.ProductData;
-import adss_group_k.dataLayer.records.readonly.ProductItemData;
+import groupk.PresentationLayer.Suppliers.UserOutput;
+import groupk.dataLayer.dao.PersistenceController;
+import groupk.dataLayer.records.DiscountPairRecord;
+import groupk.dataLayer.records.ProductItemRecord;
+import groupk.dataLayer.records.readonly.ProductData;
+import groupk.dataLayer.records.readonly.ProductItemData;
 
 
 import java.sql.Date;

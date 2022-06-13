@@ -1,16 +1,16 @@
-package adss_group_k.BusinessLayer.Suppliers.Controller;
+package groupk.BusinessLayer.Suppliers.Controller;
 
-import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
-import adss_group_k.BusinessLayer.Inventory.Product;
-import adss_group_k.BusinessLayer.Inventory.Service.Service;
-import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
-import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
-import adss_group_k.PresentationLayer.Suppliers.UserOutput;
-import adss_group_k.dataLayer.dao.PersistenceController;
-import adss_group_k.dataLayer.records.ItemRecord;
-import adss_group_k.dataLayer.records.readonly.ItemData;
+import groupk.BusinessLayer.Inventory.Controllers.ProductController;
+import groupk.BusinessLayer.Inventory.Product;
+import groupk.BusinessLayer.Inventory.Service.Service;
+import groupk.BusinessLayer.Suppliers.BusinessLogicException;
+import groupk.BusinessLayer.Suppliers.BussinessObject.Item;
+import groupk.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
+import groupk.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import groupk.PresentationLayer.Suppliers.UserOutput;
+import groupk.dataLayer.dao.PersistenceController;
+import groupk.dataLayer.records.ItemRecord;
+import groupk.dataLayer.records.readonly.ItemData;
 
 import java.util.*;
 import java.util.stream.Collectors;
