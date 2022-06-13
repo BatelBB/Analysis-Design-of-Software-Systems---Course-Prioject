@@ -79,4 +79,7 @@ public interface ISupplierService {
 
 
     ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay);
+
+
+    Response createOrderPeriodicVoid(Map<Integer, Integer> productAmount, int weekDay);
 }

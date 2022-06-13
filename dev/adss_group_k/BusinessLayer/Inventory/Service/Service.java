@@ -86,7 +86,7 @@ public class Service extends ServiceBase {
         return product_service.getProductNames();
     }
 
-    public static ResponseT<List<adss_group_k.BusinessLayer.Inventory.Product>> getProducts(){
+    public static ResponseT<List<adss_group_k.BusinessLayer.Inventory.Product>> getProducts() {
         return product_service.getProducts();
     }
 
@@ -96,9 +96,9 @@ public class Service extends ServiceBase {
     }
 
     public Response removeItem(int product_id, int item_id) {
-        ResponseT<Boolean> r=product_service.removeItem(product_id, item_id);
-        int min_qty=product_service.getMinQty(product_id).data;
-        return supplierService.createOrderShortage(r,product_id,min_qty);
+        ResponseT<Boolean> r = product_service.removeItem(product_id, item_id);
+        int min_qty = product_service.getMinQty(product_id).data;
+        return supplierService.createOrderShortage(r, product_id, min_qty);
     }
 
     public Response updateItemCusDiscount(float discount, LocalDate start_date, LocalDate end_date, int product_id, int item_id) {
@@ -163,11 +163,12 @@ public class Service extends ServiceBase {
     }
 
     //Order methods
-    public Response createPeriodicOrder(Map<Integer,Integer> productAmount, int weekDay) {
+    public Response createPeriodicOrder(Map<Integer, Integer> productAmount, int weekDay) {
         /*יוצרים הזמנה תקופתית שתגיע ביום מסוים בשבוע. הארגומנטים הם
                                 מפה של הID של המוצר והכמות עבורו. בנוסף היום בשבוע שבו נרצה שההזמנה תגיע*/
-        int orderId= supplierService.createOrderPeriodic(productAmount,weekDay).data;
-        return product_service.addOrderRecord(orderId,productAmount);
+        return supplierService.createOrderPeriodicVoid(productAmount, weekDay);
+//        int orderId= supplierService.createOrderPeriodic(productAmount,weekDay).data;
+//        return product_service.addOrderRecord(orderId,productAmount);
 
     }
 
