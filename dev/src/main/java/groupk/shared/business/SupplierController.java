@@ -1,17 +1,19 @@
-package groupk.shared.business;
+package adss_group_k.BusinessLayer.Suppliers.Controller;
 
-import groupk.shared.business.Suppliers.BusinessLogicException;
-import groupk.shared.business.Suppliers.BussinessObject.Supplier;
-import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
-import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
-import groupk.inventory_suppliers.dataLayer.dao.records.SupplierRecord;
-import groupk.inventory_suppliers.dataLayer.dao.records.readonly.SupplierData;
-import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
+import adss_group_k.BusinessLayer.Inventory.Product;
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
+import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.PaymentCondition;
+import adss_group_k.dataLayer.records.SupplierRecord;
+import adss_group_k.dataLayer.records.readonly.SupplierData;
+import adss_group_k.shared.dto.CreateSupplierDTO;
 
 import java.time.DayOfWeek;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SupplierController {
     Map<Integer, Supplier> suppliers;
@@ -90,4 +92,7 @@ public class SupplierController {
 
     public void setContact(int supplierPPN, String name, String phoneNumber, String email) {
     }
+
+
+
 }

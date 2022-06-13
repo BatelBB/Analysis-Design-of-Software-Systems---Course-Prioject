@@ -59,7 +59,12 @@ public class OrderController {
     }
 
     public void deleteAllFromSupplier(Supplier s) {
-        orders.removeIf(order -> order.supplier == s);
+        orders.stream()
+            .filter(order -> order.supplier.getPpn() == s.getPpn())
+            .forEach(order -> {
+                orders.remove(order);
+                dal.getOrders().delete(order.getId());
+            });
     }
 
     public void delete(int orderId) throws BusinessLogicException {
@@ -89,5 +94,29 @@ public class OrderController {
         order.orderItem(item, amount);
         refreshPricesAndDiscounts(item);
         return order.getId();
+    }
+
+    public int createShortage(Supplier supplier, Item item, int amountOfProd, OrderType type, LocalDate ordered, LocalDate delivered){
+        if(ordered.isAfter(delivered)) {
+            throw new BusinessLogicException("delivery date can't be before ordering date.");
+        }
+
+        OrderData data = dal.getOrders().createOrder(supplier.getPpn(), type, ordered, delivered);
+        Order order = new Order(supplier, data, dal, discounts);
+
+        if(type == OrderType.Shortages){
+            order.orderItem(item, amountOfProd);
+        }
+
+        orders.add(order);
+        return order.getId();
+    }
+
+    public void orderItemFromMap(Order order, Map<Item, Integer> itemsWithAmount) {
+        for(int i=0; i<itemsWithAmount.size(); i++){
+            order.orderItem((Item) itemsWithAmount.keySet().toArray()[i],
+                    itemsWithAmount.get(itemsWithAmount.keySet().toArray()[i]));
+
+        }
     }
 }

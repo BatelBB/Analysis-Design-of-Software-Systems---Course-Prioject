@@ -47,6 +47,17 @@ public class ExampleData {
                 "writing",
                 "pens"
         ).data;
+        Product cheaperPen = inventory.addProduct(
+                "GelGrip Pen, 1.0mm, Blue",
+                "Pilot",
+                5,
+                6,
+                10,
+                10, // Michael, fill some reasonable fields here
+                "office",
+                "writing",
+                "pens"
+        ).data;
         Product milk5 = inventory.addProduct(
                 "Mister milk",
                 "Mister Milker",
@@ -125,6 +136,13 @@ public class ExampleData {
                 11
         ).data;
 
+        Item cheaperPenItem = suppliers.createItem(
+                ppn_lorem,
+                10,
+                cheaperPen.getProduct_id(),
+                5
+        ).data;
+
         // Food items
         Item milk5FromFoodsAreUs = suppliers.createItem(
                 ppn_foods,
@@ -166,10 +184,12 @@ public class ExampleData {
 
         int order1 = suppliers.createOrder(ppn_office, date_jan_1, date_jan_2, OrderType.Periodical).data.getId();
         int order2 = suppliers.createOrder(ppn_foods, date_jan_1, date_jan_2, OrderType.Shortages).data.getId();
+        int order3 = suppliers.createOrder(ppn_lorem, date_jan_1, date_jan_2, OrderType.Shortages).data.getId();
 
         // order things
         suppliers.orderItem(order1, ppn_office, penItem.getCatalogNumber(), 10);
         suppliers.orderItem(order2, ppn_foods, milk5FromFoodsAreUs.getCatalogNumber(), 5);
+        suppliers.orderItem(order3, ppn_lorem, cheaperPenItem.getCatalogNumber(), 5);
         // fill other tables
         inventory.createByCategoryReport("my first report", "Naziff", "", "", "");
         inventory.createBySupplierReport("my second report", "Shariff", 2);

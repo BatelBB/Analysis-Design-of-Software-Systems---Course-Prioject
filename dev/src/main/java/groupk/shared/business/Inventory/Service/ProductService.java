@@ -1,14 +1,16 @@
-package groupk.shared.business.Inventory.Service;
+package adss_group_k.BusinessLayer.Inventory.Service;
 
-import groupk.shared.business.ProductController;
-import groupk.shared.business.Inventory.Service.Objects.Product;
-import groupk.shared.business.Inventory.Service.Objects.ProductItem;
-import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
+import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
+import adss_group_k.BusinessLayer.Inventory.Service.Objects.Product;
+import adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem;
+import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
+import adss_group_k.dataLayer.dao.PersistenceController;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
-import groupk.shared.service.ServiceBase;
+import adss_group_k.serviceLayer.ServiceBase;
 
 public class ProductService extends ServiceBase {
     private final ProductController product_controller;
@@ -61,7 +63,7 @@ public class ProductService extends ServiceBase {
         return responseForVoid(() -> product_controller.removeProduct(id));
     }
 
-    public ResponseT<ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
+    public ResponseT<adss_group_k.BusinessLayer.Inventory.Service.Objects.ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
         return responseFor(() ->
                 new ProductItem(
                         product_controller.addItem(
@@ -73,12 +75,15 @@ public class ProductService extends ServiceBase {
         );
     }
 
-    public Response removeItem(int product_id, int item_id) {
-        return responseForVoid(() -> product_controller.removeItem(product_id, item_id));
+    public ResponseT<Boolean> removeItem(int product_id, int item_id) {
+        return responseFor(() -> product_controller.removeItem(product_id, item_id));
     }
 
     public ResponseT<String> getItemLocation(int product_id, int item_id) {
         return responseFor(() -> product_controller.getItemLocation(product_id, item_id));
+    }
+    public ResponseT<Integer> getMinQty(int product_id){
+        return responseFor(() ->product_controller.getMinQty(product_id));
     }
 
     public Response changeItemLocation(int product_id, int item_id, String location) {
@@ -100,4 +105,16 @@ public class ProductService extends ServiceBase {
     public boolean productsInSubSubCategory(String category, String sub_category, String sub_sub_category) {
         return product_controller.productsInSubSubCategory(category, sub_category, sub_sub_category);
     }
+
+    public ResponseT<List<adss_group_k.BusinessLayer.Inventory.Product>> getProducts() {
+        return responseFor(product_controller::getProducts);
+    }
+
+//    public Response addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {
+//        return responseForVoid(()->product_controller.addOrderRecord(orderId,productAmount));
+//    }
+
+//    public Response receiveTrucking(int trucking_id){
+//        return responseForVoid(()->product_controller.receiveTrucking(trucking_id));
+//    }
 }

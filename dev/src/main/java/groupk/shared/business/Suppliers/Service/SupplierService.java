@@ -1,23 +1,31 @@
-package groupk.shared.business.Suppliers.Service;
+package adss_group_k.BusinessLayer.Suppliers.Service;
 
-import groupk.shared.business.Suppliers.BusinessLogicException;
-import groupk.shared.business.Suppliers.BussinessObject.Item;
-import groupk.shared.business.Suppliers.BussinessObject.Order;
-import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
-import groupk.shared.business.Suppliers.BussinessObject.Supplier;
-import groupk.shared.business.ItemController;
-import groupk.shared.business.OrderController;
-import groupk.shared.business.QuantityDiscountController;
-import groupk.shared.business.SupplierController;
-import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
-import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
-import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
-import groupk.shared.service.ServiceBase;
-import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
+import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import adss_group_k.BusinessLayer.Suppliers.Controller.ItemController;
+import adss_group_k.BusinessLayer.Suppliers.Controller.OrderController;
+import adss_group_k.BusinessLayer.Suppliers.Controller.QuantityDiscountController;
+import adss_group_k.BusinessLayer.Suppliers.Controller.SupplierController;
+import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.OrderType;
+import adss_group_k.dataLayer.records.PaymentCondition;
+import adss_group_k.serviceLayer.ServiceBase;
+import adss_group_k.shared.dto.CreateSupplierDTO;
 
+import static adss_group_k.serviceLayer.ServiceBase.*;
+
+import java.sql.Connection;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SupplierService extends ServiceBase implements ISupplierService {
 
@@ -33,6 +41,7 @@ public class SupplierService extends ServiceBase implements ISupplierService {
         items = new ItemController(dal, suppliers);
         discounts = new QuantityDiscountController(dal, items);
         orders = new OrderController(dal, discounts);
+
     }
 
     @Override
@@ -209,5 +218,38 @@ public class SupplierService extends ServiceBase implements ISupplierService {
     @Override
     public Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
         return null;
+    }
+
+    @Override
+    public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty) {
+        if(r.success){
+            Item item = items.getItemsFromProdID(product_id);
+            Supplier supplier = items.checkBestSupplier(item); //Maybe we can combine both methods and this method needs to get prodid
+            return responseFor(()->orders.createShortage(supplier, item, min_qty, OrderType.Shortages,
+                    LocalDate.now(), LocalDate.now().plusDays(7)));
+        }else{
+            return responseFor(()-> {throw new BusinessLogicException("NO NEED FOR SHORTAGE ORDER!");});
+        }
+    }
+
+    @Override
+    public ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
+        Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
+        Supplier supplier = items.checkBestSupplier((Item) itemsWithAmount.keySet().toArray()[0]);
+        Order order = orders.create(supplier, OrderType.Periodical,
+                LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
+        orders.orderItemFromMap(order, itemsWithAmount);
+
+        return responseFor(() -> order.getId());
+    }
+
+    @Override
+    public Response createOrderPeriodicVoid(Map<Integer, Integer> productAmount, int weekDay) {
+        Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
+        Supplier supplier = items.checkBestSupplier((Item) itemsWithAmount.keySet().toArray()[0]);
+        Order order = orders.create(supplier, OrderType.Periodical,
+                LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
+
+        return responseForVoid(() -> orders.orderItemFromMap(order, itemsWithAmount));
     }
 }

@@ -9,11 +9,13 @@ import groupk.inventory_suppliers.dataLayer.dao.records.readonly.ProductData;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProductController {
     private Map<Integer, Product> products;
     private CategoryController category_controller;
     private PersistenceController pc;
+//    private Map<Integer,Map<Integer,Integer>> orders;
 
 
     //constructors
@@ -85,6 +87,10 @@ public class ProductController {
         productExists(product_id);
         return products.get(product_id).getItemLocation(item_id);
     }
+    public int getMinQty(int product_id) throws Exception {
+        productExists(product_id);
+        return products.get(product_id).getMin_qty();
+    }
 
     public Product addProduct(String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
         try {
@@ -146,9 +152,9 @@ public class ProductController {
         return products.get(product_id).addItem(store, location, supplier, expiration_date, on_shelf);
     }
 
-    public void removeItem(int product_id, int item_id) throws Exception {
+    public boolean removeItem(int product_id, int item_id) throws Exception {
         productExists(product_id);
-        products.get(product_id).removeItem(item_id);
+        return products.get(product_id).removeItem(item_id);
     }
 
     public void changeItemLocation(int product_id, int item_id, String location) throws Exception {
@@ -299,4 +305,23 @@ public class ProductController {
         }
         return (Map<String, Integer>) deficiency;
     }
+
+    public List<Product> getProducts() {
+        return products.values().stream().collect(Collectors.toList());
+    }
+
+//    public void addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {
+//        orders.put(orderId,productAmount);
+//    }
+
+//    public void receiveTrucking(int trucking_id) {
+//        Map<Integer,Integer> order_products = orders.get(trucking_id);
+//        for(Map.Entry<Integer, Integer> pair : order_products.entrySet()){
+//            pair.getKey()
+//        }
+//    }
+
+//    private ProductItem randomizeProductItem(){
+//        return null;
+//    }
 }

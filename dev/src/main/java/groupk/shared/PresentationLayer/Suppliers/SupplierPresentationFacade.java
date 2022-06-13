@@ -1,298 +1,311 @@
-package groupk.shared.PresentationLayer.Suppliers;
+package adss_group_k.PresentationLayer.Suppliers;
 
-import groupk.shared.business.Suppliers.BussinessObject.Item;
-import groupk.shared.business.Suppliers.BussinessObject.Order;
-import groupk.shared.business.Suppliers.BussinessObject.Supplier;
-import groupk.shared.business.Suppliers.Service.ISupplierService;
-import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
-import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
+import adss_group_k.BusinessLayer.Inventory.Product;
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Order;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import adss_group_k.BusinessLayer.Suppliers.Service.ISupplierService;
+import adss_group_k.dataLayer.records.OrderType;
+import adss_group_k.dataLayer.records.PaymentCondition;
 
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
-import static groupk.shared.service.ServiceBase.*;
+import static adss_group_k.serviceLayer.ServiceBase.*;
 
 public class SupplierPresentationFacade {
     private UserInput input = UserInput.getInstance();
     private UserOutput output = UserOutput.getInstance();
     private final ISupplierService service;
+    private final Service inventory;
+    private int minPrice = 100000;
 
-    public SupplierPresentationFacade(ISupplierService supplierService) {
+    public SupplierPresentationFacade(ISupplierService supplierService, Service inventory) {
         this.service = supplierService;
+        this.inventory = inventory;
     }
-    
+
     static Scanner scanner = new Scanner(System.in);
 
     public void startSupplierMenu() {
-            while (true) {
-                int userInput = input.nextInt(Menu.getMainMenu());
-                switch (userInput) {
-                    case (1): {
-                        userInput = input.nextInt(Menu.getSupplierSubmenu());
-                        switch (userInput) {
-                            case (1): {
-                                //Create Supplier Card
-                                int ppn = input.nextInt("Enter supplier's ppn number: ");
-                                int bankAccount = input.nextInt("Enter supplier's bank account number: ");
-                                String name = input.nextString("Enter supplier's company name: ");
-                                boolean isDelivering = input.nextBoolean("Is the supplier delivering by himself?");
-                                PaymentCondition paymentCondition = choosePayment("Which way will the supplier pay? ");
-                                DayOfWeek day = isDelivering ? chooseDay() : null;
-                                String contactName = input.nextString("Enter the supplier's contact name: ");
-                                String email = input.nextString("Enter the supplier's contact email: ");
-                                String phoneNum = input.nextString("Enter the supplier's contact phone number: ");
-                                ResponseT<Supplier> supplier = service.createSupplier(ppn, bankAccount, name, isDelivering,
-                                        paymentCondition, day, contactName, phoneNum, email);
-                                if(supplier.success) {
-                                    output.print(supplier.data.toString());
-                                }else {
-                                    output.println(supplier.error);
-                                }
-                                break;
+        while (true) {
+            int userInput = input.nextInt(Menu.getMainMenu());
+            switch (userInput) {
+                case (1): {
+                    userInput = input.nextInt(Menu.getSupplierSubmenu());
+                    switch (userInput) {
+                        case (1): {
+                            //Create Supplier Card
+                            int ppn = input.nextInt("Enter supplier's ppn number: ");
+                            int bankAccount = input.nextInt("Enter supplier's bank account number: ");
+                            String name = input.nextString("Enter supplier's company name: ");
+                            boolean isDelivering = input.nextBoolean("Is the supplier delivering by himself?");
+                            PaymentCondition paymentCondition = choosePayment("Which way will the supplier pay? ");
+                            DayOfWeek day = isDelivering ? chooseDay() : null;
+                            String contactName = input.nextString("Enter the supplier's contact name: ");
+                            String email = input.nextString("Enter the supplier's contact email: ");
+                            String phoneNum = input.nextString("Enter the supplier's contact phone number: ");
+                            ResponseT<Supplier> supplier = service.createSupplier(ppn, bankAccount, name, isDelivering,
+                                    paymentCondition, day, contactName, phoneNum, email);
+                            if (supplier.success) {
+                                output.print(supplier.data.toString());
+                            } else {
+                                output.println(supplier.error);
                             }
-                            case (2): {
-                                //Edit existing supplier card
-                                int ppn = checkPPN("Enter the ppn number: ");
-                                output.println("What do you want to edit? ");
-                                int edit = input.nextInt(Menu.getSupplierEditSubmenu());
-                                try {
-                                    Supplier supplier = service.getSupplier(ppn).data;
-                                    switch (edit) {
-                                        case (1): {
-                                            //PPN NUMBER
-                                            output.println("[Sorry, this operation isn't available]");
-                                            break;
-                                        }
-                                        case (2): {
-                                            //Edit bank account
-                                            int bankAct = input.nextInt("Enter bank account: ");
-                                            service.setSupplierBankAccount(ppn, bankAct);
-                                            break;
-                                        }
-                                        case (3): {
-                                            //Edit company name
-                                            String newName = input.nextString("Enter name: ");
-                                            service.setSupplierCompanyName(ppn, newName);
-                                            break;
-                                        }
-                                        case (4): {
-                                            //Edit delivery
-                                            boolean newValue = input.nextBoolean("Is delivering?");
-                                            service.setSupplierIsDelivering(ppn, newValue);
-                                            break;
-                                        }
-                                        case (5): {
-                                            //edit payment condition
-                                            PaymentCondition payment = choosePayment(
-                                                    "Which way will the supplier pay? ");
-                                            service.setSupplierPaymentCondition(ppn, payment);
-                                            break;
-                                        }
-                                        case (6): {
-                                            //edit supplying days
-                                            service.setSupplierRegularSupplyingDays(ppn, chooseDay());
-                                            break;
-                                        }
-                                        case (7): {
-                                            //Edit contact
-                                            String contactName = input.nextString("Enter the supplier's contact name: ");
-                                            String email = input.nextString("Enter the supplier's contact email: ");
-                                            String phoneNum = input.nextString(
-                                                    "Enter the supplier's contact phone number: ");
-                                            service.setSupplierContact(ppn, contactName, phoneNum, email);
-                                            break;
-                                        }
-
+                            break;
+                        }
+                        case (2): {
+                            //Edit existing supplier card
+                            int ppn = checkPPN("Enter the ppn number: ");
+                            output.println("What do you want to edit? ");
+                            int edit = input.nextInt(Menu.getSupplierEditSubmenu());
+                            try {
+                                Supplier supplier = service.getSupplier(ppn).data;
+                                switch (edit) {
+                                    case (1): {
+                                        //PPN NUMBER
+                                        output.println("[Sorry, this operation isn't available]");
+                                        break;
                                     }
-
-                                } catch (Exception e) {
-                                    output.print(e.getMessage());
-                                }
-                                break;
-                            }
-                            case (3): {
-                                //Delete existing supplier
-                                int ppn = checkPPN("Enter the ppn number: ");
-                                service.deleteSupplier(ppn);
-                                break;
-                            }
-                            case (4): {
-                                //See summery of all suppliers
-                                service.getSuppliers().forEach(s -> output.println(s.toString()));
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                    case (2): {
-                        userInput = input.nextInt(Menu.getItemSubmenu());
-                        switch (userInput) {
-                            case (1): {
-                                //Create new item
-                                int ppn = checkPPN("Enter the supplier's ppn number: ");
-                                int catalog = input.nextInt("Enter the item's catalog number: ");
-                                int productNumber = input.nextInt("Enter product number:");
-                                float price = (float) input.nextInt("Enter the item's price: ");
-                                output.print(service.createItem(ppn, catalog, productNumber, price).data.toString());
-                                break;
-                            }
-                            case (2): {
-                                //Edit catalog number of existing item
-                                output.println("[Sorry, this operation isn't available]");
-                                break;
-                            }
-                            case (3): {
-                                //edit price of existing item
-                                int[] arr = checkItem();
-                                Item item = service.getItem(arr[0], arr[1]).data;
-                                service.setPrice(item.getSupplier().getPpn(), item.getCatalogNumber(), input.nextFloat("Enter new price: "));
-                                break;
-                            }
-                            case (4):
-                            case (5):
-                            case (6):{
-                                //edit name of existing item
-                                output.println("this option is no longer supported.");
-                                break;
-                            }
-                            case (7): {
-                                //see summery of items
-                                output.println(service.getItems().toString());
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                    case (3): {
-                        userInput = input.nextInt(Menu.getOrderSubmenu());
-                        switch (userInput) {
-                            case (1): {
-                                //create new order
-                                Order order = null;
-                                int ppn = checkPPN("Enter the supplier's ppn number: ");
-                                LocalDate ordered = input.nextDate("What is the order date? ");
-                                LocalDate deliver = input.nextDate("When is the order supposed to be delivered? ");
-                                OrderType orderType = input.nextEnum("choose order type", OrderType.class);
-                                try {
-                                    ResponseT<Order> serviceResponse = service.createOrder(
-                                            ppn, ordered, deliver, orderType);
-                                    order = serviceResponse.data;
-                                    String err = serviceResponse.error;
-                                    if (err != null) {
-                                        output.println(err);
+                                    case (2): {
+                                        //Edit bank account
+                                        int bankAct = input.nextInt("Enter bank account: ");
+                                        service.setSupplierBankAccount(ppn, bankAct);
+                                        break;
+                                    }
+                                    case (3): {
+                                        //Edit company name
+                                        String newName = input.nextString("Enter name: ");
+                                        service.setSupplierCompanyName(ppn, newName);
+                                        break;
+                                    }
+                                    case (4): {
+                                        //Edit delivery
+                                        boolean newValue = input.nextBoolean("Is delivering?");
+                                        service.setSupplierIsDelivering(ppn, newValue);
+                                        break;
+                                    }
+                                    case (5): {
+                                        //edit payment condition
+                                        PaymentCondition payment = choosePayment(
+                                                "Which way will the supplier pay? ");
+                                        service.setSupplierPaymentCondition(ppn, payment);
+                                        break;
+                                    }
+                                    case (6): {
+                                        //edit supplying days
+                                        service.setSupplierRegularSupplyingDays(ppn, chooseDay());
+                                        break;
+                                    }
+                                    case (7): {
+                                        //Edit contact
+                                        String contactName = input.nextString("Enter the supplier's contact name: ");
+                                        String email = input.nextString("Enter the supplier's contact email: ");
+                                        String phoneNum = input.nextString(
+                                                "Enter the supplier's contact phone number: ");
+                                        service.setSupplierContact(ppn, contactName, phoneNum, email);
                                         break;
                                     }
 
-                                } catch (Exception e) {
-                                    output.println(e.getMessage());
                                 }
-                                output.println("Now it's time to add items to the order");
-                                boolean retry = true;
-                                int nextInt = 0;
-                                while (retry) {
-                                    int[] arr = checkItem();
-                                    int amount = input.nextInt("How much of this item do you want to order? ");
-                                    service.orderItem(order.getId(),
-                                            service.getItem(arr[0], arr[1]).data.getSupplier().getPpn(),
-                                            service.getItem(arr[0], arr[1]).data.getCatalogNumber(), amount);
-                                    String more = input.nextString("Do you want to add more items? n/y ");
-                                    if (more.equals("n")) {
-                                        retry = false;
-                                    }
-                                }
-                                output.println(order.toString());
-                                break;
+
+                            } catch (Exception e) {
+                                output.print(e.getMessage());
                             }
-                            case (2): {
-                                //delete existing order
-                                int ppn = checkPPN("Enter the supplier's ppn number: ");
-                                service.deleteOrder(service.getOrder(ppn).data.getId());
-                                break;
-                            }
-                            case (3): {
-                                //edit ordered date
-                                int id = input.nextInt("Enter order's id number, see summery for info ");
-                                checkId(id);
-                                LocalDate delivered = input.nextDate("When is the order ordered? ");
-                                try {
-                                    service.setOrderOrdered(id, delivered);
-                                } catch (Exception e) {
-                                    output.println(e.getMessage());
-                                }
-                                break;
-                            }
-                            case (4): {
-                                //edit delivery date
-                                int id = input.nextInt("Enter order's id number, see summery for info ");
-                                checkId(id);
-                                LocalDate delivered = input.nextDate("When is the order supposed to be delivered? ");
-                                try {
-                                    service.setOrderProvided(id, delivered);
-                                } catch (Exception e) {
-                                    output.println(e.getMessage());
-                                }
-                                break;
-                            }
-                            case (5): {
-                                int id = input.nextInt("Enter order's id number, see summery for info ");
-                                checkId(id);
-                                int[] itemCoords = checkItem();
-                                try {
-                                    Item item = service.getItem(itemCoords[0], itemCoords[1]).data;
-                                    service.updateOrderAmount(id, item.getSupplier().getPpn(),
-                                            item.getCatalogNumber(), input.nextInt("Enter amount to order"));
-                                } catch (Exception e) {
-                                    output.println(e.getMessage());
-                                }
-                                break;
-                            }
-                            case (6): {
-                                //see summery of all orders
-                                output.print(service.getOrders().toString());
-                                break;
-                            }
+                            break;
                         }
-                        break;
-                    }
-                    case (4): {
-                        userInput = input.nextInt(Menu.getQuantityAgreementSubmenu());
-                        switch (userInput) {
-                            case (1): {
-                                //create new quantity agreement
-                                createDiscount();
-                                break;
-                            }
-                            case (2): {
-                                //edit existing quantity agreement
-                                deleteDiscount();
-                                createDiscount();
-                                break;
-                            }
-                            case (3): {
-                                //delete existing quantity agreement
-                                deleteDiscount();
-                                break;
-                            }
-                            case (4): {
-                                //summery of quantity discount
-                                output.println(service.getDiscounts().toString());
-                                break;
-                            }
+                        case (3): {
+                            //Delete existing supplier
+                            int ppn = checkPPN("Enter the ppn number: ");
+                            service.deleteSupplier(ppn);
+                            break;
                         }
-                        break;
+                        case (4): {
+                            //See summery of all suppliers
+                            service.getSuppliers().forEach(s -> output.println(s.toString()));
+                            break;
+                        }
                     }
-                    case (5): {
-                        return;
+                    break;
+                }
+                case (2): {
+                    userInput = input.nextInt(Menu.getItemSubmenu());
+                    switch (userInput) {
+                        case (1): {
+                            //Create new item
+                            int ppn = checkPPN("Enter the supplier's ppn number: ");
+                            int catalog = input.nextInt("Enter the item's catalog number: ");
+                            int productNumber = input.nextInt("Enter product number:");
+                            float price = (float) input.nextInt("Enter the item's price: ");
+                            output.print(service.createItem(ppn, catalog, productNumber, price).data.toString());
+                            break;
+                        }
+                        case (2): {
+                            //Edit catalog number of existing item
+                            output.println("[Sorry, this operation isn't available]");
+                            break;
+                        }
+                        case (3): {
+                            //edit price of existing item
+                            int[] arr = checkItem();
+                            Item item = service.getItem(arr[0], arr[1]).data;
+                            service.setPrice(item.getSupplier().getPpn(), item.getCatalogNumber(), input.nextFloat("Enter new price: "));
+                            break;
+                        }
+                        case (4):
+                        case (5):
+                        case (6): {
+                            //edit name of existing item
+                            output.println("this option is no longer supported.");
+                            break;
+                        }
+                        case (7): {
+                            //see summery of items
+                            output.println(service.getItems().toString());
+                            break;
+                        }
                     }
-                    default: {
-                        UserOutput.getInstance().println("Please select valid option.");
+                    break;
+                }
+                case (3): {
+                    userInput = input.nextInt(Menu.getOrderSubmenu());
+                    switch (userInput) {
+//                        case (0): { //DELETE IT
+//                            //create new order
+//                            Order order = null;
+//                            int ppn = checkPPN("Enter the supplier's ppn number: ");
+//                            LocalDate ordered = input.nextDate("What is the order date? ");
+//                            LocalDate deliver = input.nextDate("When is the order supposed to be delivered? ");
+//                            OrderType orderType = input.nextEnum("choose order type", OrderType.class);
+//                            try {
+//                                ResponseT<Order> serviceResponse = service.createOrder(
+//                                        ppn, ordered, deliver, orderType);
+//                                order = serviceResponse.data;
+//                                String err = serviceResponse.error;
+//                                if (err != null) {
+//                                    output.println(err);
+//                                    break;
+//                                }
+//
+//                            } catch (Exception e) {
+//                                output.println(e.getMessage());
+//                            }
+//                            output.println("Now it's time to add items to the order");
+//                            boolean retry = true;
+//                            int nextInt = 0;
+//                            while (retry) {
+//                                int[] arr = checkItem();
+//                                Supplier sup = checkBestSupplier(service.getItem(arr[0], arr[1]).data);
+//                                output.println("There is a better supplier that supplying this item: "
+//                                        + sup.getName() + " with the better price: " + minPrice + " instead of the price: " +
+//                                        service.getItem(arr[0], arr[1]).data.getPrice());
+//                                int amount = input.nextInt("How much of this item do you want to order? ");
+//                                service.orderItem(order.getId(),
+//                                        sup.getPpn(),
+//                                        service.getItem(arr[0], arr[1]).data.getCatalogNumber(), amount);
+//
+//                                String more = input.nextString("Do you want to add more items? n/y ");
+//                                if (more.equals("n")) {
+//                                    retry = false;
+//                                }
+//                            }
+//                            output.println(order.toString());
+//                            break;
+//                        }
+                        case (1): {
+                            //delete existing order
+                            int ppn = checkPPN("Enter the supplier's ppn number: ");
+                            service.deleteOrder(service.getOrder(ppn).data.getId());
+                            break;
+                        }
+                        case (2): {
+                            //edit ordered date
+                            int id = input.nextInt("Enter order's id number, see summery for info ");
+                            checkId(id);
+                            LocalDate delivered = input.nextDate("When is the order ordered? ");
+                            try {
+                                service.setOrderOrdered(id, delivered);
+                            } catch (Exception e) {
+                                output.println(e.getMessage());
+                            }
+                            break;
+                        }
+                        case (3): {
+                            //edit delivery date
+                            int id = input.nextInt("Enter order's id number, see summery for info ");
+                            checkId(id);
+                            LocalDate delivered = input.nextDate("When is the order supposed to be delivered? ");
+                            try {
+                                service.setOrderProvided(id, delivered);
+                            } catch (Exception e) {
+                                output.println(e.getMessage());
+                            }
+                            break;
+                        }
+                        case (4): {
+                            int id = input.nextInt("Enter order's id number, see summery for info ");
+                            checkId(id);
+                            int[] itemCoords = checkItem();
+                            try {
+                                Item item = service.getItem(itemCoords[0], itemCoords[1]).data;
+                                service.updateOrderAmount(id, item.getSupplier().getPpn(),
+                                        item.getCatalogNumber(), input.nextInt("Enter amount to order"));
+                            } catch (Exception e) {
+                                output.println(e.getMessage());
+                            }
+                            break;
+                        }
+                        case (5): {
+                            //see summery of all orders
+                            output.print(service.getOrders().toString());
+                            break;
+                        }
                     }
+                    break;
+                }
+                case (4): {
+                    userInput = input.nextInt(Menu.getQuantityAgreementSubmenu());
+                    switch (userInput) {
+                        case (1): {
+                            //create new quantity agreement
+                            createDiscount();
+                            break;
+                        }
+                        case (2): {
+                            //edit existing quantity agreement
+                            deleteDiscount();
+                            createDiscount();
+                            break;
+                        }
+                        case (3): {
+                            //delete existing quantity agreement
+                            deleteDiscount();
+                            break;
+                        }
+                        case (4): {
+                            //summery of quantity discount
+                            output.println(service.getDiscounts().toString());
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case (5): {
+                    return;
+                }
+                default: {
+                    UserOutput.getInstance().println("Please select valid option.");
                 }
             }
         }
-
+    }
 
     private void createDiscount() {
         int[] arr = checkItem();

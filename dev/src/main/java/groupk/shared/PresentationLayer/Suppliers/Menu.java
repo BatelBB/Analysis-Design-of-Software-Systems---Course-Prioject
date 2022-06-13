@@ -23,12 +23,11 @@ public class Menu {
 
     public static String getOrderSubmenu() {
         return new String(
-                "1. Create new order\n" +
-                        "2. Delete existing order\n" +
-                        "3. Edit the ordered date\n" +
-                        "4. Edit the delivery data\n" +
-                        "5. Edit the item's amount\n" +
-                        "6. See summery of all orders\n");
+                        "1. Delete existing order\n" +
+                        "2. Edit the ordered date\n" +
+                        "3. Edit the delivery data\n" +
+                        "4. Edit the item's amount\n" +
+                        "5. See summery of all orders\n");
     }
 
     public static String getSupplierSubmenu() {

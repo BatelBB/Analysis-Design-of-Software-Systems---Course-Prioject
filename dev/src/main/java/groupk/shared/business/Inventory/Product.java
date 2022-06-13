@@ -1,10 +1,11 @@
-package groupk.shared.business.Inventory;
+package adss_group_k.BusinessLayer.Inventory;
 
-import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
-import groupk.inventory_suppliers.dataLayer.dao.records.DiscountPairRecord;
-import groupk.inventory_suppliers.dataLayer.dao.records.ProductItemRecord;
-import groupk.inventory_suppliers.dataLayer.dao.records.readonly.ProductData;
-import groupk.inventory_suppliers.dataLayer.dao.records.readonly.ProductItemData;
+import adss_group_k.PresentationLayer.Suppliers.UserOutput;
+import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.DiscountPairRecord;
+import adss_group_k.dataLayer.records.ProductItemRecord;
+import adss_group_k.dataLayer.records.readonly.ProductData;
+import adss_group_k.dataLayer.records.readonly.ProductItemData;
 
 
 import java.sql.Date;
@@ -93,7 +94,7 @@ public class Product {
         return pItem;
     }
 
-    public void removeItem(int item_id) throws Exception {
+    public boolean removeItem(int item_id) throws Exception {
         itemExists(item_id);
         for (DiscountPair dp : items.get(item_id).getCus_discount()) {
             pc.getDiscountPairs().delete(new DiscountPairRecord.DiscountPairKey(product_id, item_id, dp.getId()));
@@ -104,6 +105,10 @@ public class Product {
         else
             setStorage_qty(storage_qty - 1);
         items.remove(item_id);
+        if(shelf_qty+storage_qty<min_qty){
+            UserOutput.getInstance().println("Product ID: " + product_id + " has reached below minimum quantity, creating order.");
+        }
+        return shelf_qty+storage_qty<min_qty;
     }
 
     public void changeItemLocation(int item_id, String location) throws Exception {

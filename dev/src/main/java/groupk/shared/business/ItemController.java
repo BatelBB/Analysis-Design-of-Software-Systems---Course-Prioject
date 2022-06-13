@@ -1,25 +1,32 @@
-package groupk.shared.business;
+package adss_group_k.BusinessLayer.Suppliers.Controller;
 
-import groupk.shared.business.Suppliers.BusinessLogicException;
-import groupk.shared.business.Suppliers.BussinessObject.Item;
-import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
-import groupk.shared.business.Suppliers.BussinessObject.Supplier;
-import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
-import groupk.inventory_suppliers.dataLayer.dao.records.ItemRecord;
-import groupk.inventory_suppliers.dataLayer.dao.records.readonly.ItemData;
+import adss_group_k.BusinessLayer.Inventory.Controllers.ProductController;
+import adss_group_k.BusinessLayer.Inventory.Product;
+import adss_group_k.BusinessLayer.Inventory.Service.Service;
+import adss_group_k.BusinessLayer.Suppliers.BusinessLogicException;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Item;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.QuantityDiscount;
+import adss_group_k.BusinessLayer.Suppliers.BussinessObject.Supplier;
+import adss_group_k.PresentationLayer.Suppliers.UserOutput;
+import adss_group_k.dataLayer.dao.PersistenceController;
+import adss_group_k.dataLayer.records.ItemRecord;
+import adss_group_k.dataLayer.records.readonly.ItemData;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ItemController {
     private final SupplierController suppliers;
     Map<String, Item> items;
     PersistenceController dal;
+
     public ItemController(PersistenceController dal, SupplierController suppliers) {
         this.dal = dal;
         this.suppliers = suppliers;
         items = new HashMap<>();
 
         this.dal.getItems().all().forEach(this::createFromExisting);
+
     }
 
     private void createFromExisting(ItemRecord itemRecord) {
@@ -78,7 +85,12 @@ public class ItemController {
 
     public void deleteAllFromSupplier(Supplier s) {
         for(Map.Entry<String, Item> entry: items.entrySet()) {
-            items.remove(entry.getKey());
+            String key = entry.getKey();
+            Item item = entry.getValue();
+            items.remove(key);
+            dal.getItems().delete(new ItemRecord.ItemKey(item.getSupplier().getPpn(), item.getCatalogNumber()));
+            UserOutput.getInstance().println("Item with catalog number: " +entry.getValue().getCatalogNumber() +
+                    " is deleted.");
         }
     }
 
@@ -92,5 +104,52 @@ public class ItemController {
                 new ItemRecord.ItemKey(supplier, catalogNumber),
                 price
         );
+    }
+
+    public Item getItemsFromProdID(int prodId){
+        Item it = null;
+        for(Map.Entry<String, Item> entry: items.entrySet()) {
+            if(entry.getValue().getProductId() == prodId)
+                it = entry.getValue();
+        }
+        return it;
+    }
+
+    public Supplier checkBestSupplier(Item item) {
+        List<Product> productList = Service.getProducts().data;
+        Map<Integer, String> productMap = new HashMap<>();
+        for (Product prod : productList) {
+            productMap.put(prod.getProduct_id(), prod.getName());
+        }
+        String nameProduct = "";
+        int minPrice = 1000000;
+        List<Item> itemList = items.values().stream().collect(Collectors.toList());
+        for (Item it : itemList) {
+            if (productMap.containsKey(item.getProductId()))
+                nameProduct = productMap.get(item.getProductId());
+            if (productMap.containsKey(it.getProductId()) && productMap.get(it.getProductId()).equals(nameProduct)) {
+                minPrice = (int) Math.min(it.getPrice(), minPrice);
+            }
+            if (it.getPrice() == minPrice) {
+                UserOutput.println("There is a better supplier that supplying this item "+
+                                        "with the better price: " + minPrice + " instead of the price: " +
+                                        item.getPrice());
+                return it.getSupplier();
+            }
+        }
+
+        return item.getSupplier();
+    }
+
+    public Map<Item, Integer> getItemsWithAmount(Map<Integer, Integer> productAmount) {
+        Map<Item, Integer> itemProdAmountMap = new HashMap<>();
+        int id = 0;
+        Item item;
+        for(int i =0; i< productAmount.size(); i++){
+            id = (int) productAmount.keySet().toArray()[i];
+            item = (Item) items.values().toArray()[i];
+            itemProdAmountMap.put(item, productAmount.get(id));
+        }
+        return itemProdAmountMap;
     }
 }
