@@ -1,0 +1,146 @@
+@startuml
+
+together {
+	entity Contact {
+		{static} email: String
+		name: String
+		phone: String
+	}
+	
+	entity Supplier {
+		{static} ppn: int
+		bankNumber: int
+		name: String
+		isDelivering: boolean
+		paymentCondition: PaymentCondition
+		regularSupplyingDays: DayOfWeek?
+	}
+	
+	Contact "1" -- "1" Supplier: represents > 
+
+}
+
+together {
+	entity Category {
+		{static} name: String
+	}
+	
+	entity SubCategory {
+		{static} name: String
+        {static} parent: String
+	}
+	
+	entity SubSubCategory {
+		{static} name: String
+        {static} parent: String
+	}
+	
+	Category "1" -- "*" SubCategory
+	SubCategory "1" -- "*" SubSubCategory
+}
+
+together {
+
+entity Product {
+	{static} id: int
+	name: String
+	category: String
+	cus_price: double
+	min_qty: int
+	storage_qty: int
+	shelf_qty: int
+}
+
+entity ProductItem {
+	{static} id: int
+	location: String
+	is_defect: bool
+	defect_reporter: String?
+	on_shelf: bool
+	store: String
+	expiration_date: LocalDateTime
+}
+
+entity Item {
+    {static} supplierPPN
+	{static} catalogNumber: int
+	price: float
+}
+
+
+Product "1" --- "*" Item: sold as >
+Product "*" -- "1" SubSubCategory
+Supplier "1" ---- "*" Item: supplies >
+
+entity QuantityDiscount {
+    {static} id: int
+	quantity: int
+	discount: float
+}
+
+QuantityDiscount "*" ---- "1" Item: has discount <
+}
+
+together {
+
+entity Order {
+    {static} id: int
+	orderType: OrderType
+	price: float
+	ordered: LocalDateTime
+	provided: LocalDateTime
+}
+
+Order "*" -- "1" Supplier: is from >
+
+entity ItemInOrder {
+    {static} ppn: int
+    {static} catalogNumber: int
+    {static} orderId: int
+	amount: int
+}
+
+ItemInOrder "*" -- "1" Item: is in <
+ItemInOrder "*" -- "1" Order: is in <
+
+
+
+}
+together {
+	entity Report <<abstract>> {
+		 {static} id: int
+		 report_producer: String
+		 name: String
+		 date: LocalDateTime
+	}
+	
+	entity ProductsReport {
+		type: ProductReportType 
+		query: String
+	}
+	
+	ProductsReport --u--|> Report: extends
+	
+	entity ProductItemsReport {
+		type: ProductItemReportType
+	}
+	
+	ProductItemsReport --u--|> Report: extends
+	
+	entity ProductItemInProductItemsReport  {
+		qty: int
+	} 
+	
+	ProductItemInProductItemsReport "*" -- "1" ProductItem
+	ProductItemInProductItemsReport "*" -- "1" ProductItemsReport
+	
+	entity ProductInProductsReport{
+		qty: int
+	}
+	
+	
+	ProductInProductsReport "*" -- "1" Product
+	ProductInProductsReport "*" -- "1" ProductsReport
+}
+
+@enduml

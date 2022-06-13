@@ -1,0 +1,98 @@
+@startuml
+
+skinparam lifelineStrategy solid
+
+title Sequence diagram - use case d.
+
+actor "supply manager" as user
+participant "Presentation Layer" as pres
+participant "SupplierService" as service
+participant "SupplierController" as ctrl
+participant "SupplierDAO" as dao
+participant "MutableSupplier" as mut_sup
+participant "SupplierIdentityMapper" as idmap 
+participant "DataSource" as ds
+database "SQLite" as db
+
+
+user -> pres: Create new supplier card
+
+activate pres
+
+pres -> user: Enter ppn
+user --> pres: ppn
+pres -> user: Enter bank number
+user --> pres: bank_number
+pres -> user: Enter name
+user --> pres: name
+pres -> user: is supplier delivering by themselves?
+user --> pres: is_delivering
+
+alt is_delivering: true
+	pres -> user: enter weekday
+	user --> pres: weekday
+else is_delivering: false
+	pres -> pres: weekday = null
+end
+
+pres -> user: enter payment condition
+user --> pres: payment_condition
+
+pres -> user: enter contact info
+user --> pres: contact_info
+
+pres -> service: createSupplier(ppn, bank_number, name,\nis_delivering, payment_condition,\nweekday, contact_info)
+activate service
+
+service -> ctrl: create(ppn, bank_number, name,\nis_delivering, payment_condition,\nweekday, contact_info)
+activate ctrl
+
+opt ppn exists
+	ctrl --> service: BusinessLogicException
+	service --> pres: ResponseT
+	pres --> user: Supplier with this ppn already exists.
+end
+
+ctrl -> dao: createSupplier(ppn, bank_number, name,\nis_delivering, payment_condition,\nweekday, contact_info)
+activate dao
+
+dao -> ds: createSupplier(ppn, bank_number, name,\nis_delivering, payment_condition,\nweekday, contact_info)
+
+activate ds
+ds -> db: CREATE Supplier\nVALUES(ppn, bank_number, name,\nis_delivering, payment_condition,\nweekday, contact_info)
+
+activate db
+db --> ds: 1 row affected.
+deactivate db
+ds --> dao: true
+
+deactivate ds
+
+dao -> mut_sup **: ctor(ppn, bank_number, name,\nis_delivering, payment_condition,\nweekday, contact_info)
+activate mut_sup
+
+mut_sup --> dao
+dao -> idmap: add(MutableSupplier)
+activate idmap
+idmap --> dao
+deactivate idmap
+
+dao --> ctrl: MutableSupplier as Supplier
+deactivate dao
+note top: "same object but limited interface"
+
+
+ctrl -> ctrl: add(Supplier)
+activate ctrl
+deactivate ctrl
+
+ctrl --> service: Supplier
+deactivate ctrl
+
+service --> pres: ResponseT
+deactivate service
+
+pres --> user: formatted output
+deactivate pres
+
+@enduml
