@@ -19,12 +19,14 @@ public class ItemController {
     private final SupplierController suppliers;
     Map<String, Item> items;
     PersistenceController dal;
+
     public ItemController(PersistenceController dal, SupplierController suppliers) {
         this.dal = dal;
         this.suppliers = suppliers;
         items = new HashMap<>();
 
         this.dal.getItems().all().forEach(this::createFromExisting);
+
     }
 
     private void createFromExisting(ItemRecord itemRecord) {
@@ -112,7 +114,7 @@ public class ItemController {
 
     public Supplier checkBestSupplier(Item item) {
         List<Product> productList = Service.getProducts().data;
-        Map<Integer, String> productMap = new HashMap<Integer, String>();
+        Map<Integer, String> productMap = new HashMap<>();
         for (Product prod : productList) {
             productMap.put(prod.getProduct_id(), prod.getName());
         }
@@ -126,7 +128,7 @@ public class ItemController {
                 minPrice = (int) Math.min(it.getPrice(), minPrice);
             }
             if (it.getPrice() == minPrice) {
-                UserOutput.println("There is a better supplier that supplying this item: "+
+                UserOutput.println("There is a better supplier that supplying this item "+
                                         "with the better price: " + minPrice + " instead of the price: " +
                                         item.getPrice());
                 return it.getSupplier();

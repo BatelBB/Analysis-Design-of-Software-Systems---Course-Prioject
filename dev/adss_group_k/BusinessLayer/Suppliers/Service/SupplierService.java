@@ -224,7 +224,7 @@ public class SupplierService extends ServiceBase implements ISupplierService {
     public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty) {
         if(r.success){
             Item item = items.getItemsFromProdID(product_id);
-            Supplier supplier = items.checkBestSupplier(item);
+            Supplier supplier = items.checkBestSupplier(item); //Maybe we can combine both methods and this method needs to get prodid
             return responseFor(()->orders.createShortage(supplier, item, min_qty, OrderType.Shortages,
                     LocalDate.now(), LocalDate.now().plusDays(7)));
         }else{
