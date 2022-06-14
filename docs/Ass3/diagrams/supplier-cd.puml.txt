@@ -188,20 +188,30 @@ package dataLayer {
 			interface ProductData
 		}
 		
+			
+		abstract class BaseRecord
+		circle " " as recExt
+		recExt -u-|> BaseRecord
+		
 		class ItemRecord
 		ItemRecord -u-|> ItemData
+		ItemRecord -u-|> recExt
 		
 		class ItemInOrderRecord
 		ItemInOrderRecord -u-|> ItemInOrderData
+		ItemInOrderRecord -u-|> recExt
 		
 		class OrderRecord
 		OrderRecord -u-|> OrderData
+		OrderRecord -u-|> recExt
 		
 		class SupplierRecord
 		SupplierRecord -u-|> SupplierData
+		SupplierRecord -u-|> recExt
 		
 		class ProductRecord
 		ProductRecord -u-|> ProductData
+		ProductRecord -u-|> recExt
 	}
 	
 	abstract class BaseDao
