@@ -27,36 +27,26 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Tests {
-    protected Connection connection;
 
-    @BeforeEach
-    public void setService() {
+    private TruckManagerController truckManagerController ;
+    private DriverController driverController;
+    myDataBase myDataBase;
+    protected Connection connection;
+    public Tests() {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:database.db");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-    }
-    private TruckManagerController truckManagerController ;
-    private DriverController driverController;
-    myDataBase myDataBase = new myDataBase(connection);
-    public Tests() {
+        myDataBase = new myDataBase(connection);
         truckManagerController = TruckManagerController.getInstance();
         driverController = DriverController.getInstance();
     }
 
 
-
-    private void resetDB () {
-        myDataBase.deleteDB();
-        truckManagerController.deleteDB();
-        myDataBase.createNewTable();
-        truckManagerController.forTests();
-    }
-
-
     @Test
     public void addLicenses() {
+        myDataBase.deleteDB();
         assertEquals(true, driverController.addLicense(319034121, "B"));
         assertEquals(true, driverController.addLicense(319034121, "C"));
         try {
@@ -70,7 +60,7 @@ public class Tests {
 
     @Test
     public void addVehicle() {
-        resetDB();
+        myDataBase.deleteDB();
         truckManagerController.addVehicle("B","12345678","volvo",20,40);
         try {
             truckManagerController.addVehicle("B","12345678","volvo",20,40);
@@ -87,7 +77,7 @@ public class Tests {
 
     @Test
     public void addTrucking() {
-        resetDB();
+        myDataBase.deleteDB();
         driverController.addLicense(319034121, "B");
         truckManagerController.addVehicle("B","12345678","volvo",20,40);
         LocalDate date =  LocalDate.of(2023,10,18);
@@ -134,7 +124,7 @@ public class Tests {
 
     @Test
     public void updateVehicle() {
-        resetDB();
+        myDataBase.deleteDB();
         setDetails();
         try {
             truckManagerController.updateVehicleOnTrucking(1,1,"12315678");
@@ -147,7 +137,7 @@ public class Tests {
 
     @Test
     public void setWeight() {
-        resetDB();
+        myDataBase.deleteDB();
         setDetails();
         try {
             driverController.setWeightForTrucking(319034121,1,9);
@@ -161,7 +151,7 @@ public class Tests {
 
     @Test
     public void addProducts() {
-        resetDB();
+        myDataBase.deleteDB();
         setDetails();
         try {
             truckManagerController.addProductToTrucking(1,1,"Eggs_4902505139314",2);
@@ -175,7 +165,7 @@ public class Tests {
 //
     @Test
     public void removeProducts() {
-        resetDB();
+        myDataBase.deleteDB();
         setDetails();
         truckManagerController.moveProductsToTrucking(1,1,"Eggs_4902505139314",1);
         assertEquals(driverController.printMyTruckings(319034121).contains("Product: " + "Eggs_4902505139314" + ", Quantity: " + "1"),true);
@@ -185,7 +175,7 @@ public class Tests {
     //
     @Test
     public void removeTrucking() {
-        resetDB();
+        myDataBase.deleteDB();
         setDetails();
         try {
             truckManagerController.removeTrucking(1,1);
@@ -198,7 +188,7 @@ public class Tests {
 
     @Test
     public void getRegistrationPlates() {
-        resetDB();
+        myDataBase.deleteDB();
         setDetails();
         truckManagerController.addVehicle("B","12315679","mercedes",4,32);
         assertEquals(truckManagerController.getVehiclesRegistrationPlates().size()==3,true);
