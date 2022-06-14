@@ -178,69 +178,8 @@ findCheapestSupplierFor(productID: int, amount: int): Supplier
 	ctrl --[hidden]-> entity
 }
 
+
 package dataLayer {
-	package records {
-		package readonly {
-			interface ItemData
-			interface ItemInOrderData
-			interface OrderData
-			interface SupplierData
-			interface ProductData
-		}
-		
-			
-		abstract class BaseRecord
-		circle " " as recExt
-		recExt -u-|> BaseRecord
-		
-		class ItemRecord
-		ItemRecord -u-|> ItemData
-		ItemRecord -u-|> recExt
-		
-		class ItemInOrderRecord
-		ItemInOrderRecord -u-|> ItemInOrderData
-		ItemInOrderRecord -u-|> recExt
-		
-		class OrderRecord
-		OrderRecord -u-|> OrderData
-		OrderRecord -u-|> recExt
-		
-		class SupplierRecord
-		SupplierRecord -u-|> SupplierData
-		SupplierRecord -u-|> recExt
-		
-		class ProductRecord
-		ProductRecord -u-|> ProductData
-		ProductRecord -u-|> recExt
-	}
-	
-	abstract class BaseDao
-	BaseDao -[hidden]u-> records
-	
-	circle " " as daoExt
-	daoExt -u-|> BaseDao
-	
-	class ItemDao
-	ItemDao -u-|> daoExt
-	ItemDao *-u- ItemRecord
-	
-	class ItemInOrderDao
-	ItemInOrderDao *-u- ItemInOrderRecord
-	ItemInOrderDao -u-|> daoExt
-	
-	class OrderDao
-	OrderDao *-u- OrderRecord
-	OrderDao -u-|> daoExt
-	
-	class SupplierDao
-	SupplierDao *-u- SupplierRecord
-	SupplierDao -u-|> daoExt
-	
-	
-	class ProductDao
-	ProductDao *-u- ProductRecord
-	ProductDao -u-|> daoExt
-	
 	class "PersistenceController" as dal
 	dal -u- ItemDao
 	dal -u- ItemInOrderDao
@@ -249,7 +188,20 @@ package dataLayer {
 	dal -u- ProductDao
 }
 
+ItemController -- ItemDao
+OrderController -- ItemInOrderDao
+OrderController -- OrderDao
+SupplierController -- SupplierDao
+ProductController -- ProductDao
+
 dataLayer -[hidden]u-> ctrl
+
+
+note top of dataLayer
+	due to things getting crowded, this package
+	is shown here partially and a fuller class diagram of it
+	is provided seperately.
+end note
 
 	PresentationController "1" -- "1" Service: uses
 	Service -[hidden]-> presentationLayer
