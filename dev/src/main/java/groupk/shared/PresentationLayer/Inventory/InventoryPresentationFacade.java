@@ -225,7 +225,7 @@ public class InventoryPresentationFacade {
         );
     }
 
-    public void updateItemDefect() {
+    private void updateItemDefect() {
         useService(args, 4,
                 () -> products.updateItemDefect(
                         convertInt(args[0]),
@@ -236,11 +236,11 @@ public class InventoryPresentationFacade {
         );
     }
 
-    public void getItemLocation() {
+    private void getItemLocation() {
         useService(args, 2, () -> products.getItemLocation(convertInt(args[0]), convertInt(args[0])));
     }
 
-    public void changeItemLocation() {
+    private void changeItemLocation() {
         useService(
                 args, 3,
                 () -> products.changeItemLocation(convertInt(args[0]), convertInt(args[0]), args[2])
@@ -254,7 +254,7 @@ public class InventoryPresentationFacade {
         }
     }
 
-    public void changeItemOnShelf() {
+    private void changeItemOnShelf() {
         useService(args, 3,
                 () -> products.changeItemOnShelf(
                         convertInt(args[0]),
@@ -264,65 +264,65 @@ public class InventoryPresentationFacade {
         );
     }
 
-    public void createMissingReport() {
+    private void createMissingReport() {
         useService(args, 2,
                 () -> reports.createMissingReport(args[0], args[1]));
     }
 
-    public void createExpiredReport() {
+    private void createExpiredReport() {
         useService(args, 2,
                 () -> reports.createExpiredReport(args[0], args[1]));
     }
 
-    public void createSurplusesReport() {
+    private void createSurplusesReport() {
         useService(args, 2,
                 () -> reports.createSurplusesReport(args[0], args[1])
         );
     }
 
-    public void createDefectiveReport() {
+    private void createDefectiveReport() {
         useService(args, 2, () -> reports.createDefectiveReport(args[0], args[1]));
     }
 
-    public void createBySupplierReport() {
+    private void createBySupplierReport() {
         useService(args, 3,
                 () -> reports.createBySupplierReport(args[0], args[1], convertInt(args[2]))
         );
     }
 
-    public void createByProductReport() {
+    private void createByProductReport() {
         useService(args, 3,
                 () -> reports.createByProductReport(args[0], args[1], args[2])
         );
     }
 
-    public void createByCategoryReport() {
+    private void createByCategoryReport() {
         useService(args, 5,
                 () -> reports.createByCategoryReport(args[0], args[1], args[2], args[3], args[4])
         );
     }
 
-    public void removeReport() {
+    private void removeReport() {
         useService(args, 1,
                 () -> reports.removeReport(convertInt(args[0])));
     }
 
-    public void getReport() {
+    private void getReport() {
         useService(args, 1,
                 () -> reports.getReport(convertInt(args[0])));
     }
 
-    public void createPeriodicOrder() {
+    private void createPeriodicOrder() {
         useService(args, 2, () -> inventory_service.createPeriodicOrder(convertMap(args[0]), convertInt(args[1])));
     }
 
-    public void confirmOrder() {
+    private void confirmOrder() {
         Map<Integer, Integer> order_details = inventory_service.confirmOrder(convertInt(args[0])).data;
         System.out.println("Order details");
         for (Map.Entry<Integer, Integer> pair : order_details.entrySet()) {
             System.out.println(pair.getKey() + " - " + pair.getValue());
         }
-        System.out.println("please enter actual amount delivered:");
+        System.out.println("please enter actual amount delivered\n(example format: \"[id0]-[amount0]_[id1]-[amount1]\"):");
         Scanner scan = new Scanner(System.in);
         String input = scan.nextLine();
         useService(args, 1, () -> inventory_service.confirmOrderAmount(convertMap(input)));
