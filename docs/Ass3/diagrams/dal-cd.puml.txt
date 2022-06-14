@@ -1,0 +1,108 @@
+@startuml
+
+title Data Layer Class Diagram
+
+package dataLayer {
+	package records {
+		package readonly {
+			interface ItemData
+			interface ItemInOrderData
+			interface OrderData
+			interface SupplierData
+			interface ProductData
+		}
+		
+			
+		abstract class "BaseRecord<TRecord extends BaseRecord<TRecord, TKey>, TKey>" as BaseRecord {
+		-- public abstract --
+	 {abstract} key(): TKey
+		}
+		
+		note left of BaseRecord
+			each entity has a class that derives BaseRecord
+			and an interface named "Data".
+			The Data interface has getters for properties,
+			and the record class adds setters.
+		end note
+		
+		circle " " as recExt
+		recExt -u-|> BaseRecord
+		
+		class ItemRecord
+		ItemRecord -u-|> ItemData
+		ItemRecord -u-|> recExt
+		
+		class ItemInOrderRecord
+		ItemInOrderRecord -u-|> ItemInOrderData
+		ItemInOrderRecord -u-|> recExt
+		
+		class OrderRecord
+		OrderRecord -u-|> OrderData
+		OrderRecord -u-|> recExt
+		
+		class SupplierRecord
+		SupplierRecord -u-|> SupplierData
+		SupplierRecord -u-|> recExt
+		
+		class ProductRecord
+		ProductRecord -u-|> ProductData
+		ProductRecord -u-|> recExt
+	}
+	
+	abstract class "BaseDao" as BaseDao {
+			-- public --
+			get(TKey key): TRecord
+			all(): Stream<TRecord>
+			exists(TKey key): boolean
+			-- protected ---
+			# "create(Factory<TEntity> ifSucceeds, Statement statement): TEntity"
+			# runUpdate(Statement st): int
+			-- protected abstract --
+			# {abstract} fetchAll(): Stream<Entity>
+			# {abstract} fetch(TKey key): TEntity
+			# {abstract} runDelete(TKey key): void
+	}
+	BaseDao -[hidden]u-> records
+	
+	note right of BaseDao
+		generically implements the identity map pattern
+		as well as lazy loading, with CRUD.
+		Inherting DAO classes implements abstract DAO
+		that are in charge of (a) creating a
+		matching record instance and (b) specifying
+		the related SQL queries and commands.
+	end note
+	
+	circle " " as daoExt
+	daoExt -u-|> BaseDao
+	
+	class ItemDao
+	ItemDao -u-|> daoExt
+	ItemDao *-u- ItemRecord
+	
+	class ItemInOrderDao
+	ItemInOrderDao *-u- ItemInOrderRecord
+	ItemInOrderDao -u-|> daoExt
+	
+	class OrderDao
+	OrderDao *-u- OrderRecord
+	OrderDao -u-|> daoExt
+	
+	class SupplierDao
+	SupplierDao *-u- SupplierRecord
+	SupplierDao -u-|> daoExt
+	
+	
+	class ProductDao
+	ProductDao *-u- ProductRecord
+	ProductDao -u-|> daoExt
+	
+	class "PersistenceController" as dal
+	dal -u- ItemDao
+	dal -u- ItemInOrderDao
+	dal -u- OrderDao
+	dal -u- SupplierDao
+	dal -u- ProductDao
+}
+
+@enduml

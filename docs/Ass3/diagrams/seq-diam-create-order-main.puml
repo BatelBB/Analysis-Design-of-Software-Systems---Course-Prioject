@@ -1,0 +1,57 @@
+@startuml
+
+title Sequence Diagram - Supplier Delivery
+
+actor "Stock Manager" as user
+participant "Presentation Layer" as pres
+participant "SupplierService" as service
+participant "Order Controller" as ctrl_order
+participant "Order" as order
+' participant "Persistence Controller" as dal
+participant "Order\nRecord" as order_record
+participant "OrderDAO" as dao_order
+database "database" as db
+
+user -> pres : create new order
+activate pres
+pres -> user: enter order details
+user -> pres: ppn, order_date,\ndelivery_date, type=Priodical
+
+pres -> service: create_order(create_order_dto)
+activate service
+
+service -> ctrl_order: create_order(create_order_dto)
+activate ctrl_order
+
+ctrl_order -> dao_order: create_order(create_order_dto)
+activate dao_order 
+
+dao_order -> db: "INSERT INTO Orders ..."
+activate db
+db ---> dao_order: "1 row affected."
+deactivate db
+
+dao_order -> order_record **: new
+
+dao_order -> dao_order: add(order_record)
+dao_order --> ctrl_order: order_record
+deactivate dao_order
+ctrl_order -> order ** : new
+ctrl_order -> ctrl_order: add(order)
+ctrl_order --> service: Order
+deactivate ctrl_order
+
+service --> pres: Response<Order>
+deactivate service
+
+pres --> user: "Order was created, now add items"
+
+ref over user, db
+	add items to order
+end ref
+
+ref over user, db
+	create delivery from order
+end ref
+
+@enduml
