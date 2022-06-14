@@ -10,6 +10,7 @@ import groupk.shared.service.dto.Delivery;
 import groupk.shared.service.dto.Product;
 import groupk.shared.service.dto.Site;
 
+import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,8 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LogisticsController {
     private myDataBase db;
 
-    public LogisticsController() {
-        db = new myDataBase();
+    public LogisticsController(Connection connection) {
+        db = new myDataBase(connection);
     }
 
     public Response<Boolean> deleteDelivery(int truckManagerID, int deliveryID) {

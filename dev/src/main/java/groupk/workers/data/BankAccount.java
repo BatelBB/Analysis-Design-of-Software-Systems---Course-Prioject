@@ -13,20 +13,18 @@ public class BankAccount {
 
     public void setBankAccount(String id, String bank, int bankID, int bankBranch) {
         try {
-            Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Employee set BankName = ? where ID = ?");
+            PreparedStatement preparedStatement = DalController.connection.prepareStatement("UPDATE Employee set BankName = ? where ID = ?");
             preparedStatement.setString(1, bank);
             preparedStatement.setString(2, id);
             preparedStatement.executeUpdate();
-            PreparedStatement preparedStatement2 = connection.prepareStatement("UPDATE Employee set BankBranch = ? where ID = ?");
+            PreparedStatement preparedStatement2 = DalController.connection.prepareStatement("UPDATE Employee set BankBranch = ? where ID = ?");
             preparedStatement2.setInt(1, bankBranch);
             preparedStatement2.setString(2, id);
             preparedStatement2.executeUpdate();
-            PreparedStatement preparedStatement3 = connection.prepareStatement("UPDATE Employee set BankID = ? where ID = ?");
+            PreparedStatement preparedStatement3 = DalController.connection.prepareStatement("UPDATE Employee set BankID = ? where ID = ?");
             preparedStatement3.setInt(1, bankID);
             preparedStatement3.setString(2, id);
             preparedStatement3.executeUpdate();
-            connection.close();
             this.bank = bank;
             this.bankID = bankID;
             this.bankBranch = bankBranch;

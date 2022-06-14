@@ -18,6 +18,7 @@ import groupk.shared.service.Response;
 import groupk.shared.service.dto.*;
 import groupk.shared.service.ServiceBase;
 
+import java.sql.Connection;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -37,8 +38,8 @@ public class Facade {
     private final SupplierController suppliers;
 
     public Facade(PersistenceController p) {
-        employees = new EmployeesController();
-        logistics = new LogisticsController();
+        employees = new EmployeesController(p.getConn());
+        logistics = new LogisticsController(p.getConn());
         category_controller = new CategoryController(p);
         product_controller = new ProductController(p, category_controller);
         suppliers = new SupplierController(p);
@@ -49,9 +50,9 @@ public class Facade {
 
     //just for test
     //employee logistics facade
-    public Facade() {
-        employees = new EmployeesController();
-        logistics = new LogisticsController();
+    public Facade(Connection connection) {
+        employees = new EmployeesController(connection);
+        logistics = new LogisticsController(connection);
         category_controller = null;
         product_controller = null;
         suppliers = null;

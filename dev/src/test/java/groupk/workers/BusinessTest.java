@@ -1,21 +1,33 @@
 package groupk.workers;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import groupk.workers.business.Facade;
-import groupk.workers.data.DalController;
-import groupk.shared.service.Service;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.*;
 
 public class BusinessTest {
+    protected Connection connection;
 
+    @BeforeEach
+    public void setService() {
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
     @Test
     public void testCreateEmployee()
     {
-        Facade facade = new Facade();
+        Facade facade = new Facade(connection);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
@@ -40,7 +52,7 @@ public class BusinessTest {
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
-        Facade facade = new Facade();
+        Facade facade = new Facade(connection);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
@@ -154,7 +166,7 @@ public class BusinessTest {
 
     @Test
     public void testDeleteEmployeeByHR() {
-        Facade facade = new Facade();
+        Facade facade = new Facade(connection);
         facade.deleteDB();
         facade.addEmployee(
                 "Foo",
@@ -187,7 +199,7 @@ public class BusinessTest {
 
     @Test
     public void testAddEmployeeShiftPreference(){
-        Facade facade = new Facade();
+        Facade facade = new Facade(connection);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -209,7 +221,7 @@ public class BusinessTest {
     public void testAddEmployeeToShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Facade facade = new Facade();
+        Facade facade = new Facade(connection);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -260,7 +272,7 @@ public class BusinessTest {
 
     @Test
     public void testAddEmployeeToShiftCanNotWork() {
-        Facade facade = new Facade();
+        Facade facade = new Facade(connection);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -314,7 +326,7 @@ public class BusinessTest {
     public void testRemoveEmployeeFromShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Facade facade = new Facade();
+        Facade facade = new Facade(connection);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -368,7 +380,7 @@ public class BusinessTest {
 
     @Test
     public void testWhoCanWork() {
-        Facade facade = new Facade();
+        Facade facade = new Facade(connection);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
@@ -411,7 +423,7 @@ public class BusinessTest {
 
     @Test
     public void testAddEmployeeToShiftNoEmployee() {
-        Facade facade = new Facade();
+        Facade facade = new Facade(connection);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
@@ -454,7 +466,7 @@ public class BusinessTest {
     public void testSetRequiredStaffInShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Facade facade = new Facade();
+        Facade facade = new Facade(connection);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",

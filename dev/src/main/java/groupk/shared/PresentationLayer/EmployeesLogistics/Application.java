@@ -2,11 +2,12 @@ package groupk.shared.PresentationLayer.EmployeesLogistics;
 
 import groupk.shared.PresentationLayer.EmployeesLogistics.command.*;
 
+import java.sql.Connection;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Application {
-    public static void main(String[] args) {
+    public static void main(String[] args, Connection conn) {
         AtomicBoolean keepGoing = new AtomicBoolean(true);
         CommandRunner runner = new CommandRunner(
                 new Command[] {
@@ -39,7 +40,7 @@ public class Application {
                 },
                 () -> {
                         keepGoing.set(false);
-                });
+                }, conn);
 
         Scanner input = new Scanner(System.in);
 

@@ -28,13 +28,14 @@ public class App {
     private final SupplierPresentationFacade supplierPresentation;
     private final InventoryPresentationFacade inventoryPresentationFacade;
     private final Service inventoryService;
+    private final Connection appConnection;
 
     public App(String dbPath) {
         boolean isNew = !new java.io.File(dbPath).exists();
         boolean shouldLoadExample = false;
 
         AppContainer ioc = new AppContainer(dbPath);
-        Connection appConnection = ioc.get(Connection.class);
+        appConnection = ioc.get(Connection.class);
         SchemaInit.init(appConnection);
         if (isNew) {
             UserOutput.getInstance().println(
@@ -71,7 +72,7 @@ public class App {
                     break;
                 }
                 case (3) : {
-                    Application.main(new String[]{});
+                    Application.main(new String[]{}, appConnection);
                     break;
                 }
                 case (4): {

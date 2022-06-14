@@ -11,8 +11,7 @@ public class Shift {
 
     public Shift(Calendar date, Type type, LinkedList<Employee> staff, HashMap<Employee.Role, Integer> requiredStaff){
         try{
-            Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Shift VALUES(?,?)");
+            PreparedStatement preparedStatement = DalController.connection.prepareStatement("INSERT INTO Shift VALUES(?,?)");
             preparedStatement.setString(1, type.name());
             preparedStatement.setString(2, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
             preparedStatement.executeUpdate();
@@ -32,7 +31,7 @@ public class Shift {
                 }
             }
             for (Employee.Role role : this.requiredStaff.keySet()) {
-                PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO RequiredStaff VALUES(?,?,?,?)");
+                PreparedStatement preparedStatement2 = DalController.connection.prepareStatement("INSERT INTO RequiredStaff VALUES(?,?,?,?)");
                 preparedStatement2.setInt(1, this.requiredStaff.get(role));
                 preparedStatement2.setString(2, role.name());
                 preparedStatement2.setString(3, type.name());
@@ -40,13 +39,12 @@ public class Shift {
                 preparedStatement2.executeUpdate();
             }
             for(Employee employee : staff){
-                PreparedStatement preparedStatement3 = connection.prepareStatement("INSERT INTO Workers VALUES(?,?,?)");
+                PreparedStatement preparedStatement3 = DalController.connection.prepareStatement("INSERT INTO Workers VALUES(?,?,?)");
                 preparedStatement3.setString(1, type.name());
                 preparedStatement3.setString(2, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
                 preparedStatement3.setString(3, employee.getId());
                 preparedStatement3.executeUpdate();
             }
-            connection.close();
             this.type = type;
             this.date = date;
             this.staff = staff;
@@ -88,13 +86,12 @@ public class Shift {
 
     public Shift setRequiredStaff(HashMap<Employee.Role, Integer> requiredStaff){
         try{
-            Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM RequiredStaff WHERE Type = ? and Date = ?");
+            PreparedStatement preparedStatement = DalController.connection.prepareStatement("DELETE FROM RequiredStaff WHERE Type = ? and Date = ?");
             preparedStatement.setString(1 , type.name());
             preparedStatement.setString(2 , date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
             preparedStatement.executeUpdate();
             for (Employee.Role role : requiredStaff.keySet()) {
-                PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO RequiredStaff VALUES(?,?,?,?)");
+                PreparedStatement preparedStatement2 = DalController.connection.prepareStatement("INSERT INTO RequiredStaff VALUES(?,?,?,?)");
                 preparedStatement2.setInt(1, this.requiredStaff.get(role));
                 preparedStatement2.setString(2, role.name());
                 preparedStatement2.setString(3, type.name());
@@ -102,7 +99,6 @@ public class Shift {
                 preparedStatement2.executeUpdate();
                 this.requiredStaff.put(role, requiredStaff.get(role));
             }
-            connection.close();
         }
         catch (SQLException s){
             throw new IllegalArgumentException(s.getMessage());
@@ -112,14 +108,12 @@ public class Shift {
 
     public Shift setRequiredRoleInShift(Employee.Role role, int number){
         try{
-            Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE RequiredStaff set Count = ? where Role = ? and Type = ? and Date = ?");
+            PreparedStatement preparedStatement = DalController.connection.prepareStatement("UPDATE RequiredStaff set Count = ? where Role = ? and Type = ? and Date = ?");
             preparedStatement.setInt(1, number);
             preparedStatement.setString(2, role.name());
             preparedStatement.setString(2, type.name());
             preparedStatement.setString(3, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
             preparedStatement.executeUpdate();
-            connection.close();
             requiredStaff.replace(role, number);
         }
         catch (SQLException s){
@@ -138,13 +132,11 @@ public class Shift {
 
     public Shift addEmployee(Employee e){
         try{
-            Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement  preparedStatement = connection.prepareStatement("INSERT INTO Workers VALUES(?,?,?)");
+            PreparedStatement  preparedStatement = DalController.connection.prepareStatement("INSERT INTO Workers VALUES(?,?,?)");
             preparedStatement.setString(1, type.name());
             preparedStatement.setString(2, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
             preparedStatement.setString(3, e.getId());
             preparedStatement.executeUpdate();
-            connection.close();
             staff.add(e);
         }
         catch (SQLException s){
@@ -155,13 +147,11 @@ public class Shift {
 
     public Shift removeEmployee(Employee e){
         try{
-            Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement  preparedStatement = connection.prepareStatement("DELETE FROM Workers Type = ? and Date = ? and EmployeeID = ?");
+            PreparedStatement  preparedStatement = DalController.connection.prepareStatement("DELETE FROM Workers Type = ? and Date = ? and EmployeeID = ?");
             preparedStatement.setString(1, type.name());
             preparedStatement.setString(2, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
             preparedStatement.setString(3, e.getId());
             preparedStatement.executeUpdate();
-            connection.close();
             staff.remove(e);
         }
         catch (SQLException s){

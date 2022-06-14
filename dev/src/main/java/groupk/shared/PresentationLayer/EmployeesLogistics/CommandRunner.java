@@ -5,6 +5,7 @@ import groupk.shared.service.Service;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
 
+import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -16,10 +17,10 @@ public class CommandRunner {
     private String subject;
     private Service service;
 
-    public CommandRunner(Command[] commands, Runnable onStop) {
+    public CommandRunner(Command[] commands, Runnable onStop, Connection conn) {
         this.commands = commands;
         this.onStop = onStop;
-        this.service = new Service();
+        this.service = new Service(conn);
         this.service.loadEmployeeDB();
     }
 

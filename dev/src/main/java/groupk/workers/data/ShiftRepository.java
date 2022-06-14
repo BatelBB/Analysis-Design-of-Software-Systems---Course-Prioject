@@ -1,5 +1,6 @@
 package groupk.workers.data;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.*;
 
@@ -7,6 +8,10 @@ public class ShiftRepository {
     private LinkedList<Shift> shifts;
 
     public ShiftRepository(){
+        shifts = new LinkedList<>();
+    }
+
+    public void delete(){
         shifts = new LinkedList<>();
     }
 

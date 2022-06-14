@@ -11,6 +11,10 @@ public class EmployeeRepository {
         employees = new HashMap<>();
     }
 
+    public void delete(){
+        employees = new HashMap<>();
+    }
+
     public List<Employee> getEmployees() {
         return new ArrayList<>(employees.values());
     }

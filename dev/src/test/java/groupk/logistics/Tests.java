@@ -13,6 +13,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,10 +27,19 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Tests {
+    protected Connection connection;
 
+    @BeforeEach
+    public void setService() {
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
     private TruckManagerController truckManagerController ;
     private DriverController driverController;
-    myDataBase myDataBase = new myDataBase();
+    myDataBase myDataBase = new myDataBase(connection);
     public Tests() {
         truckManagerController = TruckManagerController.getInstance();
         driverController = DriverController.getInstance();
@@ -43,10 +55,8 @@ public class Tests {
     }
 
 
-
     @Test
     public void addLicenses() {
-        resetDB();
         assertEquals(true, driverController.addLicense(319034121, "B"));
         assertEquals(true, driverController.addLicense(319034121, "C"));
         try {
