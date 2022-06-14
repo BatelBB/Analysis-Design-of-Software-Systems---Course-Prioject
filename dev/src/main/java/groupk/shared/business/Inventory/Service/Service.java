@@ -91,7 +91,8 @@ public class Service extends ServiceBase {
     }
 
     public static ResponseT<List<groupk.shared.business.Inventory.Product>> getProducts() {
-        return product_service.getProducts();
+        // return product_service.getProducts();
+        return null;
     }
 
     //Item methods
