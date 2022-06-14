@@ -2,6 +2,7 @@ package groupk.shared.PresentationLayer.EmployeesLogistics.command;
 
 import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.Response;
+import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Product;
 
 public class DeleteDeliveryProduct implements Command {
@@ -18,6 +19,11 @@ public class DeleteDeliveryProduct implements Command {
     @Override
     public boolean isMatching(String line) {
         return line.startsWith("delete delivery product");
+    }
+
+    @Override
+    public boolean isVisible(Employee.Role role) {
+        return role == Employee.Role.LogisticsManager || role == Employee.Role.TruckingManger;
     }
 
     @Override

@@ -24,6 +24,11 @@ public class CreateEmployee implements Command {
     }
 
     @Override
+    public boolean isVisible(Employee.Role role) {
+        return true;
+    }
+
+    @Override
     public void execute(String[] command, CommandRunner runner) {
         if (command.length != 9) {
             System.out.println("Error: Wrong number of arguments.");

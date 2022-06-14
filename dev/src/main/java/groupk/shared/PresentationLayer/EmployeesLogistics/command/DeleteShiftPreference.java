@@ -21,6 +21,11 @@ public class DeleteShiftPreference implements Command {
     }
 
     @Override
+    public boolean isVisible(Employee.Role role) {
+        return true;
+    }
+
+    @Override
     public void execute(String[] command, CommandRunner runner) {
         if (command.length != 4) {
             System.out.println("Error: All arguments must be supplied.");

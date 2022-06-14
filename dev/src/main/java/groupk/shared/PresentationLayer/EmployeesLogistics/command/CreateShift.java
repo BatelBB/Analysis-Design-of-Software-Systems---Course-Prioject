@@ -26,6 +26,11 @@ public class CreateShift implements Command {
     }
 
     @Override
+    public boolean isVisible(Employee.Role role) {
+        return role == Employee.Role.HumanResources;
+    }
+
+    @Override
     public void execute(String[] command, CommandRunner runner) {
         if (command.length < 4) {
             System.out.println("Error: All arguments must be supplied.");

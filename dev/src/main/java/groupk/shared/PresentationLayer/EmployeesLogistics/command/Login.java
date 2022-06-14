@@ -21,6 +21,11 @@ public class Login implements Command {
     }
 
     @Override
+    public boolean isVisible(Employee.Role role) {
+        return true;
+    }
+
+    @Override
     public void execute(String[] command, CommandRunner runner) {
         if (command.length != 2) {
             System.out.println("Error: Wrong number of arguments.");

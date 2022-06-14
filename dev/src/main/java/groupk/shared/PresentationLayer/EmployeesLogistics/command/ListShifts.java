@@ -25,6 +25,11 @@ public class ListShifts implements Command {
     }
 
     @Override
+    public boolean isVisible(Employee.Role role) {
+        return role == Employee.Role.HumanResources;
+    }
+
+    @Override
     public void execute(String[] command, CommandRunner runner) {
         if (command.length != 2) {
             System.out.println("Error: Too many arguments supplied.");

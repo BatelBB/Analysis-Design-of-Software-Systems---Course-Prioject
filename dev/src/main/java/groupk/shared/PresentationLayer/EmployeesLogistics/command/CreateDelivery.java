@@ -3,6 +3,7 @@ package groupk.shared.PresentationLayer.EmployeesLogistics.command;
 import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.Delivery;
+import groupk.shared.service.dto.Employee;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -21,6 +22,11 @@ public class CreateDelivery implements Command {
     @Override
     public boolean isMatching(String line) {
         return line.startsWith("create delivery");
+    }
+
+    @Override
+    public boolean isVisible(Employee.Role role) {
+        return role == Employee.Role.LogisticsManager || role == Employee.Role.TruckingManger;
     }
 
     @Override

@@ -2,6 +2,7 @@ package groupk.shared.PresentationLayer.EmployeesLogistics.command;
 
 import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.Response;
+import groupk.shared.service.dto.Employee;
 
 public class UpdateDeliveryWeight implements Command {
     @Override
@@ -17,6 +18,11 @@ public class UpdateDeliveryWeight implements Command {
     @Override
     public boolean isMatching(String line) {
         return line.startsWith("update delivery weight");
+    }
+
+    @Override
+    public boolean isVisible(Employee.Role role) {
+        return role == Employee.Role.LogisticsManager || role == Employee.Role.TruckingManger;
     }
 
     @Override

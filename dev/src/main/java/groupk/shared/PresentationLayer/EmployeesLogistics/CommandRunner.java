@@ -1,6 +1,7 @@
 package groupk.shared.PresentationLayer.EmployeesLogistics;
 
 import groupk.shared.PresentationLayer.EmployeesLogistics.command.Command;
+import groupk.shared.service.Response;
 import groupk.shared.service.Service;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
@@ -14,7 +15,7 @@ import java.util.GregorianCalendar;
 public class CommandRunner {
     private final Command[] commands;
     private final Runnable onStop;
-    private String subject;
+    private Employee subject;
     private Service service;
 
     public CommandRunner(Command[] commands, Runnable onStop, Connection conn) {
@@ -26,9 +27,11 @@ public class CommandRunner {
 
     public void invoke(String line) {
         for (Command command: commands) {
-            if (command.isMatching(line)) {
-                command.execute(line.split(" "), this);
-                return;
+            if (command.isVisible(subject != null ? subject.role : null)) {
+                if (command.isMatching(line)) {
+                    command.execute(line.split(" "), this);
+                    return;
+                }
             }
         }
         help();
@@ -43,11 +46,15 @@ public class CommandRunner {
     }
 
     public void setSubject(String subject) {
-        this.subject = subject;
+        Response<Employee> subjectResponse = service.readEmployee(subject, subject);
+        if (subjectResponse.isError()) {
+            throw new RuntimeException("subject should be an employee's ID");
+        }
+        this.subject = subjectResponse.getValue();
     }
 
     public String getSubject() {
-        return subject;
+        return subject.id;
     }
 
     public Service getService() {
@@ -61,14 +68,16 @@ public class CommandRunner {
                 .max(Integer::compareTo)
                 .orElse(0) + 2;
         for (Command command: commands) {
-            // Imagine this is not Java 8:
-            //             " ".repeat(indent - command.name().length())
-            String space = new String(new char[indent - command.name().length()]).replace("\0", " ");
-            System.out.println(
-                    "  "
-                    + command.name()
-                    + space
-                    + command.description());
+            if (command.isVisible(subject != null ? subject.role : null)) {
+                // Imagine this is not Java 8:
+                //             " ".repeat(indent - command.name().length())
+                String space = new String(new char[indent - command.name().length()]).replace("\0", " ");
+                System.out.println(
+                        "  "
+                                + command.name()
+                                + space
+                                + command.description());
+            }
         }
         System.out.println("Usage:");
         System.out.println("  > <command> [arguments...]");

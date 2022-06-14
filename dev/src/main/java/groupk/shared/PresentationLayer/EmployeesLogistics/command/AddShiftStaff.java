@@ -2,6 +2,7 @@ package groupk.shared.PresentationLayer.EmployeesLogistics.command;
 
 import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.Response;
+import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
 
 import java.util.Calendar;
@@ -20,6 +21,11 @@ public class AddShiftStaff implements Command {
     @Override
     public boolean isMatching(String line) {
         return line.startsWith("add shift staff");
+    }
+
+    @Override
+    public boolean isVisible(Employee.Role role) {
+        return role == Employee.Role.HumanResources;
     }
 
     @Override

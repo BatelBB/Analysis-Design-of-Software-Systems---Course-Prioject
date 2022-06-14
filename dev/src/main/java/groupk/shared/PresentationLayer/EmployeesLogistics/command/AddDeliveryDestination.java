@@ -2,6 +2,7 @@ package groupk.shared.PresentationLayer.EmployeesLogistics.command;
 
 import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.Response;
+import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Site;
 
 import java.util.LinkedList;
@@ -21,6 +22,11 @@ public class AddDeliveryDestination implements Command {
     @Override
     public boolean isMatching(String line) {
         return line.startsWith("add delivery destination");
+    }
+
+    @Override
+    public boolean isVisible(Employee.Role role) {
+        return role == Employee.Role.LogisticsManager || role == Employee.Role.TruckingManger;
     }
 
     @Override
