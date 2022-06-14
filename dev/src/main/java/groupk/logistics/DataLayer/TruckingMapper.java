@@ -65,8 +65,7 @@ public class TruckingMapper {
         String query = "INSERT INTO Truckings(TID,truck_manager,registration_plate,driver_username,date,hours,minutes,weight) VALUES(?,?,?,?,?,?,?,?)";
 
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            PreparedStatement prepStat = conn.prepareStatement(query);
+            PreparedStatement prepStat = myDataBase.connection.prepareStatement(query);
             DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
             String formattedDateTime = trucking.getDate().format(formatter);
             formattedDateTime = formattedDateTime.replace("T", " ");
@@ -79,9 +78,9 @@ public class TruckingMapper {
             prepStat.setLong(7, trucking.getMinutes());
             prepStat.setInt(8, trucking.getWeight());
             n = prepStat.executeUpdate();
-            conn.close();
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        }
+        catch (SQLException e){
+                throw new IllegalArgumentException("Oops, something got wrong and we couldn't add your trucking :( \nbecause: " + e.getMessage());
         }
         if (n == 1)
             truckingIDMap.insertTrucking(trucking);
@@ -99,10 +98,8 @@ public class TruckingMapper {
         String Query = "DELETE FROM Truckings WHERE TID = '" + truckingID + "'";
         int n = 0;
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            PreparedStatement pstmt = conn.prepareStatement(Query);
+            PreparedStatement pstmt = myDataBase.connection.prepareStatement(Query);
             n = pstmt.executeUpdate();
-            conn.close();
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -114,10 +111,8 @@ public class TruckingMapper {
         String sql = "UPDATE Truckings SET weight=" + weight + " WHERE TID='" + truckingId + "'";
         int n = 0;
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            PreparedStatement pstmt = myDataBase.connection.prepareStatement(sql);
             n = pstmt.executeUpdate();
-            conn.close();
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -130,10 +125,8 @@ public class TruckingMapper {
         String sql = "UPDATE Truckings SET registration_plate = '" + vehicleRegistrationPlate + "' WHERE TID = '" + truckingId + "'";
         int n = 0;
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            PreparedStatement pstmt = myDataBase.connection.prepareStatement(sql);
             n = pstmt.executeUpdate();
-            conn.close();
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -145,12 +138,10 @@ public class TruckingMapper {
     public boolean updateDriver(int truckingId, int driverUsername) {
         int n = 0;
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            PreparedStatement preparedStatement = conn.prepareStatement("UPDATE Truckings set driver_username = ? where TID = ?");
+            PreparedStatement preparedStatement = myDataBase.connection.prepareStatement("UPDATE Truckings set driver_username = ? where TID = ?");
             preparedStatement.setInt(1, driverUsername);
             preparedStatement.setInt(2, truckingId);
             n = preparedStatement.executeUpdate();
-            conn.close();
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -163,10 +154,8 @@ public class TruckingMapper {
         String sql = "UPDATE Truckings SET date = '" + date.format(dateFormat).replace('T', ' ') + "' WHERE TID = '" + truckingID + "'";
         int n = 0;
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            PreparedStatement pstmt = myDataBase.connection.prepareStatement(sql);
             n = pstmt.executeUpdate();
-            conn.close();
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -182,16 +171,14 @@ public class TruckingMapper {
         String query = "SELECT registration_plate FROM Truckings " +
                 "WHERE TID = '" + TruckingId + "'";
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            Statement stmt = conn.createStatement();
+            Statement stmt = myDataBase.connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if (rs.next()) {
                 toReturn += rs.getString(1);
             } else
                 throw new IllegalArgumentException("There is no trucking with id: " + TruckingId);
-            conn.close();
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -203,16 +190,14 @@ public class TruckingMapper {
         String query = "SELECT driver_username FROM Truckings " +
                 "WHERE TID = '" + TruckingId + "'";
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            Statement stmt = conn.createStatement();
+            Statement stmt = myDataBase.connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if (rs.next()) {
                 toReturn += rs.getInt(1);
             } else
                 throw new IllegalArgumentException("There is no trucking with id: " + TruckingId);
-            conn.close();
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -227,17 +212,15 @@ public class TruckingMapper {
         String query = "SELECT * FROM Truckings " +
                 "WHERE TID = '" + truckingID + "'";
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            Statement stmt = conn.createStatement();
+            Statement stmt = myDataBase.connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if (rs.next()) {
                 toReturn = new TruckingDTO(rs.getInt(1), rs.getString(5), rs.getInt(2), rs.getInt(4), rs.getString(3), rs.getInt(6), rs.getInt(7), rs.getInt(8), sources, destinations, products);
                 truckingIDMap.insertTrucking(toReturn);
             } else
                 throw new IllegalArgumentException("There is no trucking with that id");
-            conn.close();
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something in verification process got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -249,8 +232,7 @@ public class TruckingMapper {
 
         for (SiteDTO source : sources) {
             try {
-                Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-                PreparedStatement prepStat = conn.prepareStatement(query);
+                PreparedStatement prepStat = myDataBase.connection.prepareStatement(query);
                 prepStat.setInt(1, truckingIdCounter);
                 prepStat.setString(2, source.getContactGuy());
                 prepStat.setString(3, source.getCity());
@@ -262,9 +244,8 @@ public class TruckingMapper {
                 prepStat.setInt(9, source.getApartment());
                 if (prepStat.executeUpdate() < 1)
                     throw new IllegalArgumentException("The destination is already exist");
-                conn.close();
-            } catch (SQLException e) {
-                Exceptions.add(e.getMessage());
+            } catch (Exception e){
+                Exceptions.add("There was a problem with the destination with the contact guy: " + source.getContactGuy() + "\nthe error description: " + e.getMessage());
             }
         }
         return Exceptions;
@@ -274,10 +255,8 @@ public class TruckingMapper {
         String Query = "DELETE FROM Truckings_Sources WHERE TID = '" + truckingID + "'";
         int n = 0;
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            PreparedStatement pstmt = conn.prepareStatement(Query);
+            PreparedStatement pstmt = myDataBase.connection.prepareStatement(Query);
             n = pstmt.executeUpdate();
-            conn.close();
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -288,15 +267,13 @@ public class TruckingMapper {
         List<SiteDTO> sites = new LinkedList<SiteDTO>();
         String query = "SELECT * FROM Truckings_Sources Where TID = '" + TruckingID + "'";
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            PreparedStatement pstmt = conn.prepareStatement(query);
+            PreparedStatement pstmt = myDataBase.connection.prepareStatement(query);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 sites.add(new SiteDTO(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getString(6)));
             }
-            conn.close();
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Oops, there was unexpected problem with get the sources of trucking: \"" + TruckingID + "\"\nError description: " + e.getMessage());
         }
         return sites;
     }
@@ -307,8 +284,7 @@ public class TruckingMapper {
         String query = "INSERT INTO Truckings_Destinations(TID,contact_guy,city,phone_number,street,area,house_number,floor,apartment_number) VALUES(?,?,?,?,?,?,?,?,?)";
         for (SiteDTO destination : destinations) {
             try {
-                Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-                PreparedStatement prepStat = conn.prepareStatement(query);
+                PreparedStatement prepStat = myDataBase.connection.prepareStatement(query);
                 prepStat.setInt(1, truckingIdCounter);
                 prepStat.setString(2, destination.getContactGuy());
                 prepStat.setString(3, destination.getCity());
@@ -320,9 +296,8 @@ public class TruckingMapper {
                 prepStat.setInt(9, destination.getApartment());
                 if (prepStat.executeUpdate() < 1)
                     throw new IllegalArgumentException("The destination is already exist");
-                conn.close();
-            } catch (SQLException e) {
-                Exceptions.add(e.getMessage());
+            } catch (Exception e){
+                Exceptions.add("There was a problem with the destination with the contact guy: " + destination.getContactGuy() + "\nthe error description: " + e.getMessage());
             }
         }
         return Exceptions;
@@ -332,10 +307,8 @@ public class TruckingMapper {
         String Query = "DELETE FROM Truckings_Destinations WHERE TID = '" + truckingID + "'";
         int n = 0;
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            PreparedStatement pstmt = conn.prepareStatement(Query);
+            PreparedStatement pstmt = myDataBase.connection.prepareStatement(Query);
             n = pstmt.executeUpdate();
-            conn.close();
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -346,15 +319,13 @@ public class TruckingMapper {
         List<SiteDTO> sites = new LinkedList<SiteDTO>();
         String query = "SELECT * FROM Truckings_Destinations Where TID = '" + TruckingID + "'";
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            PreparedStatement pstmt = conn.prepareStatement(query);
+            PreparedStatement pstmt = myDataBase.connection.prepareStatement(query);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 sites.add(new SiteDTO(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getString(6)));
             }
-            conn.close();
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Oops, there was unexpected problem with get the destinations of trucking: \"" + TruckingID + "\"\nError description: " + e.getMessage());
         }
         return sites;
     }
@@ -370,15 +341,13 @@ public class TruckingMapper {
         String query = "INSERT INTO Truckings_Products(TID,product,quantity) VALUES(?,?,?)";
 
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            PreparedStatement prepStat = conn.prepareStatement(query);
+            PreparedStatement prepStat = myDataBase.connection.prepareStatement(query);
             prepStat.setInt(1, truckingIdCounter);
             prepStat.setString(2, productForTrucking.getProduct());
             prepStat.setInt(3, productForTrucking.getQuantity());
             n = prepStat.executeUpdate();
-            conn.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
 
     }
@@ -387,15 +356,13 @@ public class TruckingMapper {
         List<ProductForTruckingDTO> productForTruckings = new LinkedList<>();
         String query = "SELECT * FROM Truckings_Products WHERE TID = '" + truckingID + "'";
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            Statement stmt = conn.createStatement();
+            Statement stmt = myDataBase.connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 productForTruckings.add(new ProductForTruckingDTO(rs.getString(2), rs.getInt(3)));
             }
-            conn.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
 
         return productForTruckings;
@@ -406,15 +373,13 @@ public class TruckingMapper {
         String Query = "DELETE FROM Truckings_Products WHERE TID = '" + TruckingID + "'" + " and product = '" + productSKU + "'";
         int n = 0;
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            Statement stmt = conn.createStatement();
+            Statement stmt = myDataBase.connection.createStatement();
             ResultSet rs = stmt.executeQuery(Query);
             if (rs.next()) {
                 return true;
             }
-            conn.close();
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Deleted products successfully");
         }
         return false;
     }
@@ -423,13 +388,11 @@ public class TruckingMapper {
         String Query = "SELECT * FROM Truckings_Products WHERE TID = '" + TruckingID + "'" + " and product = '" + productSKU + "'";
         int n = 0;
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            Statement stmt = conn.createStatement();
+            Statement stmt = myDataBase.connection.createStatement();
             ResultSet rs = stmt.executeQuery(Query);
             if (rs.next()) {
                 return true;
             }
-            conn.close();
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -442,10 +405,8 @@ public class TruckingMapper {
         String Query = "UPDATE Truckings_Products SET quantity = '" + addedQuantity + "'" + " WHERE TID = '" + TruckingID + "'" + " AND product = '" + productSKU + "'";
         int n = 0;
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            PreparedStatement pstmt = conn.prepareStatement(Query);
+            PreparedStatement pstmt = myDataBase.connection.prepareStatement(Query);
             n = pstmt.executeUpdate();
-            conn.close();
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -456,14 +417,12 @@ public class TruckingMapper {
         String Query = "SELECT * FROM Truckings_Products WHERE TID = '" + truckingID + "'" + " AND product = '" + productSKU + "'";
         int n = 0;
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            Statement stmt = conn.createStatement();
+            Statement stmt = myDataBase.connection.createStatement();
             ResultSet rs = stmt.executeQuery(Query);
-            while (rs.next()) {
-                conn.close();
+            while (rs.next())
+            {
                 return rs.getString(3);
             }
-            conn.close();
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -475,11 +434,9 @@ public class TruckingMapper {
         String Query = "DELETE FROM Truckings_Products WHERE TID = '" + truckingID + "'";
         int n = 0;
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            PreparedStatement pstmt = conn.prepareStatement(Query);
+            PreparedStatement pstmt = myDataBase.connection.prepareStatement(Query);
             n = pstmt.executeUpdate();
-            conn.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
         return n > 0;
@@ -562,8 +519,7 @@ public class TruckingMapper {
         String query = "SELECT * FROM Truckings " +
                 "WHERE strftime(date) between strftime('" + date.minusHours(7).format(dateFormat) + "') and strftime('" + date.plusHours(7).format(dateFormat) + "') ORDER BY date";
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            Statement stmt = conn.createStatement();
+            Statement stmt = myDataBase.connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 int truckingId = rs.getInt(1);
@@ -574,9 +530,8 @@ public class TruckingMapper {
                 toReturn.add(newTrucking);
                 truckingIDMap.insertTrucking(newTrucking);
             }
-            conn.close();
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something in verification process got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -587,8 +542,7 @@ public class TruckingMapper {
                 "WHERE " + fieldName + " = '" + usernameOrRegistration + "'" +
                 " ORDER BY date";
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            Statement stmt = conn.createStatement();
+            Statement stmt = myDataBase.connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 int truckingId = rs.getInt(1);
@@ -599,9 +553,8 @@ public class TruckingMapper {
                 toReturn.add(newTrucking);
                 truckingIDMap.insertTrucking(newTrucking);
             }
-            conn.close();
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops, something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -612,8 +565,7 @@ public class TruckingMapper {
                 "WHERE strftime(date) > DATE('now') and " + fieldName + " = '" + usernameOrRegistration + "'" +
                 " ORDER BY date";
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            Statement stmt = conn.createStatement();
+            Statement stmt = myDataBase.connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 int truckingId = rs.getInt(1);
@@ -624,9 +576,8 @@ public class TruckingMapper {
                 toReturn.add(newTrucking);
                 truckingIDMap.insertTrucking(newTrucking);
             }
-            conn.close();
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -637,8 +588,7 @@ public class TruckingMapper {
                 "WHERE strftime(date) <= DATE('now') and " + fieldName + " = '" + usernameOrRegistration + "'" +
                 " ORDER BY date";
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            Statement stmt = conn.createStatement();
+            Statement stmt = myDataBase.connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 int truckingId = rs.getInt(1);
@@ -649,9 +599,8 @@ public class TruckingMapper {
                 toReturn.add(newTrucking);
                 truckingIDMap.insertTrucking(newTrucking);
             }
-            conn.close();
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -660,15 +609,13 @@ public class TruckingMapper {
         int toReturn = 1;
         String query = "SELECT TID FROM Truckings ORDER BY TID DESC";
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            Statement stmt = conn.createStatement();
+            Statement stmt = myDataBase.connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if (rs.next()) {
                 toReturn += rs.getInt(1);
             }
-            conn.close();
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -678,14 +625,12 @@ public class TruckingMapper {
         String query = "SELECT * FROM Truckings WHERE TID='" + truckingId + "'";
         int n = 0;
         try {
-            Connection conn = DriverManager.getConnection(myDataBase.finalCurl);
-            Statement stmt = conn.createStatement();
+            Statement stmt = myDataBase.connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if (rs.next()) {
                 regisrationPlate = rs.getString(3);
             }
-            conn.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
         return regisrationPlate;

@@ -13,12 +13,10 @@ public class WorkingConditions {
 
     public void setEmploymentStart(String id, Calendar employmentStart) {
         try {
-            Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Employee set EmploymentStart = ? where ID = ?");
+            PreparedStatement preparedStatement = DalController.connection.prepareStatement("UPDATE Employee set EmploymentStart = ? where ID = ?");
             preparedStatement.setString(1, employmentStart.get(Calendar.DATE) + "/" + (employmentStart.get(Calendar.MONTH)+1)  + "/" + employmentStart.get(Calendar.YEAR));
             preparedStatement.setString(2, id);
             preparedStatement.executeUpdate();
-            connection.close();
             this.employmentStart = employmentStart;
         } catch (SQLException s) {
             throw new IllegalArgumentException(s.getMessage());
@@ -27,12 +25,10 @@ public class WorkingConditions {
 
     public void setSalaryPerHour(String id, int salaryPerHour) {
         try {
-            Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Employee set SalaryPerHour = ? where ID = ?");
+            PreparedStatement preparedStatement = DalController.connection.prepareStatement("UPDATE Employee set SalaryPerHour = ? where ID = ?");
             preparedStatement.setInt(1, salaryPerHour);
             preparedStatement.setString(2, id);
             preparedStatement.executeUpdate();
-            connection.close();
             this.salaryPerHour = salaryPerHour;
         } catch (SQLException s) {
             throw new IllegalArgumentException(s.getMessage());
@@ -41,12 +37,10 @@ public class WorkingConditions {
 
     public void setSickDaysUsed(String id, int sickDaysUsed) {
         try {
-            Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Employee set SickDaysUsed = ? where ID = ?");
+            PreparedStatement preparedStatement = DalController.connection.prepareStatement("UPDATE Employee set SickDaysUsed = ? where ID = ?");
             preparedStatement.setInt(1, sickDaysUsed);
             preparedStatement.setString(2, id);
             preparedStatement.executeUpdate();
-            connection.close();
             this.sickDaysUsed = sickDaysUsed;
         } catch (SQLException s) {
             throw new IllegalArgumentException(s.getMessage());
@@ -55,12 +49,10 @@ public class WorkingConditions {
 
     public void setVacationDaysUsed(String id, int vacationDaysUsed) {
         try {
-            Connection connection = DriverManager.getConnection(DalController.url);
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Employee set VacationDaysUsed = ? where ID = ?");
+            PreparedStatement preparedStatement = DalController.connection.prepareStatement("UPDATE Employee set VacationDaysUsed = ? where ID = ?");
             preparedStatement.setInt(1, vacationDaysUsed);
             preparedStatement.setString(2, id);
             preparedStatement.executeUpdate();
-            connection.close();
             this.vacationDaysUsed = vacationDaysUsed;
         } catch (SQLException s) {
             throw new IllegalArgumentException(s.getMessage());

@@ -4,14 +4,15 @@ import groupk.logistics.DataLayer.TruckingDTO;
 import groupk.shared.business.Facade;
 import groupk.shared.service.dto.*;
 
+import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class Service {
     private Facade facade;
 
-    public Service() {
-        facade = new Facade();
+    public Service(Connection conn) {
+        facade = new Facade(conn);
     }
 
     public void deleteEmployeeDB(){

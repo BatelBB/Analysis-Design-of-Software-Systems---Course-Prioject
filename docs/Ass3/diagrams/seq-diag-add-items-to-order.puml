@@ -1,0 +1,91 @@
+@startuml
+
+title Sequence Diagram - Add items to order
+
+actor "Stock Manager" as user
+participant "Presentation\nLayer" as pres
+participant "Supplier\nService" as service
+participant "Order" as order
+participant "Item" as item
+participant "Order\nController" as ctrl_order
+participant "Item\nController" as ctrl_item
+participant "ItemsInOrders\nDao" as dao
+participant "ItemsInOrder\nRecord" as record
+database "database" as db
+
+activate pres
+
+loop
+
+pres -> user: enter item catalog number
+user -> pres: catalog_number
+pres -> user: how many items?
+user -> pres: quantity
+
+pres -> service: order_item(orderId, supplier, catalogNumber, quantity)
+activate service
+
+service -> ctrl_order: get(orderId)
+activate ctrl_order
+ctrl_order --> order **
+ctrl_order --> service: order
+deactivate ctrl_order
+
+service -> ctrl_item: get(ppn, catalogNumber)
+activate ctrl_item
+ctrl_item --> item **
+ctrl_item --> service: item
+deactivate ctrl_item
+
+service -> ctrl_order: orderItem(order, item, quantity)
+activate ctrl_order
+
+ctrl_order -> order: orderItem(item, quantity)
+activate order
+order -> order: amounts[item] = quantity
+order -> dao: updateAmount(order.id, ppn, catalogNumber, amount)
+activate dao
+alt cache contains (order.id, ppn, catalogNumber)
+	dao -> record **: get from cache
+else 
+	dao -> db: SELECT
+	activate db
+	db --> dao: ResultSet
+	deactivate db
+	alt result set is empty
+		dao -> db: CREATE
+		activate db
+		db --> dao: 1 rows affected
+		deactivate db
+	else
+end
+	
+	dao -> record: new
+	dao -> dao: add(record)
+	
+end
+
+	dao -> record: setAmount(amount)
+	activate record
+	record --> dao
+	deactivate record
+	
+	dao --> order
+	deactivate dao
+	
+	order --> ctrl_order
+	deactivate order
+	
+	ctrl_order --> service
+	deactivate ctrl_order
+	
+	service --> pres: Response
+	deactivate service
+	
+	pres -> user: "add another? (true/false)"
+	user -> pres: true/false
+end
+
+deactivate pres
+
+@enduml

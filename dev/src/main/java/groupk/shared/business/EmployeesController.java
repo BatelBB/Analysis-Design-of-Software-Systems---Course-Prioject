@@ -5,14 +5,15 @@ import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
 import groupk.workers.business.Facade;
 
+import java.sql.Connection;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class EmployeesController {
     public Facade employeeBusiness;
 
-    public EmployeesController() {
-        employeeBusiness = new Facade();
+    public EmployeesController(Connection connection) {
+        employeeBusiness = new Facade(connection);
     }
 
     public Response<Employee> createEmployee(

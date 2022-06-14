@@ -5,6 +5,7 @@ import groupk.workers.data.DalController;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
 
+import java.sql.Connection;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -13,8 +14,8 @@ public class Facade {
     private ShiftController shifts;
     private DalController dalColntroller;
 
-    public Facade() {
-        dalColntroller = new DalController();
+    public Facade(Connection connection) {
+        dalColntroller = new DalController(connection);
         employees = new EmployeeController(dalColntroller);
         shifts = new ShiftController(dalColntroller);
     }
@@ -22,7 +23,6 @@ public class Facade {
     //for test use
     public void deleteDB(){
         dalColntroller.deleteDataBase();
-        dalColntroller = new DalController();
     }
 
     public void loadDB(){

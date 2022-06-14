@@ -12,13 +12,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class myDataBase {
-    static Connection con;
     public static String finalCurl;
     public static File file;
+    public static Connection connection;
 
-    public myDataBase() {
-        file = new File("database.db");
-        finalCurl = ("jdbc:sqlite:").concat(file.getAbsolutePath());
+    public myDataBase(Connection conn) {
+        connection = conn;
+//        file = new File("database.db");
+//        finalCurl = ("jdbc:sqlite:").concat(file.getAbsolutePath());
         try {
             createNewTable();
         } catch (Exception e) {
@@ -36,7 +37,6 @@ public class myDataBase {
         tables.add("DROP TABLE IF EXISTS Truckings_Sources");
         tables.add("DROP TABLE IF EXISTS Truckings_Products");
         try (
-                Connection connection = DriverManager.getConnection(finalCurl);
                 Statement statement = connection.createStatement()) {
             for (String table : tables) {
                 statement.addBatch(table);
@@ -109,8 +109,7 @@ public class myDataBase {
                 "FOREIGN KEY(TID) REFERENCES Truckings(TID)\n" +
                 "\t);\n" +
                 "\n";
-        try (Connection conn = DriverManager.getConnection(finalCurl);
-             Statement s = conn.createStatement()) {
+        try (Statement s = connection.createStatement()) {
             s.addBatch(vehiclesTable);
             s.addBatch(dirversLicencesTable);
             s.addBatch(Truckings);
@@ -118,8 +117,8 @@ public class myDataBase {
             s.addBatch(Truckings_Products);
             s.addBatch(Truckings_Sources);
             s.executeBatch();
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("There was a problem to connect the database: " + e.getMessage());
         }
     }
 }

@@ -11,11 +11,13 @@ public class DalController {
     public static String url;
     private ShiftRepository shiftRepository;
     private EmployeeRepository employeeRepository;
+    public static Connection connection;
     public static File file;
 
-    public DalController() {
-        file = new File("database.db");
-        url = ("jdbc:sqlite:").concat(file.getAbsolutePath());
+    public DalController(Connection conn) {
+        connection = conn;
+//        file = new File("database.db");
+//        url = ("jdbc:sqlite:").concat(file.getAbsolutePath());
         try{
             createTables();
             load();
@@ -82,13 +84,11 @@ public class DalController {
                 "\tPRIMARY KEY(\"Date\",\"Type\",\"EmployeeID\")\n" +
                 ");");
         try (
-            Connection connection = DriverManager.getConnection(url);
             Statement statement = connection.createStatement()){
             for (String table : tables) {
                 statement.addBatch(table);
             }
             statement.executeBatch();
-            connection.createStatement().execute("PRAGMA foreign_keys = ON");
         } catch (SQLException s) {
             throw new IllegalArgumentException(s.getMessage());
         }
@@ -96,7 +96,6 @@ public class DalController {
 
     public void load(){
         try{
-            Connection connection = DriverManager.getConnection(url);
             Statement statement = connection.createStatement();
             for (Employee.Role role: Employee.Role.values()) {
                 String insertRole = "INSERT OR IGNORE INTO Role VALUES ('"+ role.name()+"')";
@@ -106,7 +105,6 @@ public class DalController {
                 String insertShift = "INSERT OR IGNORE INTO ShiftSlot VALUES ('" + shift.name() + "')";
                 statement.executeUpdate(insertShift);
             }
-            connection.close();
         }
         catch (SQLException s){
             throw new IllegalArgumentException(s.getMessage());
@@ -114,6 +112,8 @@ public class DalController {
     }
 
     public void deleteDataBase(){
+        shiftRepository.delete();
+        employeeRepository.delete();
         LinkedList<String> tables = new LinkedList<>();
         tables.add("DROP TABLE IF EXISTS Employee");
         tables.add("DROP TABLE IF EXISTS RequiredStaff");
@@ -123,7 +123,6 @@ public class DalController {
         tables.add("DROP TABLE IF EXISTS ShiftSlot");
         tables.add("DROP TABLE IF EXISTS Workers");
         try (
-                Connection connection = DriverManager.getConnection(url);
                 Statement statement = connection.createStatement()){
             for (String table : tables) {
                 statement.addBatch(table);
@@ -150,12 +149,9 @@ public class DalController {
 
     public Employee deleteEmployee(String id) {
         try{
-            Connection connection = DriverManager.getConnection(DalController.url);
-            connection.createStatement().execute("PRAGMA foreign_keys = ON");
             String deleteEmployee = "DELETE FROM Employee WHERE ID = '" + id + "';";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteEmployee);
             preparedStatement.executeUpdate();
-            connection.close();
         }
         catch (SQLException s){
             throw new IllegalArgumentException(s.getMessage());
@@ -165,13 +161,10 @@ public class DalController {
 
     public Shift deleteShift(Shift.Type type, Calendar date){
         try{
-            Connection connection = DriverManager.getConnection(DalController.url);
-            connection.createStatement().execute("PRAGMA foreign_keys = ON");
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Shift WHERE Type = ? and Date = ?");
             preparedStatement.setString(1 , type.name());
             preparedStatement.setString(2 , date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
             preparedStatement.executeUpdate();
-            connection.close();
         }
         catch (SQLException s){
             throw new IllegalArgumentException(s.getMessage());
@@ -189,7 +182,6 @@ public class DalController {
 
     public void loadDataFromDB(){
         try {
-            Connection connection = DriverManager.getConnection(DalController.url);
             PreparedStatement prepStat = connection.prepareStatement("SELECT * FROM  Employee");
             ResultSet employees = prepStat.executeQuery();
             while(employees.next()){
@@ -217,7 +209,6 @@ public class DalController {
                 }
                 shiftRepository.addShift(shifts, shiftReqLoad, listOfWorkers);
             }
-            connection.close();
         }
         catch (SQLException s){
             throw new IllegalArgumentException(s.getMessage());
