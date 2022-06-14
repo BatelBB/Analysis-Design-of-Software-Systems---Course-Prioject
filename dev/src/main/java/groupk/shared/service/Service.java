@@ -1,10 +1,22 @@
 package groupk.shared.service;
 
-import groupk.logistics.DataLayer.TruckingDTO;
+import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
+import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import groupk.shared.business.Facade;
+import groupk.shared.business.Inventory.Categories.Category;
+import groupk.shared.business.Inventory.Service.Objects.ProductItem;
+import groupk.shared.business.Inventory.Service.Objects.Report;
+import groupk.shared.business.Inventory.Service.Objects.SubCategory;
+import groupk.shared.business.Suppliers.BusinessLogicException;
+import groupk.shared.business.Suppliers.BussinessObject.Item;
+import groupk.shared.business.Suppliers.BussinessObject.Order;
+import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
+import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 import groupk.shared.service.dto.*;
 
 import java.sql.Connection;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -15,7 +27,7 @@ public class Service {
         facade = new Facade(conn);
     }
 
-    public void deleteEmployeeDB(){
+    public void deleteEmployeeDB() {
         facade.deleteEmployeeDB();
     }
 
@@ -23,9 +35,11 @@ public class Service {
         facade.deleteLogisticsDB();
     }
 
-    public void loadEmployeeDB(){ facade.loadEmployeeDB();}
+    public void loadEmployeeDB() {
+        facade.loadEmployeeDB();
+    }
 
-    public  Response<Employee> createEmployee(
+    public Response<Employee> createEmployee(
             String name,
             String id,
             String bank,
@@ -42,7 +56,7 @@ public class Service {
 
     public Response<Shift> createShift(String subjectID, Calendar date, Shift.Type type,
                                        LinkedList<Employee> staff,
-                                       HashMap<Employee.Role, Integer> requiredStaff){
+                                       HashMap<Employee.Role, Integer> requiredStaff) {
         return facade.createShift(subjectID, date, type, staff, requiredStaff);
     }
 
@@ -50,7 +64,7 @@ public class Service {
         return facade.readEmployee(subjectID, employeeID);
     }
 
-    public Response<Shift> readShift(String subjectID, Calendar date , Shift.Type type) {
+    public Response<Shift> readShift(String subjectID, Calendar date, Shift.Type type) {
         return facade.readShift(subjectID, date, type);
     }
 
@@ -59,7 +73,7 @@ public class Service {
     }
 
     //dont use
-    public Response<Shift> deleteShift(String subjectID, Shift.Type type, Calendar date){
+    public Response<Shift> deleteShift(String subjectID, Shift.Type type, Calendar date) {
         return facade.deleteShift(subjectID, type, date);
     }
 
@@ -87,7 +101,7 @@ public class Service {
         return facade.setEmployeeShiftsPreference(subjectID, employeeID, shiftPreferences);
     }
 
-    public Response<Employee> deleteEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift){
+    public Response<Employee> deleteEmployeeShiftPreference(String subjectID, String employeeID, Employee.ShiftDateTime shift) {
         return facade.deleteEmployeeShiftPreference(subjectID, employeeID, shift);
     }
 
@@ -201,6 +215,295 @@ public class Service {
 
     public Response<String[]> getAreasList() {
         return facade.getAreasList();
+    }
+
+    //inventory & suppliers methods
+
+
+    public Facade.SI_Response addCategory(String name) {
+        return facade.addCategory(name);
+    }
+
+    public Facade.SI_Response addSubCategory(String categoryName, String SubCategoryName) {
+        return facade.addSubCategory(categoryName, SubCategoryName);
+    }
+
+    public Facade.SI_Response addSubSubCategory(String category, String sub_category, String name) {
+        return facade.addSubSubCategory(category, sub_category, name);
+    }
+
+    public Facade.SI_Response removeCategory(String name) {
+        return facade.removeCategory(name, facade.productsInCategory(name));
+    }
+
+    public Facade.SI_Response removeSubCategory(String category, String name) {
+        return facade.removeSubCategory(category, name, facade.productsInSubCategory(category, name));
+    }
+
+    public Facade.SI_Response removeSubSubCategory(String category, String sub_category, String name) {
+        return facade.removeSubSubCategory(category, sub_category, name, facade.productsInSubSubCategory(category, sub_category, name));
+    }
+
+    public Facade.ResponseT<Category> getCategory(String name) {
+        return facade.getCategory(name);
+    }
+
+    public Facade.ResponseT<SubCategory> getSubCategory(String category, String name) {
+        return facade.getSubCategory(category, name);
+    }
+
+    public Facade.SI_Response updateCategoryCusDiscount(float discount, LocalDate start_date, LocalDate end_date, String category, String sub_category, String subsub_category) {
+        return facade.updateCategoryCusDiscount(discount, start_date, end_date, category, sub_category, subsub_category);
+    }
+
+    public Facade.ResponseT<List<String>> getCategoriesNames() {
+        return facade.getCategoriesNames();
+    }
+
+    //Product methods
+    public Facade.ResponseT<groupk.shared.business.Inventory.Service.Objects.Product> addProduct(String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
+        return facade.addProduct(name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category);
+    }
+
+    public Facade.SI_Response removeProduct(int id) {
+        return facade.removeProduct(id);
+    }
+
+    public Facade.SI_Response updateProductCusDiscount(float discount, LocalDate start_date, LocalDate end_date, int product_id) {
+        return facade.updateProductCusDiscount(discount, start_date, end_date, product_id);
+    }
+
+    public Facade.SI_Response updateProductCusPrice(int product_id, float price) {
+        return facade.updateProductCusPrice(product_id, price);
+    }
+
+    public Facade.ResponseT<List<String>> getProductNames() {
+        return facade.getProductNames();
+    }
+
+    public static Facade.ResponseT<List<groupk.shared.business.Inventory.Product>> getProducts() {
+        // return facade.getProducts();
+        return null;
+    }
+
+    //Item methods
+    public Facade.ResponseT<ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
+        return facade.addItem(product_id, store, location, supplier, expiration_date, on_shelf);
+    }
+
+    public Facade.SI_Response removeItem(int product_id, int item_id) {
+        Facade.ResponseT<Boolean> r = facade.removeItem(product_id, item_id);
+        int min_qty = facade.getMinQty(product_id).data;
+        return facade.createOrderShortage(r, product_id, min_qty);
+    }
+
+    public Facade.SI_Response updateItemCusDiscount(float discount, LocalDate start_date, LocalDate end_date, int product_id, int item_id) {
+        return facade.updateItemCusDiscount(product_id, item_id, discount, start_date, end_date);
+    }
+
+    public Facade.SI_Response updateItemDefect(int product_id, int item_id, boolean is_defect, String defect_reporter) {
+        return facade.updateItemDefect(product_id, item_id, is_defect, defect_reporter);
+    }
+
+    public Facade.ResponseT<String> getItemLocation(int product_id, int item_id) {
+        return facade.getItemLocation(product_id, item_id);
+    }
+
+    public Facade.SI_Response setItemLocation(int product_id, int item_id, String location) {
+        return facade.changeItemLocation(product_id, item_id, location);
+    }
+
+    public Facade.SI_Response setItemOnShelf(int product_id, int item_id, boolean on_shelf) {
+        return facade.changeItemOnShelf(product_id, item_id, on_shelf);
+    }
+
+    //Report methods
+    public Facade.ResponseT<List<Integer>> getReportListIds() {
+        return facade.getReportListNames();
+    }
+
+    public Facade.ResponseT<Report> createMissingReport(String name, String report_producer) {
+        return facade.createMissingReport(name, report_producer);
+    }
+
+    public Facade.ResponseT<Report> createExpiredReport(String name, String report_producer) {
+        return facade.createExpiredReport(name, report_producer);
+    }
+
+    public Facade.ResponseT<Report> createSurplusesReport(String name, String report_producer) {
+        return facade.createSurplusesReport(name, report_producer);
+    }
+
+    public Facade.ResponseT<Report> createDefectiveReport(String name, String report_producer) {
+        return facade.createDefectiveReport(name, report_producer);
+    }
+
+    public Facade.ResponseT<Report> createBySupplierReport(String name, String report_producer, int suppName) {
+        return facade.createBySupplierReport(name, report_producer, suppName);
+    }
+
+    public Facade.ResponseT<Report> createByProductReport(String name, String report_producer, String proName) {
+        return facade.createByProductReport(name, report_producer, proName);
+    }
+
+    public Facade.ResponseT<Report> createByCategoryReport(String name, String report_producer, String CatName, String subCatName, String subSubCatName) {
+        return facade.createByCategoryReport(name, report_producer, CatName, subCatName, subSubCatName);
+    }
+
+    public Facade.SI_Response removeReport(int id) {
+        return facade.removeReport(id);
+    }
+
+    public Facade.ResponseT<Report> getReport(int id) {
+        return facade.getReport(id);
+    }
+
+    //Order methods
+    public Facade.SI_Response createPeriodicOrder(Map<Integer, Integer> productAmount, int weekDay) {
+        /*יוצרים הזמנה תקופתית שתגיע ביום מסוים בשבוע. הארגומנטים הם
+                                מפה של הID של המוצר והכמות עבורו. בנוסף היום בשבוע שבו נרצה שההזמנה תגיע*/
+        return facade.createOrderPeriodicVoid(productAmount, weekDay);
+//        int orderId= supplierService.createOrderPeriodic(productAmount,weekDay).data;
+//        return facade.addOrderRecord(orderId,productAmount);
+
+    }
+
+
+    public Facade.ResponseT<Map<Integer, Integer>> confirmOrder(int order_id) {
+        return facade.confirmOrder(order_id);
+    }
+
+    public Facade.SI_Response confirmOrderAmount(Map<Integer, Integer> actual_amount) {
+        return facade.confirmOrderAmount(actual_amount);
+    }
+
+    //SUPPLIER METHODS
+    public Facade.ResponseT<Order> getOrder(int id) {
+        //TODO: what's this? -Michael
+        return null;
+    }
+
+    public Facade.ResponseT<Supplier> createSupplier(int ppn, int bankAccount, String name,
+                                                          boolean isDelivering, PaymentCondition paymentCondition,
+                                                          DayOfWeek regularSupplyingDays, String contactName,
+                                                          String contactPhone, String contactEmail) {
+        return facade.createSupplier(
+                ppn, bankAccount, name, isDelivering,
+                paymentCondition, regularSupplyingDays, contactEmail,
+                contactName, contactPhone
+        );
+    }
+
+    public Collection<Supplier> getSuppliers() {
+        return facade.getSuppliers();
+    }
+
+    public Facade.ResponseT<Supplier> getSupplier(int ppn) throws BusinessLogicException {
+        return facade.getSupplier(ppn);
+    }
+
+    public Facade.SI_Response deleteSupplier(int ppn) {
+        return facade.getSupplier(ppn);
+    }
+
+    public Facade.ResponseT<Item> createItem(int supplierPPN, int catalogNumber, int productID, float price) {
+        return facade.createItem(supplierPPN, catalogNumber, productID, price);
+    }
+
+    public Collection<Item> getItems() {
+        return facade.getItems();
+    }
+
+    public Facade.ResponseT<Item> getItem(int ppn, int catalog) {
+        return facade.getItem(ppn, catalog);
+    }
+
+    public Facade.ResponseT<QuantityDiscount> createDiscount(int supplierPPN, int catalogN, int amount, float discount) {
+        return facade.createDiscount(supplierPPN, catalogN, amount, discount);
+    }
+
+    public Facade.SI_Response deleteDiscount(QuantityDiscount discount) {
+        return facade.deleteDiscount(discount);
+    }
+
+    public Facade.ResponseT<Order> createOrder(int supplierPPN, LocalDate ordered, LocalDate delivered, OrderType type) {
+        return facade.createOrder(supplierPPN, ordered, delivered, type);
+    }
+
+    public Collection<Order> getOrders() {
+        return facade.getOrders();
+    }
+
+    public Facade.SI_Response deleteOrder(int orderId) {
+        return facade.deleteOrder(orderId);
+    }
+
+    public QuantityDiscount getDiscount(int amount, int ppn, int catalog) throws BusinessLogicException {
+        //TODO: what's this? -Michael
+        return null;
+    }
+
+    public Facade.SI_Response orderItem(int orderId, int supplier, int catalogNumber, int amount) {
+        return facade.orderItem(orderId, supplier, catalogNumber, amount);
+    }
+
+    public Facade.SI_Response setPrice(int supplier, int catalogNumber, float price) {
+        return facade.setPrice(supplier, catalogNumber, price);
+    }
+
+    public Collection<QuantityDiscount> getDiscounts() {
+        return facade.getDiscounts();
+    }
+
+    public Facade.SI_Response setOrderOrdered(int orderID, LocalDate ordered) throws BusinessLogicException {
+        return facade.setOrderOrdered(orderID, ordered);
+    }
+
+    public Facade.SI_Response setOrderProvided(int orderID, LocalDate provided) throws BusinessLogicException {
+        return facade.setOrderProvided(orderID, provided);
+    }
+
+    public Facade.SI_Response setSupplierBankAccount(int supplierPPN, int bankAct) {
+        return facade.setSupplierBankAccount(supplierPPN, bankAct);
+    }
+
+    public Facade.SI_Response setSupplierCompanyName(int supplierPPN, String newName) {
+        return facade.setSupplierCompanyName(supplierPPN, newName);
+    }
+
+    public Facade.SI_Response setSupplierIsDelivering(int supplierPPN, boolean newValue) {
+        return facade.setSupplierIsDelivering(supplierPPN, newValue);
+    }
+
+    public Facade.SI_Response setSupplierPaymentCondition(int supplierPPN, PaymentCondition payment) {
+
+        return facade.setSupplierPaymentCondition(supplierPPN, payment);
+    }
+
+    public Facade.SI_Response setSupplierRegularSupplyingDays(int supplierPPN, DayOfWeek dayOfWeek) {
+        return facade.setSupplierRegularSupplyingDays(supplierPPN, dayOfWeek);
+    }
+
+    public Facade.SI_Response setSupplierContact(int supplierPPN, String name, String phoneNumber, String email) {
+
+        return facade.setSupplierContact(supplierPPN, name, phoneNumber, email);
+    }
+
+    public Facade.SI_Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
+        //TODO: what's this? -Michael
+        return null;
+    }
+
+    public Facade.ResponseT<Integer> createOrderShortage(Facade.ResponseT<Boolean> r, int product_id, int min_qty) {
+        return facade.createOrderShortage(r, product_id, min_qty);
+    }
+
+    public Facade.ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
+        return facade.createOrderPeriodic(productAmount, weekDay);
+    }
+
+    public Facade.SI_Response createOrderPeriodicVoid(Map<Integer, Integer> productAmount, int weekDay) {
+        return facade.createOrderPeriodicVoid(productAmount, weekDay);
     }
 
 }

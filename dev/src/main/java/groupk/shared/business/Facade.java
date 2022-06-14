@@ -462,12 +462,16 @@ public class Facade {
         );
     }
 
-    public SI_Response removeItem(int product_id, int item_id) {
-        return responseForVoid(() -> product_controller.removeItem(product_id, item_id));
+    public ResponseT<Boolean> removeItem(int product_id, int item_id) {
+        return responseFor(() -> product_controller.removeItem(product_id, item_id));
     }
 
     public ResponseT<String> getItemLocation(int product_id, int item_id) {
         return responseFor(() -> product_controller.getItemLocation(product_id, item_id));
+    }
+
+    public ResponseT<Integer> getMinQty(int product_id) {
+        return responseFor(() -> product_controller.getMinQty(product_id));
     }
 
     public SI_Response changeItemLocation(int product_id, int item_id, String location) {
@@ -570,6 +574,16 @@ public class Facade {
         return responseFor(() -> new Report(
                 report_controller.createByCategoryReport(name, report_producer,
                         CatName, subCatName, subSubCatName)));
+    }
+
+    public ResponseT<Map<Integer, Integer>> confirmOrder(int order_id) {
+        return null;
+        //TODO: implement from previous service
+    }
+
+    public SI_Response confirmOrderAmount(Map<Integer, Integer> actual_amount) {
+        return null;
+        //TODO: implement from previous service
     }
 
     public ResponseT<Order> getOrder(int id) {
@@ -723,6 +737,38 @@ public class Facade {
         return null;
     }
 
+    public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty) {
+        if (r.success) {
+            Item item = items.getItemsFromProdID(product_id);
+            Supplier supplier = items.checkBestSupplier(item); //Maybe we can combine both methods and this method needs to get prodid
+            return responseFor(() -> orders.createShortage(supplier, item, min_qty, OrderType.Shortages,
+                    LocalDate.now(), LocalDate.now().plusDays(7)));
+        } else {
+            return responseFor(() -> {
+                throw new BusinessLogicException("NO NEED FOR SHORTAGE ORDER!");
+            });
+        }
+    }
+
+    public ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
+        Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
+        Supplier supplier = items.checkBestSupplier((Item) itemsWithAmount.keySet().toArray()[0]);
+        Order order = orders.create(supplier, OrderType.Periodical,
+                LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
+        orders.orderItemFromMap(order, itemsWithAmount);
+
+        return responseFor(() -> order.getId());
+    }
+
+    public SI_Response createOrderPeriodicVoid(Map<Integer, Integer> productAmount, int weekDay) {
+        Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
+        Supplier supplier = items.checkBestSupplier((Item) itemsWithAmount.keySet().toArray()[0]);
+        Order order = orders.create(supplier, OrderType.Periodical,
+                LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
+
+        return responseForVoid(() -> orders.orderItemFromMap(order, itemsWithAmount));
+    }
+
     protected SI_Response voidOk() {
         return new SI_Response(true, null);
     }
@@ -755,7 +801,6 @@ public class Facade {
             return voidError(e.getMessage());
         }
     }
-
 
 
     public static class SI_Response {
