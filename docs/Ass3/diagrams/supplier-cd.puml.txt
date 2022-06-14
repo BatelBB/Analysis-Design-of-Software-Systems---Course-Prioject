@@ -1,0 +1,246 @@
+@startuml
+
+package presentationLayer {
+	class PresentationController {
+		---
+		startSupplierMenu(): void
+	}
+	
+	class UserInput {
+		scanner: java.util.Scanner
+		{static} instance: UserInput
+		---
+		{static} getInstance(): UserInput
+		nextInt(msg: String): int
+		nextBoolean(msg: String): boolean
+		nextString(msg: String): String
+	}
+	
+	class UserOutput {
+		{static} instance: UserOutput
+		---
+		{static} getInstance(): UserOutput
+		println(str: String): void
+		print(str: String): void
+	}
+	
+	class PresentationFacade {
+		{static} main(args: String[]): void
+	}
+	
+	class Menu {
+		{static} getMainMenu: String() 
+		{static} getItemSubmenu: String() 
+		{static} getOrderSubmenu: String()
+		{static} getSupplierSubmenu: String()
+		{static} getQuantityAgreementSubmenu: String() 
+		{static} getSupplierEditSubmenu: String()
+	}
+
+	PresentationController "1" -- "1" UserInput: uses
+	PresentationController "1" -- "1" UserOutput: uses
+	UserInput "1" -- "1" UserOutput: uses
+	PresentationController "1" -- "1" Menu: uses
+	PresentationFacade "1" -- "1" PresentationController: uses
+}
+
+package shared.response {
+	class Response {
+		success: final boolean { final }
+		error: String { final }
+		---
+		{static} success(): Response
+		{static} error(message: String): Response
+	}
+	
+	class ResponseT {
+		data: T { final }
+		---
+		{static} success(data: T): ResponseT
+		{static} error(message: String): ResponseT
+	}
+	
+	ResponseT -u-|> Response: extends 
+
+}
+
+package businessLayer {
+	
+	package businessLayer.entity as entity {
+		
+		class Supplier {
+			ppn: int
+			bankNumber: int
+			name: string
+			isDelivering: boolean
+			paymentCondition: PaymentCondition
+			regularSupplyingDay: Weekday?
+		}
+		
+		class Contact {
+			name: string
+			email: string
+			phoneNumber: string
+		}
+		
+		class Order {
+			ordered: LocalDate
+			provided: LocalDate
+			totalPrice: float
+		}
+		
+		class Item {
+			catalogNumber: int
+			name: string
+			category: string
+			price: float
+		}
+		
+		class QuantityDiscount {
+			quantity: int
+			discount: float
+		}
+		
+		Supplier "1" *-- "1" Contact: "contacted via"
+		
+		QuantityDiscount "*" --* "1" Item: "is for"
+		
+		<>   item_order_link_node
+		Item "*" o--  item_order_link_node: ordering
+		item_order_link_node  --o "*" Order: ordering
+		note left of item_order_link_node: "quantity: int"
+		
+		Supplier "1" -- "*" Item: supplied
+	}
+	
+	package businessLayer.controller as ctrl {
+		class SupplierController {
+		
+		}
+		
+		class OrderController {
+		
+		}
+		
+		class ItemController {
+		
+		}
+		
+		SupplierController "1" *-- "   *   " Supplier
+		ItemController "1" *-- "*" Item
+		OrderController "1" *-- "*" Order
+	}
+	
+	package businessLayer.service {
+		class Service {
+			seedExample(): Response
+createSupplier(
+	ppn: int, bankAccount: int, name: String,
+	isDelivering: boolean, paymentCondition: PaymentCondition,
+	regularSupplyingDays: DayOfWeek,
+	contactName: String, contactPhone: String, contactEmail: String): ResponseT<Supplier>
+deleteSupplier(ppn: int): Response
+createItem(supplierPPN: int, catalogNumber: int, productID: int, name: String, category: String, price: float): ResponseT<Item>
+deleteItem(ppn: int, catalogN: int): Response
+createDiscount(supplierPPN: int, catalogN: int, amount: int, discount: float): ResponseT<QuantityDiscount>
+deleteDiscount(discount: QuantityDiscount): Response
+createOrder(supplierPPN: int, ordered: LocalDate, delivered: LocalDate, type: Order.OrderType): ResponseT<Order> 
+deleteOrder(orderId: int): Response
+orderItem(orderId: int, supplier: int, catalogNumber: int, amount: int): void
+findCheapestSupplierFor(productID: int, amount: int): Supplier
+		}
+		
+		class SupplierController {
+			create(int ppn, int bankAccount, String name, boolean isDelivering,
+                                  PaymentCondition paymentCondition,
+                                  DayOfWeek regularSupplyingDays, MutableContact contact): Supplier
+    	all(): Collection<Supplier>
+    	delete(ppn: int): void
+		}
+		
+		class OrderController {
+			create(supplierPPN: int, ordered: LocalDate, provided: LocalDate): Order
+			removeItemFromOrders(item: Item): void
+			orderItem(order: Order, item: Item, amount: int): void
+			delete(orderId: int): void
+			all(): Collection<Order>
+		}
+		
+		class ItemController {
+			create(supplierPPN: int, catalogNumber: int, name: String, category: String, price: String): Item
+		}
+		
+		Service "1" -- "1" SupplierController
+		Service "1" -- "1" OrderController
+		Service "1" -- "1" ItemController
+	}
+	
+	ctrl --[hidden]-> entity
+}
+
+package dataLayer {
+	package records {
+		package readonly {
+			interface ItemData
+			interface ItemInOrderData
+			interface OrderData
+			interface SupplierData
+			interface ProductData
+		}
+		
+		class ItemRecord
+		ItemRecord -u-|> ItemData
+		
+		class ItemInOrderRecord
+		ItemInOrderRecord -u-|> ItemInOrderData
+		
+		class OrderRecord
+		OrderRecord -u-|> OrderData
+		
+		class SupplierRecord
+		SupplierRecord -u-|> SupplierData
+		
+		class ProductRecord
+		ProductRecord -u-|> ProductData
+	}
+	
+	abstract class BaseDao
+	BaseDao -[hidden]u-> records
+	
+	circle " " as daoExt
+	daoExt -u-|> BaseDao
+	
+	class ItemDao
+	ItemDao -u-|> daoExt
+	ItemDao *-u- ItemRecord
+	
+	class ItemInOrderDao
+	ItemInOrderDao *-u- ItemInOrderRecord
+	ItemInOrderDao -u-|> daoExt
+	
+	class OrderDao
+	OrderDao *-u- OrderRecord
+	OrderDao -u-|> daoExt
+	
+	class SupplierDao
+	SupplierDao *-u- SupplierRecord
+	SupplierDao -u-|> daoExt
+	
+	
+	class ProductDao
+	ProductDao *-u- ProductRecord
+	ProductDao -u-|> daoExt
+	
+	class "PersistenceController" as dal
+	dal -u- ItemDao
+	dal -u- ItemInOrderDao
+	dal -u- OrderDao
+	dal -u- SupplierDao
+	dal -u- ProductDao
+}
+
+dataLayer -[hidden]u-> ctrl
+
+	PresentationController "1" -- "1" Service: uses
+	Service -[hidden]-> presentationLayer
+@enduml
