@@ -1,7 +1,7 @@
-package groupk.shared.presentation.command;
+package groupk.shared.PresentationLayer.EmployeesLogistics.command;
 
 import groupk.logistics.business.DLicense;
-import groupk.shared.presentation.CommandRunner;
+import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Product;
 import groupk.shared.service.dto.Shift;
@@ -10,7 +10,6 @@ import groupk.shared.service.dto.Site;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class LoadSample implements Command {
     @Override

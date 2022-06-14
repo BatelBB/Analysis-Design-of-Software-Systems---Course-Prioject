@@ -1,25 +1,25 @@
-package groupk.shared.presentation.command;
+package groupk.shared.PresentationLayer.EmployeesLogistics.command;
 
-import groupk.shared.presentation.CommandRunner;
+import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.Shift;
 
 import java.util.Calendar;
 
-public class DeleteShiftStaff implements Command {
+public class AddShiftStaff implements Command {
     @Override
     public String name() {
-        return "delete shift staff";
+        return "add shift staff";
     }
 
     @Override
     public String description() {
-        return "remove an employee from shift";
+        return "add employee as staff in shift";
     }
 
     @Override
     public boolean isMatching(String line) {
-        return line.startsWith("delete shift staff");
+        return line.startsWith("add shift staff");
     }
 
     @Override
@@ -27,7 +27,7 @@ public class DeleteShiftStaff implements Command {
         if (command.length != 6) {
             System.out.println("Error: All arguments must be supplied.");
             System.out.println("Usage:");
-            System.out.println("> delete shift staff <date> <type> <id>");
+            System.out.println("> add shift staff <date> <type> <id>");
             System.out.println("  date is formatted as yyyy-mm-dd, for example 2022-04-25.");
             System.out.println("  type is either Morning or Evening.");
             return;
@@ -51,11 +51,11 @@ public class DeleteShiftStaff implements Command {
 
         String id = command[5];
 
-        Response<Shift> changed = runner.getService().removeEmployeeFromShift(runner.getSubject(), date, type, id);
+        Response<Shift> changed = runner.getService().addEmployeeToShift(runner.getSubject(), date, type, id);
         if (changed.isError()) {
             System.out.printf("Error: %s\n", changed.getErrorMessage());
             return;
         }
-        System.out.println("Employee removed from shift.");
+        System.out.println("Employee added to shift.");
     }
 }

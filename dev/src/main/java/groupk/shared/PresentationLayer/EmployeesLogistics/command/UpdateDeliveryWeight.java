@@ -1,31 +1,30 @@
-package groupk.shared.presentation.command;
+package groupk.shared.PresentationLayer.EmployeesLogistics.command;
 
-import groupk.shared.presentation.CommandRunner;
+import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.Response;
-import groupk.shared.service.dto.Product;
 
-public class DeleteDeliveryProduct implements Command {
+public class UpdateDeliveryWeight implements Command {
     @Override
     public String name() {
-        return "delete delivery product";
+        return "update delivery weight";
     }
 
     @Override
     public String description() {
-        return "remove product from delivery";
+        return "set weighted weight of delivery";
     }
 
     @Override
     public boolean isMatching(String line) {
-        return line.startsWith("delete delivery product");
+        return line.startsWith("update delivery weight");
     }
 
     @Override
     public void execute(String[] command, CommandRunner runner) {
-        if (command.length != 6) {
+        if (command.length != 5) {
             System.out.println("Error: Wrong number of arguments.");
             System.out.println("Usage:");
-            System.out.println("> delete delivery product <id> <product-id> <count>");
+            System.out.println("> update delivery weight <id> <weight>");
             return;
         }
 
@@ -33,19 +32,19 @@ public class DeleteDeliveryProduct implements Command {
         try {
             id = CommandRunner.parseInt(command[3]);
         } catch (IllegalArgumentException e) {
-            System.out.printf("Error: id %s\n", e.getMessage());
+            System.out.printf("Error: weight %s\n", e.getMessage());
             return;
         }
 
-        int count;
+        int weight;
         try {
-            count = CommandRunner.parseInt(command[5]);
+            weight = CommandRunner.parseInt(command[4]);
         } catch (IllegalArgumentException e) {
-            System.out.printf("Error: count %s\n", e.getMessage());
+            System.out.printf("Error: weight %s\n", e.getMessage());
             return;
         }
 
-        Response<Boolean> response = runner.getService().moveProducts(runner.getSubject(), id, new Product(command[4], count));
+        Response<Boolean> response = runner.getService().setWeightForDelivery(runner.getSubject(), id, weight);
         if (response.isError()) {
             System.out.printf("Error: %s\n", response.getErrorMessage());
             return;
@@ -54,6 +53,6 @@ public class DeleteDeliveryProduct implements Command {
             System.out.println("Error: Something went wrong.");
             return;
         }
-        System.out.println("Added product to delivery.");
+        System.out.println("Updated weight of delivery.");
     }
 }

@@ -1,6 +1,6 @@
-package groupk.shared.presentation.command;
+package groupk.shared.PresentationLayer.EmployeesLogistics.command;
 
-import groupk.shared.presentation.CommandRunner;
+import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 
 public class Quit implements Command {
     @Override

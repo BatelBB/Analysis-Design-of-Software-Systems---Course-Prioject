@@ -1,13 +1,11 @@
-package groupk.shared.presentation.command;
+package groupk.shared.PresentationLayer.EmployeesLogistics.command;
 
-import groupk.logistics.DataLayer.TruckingDTO;
-import groupk.shared.presentation.CommandRunner;
+import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.Delivery;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
-import java.util.List;
 
 public class CreateDelivery implements Command {
     @Override

@@ -1,26 +1,26 @@
-package groupk.shared.presentation.command;
+package groupk.shared.PresentationLayer.EmployeesLogistics.command;
 
-import groupk.shared.presentation.CommandRunner;
+import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.Site;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class AddDeliveryDestination implements Command {
+public class AddDeliverySource implements Command {
     @Override
     public String name() {
-        return "add delivery destination";
+        return "add delivery source";
     }
 
     @Override
     public String description() {
-        return "add destination to delivery";
+        return "add source to delivery";
     }
 
     @Override
     public boolean isMatching(String line) {
-        return line.startsWith("add delivery destination");
+        return line.startsWith("add delivery source");
     }
 
     @Override
@@ -28,7 +28,7 @@ public class AddDeliveryDestination implements Command {
         if (command.length != 12) {
             System.out.println("Error: Wrong number of arguments.");
             System.out.println("Usage:");
-            System.out.println("> add delivery destination <id> <contact-name> <contact-phone> <area> <city> <street> <house-number> <apartment> <floor>");
+            System.out.println("> add delivery source <id> <contact-name> <contact-phone> <area> <city> <street> <house-number> <apartment> <floor>");
             return;
         }
 
@@ -68,11 +68,11 @@ public class AddDeliveryDestination implements Command {
         LinkedList<Site> sites = new LinkedList<Site>();
         sites.add(site);
 
-        Response<List<String>> response = runner.getService().addDestination(runner.getSubject(), id, sites);
+        Response<List<String>> response = runner.getService().addSources(runner.getSubject(), id, sites);
         if (response.isError()) {
             System.out.printf("Error: %s\n", response.getErrorMessage());
             return;
         }
-        System.out.println("Delivery destination added.");
+        System.out.println("Delivery source added.");
     }
 }

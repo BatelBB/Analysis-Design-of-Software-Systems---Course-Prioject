@@ -1,5 +1,6 @@
 package groupk.shared.PresentationLayer;
 
+import groupk.shared.PresentationLayer.EmployeesLogistics.Application;
 import groupk.shared.business.CategoryController;
 import groupk.shared.business.ProductController;
 import groupk.shared.business.Inventory.Service.CategoryService;
@@ -58,7 +59,8 @@ public class App {
             in = UserInput.getInstance().nextInt("Which module do you need?\n" +
                     "1. Supplier module\n" +
                     "2. Inventory module\n" +
-                    "3. Exit\n");
+                    "3. Employees and Logistics modules\n" +
+                    "4. Exit\n");
             switch (in) {
                 case (1): {
                     supplierPresentation.startSupplierMenu();
@@ -68,7 +70,11 @@ public class App {
                     startInventoryMenu();
                     break;
                 }
-                case (3): {
+                case (3) : {
+                    Application.main(new String[]{});
+                    break;
+                }
+                case (4): {
                     UserOutput.getInstance().println("Goodbye!");
                     return;
                 }
