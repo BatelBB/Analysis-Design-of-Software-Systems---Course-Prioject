@@ -30,8 +30,10 @@ public class VehicleMapper {
             prepStat.setInt(4, weight);
             prepStat.setInt(5, maxWeight);
             n = prepStat.executeUpdate();
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception e){
+            if (e.getMessage().equals("[SQLITE_CONSTRAINT_PRIMARYKEY]  A PRIMARY KEY constraint failed (UNIQUE constraint failed: Vehicles.registration_plate)"))
+                throw new IllegalArgumentException("Oops, there is another vehicle with that registration plate");
+            throw new IllegalArgumentException("There was an error: " + e.getMessage());
         }
         return n == 1;
     }

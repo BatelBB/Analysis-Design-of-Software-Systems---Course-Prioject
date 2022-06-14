@@ -3,6 +3,7 @@ import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
 import groupk.workers.business.Facade;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +21,15 @@ public class DalEmployeeTest {
     public void setService() {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    @AfterEach
+    public void afterService() {
+        try {
+            connection.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import groupk.workers.business.Facade;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +25,16 @@ public class BusinessTest {
             throwables.printStackTrace();
         }
     }
+
+    @AfterEach
+    public void afterService() {
+        try {
+            connection.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
     @Test
     public void testCreateEmployee()
     {

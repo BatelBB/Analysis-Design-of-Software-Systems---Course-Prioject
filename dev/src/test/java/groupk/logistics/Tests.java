@@ -10,6 +10,7 @@ import groupk.logistics.business.TruckManagerController;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -30,17 +31,28 @@ public class Tests {
 
     private TruckManagerController truckManagerController ;
     private DriverController driverController;
-    myDataBase myDataBase;
+    private myDataBase myDataBase;
     protected Connection connection;
-    public Tests() {
+
+    @BeforeEach
+    public void setService() {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+            myDataBase = new myDataBase(connection);
+            truckManagerController = TruckManagerController.getInstance();
+            driverController = DriverController.getInstance();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        myDataBase = new myDataBase(connection);
-        truckManagerController = TruckManagerController.getInstance();
-        driverController = DriverController.getInstance();
+    }
+
+    @AfterEach
+    public void afterService() {
+        try {
+            connection.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
 
@@ -169,7 +181,6 @@ public class Tests {
         setDetails();
         truckManagerController.moveProductsToTrucking(1,1,"Eggs_4902505139314",1);
         assertEquals(driverController.printMyTruckings(319034121).contains("Product: " + "Eggs_4902505139314" + ", Quantity: " + "1"),true);
-
 
     }
     //

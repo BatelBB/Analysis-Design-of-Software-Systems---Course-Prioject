@@ -117,8 +117,8 @@ public class myDataBase {
             s.addBatch(Truckings_Products);
             s.addBatch(Truckings_Sources);
             s.executeBatch();
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("There was a problem to connect the database: " + e.getMessage());
         }
     }
 }

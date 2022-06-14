@@ -31,8 +31,8 @@ public class DriverLicencesMapper {
                 DTOList.add(rs.getString(1));
                 driverLicencesIDMapper.addDLicense(username, rs.getString(1));
             }
-        } catch (SQLException s) {
-            throw new IllegalArgumentException(s.getMessage());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Oops, there was unexpected problem with get the licenses from the driver: \"" + username + "\"\nError description: " + e.getMessage());
         }
         driverLicencesIDMapper.updateDriver(username);
         return DTOList;
@@ -48,10 +48,10 @@ public class DriverLicencesMapper {
             n = prepStat.executeUpdate();
             if (driverLicencesIDMapper.isDriverUpdated(username))
                 driverLicencesIDMapper.addDLicense(username, license.name());
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
         }
-
+        catch (SQLException e){
+            throw new IllegalArgumentException("Oops, there was unexpected problem with add the license '" + license.name() + "' to the driver: '" + username + "'\nError description: " + e.getMessage());
+        }
         return n == 1;
     }
 }

@@ -78,8 +78,9 @@ public class TruckingMapper {
             prepStat.setLong(7, trucking.getMinutes());
             prepStat.setInt(8, trucking.getWeight());
             n = prepStat.executeUpdate();
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        }
+        catch (SQLException e){
+                throw new IllegalArgumentException("Oops, something got wrong and we couldn't add your trucking :( \nbecause: " + e.getMessage());
         }
         if (n == 1)
             truckingIDMap.insertTrucking(trucking);
@@ -177,7 +178,7 @@ public class TruckingMapper {
             } else
                 throw new IllegalArgumentException("There is no trucking with id: " + TruckingId);
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -196,7 +197,7 @@ public class TruckingMapper {
             } else
                 throw new IllegalArgumentException("There is no trucking with id: " + TruckingId);
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -219,7 +220,7 @@ public class TruckingMapper {
             } else
                 throw new IllegalArgumentException("There is no trucking with that id");
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something in verification process got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -243,8 +244,8 @@ public class TruckingMapper {
                 prepStat.setInt(9, source.getApartment());
                 if (prepStat.executeUpdate() < 1)
                     throw new IllegalArgumentException("The destination is already exist");
-            } catch (SQLException e) {
-                Exceptions.add(e.getMessage());
+            } catch (Exception e){
+                Exceptions.add("There was a problem with the destination with the contact guy: " + source.getContactGuy() + "\nthe error description: " + e.getMessage());
             }
         }
         return Exceptions;
@@ -271,8 +272,8 @@ public class TruckingMapper {
             while (rs.next()) {
                 sites.add(new SiteDTO(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getString(6)));
             }
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Oops, there was unexpected problem with get the sources of trucking: \"" + TruckingID + "\"\nError description: " + e.getMessage());
         }
         return sites;
     }
@@ -295,8 +296,8 @@ public class TruckingMapper {
                 prepStat.setInt(9, destination.getApartment());
                 if (prepStat.executeUpdate() < 1)
                     throw new IllegalArgumentException("The destination is already exist");
-            } catch (SQLException e) {
-                Exceptions.add(e.getMessage());
+            } catch (Exception e){
+                Exceptions.add("There was a problem with the destination with the contact guy: " + destination.getContactGuy() + "\nthe error description: " + e.getMessage());
             }
         }
         return Exceptions;
@@ -323,8 +324,8 @@ public class TruckingMapper {
             while (rs.next()) {
                 sites.add(new SiteDTO(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getString(6)));
             }
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Oops, there was unexpected problem with get the destinations of trucking: \"" + TruckingID + "\"\nError description: " + e.getMessage());
         }
         return sites;
     }
@@ -346,7 +347,7 @@ public class TruckingMapper {
             prepStat.setInt(3, productForTrucking.getQuantity());
             n = prepStat.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
 
     }
@@ -361,7 +362,7 @@ public class TruckingMapper {
                 productForTruckings.add(new ProductForTruckingDTO(rs.getString(2), rs.getInt(3)));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
 
         return productForTruckings;
@@ -377,8 +378,8 @@ public class TruckingMapper {
             if (rs.next()) {
                 return true;
             }
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Deleted products successfully");
         }
         return false;
     }
@@ -435,7 +436,7 @@ public class TruckingMapper {
         try {
             PreparedStatement pstmt = myDataBase.connection.prepareStatement(Query);
             n = pstmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
         return n > 0;
@@ -530,7 +531,7 @@ public class TruckingMapper {
                 truckingIDMap.insertTrucking(newTrucking);
             }
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something in verification process got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -553,7 +554,7 @@ public class TruckingMapper {
                 truckingIDMap.insertTrucking(newTrucking);
             }
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops, something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -576,7 +577,7 @@ public class TruckingMapper {
                 truckingIDMap.insertTrucking(newTrucking);
             }
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -599,7 +600,7 @@ public class TruckingMapper {
                 truckingIDMap.insertTrucking(newTrucking);
             }
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -614,7 +615,7 @@ public class TruckingMapper {
                 toReturn += rs.getInt(1);
             }
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());
         }
         return toReturn;
     }
@@ -629,7 +630,7 @@ public class TruckingMapper {
             if (rs.next()) {
                 regisrationPlate = rs.getString(3);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
         return regisrationPlate;
