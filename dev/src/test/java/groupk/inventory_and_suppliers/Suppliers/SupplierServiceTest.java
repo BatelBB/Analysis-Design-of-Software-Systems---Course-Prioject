@@ -66,7 +66,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
     void getSupplier() throws BusinessLogicException {
         suppliers.createSupplier(1, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
-                "john", "Lorem Ave. 23, Ipsumistan", "054");
+                "john", "054-8694859", "Lorem 23, Ipsumistan");
         Supplier supplier = assertSuccess(suppliers.getSupplier(1));
         Assertions.assertNotNull(supplier);
         Assertions.assertEquals(1, supplier.getPpn());
@@ -84,7 +84,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         
         Supplier supplier = assertSuccess(suppliers.createSupplier(ppn, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
-                "john", "052-1758495", "Lorem Ave. 23, Ipsumville"));
+                "john", "054-8694859", "Lorem 23, Ipsumistan"));
         Product product = assertSuccess(inventory.addProduct("Milk", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%"));
         Item item = assertSuccess(suppliers.createItem(ppn, 1, product.getProduct_id(),  1));
@@ -103,7 +103,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         ServiceBase.ResponseT<Supplier> otherResponse = suppliers.createSupplier(ppn, 222,
                 "Ipsum", false,
                 PaymentCondition.Credit, DayOfWeek.MONDAY,
-                "george", "Foo street, Foobar City", "050");
+                "george", "054-8694859", "Lorem 23, Ipsumistan");
         assertTrue(otherResponse.success,
                 "creating new ReadOnlysupplier with PPN of deleted ReadOnlysupplier should have worked");
         assertNotNull(otherResponse.data,
