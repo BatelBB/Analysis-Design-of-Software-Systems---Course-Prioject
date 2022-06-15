@@ -18,11 +18,10 @@ public class CommandRunner {
     private Employee subject;
     private Service service;
 
-    public CommandRunner(Command[] commands, Runnable onStop, Connection conn) {
+    public CommandRunner(Command[] commands, Runnable onStop, Service service) {
         this.commands = commands;
         this.onStop = onStop;
-        this.service = new Service(conn);
-        this.service.loadEmployeeDB();
+        this.service = service;
     }
 
     public void invoke(String line) {
@@ -45,12 +44,8 @@ public class CommandRunner {
         onStop.run();
     }
 
-    public void setSubject(String subject) {
-        Response<Employee> subjectResponse = service.readEmployee(subject, subject);
-        if (subjectResponse.isError()) {
-            throw new RuntimeException("subject should be an employee's ID");
-        }
-        this.subject = subjectResponse.getValue();
+    public void setSubject(Employee subject) {
+        this.subject = subject;
     }
 
     public String getSubject() {

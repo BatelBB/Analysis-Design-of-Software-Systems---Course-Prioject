@@ -5,6 +5,7 @@ import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 import groupk.shared.business.Suppliers.Service.ISupplierService;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
+import groupk.shared.service.dto.Employee;
 
 import static groupk.shared.service.ServiceBase.*;
 
@@ -26,7 +27,8 @@ public class SupplierPresentationFacade {
 
     static Scanner scanner = new Scanner(System.in);
 
-    public void startSupplierMenu() {
+    public void startSupplierMenu(Employee currentUser) {
+        // TODO Show only actions currentUser can do.
         while (true) {
             int userInput = input.nextInt(Menu.getMainMenu());
             switch (userInput) {

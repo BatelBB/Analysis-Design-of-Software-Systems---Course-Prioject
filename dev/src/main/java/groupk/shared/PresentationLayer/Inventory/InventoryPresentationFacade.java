@@ -5,6 +5,7 @@ import groupk.shared.service.Inventory.ProductService;
 import groupk.shared.service.Inventory.ReportService;
 import groupk.shared.service.Inventory.InventoryService;
 import groupk.shared.service.ServiceBase;
+import groupk.shared.service.dto.Employee;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -28,7 +29,8 @@ public class InventoryPresentationFacade {
         this.reports = reports;
     }
 
-    public void execute(String input) {
+    public void execute(String input, Employee currentUser) {
+        // TODO Show only actions currentUser can do.
         try {
             if (!input.equals("exit")) {
                 String command = input.substring(0, input.indexOf(" "));
