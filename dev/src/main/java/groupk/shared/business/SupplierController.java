@@ -1,9 +1,6 @@
 package groupk.shared.business;
 
-import groupk.shared.business.Inventory.Product;
-import groupk.shared.business.Inventory.Service.Service;
 import groupk.shared.business.Suppliers.BusinessLogicException;
-import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
@@ -13,7 +10,6 @@ import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
 
 import java.time.DayOfWeek;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SupplierController {
     Map<Integer, Supplier> suppliers;

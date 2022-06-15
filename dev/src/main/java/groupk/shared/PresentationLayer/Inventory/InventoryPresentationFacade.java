@@ -3,7 +3,7 @@ package groupk.shared.PresentationLayer.Inventory;
 import groupk.shared.business.Inventory.Service.CategoryService;
 import groupk.shared.business.Inventory.Service.ProductService;
 import groupk.shared.business.Inventory.Service.ReportService;
-import groupk.shared.business.Inventory.Service.Service;
+import groupk.shared.business.Inventory.Service.InventoryService;
 import groupk.shared.service.ServiceBase;
 
 import java.time.LocalDate;
@@ -16,12 +16,12 @@ import java.util.function.Supplier;
 
 public class InventoryPresentationFacade {
     private String[] args;
-    private final Service inventory_service;
+    private final InventoryService inventory_service;
     private final CategoryService categories;
     private final ProductService products;
     private final ReportService reports;
 
-    public InventoryPresentationFacade(Service inventory_service, CategoryService categories, ProductService products, ReportService reports) {
+    public InventoryPresentationFacade(InventoryService inventory_service, CategoryService categories, ProductService products, ReportService reports) {
         this.inventory_service = inventory_service;
         this.categories = categories;
         this.products = products;

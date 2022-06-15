@@ -5,13 +5,11 @@ import groupk.shared.business.ProductController;
 import groupk.shared.business.Inventory.Service.CategoryService;
 import groupk.shared.business.Inventory.Service.ProductService;
 import groupk.shared.business.Inventory.Service.ReportService;
-import groupk.shared.business.Inventory.Service.Service;
+import groupk.shared.business.Inventory.Service.InventoryService;
 import groupk.shared.business.Suppliers.Service.ISupplierService;
 import groupk.shared.business.Suppliers.Service.SupplierService;
 import groupk.shared.PresentationLayer.Inventory.InventoryPresentationFacade;
 import groupk.shared.PresentationLayer.Suppliers.SupplierPresentationFacade;
-import groupk.shared.PresentationLayer.Suppliers.UserInput;
-import groupk.shared.PresentationLayer.Suppliers.UserOutput;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
 import groupk.inventory_suppliers.shared.ioc.ClassContainer;
 
@@ -34,7 +32,7 @@ public class AppContainer {
         ioc.singleton(ProductController.class);
         ioc.singleton(ReportService.class);
         ioc.singleton(CategoryService.class);
-        ioc.singleton(Service.class);
+        ioc.singleton(InventoryService.class);
         ioc.singleton(SupplierPresentationFacade.class);
         ioc.singleton(InventoryPresentationFacade.class);
     }

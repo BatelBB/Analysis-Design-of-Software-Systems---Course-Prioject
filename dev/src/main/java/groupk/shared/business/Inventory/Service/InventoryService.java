@@ -12,16 +12,16 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-public class Service extends ServiceBase {
+public class InventoryService extends ServiceBase {
     private final ProductService product_service;
     private final CategoryService category_service;
     private final ReportService report_service;
     private final ISupplierService supplierService;
 
-    public Service(ISupplierService supplierService,
-                   ProductService productService,
-                   ReportService reportService,
-                   CategoryService categoryService) {
+    public InventoryService(ISupplierService supplierService,
+                            ProductService productService,
+                            ReportService reportService,
+                            CategoryService categoryService) {
         this.product_service = productService;
         this.report_service = reportService;
         this.category_service = categoryService;

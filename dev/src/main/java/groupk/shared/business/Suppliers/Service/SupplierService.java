@@ -1,7 +1,6 @@
 package groupk.shared.business.Suppliers.Service;
 
 import groupk.inventory_suppliers.shared.utils.Tuple;
-import groupk.shared.business.Inventory.Service.Service;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Order;
@@ -17,16 +16,10 @@ import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
 import groupk.shared.service.ServiceBase;
 
-import static groupk.shared.service.ServiceBase.*;
-
-import java.sql.Connection;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class SupplierService extends ServiceBase implements ISupplierService {
 

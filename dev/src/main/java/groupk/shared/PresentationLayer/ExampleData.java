@@ -2,10 +2,9 @@ package groupk.shared.PresentationLayer;
 
 import groupk.shared.business.Inventory.Service.Objects.Product;
 import groupk.shared.business.Inventory.Service.Objects.ProductItem;
-import groupk.shared.business.Inventory.Service.Service;
+import groupk.shared.business.Inventory.Service.InventoryService;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.Service.ISupplierService;
-import groupk.shared.business.Suppliers.Service.SupplierService;
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 
@@ -13,7 +12,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 public class ExampleData {
-    public static void loadExampleData(Service inventory, ISupplierService suppliers) {
+    public static void loadExampleData(InventoryService inventory, ISupplierService suppliers) {
         int ppn_office = suppliers.createSupplier(1, 1, "OfficeLi",
                 true, PaymentCondition.Credit, DayOfWeek.SUNDAY,
                 "Ofir", "1-800-office", "ofir@office.li").data.getPpn();

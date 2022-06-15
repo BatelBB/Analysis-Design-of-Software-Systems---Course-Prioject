@@ -1,7 +1,7 @@
 package groupk.shared.PresentationLayer;
 
 import groupk.shared.PresentationLayer.EmployeesLogistics.MainEmployeesAndDelivery;
-import groupk.shared.business.Inventory.Service.Service;
+import groupk.shared.business.Inventory.Service.InventoryService;
 import groupk.shared.business.Suppliers.Service.ISupplierService;
 import groupk.shared.PresentationLayer.Inventory.InventoryPresentationFacade;
 import groupk.shared.PresentationLayer.Suppliers.SupplierPresentationFacade;
@@ -19,7 +19,7 @@ public class App {
     private final ISupplierService supplierService;
     private final SupplierPresentationFacade supplierPresentation;
     private final InventoryPresentationFacade inventoryPresentationFacade;
-    private final Service inventoryService;
+    private final InventoryService inventoryService;
     private final Connection appConnection;
 
     public App(String dbPath) {
@@ -39,7 +39,7 @@ public class App {
         dal = ioc.get(PersistenceController.class);
         inventoryPresentationFacade = ioc.get(InventoryPresentationFacade.class);
         supplierPresentation = ioc.get(SupplierPresentationFacade.class);
-        inventoryService = ioc.get(Service.class);
+        inventoryService = ioc.get(InventoryService.class);
         supplierService = ioc.get(ISupplierService.class);
         if (shouldLoadExample) {
             ExampleData.loadExampleData(inventoryService, supplierService);

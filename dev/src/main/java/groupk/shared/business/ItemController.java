@@ -1,9 +1,6 @@
 package groupk.shared.business;
 
 import groupk.inventory_suppliers.shared.utils.Tuple;
-import groupk.shared.business.ProductController;
-import groupk.shared.business.Inventory.Product;
-import groupk.shared.business.Inventory.Service.Service;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
