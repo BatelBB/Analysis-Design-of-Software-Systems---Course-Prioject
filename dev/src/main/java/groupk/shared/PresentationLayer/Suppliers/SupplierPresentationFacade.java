@@ -44,7 +44,7 @@ public class SupplierPresentationFacade {
                             DayOfWeek day = isDelivering ? chooseDay() : null;
                             String contactName = input.nextString("Enter the supplier's contact name: ");
                             String email = input.nextString("Enter the supplier's contact email: ");
-                            String phoneNum = input.nextString("Enter the supplier's contact phone number: ");
+                            String phoneNum = input.nextPhone("Enter the supplier's contact phone number: ");
                             ResponseT<Supplier> supplier = service.createSupplier(ppn, bankAccount, name, isDelivering,
                                     paymentCondition, day, contactName, phoneNum, email);
                             if (supplier.success) {

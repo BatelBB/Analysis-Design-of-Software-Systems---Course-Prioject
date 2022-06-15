@@ -4,13 +4,17 @@ package groupk.shared.PresentationLayer.Suppliers;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
+import java.util.MissingFormatArgumentException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class UserInput {
 
     private Scanner scanner = new Scanner(System.in);
 
     private static UserInput instance = null;
+
+    private final Pattern phonePattern = Pattern.compile("^05\\d\\-\\d{7}$");
 
     private UserInput() {
 
@@ -125,11 +129,11 @@ public class UserInput {
             String prompt, Class<TEnum> enumType) {
         TEnum selected = null;
         TEnum[] values = enumType.getEnumConstants();
-        while(true) {
+        while (true) {
             try {
                 UserOutput.getInstance().println(prompt);
                 for (int i = 0; i < values.length; i++) {
-                    UserOutput.getInstance().println((i+1) + ": " + values[i]);
+                    UserOutput.getInstance().println((i + 1) + ": " + values[i]);
                 }
                 return values[Integer.parseInt(scanner.nextLine().trim()) - 1];
             } catch (Exception e) {
@@ -137,4 +141,24 @@ public class UserInput {
             }
         }
     }
+
+    public String nextPhone(String s) {
+        boolean retry = true;
+        LocalDate nextDate = null;
+        String inputLine = "";
+        while (retry) {
+            try {
+                UserOutput.getInstance().print(s + "(format: 05X-XXXXXXX)");
+                inputLine = scanner.nextLine();
+                if (!inputLine.equals(phonePattern)) {
+                    throw new MissingFormatArgumentException("Please use format: 05X-XXXXXXX");
+                }
+                retry = false;
+            } catch (Exception e) {
+                UserOutput.getInstance().println(e.getMessage());
+            }
+        }
+        return inputLine;
+    }
 }
+
