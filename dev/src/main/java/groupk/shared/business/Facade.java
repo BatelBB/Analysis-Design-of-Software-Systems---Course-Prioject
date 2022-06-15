@@ -297,7 +297,7 @@ public class Facade {
         return logistics.listVehicles();
     }
 
-    public Response<Delivery> createDelivery(String subjectID, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<groupk.shared.service.dto.Product> products, long hours, long minutes) {
+    public Response<List<String>[]> createDelivery(String subjectID, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<Integer> orders, long hours, long minutes) {
         if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
@@ -309,7 +309,7 @@ public class Facade {
         if (!isThereWorkerWithThisRoleInShift(subjectID, date, Employee.Role.Logistics))
             return new Response<>("There is no logistics worker in this shift to except delivery");
         else
-            return logistics.createDelivery(Integer.parseInt(subjectID), registrationPlateOfVehicle, date, Integer.parseInt(driverUsername), sources, destinations, products, hours, minutes);
+            return logistics.createDelivery(Integer.parseInt(subjectID), registrationPlateOfVehicle, date, Integer.parseInt(driverUsername), sources, destinations, orders, hours, minutes);
     }
 
     public Response<List<Delivery>> listDeliveriesWithVehicle(String subjectID, String registration) {
@@ -333,11 +333,11 @@ public class Facade {
         return logistics.setWeightForDelivery(Integer.parseInt(subjectID), deliveryID, weight);
     }
 
-    public Response<Boolean> addProductsToTrucking(String subjectID, int truckingID, groupk.shared.service.dto.Product products) {
+    public Response<Boolean> addOrdersToTrucking(String subjectID, int truckingID, int orderID) {
         if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
-        return logistics.addProductsToTrucking(Integer.parseInt(subjectID), truckingID, products);
+        return logistics.addOrdersToTrucking(Integer.parseInt(subjectID), truckingID, orderID);
     }
 
     public Response<List<String>> updateSources(String subjectID, int truckingID, List<Site> sources) {
@@ -368,11 +368,11 @@ public class Facade {
         return logistics.addDestination(Integer.parseInt(subjectID), truckingID, destinations);
     }
 
-    public Response<Boolean> moveProducts(String subjectID, int truckingID, groupk.shared.service.dto.Product product) {
+    public Response<Boolean> moveOrdersFromTrucking(String subjectID, int truckingID, int orderID) {
         if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
-        return logistics.moveProducts(Integer.parseInt(subjectID), truckingID, product);
+        return logistics.moveOrderFromTrucking(Integer.parseInt(subjectID), truckingID, orderID);
     }
 
     public Response<Boolean> updateVehicleOnTrucking(String subjectID, int truckingID, String registrationPlate) {
@@ -426,10 +426,6 @@ public class Facade {
 
     public Response<String[]> getLicensesList() {
         return logistics.getLicensesList();
-    }
-
-    public Response<String[]> getProductsSKUList() {
-        return logistics.getProductsSKUList();
     }
 
     public Response<String[]> getAreasList() {

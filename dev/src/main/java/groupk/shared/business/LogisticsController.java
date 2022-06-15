@@ -1,6 +1,5 @@
 package groupk.shared.business;
 
-import groupk.logistics.DataLayer.ProductForTruckingDTO;
 import groupk.logistics.DataLayer.SiteDTO;
 import groupk.logistics.DataLayer.TruckingDTO;
 import groupk.logistics.DataLayer.myDataBase;
@@ -106,7 +105,7 @@ public class LogisticsController {
         }
     }
 
-    public Response<Delivery> createDelivery(int truckManagerID, String registrationPlateOfVehicle, LocalDateTime date, int driverUsername, List<Site> sources, List<Site> destinations, List<Product> products, long hours, long minutes) {
+    public Response<List<String>[]> createDelivery(int truckManagerID, String registrationPlateOfVehicle, LocalDateTime date, int driverUsername, List<Site> sources, List<Site> destinations, List<Integer> orders, long hours, long minutes) {
         try {
             List<String[]> sources_ = new LinkedList<String[]>();
             List<String[]> destinations_ = new LinkedList<String[]>();
@@ -116,8 +115,7 @@ public class LogisticsController {
             for (Site destination : destinations) {
                 destinations_.add(SiteToArray(destination));
             }
-            Map<String, Integer> products_ = ProductToMap(products);
-            return new Response<>(truckingDTOToDelivery(TruckManagerController.getInstance().addTrucking(truckManagerID, registrationPlateOfVehicle, date, driverUsername, sources_, destinations_, products_, hours, minutes)));
+            return new Response<>(TruckManagerController.getInstance().addTrucking(truckManagerID, registrationPlateOfVehicle, date, driverUsername, sources_, destinations_, orders, hours, minutes));
         }
         catch (Exception e) {
             return new Response<>(e.getMessage());
@@ -131,16 +129,16 @@ public class LogisticsController {
             for (TruckingDTO trucking : truckings) {
                 toReturn.add(truckingDTOToDelivery(trucking));
             }
-            return new Response<>(toReturn);
+            return new Response<List<Delivery>>(toReturn);
         }
         catch (Exception e) {
             return new Response<>(e.getMessage());
         }
     }
 
-    public Response<Boolean> addProductsToTrucking(int truckManagerID, int truckingID, Product products) {
+    public Response<Boolean> addOrdersToTrucking(int truckManagerID, int truckingID, int orderID) {
         try {
-            TruckManagerController.getInstance().addProductToTrucking(truckManagerID, truckingID, products.id, products.count);
+            TruckManagerController.getInstance().addOrderToTrucking(truckManagerID, truckingID, orderID);
             return new Response<Boolean>(true);
         }
         catch (Exception e) {
@@ -200,9 +198,9 @@ public class LogisticsController {
         }
     }
 
-    public Response<Boolean> moveProducts(int truckManagerID, int truckingID, Product product) {
+    public Response<Boolean> moveOrderFromTrucking(int truckManagerID, int truckingID, int orderID) {
         try {
-            TruckManagerController.getInstance().moveProductsToTrucking(truckManagerID, truckingID, product.id, product.count);
+            TruckManagerController.getInstance().moveOrdersToTrucking(truckManagerID, truckingID, orderID);
             return new Response<Boolean>(true);
         }
         catch (Exception e) {
@@ -299,15 +297,6 @@ public class LogisticsController {
         }
     }
 
-    public Response<String[]> getProductsSKUList() {
-        try {
-            return new Response<String[]>(Products.getProductsSKUList());
-        }
-        catch (Exception e) {
-            return new Response<>("Oops, something got wrong with getting products list");
-        }
-    }
-
     public Response<String[]> getAreasList() {
         try {
             return new Response<String[]>(Area.getAreasList());
@@ -320,17 +309,16 @@ public class LogisticsController {
     private Delivery truckingDTOToDelivery(TruckingDTO truckingDTO) {
         List<Site> sources = new LinkedList<Site>();
         List<Site> destinations = new LinkedList<Site>();
-        List<Product> products = new LinkedList<Product>();
+        List<Integer> orders = new LinkedList<Integer>();
         for (SiteDTO source : truckingDTO.getSources()) {
             sources.add(new Site(source.getContactGuy(), source.getPhoneNumber(), source.getArea(), source.getCity(), source.getStreet(), source.getHouseNumber(), source.getFloor(), source.getApartment()));
         }
         for (SiteDTO destination : truckingDTO.getDestinations()) {
             destinations.add(new Site(destination.getContactGuy(), destination.getPhoneNumber(), destination.getArea(), destination.getCity(), destination.getStreet(), destination.getHouseNumber(), destination.getFloor(), destination.getApartment()));
         }
-        for (ProductForTruckingDTO product : truckingDTO.getProducts()) {
-            products.add(new Product(product.getProduct(), product.getQuantity()));
-        }
-        return new Delivery(truckingDTO.getId(), truckingDTO.getDate(), truckingDTO.getTruckManager(), truckingDTO.getDriverUsername(), truckingDTO.getVehicleRegistrationPlate(), sources, destinations, truckingDTO.getWeight(), products, truckingDTO.getHours(), truckingDTO.getMinutes());
+        for (Integer orderID : truckingDTO.getOrders())
+            orders.add(new Integer(orderID.intValue()));
+        return new Delivery(truckingDTO.getId(), truckingDTO.getDate(), truckingDTO.getTruckManager(), truckingDTO.getDriverUsername(), truckingDTO.getVehicleRegistrationPlate(), sources, destinations, truckingDTO.getWeight(), orders, truckingDTO.getHours(), truckingDTO.getMinutes());
     }
 
     private Map<String, Integer> ProductToMap(List<Product> Products) {

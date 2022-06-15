@@ -16,9 +16,9 @@ public class TruckingDTO {
     private int weight;
     private List<SiteDTO> sources;
     private List<SiteDTO> destinations;
-    private List<ProductForTruckingDTO> products;
+    private List<Integer> orders;
 
-    public TruckingDTO(int id, String date,int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight, List<SiteDTO> sources, List<SiteDTO> destinations, List<ProductForTruckingDTO> products) {
+    public TruckingDTO(int id, String date,int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight, List<SiteDTO> sources, List<SiteDTO> destinations, List<Integer> orders) {
         this.id = id;
         this.date = convertDate(date, id);
         this.truckManager = truckManager;
@@ -29,10 +29,10 @@ public class TruckingDTO {
         this.weight = weight;
         this.sources = sources;
         this.destinations = destinations;
-        this.products = products;
+        this.orders = orders;
     }
 
-    public TruckingDTO(int id, LocalDateTime date, int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight, List<SiteDTO> sources, List<SiteDTO> destinations, List<ProductForTruckingDTO> products) {
+    public TruckingDTO(int id, LocalDateTime date, int truckManager, int driverUsername, String vehicleRegistrationPlate, long hours, long minutes, int weight, List<SiteDTO> sources, List<SiteDTO> destinations, List<Integer> orders) {
         this.id = id;
         this.date = date;
         this.truckManager = truckManager;
@@ -43,7 +43,7 @@ public class TruckingDTO {
         this.weight = weight;
         this.sources = sources;
         this.destinations = destinations;
-        this.products = products;
+        this.orders = orders;
     }
     private LocalDateTime convertDate(String date, int TruckingID){
         LocalDateTime toReturn;
@@ -93,7 +93,7 @@ public class TruckingDTO {
 
     public List<SiteDTO> getDestinations() { return destinations; }
 
-    public List<ProductForTruckingDTO> getProducts() { return products; }
+    public List<Integer> getOrders() { return orders; }
 
     public void setWeight(int newWeight) {this.weight = newWeight; }
 
@@ -107,5 +107,5 @@ public class TruckingDTO {
 
     public void updateDestinations(List<SiteDTO> destinations) { this.destinations = destinations; }
 
-    public void updateProducts(List<ProductForTruckingDTO> products) { this.products = products; }
+    public void updateProducts(List<Integer> orders) { this.orders = orders; }
 }

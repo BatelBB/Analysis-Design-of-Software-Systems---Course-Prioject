@@ -35,7 +35,7 @@ public class myDataBase {
         tables.add("DROP TABLE IF EXISTS Truckings");
         tables.add("DROP TABLE IF EXISTS Truckings_Destinations");
         tables.add("DROP TABLE IF EXISTS Truckings_Sources");
-        tables.add("DROP TABLE IF EXISTS Truckings_Products");
+        tables.add("DROP TABLE IF EXISTS Truckings_Orders");
         try (
                 Statement statement = connection.createStatement()) {
             for (String table : tables) {
@@ -101,12 +101,10 @@ public class myDataBase {
                 "FOREIGN KEY(TID) REFERENCES Truckings(TID)\n" +
                 "\t);\n" +
                 "\n";
-        String Truckings_Products = "CREATE TABLE IF NOT EXISTS " + "Truckings_Products" + " (\n" +
+        String Truckings_Products = "CREATE TABLE IF NOT EXISTS " + "Truckings_Orders" + " (\n" +
                 "\tTID INTEGER  NOT NULL,\n" +
-                "\tproduct TEXT NOT NULL,\n" +
-                "\tquantity INTEGER  NOT NULL,\n" +
-                "\tPRIMARY KEY (TID,product),\n" +
-                "FOREIGN KEY(TID) REFERENCES Truckings(TID)\n" +
+                "\torderID TEXT NOT NULL,\n" +
+                "\tPRIMARY KEY (orderID)" +
                 "\t);\n" +
                 "\n";
         try (Statement s = connection.createStatement()) {
