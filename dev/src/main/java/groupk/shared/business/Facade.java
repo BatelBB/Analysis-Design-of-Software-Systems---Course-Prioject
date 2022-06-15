@@ -132,7 +132,6 @@ public class Facade {
     }
 
     public Response<Shift> removeEmployeeFromShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
-        //blablabla
         if (isFromRole(employeeID, Employee.Role.Driver).getValue()) {
             Response<List<Delivery>> deliveries = logistics.listDeliveriesByDriver(Integer.parseInt(employeeID));
             if (!deliveries.isError()) {
