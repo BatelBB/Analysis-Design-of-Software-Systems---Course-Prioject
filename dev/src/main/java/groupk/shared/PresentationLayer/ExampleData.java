@@ -15,13 +15,13 @@ public class ExampleData {
     public static void loadExampleData(InventoryService inventory, ISupplierService suppliers) {
         int ppn_office = suppliers.createSupplier(1, 1, "OfficeLi",
                 true, PaymentCondition.Credit, DayOfWeek.SUNDAY,
-                "Ofir", "1-800-office", "Pencil St. 12, Pencilvannia").data.getPpn();
+                "Ofir", "1-800-office", "Pencil 12, Pencilvannia").data.getPpn();
         int ppn_foods = suppliers.createSupplier(2, 2, "FoodsAreUs",
                 true, PaymentCondition.DirectDebit, DayOfWeek.THURSDAY,
                 "Frank", "1-800-food", "Vegetable Street, Beersheba").data.getPpn();
         int ppn_lorem = suppliers.createSupplier(3, 3, "Lorem Stuff",
                 true, PaymentCondition.Credit, DayOfWeek.WEDNESDAY,
-                "Lauren", "1-800-Lorem", "Lorem Ave., Ipsumia").data.getPpn();
+                "Lauren", "1-800-Lorem", "Lorem, Ipsumia").data.getPpn();
 
         inventory.addCategory("office");
         inventory.addSubCategory("office", "writing");

@@ -105,7 +105,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
     public void testAddItemToOrder() {
         sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem",
                 true, PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti",
-                "050-9954528", "Foo St. 15, Foobar"));
+                "050-9954528", "Foo 15, Foobar"));
 
         order = assertSuccess(suppliers.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX, OrderType.Periodical));
         inventory.addCategory("Dairy");

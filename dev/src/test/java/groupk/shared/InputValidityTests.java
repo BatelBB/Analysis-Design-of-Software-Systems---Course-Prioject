@@ -11,9 +11,25 @@ public class InputValidityTests {
     @Test
     public void testPhoneValidator() {
         String[] correct = {"050-1234567",
-        "057-1234566", "052-7654321"};
+                "057-1234566", "052-7654321"};
         String[] incorrect = {"0555-243231", "050-123456", "150-1234567", "-1234567", "0501234567"};
         testPattern(InputValidity.phone, correct, incorrect);
+    }
+    @Test
+    public void testAddressValidator() {
+        String[] correct = {
+                "White Tower 19, Ramla",
+                "Yossi Banai 12, Beer Sheva",
+                "Flowers 35, Shoham"
+        };
+        String[] incorrect = {
+                "White Tower, Ramla", // no number
+                "19, Ramla", // no street name
+                "White Tower 19 Ramla", // no comma
+                "White Tower Ramla",
+                "Ramla"
+        };
+        testPattern(InputValidity.address, correct, incorrect);
     }
 
     private void testPattern(InputValidity.StringInputValidator validator,
