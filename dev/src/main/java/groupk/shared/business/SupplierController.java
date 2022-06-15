@@ -7,6 +7,7 @@ import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import groupk.inventory_suppliers.dataLayer.dao.records.SupplierRecord;
 import groupk.inventory_suppliers.dataLayer.dao.records.readonly.SupplierData;
 import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
+import groupk.shared.inputValidity.InputValidity;
 
 import java.time.DayOfWeek;
 import java.util.*;
@@ -24,6 +25,8 @@ public class SupplierController {
     public Supplier create(CreateSupplierDTO dto)
             throws BusinessLogicException {
         validatePPNIsNew(dto.ppn);
+        InputValidity.phone.throwIfNotMatch(dto.contactPhone);
+        InputValidity.address.throwIfNotMatch(dto.contactAddress);
         SupplierData source = dal.getSuppliers().createSupplier(dto);
         Supplier object = new Supplier(source, dal.getSuppliers());
         suppliers.put(dto.ppn, object);

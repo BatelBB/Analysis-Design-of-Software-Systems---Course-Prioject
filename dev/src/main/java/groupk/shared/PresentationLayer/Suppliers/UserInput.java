@@ -1,6 +1,8 @@
 package groupk.shared.PresentationLayer.Suppliers;
 
 
+import groupk.shared.inputValidity.InputValidity;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
@@ -13,8 +15,6 @@ public class UserInput {
     private Scanner scanner = new Scanner(System.in);
 
     private static UserInput instance = null;
-
-    private final String phonePattern = "^05\\d[-]\\d{7}$";
 
     private UserInput() {
 
@@ -144,14 +144,13 @@ public class UserInput {
 
     public String nextPhone(String s) {
         boolean retry = true;
-        LocalDate nextDate = null;
         String inputLine = "";
         while (retry) {
             try {
-                UserOutput.getInstance().print(s + "(format: 05X-XXXXXXX) ");
+                UserOutput.getInstance().print(s + "(format: " + InputValidity.phone.format + ") ");
                 inputLine = scanner.nextLine();
-                if (!inputLine.matches(phonePattern)) {
-                    throw new MissingFormatArgumentException(" Please use format: 05X-XXXXXXX ");
+                if (!InputValidity.phone.test(inputLine)) {
+                    throw new MissingFormatArgumentException("Please use format:  "+ InputValidity.phone.format);
                 }
                 retry = false;
             } catch (Exception e) {
@@ -160,5 +159,25 @@ public class UserInput {
         }
         return inputLine;
     }
+
+    public String nextAddress(String s) {
+        boolean retry = true;
+        String inputLine = "";
+        while (retry) {
+            try {
+                UserOutput.getInstance().print(s + "(format: " + InputValidity.address.format + ") ");
+                inputLine = scanner.nextLine();
+                if (!InputValidity.address.test(inputLine)) {
+                    throw new MissingFormatArgumentException(" Please use format: " + InputValidity.address.format );
+                }
+                retry = false;
+            } catch (Exception e) {
+                UserOutput.getInstance().println(e.getMessage());
+            }
+        }
+        return inputLine;
+    }
+
+
 }
 
