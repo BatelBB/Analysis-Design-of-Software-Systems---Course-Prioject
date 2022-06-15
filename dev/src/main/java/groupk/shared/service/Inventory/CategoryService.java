@@ -1,4 +1,4 @@
-package groupk.shared.business.Inventory.Service;
+package groupk.shared.service.Inventory;
 
 import groupk.shared.business.Inventory.Categories.Category;
 import groupk.shared.business.CategoryController;
@@ -47,10 +47,10 @@ public class CategoryService extends ServiceBase {
         return responseFor(() -> category_controller.getCategory(name));
     }
 
-    public ResponseT<groupk.shared.business.Inventory.Service.Objects.SubCategory> getSubCategory(String categoryName, String SubCategoryName) {
+    public ResponseT<groupk.shared.service.Inventory.Objects.SubCategory> getSubCategory(String categoryName, String SubCategoryName) {
         return responseFor(() -> {
             SubCategory subCategory = category_controller.getSubCategory(categoryName, SubCategoryName);
-            return new groupk.shared.business.Inventory.Service.Objects.SubCategory(subCategory);
+            return new groupk.shared.service.Inventory.Objects.SubCategory(subCategory);
         });
     }
 }

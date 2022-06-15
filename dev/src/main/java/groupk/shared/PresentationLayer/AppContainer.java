@@ -2,14 +2,12 @@ package groupk.shared.PresentationLayer;
 
 import groupk.inventory_suppliers.shared.ioc.ServiceProvider;
 import groupk.shared.business.CategoryController;
-import groupk.shared.business.Inventory.Service.ProductService;
+import groupk.shared.service.Inventory.ProductService;
 import groupk.shared.business.ProductController;
-import groupk.shared.business.Inventory.Service.CategoryService;
-import groupk.shared.business.Inventory.Service.ReportService;
-import groupk.shared.business.Inventory.Service.InventoryService;
+import groupk.shared.service.Inventory.CategoryService;
+import groupk.shared.service.Inventory.ReportService;
+import groupk.shared.service.Inventory.InventoryService;
 import groupk.shared.business.Suppliers.Service.ISupplierService;
-import groupk.shared.PresentationLayer.Suppliers.UserInput;
-import groupk.shared.PresentationLayer.Suppliers.UserOutput;
 import groupk.shared.business.Suppliers.Service.SupplierService;
 import groupk.shared.PresentationLayer.Inventory.InventoryPresentationFacade;
 import groupk.shared.PresentationLayer.Suppliers.SupplierPresentationFacade;

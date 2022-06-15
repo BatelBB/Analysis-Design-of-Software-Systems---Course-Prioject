@@ -4,9 +4,9 @@ import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import groupk.shared.business.Facade;
 import groupk.shared.business.Inventory.Categories.Category;
-import groupk.shared.business.Inventory.Service.Objects.ProductItem;
-import groupk.shared.business.Inventory.Service.Objects.Report;
-import groupk.shared.business.Inventory.Service.Objects.SubCategory;
+import groupk.shared.service.Inventory.Objects.ProductItem;
+import groupk.shared.service.Inventory.Objects.Report;
+import groupk.shared.service.Inventory.Objects.SubCategory;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Order;
@@ -265,7 +265,7 @@ public class Service {
     }
 
     //Product methods
-    public Facade.ResponseT<groupk.shared.business.Inventory.Service.Objects.Product> addProduct(String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
+    public Facade.ResponseT<groupk.shared.service.Inventory.Objects.Product> addProduct(String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
         return facade.addProduct(name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category);
     }
 

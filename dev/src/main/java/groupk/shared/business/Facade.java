@@ -6,11 +6,11 @@ import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
 import groupk.inventory_suppliers.shared.utils.Tuple;
 import groupk.shared.business.Inventory.Categories.Category;
-import groupk.shared.business.Inventory.Service.Objects.Product;
-import groupk.shared.business.Inventory.Service.Objects.ProductItem;
-import groupk.shared.business.Inventory.Service.Objects.Report;
+import groupk.shared.service.Inventory.Objects.Product;
+import groupk.shared.service.Inventory.Objects.ProductItem;
+import groupk.shared.service.Inventory.Objects.Report;
 import groupk.shared.business.Suppliers.BusinessLogicException;
-import groupk.shared.business.Inventory.Service.Objects.SubCategory;
+import groupk.shared.service.Inventory.Objects.SubCategory;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Order;
 import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
@@ -108,10 +108,10 @@ public class Facade {
     public Response<Employee> deleteEmployee(String subjectID, String employeeID) {
         if (isFromRole(employeeID, Employee.Role.Driver).getValue()) {
             Response<List<Delivery>> deliveries = logistics.listDeliveriesByDriver(Integer.parseInt(employeeID));
-            if (!deliveries.isError()){
+            if (!deliveries.isError()) {
                 for (Delivery d : deliveries.getValue()) {
                     LocalDateTime localDateTime = LocalDateTime.now();
-                    if(d.date.isAfter(localDateTime))
+                    if (d.date.isAfter(localDateTime))
                         return new Response<>("Can not delete, the employee is a driver and he has a future trucking.");
                 }
             }
@@ -176,7 +176,7 @@ public class Facade {
 
     public Response<Integer> numOfEmployeeShifts(String subjectID, String employeeID) {
         Response<List<Shift>> list = listEmployeeShifts(subjectID, employeeID);
-        if(list.isError())
+        if (list.isError())
             return new Response<>(list.getErrorMessage());
         return new Response<>(listEmployeeShifts(subjectID, employeeID).getValue().size());
     }
@@ -203,7 +203,7 @@ public class Facade {
 
     private boolean isThereWorkerWithThisRoleInShift(String subjectID, LocalDateTime date, Employee.Role role) {
         //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
-        Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonthValue()-1, date.getDayOfMonth());
+        Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
         Response<Shift> shift;
         if (date.getHour() + 1 < 16) // the hour is from 0 to 23, therefore 16 is 17
             shift = readShift(subjectID, calendar, Shift.Type.Morning);
@@ -234,7 +234,7 @@ public class Facade {
         //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
         if (date.getHour() < 8 | (date.plusHours(hours).plusMinutes(minutes).getHour() > 0 && date.plusHours(hours).plusMinutes(minutes).getHour() < 8))
             return false;
-        Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonthValue()-1, date.getDayOfMonth());
+        Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
         Response<Shift> shiftResponse;
         if (date.getHour() + 1 < 16) // the hour is from 0 to 23, therefore 16 is 17
             shiftResponse = readShift(subjectID, calendar, Shift.Type.Morning);
@@ -250,16 +250,16 @@ public class Facade {
         return false;
     }
 
-    public Response<List<Shift>> optionsForDeleveryWithLogisitcsAndDriversInShift(String subjectID){
+    public Response<List<Shift>> optionsForDeleveryWithLogisitcsAndDriversInShift(String subjectID) {
         Response<List<Shift>> shifts = listShifts(subjectID);
         List<Shift> output = new LinkedList<>();
         Calendar dateToday = new GregorianCalendar();
         dateToday.add(Calendar.DAY_OF_MONTH, 7);
-        if(shifts.isError())
+        if (shifts.isError())
             return new Response<>(shifts.getErrorMessage());
-        for (Shift s: shifts.getValue()) {
-            if(s.getDate().after(new GregorianCalendar())&& s.getDate().before(dateToday)){
-                if(isThereWorkerWithThisRoleInShift(subjectID, s.getDate(), s.getType(), Employee.Role.Driver) && isThereWorkerWithThisRoleInShift(subjectID, s.getDate(), s.getType(), Employee.Role.Logistics))
+        for (Shift s : shifts.getValue()) {
+            if (s.getDate().after(new GregorianCalendar()) && s.getDate().before(dateToday)) {
+                if (isThereWorkerWithThisRoleInShift(subjectID, s.getDate(), s.getType(), Employee.Role.Driver) && isThereWorkerWithThisRoleInShift(subjectID, s.getDate(), s.getType(), Employee.Role.Logistics))
                     output.add(s);
             }
         }
@@ -606,13 +606,11 @@ public class Facade {
     }
 
     public ResponseT<Map<Integer, Integer>> confirmOrder(int order_id) {
-        return null;
-        //TODO: implement from previous service
+        return responseFor(() -> product_controller.confirmOrder(order_id));
     }
 
     public SI_Response confirmOrderAmount(Map<Integer, Integer> actual_amount) {
-        return null;
-        //TODO: implement from previous service
+        return responseForVoid(() -> product_controller.confirmOrderAmount(actual_amount));
     }
 
     public ResponseT<Order> getOrder(int id) {
@@ -767,12 +765,14 @@ public class Facade {
     }
 
     public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty) {
-        if(r.success){
+        if (r.success) {
             Tuple<Supplier, Item> supplierItemTuple = items.checkBestSupplier(product_id); //Maybe we can combine both methods and this method needs to get prodid
-            return responseFor(()->orders.createShortage(supplierItemTuple.first, supplierItemTuple.second,
+            return responseFor(() -> orders.createShortage(supplierItemTuple.first, supplierItemTuple.second,
                     min_qty, OrderType.Shortages, LocalDate.now(), LocalDate.now().plusDays(7)));
-        }else{
-            return responseFor(()-> {throw new BusinessLogicException("NO NEED FOR SHORTAGE ORDER!");});
+        } else {
+            return responseFor(() -> {
+                throw new BusinessLogicException("NO NEED FOR SHORTAGE ORDER!");
+            });
         }
     }
 

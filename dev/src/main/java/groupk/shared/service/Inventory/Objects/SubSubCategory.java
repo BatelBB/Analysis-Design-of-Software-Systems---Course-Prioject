@@ -1,4 +1,4 @@
-package groupk.shared.business.Inventory.Service.Objects;
+package groupk.shared.service.Inventory.Objects;
 
 public class SubSubCategory {
     String name;

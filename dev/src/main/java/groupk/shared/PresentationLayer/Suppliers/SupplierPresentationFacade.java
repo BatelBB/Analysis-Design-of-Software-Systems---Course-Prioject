@@ -1,6 +1,6 @@
 package groupk.shared.PresentationLayer.Suppliers;
 
-import groupk.shared.business.Inventory.Service.InventoryService;
+import groupk.shared.service.Inventory.InventoryService;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 import groupk.shared.business.Suppliers.Service.ISupplierService;
