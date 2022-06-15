@@ -18,7 +18,6 @@ public class SupplierPresentationFacade {
     private UserOutput output = UserOutput.getInstance();
     private final ISupplierService service;
     private final InventoryService inventory;
-    private int minPrice = 100000;
 
     public SupplierPresentationFacade(ISupplierService supplierService, InventoryService inventory) {
         this.service = supplierService;
