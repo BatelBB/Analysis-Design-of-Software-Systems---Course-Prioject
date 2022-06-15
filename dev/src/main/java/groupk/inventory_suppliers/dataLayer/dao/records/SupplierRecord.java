@@ -23,7 +23,7 @@ public class SupplierRecord extends BaseRecord<Integer> implements SupplierData 
         this.isDelivering = dto.isDelivering;
         this.paymentCondition = dto.paymentCondition;
         this.regularSupplyingDays = dto.regularSupplyDays;
-        this.contact = new ContactRecord(dto.contactName, dto.contactEmail, dto.contactPhone);
+        this.contact = new ContactRecord(dto.contactName, dto.contactAddress, dto.contactPhone);
     }
 
     public SupplierRecord(int ppn, int bankNumber, String name, boolean isDelivering, PaymentCondition pm,
@@ -105,7 +105,7 @@ public class SupplierRecord extends BaseRecord<Integer> implements SupplierData 
                 "Name", name,
                 "Contact name", contact.name,
                 "Contact phone", contact.phoneNumber,
-                "Contact email", contact.email,
+                "Contact address", contact.address,
                 "Bank #", bankNumber,
                 "Delivering", isDelivering,
                 "Payment condition", paymentCondition,

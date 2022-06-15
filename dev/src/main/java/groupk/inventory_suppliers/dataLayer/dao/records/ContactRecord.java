@@ -4,7 +4,7 @@ import groupk.inventory_suppliers.dataLayer.dao.records.readonly.ContactData;
 
 public class ContactRecord implements ContactData {
     String name;
-    String email;
+    String address;
     String phoneNumber;
 
     @Override
@@ -17,12 +17,12 @@ public class ContactRecord implements ContactData {
     }
 
     @Override
-    public String getEmail() {
-        return email;
+    public String getAddress() {
+        return address;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     @Override
@@ -34,9 +34,9 @@ public class ContactRecord implements ContactData {
         this.phoneNumber = phoneNumber;
     }
 
-    public ContactRecord(String name, String email, String phoneNumber) {
+    public ContactRecord(String name, String address, String phoneNumber) {
         this.name = name;
-        this.email = email;
+        this.address = address;
         this.phoneNumber = phoneNumber;
     }
 
@@ -44,7 +44,7 @@ public class ContactRecord implements ContactData {
     public String toString() {
         return String.format(
                 "[CONTACT: %s | %s | %s]",
-                name, email, phoneNumber
+                name, address, phoneNumber
         );
     }
 

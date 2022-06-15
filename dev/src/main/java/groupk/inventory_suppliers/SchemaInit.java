@@ -81,7 +81,7 @@ public class SchemaInit {
                     "\t\"isDelivering\"\tTINYINT NOT NULL,\n" +
                     "\t\"paymentCondition\"\tINTEGER NOT NULL,\n" +
                     "\t\"regularSupplyingDay\"\tINTEGER NOT NULL,\n" +
-                    "\t\"contactEmail\"\tTEXT NOT NULL,\n" +
+                    "\t\"contactAddress\"\tTEXT NOT NULL,\n" +
                     "\t\"contactName\"\tTEXT NOT NULL,\n" +
                     "\t\"contactPhone\"\tTEXT NOT NULL,\n" +
                     "\tPRIMARY KEY(\"ppn\")\n" +

@@ -11,18 +11,18 @@ public class CreateSupplierDTO {
     public final boolean isDelivering;
     public final PaymentCondition paymentCondition;
     public final DayOfWeek regularSupplyDays;
-    public final String contactEmail;
+    public final String contactAddress;
     public final String contactName;
     public final String contactPhone;
 
-    public CreateSupplierDTO(int ppn, int bankNumber, String name, boolean isDelivering, PaymentCondition paymentCondition, DayOfWeek regularSupplyDays, String contactEmail, String contactName, String contactPhone) {
+    public CreateSupplierDTO(int ppn, int bankNumber, String name, boolean isDelivering, PaymentCondition paymentCondition, DayOfWeek regularSupplyDays, String contactAddress, String contactName, String contactPhone) {
         this.ppn = ppn;
         this.bankNumber = bankNumber;
         this.name = name;
         this.isDelivering = isDelivering;
         this.paymentCondition = paymentCondition;
         this.regularSupplyDays = regularSupplyDays;
-        this.contactEmail = contactEmail;
+        this.contactAddress = contactAddress;
         this.contactName = contactName;
         this.contactPhone = contactPhone;
     }

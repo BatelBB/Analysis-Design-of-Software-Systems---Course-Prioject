@@ -86,7 +86,7 @@ public class SupplierController {
     public void setRegularSupplyingDays(int supplierPPN, DayOfWeek dayOfWeek) {
     }
 
-    public void setContact(int supplierPPN, String name, String phoneNumber, String email) {
+    public void setContact(int supplierPPN, String name, String phoneNumber, String address) {
     }
 
 
