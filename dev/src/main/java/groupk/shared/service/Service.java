@@ -281,7 +281,7 @@ public class Service {
         return facade.getProductNames();
     }
 
-    public static Facade.ResponseT<List<groupk.shared.business.Inventory.Product>> getProducts() {
+    public Facade.ResponseT<List<groupk.shared.business.Inventory.Product>> getProducts() {
         // return facade.getProducts();
         return null;
     }

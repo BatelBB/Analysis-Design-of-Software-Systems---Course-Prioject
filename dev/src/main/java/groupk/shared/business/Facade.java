@@ -4,6 +4,7 @@ import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
+import groupk.inventory_suppliers.shared.utils.Tuple;
 import groupk.shared.business.Inventory.Categories.Category;
 import groupk.shared.business.Inventory.Service.Objects.Product;
 import groupk.shared.business.Inventory.Service.Objects.ProductItem;
@@ -738,22 +739,20 @@ public class Facade {
     }
 
     public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty) {
-        if (r.success) {
-            Item item = items.getItemsFromProdID(product_id);
-            Supplier supplier = items.checkBestSupplier(item); //Maybe we can combine both methods and this method needs to get prodid
-            return responseFor(() -> orders.createShortage(supplier, item, min_qty, OrderType.Shortages,
-                    LocalDate.now(), LocalDate.now().plusDays(7)));
-        } else {
-            return responseFor(() -> {
-                throw new BusinessLogicException("NO NEED FOR SHORTAGE ORDER!");
-            });
+        if(r.success){
+            Tuple<Supplier, Item> supplierItemTuple = items.checkBestSupplier(product_id); //Maybe we can combine both methods and this method needs to get prodid
+            return responseFor(()->orders.createShortage(supplierItemTuple.first, supplierItemTuple.second,
+                    min_qty, OrderType.Shortages, LocalDate.now(), LocalDate.now().plusDays(7)));
+        }else{
+            return responseFor(()-> {throw new BusinessLogicException("NO NEED FOR SHORTAGE ORDER!");});
         }
     }
 
     public ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
         Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
-        Supplier supplier = items.checkBestSupplier((Item) itemsWithAmount.keySet().toArray()[0]);
-        Order order = orders.create(supplier, OrderType.Periodical,
+        Tuple<Supplier, Item> supplierItemTuple =
+                items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
+        Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
                 LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
         orders.orderItemFromMap(order, itemsWithAmount);
 
@@ -762,8 +761,9 @@ public class Facade {
 
     public SI_Response createOrderPeriodicVoid(Map<Integer, Integer> productAmount, int weekDay) {
         Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
-        Supplier supplier = items.checkBestSupplier((Item) itemsWithAmount.keySet().toArray()[0]);
-        Order order = orders.create(supplier, OrderType.Periodical,
+        Tuple<Supplier, Item> supplierItemTuple =
+                items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
+        Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
                 LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
 
         return responseForVoid(() -> orders.orderItemFromMap(order, itemsWithAmount));

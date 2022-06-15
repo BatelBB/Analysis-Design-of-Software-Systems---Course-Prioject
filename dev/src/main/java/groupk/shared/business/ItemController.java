@@ -1,5 +1,6 @@
 package groupk.shared.business;
 
+import groupk.inventory_suppliers.shared.utils.Tuple;
 import groupk.shared.business.ProductController;
 import groupk.shared.business.Inventory.Product;
 import groupk.shared.business.Inventory.Service.Service;
@@ -115,30 +116,29 @@ public class ItemController {
         return it;
     }
 
-    public Supplier checkBestSupplier(Item item) {
-        List<Product> productList = Service.getProducts().data;
-        Map<Integer, String> productMap = new HashMap<>();
-        for (Product prod : productList) {
-            productMap.put(prod.getProduct_id(), prod.getName());
-        }
-        String nameProduct = "";
-        int minPrice = 1000000;
-        List<Item> itemList = items.values().stream().collect(Collectors.toList());
-        for (Item it : itemList) {
-            if (productMap.containsKey(item.getProductId()))
-                nameProduct = productMap.get(item.getProductId());
-            if (productMap.containsKey(it.getProductId()) && productMap.get(it.getProductId()).equals(nameProduct)) {
-                minPrice = (int) Math.min(it.getPrice(), minPrice);
-            }
-            if (it.getPrice() == minPrice) {
-                UserOutput.println("There is a better supplier that supplying this item "+
-                                        "with the better price: " + minPrice + " instead of the price: " +
-                                        item.getPrice());
-                return it.getSupplier();
-            }
-        }
+    public Tuple<Supplier, Item> checkBestSupplier(int given_prod_id) {
+        /**
+         * take the given_prod_id and take all the items that have this prod_id, compare the price of these items and
+         * take the minimal one.
+         * Return map of <Supplier, Item> that the supplier is the one with the cheapest item.
+         */
 
-        return item.getSupplier();
+        List<Item> itemList = items.values().stream().collect(Collectors.toList());
+        List<Item> items_with_given_prod_id = new ArrayList<>();
+        for (Item it : itemList) {
+            if(it.getProductId()==given_prod_id)
+                items_with_given_prod_id.add(it);
+        }
+        int minPrice = 1000000;
+        for(Item it: items_with_given_prod_id){
+            minPrice = (int) Math.min(it.getPrice(), minPrice);
+        }
+        Item retItem = null;
+        for(Item it: items_with_given_prod_id){
+            if(it.getPrice() == minPrice)
+                retItem = it;
+        }
+        return new Tuple<>(retItem.getSupplier(), retItem);
     }
 
     public Map<Item, Integer> getItemsWithAmount(Map<Integer, Integer> productAmount) {
