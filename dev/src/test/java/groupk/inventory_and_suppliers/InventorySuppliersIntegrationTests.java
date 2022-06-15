@@ -2,14 +2,15 @@ package groupk.inventory_and_suppliers;
 
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
-import groupk.shared.business.Inventory.ProductItem;
-import groupk.shared.business.Inventory.Service.Objects.Product;
-import groupk.shared.business.Inventory.Service.Objects.Report;
+import groupk.shared.business.Inventory.Product;
+import groupk.shared.business.Inventory.Report;
+
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Order;
 import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 
+import groupk.shared.service.Inventory.Objects.ProductItem;
 import groupk.shared.service.ServiceBase;
 import groupk.shared.service.ServiceBase.ResponseT;
 import groupk.shared.service.ServiceBase.Response;
@@ -29,16 +30,15 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
     private Order order;
     private Supplier sup;
 
-    private Report missingReport;
-    private Report supplierReport;
-    private Report expiredReport;
-    private Report categoryReport;
-    private Report defectiveReport;
-    private Report surplusesReport;
-    private Report byProductReport;
+    private groupk.shared.service.Inventory.Objects.Report missingReport;
+    private groupk.shared.service.Inventory.Objects.Report supplierReport;
+    private groupk.shared.service.Inventory.Objects.Report expiredReport;
+    private groupk.shared.service.Inventory.Objects.Report categoryReport;
+    private groupk.shared.service.Inventory.Objects.Report defectiveReport;
+    private groupk.shared.service.Inventory.Objects.Report surplusesReport;
+    private groupk.shared.service.Inventory.Objects.Report byProductReport;
 
-    private Product prod;
-    private ProductItem pItem;
+    private groupk.shared.service.Inventory.Objects.Product prod;
 
     int categorySize = 0, discountPairSize = 0, itemSize = 0, itemInOrderSize = 0, reportSize = 0,
             orderSize = 0, productSize = 0, productInReportSize = 0, productItem = 0,
@@ -46,7 +46,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
             supplierSize = 0;
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
 
     }
 
@@ -112,7 +112,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
         inventory.addSubCategory("Dairy", "Shop");
         inventory.addSubSubCategory("Dairy", "Shop", "10%");
 
-        Product prod = assertSuccess(inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+        prod = assertSuccess(inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
                 1200, "Dairy", "Shop", "10%"));
         Item item = assertSuccess(suppliers.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
 
@@ -307,7 +307,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
                 "Shop",
                 "10%"
         );
-        Product prod = assertSuccess(inventory.addProduct(
+        prod = assertSuccess(inventory.addProduct(
                 "Milk",
                 "Tnoova",
                 10.0,
@@ -413,7 +413,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
         inventory.addSubCategory("Dairy", "Shop");
         inventory.addSubSubCategory("Dairy", "Shop", "10%");
 
-        Product prod = assertSuccess(inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+        prod = assertSuccess(inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
                 1200, "Dairy", "Shop", "10%"));
 
         Item item = assertSuccess(suppliers.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
@@ -436,7 +436,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
         inventory.addSubCategory("Dairy", "Shop");
         inventory.addSubSubCategory("Dairy", "Shop", "10%");
 
-        Product prod = assertSuccess(inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+        prod = assertSuccess(inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
                 1200, "Dairy", "Shop", "10%"));
 
         Item item = assertSuccess(suppliers.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
@@ -476,7 +476,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
                         10.0, 20, 10, 1200,
                         "Dairy", "Shop", "10%"));
 
-        groupk.shared.business.Inventory.Service.Objects.ProductItem pItem = assertSuccess(inventory.addItem(prod.getProduct_id(), "TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX, true));
+        ProductItem pItem = assertSuccess(inventory.addItem(prod.getProduct_id(), "TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX, true));
         Item item = assertSuccess(suppliers.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
         assertSuccess(suppliers.orderItem(
                 order.getId(),

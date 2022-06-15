@@ -3,8 +3,8 @@ package groupk.inventory_and_suppliers;
 import groupk.inventory_suppliers.SchemaInit;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
 import groupk.shared.PresentationLayer.AppContainer;
-import groupk.shared.business.Inventory.Service.InventoryService;
 import groupk.shared.business.Suppliers.Service.ISupplierService;
+import groupk.shared.service.Inventory.InventoryService;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.sql.Connection;
