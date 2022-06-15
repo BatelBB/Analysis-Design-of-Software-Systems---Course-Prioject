@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * @author Yuval Dolev
  */
-public class ClassContainer {
+public class ClassContainer implements ServiceProvider {
     private Map<Class<?>, Supplier<?>> suppliers;
     private Set<Class<?>> singletons;
     private Map<Class<?>, Object> singletonInstances;
@@ -21,10 +21,12 @@ public class ClassContainer {
         singletons = new HashSet<>();
     }
 
+    @Override
     public boolean supports(Class<?> service) {
         return suppliers.containsKey(service);
     }
 
+    @Override
     public <T> T get(Class<T> service) {
         mustSupport(service);
         if(singletons.contains(service)) {
