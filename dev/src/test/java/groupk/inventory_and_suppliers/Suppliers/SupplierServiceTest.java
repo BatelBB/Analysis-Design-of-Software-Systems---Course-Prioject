@@ -84,7 +84,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         
         Supplier supplier = assertSuccess(suppliers.createSupplier(ppn, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
-                "john", "Lorem Ave. 23, Ipsumville", "054"));
+                "john", "052-1758495", "Lorem Ave. 23, Ipsumville"));
         Product product = assertSuccess(inventory.addProduct("Milk", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%"));
         Item item = assertSuccess(suppliers.createItem(ppn, 1, product.getProduct_id(),  1));
@@ -622,6 +622,6 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
     private ServiceBase.ResponseT<Supplier> createWithPpn(int ppn) {
         return suppliers.createSupplier(ppn, 111, "dummy", true,
                 PaymentCondition.Credit, null,
-                "John", "Some Street, Ana Aref", "054");
+                "John", "052-1869386", "Some 14, Ana Aref");
     }
 }
