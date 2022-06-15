@@ -7,14 +7,13 @@ public class InputValidity {
     private InputValidity() {}
 
     public static final StringInputValidator address = new StringInputValidator(
-            "[Street (letters, numbers, whitespaces)] [number], [city]",
+            "[Street (letters, numbers, whitespaces)] [number], [city (letters, numbers, whitespaces)]",
             "^[ \\w]+ \\d+\\, [ \\w]+$"
     );
 
     public static final StringInputValidator phone = new StringInputValidator(
-            "\"^05\\\\d[-]\\\\d{7}$\"",
-            "05X-XXXXXXX");
-
+            "05X-XXXXXXX",
+            "^05\\d\\-\\d{7}$");
 
 
     public static class StringInputValidator {
