@@ -107,19 +107,14 @@ public class Facade {
 
     public Response<Employee> deleteEmployee(String subjectID, String employeeID) {
         if (isFromRole(employeeID, Employee.Role.Driver).getValue()) {
-            Response<List<Delivery>> futureDeliveries = logistics.listFutureDeliveries(Integer.parseInt(subjectID));
-            if (futureDeliveries.isError() | futureDeliveries.getValue() == null)
-                return new Response<>("Oops, we are currently unable to find data on this logistics manager's leads.\n" +
-                        "Therefore, the operation cannot be performed at this time.");
-            if (futureDeliveries.getValue().size() > 0)
-                return new Response<>("Oops, the truck manager has future truckings. Before you address the issue, you will not be able to take action");
-        } else if (!isFromRole(subjectID, Employee.Role.Driver).getValue()) {
-            Response<List<Delivery>> futureDeliveries = logistics.listFutureDeliveriesByDriver(Integer.parseInt(subjectID));
-            if (futureDeliveries.isError() | futureDeliveries.getValue() == null)
-                return new Response<>("Oops, we are currently unable to find data on this trucking manager's leads.\n" +
-                        "Therefore, the operation cannot be performed at this time.");
-            if (futureDeliveries.getValue().size() > 0)
-                return new Response<>("Oops, the truck manager has future truckings. Before you address the issue, you will not be able to take action");
+            Response<List<Delivery>> deliveries = logistics.listDeliveriesByDriver(Integer.parseInt(employeeID));
+            if (!deliveries.isError()){
+                for (Delivery d : deliveries.getValue()) {
+                    LocalDateTime localDateTime = LocalDateTime.now();
+                    if(d.date.isAfter(localDateTime))
+                        return new Response<>("Can not delete, the employee is a driver and he has a future trucking.");
+                }
+            }
         }
         return employees.deleteEmployee(subjectID, employeeID);
     }
@@ -137,8 +132,21 @@ public class Facade {
     }
 
     public Response<Shift> removeEmployeeFromShift(String subjectID, Calendar date, Shift.Type type, String employeeID) {
-        if (isTheDriverInShift(subjectID, employeeID, date, type))
-            return new Response<>("Oops, the driver has a trucking at that shift. So, we cannot remove the shift");
+        if (isFromRole(employeeID, Employee.Role.Driver).getValue()) {
+            Response<List<Delivery>> deliveries = logistics.listDeliveriesByDriver(Integer.parseInt(employeeID));
+            if (!deliveries.isError()) {
+                for (Delivery d : deliveries.getValue()) {
+                    Calendar calendar = new GregorianCalendar(d.date.getYear(), d.date.getMonthValue() - 1, d.date.getDayOfMonth());
+                    Shift.Type t;
+                    if (d.date.getHour() + 1 < 16) // the hour is from 0 to 23, therefore 16 is 17
+                        t = Shift.Type.Morning;
+                    else
+                        t = Shift.Type.Evening;
+                    if (calendar.equals(date) && type.equals(t))
+                        return new Response<>("Oops, the driver has a trucking at that shift. So, we cannot remove the shift");
+                }
+            }
+        }
         return employees.removeEmployeeFromShift(subjectID, date, type, employeeID);
     }
 
@@ -167,7 +175,10 @@ public class Facade {
     }
 
     public Response<Integer> numOfEmployeeShifts(String subjectID, String employeeID) {
-        return employees.numOfEmployeeShifts(subjectID, employeeID);
+        Response<List<Shift>> list = listEmployeeShifts(subjectID, employeeID);
+        if(list.isError())
+            return new Response<>(list.getErrorMessage());
+        return new Response<>(listEmployeeShifts(subjectID, employeeID).getValue().size());
     }
 
     public Response<Shift> updateRequiredRoleInShift(String subjectId, Calendar date, Shift.Type type, Employee.Role role, int count) {
@@ -185,6 +196,76 @@ public class Facade {
     public Response<List<Employee>> whoCanWork(String subjectId, Employee.ShiftDateTime day) {
         return employees.whoCanWork(subjectId, day);
     }
+
+    public Response<Boolean> isFromRole(String employeeID, Employee.Role role) {
+        return employees.isFromRole(employeeID, role);
+    }
+
+    private boolean isThereWorkerWithThisRoleInShift(String subjectID, LocalDateTime date, Employee.Role role) {
+        //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
+        Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonthValue()-1, date.getDayOfMonth());
+        Response<Shift> shift;
+        if (date.getHour() + 1 < 16) // the hour is from 0 to 23, therefore 16 is 17
+            shift = readShift(subjectID, calendar, Shift.Type.Morning);
+        else
+            shift = readShift(subjectID, calendar, Shift.Type.Evening);
+        if (shift.isError())
+            return false;
+        for (Employee employee : shift.getValue().getStaff()) {
+            if (employee.role.equals(role))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean isThereWorkerWithThisRoleInShift(String subjectID, Calendar date, Shift.Type type, Employee.Role role) {
+        //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
+        Response<Shift> shift = readShift(subjectID, date, type);
+        if (shift.isError())
+            return false;
+        for (Employee employee : shift.getValue().getStaff()) {
+            if (employee.role.equals(role))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean isTheDriverHasShift(String subjectID, String driverID, LocalDateTime date, long hours, long minutes) {
+        //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
+        if (date.getHour() < 8 | (date.plusHours(hours).plusMinutes(minutes).getHour() > 0 && date.plusHours(hours).plusMinutes(minutes).getHour() < 8))
+            return false;
+        Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonthValue()-1, date.getDayOfMonth());
+        Response<Shift> shiftResponse;
+        if (date.getHour() + 1 < 16) // the hour is from 0 to 23, therefore 16 is 17
+            shiftResponse = readShift(subjectID, calendar, Shift.Type.Morning);
+        else
+            shiftResponse = readShift(subjectID, calendar, Shift.Type.Evening);
+        if (shiftResponse.isError()) {
+            return false;
+        }
+        for (Employee employee : shiftResponse.getValue().getStaff()) {
+            if (employee.id.equals(driverID))
+                return true;
+        }
+        return false;
+    }
+
+    public Response<List<Shift>> optionsForDeleveryWithLogisitcsAndDriversInShift(String subjectID){
+        Response<List<Shift>> shifts = listShifts(subjectID);
+        List<Shift> output = new LinkedList<>();
+        Calendar dateToday = new GregorianCalendar();
+        dateToday.add(Calendar.DAY_OF_MONTH, 7);
+        if(shifts.isError())
+            return new Response<>(shifts.getErrorMessage());
+        for (Shift s: shifts.getValue()) {
+            if(s.getDate().after(new GregorianCalendar())&& s.getDate().before(dateToday)){
+                if(isThereWorkerWithThisRoleInShift(subjectID, s.getDate(), s.getType(), Employee.Role.Driver) && isThereWorkerWithThisRoleInShift(subjectID, s.getDate(), s.getType(), Employee.Role.Logistics))
+                    output.add(s);
+            }
+        }
+        return new Response<>(output);
+    }
+
 
     // Previously removeTrucking
     public Response<Boolean> deleteDelivery(String subjectID, int deliveryID) {
@@ -229,55 +310,6 @@ public class Facade {
             return new Response<>("There is no logistics worker in this shift to except delivery");
         else
             return logistics.createDelivery(Integer.parseInt(subjectID), registrationPlateOfVehicle, date, Integer.parseInt(driverUsername), sources, destinations, products, hours, minutes);
-    }
-
-    private boolean isThereWorkerWithThisRoleInShift(String subjectID, LocalDateTime date, Employee.Role role) {
-        //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
-        Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
-        Response<Shift> shift;
-        if (date.getHour() + 1 < 16) // the hour is from 0 to 23, therefore 16 is 17
-            shift = readShift(subjectID, calendar, Shift.Type.Morning);
-        else
-            shift = readShift(subjectID, calendar, Shift.Type.Evening);
-        if (shift.isError())
-            return false;
-        for (Employee employee : shift.getValue().getStaff()) {
-            if (employee.role.equals(role))
-                return true;
-        }
-        return false;
-    }
-
-    private boolean isTheDriverInShift(String subjectID, String driverID, Calendar date, groupk.shared.service.dto.Shift.Type type) {
-        Response<Shift> shift = readShift(subjectID, date, type);
-        if (shift.isError()) {
-            return false;
-        }
-        for (Employee employee : shift.getValue().getStaff()) {
-            if (employee.id.equals(driverID))
-                return true;
-        }
-        return false;
-    }
-
-    private boolean isTheDriverHasShift(String subjectID, String driverID, LocalDateTime date, long hours, long minutes) {
-        //date.getMonthValue()-1 because in GregorianCalendar Month from 0 to 11 and LocalDateTime is from 1 to 12
-        if (date.getHour() < 8 | (date.plusHours(hours).plusMinutes(minutes).getHour() > 0 && date.plusHours(hours).plusMinutes(minutes).getHour() < 8))
-            return false;
-        Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
-        Response<Shift> shiftResponse;
-        if (date.getHour() + 1 < 16) // the hour is from 0 to 23, therefore 16 is 17
-            shiftResponse = readShift(subjectID, calendar, Shift.Type.Morning);
-        else
-            shiftResponse = readShift(subjectID, calendar, Shift.Type.Evening);
-        if (shiftResponse.isError()) {
-            return false;
-        }
-        for (Employee employee : shiftResponse.getValue().getStaff()) {
-            if (employee.id.equals(driverID))
-                return true;
-        }
-        return false;
     }
 
     public Response<List<Delivery>> listDeliveriesWithVehicle(String subjectID, String registration) {
@@ -390,10 +422,6 @@ public class Facade {
 
     public Response<Delivery> getTruckingById(String subjectID, int truckingID) {
         return logistics.getTruckinfByID(Integer.parseInt(subjectID), truckingID);
-    }
-
-    public Response<Boolean> isFromRole(String employeeID, Employee.Role role) {
-        return employees.isFromRole(employeeID, role);
     }
 
     public Response<String[]> getLicensesList() {

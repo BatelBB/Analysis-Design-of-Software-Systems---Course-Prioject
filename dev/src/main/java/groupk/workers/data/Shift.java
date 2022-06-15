@@ -147,7 +147,7 @@ public class Shift {
 
     public Shift removeEmployee(Employee e){
         try{
-            PreparedStatement  preparedStatement = DalController.connection.prepareStatement("DELETE FROM Workers Type = ? and Date = ? and EmployeeID = ?");
+            PreparedStatement  preparedStatement = DalController.connection.prepareStatement("DELETE FROM Workers WHERE Type = ? and Date = ? and EmployeeID = ?");
             preparedStatement.setString(1, type.name());
             preparedStatement.setString(2, date.get(Calendar.DATE) + "/" + (date.get(Calendar.MONTH)+1)  + "/" + date.get(Calendar.YEAR));
             preparedStatement.setString(3, e.getId());
