@@ -93,7 +93,7 @@ class ServiceTest extends TestsBase {
 
         // delete should work.
         ServiceBase.Response serviceResponse = suppliers.deleteSupplier(ppn);
-        assertTrue(serviceResponse.success, "delete ReadOnlysupplier failed, but shouldn't have");
+        assertTrue(serviceResponse.success, "delete ReadOnlysupplier failed, but shouldn't have: " + serviceResponse.error);
 
         // getting this ReadOnlysupplier shouldn't work.
         Assertions.assertFalse(suppliers.getSupplier(ppn).success,
