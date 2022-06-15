@@ -186,13 +186,13 @@ public class DalController {
             ResultSet employees = prepStat.executeQuery();
             while(employees.next()){
                 String id = employees.getString(1);
-                String shiftPrefWithId = "SELECT * FROM ShiftPreference where EmployeeID = " + id;
+                String shiftPrefWithId = "SELECT * FROM ShiftPreference WHERE EmployeeID = " + id;
                 PreparedStatement prepStat2 = connection.prepareStatement(shiftPrefWithId);
                 ResultSet shiftPref = prepStat2.executeQuery();
                 Employee employee = employeeRepository.addEmployee(employees);
                 employee.setAvailableShifts(shiftPref);
             }
-            PreparedStatement prepStat3 = connection.prepareStatement("select * from Shift");
+            PreparedStatement prepStat3 = connection.prepareStatement("SELECT * FROM Shift");
             ResultSet shifts = prepStat3.executeQuery();
             while(shifts.next()){
                 String type = shifts.getString(1);
