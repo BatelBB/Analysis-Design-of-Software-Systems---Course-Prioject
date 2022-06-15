@@ -1,6 +1,5 @@
 package groupk.inventory_and_suppliers.Suppliers;
 
-import groupk.shared.business.Inventory.Service.Objects.Product;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Order;
@@ -11,6 +10,7 @@ import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 
 
+import groupk.shared.service.Inventory.Objects.Product;
 import groupk.shared.service.ServiceBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
