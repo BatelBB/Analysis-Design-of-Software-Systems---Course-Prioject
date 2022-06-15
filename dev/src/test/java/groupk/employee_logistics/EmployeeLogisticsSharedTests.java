@@ -241,9 +241,8 @@ public class EmployeeLogisticsSharedTests {
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -261,7 +260,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
         assertEquals(service.listDeliveries(TM1.id).getValue().size(),1);
@@ -288,7 +287,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
         service.removeEmployeeFromShift(HR.id, shift1.getDate(), shift1.getType(), d.id).getValue();
@@ -373,9 +372,8 @@ public class EmployeeLogisticsSharedTests {
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -393,7 +391,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
         service.deleteLogisticsDB();
@@ -557,9 +555,8 @@ public class EmployeeLogisticsSharedTests {
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -577,7 +574,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
         service = new Service(connection);
@@ -719,9 +716,8 @@ public class EmployeeLogisticsSharedTests {
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -739,7 +735,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
         Employee d2 = service.createEmployee(
@@ -914,9 +910,8 @@ public class EmployeeLogisticsSharedTests {
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -934,7 +929,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
         assertEquals(service.listDeliveries(TM1.id).getValue().size(),1);
@@ -1007,9 +1002,8 @@ public class EmployeeLogisticsSharedTests {
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -1027,7 +1021,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0).isError());
     }
@@ -1110,9 +1104,8 @@ public class EmployeeLogisticsSharedTests {
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -1130,7 +1123,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0).isError());
     }
@@ -1213,9 +1206,8 @@ public class EmployeeLogisticsSharedTests {
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -1233,7 +1225,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0).isError());
     }

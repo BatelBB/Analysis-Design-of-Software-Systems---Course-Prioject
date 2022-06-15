@@ -13,10 +13,10 @@ public class Delivery {
     public List<Site> sources;
     public List<Site> destinations;
     public int totalWeight;
-    public List<Product> products;
+    public List<Integer> orders;
     public long durationInMinutes;
 
-    public Delivery (int id, LocalDateTime date, int truckManagerID, int driverID, String vehicleRegistration, List<Site> sources, List<Site> destinations, int totalWeight, List<Product> products, long hours, long minutes) {
+    public Delivery (int id, LocalDateTime date, int truckManagerID, int driverID, String vehicleRegistration, List<Site> sources, List<Site> destinations, int totalWeight, List<Integer> orders, long hours, long minutes) {
         this.id = id;
         this.date = date;
         this.truckManagerID = truckManagerID;
@@ -25,7 +25,7 @@ public class Delivery {
         this.sources = sources;
         this.destinations = destinations;
         this.totalWeight = totalWeight;
-        this.products = products;
+        this.orders = orders;
         this.durationInMinutes = hours * 60 + minutes;
     }
 }

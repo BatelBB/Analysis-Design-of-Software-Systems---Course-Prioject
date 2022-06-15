@@ -20,8 +20,6 @@ public class DriverLicencesMapper {
     }
 
     public List<String> getMyLicenses(int username) {
-        if (driverLicencesIDMapper.isDriverUpdated(username))
-            return driverLicencesIDMapper.getMyLicenses(username);
         List<String> DTOList = new LinkedList<String>();
         String query = "SELECT licence FROM Drivers_Licences Where username = '" + username + "'";
         try {
@@ -46,8 +44,6 @@ public class DriverLicencesMapper {
             prepStat.setInt(1, username);
             prepStat.setString(2, license.name());
             n = prepStat.executeUpdate();
-            if (driverLicencesIDMapper.isDriverUpdated(username))
-                driverLicencesIDMapper.addDLicense(username, license.name());
         }
         catch (SQLException e){
             throw new IllegalArgumentException("Oops, there was unexpected problem with add the license '" + license.name() + "' to the driver: '" + username + "'\nError description: " + e.getMessage());

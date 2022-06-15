@@ -99,11 +99,11 @@ public class DriverController {
         toReturn += "End Hour: " + printHour(trucking.getDate().plusHours(trucking.getHours()).plusMinutes(trucking.getMinutes())) + "\n";
         toReturn += "Vehicle registration plate: " + trucking.getVehicleRegistrationPlate() + "\n";
         toReturn += "Driver: " + trucking.getDriverUsername() + "\n";
-        toReturn += printSources(trucking.getId());
-        toReturn += printDestinations(trucking.getId());
-        toReturn += printProducts(trucking.getId()) + "\n";
+        toReturn += printSources(trucking);
+        toReturn += printDestinations(trucking);
+        toReturn += printOrders(trucking) + "\n";
         if (trucking.getWeight() > 0)
-            toReturn += "Total weight : " + trucking.getWeight() + "\n";
+            toReturn += "Total weight: " + trucking.getWeight() + "\n";
         else
             toReturn += "There is no data about the trucking weight\n";
         return toReturn;
@@ -122,20 +122,20 @@ public class DriverController {
         return toReturn;
     }
 
-    private String printSources(int TruckingID) {
+    private String printSources(TruckingDTO trucking) {
         String toReturn = "\nSOURCE DETAILS:\n";
-        toReturn += printSitesList(truckingMapper.getSourcesByTruckingId(TruckingID));
+        toReturn += printSitesList(trucking.getSources());
         return toReturn;
     }
 
-    private String printDestinations(int TruckingID) {
+    private String printDestinations(TruckingDTO trucking) {
         String toReturn = "\nDESTINATION DETAILS:\n";
-        toReturn += printSitesList(truckingMapper.getDestinationsByTruckingId(TruckingID));
+        toReturn += printSitesList(trucking.getDestinations());
         return toReturn;
     }
 
-    private String printProducts(int TruckingID) {
-        return "\nProduct DETAILS:\n"  + printProductsList(truckingMapper.getProducts(TruckingID));
+    private String printOrders(TruckingDTO trucking) {
+        return "\nOrder-IDs:\n"  + printOrdersList(trucking.getOrders());
     }
 
     private String printSitesList(List<SiteDTO> sourcesOrDestinations) {
@@ -157,11 +157,11 @@ public class DriverController {
         return toReturn;
     }
 
-    private String printProductsList(List<ProductForTruckingDTO> productForTruckings) {
+    private String printOrdersList(List<Integer> orders) {
         String toReturn  = "";
         int siteCounter = 1;
-        for (ProductForTruckingDTO productForTrucking : productForTruckings) {
-            toReturn += siteCounter + ". " + productForTrucking.printProductForTrucking() + "\n";
+        for (Integer orderID : orders) {
+            toReturn += siteCounter + ". " + orderID.intValue() + "\n";
             siteCounter++;
         }
         return toReturn;

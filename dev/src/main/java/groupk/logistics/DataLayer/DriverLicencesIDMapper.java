@@ -47,4 +47,8 @@ public class DriverLicencesIDMapper {
             singleton = new DriverLicencesIDMapper();
         return singleton;
     }
+
+    public boolean contains(int username) {
+        return driverLicencesIDMapper.containsKey(username);
+    }
 }

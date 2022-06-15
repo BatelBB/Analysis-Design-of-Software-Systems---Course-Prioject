@@ -56,9 +56,8 @@ public class LoadSample implements Command {
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
 
         Site source2 = new Site("miri", "052-2226668", "north", "haifa", "miriSTR", 13, 2, 3);
         Site destination2 = new Site("lior", "053-6545648", "south", "beersheva", "liorSTR", 100, 1, 6);
@@ -66,9 +65,8 @@ public class LoadSample implements Command {
         List<Site> destinations2 = new LinkedList<>();
         sources2.add(source2);
         destinations2.add(destination2);
-        Product product2 = new Product("Water_7290019056966", 2);
-        List<Product> products2 = new LinkedList<>();
-        products2.add(product2);
+        List<Integer> orders2 = new LinkedList<>();
+        orders.add(2);
 
         // HR.
         Employee HR1 = runner.getService().createEmployee(
@@ -368,7 +366,7 @@ public class LoadSample implements Command {
                 D2.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
 
@@ -380,7 +378,7 @@ public class LoadSample implements Command {
                 D1.id,
                 sources2,
                 destinations2,
-                products2,
+                orders2,
                 1,
                 0);
 

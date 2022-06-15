@@ -4,7 +4,7 @@ import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Product;
-
+/*
 public class DeleteDeliveryProduct implements Command {
     @Override
     public String name() {
@@ -63,3 +63,5 @@ public class DeleteDeliveryProduct implements Command {
         System.out.println("Added product to delivery.");
     }
 }
+
+ */
