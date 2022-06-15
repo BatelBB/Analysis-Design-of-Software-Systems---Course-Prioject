@@ -131,7 +131,7 @@ public class LogisticsController {
             for (TruckingDTO trucking : truckings) {
                 toReturn.add(truckingDTOToDelivery(trucking));
             }
-            return new Response<List<Delivery>>(toReturn);
+            return new Response<>(toReturn);
         }
         catch (Exception e) {
             return new Response<>(e.getMessage());

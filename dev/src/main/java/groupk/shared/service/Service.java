@@ -133,6 +133,10 @@ public class Service {
         return facade.setRequiredStaffInShift(subjectId, date, type, requiredStaff);
     }
 
+    public Response<List<Shift>> optionsForDeleveryWithLogisitcsAndDriversInShift(String subjectID){
+        return facade.optionsForDeleveryWithLogisitcsAndDriversInShift(subjectID);
+    }
+
     public Response<Boolean> deleteDelivery(String subjectID, int deliveryID) {
         return facade.deleteDelivery(subjectID, deliveryID);
     }

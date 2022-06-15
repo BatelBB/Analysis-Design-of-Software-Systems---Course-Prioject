@@ -15,8 +15,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SharedTests {
     protected Connection connection;
@@ -37,6 +36,263 @@ public class SharedTests {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    @Test
+    public void optionsForDelivery(){
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+            shiftPreferences.add(shiftDateTime);
+        HashMap<Employee.Role, Integer> r1 = new HashMap<>();
+        for (Employee.Role role : Employee.Role.values())
+            r1.put(role, 0);
+        r1.replace(Employee.Role.ShiftManager, 1);
+        Service service = new Service(connection);
+        service.deleteEmployeeDB();
+        service.deleteLogisticsDB();
+        Employee HR = (service.createEmployee(
+                "Foo",
+                "111111110",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.HumanResources,
+                shiftPreferences)).getValue();
+        Employee d = service.createEmployee(
+                "Foo",
+                "211005121",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.Driver,
+                shiftPreferences).getValue();
+        Employee l = service.createEmployee(
+                "Foo",
+                "21221",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.Logistics,
+                shiftPreferences).getValue();
+        Employee SM1 = service.createEmployee(
+                "Eli",
+                "612",
+                "Example",
+                1,
+                1, new GregorianCalendar(),
+                30,
+                0,
+                0,
+                Employee.Role.ShiftManager,
+                shiftPreferences).getValue();
+        Employee TM1 = service.createEmployee(
+                "Avi",
+                "911",
+                "Example",
+                1,
+                1, new GregorianCalendar(),
+                30,
+                0,
+                0,
+                Employee.Role.TruckingManger,
+                shiftPreferences).getValue();
+        LinkedList<Employee> staff = new LinkedList<>();
+        staff.add(SM1); staff.add(l); staff.add(d);
+        Calendar date = new GregorianCalendar();
+        date.roll(Calendar.DAY_OF_MONTH,1);
+        Shift shift1 = service.createShift(
+                HR.id,
+                date,
+                Shift.Type.Evening,
+                staff,
+                r1).getValue();
+        date = new GregorianCalendar();
+        date.roll(Calendar.DAY_OF_MONTH,2);
+        Shift shift2 = service.createShift(
+                HR.id,
+                date,
+                Shift.Type.Evening,
+                staff,
+                r1).getValue();
+        date = new GregorianCalendar();
+        date.roll(Calendar.DAY_OF_MONTH,3);
+        Shift shift3 = service.createShift(
+                HR.id,
+                date,
+                Shift.Type.Evening,
+                staff,
+                r1).getValue();
+        date = new GregorianCalendar();
+        date.roll(Calendar.DAY_OF_MONTH,4);
+        Shift shift4 = service.createShift(
+                HR.id,
+                date,
+                Shift.Type.Evening,
+                staff,
+                r1).getValue();
+        date = new GregorianCalendar();
+        date.roll(Calendar.DAY_OF_MONTH,5);
+        Shift shift5 = service.createShift(
+                HR.id,
+                date,
+                Shift.Type.Evening,
+                staff,
+                r1).getValue(); date.add(Calendar.DAY_OF_MONTH,1);
+        date = new GregorianCalendar();
+        date.roll(Calendar.DAY_OF_MONTH,6);
+        Shift shift6 = service.createShift(
+                HR.id,
+                date,
+                Shift.Type.Evening,
+                staff,
+                r1).getValue();
+        date = new GregorianCalendar();
+        date.roll(Calendar.DAY_OF_MONTH,7);
+        Shift shift7 = service.createShift(
+                HR.id,
+                date,
+                Shift.Type.Evening,
+                staff,
+                r1).getValue();
+        assertEquals(service.listShifts(HR.id).getValue().size(), 7);
+        assertEquals(service.optionsForDeleveryWithLogisitcsAndDriversInShift(HR.id).getValue().size(),7);
+    }
+    @Test
+    public void deleteDriverWhoHasFutureDelivery(){
+        Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
+        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+            shiftPreferences.add(shiftDateTime);
+        HashMap<Employee.Role, Integer> r1 = new HashMap<>();
+        for (Employee.Role role : Employee.Role.values())
+            r1.put(role, 0);
+        r1.replace(Employee.Role.ShiftManager, 1);
+        Service service = new Service(connection);
+        service.deleteEmployeeDB();
+        service.deleteLogisticsDB();
+        Employee HR = (service.createEmployee(
+                "Foo",
+                "111111110",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.HumanResources,
+                shiftPreferences)).getValue();
+        Employee d = service.createEmployee(
+                "Foo",
+                "211005121",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.Driver,
+                shiftPreferences).getValue();
+        Employee l = service.createEmployee(
+                "Foo",
+                "21221",
+                "FooBank",
+                1, 1,
+                new GregorianCalendar(),
+                30,
+                0, 0,
+                Employee.Role.Logistics,
+                shiftPreferences).getValue();
+        Employee SM1 = service.createEmployee(
+                "Eli",
+                "612",
+                "Example",
+                1,
+                1, new GregorianCalendar(),
+                30,
+                0,
+                0,
+                Employee.Role.ShiftManager,
+                shiftPreferences).getValue();
+        Employee TM1 = service.createEmployee(
+                "Avi",
+                "911",
+                "Example",
+                1,
+                1, new GregorianCalendar(),
+                30,
+                0,
+                0,
+                Employee.Role.TruckingManger,
+                shiftPreferences).getValue();
+        LinkedList<Employee> staff = new LinkedList<>();
+        staff.add(SM1); staff.add(l); staff.add(d);
+        Shift shift1 = service.createShift(
+                HR.id,
+                new GregorianCalendar(2023, Calendar.APRIL, 21),
+                Shift.Type.Evening,
+                staff,
+                r1).getValue();
+        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        List<Site> sources = new LinkedList<>();
+        List<Site> destinations = new LinkedList<>();
+        sources.add(source);
+        destinations.add(destination);
+        Product product = new Product("Eggs_4902505139314", 2);
+        List<Product> products = new LinkedList<>();
+        products.add(product);
+        service.createVehicle(
+                TM1.id,
+                "B",
+                "12315678",
+                "mercedes",
+                4,
+                32);
+        service.addLicenseForDriver(
+                d.id,
+                DLicense.B.name());
+        service.createDelivery(
+                TM1.id,
+                "12315678",
+                LocalDateTime.of(2023, Month.APRIL, 21, 18, 0),
+                d.id,
+                sources,
+                destinations,
+                products,
+                2,
+                0);
+        assertEquals(service.listDeliveries(TM1.id).getValue().size(),1);
+        assertTrue(service.deleteEmployee(HR.id,d.id).isError());
+        service.deleteDelivery(TM1.id, 1);
+        Calendar date = new GregorianCalendar();
+        date.roll(Calendar.DAY_OF_MONTH, -4);
+        Shift shift2 = service.createShift(
+                HR.id,
+                date,
+                Shift.Type.Evening,
+                staff,
+                r1).getValue();
+        Shift shift3 = service.createShift(
+                HR.id,
+                date,
+                Shift.Type.Morning,
+                staff,
+                r1).getValue();
+        service.createDelivery(
+                TM1.id,
+                "12315678",
+                (LocalDateTime.now()).minusDays(4),
+                d.id,
+                sources,
+                destinations,
+                products,
+                2,
+                0);
+        service.removeEmployeeFromShift(HR.id, shift1.getDate(), shift1.getType(), d.id).getValue();
+        assertFalse(service.deleteEmployee(HR.id,d.id).isError());
     }
 
     @Test

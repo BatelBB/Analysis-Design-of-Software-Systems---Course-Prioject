@@ -72,7 +72,7 @@ public class Facade {
     }
 
     public Employee readEmployee(String subjectID, String employeeID) {
-        if (subjectID.equals(employeeID) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.HumanResources) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.LogisticsManager) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.TruckingManger)) {
+        if (subjectID.equals(employeeID) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.HumanResources) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.LogisticsManager) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.TruckingManger) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.StoreManager)) {
             return dataEmployeeToService(employees.read(employeeID));
         } else {
             throw new IllegalArgumentException("Subject must be authorized to read employees.");
@@ -80,7 +80,7 @@ public class Facade {
     }
 
     public Shift readShift(String subjectID, Calendar date ,Shift.Type type) {
-        if (employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.HumanResources) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.LogisticsManager) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.TruckingManger)) {
+        if (employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.HumanResources) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.LogisticsManager) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.TruckingManger) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.StoreManager)) {
             return dataShiftToService(shifts.getShift(date, serviceTypeToData(type)));
         }
         else {
@@ -90,10 +90,32 @@ public class Facade {
 
     public Employee deleteEmployee(String subjectID, String employeeID) {
         if (employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.HumanResources)) {
-            return dataEmployeeToService(employees.delete(employeeID));
-        } else {
+            List<Shift> shifts = listEmployeeShifts(subjectID, employeeID);
+            Employee employee = readEmployee(subjectID, employeeID);
+            for (Shift s:shifts) {
+                if(s.getDate().after(new GregorianCalendar())) {
+                    int numOfRoles = -1; //without this employee
+                    for (Employee e : s.getStaff()) {
+                        if (e.role.equals(employee.role))
+                            numOfRoles++;
+                    }
+                    if (numOfRoles < s.getRequiredStaff().get(employee.role))
+                        throw new IllegalArgumentException("Employee has a future shift at" + "and there are not enough workers with this employee's role to run this shift without him.");
+                }
+            }
+        }
+        else {
             throw new IllegalArgumentException("Subject must be authorized to delete employees.");
         }
+        groupk.workers.data.Employee output = employees.delete(employeeID);
+        List<groupk.workers.data.Shift> shiftsInFuture = shifts.listShifts();
+        for (groupk.workers.data.Shift s:shiftsInFuture) {//remove employee from future shifts
+            if(s.getDate().after(new GregorianCalendar())) {
+                if(s.getStaff().contains(output))
+                    s.removeEmployee(output);
+            }
+        }
+        return  dataEmployeeToService(output);
     }
 
     public Shift deleteShift(String subjectID, Shift.Type type, Calendar date){
@@ -105,7 +127,7 @@ public class Facade {
     }
 
     public List<Employee> listEmployees(String subjectID) {
-        if (employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.HumanResources)) {
+        if (employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.HumanResources) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.StoreManager)) {
             return employees.list().stream()
                     .map(Facade::dataEmployeeToService)
                     .collect(Collectors.toList());
@@ -194,7 +216,7 @@ public class Facade {
     }
 
     public List<Shift> listShifts(String subjectID) {
-        if(employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.HumanResources)) {
+        if(employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.HumanResources) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.TruckingManger) ||employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.LogisticsManager) ||employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.StoreManager)) {
             List<groupk.workers.data.Shift> dataShifts = shifts.listShifts();
             List<Shift> dtoShifts = new LinkedList<>();
             for (groupk.workers.data.Shift s : dataShifts)
@@ -205,16 +227,19 @@ public class Facade {
     }
 
     public List<Shift> listEmployeeShifts(String subjectID, String employeeID) {
-        List<Shift> shifts = listShifts(subjectID);
-        List<Shift> output = new ArrayList<>();
-        for (Shift s: shifts) {
-            List<Employee> staff = s.getStaff();
-            for (Employee e: staff) {
-                if(e.id.equals(employeeID))
-                output.add(s);
+        if(subjectID.equals(employeeID) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.HumanResources) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.StoreManager)) {
+            List<groupk.workers.data.Shift> dataShifts = shifts.listShifts();
+            List<Shift> dtoShifts = new LinkedList<>();
+            for (groupk.workers.data.Shift s : dataShifts) {
+                List<groupk.workers.data.Employee> staff = s.getStaff();
+                for (groupk.workers.data.Employee e : staff) {
+                    if (e.getId().equals(employeeID))
+                        dtoShifts.add(dataShiftToService(s));
+                }
             }
+            return dtoShifts;
         }
-        return output;
+        throw new IllegalArgumentException("Subject must be authorized to get history of shifts.");
     }
 
     public Shift setRequiredRoleInShift(String subjectId, Calendar date, Shift.Type type, Employee.Role role, int count) {
@@ -232,7 +257,7 @@ public class Facade {
     }
 
     public List<Employee> whoCanWorkWithRole(String subjectId, Employee.ShiftDateTime day, Employee.Role role){
-        if(employees.isFromRole(subjectId, groupk.workers.data.Employee.Role.HumanResources)) {
+        if(employees.isFromRole(subjectId, groupk.workers.data.Employee.Role.HumanResources) || employees.isFromRole(subjectId, groupk.workers.data.Employee.Role.StoreManager)) {
             List<Employee> employees = listEmployees(subjectId);
             return employees.stream().filter(p -> p.shiftPreferences.contains(day) && p.role.equals(role)).collect(Collectors.toList());
         }
@@ -241,7 +266,7 @@ public class Facade {
     }
 
     public List<Employee> whoCanWork(String subjectId, Employee.ShiftDateTime day) {
-        if(employees.isFromRole(subjectId, groupk.workers.data.Employee.Role.HumanResources)) {
+        if(employees.isFromRole(subjectId, groupk.workers.data.Employee.Role.HumanResources) || employees.isFromRole(subjectId, groupk.workers.data.Employee.Role.StoreManager)) {
             List<Employee> employees = listEmployees(subjectId);
             return employees.stream().filter(p -> p.shiftPreferences.contains(day)).collect(Collectors.toList());
         }
