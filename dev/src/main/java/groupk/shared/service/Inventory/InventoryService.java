@@ -1,10 +1,9 @@
-package groupk.shared.business.Inventory.Service;
+package groupk.shared.service.Inventory;
 
-import groupk.shared.business.Inventory.Service.Objects.*;
 import groupk.shared.business.Inventory.Categories.Category;
-import groupk.shared.business.Inventory.Service.Objects.Product;
-import groupk.shared.business.Inventory.Service.Objects.Report;
-import groupk.shared.business.Inventory.Service.Objects.SubCategory;
+import groupk.shared.service.Inventory.Objects.Product;
+import groupk.shared.service.Inventory.Objects.Report;
+import groupk.shared.service.Inventory.Objects.SubCategory;
 import groupk.shared.business.Suppliers.Service.ISupplierService;
 import groupk.shared.service.ServiceBase;
 
@@ -96,7 +95,7 @@ public class InventoryService extends ServiceBase {
     }
 
     //Item methods
-    public ResponseT<groupk.shared.business.Inventory.Service.Objects.ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
+    public ResponseT<groupk.shared.service.Inventory.Objects.ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
         return product_service.addItem(product_id, store, location, supplier, expiration_date, on_shelf);
     }
 

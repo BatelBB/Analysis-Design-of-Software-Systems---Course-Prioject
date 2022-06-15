@@ -1,7 +1,7 @@
 package groupk.shared.PresentationLayer;
 
 import groupk.shared.PresentationLayer.EmployeesLogistics.MainEmployeesAndDelivery;
-import groupk.shared.business.Inventory.Service.InventoryService;
+import groupk.shared.service.Inventory.InventoryService;
 import groupk.shared.business.Suppliers.Service.ISupplierService;
 import groupk.shared.PresentationLayer.Inventory.InventoryPresentationFacade;
 import groupk.shared.PresentationLayer.Suppliers.SupplierPresentationFacade;

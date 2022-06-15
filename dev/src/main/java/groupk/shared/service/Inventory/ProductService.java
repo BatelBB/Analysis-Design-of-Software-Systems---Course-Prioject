@@ -1,9 +1,8 @@
-package groupk.shared.business.Inventory.Service;
+package groupk.shared.service.Inventory;
 
 import groupk.shared.business.ProductController;
-import groupk.shared.business.Inventory.Service.Objects.Product;
-import groupk.shared.business.Inventory.Service.Objects.ProductItem;
-import groupk.shared.business.Suppliers.Service.ISupplierService;
+import groupk.shared.service.Inventory.Objects.Product;
+import groupk.shared.service.Inventory.Objects.ProductItem;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
 
 import java.time.LocalDate;
@@ -63,7 +62,7 @@ public class ProductService extends ServiceBase {
         return responseForVoid(() -> product_controller.removeProduct(id));
     }
 
-    public ResponseT<groupk.shared.business.Inventory.Service.Objects.ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
+    public ResponseT<groupk.shared.service.Inventory.Objects.ProductItem> addItem(int product_id, String store, String location, int supplier, LocalDate expiration_date, boolean on_shelf) {
         return responseFor(() ->
                 new ProductItem(
                         product_controller.addItem(

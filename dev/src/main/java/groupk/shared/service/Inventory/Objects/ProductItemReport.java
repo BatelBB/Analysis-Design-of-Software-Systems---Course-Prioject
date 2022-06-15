@@ -1,8 +1,6 @@
-package groupk.shared.business.Inventory.Service.Objects;
+package groupk.shared.service.Inventory.Objects;
 
 import java.util.List;
-
-import static groupk.shared.business.Inventory.Report.report_type.*;
 
 public class ProductItemReport extends Report{
 
@@ -12,7 +10,7 @@ public class ProductItemReport extends Report{
         super(report);
         List<groupk.shared.business.Inventory.ProductItem> BusinessProductItemList=report.getProductItemList();
         for (groupk.shared.business.Inventory.ProductItem p:BusinessProductItemList) {
-            productItemList.add(new groupk.shared.business.Inventory.Service.Objects.ProductItem(p));
+            productItemList.add(new groupk.shared.service.Inventory.Objects.ProductItem(p));
         }
     }
 

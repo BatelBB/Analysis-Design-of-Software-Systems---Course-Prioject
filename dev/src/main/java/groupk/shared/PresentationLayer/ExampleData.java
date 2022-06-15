@@ -1,8 +1,8 @@
 package groupk.shared.PresentationLayer;
 
-import groupk.shared.business.Inventory.Service.Objects.Product;
-import groupk.shared.business.Inventory.Service.Objects.ProductItem;
-import groupk.shared.business.Inventory.Service.InventoryService;
+import groupk.shared.service.Inventory.Objects.Product;
+import groupk.shared.service.Inventory.Objects.ProductItem;
+import groupk.shared.service.Inventory.InventoryService;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.Service.ISupplierService;
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;

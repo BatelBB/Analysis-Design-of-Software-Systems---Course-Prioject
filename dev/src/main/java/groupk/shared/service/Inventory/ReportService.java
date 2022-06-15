@@ -1,9 +1,9 @@
-package groupk.shared.business.Inventory.Service;
+package groupk.shared.service.Inventory;
 
 import groupk.shared.business.CategoryController;
 import groupk.shared.business.ProductController;
 import groupk.shared.business.ReportController;
-import groupk.shared.business.Inventory.Service.Objects.Report;
+import groupk.shared.service.Inventory.Objects.Report;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
 import groupk.shared.service.ServiceBase;
 

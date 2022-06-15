@@ -1,9 +1,9 @@
 package groupk.shared.PresentationLayer.Inventory;
 
-import groupk.shared.business.Inventory.Service.CategoryService;
-import groupk.shared.business.Inventory.Service.ProductService;
-import groupk.shared.business.Inventory.Service.ReportService;
-import groupk.shared.business.Inventory.Service.InventoryService;
+import groupk.shared.service.Inventory.CategoryService;
+import groupk.shared.service.Inventory.ProductService;
+import groupk.shared.service.Inventory.ReportService;
+import groupk.shared.service.Inventory.InventoryService;
 import groupk.shared.service.ServiceBase;
 
 import java.time.LocalDate;

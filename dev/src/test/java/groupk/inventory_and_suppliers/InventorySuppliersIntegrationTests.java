@@ -339,9 +339,9 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
 
     @Test
     public void testCreateSupplierCard() {
-        Assertions.assertTrue(suppliers.createSupplier(1, 123, "Lorem", true,
-                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
-                "Foobar Lane 69, Upper Foo").success);
+        assertSuccess(suppliers.createSupplier(1, 123, "Lorem", true,
+                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "050-9954528",
+                "Foobar Lane 69, Upper Foo"));
     }
 
 
