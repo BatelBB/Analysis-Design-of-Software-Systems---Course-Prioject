@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ServiceTest {
+public class WorkersServiceTest {
     protected Connection connection;
 
     @BeforeEach

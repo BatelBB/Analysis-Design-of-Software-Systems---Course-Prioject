@@ -23,7 +23,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class IntegrationTests extends TestsBase {
+public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsBase {
 
     private QuantityDiscount discount;
     private Order order;

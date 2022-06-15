@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.sql.Connection;
 
-public class TestsBase {
+public class InventorySuppliersTestsBase {
     protected InventoryService inventory;
     protected ISupplierService suppliers;
     protected PersistenceController pc;

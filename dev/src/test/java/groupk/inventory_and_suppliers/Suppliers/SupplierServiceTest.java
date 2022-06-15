@@ -6,7 +6,7 @@ import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Order;
 import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
-import groupk.inventory_and_suppliers.TestsBase;
+import groupk.inventory_and_suppliers.InventorySuppliersTestsBase;
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 
@@ -21,7 +21,7 @@ import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ServiceTest extends TestsBase {
+class SupplierServiceTest extends InventorySuppliersTestsBase {
 
     /**
      * used for float equality

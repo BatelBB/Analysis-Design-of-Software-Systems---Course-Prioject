@@ -1,7 +1,7 @@
 package groupk.inventory_and_suppliers.Inventory;
 
 import groupk.shared.business.Inventory.Service.Objects.*;
-import groupk.inventory_and_suppliers.TestsBase;
+import groupk.inventory_and_suppliers.InventorySuppliersTestsBase;
 
 import groupk.shared.business.Inventory.Categories.Category;
 import groupk.shared.service.ServiceBase;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ServiceTest extends TestsBase {
+class InventoryServiceTest extends InventorySuppliersTestsBase {
 
     @Test
     void addCategory() {

@@ -14,7 +14,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DalEmployeeTest {
+public class WorkersDalTest {
     protected Connection connection;
 
     @BeforeEach

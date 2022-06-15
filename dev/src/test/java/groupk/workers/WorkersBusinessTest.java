@@ -14,7 +14,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.*;
 
-public class BusinessTest {
+public class WorkersBusinessTest {
     protected Connection connection;
 
     @BeforeEach
