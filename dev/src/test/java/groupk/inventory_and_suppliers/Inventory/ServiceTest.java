@@ -1,7 +1,7 @@
-package groupk.shared.Tests.Inventory;
+package groupk.inventory_and_suppliers.Inventory;
 
 import groupk.shared.business.Inventory.Service.Objects.*;
-import groupk.shared.Tests.TestsBase;
+import groupk.inventory_and_suppliers.TestsBase;
 
 import groupk.shared.business.Inventory.Categories.Category;
 import groupk.shared.service.ServiceBase;

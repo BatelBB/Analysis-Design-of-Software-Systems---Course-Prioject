@@ -1,8 +1,7 @@
-package groupk.shared.Tests;
+package groupk.inventory_and_suppliers;
 
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
-import groupk.shared.business.Facade;
 import groupk.shared.business.Inventory.ProductItem;
 import groupk.shared.business.Inventory.Service.Objects.Product;
 import groupk.shared.business.Inventory.Service.Objects.Report;
@@ -11,9 +10,6 @@ import groupk.shared.business.Suppliers.BussinessObject.Order;
 import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 
-import groupk.shared.business.Suppliers.BussinessObject.Order;
-import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
-import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 import groupk.shared.service.ServiceBase;
 import groupk.shared.service.ServiceBase.ResponseT;
 import groupk.shared.service.ServiceBase.Response;

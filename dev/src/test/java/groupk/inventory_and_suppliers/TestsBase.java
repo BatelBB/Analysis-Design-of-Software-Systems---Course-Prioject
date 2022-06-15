@@ -1,4 +1,4 @@
-package groupk.shared.Tests;
+package groupk.inventory_and_suppliers;
 
 import groupk.inventory_suppliers.SchemaInit;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;

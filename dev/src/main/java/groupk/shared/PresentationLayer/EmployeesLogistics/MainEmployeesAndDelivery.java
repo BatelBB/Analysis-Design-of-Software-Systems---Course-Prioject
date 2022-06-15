@@ -6,8 +6,8 @@ import java.sql.Connection;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Application {
-    public static void main(String[] args, Connection conn) {
+public class MainEmployeesAndDelivery {
+    public static void mainEmployeesAndDelivery(String[] args, Connection conn) {
         AtomicBoolean keepGoing = new AtomicBoolean(true);
         CommandRunner runner = new CommandRunner(
                 new Command[] {

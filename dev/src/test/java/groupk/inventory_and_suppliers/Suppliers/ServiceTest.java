@@ -1,4 +1,4 @@
-package groupk.shared.Tests.Suppliers;
+package groupk.inventory_and_suppliers.Suppliers;
 
 import groupk.shared.business.Inventory.Service.Objects.Product;
 import groupk.shared.business.Suppliers.BusinessLogicException;
@@ -6,7 +6,7 @@ import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Order;
 import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
-import groupk.shared.Tests.TestsBase;
+import groupk.inventory_and_suppliers.TestsBase;
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 
