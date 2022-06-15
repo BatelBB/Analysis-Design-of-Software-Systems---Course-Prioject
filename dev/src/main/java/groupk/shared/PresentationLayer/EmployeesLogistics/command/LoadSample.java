@@ -50,8 +50,8 @@ public class LoadSample implements Command {
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
@@ -60,8 +60,8 @@ public class LoadSample implements Command {
         List<Product> products = new LinkedList<>();
         products.add(product);
 
-        Site source2 = new Site("miri", "0522226668", "north", "haifa", "miriSTR", 13, 2, 3);
-        Site destination2 = new Site("lior", "0536545648", "south", "beersheva", "liorSTR", 100, 1, 6);
+        Site source2 = new Site("miri", "052-2226668", "north", "haifa", "miriSTR", 13, 2, 3);
+        Site destination2 = new Site("lior", "053-6545648", "south", "beersheva", "liorSTR", 100, 1, 6);
         List<Site> sources2 = new LinkedList<>();
         List<Site> destinations2 = new LinkedList<>();
         sources2.add(source2);

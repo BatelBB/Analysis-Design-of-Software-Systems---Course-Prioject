@@ -96,8 +96,8 @@ public class LogisticsTests {
         LocalTime time =  LocalTime.of(20,0,0);
         LocalDateTime localDateTime =  LocalDateTime.of(date,time);
         localDateTime.plusSeconds(10);
-        String[] source = {"tamirHouse","batYam","0543397995","tamirStr","13","2","3","center"};
-        String[]  destination = {"idoHouse","herzliya","0524321231","idoStr","100","1","6","center"};
+        String[] source = {"tamirHouse","batYam","054-3397995","tamirStr","13","2","3","center"};
+        String[]  destination = {"idoHouse","herzliya","052-4321231","idoStr","100","1","6","center"};
         List<String[]> sources = new LinkedList<>();
         List<String[]> destinations = new LinkedList<>();
         sources.add(source);
@@ -122,8 +122,8 @@ public class LogisticsTests {
         LocalTime time =  LocalTime.of(20,0,0);
         LocalDateTime localDateTime =  LocalDateTime.of(date,time);
         localDateTime.plusSeconds(10);
-        String[] source = {"tamirHouse","batYam","0543397995","tamirStr","13","2","3","center"};
-        String[]  destination = {"idoHouse","herzliya","0524321231","idoStr","100","1","6","center"};
+        String[] source = {"tamirHouse","batYam","054-3397995","tamirStr","13","2","3","center"};
+        String[]  destination = {"idoHouse","herzliya","052-4321231","idoStr","100","1","6","center"};
         List<String[]> sources = new LinkedList<>();
         List<String[]> destinations = new LinkedList<>();
         sources.add(source);
@@ -207,8 +207,8 @@ public class LogisticsTests {
     //
     @Test
     public void checkSites() {
-        String[] site1 = {"tamirHouse","batYam","0543397995","tamirStr","13","2","3","center"};
-        String[]  site2 = {"idoHouse","herzliya","0524321231","idoStr","100","1","6","north"};
+        String[] site1 = {"tamirHouse","batYam","054-3397995","tamirStr","13","2","3","center"};
+        String[]  site2 = {"idoHouse","herzliya","052-4321231","idoStr","100","1","6","north"};
         List<String[]> sites = new LinkedList<>();
         sites.add(site1);
         sites.add(site2);

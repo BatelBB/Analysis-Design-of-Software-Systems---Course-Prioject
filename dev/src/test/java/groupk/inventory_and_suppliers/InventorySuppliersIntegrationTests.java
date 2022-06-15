@@ -389,7 +389,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
     @Test
     public void testAddItemWithoutExistingSupplier() {
         Supplier sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem", true,
-                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
+                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "050-9954528",
                 "Foobar Lane 69, Upper Foo"));
 
         inventory.addCategory("Dairy");
@@ -403,7 +403,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
     @Test
     public void testAddItemToNonExistingOrder() {
         Supplier sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem", true,
-                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
+                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "050-9954528",
                 "Foobar Lane 69, Upper Foo"));
 
         Order order = assertSuccess(suppliers.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
@@ -426,7 +426,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
     @Test
     public void testAddQuantityDiscountToItem() throws SQLException {
         Supplier sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem", true,
-                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "0509954528",
+                PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "050-9954528",
                 "Foobar Lane 69, Upper Foo"));
 
         Order order = assertSuccess(suppliers.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
@@ -462,7 +462,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
     private void addToDB() {
         sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem",
                 true, PaymentCondition.Credit, DayOfWeek.SUNDAY,
-                "Moti", "0509954528", "Foobar Lane 69, Upper Foo"));
+                "Moti", "050-9954528", "Foobar Lane 69, Upper Foo"));
 
         order = assertSuccess(suppliers.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX, OrderType.Periodical));
 

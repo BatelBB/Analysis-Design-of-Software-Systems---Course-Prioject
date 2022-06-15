@@ -235,8 +235,8 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
@@ -367,8 +367,8 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
@@ -551,8 +551,8 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
@@ -713,8 +713,8 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
@@ -908,8 +908,8 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
@@ -1001,8 +1001,8 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
@@ -1104,8 +1104,8 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
@@ -1207,8 +1207,8 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
