@@ -386,10 +386,10 @@ public class Service {
     public Facade.ResponseT<Supplier> createSupplier(int ppn, int bankAccount, String name,
                                                           boolean isDelivering, PaymentCondition paymentCondition,
                                                           DayOfWeek regularSupplyingDays, String contactName,
-                                                          String contactPhone, String contactEmail) {
+                                                          String contactPhone, String contactAddress) {
         return facade.createSupplier(
                 ppn, bankAccount, name, isDelivering,
-                paymentCondition, regularSupplyingDays, contactEmail,
+                paymentCondition, regularSupplyingDays, contactAddress,
                 contactName, contactPhone
         );
     }
@@ -484,9 +484,9 @@ public class Service {
         return facade.setSupplierRegularSupplyingDays(supplierPPN, dayOfWeek);
     }
 
-    public Facade.SI_Response setSupplierContact(int supplierPPN, String name, String phoneNumber, String email) {
+    public Facade.SI_Response setSupplierContact(int supplierPPN, String name, String phoneNumber, String address) {
 
-        return facade.setSupplierContact(supplierPPN, name, phoneNumber, email);
+        return facade.setSupplierContact(supplierPPN, name, phoneNumber, address);
     }
 
     public Facade.SI_Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {

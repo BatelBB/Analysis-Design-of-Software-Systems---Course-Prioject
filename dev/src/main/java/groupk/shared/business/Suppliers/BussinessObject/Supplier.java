@@ -53,7 +53,7 @@ public class Supplier {
                 "Name", getName(),
                 "Contact name", source.getContact().getName(),
                 "Contact phone", source.getContact().getPhoneNumber(),
-                "Contact email", source.getContact().getEmail(),
+                "Contact address", source.getContact().getAddress(),
                 "Bank #", source.getBankNumber(),
                 "Delivering", source.isDelivering(),
                 "Payment condition", source.getPaymentCondition(),

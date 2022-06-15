@@ -20,7 +20,7 @@ CREATE TABLE "Supplier" (
 	"isDelivering"	BOOLEAN NOT NULL,
 	"paymentCondition"	INTEGER NOT NULL,
 	"regularSupplyingDay"	INTEGER,
-	"contactEmail"	TEXT NOT NULL,
+	"contactAddress"	TEXT NOT NULL,
 	"contactName"	TEXT NOT NULL,
 	"contactPhone"	TEXT NOT NULL,
 	PRIMARY KEY("ppn" AUTOINCREMENT)
@@ -38,7 +38,7 @@ public class SupplierDAO extends BaseDAO<Integer, SupplierRecord> {
 
                 "INSERT INTO " +
                 "Supplier(ppn, bankNumber, name, isDelivering, paymentCondition, regularSupplyingDay," +
-                "contactName, contactPhone, contactEmail)" +
+                "contactName, contactPhone, contactAddress)" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
 
                 ps -> ps.setInt(1, createSupplierDTO.ppn),
@@ -49,7 +49,7 @@ public class SupplierDAO extends BaseDAO<Integer, SupplierRecord> {
                 ps -> ps.setInt(6, valueOf(createSupplierDTO.regularSupplyDays)),
                 ps -> ps.setString(7, createSupplierDTO.contactName),
                 ps -> ps.setString(8, createSupplierDTO.contactPhone),
-                ps -> ps.setString(9, createSupplierDTO.contactEmail)
+                ps -> ps.setString(9, createSupplierDTO.contactAddress)
         );
     }
                        
@@ -68,9 +68,9 @@ public class SupplierDAO extends BaseDAO<Integer, SupplierRecord> {
         get(ppn).setRegularSupplyingDays(day);
     }
 
-    public void updateContactEmail(int ppn, String email) {
-        runUpdate(ppn, "contactEmail", email, Types.VARCHAR);
-        get(ppn).getContact().setEmail(email);
+    public void updateContactAddress(int ppn, String address) {
+        runUpdate(ppn, "contactAddress", address, Types.VARCHAR);
+        get(ppn).getContact().setAddress(address);
     }
 
     private void runUpdate(int ppn, String field, Object value, int sqlType) {
@@ -117,7 +117,7 @@ public class SupplierDAO extends BaseDAO<Integer, SupplierRecord> {
         DayOfWeek rsd = weekday == -1 ? null : DayOfWeek.of(weekday);
         ContactRecord contact = new ContactRecord(
                 resultSet.getString("contactName"),
-                resultSet.getString("contactEmail"),
+                resultSet.getString("contactAddress"),
                 resultSet.getString("contactPhone")
         );
         SupplierRecord sup = new SupplierRecord(ppn, bankNo, name, delivering, pm, rsd, contact);

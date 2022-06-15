@@ -594,10 +594,10 @@ public class Facade {
     public ResponseT<Supplier> createSupplier(int ppn, int bankAccount, String name,
                                               boolean isDelivering, PaymentCondition paymentCondition,
                                               DayOfWeek regularSupplyingDays, String contactName,
-                                              String contactPhone, String contactEmail) {
+                                              String contactPhone, String contactAddress) {
         return responseFor(() -> suppliers.create(new CreateSupplierDTO(
                 ppn, bankAccount, name, isDelivering,
-                paymentCondition, regularSupplyingDays, contactEmail,
+                paymentCondition, regularSupplyingDays, contactAddress,
                 contactName, contactPhone
         )));
     }
@@ -729,9 +729,9 @@ public class Facade {
         return responseForVoid(() -> suppliers.setRegularSupplyingDays(supplierPPN, dayOfWeek));
     }
 
-    public SI_Response setSupplierContact(int supplierPPN, String name, String phoneNumber, String email) {
+    public SI_Response setSupplierContact(int supplierPPN, String name, String phoneNumber, String address) {
 
-        return responseForVoid(() -> suppliers.setContact(supplierPPN, name, phoneNumber, email));
+        return responseForVoid(() -> suppliers.setContact(supplierPPN, name, phoneNumber, address));
     }
 
     public SI_Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {

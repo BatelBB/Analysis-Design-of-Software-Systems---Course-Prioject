@@ -43,10 +43,10 @@ public class SupplierPresentationFacade {
                             PaymentCondition paymentCondition = choosePayment("Which way will the supplier pay? ");
                             DayOfWeek day = isDelivering ? chooseDay() : null;
                             String contactName = input.nextString("Enter the supplier's contact name: ");
-                            String email = input.nextString("Enter the supplier's contact email: ");
+                            String address = input.nextString("Enter the supplier's contact address: ");
                             String phoneNum = input.nextPhone("Enter the supplier's contact phone number: ");
                             ResponseT<Supplier> supplier = service.createSupplier(ppn, bankAccount, name, isDelivering,
-                                    paymentCondition, day, contactName, phoneNum, email);
+                                    paymentCondition, day, contactName, phoneNum, address);
                             if (supplier.success) {
                                 output.print(supplier.data.toString());
                             } else {
@@ -100,10 +100,10 @@ public class SupplierPresentationFacade {
                                     case (7): {
                                         //Edit contact
                                         String contactName = input.nextString("Enter the supplier's contact name: ");
-                                        String email = input.nextString("Enter the supplier's contact email: ");
+                                        String address = input.nextString("Enter the supplier's contact address: ");
                                         String phoneNum = input.nextString(
                                                 "Enter the supplier's contact phone number: ");
-                                        service.setSupplierContact(ppn, contactName, phoneNum, email);
+                                        service.setSupplierContact(ppn, contactName, phoneNum, address);
                                         break;
                                     }
 

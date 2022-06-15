@@ -25,7 +25,7 @@ public interface ISupplierService {
             int ppn, int bankAccount, String name,
             boolean isDelivering, PaymentCondition paymentCondition,
             DayOfWeek regularSupplyingDays,
-            String contactName, String contactPhone, String contactEmail);
+            String contactName, String contactPhone, String contactAddress);
 
     Collection<Supplier> getSuppliers();
 
@@ -73,7 +73,7 @@ public interface ISupplierService {
 
     Response setSupplierRegularSupplyingDays(int supplierPPN, DayOfWeek dayOfWeek);
 
-    Response setSupplierContact(int supplierPPN, String name, String phoneNumber, String email);
+    Response setSupplierContact(int supplierPPN, String name, String phoneNumber, String address);
 
     Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount);
 
