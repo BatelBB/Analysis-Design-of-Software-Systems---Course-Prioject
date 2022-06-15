@@ -14,7 +14,7 @@ public class UserInput {
 
     private static UserInput instance = null;
 
-    private final Pattern phonePattern = Pattern.compile("^05\\d\\-\\d{7}$");
+    private final String phonePattern = "^05\\d[-]\\d{7}$";
 
     private UserInput() {
 
@@ -148,10 +148,10 @@ public class UserInput {
         String inputLine = "";
         while (retry) {
             try {
-                UserOutput.getInstance().print(s + "(format: 05X-XXXXXXX)");
+                UserOutput.getInstance().print(s + "(format: 05X-XXXXXXX) ");
                 inputLine = scanner.nextLine();
-                if (!inputLine.equals(phonePattern)) {
-                    throw new MissingFormatArgumentException("Please use format: 05X-XXXXXXX");
+                if (!inputLine.matches(phonePattern)) {
+                    throw new MissingFormatArgumentException(" Please use format: 05X-XXXXXXX ");
                 }
                 retry = false;
             } catch (Exception e) {
