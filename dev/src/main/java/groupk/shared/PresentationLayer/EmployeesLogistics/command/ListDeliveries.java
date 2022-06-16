@@ -4,7 +4,6 @@ import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.Delivery;
 import groupk.shared.service.dto.Employee;
-import groupk.shared.service.dto.Product;
 import groupk.shared.service.dto.Site;
 
 import java.util.List;

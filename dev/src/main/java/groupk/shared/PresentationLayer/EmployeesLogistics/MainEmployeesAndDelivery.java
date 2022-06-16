@@ -33,10 +33,12 @@ public class MainEmployeesAndDelivery {
                         new AddDeliveryDestination(),
                         new AddOrderToDelivery(),
                         new UpdateDeliveryWeight(),
-                        //new DeleteDeliveryProduct(),
+                        new DeleteOrderFromDelivery(),
                         new CreateVehicle(),
                         new ListVehicles(),
-                        new AddDriverLicense()
+                        new AddDriverLicense(),
+                        new GetDeliveryByOrder(),
+                        new GetDeliveryRequests()
                 },
                 () -> {
                         keepGoing.set(false);

@@ -217,6 +217,18 @@ public class Service {
         return facade.getAreasList();
     }
 
+    public Response<Integer> getTruckingIDByOrderID(String subjectID, int orderID) {
+        return facade.getTruckingIDByOrderID(subjectID, orderID);
+    }
+
+    public Response<Boolean> deleteTruckingRequest(String subjectID, int orderID) {
+        return facade.deleteTruckingRequest(subjectID, orderID);
+    }
+
+    public Response<List<String>> getTruckingRequests(String subjectID) {
+        return facade.getTruckingRequests(subjectID);
+    }
+
     //inventory & suppliers methods
 
 
