@@ -1,5 +1,7 @@
 package groupk.inventory_suppliers.dataLayer.dao;
 
+import groupk.inventory_suppliers.dataLayer.dao.records.OrderMapRecord;
+
 import java.sql.Connection;
 
 public class PersistenceController {
@@ -18,8 +20,8 @@ public class PersistenceController {
     private final ItemInOrderDAO itemInOrder;
     private final ReportDAO reports;
     private final ProductInReportDAO productsInReports;
-
     private final ProductItemInReportDAO productItemsInReports;
+    private final OrderMapDAO orderMaps;
 
     public PersistenceController(Connection conn) {
         this.conn = conn;
@@ -37,6 +39,7 @@ public class PersistenceController {
         reports = new ReportDAO(conn);
         productsInReports = new ProductInReportDAO(conn);
         productItemsInReports = new ProductItemInReportDAO(conn);
+        orderMaps = new OrderMapDAO(conn);
     }
 
     public Connection getConn() {
@@ -97,5 +100,9 @@ public class PersistenceController {
 
     public ProductItemInReportDAO getProductItemsInReports() {
         return productItemsInReports;
+    }
+
+    public OrderMapDAO getOrderMaps() {
+        return orderMaps;
     }
 }

@@ -1,5 +1,7 @@
 package groupk.shared.business;
 
+import groupk.inventory_suppliers.dataLayer.dao.records.OrderMapRecord;
+import groupk.inventory_suppliers.dataLayer.dao.records.readonly.OrderMapData;
 import groupk.shared.business.Inventory.Product;
 import groupk.shared.business.Inventory.ProductItem;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
@@ -8,7 +10,6 @@ import groupk.inventory_suppliers.dataLayer.dao.records.readonly.ProductData;
 
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,7 @@ public class ProductController {
         this.pc = pc;
         this.category_controller = category_controller;
         pc.getProducts().all().forEach(this::addFromExisting);
+        pc.getOrderMaps().all().forEach(this::addFromExisting);
     }
 
     public void updateCategoryCusDiscount(float discount, LocalDate start_date, LocalDate end_date, String category, String sub_category, String subsub_category) throws Exception {
@@ -256,11 +258,49 @@ public class ProductController {
         return true;
     }
 
+    public void addProductToOrder(int order_id, int product_id, int amount) {
+        if (!orders.containsKey(order_id))
+            orders.put(order_id, new HashMap<>());
+        orders.get(order_id).put(product_id, amount);
+        pc.getOrderMaps().create(order_id, product_id, amount);
+    }
+
+    public void addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {
+        for (Map.Entry<Integer, Integer> pair : productAmount.entrySet())
+            addProductToOrder(orderId, pair.getKey(), pair.getValue());
+    }
+
+    public Map<Integer, Integer> confirmOrder(int order_id) {
+        return orders.get(order_id);
+    }
+
+    public void confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount) throws Exception {
+        for (Map.Entry<Integer, Integer> pair : actual_amount.entrySet()) {
+            int product_id = pair.getKey(), amount = pair.getValue();
+            for (int i = 0; i < amount; i++)
+                randomizeProductItem(product_id);
+            if (amount < orders.get(order_id).get(product_id))
+                updateOrderAmount(order_id, product_id, orders.get(order_id).get(product_id) - amount);
+            else
+                deleteProductFromOrder(order_id, product_id);
+        }
+    }
+
+    private void updateOrderAmount(int order_id, int product_id, int new_amount) {
+        orders.get(order_id).put(product_id, new_amount);
+        pc.getOrderMaps().update(new OrderMapRecord.OrderMapKey(order_id, product_id), new_amount);
+    }
+
+    private void deleteProductFromOrder(int order_id, int product_id) {
+        orders.get(order_id).remove(product_id);
+        pc.getOrderMaps().runDeleteQuery(new OrderMapRecord.OrderMapKey(order_id, product_id));
+    }
+
 
     //getters and setters
 
     //private methods
-    private void productExists(int product_id) throws Exception {
+    public void productExists(int product_id) throws Exception {
         if (!products.containsKey(product_id)) throw new Exception("product id does not exist");
     }
 
@@ -281,6 +321,12 @@ public class ProductController {
 
     private void addFromExisting(ProductRecord product) {
         products.put(product.getId(), new Product(product, pc));
+    }
+
+    private void addFromExisting(OrderMapRecord product_order) {
+        if (!orders.containsKey(product_order.getOrder_id()))
+            orders.put(product_order.getOrder_id(), new HashMap<>());
+        orders.get(product_order.getOrder_id()).put(product_order.getProduct_id(), product_order.getAmount());
     }
 
     public List<String> getProductNames() {
@@ -312,22 +358,6 @@ public class ProductController {
         return products.values().stream().collect(Collectors.toList());
     }
 
-    public Map<Integer, Integer> confirmOrder(int order_id) {
-        return orders.get(order_id);
-    }
-
-    public void confirmOrderAmount(Map<Integer, Integer> actual_amount) throws Exception {
-        for (Map.Entry<Integer, Integer> pair : actual_amount.entrySet()) {
-            for (int i = 0; i < pair.getValue(); i++) {
-                randomizeProductItem(pair.getKey());
-            }
-        }
-    }
-
-//    public void addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {
-//        orders.put(orderId,productAmount);
-//    }
-
 //    public void receiveTrucking(int trucking_id) {
 //        Map<Integer,Integer> order_products = orders.get(trucking_id);
 //        for(Map.Entry<Integer, Integer> pair : order_products.entrySet()){
@@ -336,10 +366,10 @@ public class ProductController {
 //    }
 
     private void randomizeProductItem(int product_id) throws Exception {
-        String random_location="";
-        int random_supplier=0;
-        LocalDate random_date=LocalDate.now();
-        boolean random_onShelf=false;
+        String random_location = "";
+        int random_supplier = 0;
+        LocalDate random_date = LocalDate.now();
+        boolean random_onShelf = false;
         addItem(product_id, "Yavne", random_location, random_supplier, random_date, random_onShelf);
     }
 }

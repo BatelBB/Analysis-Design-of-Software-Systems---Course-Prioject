@@ -609,8 +609,8 @@ public class Facade {
         return responseFor(() -> product_controller.confirmOrder(order_id));
     }
 
-    public SI_Response confirmOrderAmount(Map<Integer, Integer> actual_amount) {
-        return responseForVoid(() -> product_controller.confirmOrderAmount(actual_amount));
+    public SI_Response confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount) {
+        return responseForVoid(() -> product_controller.confirmOrderAmount(order_id, actual_amount));
     }
 
     public ResponseT<Order> getOrder(int id) {
@@ -776,25 +776,21 @@ public class Facade {
         }
     }
 
-    public ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
+    public SI_Response createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
+        for (Integer product_id : productAmount.keySet()) {
+            try {
+                product_controller.productExists(product_id);
+            } catch (Exception e) {
+                return responseFor(() -> {
+                    throw e;
+                });
+            }
+        }
         Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
-        Tuple<Supplier, Item> supplierItemTuple =
-                items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
-        Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
-                LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
+        Tuple<Supplier, Item> supplierItemTuple = items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
+        Order order = orders.create(supplierItemTuple.first, OrderType.Periodical, LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
         orders.orderItemFromMap(order, itemsWithAmount);
-
-        return responseFor(() -> order.getId());
-    }
-
-    public SI_Response createOrderPeriodicVoid(Map<Integer, Integer> productAmount, int weekDay) {
-        Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
-        Tuple<Supplier, Item> supplierItemTuple =
-                items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
-        Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
-                LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
-
-        return responseForVoid(() -> orders.orderItemFromMap(order, itemsWithAmount));
+        return responseForVoid(() -> product_controller.addOrderRecord(order.getId(), productAmount));
     }
 
     protected SI_Response voidOk() {
@@ -828,6 +824,14 @@ public class Facade {
         } catch (Exception e) {
             return voidError(e.getMessage());
         }
+    }
+
+    public SI_Response addProductToOrder(int order_id, int product_id, int amount) {
+        return responseForVoid(() -> product_controller.addProductToOrder(order_id, product_id, amount));
+    }
+
+    public SI_Response addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {
+        return responseForVoid(() -> product_controller.addOrderRecord(orderId, productAmount));
     }
 
 
