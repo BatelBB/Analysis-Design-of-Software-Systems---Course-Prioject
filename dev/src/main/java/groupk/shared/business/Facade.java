@@ -6,6 +6,7 @@ import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
 import groupk.inventory_suppliers.shared.utils.Tuple;
 import groupk.logistics.business.TruckManagerController;
+import groupk.shared.PresentationLayer.Suppliers.UserOutput;
 import groupk.shared.business.Inventory.Categories.Category;
 import groupk.shared.service.Inventory.Objects.Product;
 import groupk.shared.service.Inventory.Objects.ProductItem;
@@ -432,9 +433,18 @@ public class Facade {
     }
 
     public Response<Boolean> deleteTruckingRequest(String subjectID, int orderID) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue())
-            return new Response<>("You are not authorized to perform this operation");
-        return logistics.deleteTruckingRequest(orderID);
+        try {
+            if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue())
+                return new Response<>("You are not authorized to perform this operation");
+            Response<Boolean> truckingDeletion = logistics.deleteTruckingRequest(orderID);
+            if (!truckingDeletion.isError() && truckingDeletion.getValue()) {
+                orders.delete(orderID);
+                UserOutput.println("Order " + orderID + " was deleted.");
+                return new Response<>(true);
+            }
+        } catch (Exception e) {
+            return new Response<Boolean>(e.getMessage());
+        }
     }
 
     public Response<List<String>> getTruckingRequests(String subjectID) {
@@ -802,18 +812,21 @@ public class Facade {
         Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
                 LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
         orders.orderItemFromMap(order, itemsWithAmount);
-
+        orders.createFittingTrucking(order);
         return responseFor(() -> order.getId());
     }
 
     public SI_Response createOrderPeriodicVoid(Map<Integer, Integer> productAmount, int weekDay) {
-        Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
-        Tuple<Supplier, Item> supplierItemTuple =
-                items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
-        Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
-                LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
+        return responseForVoid(() -> {
+            Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
+            Tuple<Supplier, Item> supplierItemTuple =
+                    items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
+            Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
+                    LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
 
-        return responseForVoid(() -> orders.orderItemFromMap(order, itemsWithAmount));
+            orders.orderItemFromMap(order, itemsWithAmount);
+            orders.createFittingTrucking(order);
+        });
     }
 
     protected SI_Response voidOk() {

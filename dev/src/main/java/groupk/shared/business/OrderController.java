@@ -1,5 +1,6 @@
 package groupk.shared.business;
 
+import groupk.inventory_suppliers.shared.ioc.ServiceProvider;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 
@@ -8,6 +9,7 @@ import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.readonly.OrderData;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
 import java.time.LocalDate;
@@ -17,13 +19,15 @@ import java.util.Map;
 
 public class OrderController {
     private final QuantityDiscountController discounts;
+    private final ServiceProvider serviceProvider;
     ArrayList<Order> orders;
     private PersistenceController dal;
 
-    public OrderController(PersistenceController dal, QuantityDiscountController discounts) {
+    public OrderController(PersistenceController dal, QuantityDiscountController discounts, ServiceProvider serviceProvider) {
         this.dal = dal;
         orders = new ArrayList<>();
         this.discounts = discounts;
+        this.serviceProvider = serviceProvider;
     }
 
     public Order get(int id) throws BusinessLogicException {
@@ -113,6 +117,11 @@ public class OrderController {
         }
 
         orders.add(order);
+
+        LogisticsController logistics = serviceProvider.get(LogisticsController.class);
+        String source = order.supplier.getContact().getAddress();
+        String destination = "TODO inventory"; // TODO inventory
+        logistics.addTruckingRequest(order.getId(), source, destination);
         return order.getId();
     }
 
@@ -122,5 +131,12 @@ public class OrderController {
                     itemsWithAmount.get(itemsWithAmount.keySet().toArray()[i]));
 
         }
+    }
+
+    public void createFittingTrucking(Order order) {
+        LogisticsController logistics = serviceProvider.get(LogisticsController.class);
+        String source = order.supplier.getContact().getAddress();
+        String destination = "TODO inventory"; // TODO inventory
+        logistics.addTruckingRequest(order.getId(), source, destination);
     }
 }

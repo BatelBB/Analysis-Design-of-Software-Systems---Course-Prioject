@@ -326,7 +326,9 @@ public class LogisticsController {
 
     public Response<Boolean> deleteTruckingRequest(int orderID) {
         try {
-            return new Response<Boolean>(TruckManagerController.getInstance().removeTruckingRequest(orderID));
+            boolean removed = TruckManagerController.getInstance().removeTruckingRequest(orderID);
+
+            return new Response<Boolean>(removed);
         }
         catch (Exception e) {
             return new Response<>(e.getMessage());
