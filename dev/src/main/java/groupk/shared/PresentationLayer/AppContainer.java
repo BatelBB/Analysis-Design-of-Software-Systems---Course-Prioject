@@ -26,16 +26,7 @@ public class AppContainer {
         this.dbPath = dbPath;
         ioc = new ClassContainer();
         ioc.singleton(java.sql.Connection.class, this::connect);
-        ioc.singleton(PersistenceController.class);
         ioc.singleton(ISupplierService.class, SupplierService.class);
-        ioc.singleton(CategoryController.class);
-        ioc.singleton(ProductService.class);
-        ioc.singleton(ProductController.class);
-        ioc.singleton(ReportService.class);
-        ioc.singleton(CategoryService.class);
-        ioc.singleton(InventoryService.class);
-        ioc.singleton(SupplierPresentationFacade.class);
-        ioc.singleton(InventoryPresentationFacade.class);
         ioc.singleton(ServiceProvider.class, () -> ioc);
     }
 
