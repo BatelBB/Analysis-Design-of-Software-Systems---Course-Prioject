@@ -38,7 +38,8 @@ public class MainEmployeesAndDelivery {
                         new ListVehicles(),
                         new AddDriverLicense(),
                         new GetDeliveryByOrder(),
-                        new GetDeliveryRequests()
+                        new GetDeliveryRequests(),
+                        new ConfirmDeliveryRequest()
                 },
                 () -> {
                         keepGoing.set(false);
