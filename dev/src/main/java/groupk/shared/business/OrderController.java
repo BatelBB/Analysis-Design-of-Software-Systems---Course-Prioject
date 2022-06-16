@@ -19,15 +19,17 @@ import java.util.Map;
 
 public class OrderController {
     private final QuantityDiscountController discounts;
-    private final ServiceProvider serviceProvider;
+    private final LogisticsController logistics;
     ArrayList<Order> orders;
     private PersistenceController dal;
 
-    public OrderController(PersistenceController dal, QuantityDiscountController discounts, ServiceProvider serviceProvider) {
+    public OrderController(PersistenceController dal,
+                           QuantityDiscountController discounts,
+                           LogisticsController logistics) {
         this.dal = dal;
         orders = new ArrayList<>();
         this.discounts = discounts;
-        this.serviceProvider = serviceProvider;
+        this.logistics = logistics;
     }
 
     public Order get(int id) throws BusinessLogicException {
@@ -118,7 +120,6 @@ public class OrderController {
 
         orders.add(order);
 
-        LogisticsController logistics = serviceProvider.get(LogisticsController.class);
         String source = order.supplier.getContact().getAddress();
         String destination = "TODO inventory"; // TODO inventory
         logistics.addTruckingRequest(order.getId(), source, destination);
@@ -134,7 +135,6 @@ public class OrderController {
     }
 
     public void createFittingTrucking(Order order) {
-        LogisticsController logistics = serviceProvider.get(LogisticsController.class);
         String source = order.supplier.getContact().getAddress();
         String destination = "TODO inventory"; // TODO inventory
         logistics.addTruckingRequest(order.getId(), source, destination);

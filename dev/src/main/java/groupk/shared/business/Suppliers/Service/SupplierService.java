@@ -1,15 +1,12 @@
 package groupk.shared.business.Suppliers.Service;
 
 import groupk.inventory_suppliers.shared.utils.Tuple;
+import groupk.shared.business.*;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Order;
 import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
-import groupk.shared.business.ItemController;
-import groupk.shared.business.OrderController;
-import groupk.shared.business.QuantityDiscountController;
-import groupk.shared.business.SupplierController;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
@@ -29,13 +26,12 @@ public class SupplierService extends ServiceBase implements ISupplierService {
     private final PersistenceController dal;
     private final SupplierController suppliers;
 
-    public SupplierService(PersistenceController dal) {
+    public SupplierService(PersistenceController dal, LogisticsController logistics) {
         this.dal = dal;
         suppliers = new SupplierController(dal);
         items = new ItemController(dal, suppliers);
         discounts = new QuantityDiscountController(dal, items);
-        orders = new OrderController(dal, discounts);
-
+        orders = new OrderController(dal, discounts, logistics);
     }
 
     @Override

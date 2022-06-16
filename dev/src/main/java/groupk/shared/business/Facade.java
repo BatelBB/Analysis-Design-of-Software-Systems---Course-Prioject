@@ -48,7 +48,7 @@ public class Facade {
         suppliers = new SupplierController(p);
         items = new ItemController(p, suppliers);
         discounts = new QuantityDiscountController(p, items);
-        orders = new OrderController(p, discounts);
+        orders = new OrderController(p, discounts, logistics);
     }
 
     //just for test
@@ -442,6 +442,7 @@ public class Facade {
                 UserOutput.println("Order " + orderID + " was deleted.");
                 return new Response<>(true);
             }
+            throw new BusinessLogicException("There was some problem deleting trucking order (what the truck)");
         } catch (Exception e) {
             return new Response<Boolean>(e.getMessage());
         }
