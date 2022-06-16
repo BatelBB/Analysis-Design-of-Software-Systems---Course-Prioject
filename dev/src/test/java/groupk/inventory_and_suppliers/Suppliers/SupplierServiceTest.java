@@ -2,6 +2,7 @@ package groupk.inventory_and_suppliers.Suppliers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import groupk.shared.business.Facade;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Order;
@@ -40,13 +41,13 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
      **/
     @Test
     void createSupplier() {
-        ServiceBase.ResponseT<Supplier> response = createWithPpn(1);
+        Facade.ResponseT<Supplier> response = createWithPpn(1);
         Supplier supplier = assertSuccess(response);
         Assertions.assertNotNull(supplier);
         Assertions.assertEquals(1, supplier.getPpn());
         // TODO add tests for other fields if there's time
 
-        ServiceBase.ResponseT<Supplier> responseErroneous = createWithPpn(1);
+        Facade.ResponseT<Supplier> responseErroneous = createWithPpn(1);
         assertFalse(responseErroneous.success,
                 "shouldn't be able to create when ReadOnlysupplier with same PPN exists.");
         assertNull(responseErroneous.data,
@@ -95,7 +96,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         facade.orderItem(order.getId(), ppn, item.getCatalogNumber(), 12);
 
         // delete should work.
-        ServiceBase.Response serviceResponse = facade.deleteSupplier(ppn);
+        Facade.SI_Response serviceResponse = facade.deleteSupplier(ppn);
         assertTrue(serviceResponse.success, "delete ReadOnlysupplier failed, but shouldn't have: " + serviceResponse.error);
 
         // getting this ReadOnlysupplier shouldn't work.
@@ -103,7 +104,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
                 "Getting deleted ReadOnlysupplier should have failed");
 
         // creating new one with same PPN should work.
-        ServiceBase.ResponseT<Supplier> otherResponse = facade.createSupplier(ppn, 222,
+        Facade.ResponseT<Supplier> otherResponse = facade.createSupplier(ppn, 222,
                 "Ipsum", false,
                 PaymentCondition.Credit, DayOfWeek.MONDAY,
                 "george", "054-8694859", "Lorem 23, Ipsumistan");
@@ -143,7 +144,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         // ReadOnlySupplier 1, ReadOnlyItem 1
         Product product = assertSuccess(facade.addProduct("Milk", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%"));
-        ServiceBase.ResponseT<Item> resApple =
+        Facade.ResponseT<Item> resApple =
                 facade.createItem(ppn1, cn1, product.getProduct_id(),  1);
         assertTrue(resApple.success, "should have succeeded.");
         Item apple = assertSuccess(resApple);
@@ -153,7 +154,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         // ReadOnlySupplier 1, ReadOnlyItem 2
         Product product2 = assertSuccess(facade.addProduct("Banana", "Tnoova", 100.0,
                 50, 10, 1200, "Store", "Shop,", "10%"));
-        ServiceBase.ResponseT<Item> resBanana =
+        Facade.ResponseT<Item> resBanana =
                 facade.createItem(ppn1, cn2, product2.getProduct_id(),  2);
         assertTrue(resBanana.success, "should have succeeded but got " + resBanana.error);
 
@@ -164,7 +165,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         // ReadOnlySupplier 2, ReadOnlyItem 1
         Product product3 =assertSuccess (facade.addProduct("Pen", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%"));
-        ServiceBase.ResponseT<Item> resOtherSupplier =
+        Facade.ResponseT<Item> resOtherSupplier =
                 facade.createItem(ppn2, cn1, product3.getProduct_id(),  10);
         assertTrue(resOtherSupplier.success,
                 "creating other ReadOnlyitem with same CN but different PPN should've worked.");
@@ -175,12 +176,12 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         Assertions.assertEquals("Pen", product3.getName());
 
         // create with already existing
-        ServiceBase.ResponseT<Item> alreadyExisting = facade.createItem(ppn1, cn1,
+        Facade.ResponseT<Item> alreadyExisting = facade.createItem(ppn1, cn1,
                 product3.getProduct_id(),  123);
         assertFalse(alreadyExisting.success);
 
         // not existence supplier
-        ServiceBase.ResponseT<Item> noSuchSupplier = facade.createItem(ppnNotExisting, cn1,
+        Facade.ResponseT<Item> noSuchSupplier = facade.createItem(ppnNotExisting, cn1,
                 product3.getProduct_id(),  60);
         assertFalse(noSuchSupplier.success);
 
@@ -216,20 +217,20 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         createWithPpn(ppn);
         facade.createItem(ppn, cn, product4.getProduct_id(),10);
 
-        ServiceBase.ResponseT<Item> resSucc = facade.getItem(ppn, cn);
+        Facade.ResponseT<Item> resSucc = facade.getItem(ppn, cn);
         assertTrue(resSucc.success);
         Assertions.assertNotNull(resSucc.data);
         assertEquals(ppn, resSucc.data.getSupplier().getPpn());
         assertEquals(cn, resSucc.data.getCatalogNumber());
         Assertions.assertEquals("Pen", product4.getName());
 
-        ServiceBase.ResponseT<Item> resWrongPPN = facade.getItem(wrongPPN, cn);
+        Facade.ResponseT<Item> resWrongPPN = facade.getItem(wrongPPN, cn);
         assertFalse(resWrongPPN.success);
 
-        ServiceBase.ResponseT<Item> resWrongCN = facade.getItem(ppn, wrongCN);
+        Facade.ResponseT<Item> resWrongCN = facade.getItem(ppn, wrongCN);
         assertFalse(resWrongCN.success);
 
-        ServiceBase.ResponseT<Item> resWrongBoth = facade.getItem(wrongPPN, wrongCN);
+        Facade.ResponseT<Item> resWrongBoth = facade.getItem(wrongPPN, wrongCN);
         assertFalse(resWrongBoth.success);
     }
 
@@ -247,11 +248,11 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         facade.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
-        ServiceBase.ResponseT<Order> responseWithBadDates = facade.createOrder(ppn, date2, date1, OrderType.Periodical);
+        Facade.ResponseT<Order> responseWithBadDates = facade.createOrder(ppn, date2, date1, OrderType.Periodical);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        ServiceBase.ResponseT<Order> response = facade.createOrder(ppn, date1, date2, OrderType.Periodical);
+        Facade.ResponseT<Order> response = facade.createOrder(ppn, date1, date2, OrderType.Periodical);
         assertTrue(response.success);
 
     }
@@ -292,11 +293,11 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         Order order = assertSuccess(facade.createOrder(ppn, date1, date2, OrderType.Periodical));
         facade.orderItem(order.getId(), ppn, pen.getCatalogNumber(),10);
 
-        ServiceBase.Response resDelete = facade.deleteOrder(order.getId());
+        Facade.SI_Response resDelete = facade.deleteOrder(order.getId());
         assertTrue(resDelete.success);
 
         // delete already deleted
-        ServiceBase.Response resDeleteAgain = facade.deleteOrder(order.getId());
+        Facade.SI_Response resDeleteAgain = facade.deleteOrder(order.getId());
         assertFalse(resDeleteAgain.success);
     }
 
@@ -435,7 +436,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         facade.orderItem(order.getId(), ppn, item.getCatalogNumber(), 1);
         Assertions.assertEquals(priceCalc, order.getTotalPrice());
 
-        ServiceBase.ResponseT<QuantityDiscount> res = facade.createDiscount(ppn, item.getCatalogNumber(), 10,
+        Facade.ResponseT<QuantityDiscount> res = facade.createDiscount(ppn, item.getCatalogNumber(), 10,
                 0.01f);
         assertTrue(res.success);
         Assertions.assertEquals(priceCalc, order.getTotalPrice());
@@ -584,11 +585,11 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         facade.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
-        ServiceBase.ResponseT<Order> responseWithBadDates = facade.createOrder(ppn, date2, date1, OrderType.Shortages);
+        Facade.ResponseT<Order> responseWithBadDates = facade.createOrder(ppn, date2, date1, OrderType.Shortages);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        ServiceBase.ResponseT<Order> response = facade.createOrder(ppn, date1, date2, OrderType.Shortages);
+        Facade.ResponseT<Order> response = facade.createOrder(ppn, date1, date2, OrderType.Shortages);
         assertTrue(response.success);
 
     }
@@ -603,11 +604,11 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         facade.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
-        ServiceBase.ResponseT<Order> responseWithBadDates = facade.createOrder(ppn, date2, date1, OrderType.Periodical);
+        Facade.ResponseT<Order> responseWithBadDates = facade.createOrder(ppn, date2, date1, OrderType.Periodical);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        ServiceBase.ResponseT<Order> response = facade.createOrder(ppn, date1, date2, OrderType.Periodical);
+        Facade.ResponseT<Order> response = facade.createOrder(ppn, date1, date2, OrderType.Periodical);
         assertTrue(response.success);
 
 
@@ -617,7 +618,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
      * (private) UTILS
      */
 
-    private ServiceBase.ResponseT<Supplier> createWithPpn(int ppn) {
+    private Facade.ResponseT<Supplier> createWithPpn(int ppn) {
         return facade.createSupplier(ppn, 111, "dummy", true,
                 PaymentCondition.Credit, null,
                 "John", "052-1869386", "Some 14, Ana Aref");
