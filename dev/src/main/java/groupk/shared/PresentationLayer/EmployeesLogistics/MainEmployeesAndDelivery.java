@@ -4,7 +4,6 @@ import groupk.shared.PresentationLayer.EmployeesLogistics.command.*;
 import groupk.shared.service.Service;
 import groupk.shared.service.dto.Employee;
 
-import java.sql.Connection;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -13,7 +12,7 @@ public class MainEmployeesAndDelivery {
         AtomicBoolean keepGoing = new AtomicBoolean(true);
         CommandRunner runner = new CommandRunner(
                 new Command[] {
-                        new Quit(),
+                        new Back(),
                         new CreateEmployee(),
                         new GetEmployee(),
                         new DeleteEmployee(),

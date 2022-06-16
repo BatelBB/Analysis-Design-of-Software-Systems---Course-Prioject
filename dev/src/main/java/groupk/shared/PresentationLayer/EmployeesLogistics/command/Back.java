@@ -3,20 +3,20 @@ package groupk.shared.PresentationLayer.EmployeesLogistics.command;
 import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.dto.Employee;
 
-public class Quit implements Command {
+public class Back implements Command {
     @Override
     public String name() {
-        return "quit";
+        return "back";
     }
 
     @Override
     public String description() {
-        return "exit the program";
+        return "go back to the main menu";
     }
 
     @Override
     public boolean isMatching(String line) {
-        return line.equals("quit");
+        return line.equals("back");
     }
 
     @Override
