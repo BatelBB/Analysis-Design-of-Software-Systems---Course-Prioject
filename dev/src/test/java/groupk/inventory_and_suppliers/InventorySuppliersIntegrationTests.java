@@ -10,10 +10,8 @@ import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 
 import groupk.shared.service.Inventory.Objects.ProductItem;
-import groupk.shared.service.ServiceBase;
 import groupk.shared.service.ServiceBase.ResponseT;
 import groupk.shared.service.ServiceBase.Response;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -414,7 +412,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
         Item item = assertSuccess(facade.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
 
         int wrongOrderId = order.getId() + 3;
-        Response response = facade.orderItem(wrongOrderId, sup.getPpn(), item.getCatalogNumber(), 100);
+        Facade.SI_Response response = facade.orderItem(wrongOrderId, sup.getPpn(), item.getCatalogNumber(), 100);
         assertFalse(response.success);
     }
 
@@ -445,7 +443,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
         Assertions.assertTrue(resultSet.getInt(1) > 0);
     }
 
-    private void assertSuccess(ServiceBase.Response response) {
+    private void assertSuccess(Facade.SI_Response response) {
         assertTrue(response.success, response.error);
     }
 
@@ -486,7 +484,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
                 50));
         discount = assertSuccess(facade.createDiscount(sup.getPpn(), item.getCatalogNumber(), 50, 5));
 
-        facade.updateItemCusDiscount(0.1f, LocalDate.now(), LocalDate.MAX, prod.getProduct_id(), pItem.getId());
+        facade.updateItemCusDiscount(1, prod.getProduct_id(), pItem.getId(),LocalDate.now(), LocalDate.MAX);
 
         missingReport = assertSuccess(facade.createMissingReport("Missing", "Report1"));
         supplierReport = assertSuccess(facade.createBySupplierReport("Supplier", "Report2", sup.getPpn()));
