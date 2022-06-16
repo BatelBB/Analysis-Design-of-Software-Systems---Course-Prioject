@@ -1,9 +1,9 @@
 package groupk.shared.PresentationLayer.Inventory;
 
+import groupk.shared.business.Facade;
 import groupk.shared.service.Inventory.CategoryService;
 import groupk.shared.service.Inventory.ProductService;
 import groupk.shared.service.Inventory.ReportService;
-import groupk.shared.service.Inventory.InventoryService;
 import groupk.shared.service.ServiceBase;
 
 import java.time.LocalDate;
@@ -16,13 +16,13 @@ import java.util.function.Supplier;
 
 public class InventoryPresentationFacade {
     private String[] args;
-    private final InventoryService inventory_service;
     private final CategoryService categories;
     private final ProductService products;
     private final ReportService reports;
+    private final Facade facade;
 
-    public InventoryPresentationFacade(InventoryService inventory_service, CategoryService categories, ProductService products, ReportService reports) {
-        this.inventory_service = inventory_service;
+    public InventoryPresentationFacade(Facade facade, CategoryService categories, ProductService products, ReportService reports) {
+        this.facade = facade;
         this.categories = categories;
         this.products = products;
         this.reports = reports;
@@ -313,11 +313,11 @@ public class InventoryPresentationFacade {
     }
 
     private void createPeriodicOrder() {
-        useService(args, 2, () -> inventory_service.createPeriodicOrder(convertMap(args[0]), convertInt(args[1])));
+        useService(args, 2, () -> facade.createPeriodicOrder(convertMap(args[0]), convertInt(args[1])));
     }
 
     private void confirmOrder() {
-        Map<Integer, Integer> order_details = inventory_service.confirmOrder(convertInt(args[0])).data;
+        Map<Integer, Integer> order_details = facade.confirmOrder(convertInt(args[0])).data;
         System.out.println("Order details");
         for (Map.Entry<Integer, Integer> pair : order_details.entrySet()) {
             System.out.println(pair.getKey() + " - " + pair.getValue());
@@ -325,7 +325,7 @@ public class InventoryPresentationFacade {
         System.out.println("please enter actual amount delivered\n(example format: \"[id0]-[amount0]_[id1]-[amount1]\"):");
         Scanner scan = new Scanner(System.in);
         String input = scan.nextLine();
-        useService(args, 1, () -> inventory_service.confirmOrderAmount(convertMap(input)));
+        useService(args, 1, () -> facade.confirmOrderAmount(convertMap(input)));
     }
 
     //converters

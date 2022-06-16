@@ -1,9 +1,8 @@
 package groupk.shared.PresentationLayer.Suppliers;
 
-import groupk.shared.service.Inventory.InventoryService;
+import groupk.shared.business.Facade;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
-import groupk.shared.business.Suppliers.Service.ISupplierService;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 
 import static groupk.shared.service.ServiceBase.*;
@@ -16,15 +15,11 @@ import java.util.Scanner;
 public class SupplierPresentationFacade {
     private UserInput input = UserInput.getInstance();
     private UserOutput output = UserOutput.getInstance();
-    private final ISupplierService service;
-    private final InventoryService inventory;
+    private final Facade service;
 
-    public SupplierPresentationFacade(ISupplierService supplierService, InventoryService inventory) {
-        this.service = supplierService;
-        this.inventory = inventory;
+    public SupplierPresentationFacade(Facade facade) {
+        this.service = facade;
     }
-
-    static Scanner scanner = new Scanner(System.in);
 
     public void startSupplierMenu() {
         while (true) {
@@ -44,7 +39,7 @@ public class SupplierPresentationFacade {
                             String contactName = input.nextString("Enter the supplier's contact name: ");
                             String address = input.nextString("Enter the supplier's contact address: ");
                             String phoneNum = input.nextPhone("Enter the supplier's contact phone number: ");
-                            ResponseT<Supplier> supplier = service.createSupplier(ppn, bankAccount, name, isDelivering,
+                            Facade.ResponseT<Supplier> supplier = service.createSupplier(ppn, bankAccount, name, isDelivering,
                                     paymentCondition, day, contactName, phoneNum, address);
                             if (supplier.success) {
                                 output.print(supplier.data.toString());
