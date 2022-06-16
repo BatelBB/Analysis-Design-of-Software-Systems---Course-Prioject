@@ -593,7 +593,7 @@ public class Facade {
         });
     }
 
-    public ResponseT<List<Integer>> getReportListNames() {
+    public ResponseT<List<Integer>> getReportListIds() {
         return responseFor(report_controller::getReportListNames);
     }
 
