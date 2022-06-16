@@ -78,7 +78,7 @@ public class OrderMapDAO extends BaseDAO<OrderMapRecord.OrderMapKey, OrderMapRec
                 ps -> ps.setInt(3, key.product_id));
     }
 
-    }
+
 
     private OrderMapRecord readOne(OrderMapRecord.OrderMapKey key, ResultSet resultSet) throws SQLException {
         return new OrderMapRecord(
