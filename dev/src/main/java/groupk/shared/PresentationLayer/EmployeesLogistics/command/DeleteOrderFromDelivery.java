@@ -4,21 +4,21 @@ import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Product;
-/*
-public class DeleteDeliveryProduct implements Command {
+
+public class DeleteOrderFromDelivery implements Command {
     @Override
     public String name() {
-        return "delete delivery product";
+        return "delete order from delivery";
     }
 
     @Override
     public String description() {
-        return "remove product from delivery";
+        return "remove an order id from delivery";
     }
 
     @Override
     public boolean isMatching(String line) {
-        return line.startsWith("delete delivery product");
+        return line.startsWith("delete order delivery");
     }
 
     @Override
@@ -28,10 +28,10 @@ public class DeleteDeliveryProduct implements Command {
 
     @Override
     public void execute(String[] command, CommandRunner runner) {
-        if (command.length != 6) {
+        if (command.length != 5) {
             System.out.println("Error: Wrong number of arguments.");
             System.out.println("Usage:");
-            System.out.println("> delete delivery product <id> <product-id> <count>");
+            System.out.println("> delete order delivery <trucking-id> <order-id>");
             return;
         }
 
@@ -43,15 +43,15 @@ public class DeleteDeliveryProduct implements Command {
             return;
         }
 
-        int count;
+        int orderID;
         try {
-            count = CommandRunner.parseInt(command[5]);
+            orderID = CommandRunner.parseInt(command[5]);
         } catch (IllegalArgumentException e) {
             System.out.printf("Error: count %s\n", e.getMessage());
             return;
         }
 
-        Response<Boolean> response = runner.getService().moveProducts(runner.getSubject(), id, new Product(command[4], count));
+        Response<Boolean> response = runner.getService().moveOrdersFromTrucking(runner.getSubject(), id, orderID);
         if (response.isError()) {
             System.out.printf("Error: %s\n", response.getErrorMessage());
             return;
@@ -60,8 +60,6 @@ public class DeleteDeliveryProduct implements Command {
             System.out.println("Error: Something went wrong.");
             return;
         }
-        System.out.println("Added product to delivery.");
+        System.out.println("Order deleted successfully.\nPlease validate that the order canceled, or add that order to another delivery.");
     }
 }
-
- */

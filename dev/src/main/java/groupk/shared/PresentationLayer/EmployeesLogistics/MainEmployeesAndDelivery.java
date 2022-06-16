@@ -31,7 +31,7 @@ public class MainEmployeesAndDelivery {
                         new ListDeliveries(),
                         new AddDeliverySource(),
                         new AddDeliveryDestination(),
-                        //new AddDeliveryProduct(),
+                        new AddOrderToDelivery(),
                         new UpdateDeliveryWeight(),
                         //new DeleteDeliveryProduct(),
                         new CreateVehicle(),
