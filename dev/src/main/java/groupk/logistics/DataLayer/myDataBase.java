@@ -36,6 +36,7 @@ public class myDataBase {
         tables.add("DROP TABLE IF EXISTS Truckings_Destinations");
         tables.add("DROP TABLE IF EXISTS Truckings_Sources");
         tables.add("DROP TABLE IF EXISTS Truckings_Orders");
+        tables.add("DROP TABLE IF EXISTS Truckings_Requests");
         try (
                 Statement statement = connection.createStatement()) {
             for (String table : tables) {
@@ -101,9 +102,17 @@ public class myDataBase {
                 "FOREIGN KEY(TID) REFERENCES Truckings(TID)\n" +
                 "\t);\n" +
                 "\n";
-        String Truckings_Products = "CREATE TABLE IF NOT EXISTS " + "Truckings_Orders" + " (\n" +
+        String Truckings_Orders = "CREATE TABLE IF NOT EXISTS " + "Truckings_Orders" + " (\n" +
                 "\tTID INTEGER  NOT NULL,\n" +
                 "\torderID TEXT NOT NULL,\n" +
+                "\tPRIMARY KEY (orderID)" +
+                "\t);\n" +
+                "\n";
+        String Truckings_Requests = "CREATE TABLE IF NOT EXISTS " + "Truckings_Requests" + " (\n" +
+                "\tdate TEXT NOT NULL,\n" +
+                "\torderID TEXT NOT NULL,\n" +
+                "\tsource TEXT NOT NULL,\n" +
+                "\tdestination TEXT NOT NULL,\n" +
                 "\tPRIMARY KEY (orderID)" +
                 "\t);\n" +
                 "\n";
@@ -112,8 +121,9 @@ public class myDataBase {
             s.addBatch(dirversLicencesTable);
             s.addBatch(Truckings);
             s.addBatch(Truckings_Destinations);
-            s.addBatch(Truckings_Products);
+            s.addBatch(Truckings_Orders);
             s.addBatch(Truckings_Sources);
+            s.addBatch(Truckings_Requests);
             s.executeBatch();
         } catch (Exception e) {
             throw new IllegalArgumentException("There was a problem to connect the database: " + e.getMessage());

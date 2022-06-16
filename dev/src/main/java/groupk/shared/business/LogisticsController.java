@@ -306,6 +306,42 @@ public class LogisticsController {
         }
     }
 
+    public Response<Integer> getTruckingIDByOrderID(int orderID) {
+        try {
+            return new Response<Integer>(TruckManagerController.getInstance().getTruckingIDByOrderID(orderID));
+        }
+        catch (Exception e) {
+            return new Response<>(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> addTruckingRequest(int orderID, String sourceDetails, String destinationDetails) {
+        try {
+            return new Response<Boolean>(TruckManagerController.getInstance().addTruckingRequest(orderID, LocalDateTime.now(), sourceDetails, destinationDetails));
+        }
+        catch (Exception e) {
+            return new Response<>(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> deleteTruckingRequest(int orderID) {
+        try {
+            return new Response<Boolean>(TruckManagerController.getInstance().removeTruckingRequest(orderID));
+        }
+        catch (Exception e) {
+            return new Response<>(e.getMessage());
+        }
+    }
+
+    public Response<List<String>> getTruckingRequests() {
+        try {
+            return new Response<List<String>>(TruckManagerController.getInstance().getTruckingRequests());
+        }
+        catch (Exception e) {
+            return new Response<>(e.getMessage());
+        }
+    }
+
     private Delivery truckingDTOToDelivery(TruckingDTO truckingDTO) {
         List<Site> sources = new LinkedList<Site>();
         List<Site> destinations = new LinkedList<Site>();

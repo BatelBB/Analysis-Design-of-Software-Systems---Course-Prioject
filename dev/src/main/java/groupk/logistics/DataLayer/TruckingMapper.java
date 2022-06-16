@@ -458,6 +458,23 @@ public class TruckingMapper {
 
     }
 
+    public int getTruckingIDByOrderID(int orderID) {
+        int toReturn = 0;
+        String query = "SELECT TID FROM Truckings_Orders " +
+                "WHERE orderID = '" + orderID + "'";
+        try {
+            Statement stmt = myDataBase.connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            if (rs.next()) {
+                toReturn += rs.getInt(1);
+            } else
+                throw new IllegalArgumentException("There is no trucking with order id: " + orderID);
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Oops, something got wrong: " + e.getMessage());
+        }
+        return toReturn;
+    }
+
     public List<TruckingDTO> getTruckManagerBoard(int truckManagerUsername) {
         if (truckingIDMap.isUserHasUpdatedData(truckManagerUsername))
             return truckingIDMap.getTruckingsOfTruckManager(truckManagerUsername);

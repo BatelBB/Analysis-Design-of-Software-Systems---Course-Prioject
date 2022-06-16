@@ -16,6 +16,7 @@ public class TruckManagerController {
     private VehicleMapper vehicleMapper;
     private TruckingMapper truckingMapper;
     private DriverLicencesMapper driverLicensesMapper;
+    private TruckingRequestMapper truckingRequestMapper;
 
     public static TruckManagerController getInstance() {
         if (singletonTruckManagerControllerInstance == null)
@@ -28,6 +29,7 @@ public class TruckManagerController {
         truckingIdCounter = truckingMapper.getNextIdForTrucking();
         vehicleMapper = new VehicleMapper();
         driverLicensesMapper = new DriverLicencesMapper();
+        truckingRequestMapper = new TruckingRequestMapper();
     }
 
     public void reserForTests() {
@@ -296,6 +298,22 @@ public class TruckManagerController {
         if (trucking.getTruckManager() != truckManagerID)
             throw new IllegalArgumentException("Oops, you have not any trucking with that id");
         return trucking;
+    }
+
+    public int getTruckingIDByOrderID(int orderID) {
+        return truckingMapper.getTruckingIDByOrderID(orderID);
+    }
+
+    public boolean addTruckingRequest(int orderID, LocalDateTime createDate, String sourceDetails, String destinationDetails) {
+        return truckingRequestMapper.addTruckingRequest(orderID, createDate, sourceDetails, destinationDetails);
+    }
+
+    public boolean removeTruckingRequest(int orderID) {
+        return truckingRequestMapper.removeTruckingRequest(orderID);
+    }
+
+    public List<String> getTruckingRequests() {
+        return truckingRequestMapper.getTruckingRequests();
     }
 
     public String printTrucking(TruckingDTO trucking) {

@@ -5,6 +5,7 @@ import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
 import groupk.inventory_suppliers.shared.utils.Tuple;
+import groupk.logistics.business.TruckManagerController;
 import groupk.shared.business.Inventory.Categories.Category;
 import groupk.shared.service.Inventory.Objects.Product;
 import groupk.shared.service.Inventory.Objects.ProductItem;
@@ -418,6 +419,28 @@ public class Facade {
             return new Response<>("You are not authorized to perform this operation");
         }
         return logistics.getDriverLicenses(Integer.parseInt(subjectID));
+    }
+
+    public Response<Integer> getTruckingIDByOrderID(String subjectID, int orderID) {
+        return logistics.getTruckingIDByOrderID(orderID);
+    }
+
+    public Response<Boolean> addTruckingRequest(String subjectID, int orderID, String sourceDetails, String destinationDetails) {
+        if (!isFromRole(subjectID, Employee.Role.StoreManager).getValue())
+            return new Response<>("You are not authorized to perform this operation");
+        return logistics.addTruckingRequest(orderID, sourceDetails, destinationDetails);
+    }
+
+    public Response<Boolean> deleteTruckingRequest(String subjectID, int orderID) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue())
+            return new Response<>("You are not authorized to perform this operation");
+        return logistics.deleteTruckingRequest(orderID);
+    }
+
+    public Response<List<String>> getTruckingRequests(String subjectID) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue())
+            return new Response<>("You are not authorized to perform this operation");
+        return logistics.getTruckingRequests();
     }
 
     public Response<Delivery> getTruckingById(String subjectID, int truckingID) {
