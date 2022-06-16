@@ -131,123 +131,107 @@ public class InventoryPresentationFacade {
 
     //service callers
     private void addCategory() {
-        useService(args, 1, () -> categories.addCategory(args[0]));
+        categories.addCategory(args[0]);
     }
 
     private void removeCategory() {
-        useService(args, 1, () -> categories.removeCategory(args[0], true));
+        categories.removeCategory(args[0], true);
     }
 
     private void addSubCategory() {
-        useService(args, 2,
-                () -> categories.addSubCategory(args[0], args[1]));
+        categories.addSubCategory(args[0], args[1]);
     }
 
     private void removeSubCategory() {
-        useService(args, 2, () ->
-                categories.removeSubCategory(args[0], args[1], true)
-        );
+        categories.removeSubCategory(args[0], args[1], true);
     }
 
     private void addSubSubCategory() {
-        useService(args, 3,
-                () -> categories.addSubSubCategory(args[0], args[1], args[2])
-        );
+
+        categories.addSubSubCategory(args[0], args[1], args[2]);
     }
 
     private void removeSubSubCategory() {
-        useService(args, 3,
-                () -> categories.removeSubSubCategory(args[0], args[1], args[2], true)
-        );
+        categories.removeSubSubCategory(args[0], args[1], args[2], true);
     }
 
     private void updateCategoryCusDiscount() {
-        useService(args, 6,
-                () -> products.updateCategoryCusDiscount(
-                        convertFloat(args[0]), convertDate(args[1]),
-                        convertDate(args[2]),
-                        args[3], args[4], args[5])
-        );
+
+        products.updateCategoryCusDiscount(
+                convertFloat(args[0]), convertDate(args[1]),
+                convertDate(args[2]),
+                args[3], args[4], args[5]);
     }
 
     private void updateProductCusDiscount() {
-        useService(args, 4, () ->
-                products.updateProductCusDiscount(
-                        convertFloat(args[0]), convertDate(args[1]),
-                        convertDate(args[2]), convertInt(args[3]))
-        );
+
+        products.updateProductCusDiscount(
+                convertFloat(args[0]), convertDate(args[1]),
+                convertDate(args[2]), convertInt(args[3]));
     }
 
     private void updateItemCusDiscount() {
-        useService(args, 5, () ->
-                products.updateItemCusDiscount(
-                        convertInt(args[0]),
-                        convertInt(args[1]),
-                        convertFloat(args[2]),
-                        convertDate(args[3]),
-                        convertDate(args[4])
-                )
+
+        products.updateItemCusDiscount(
+                convertInt(args[0]),
+                convertInt(args[1]),
+                convertFloat(args[2]),
+                convertDate(args[3]),
+                convertDate(args[4])
         );
     }
 
     private void updateProductCusPrice() {
-        useService(args, 2, () ->
-                products.updateProductCusPrice(convertInt(args[0]), convertFloat(args[1]))
-        );
+
+        products.updateProductCusPrice(convertInt(args[0]), convertFloat(args[1]));
     }
 
     private void addProduct() {
-        useService(args, 9, () -> products.addProduct(
+        products.addProduct(
                 args[0], args[1], convertDouble(args[2]), convertFloat(args[3]),
                 convertInt(args[4]), convertInt(args[5]),
-                args[6], args[7], args[8])
-        );
+                args[6], args[7], args[8]);
     }
 
     private void removeProduct() {
-        useService(args, 1,
-                () -> products.removeProduct(convertInt(args[0])));
+
+        products.removeProduct(convertInt(args[0]));
     }
 
     private void addItem() {
-        useService(args, 6,
-                () -> products.addItem(
-                        convertInt(args[0]), args[1], args[2],
-                        convertInt(args[3]), convertDate(args[4]),
-                        Objects.requireNonNull(convertBoolean(args[5]))
-                )
+
+        products.addItem(
+                convertInt(args[0]), args[1], args[2],
+                convertInt(args[3]), convertDate(args[4]),
+                Objects.requireNonNull(convertBoolean(args[5]))
         );
     }
 
     private void removeItem() {
-        useService(args, 2,
-                () -> products.removeItem(convertInt(args[0]), convertInt(args[0]))
-        );
+
+        products.removeItem(convertInt(args[0]), convertInt(args[0]));
     }
 
     private void updateItemDefect() {
-        useService(args, 4,
-                () -> products.updateItemDefect(
-                        convertInt(args[0]),
-                        convertInt(args[1]),
-                        convertBoolean(args[2]),
-                        args[3]
-                )
+
+        products.updateItemDefect(
+                convertInt(args[0]),
+                convertInt(args[1]),
+                convertBoolean(args[2]),
+                args[3]
         );
     }
 
     private void getItemLocation() {
-        useService(args, 2, () -> products.getItemLocation(convertInt(args[0]), convertInt(args[0])));
+        products.getItemLocation(convertInt(args[0]), convertInt(args[0]));
     }
 
     private void changeItemLocation() {
-        useService(
-                args, 3,
-                () -> products.changeItemLocation(convertInt(args[0]), convertInt(args[0]), args[2])
-        );
+
 
         if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
             try {
+                products.changeItemLocation(convertInt(args[0]), convertInt(args[0]), args[2]);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -255,65 +239,54 @@ public class InventoryPresentationFacade {
     }
 
     private void changeItemOnShelf() {
-        useService(args, 3,
-                () -> products.changeItemOnShelf(
-                        convertInt(args[0]),
-                        convertInt(args[1]),
-                        convertBoolean(args[2])
-                )
+
+        products.changeItemOnShelf(
+                convertInt(args[0]),
+                convertInt(args[1]),
+                convertBoolean(args[2])
         );
     }
 
     private void createMissingReport() {
-        useService(args, 2,
-                () -> reports.createMissingReport(args[0], args[1]));
+        reports.createMissingReport(args[0], args[1]);
     }
 
     private void createExpiredReport() {
-        useService(args, 2,
-                () -> reports.createExpiredReport(args[0], args[1]));
+        reports.createExpiredReport(args[0], args[1]);
     }
 
     private void createSurplusesReport() {
-        useService(args, 2,
-                () -> reports.createSurplusesReport(args[0], args[1])
-        );
+
+        reports.createSurplusesReport(args[0], args[1]);
     }
 
     private void createDefectiveReport() {
-        useService(args, 2, () -> reports.createDefectiveReport(args[0], args[1]));
+        reports.createDefectiveReport(args[0], args[1]);
     }
 
     private void createBySupplierReport() {
-        useService(args, 3,
-                () -> reports.createBySupplierReport(args[0], args[1], convertInt(args[2]))
-        );
+        reports.createBySupplierReport(args[0], args[1], convertInt(args[2]));
     }
 
     private void createByProductReport() {
-        useService(args, 3,
-                () -> reports.createByProductReport(args[0], args[1], args[2])
-        );
+        reports.createByProductReport(args[0], args[1], args[2]);
     }
 
     private void createByCategoryReport() {
-        useService(args, 5,
-                () -> reports.createByCategoryReport(args[0], args[1], args[2], args[3], args[4])
-        );
+        reports.createByCategoryReport(args[0], args[1], args[2], args[3], args[4]);
     }
 
     private void removeReport() {
-        useService(args, 1,
-                () -> reports.removeReport(convertInt(args[0])));
+
+        reports.removeReport(convertInt(args[0]));
     }
 
     private void getReport() {
-        useService(args, 1,
-                () -> reports.getReport(convertInt(args[0])));
+        reports.getReport(convertInt(args[0]));
     }
 
     private void createPeriodicOrder() {
-        useService(args, 2, () -> facade.createPeriodicOrder(convertMap(args[0]), convertInt(args[1])));
+        facade.createPeriodicOrder(convertMap(args[0]), convertInt(args[1]));
     }
 
     private void confirmOrder() {
@@ -361,15 +334,4 @@ public class InventoryPresentationFacade {
         return Integer.parseInt(input);
     }
 
-    private void useService(String[] args, int argumentCount, Supplier<ServiceBase.Response> serviceUsage) {
-        try {
-            if (args.length != argumentCount) {
-                throw new IllegalArgumentException("Expected " + argumentCount +
-                        " arguments, but got " + args.length);
-            }
-            System.out.println(serviceUsage.get());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
 }
