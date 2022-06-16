@@ -2,8 +2,6 @@ package groupk.inventory_and_suppliers;
 
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
-import groupk.shared.business.Inventory.Product;
-import groupk.shared.business.Inventory.Report;
 
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Order;
@@ -45,10 +43,6 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
             quantityDiscountSize = 0, subSubCategorySize = 0, subCategorySize = 0,
             supplierSize = 0;
 
-    @AfterEach
-    void tearDown() {
-
-    }
 
     @Test
     public void loadDB() {
@@ -74,20 +68,20 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
     public void deleteDB() {
         addToDB();
 
-        suppliers.deleteOrder(order.getId());
-        suppliers.deleteSupplier(sup.getPpn());
+        facade.deleteOrder(order.getId());
+        facade.deleteSupplier(sup.getPpn());
 
-        inventory.removeReport(missingReport.getId());
-        inventory.removeReport(byProductReport.getId());
-        inventory.removeReport(categoryReport.getId());
-        inventory.removeReport(defectiveReport.getId());
-        inventory.removeReport(supplierReport.getId());
-        inventory.removeReport(expiredReport.getId());
-        inventory.removeReport(surplusesReport.getId());
-        inventory.removeProduct(prod.getProduct_id());
-        inventory.removeSubSubCategory("Dairy", "Shop", "10%");
-        inventory.removeSubCategory("Dairy", "Shop");
-        inventory.removeCategory("Dairy");
+        facade.removeReport(missingReport.getId());
+        facade.removeReport(byProductReport.getId());
+        facade.removeReport(categoryReport.getId());
+        facade.removeReport(defectiveReport.getId());
+        facade.removeReport(supplierReport.getId());
+        facade.removeReport(expiredReport.getId());
+        facade.removeReport(surplusesReport.getId());
+        facade.removeProduct(prod.getProduct_id());
+        facade.removeSubSubCategory("Dairy", "Shop", "10%",true);
+        facade.removeSubCategory("Dairy", "Shop", true);
+        facade.removeCategory("Dairy", true);
 
         runQuery();
 
@@ -103,18 +97,18 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
 
     @Test
     public void testAddItemToOrder() {
-        sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem",
+        sup = assertSuccess(facade.createSupplier(1, 123, "Lorem",
                 true, PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti",
                 "050-9954528", "Foo 15, Foobar"));
 
-        order = assertSuccess(suppliers.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX, OrderType.Periodical));
-        inventory.addCategory("Dairy");
-        inventory.addSubCategory("Dairy", "Shop");
-        inventory.addSubSubCategory("Dairy", "Shop", "10%");
+        order = assertSuccess(facade.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX, OrderType.Periodical));
+        facade.addCategory("Dairy");
+        facade.addSubCategory("Dairy", "Shop");
+        facade.addSubSubCategory("Dairy", "Shop", "10%");
 
-        prod = assertSuccess(inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+        prod = assertSuccess(facade.addProduct("Milk", "Tnoova", 10.0, 20, 10,
                 1200, "Dairy", "Shop", "10%"));
-        Item item = assertSuccess(suppliers.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
+        Item item = assertSuccess(facade.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
 
         String select_query = "SELECT * FROM Item WHERE supplierPPN=" + item.getSupplier().getPpn();
         Statement st = null;
@@ -136,19 +130,19 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
 
     @Test
     public void testAddProductWithoutExistingCategory() {
-        inventory.addCategory(
+        facade.addCategory(
                 "Dairy"
         );
-        inventory.addSubCategory(
+        facade.addSubCategory(
                 "Dairy",
                 "Shop"
         );
-        inventory.addSubSubCategory(
+        facade.addSubSubCategory(
                 "Dairy",
                 "Shop",
                 "10%"
         );
-        Assertions.assertFalse(inventory.addProduct(
+        Assertions.assertFalse(facade.addProduct(
                 "Milk",
                 "Tnoova",
                 10.0,
@@ -295,19 +289,19 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
 
     @Test
     public void updateDB() {
-        inventory.addCategory(
+        facade.addCategory(
                 "Dairy"
         );
-        inventory.addSubCategory(
+        facade.addSubCategory(
                 "Dairy",
                 "Shop"
         );
-        inventory.addSubSubCategory(
+        facade.addSubSubCategory(
                 "Dairy",
                 "Shop",
                 "10%"
         );
-        prod = assertSuccess(inventory.addProduct(
+        prod = assertSuccess(facade.addProduct(
                 "Milk",
                 "Tnoova",
                 10.0,
@@ -319,7 +313,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
                 "10%"
         ));
         float NEW_PRICE = 21;
-        inventory.updateProductCusPrice(prod.getProduct_id(), NEW_PRICE);
+        facade.updateProductCusPrice(prod.getProduct_id(), NEW_PRICE);
         String select_query = "SELECT * FROM Product WHERE id=" + prod.getProduct_id();
         Statement st = null;
         ResultSet res_update;
@@ -339,7 +333,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
 
     @Test
     public void testCreateSupplierCard() {
-        assertSuccess(suppliers.createSupplier(1, 123, "Lorem", true,
+        assertSuccess(facade.createSupplier(1, 123, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "050-9954528",
                 "Foobar Lane 69, Upper Foo"));
     }
@@ -347,19 +341,19 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
 
     @Test
     public void testAddProductNotWorking() {
-        inventory.addCategory(
+        facade.addCategory(
                 "Dairy"
         );
-        inventory.addSubCategory(
+        facade.addSubCategory(
                 "Dairy",
                 "Shop"
         );
-        inventory.addSubSubCategory(
+        facade.addSubSubCategory(
                 "Dairy",
                 "Shop",
                 "10%"
         );
-        Assertions.assertFalse(inventory.addProduct(
+        Assertions.assertFalse(facade.addProduct(
                 "Milk",
                 "Tnoova",
                 10.0,
@@ -388,60 +382,60 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
 
     @Test
     public void testAddItemWithoutExistingSupplier() {
-        Supplier sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem", true,
+        Supplier sup = assertSuccess(facade.createSupplier(1, 123, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "050-9954528",
                 "Foobar Lane 69, Upper Foo"));
 
-        inventory.addCategory("Dairy");
-        inventory.addSubCategory("Dairy", "Shop");
-        inventory.addSubSubCategory("Dairy", "Shop", "10%");
+        facade.addCategory("Dairy");
+        facade.addSubCategory("Dairy", "Shop");
+        facade.addSubSubCategory("Dairy", "Shop", "10%");
 
         int wrongSupplier = sup.getPpn() + 3;
-        Assertions.assertFalse(suppliers.createItem(wrongSupplier, 2, 1, 0.5f).success);
+        Assertions.assertFalse(facade.createItem(wrongSupplier, 2, 1, 0.5f).success);
     }
 
     @Test
     public void testAddItemToNonExistingOrder() {
-        Supplier sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem", true,
+        Supplier sup = assertSuccess(facade.createSupplier(1, 123, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "050-9954528",
                 "Foobar Lane 69, Upper Foo"));
 
-        Order order = assertSuccess(suppliers.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
+        Order order = assertSuccess(facade.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
                 OrderType.Periodical));
 
-        inventory.addCategory("Dairy");
-        inventory.addSubCategory("Dairy", "Shop");
-        inventory.addSubSubCategory("Dairy", "Shop", "10%");
+        facade.addCategory("Dairy");
+        facade.addSubCategory("Dairy", "Shop");
+        facade.addSubSubCategory("Dairy", "Shop", "10%");
 
-        prod = assertSuccess(inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+        prod = assertSuccess(facade.addProduct("Milk", "Tnoova", 10.0, 20, 10,
                 1200, "Dairy", "Shop", "10%"));
 
-        Item item = assertSuccess(suppliers.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
+        Item item = assertSuccess(facade.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
 
         int wrongOrderId = order.getId() + 3;
-        Response response = suppliers.orderItem(wrongOrderId, sup.getPpn(), item.getCatalogNumber(), 100);
+        Response response = facade.orderItem(wrongOrderId, sup.getPpn(), item.getCatalogNumber(), 100);
         assertFalse(response.success);
     }
 
     @Test
     public void testAddQuantityDiscountToItem() throws SQLException {
-        Supplier sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem", true,
+        Supplier sup = assertSuccess(facade.createSupplier(1, 123, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY, "Moti", "050-9954528",
                 "Foobar Lane 69, Upper Foo"));
 
-        Order order = assertSuccess(suppliers.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
+        Order order = assertSuccess(facade.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX,
                 OrderType.Periodical));
 
-        inventory.addCategory("Dairy");
-        inventory.addSubCategory("Dairy", "Shop");
-        inventory.addSubSubCategory("Dairy", "Shop", "10%");
+        facade.addCategory("Dairy");
+        facade.addSubCategory("Dairy", "Shop");
+        facade.addSubSubCategory("Dairy", "Shop", "10%");
 
-        prod = assertSuccess(inventory.addProduct("Milk", "Tnoova", 10.0, 20, 10,
+        prod = assertSuccess(facade.addProduct("Milk", "Tnoova", 10.0, 20, 10,
                 1200, "Dairy", "Shop", "10%"));
 
-        Item item = assertSuccess(suppliers.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
+        Item item = assertSuccess(facade.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
 
-        QuantityDiscount qd = assertSuccess(suppliers.createDiscount(sup.getPpn(), item.getCatalogNumber()
+        QuantityDiscount qd = assertSuccess(facade.createDiscount(sup.getPpn(), item.getCatalogNumber()
                 , 100, 0.1f));
 
         PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM QuantityDiscount");
@@ -460,39 +454,39 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
     }
 
     private void addToDB() {
-        sup = assertSuccess(suppliers.createSupplier(1, 123, "Lorem",
+        sup = assertSuccess(facade.createSupplier(1, 123, "Lorem",
                 true, PaymentCondition.Credit, DayOfWeek.SUNDAY,
                 "Moti", "050-9954528", "Foobar Lane 69, Upper Foo"));
 
-        order = assertSuccess(suppliers.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX, OrderType.Periodical));
+        order = assertSuccess(facade.createOrder(sup.getPpn(), LocalDate.now(), LocalDate.MAX, OrderType.Periodical));
 
-        assertSuccess(inventory.addCategory("Dairy"));
-        assertSuccess(inventory.addSubCategory("Dairy", "Shop"));
-        assertSuccess(inventory.addSubSubCategory("Dairy", "Shop", "10%"));
+        assertSuccess(facade.addCategory("Dairy"));
+        assertSuccess(facade.addSubCategory("Dairy", "Shop"));
+        assertSuccess(facade.addSubSubCategory("Dairy", "Shop", "10%"));
 
         prod = assertSuccess(
-                inventory.addProduct(
+                facade.addProduct(
                         "Milk", "Tnoova",
                         10.0, 20, 10, 1200,
                         "Dairy", "Shop", "10%"));
 
-        ProductItem pItem = assertSuccess(inventory.addItem(prod.getProduct_id(), "TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX, true));
-        Item item = assertSuccess(suppliers.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
-        assertSuccess(suppliers.orderItem(
+        ProductItem pItem = assertSuccess(facade.addItem(prod.getProduct_id(), "TopMarket", "BeerSheva", sup.getPpn(), LocalDate.MAX, true));
+        Item item = assertSuccess(facade.createItem(sup.getPpn(), 124, prod.getProduct_id(), 12));
+        assertSuccess(facade.orderItem(
                 order.getId(),
                 sup.getPpn(),
                 item.getCatalogNumber(),
                 50));
-        discount = assertSuccess(suppliers.createDiscount(sup.getPpn(), item.getCatalogNumber(), 50, 5));
+        discount = assertSuccess(facade.createDiscount(sup.getPpn(), item.getCatalogNumber(), 50, 5));
 
-        inventory.updateItemCusDiscount(0.1f, LocalDate.now(), LocalDate.MAX, prod.getProduct_id(), pItem.getId());
+        facade.updateItemCusDiscount(0.1f, LocalDate.now(), LocalDate.MAX, prod.getProduct_id(), pItem.getId());
 
-        missingReport = assertSuccess(inventory.createMissingReport("Missing", "Report1"));
-        supplierReport = assertSuccess(inventory.createBySupplierReport("Supplier", "Report2", sup.getPpn()));
-        expiredReport = assertSuccess(inventory.createExpiredReport("Expired", "Report3"));
-        categoryReport = assertSuccess(inventory.createByCategoryReport("Category", "Report4", "CatName", "SubCatName", "SubSubCatName"));
-        defectiveReport = assertSuccess(inventory.createDefectiveReport("Defective", "Report5"));
-        surplusesReport = assertSuccess(inventory.createSurplusesReport("Surpluses", "Report6"));
-        byProductReport = assertSuccess(inventory.createByProductReport("Product", "Report7", "ProName"));
+        missingReport = assertSuccess(facade.createMissingReport("Missing", "Report1"));
+        supplierReport = assertSuccess(facade.createBySupplierReport("Supplier", "Report2", sup.getPpn()));
+        expiredReport = assertSuccess(facade.createExpiredReport("Expired", "Report3"));
+        categoryReport = assertSuccess(facade.createByCategoryReport("Category", "Report4", "CatName", "SubCatName", "SubSubCatName"));
+        defectiveReport = assertSuccess(facade.createDefectiveReport("Defective", "Report5"));
+        surplusesReport = assertSuccess(facade.createSurplusesReport("Surpluses", "Report6"));
+        byProductReport = assertSuccess(facade.createByProductReport("Product", "Report7", "ProName"));
     }
 }
