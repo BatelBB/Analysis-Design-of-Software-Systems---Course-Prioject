@@ -2,10 +2,9 @@ package groupk.shared.PresentationLayer;
 
 import groupk.inventory_suppliers.shared.ioc.ServiceProvider;
 import groupk.shared.business.CategoryController;
-import groupk.shared.service.Inventory.ProductService;
+
 import groupk.shared.business.ProductController;
-import groupk.shared.service.Inventory.CategoryService;
-import groupk.shared.service.Inventory.ReportService;
+
 import groupk.shared.PresentationLayer.Inventory.InventoryPresentationFacade;
 import groupk.shared.PresentationLayer.Suppliers.SupplierPresentationFacade;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;

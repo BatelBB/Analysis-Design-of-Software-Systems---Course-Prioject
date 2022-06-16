@@ -3,6 +3,7 @@ package groupk.inventory_and_suppliers;
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 
+import groupk.shared.business.Facade;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Order;
 import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
@@ -447,6 +448,12 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
     private void assertSuccess(ServiceBase.Response response) {
         assertTrue(response.success, response.error);
     }
+
+    private <T> T assertSuccess(Facade.ResponseT<T> response) {
+        assertTrue(response.success, response.error);
+        return response.data;
+    }
+
 
     private <T> T assertSuccess(ResponseT<T> responseT) {
         assertTrue(responseT.success, responseT.error);
