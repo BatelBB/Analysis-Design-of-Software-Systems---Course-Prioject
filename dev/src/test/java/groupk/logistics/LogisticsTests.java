@@ -38,7 +38,7 @@ public class LogisticsTests {
     @BeforeEach
     public void setService() {
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+            connection = DriverManager.getConnection("jdbc:sqlite:database.db");
             myDataBase = new myDataBase(connection);
             truckManagerController = TruckManagerController.getInstance();
             driverController = DriverController.getInstance();
