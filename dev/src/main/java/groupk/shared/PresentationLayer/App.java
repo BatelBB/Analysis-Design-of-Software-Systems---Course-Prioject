@@ -49,7 +49,7 @@ public class App {
         inventoryService = ioc.get(InventoryService.class);
         supplierService = ioc.get(ISupplierService.class);
         if (shouldLoadExample) {
-            ExampleData.loadExampleData(inventoryService, supplierService);
+            ExampleData.loadExampleData(inventoryService, supplierService, employeesLogisticsService);
         }
     }
 

@@ -14,7 +14,6 @@ public class MainEmployeesAndDelivery {
         CommandRunner runner = new CommandRunner(
                 new Command[] {
                         new Quit(),
-                        new LoadSample(),
                         new CreateEmployee(),
                         new GetEmployee(),
                         new DeleteEmployee(),
