@@ -7,6 +7,7 @@ import groupk.shared.service.dto.Employee;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
+import java.util.List;
 
 public class CreateDelivery implements Command {
     @Override
@@ -54,7 +55,7 @@ public class CreateDelivery implements Command {
             return;
         }
 
-        Response<Delivery> response = runner.getService().createDelivery(
+        Response<List<String>[]> response = runner.getService().createDelivery(
                 runner.getSubject(),
                 command[2],
                 datetime,
@@ -68,6 +69,18 @@ public class CreateDelivery implements Command {
             System.out.printf("Error: %s\n", response.getErrorMessage());
             return;
         }
-        System.out.println("Delivery created.");
+        if (response.getValue() == null | response.getValue().length != 3 | response.getValue()[0] == null | response.getValue()[1] == null | response.getValue()[2] == null)
+            System.out.print("Error: something got wrong :(\n");
+        else if (response.getValue()[0].size() == 0 & response.getValue()[1].size() == 0 & response.getValue()[2].size() == 0)
+            System.out.println("Delivery created.");
+        else {
+            System.out.println("The delivery created with some erros: ");
+            for (int i = 0; i < 3; i++) {
+                List<String> Errors = response.getValue()[i];
+                for (String error : Errors) {
+                    System.out.println("   " + error);
+                }
+            }
+        }
     }
 }

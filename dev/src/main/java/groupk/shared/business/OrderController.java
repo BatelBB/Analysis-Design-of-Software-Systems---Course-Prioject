@@ -1,5 +1,6 @@
 package groupk.shared.business;
 
+import groupk.inventory_suppliers.shared.ioc.ServiceProvider;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 
@@ -17,13 +18,17 @@ import java.util.Map;
 
 public class OrderController {
     private final QuantityDiscountController discounts;
+    private final LogisticsController logistics;
     ArrayList<Order> orders;
     private PersistenceController dal;
 
-    public OrderController(PersistenceController dal, QuantityDiscountController discounts) {
+    public OrderController(PersistenceController dal,
+                           QuantityDiscountController discounts,
+                           LogisticsController logistics) {
         this.dal = dal;
         orders = new ArrayList<>();
         this.discounts = discounts;
+        this.logistics = logistics;
     }
 
     public Order get(int id) throws BusinessLogicException {
@@ -113,6 +118,10 @@ public class OrderController {
         }
 
         orders.add(order);
+
+        String source = order.supplier.getContact().getAddress();
+        String destination = "TODO inventory"; // TODO inventory
+        logistics.addTruckingRequest(order.getId(), source, destination);
         return order.getId();
     }
 
@@ -122,5 +131,11 @@ public class OrderController {
                     itemsWithAmount.get(itemsWithAmount.keySet().toArray()[i]));
 
         }
+    }
+
+    public void createFittingTrucking(Order order) {
+        String source = order.supplier.getContact().getAddress();
+        String destination = "TODO inventory"; // TODO inventory
+        logistics.addTruckingRequest(order.getId(), source, destination);
     }
 }

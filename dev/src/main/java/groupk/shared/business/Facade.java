@@ -5,6 +5,8 @@ import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
 import groupk.inventory_suppliers.shared.utils.Tuple;
+import groupk.logistics.business.TruckManagerController;
+import groupk.shared.PresentationLayer.Suppliers.UserOutput;
 import groupk.shared.business.Inventory.Categories.Category;
 import groupk.shared.service.Inventory.Objects.Product;
 import groupk.shared.service.Inventory.Objects.ProductItem;
@@ -46,7 +48,7 @@ public class Facade {
         suppliers = new SupplierController(p);
         items = new ItemController(p, suppliers);
         discounts = new QuantityDiscountController(p, items);
-        orders = new OrderController(p, discounts);
+        orders = new OrderController(p, discounts, logistics);
     }
 
     //just for test
@@ -297,7 +299,7 @@ public class Facade {
         return logistics.listVehicles();
     }
 
-    public Response<Delivery> createDelivery(String subjectID, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<groupk.shared.service.dto.Product> products, long hours, long minutes) {
+    public Response<List<String>[]> createDelivery(String subjectID, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<Integer> orders, long hours, long minutes) {
         if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
@@ -309,7 +311,7 @@ public class Facade {
         if (!isThereWorkerWithThisRoleInShift(subjectID, date, Employee.Role.Logistics))
             return new Response<>("There is no logistics worker in this shift to except delivery");
         else
-            return logistics.createDelivery(Integer.parseInt(subjectID), registrationPlateOfVehicle, date, Integer.parseInt(driverUsername), sources, destinations, products, hours, minutes);
+            return logistics.createDelivery(Integer.parseInt(subjectID), registrationPlateOfVehicle, date, Integer.parseInt(driverUsername), sources, destinations, orders, hours, minutes);
     }
 
     public Response<List<Delivery>> listDeliveriesWithVehicle(String subjectID, String registration) {
@@ -333,11 +335,11 @@ public class Facade {
         return logistics.setWeightForDelivery(Integer.parseInt(subjectID), deliveryID, weight);
     }
 
-    public Response<Boolean> addProductsToTrucking(String subjectID, int truckingID, groupk.shared.service.dto.Product products) {
+    public Response<Boolean> addOrdersToTrucking(String subjectID, int truckingID, int orderID) {
         if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
-        return logistics.addProductsToTrucking(Integer.parseInt(subjectID), truckingID, products);
+        return logistics.addOrdersToTrucking(Integer.parseInt(subjectID), truckingID, orderID);
     }
 
     public Response<List<String>> updateSources(String subjectID, int truckingID, List<Site> sources) {
@@ -368,11 +370,11 @@ public class Facade {
         return logistics.addDestination(Integer.parseInt(subjectID), truckingID, destinations);
     }
 
-    public Response<Boolean> moveProducts(String subjectID, int truckingID, groupk.shared.service.dto.Product product) {
+    public Response<Boolean> moveOrdersFromTrucking(String subjectID, int truckingID, int orderID) {
         if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
-        return logistics.moveProducts(Integer.parseInt(subjectID), truckingID, product);
+        return logistics.moveOrderFromTrucking(Integer.parseInt(subjectID), truckingID, orderID);
     }
 
     public Response<Boolean> updateVehicleOnTrucking(String subjectID, int truckingID, String registrationPlate) {
@@ -420,16 +422,44 @@ public class Facade {
         return logistics.getDriverLicenses(Integer.parseInt(subjectID));
     }
 
+    public Response<Integer> getTruckingIDByOrderID(String subjectID, int orderID) {
+        return logistics.getTruckingIDByOrderID(orderID);
+    }
+
+    public Response<Boolean> addTruckingRequest(String subjectID, int orderID, String sourceDetails, String destinationDetails) {
+        if (!isFromRole(subjectID, Employee.Role.StoreManager).getValue())
+            return new Response<>("You are not authorized to perform this operation");
+        return logistics.addTruckingRequest(orderID, sourceDetails, destinationDetails);
+    }
+
+    public Response<Boolean> deleteTruckingRequest(String subjectID, int orderID) {
+        try {
+            if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue())
+                return new Response<>("You are not authorized to perform this operation");
+            Response<Boolean> truckingDeletion = logistics.deleteTruckingRequest(orderID);
+            if (!truckingDeletion.isError() && truckingDeletion.getValue()) {
+                orders.delete(orderID);
+                UserOutput.println("Order " + orderID + " was deleted.");
+                return new Response<>(true);
+            }
+            throw new BusinessLogicException("There was some problem deleting trucking order (what the truck)");
+        } catch (Exception e) {
+            return new Response<Boolean>(e.getMessage());
+        }
+    }
+
+    public Response<List<String>> getTruckingRequests(String subjectID) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue())
+            return new Response<>("You are not authorized to perform this operation");
+        return logistics.getTruckingRequests();
+    }
+
     public Response<Delivery> getTruckingById(String subjectID, int truckingID) {
         return logistics.getTruckinfByID(Integer.parseInt(subjectID), truckingID);
     }
 
     public Response<String[]> getLicensesList() {
         return logistics.getLicensesList();
-    }
-
-    public Response<String[]> getProductsSKUList() {
-        return logistics.getProductsSKUList();
     }
 
     public Response<String[]> getAreasList() {
@@ -783,18 +813,21 @@ public class Facade {
         Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
                 LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
         orders.orderItemFromMap(order, itemsWithAmount);
-
+        orders.createFittingTrucking(order);
         return responseFor(() -> order.getId());
     }
 
     public SI_Response createOrderPeriodicVoid(Map<Integer, Integer> productAmount, int weekDay) {
-        Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
-        Tuple<Supplier, Item> supplierItemTuple =
-                items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
-        Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
-                LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
+        return responseForVoid(() -> {
+            Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
+            Tuple<Supplier, Item> supplierItemTuple =
+                    items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
+            Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
+                    LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
 
-        return responseForVoid(() -> orders.orderItemFromMap(order, itemsWithAmount));
+            orders.orderItemFromMap(order, itemsWithAmount);
+            orders.createFittingTrucking(order);
+        });
     }
 
     protected SI_Response voidOk() {

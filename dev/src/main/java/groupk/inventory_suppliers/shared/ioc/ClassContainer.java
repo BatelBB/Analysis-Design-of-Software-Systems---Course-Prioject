@@ -68,7 +68,9 @@ public class ClassContainer implements ServiceProvider {
 
     private void mustSupport(Class<?> serviceType) {
         if(!supports(serviceType)) {
-            throw new NoSuchElementException("This ClassContainer does not support type: " + serviceType.getName());
+            // silly patch / hail Mary
+            singleton(serviceType);
+            // throw new NoSuchElementException("This ClassContainer does not support type: " + serviceType.getName());
         }
     }
 

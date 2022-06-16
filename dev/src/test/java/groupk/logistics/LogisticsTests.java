@@ -1,6 +1,7 @@
 package groupk.logistics;
 
 
+import groupk.logistics.DataLayer.TruckingDTO;
 import groupk.logistics.DataLayer.TruckingIDMap;
 import groupk.logistics.DataLayer.TruckingMapper;
 import groupk.logistics.DataLayer.myDataBase;
@@ -102,12 +103,13 @@ public class LogisticsTests {
         List<String[]> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Map<String,Integer> product = new ConcurrentHashMap<>();
-        product.put("eggs",2);
-        truckManagerController.addTrucking(1,"12345678",localDateTime,319034121,sources,destinations,product,2,0);
+        List<Integer> ordersIDs = new LinkedList<>();
+        ordersIDs.add(1);
+        ordersIDs.add(2);
+        truckManagerController.addTrucking(1,"12345678",localDateTime,319034121,sources,destinations,ordersIDs,2,0);
         truckManagerController.forTests();
         try {
-            truckManagerController.addTrucking(1,"12345678",localDateTime,319034121,sources,destinations,product,2,0);
+            truckManagerController.addTrucking(1,"12345678",localDateTime,319034121,sources,destinations,ordersIDs,2,0);
         } catch (Exception e) {
             assertEquals(e.getMessage(), "Oops, there is another trucking at the same date and with the same driver");
         }
@@ -128,10 +130,10 @@ public class LogisticsTests {
         List<String[]> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Map<String,Integer> product = new ConcurrentHashMap<>();
-        product.put("Eggs_4902505139314",2);
-        truckManagerController.addTrucking(1,"12345678",localDateTime,319034121,sources,destinations,product,2,0);
-
+        List<Integer> ordersIDs = new LinkedList<>();
+        ordersIDs.add(3);
+        ordersIDs.add(4);
+        truckManagerController.addTrucking(1,"12345678",localDateTime,319034121,sources,destinations,ordersIDs,2,0);
     }
 
     @Test
@@ -151,36 +153,44 @@ public class LogisticsTests {
     public void setWeight() {
         myDataBase.deleteDB();
         setDetails();
+        //ystem.out.println(driverController.printMyTruckings(319034121));
         try {
-            driverController.setWeightForTrucking(319034121,1,9);
+            driverController.setWeightForTrucking(319034121,5,9);
         }
         catch (Exception e) {
             assertEquals(e.getMessage(),"There is a user already connected to the system");
         }
-        driverController.printMyTruckings(319034121);
-        assertEquals(driverController.printMyTruckings(319034121).contains("Total weight : 9"),true);
+        System.out.println(driverController.printMyTruckings(319034121));
+        assertEquals(truckManagerController.getTruckingById(1, 5).getWeight() == 9,true);
     }
 
     @Test
-    public void addProducts() {
+    public void addOrders() {
         myDataBase.deleteDB();
         setDetails();
         try {
-            truckManagerController.addProductToTrucking(1,1,"Eggs_4902505139314",2);
+            truckManagerController.addOrderToTrucking(1,2,5);
         }
         catch (Exception e) {
-            assertEquals(e.getMessage(),"Oops, the product SKU doesn't exist");
+            assertEquals(true, false);
         }
-        assertEquals(driverController.printMyTruckings(319034121).contains("Product: " + "Eggs_4902505139314" + ", Quantity: " + "4"),true);
+        assertEquals(true,truckManagerController.getTruckingById(1, 2).getOrders().contains(5));
+        try {
+            truckManagerController.addOrderToTrucking(1,2,5);
+            assertEquals(true, false);
+        }
+        catch (Exception e){
+            assertEquals(true, true);
+        }
     }
     //
 //
     @Test
-    public void removeProducts() {
+    public void removeOrders() {
         myDataBase.deleteDB();
         setDetails();
-        truckManagerController.moveProductsToTrucking(1,1,"Eggs_4902505139314",1);
-        assertEquals(driverController.printMyTruckings(319034121).contains("Product: " + "Eggs_4902505139314" + ", Quantity: " + "1"),true);
+        truckManagerController.moveOrdersToTrucking(1,2,3);
+        assertEquals(true, truckManagerController.getTruckingById(1, 2).getOrders().size() == 1 & truckManagerController.getTruckingById(1, 2).getOrders().get(0).intValue() == 4);
 
     }
     //
@@ -189,10 +199,10 @@ public class LogisticsTests {
         myDataBase.deleteDB();
         setDetails();
         try {
-            truckManagerController.removeTrucking(1,1);
+            truckManagerController.removeTrucking(1,4);
         }
         catch (Exception e) {
-            assertEquals(e.getMessage(),"There is a user already connected to the system");
+            assertEquals("no exception",e.getMessage());
         }
         assertEquals(driverController.printMyTruckings(319034121).contains("Product: " + "Eggs_4902505139314"),false);
     }
@@ -203,6 +213,8 @@ public class LogisticsTests {
         setDetails();
         truckManagerController.addVehicle("B","12315679","mercedes",4,32);
         assertEquals(truckManagerController.getVehiclesRegistrationPlates().size()==3,true);
+        truckManagerController.deleteDB();
+        myDataBase.deleteDB();
     }
     //
     @Test
@@ -218,7 +230,6 @@ public class LogisticsTests {
         catch (Exception e) {
             assertEquals(e.getMessage(),"Not all sites from the same area");
         }
-
     }
 
 
