@@ -325,7 +325,7 @@ public class InventoryPresentationFacade {
         System.out.println("please enter actual amount delivered\n(example format: \"[id0]-[amount0]_[id1]-[amount1]\"):");
         Scanner scan = new Scanner(System.in);
         String input = scan.nextLine();
-        useService(args, 1, () -> facade.confirmOrderAmount(convertMap(input)));
+        facade.confirmOrderAmount(convertMap(input));
     }
 
     //converters
