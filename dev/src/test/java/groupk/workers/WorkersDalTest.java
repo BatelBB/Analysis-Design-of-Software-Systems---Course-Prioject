@@ -14,6 +14,9 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import static groupk.CustomAssertions.*;
 public class WorkersDalTest {
     protected Connection connection;
 

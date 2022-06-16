@@ -1,5 +1,7 @@
 package groupk.inventory_and_suppliers.Suppliers;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Order;
@@ -9,6 +11,7 @@ import groupk.inventory_and_suppliers.InventorySuppliersTestsBase;
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 
+import static groupk.CustomAssertions.*;
 
 import groupk.shared.service.Inventory.Objects.Product;
 import groupk.shared.service.ServiceBase;
@@ -20,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 class SupplierServiceTest extends InventorySuppliersTestsBase {
 
@@ -37,7 +41,6 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
     @Test
     void createSupplier() {
         ServiceBase.ResponseT<Supplier> response = createWithPpn(1);
-        assertTrue(response.success, response.error);
         Supplier supplier = assertSuccess(response);
         Assertions.assertNotNull(supplier);
         Assertions.assertEquals(1, supplier.getPpn());
@@ -504,11 +507,6 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         Assertions.assertEquals(priceCalc * 250, order.getTotalPrice(), EPSILON);
 
 
-    }
-
-    private <T> T assertSuccess(ServiceBase.ResponseT<T> response) {
-        assertTrue(response.success);
-        return response.data;
     }
 
     @Test

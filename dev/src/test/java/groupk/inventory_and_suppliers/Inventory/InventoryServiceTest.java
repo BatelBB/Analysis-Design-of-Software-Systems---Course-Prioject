@@ -8,6 +8,7 @@ import groupk.shared.service.ServiceBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static groupk.CustomAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InventoryServiceTest extends InventorySuppliersTestsBase {
@@ -47,11 +48,6 @@ class InventoryServiceTest extends InventorySuppliersTestsBase {
         } catch (Exception e) {
             Assertions.assertEquals(e.getMessage(), "Category doesn't exists");
         }
-    }
-
-    private <T> T assertSuccess(ServiceBase.ResponseT<T> response) {
-        assertTrue(response.success);
-        return response.data;
     }
 
     @Test

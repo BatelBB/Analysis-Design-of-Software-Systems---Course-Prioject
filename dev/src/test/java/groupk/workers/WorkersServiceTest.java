@@ -16,6 +16,9 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import static groupk.CustomAssertions.*;
 public class WorkersServiceTest {
     protected Connection connection;
 

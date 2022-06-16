@@ -15,10 +15,14 @@ import groupk.shared.service.ServiceBase.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+
 import java.sql.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 
+import static groupk.CustomAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsBase {
@@ -441,21 +445,6 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
         ResultSet resultSet = ps.executeQuery();
         Assertions.assertTrue(resultSet.next());
         Assertions.assertTrue(resultSet.getInt(1) > 0);
-    }
-
-    private void assertSuccess(Facade.SI_Response response) {
-        assertTrue(response.success, response.error);
-    }
-
-    private <T> T assertSuccess(Facade.ResponseT<T> response) {
-        assertTrue(response.success, response.error);
-        return response.data;
-    }
-
-
-    private <T> T assertSuccess(ResponseT<T> responseT) {
-        assertTrue(responseT.success, responseT.error);
-        return responseT.data;
     }
 
     private void addToDB() {

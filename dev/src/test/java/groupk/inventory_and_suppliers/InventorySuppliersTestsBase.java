@@ -6,6 +6,9 @@ import groupk.shared.PresentationLayer.AppContainer;
 import groupk.shared.business.Facade;
 import org.junit.jupiter.api.BeforeEach;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import static groupk.CustomAssertions.*;
 import java.sql.Connection;
 
 public class InventorySuppliersTestsBase {
