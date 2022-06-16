@@ -3,6 +3,7 @@ package groupk.shared.business.Suppliers.BussinessObject;
 
 import groupk.inventory_suppliers.dataLayer.dao.SupplierDAO;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
+import groupk.inventory_suppliers.dataLayer.dao.records.readonly.ContactData;
 import groupk.inventory_suppliers.dataLayer.dao.records.readonly.SupplierData;
 import groupk.inventory_suppliers.shared.utils.Utils;
 import java.time.DayOfWeek;
@@ -15,6 +16,10 @@ public class Supplier {
     public Supplier(SupplierData source, SupplierDAO dao){
         this.source = source;
         this.dao = dao;
+    }
+
+    public ContactData getContact() {
+        return source.getContact();
     }
 
     public int getPpn() {

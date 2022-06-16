@@ -1,8 +1,7 @@
 package groupk.shared.PresentationLayer;
 
 import groupk.shared.PresentationLayer.EmployeesLogistics.MainEmployeesAndDelivery;
-import groupk.shared.service.Inventory.InventoryService;
-import groupk.shared.business.Suppliers.Service.ISupplierService;
+import groupk.shared.business.Facade;
 import groupk.shared.PresentationLayer.Inventory.InventoryPresentationFacade;
 import groupk.shared.PresentationLayer.Suppliers.SupplierPresentationFacade;
 import groupk.shared.PresentationLayer.Suppliers.UserInput;
@@ -16,11 +15,10 @@ import java.util.Scanner;
 
 public class App {
     private final PersistenceController dal;
-    private final ISupplierService supplierService;
     private final SupplierPresentationFacade supplierPresentation;
     private final InventoryPresentationFacade inventoryPresentationFacade;
-    private final InventoryService inventoryService;
     private final Connection appConnection;
+    private final Facade facade;
 
     public App(String dbPath) {
         boolean isNew = !new java.io.File(dbPath).exists();
@@ -39,10 +37,9 @@ public class App {
         dal = ioc.get(PersistenceController.class);
         inventoryPresentationFacade = ioc.get(InventoryPresentationFacade.class);
         supplierPresentation = ioc.get(SupplierPresentationFacade.class);
-        inventoryService = ioc.get(InventoryService.class);
-        supplierService = ioc.get(ISupplierService.class);
+        facade = ioc.get(Facade.class);
         if (shouldLoadExample) {
-            ExampleData.loadExampleData(inventoryService, supplierService);
+            ExampleData.loadExampleData(facade);
         }
     }
 

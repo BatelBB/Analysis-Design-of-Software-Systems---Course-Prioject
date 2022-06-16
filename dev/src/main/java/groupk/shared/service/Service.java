@@ -149,8 +149,8 @@ public class Service {
         return facade.listVehicles(subjectID);
     }
 
-    public Response<Delivery> createDelivery(String subjectID, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<Product> products, long hours, long minutes) {
-        return facade.createDelivery(subjectID, registrationPlateOfVehicle, date, driverUsername, sources, destinations, products, hours, minutes);
+    public Response<List<String>[]> createDelivery(String subjectID, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<Integer> orders, long hours, long minutes) {
+        return facade.createDelivery(subjectID, registrationPlateOfVehicle, date, driverUsername, sources, destinations, orders, hours, minutes);
     }
 
     public Response<List<Delivery>> listDeliveriesWithVehicle(String subjectID, String registration) {
@@ -165,8 +165,8 @@ public class Service {
         return facade.setWeightForDelivery(subjectID, deliveryID, weight);
     }
 
-    public Response<Boolean> addProductsToTrucking(String subjectID, int truckingID, Product products) {
-        return facade.addProductsToTrucking(subjectID, truckingID, products);
+    public Response<Boolean> addOrdersToTrucking(String subjectID, int truckingID, int orderID) {
+        return facade.addOrdersToTrucking(subjectID, truckingID, orderID);
     }
 
     public Response<List<String>> updateSources(String subjectID, int truckingID, List<Site> sources) {
@@ -185,8 +185,8 @@ public class Service {
         return facade.addDestination(subjectID, truckingID, destinations);
     }
 
-    public Response<Boolean> moveProducts(String subjectID, int truckingID, Product product) {
-        return facade.moveProducts(subjectID, truckingID, product);
+    public Response<Boolean> moveOrdersFromTrucking(String subjectID, int truckingID, int orderID) {
+        return facade.moveOrdersFromTrucking(subjectID, truckingID, orderID);
     }
 
     public Response<Boolean> updateVehicleOnTrucking(String subjectID, int truckingID, String registrationPlate) {
@@ -213,12 +213,20 @@ public class Service {
         return facade.getLicensesList();
     }
 
-    public Response<String[]> getProductsSKUList() {
-        return facade.getProductsSKUList();
-    }
-
     public Response<String[]> getAreasList() {
         return facade.getAreasList();
+    }
+
+    public Response<Integer> getTruckingIDByOrderID(String subjectID, int orderID) {
+        return facade.getTruckingIDByOrderID(subjectID, orderID);
+    }
+
+    public Response<Boolean> deleteTruckingRequest(String subjectID, int orderID) {
+        return facade.deleteTruckingRequest(subjectID, orderID);
+    }
+
+    public Response<List<String>> getTruckingRequests(String subjectID) {
+        return facade.getTruckingRequests(subjectID);
     }
 
     //inventory & suppliers methods

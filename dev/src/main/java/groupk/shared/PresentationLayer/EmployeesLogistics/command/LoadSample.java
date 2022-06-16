@@ -50,25 +50,23 @@ public class LoadSample implements Command {
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
 
-        Site source2 = new Site("miri", "0522226668", "north", "haifa", "miriSTR", 13, 2, 3);
-        Site destination2 = new Site("lior", "0536545648", "south", "beersheva", "liorSTR", 100, 1, 6);
+        Site source2 = new Site("miri", "052-2226668", "north", "haifa", "miriSTR", 13, 2, 3);
+        Site destination2 = new Site("lior", "053-6545648", "south", "beersheva", "liorSTR", 100, 1, 6);
         List<Site> sources2 = new LinkedList<>();
         List<Site> destinations2 = new LinkedList<>();
         sources2.add(source2);
         destinations2.add(destination2);
-        Product product2 = new Product("Water_7290019056966", 2);
-        List<Product> products2 = new LinkedList<>();
-        products2.add(product2);
+        List<Integer> orders2 = new LinkedList<>();
+        orders.add(2);
 
         // HR.
         Employee HR1 = runner.getService().createEmployee(
@@ -368,7 +366,7 @@ public class LoadSample implements Command {
                 D2.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
 
@@ -380,7 +378,7 @@ public class LoadSample implements Command {
                 D1.id,
                 sources2,
                 destinations2,
-                products2,
+                orders2,
                 1,
                 0);
 

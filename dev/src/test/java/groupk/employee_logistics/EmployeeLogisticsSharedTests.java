@@ -235,15 +235,14 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -261,7 +260,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
         assertEquals(service.listDeliveries(TM1.id).getValue().size(),1);
@@ -288,7 +287,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
         service.removeEmployeeFromShift(HR.id, shift1.getDate(), shift1.getType(), d.id).getValue();
@@ -367,15 +366,14 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -393,7 +391,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
         service.deleteLogisticsDB();
@@ -551,15 +549,14 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -577,7 +574,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
         service = new Service(connection);
@@ -713,15 +710,14 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -739,7 +735,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
         Employee d2 = service.createEmployee(
@@ -908,15 +904,14 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -934,7 +929,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0);
         assertEquals(service.listDeliveries(TM1.id).getValue().size(),1);
@@ -1001,15 +996,14 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -1027,7 +1021,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0).isError());
     }
@@ -1104,15 +1098,14 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -1130,7 +1123,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0).isError());
     }
@@ -1207,15 +1200,14 @@ public class EmployeeLogisticsSharedTests {
                 Shift.Type.Evening,
                 staff,
                 r1).getValue();
-        Site source = new Site("tamirHouse", "0543397995", "center", "batYam", "tamirStr", 13, 2, 3);
-        Site destination = new Site("idoHouse", "0524321231", "center", "herzliya", "idoStr", 100, 1, 6);
+        Site source = new Site("tamirHouse", "054-3397995", "center", "batYam", "tamirStr", 13, 2, 3);
+        Site destination = new Site("idoHouse", "052-4321231", "center", "herzliya", "idoStr", 100, 1, 6);
         List<Site> sources = new LinkedList<>();
         List<Site> destinations = new LinkedList<>();
         sources.add(source);
         destinations.add(destination);
-        Product product = new Product("Eggs_4902505139314", 2);
-        List<Product> products = new LinkedList<>();
-        products.add(product);
+        List<Integer> orders = new LinkedList<>();
+        orders.add(1);
         service.createVehicle(
                 TM1.id,
                 "B",
@@ -1233,7 +1225,7 @@ public class EmployeeLogisticsSharedTests {
                 d.id,
                 sources,
                 destinations,
-                products,
+                orders,
                 2,
                 0).isError());
     }

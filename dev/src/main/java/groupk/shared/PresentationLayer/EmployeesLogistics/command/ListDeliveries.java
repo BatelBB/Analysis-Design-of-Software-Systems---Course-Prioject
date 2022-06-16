@@ -4,7 +4,6 @@ import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.Delivery;
 import groupk.shared.service.dto.Employee;
-import groupk.shared.service.dto.Product;
 import groupk.shared.service.dto.Site;
 
 import java.util.List;
@@ -54,10 +53,12 @@ public class ListDeliveries implements Command {
             for (Site s : d.destinations) {
                 System.out.printf("  - %s, %s, %s, %s, %s, %s, %s\n", s.area, s.city, s.street, s.houseNumber, s.apartment, s.contactName, s.contactPhone);
             }
-            System.out.println("  products:");
-            for (Product p : d.products) {
-                System.out.printf("  - count: %s, id: %s\n", p.count, p.id);
+            System.out.println("  orders:");
+            for (Integer o : d.orders) {
+                System.out.printf("  - order id: %s\n", o.intValue());
             }
         }
     }
 }
+
+

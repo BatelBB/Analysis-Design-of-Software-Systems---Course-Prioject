@@ -14,6 +14,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import static groupk.CustomAssertions.*;
 public class WorkersBusinessTest {
     protected Connection connection;
 
