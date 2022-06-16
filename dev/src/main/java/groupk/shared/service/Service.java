@@ -339,9 +339,6 @@ public class Service {
     }
 
     //Report methods
-    public Facade.ResponseT<List<Integer>> getReportListIds() {
-        return facade.getReportListNames();
-    }
 
     public Facade.ResponseT<Report> createMissingReport(String name, String report_producer) {
         return facade.createMissingReport(name, report_producer);
