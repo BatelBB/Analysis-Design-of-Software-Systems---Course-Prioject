@@ -1,6 +1,5 @@
 package groupk.shared.business;
 
-import groupk.inventory_suppliers.shared.ioc.ServiceProvider;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 
