@@ -2,7 +2,6 @@ package groupk.inventory_and_suppliers.Suppliers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import groupk.shared.PresentationLayer.App;
 import groupk.shared.business.Facade;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
@@ -16,21 +15,12 @@ import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import static groupk.CustomAssertions.*;
 
 import groupk.shared.service.Inventory.Objects.Product;
-import groupk.shared.service.Service;
-import groupk.shared.service.ServiceBase;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.time.*;
 import java.util.Arrays;
 import java.util.Collection;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 class SupplierServiceTest extends InventorySuppliersTestsBase {
@@ -70,16 +60,16 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         createWithPpn(1);
         createWithPpn(2);
 
-        Collection<Supplier> all = facade.getSuppliers();
+        Collection<Supplier> all = service.getSuppliers();
         Assertions.assertEquals(3, all.size());
     }
 
     @Test
     void getSupplier() throws BusinessLogicException {
-        facade.createSupplier(1, 111, "Lorem", true,
+        service.createSupplier(1, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
                 "john", "054-8694859", "Lorem 23, Ipsumistan");
-        Supplier supplier = assertSuccess(facade.getSupplier(1));
+        Supplier supplier = assertSuccess(service.getSupplier(1));
         Assertions.assertNotNull(supplier);
         Assertions.assertEquals(1, supplier.getPpn());
         Assertions.assertEquals(111, supplier.getBankNumber());
@@ -94,24 +84,24 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
 
         initCategories();
         
-        Supplier supplier = assertSuccess(facade.createSupplier(ppn, 111, "Lorem", true,
+        Supplier supplier = assertSuccess(service.createSupplier(ppn, 111, "Lorem", true,
                 PaymentCondition.Credit, DayOfWeek.SUNDAY,
                 "john", "054-8694859", "Lorem 23, Ipsumistan"));
-        Product product = assertSuccess(facade.addProduct("Milk", "Tnoova", 100.0, 50, 10,
+        Product product = assertSuccess(service.addProduct("Milk", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%"));
-        Item item = assertSuccess(facade.createItem(ppn, 1, product.getProduct_id(),  1));
-        Order order = assertSuccess(facade.createOrder(ppn, date1, date2, OrderType.Periodical));
-        facade.orderItem(order.getId(), ppn, item.getCatalogNumber(), 12);
+        Item item = assertSuccess(service.createItem(ppn, 1, product.getProduct_id(),  1));
+        Order order = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 12);
 
         // delete should work.
-        Facade.SI_Response serviceResponse = facade.deleteSupplier(ppn);
+        Facade.SI_Response serviceResponse = service.deleteSupplier(ppn);
         assertTrue(serviceResponse.success, "delete ReadOnlysupplier failed, but shouldn't have: " + serviceResponse.error);
 
         // getting this ReadOnlysupplier shouldn't work.
-        assertFailure(facade.getSupplier(ppn));
+        assertFailure(service.getSupplier(ppn));
 
         // creating new one with same PPN should work.
-        Facade.ResponseT<Supplier> otherResponse = facade.createSupplier(ppn, 222,
+        Facade.ResponseT<Supplier> otherResponse = service.createSupplier(ppn, 222,
                 "Ipsum", false,
                 PaymentCondition.Credit, DayOfWeek.MONDAY,
                 "george", "054-8694859", "Lorem 23, Ipsumistan");
@@ -122,7 +112,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         assertEquals(ppn, otherResponse.data.getPpn());
 
         // getting new one should work.
-        Supplier findNew = assertSuccess(facade.getSupplier(ppn));
+        Supplier findNew = assertSuccess(service.getSupplier(ppn));
         Assertions.assertNotNull(findNew,
                 "creating new ReadOnlysupplier with PPN of deleted ReadOnlysupplier should have worked");
         Assertions.assertEquals(ppn, findNew.getPpn());
@@ -131,12 +121,12 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
     }
     
     private void initCategories() {
-        facade.addCategory("Store");
-        facade.addSubCategory("Store", "Shop,");
-        facade.addSubSubCategory("Store", "Shop,", "5%");
-        facade.addSubSubCategory("Store", "Shop,", "10%");
-        facade.addSubSubCategory("Store", "Shop,", "rye");
-        facade.addSubSubCategory("Store", "Shop,", "wheat");
+        service.addCategory("Store");
+        service.addSubCategory("Store", "Shop,");
+        service.addSubSubCategory("Store", "Shop,", "5%");
+        service.addSubSubCategory("Store", "Shop,", "10%");
+        service.addSubSubCategory("Store", "Shop,", "rye");
+        service.addSubSubCategory("Store", "Shop,", "wheat");
     }
 
     /**
@@ -149,20 +139,20 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         createWithPpn(ppn2);
         initCategories();
         // ReadOnlySupplier 1, ReadOnlyItem 1
-        Product product = assertSuccess(facade.addProduct("Milk", "Tnoova", 100.0, 50, 10,
+        Product product = assertSuccess(service.addProduct("Milk", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%"));
         Facade.ResponseT<Item> resApple =
-                facade.createItem(ppn1, cn1, product.getProduct_id(),  1);
+                service.createItem(ppn1, cn1, product.getProduct_id(),  1);
         assertTrue(resApple.success, "should have succeeded.");
         Item apple = assertSuccess(resApple);
         Assertions.assertNotNull(apple, "creating ReadOnlyitem shouldn't have returned null.");
         Assertions.assertEquals("Milk", product.getName());
 
         // ReadOnlySupplier 1, ReadOnlyItem 2
-        Product product2 = assertSuccess(facade.addProduct("Banana", "Tnoova", 100.0,
+        Product product2 = assertSuccess(service.addProduct("Banana", "Tnoova", 100.0,
                 50, 10, 1200, "Store", "Shop,", "10%"));
         Facade.ResponseT<Item> resBanana =
-                facade.createItem(ppn1, cn2, product2.getProduct_id(),  2);
+                service.createItem(ppn1, cn2, product2.getProduct_id(),  2);
         assertTrue(resBanana.success, "should have succeeded but got " + resBanana.error);
 
         Item banana = assertSuccess(resBanana);
@@ -170,10 +160,10 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         Assertions.assertEquals("Banana", product2.getName());
 
         // ReadOnlySupplier 2, ReadOnlyItem 1
-        Product product3 =assertSuccess (facade.addProduct("Pen", "Tnoova", 100.0, 50, 10,
+        Product product3 =assertSuccess (service.addProduct("Pen", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%"));
         Facade.ResponseT<Item> resOtherSupplier =
-                facade.createItem(ppn2, cn1, product3.getProduct_id(),  10);
+                service.createItem(ppn2, cn1, product3.getProduct_id(),  10);
         assertTrue(resOtherSupplier.success,
                 "creating other ReadOnlyitem with same CN but different PPN should've worked.");
         Item pen = assertSuccess(resOtherSupplier);
@@ -183,12 +173,12 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         Assertions.assertEquals("Pen", product3.getName());
 
         // create with already existing
-        Facade.ResponseT<Item> alreadyExisting = facade.createItem(ppn1, cn1,
+        Facade.ResponseT<Item> alreadyExisting = service.createItem(ppn1, cn1,
                 product3.getProduct_id(),  123);
         assertFalse(alreadyExisting.success);
 
         // not existence supplier
-        Facade.ResponseT<Item> noSuchSupplier = facade.createItem(ppnNotExisting, cn1,
+        Facade.ResponseT<Item> noSuchSupplier = service.createItem(ppnNotExisting, cn1,
                 product3.getProduct_id(),  60);
         assertFalse(noSuchSupplier.success);
 
@@ -197,7 +187,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
     @Test
     void getItems() {
         initCategories();
-        Product product4 = assertSuccess(facade.addProduct("Pen", "Tnoova", 100.0, 50, 10,
+        Product product4 = assertSuccess(service.addProduct("Pen", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%"));
         final int[] amountsOfItems = {10, 11, 12, 13, 14};
         for (int i = 0; i < amountsOfItems.length; i++) {
@@ -206,38 +196,38 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
             createWithPpn(ppn);
             for (int j = 0; j < amountForThisSupplier; j++) {
                 int cn = (j + 1) * 11111;
-                facade.createItem(ppn, cn, product4.getProduct_id(),  1);
+                service.createItem(ppn, cn, product4.getProduct_id(),  1);
             }
         }
 
         final int totalItems = Arrays.stream(amountsOfItems).sum();
-        Assertions.assertEquals(totalItems, facade.getItems().size());
+        Assertions.assertEquals(totalItems, service.getItems().size());
     }
 
     @Test
     void getItem() {
         initCategories();
-        Product product4 =assertSuccess (facade.addProduct("Pen", "Tnoova", 100.0, 50, 10,
+        Product product4 =assertSuccess (service.addProduct("Pen", "Tnoova", 100.0, 50, 10,
                 1200, "Store", "Shop,", "10%"));
         final int ppn = 1, wrongPPN = 2;
         final int cn = 11, wrongCN = 2;
         createWithPpn(ppn);
-        facade.createItem(ppn, cn, product4.getProduct_id(),10);
+        service.createItem(ppn, cn, product4.getProduct_id(),10);
 
-        Facade.ResponseT<Item> resSucc = facade.getItem(ppn, cn);
+        Facade.ResponseT<Item> resSucc = service.getItem(ppn, cn);
         assertTrue(resSucc.success);
         Assertions.assertNotNull(resSucc.data);
         assertEquals(ppn, resSucc.data.getSupplier().getPpn());
         assertEquals(cn, resSucc.data.getCatalogNumber());
         Assertions.assertEquals("Pen", product4.getName());
 
-        Facade.ResponseT<Item> resWrongPPN = facade.getItem(wrongPPN, cn);
+        Facade.ResponseT<Item> resWrongPPN = service.getItem(wrongPPN, cn);
         assertFalse(resWrongPPN.success);
 
-        Facade.ResponseT<Item> resWrongCN = facade.getItem(ppn, wrongCN);
+        Facade.ResponseT<Item> resWrongCN = service.getItem(ppn, wrongCN);
         assertFalse(resWrongCN.success);
 
-        Facade.ResponseT<Item> resWrongBoth = facade.getItem(wrongPPN, wrongCN);
+        Facade.ResponseT<Item> resWrongBoth = service.getItem(wrongPPN, wrongCN);
         assertFalse(resWrongBoth.success);
     }
 
@@ -250,16 +240,16 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         int ppn = 1, cnPen = 11;
         Supplier sup = assertSuccess(createWithPpn(ppn));
         initCategories();
-        Product product4 = assertSuccess(facade.addProduct("Pen", "Tnoova", 100.0, 50,
+        Product product4 = assertSuccess(service.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%"));
-        facade.createItem(ppn, cnPen, product4.getProduct_id(),  10);
+        service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
-        Facade.ResponseT<Order> responseWithBadDates = facade.createOrder(ppn, date2, date1, OrderType.Periodical);
+        Facade.ResponseT<Order> responseWithBadDates = service.createOrder(ppn, date2, date1, OrderType.Periodical);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        Facade.ResponseT<Order> response = facade.createOrder(ppn, date1, date2, OrderType.Periodical);
+        Facade.ResponseT<Order> response = service.createOrder(ppn, date1, date2, OrderType.Periodical);
         assertTrue(response.success);
 
     }
@@ -274,18 +264,18 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
 
             // ReadOnlysupplier must have >= 1 items or opening ReadOnlyorder fails.
             initCategories();
-            Product product4 =assertSuccess (facade.addProduct("Pen", "Tnoova", 100.0, 50,
+            Product product4 =assertSuccess (service.addProduct("Pen", "Tnoova", 100.0, 50,
                     10, 1200, "Store", "Shop,", "10%"));
-            facade.createItem(ppn, 0, product4.getProduct_id(),  1);
+            service.createItem(ppn, 0, product4.getProduct_id(),  1);
             int amountForThisSupplier = amountOfOrders[i];
             createWithPpn(ppn);
             for (int j = 0; j < amountForThisSupplier; j++) {
-                facade.createOrder(ppn, date1, date2, OrderType.Periodical);
+                service.createOrder(ppn, date1, date2, OrderType.Periodical);
             }
         }
 
         final int totalOrders = Arrays.stream(amountOfOrders).sum();
-        Assertions.assertEquals(totalOrders, facade.getOrders().size());
+        Assertions.assertEquals(totalOrders, service.getOrders().size());
     }
 
     @Test
@@ -293,18 +283,18 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         int ppn = 1, cnPen = 11;
         Supplier sup = assertSuccess(createWithPpn(ppn));
         initCategories();
-        Product product4 = assertSuccess(facade.addProduct("Pen", "Tnoova", 100.0, 50,
+        Product product4 = assertSuccess(service.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%"));
-        Item pen = assertSuccess(facade.createItem(ppn, cnPen, product4.getProduct_id(),10));
+        Item pen = assertSuccess(service.createItem(ppn, cnPen, product4.getProduct_id(),10));
 
-        Order order = assertSuccess(facade.createOrder(ppn, date1, date2, OrderType.Periodical));
-        facade.orderItem(order.getId(), ppn, pen.getCatalogNumber(),10);
+        Order order = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
+        service.orderItem(order.getId(), ppn, pen.getCatalogNumber(),10);
 
-        Facade.SI_Response resDelete = facade.deleteOrder(order.getId());
+        Facade.SI_Response resDelete = service.deleteOrder(order.getId());
         assertTrue(resDelete.success);
 
         // delete already deleted
-        Facade.SI_Response resDeleteAgain = facade.deleteOrder(order.getId());
+        Facade.SI_Response resDeleteAgain = service.deleteOrder(order.getId());
         assertFalse(resDeleteAgain.success);
     }
 
@@ -317,24 +307,24 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         float penPrice = 11, notebookPrice = 7;
         int penAmount = 13, notebookAmount = 5;
         initCategories();
-        Product product4 = assertSuccess(facade.addProduct("Pen", "Tnoova", 100.0, 50,
+        Product product4 = assertSuccess(service.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%"));
 
-        Product product5 = assertSuccess(facade.addProduct("Notebook", "Tnoova", 100.0, 50,
+        Product product5 = assertSuccess(service.addProduct("Notebook", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%"));
-        Item pen = assertSuccess(facade.createItem(ppn, cnPen, product4.getProduct_id(),  penPrice));
-        Item notebook = assertSuccess(facade.createItem(ppn, cnNotebook, product5.getProduct_id(),
+        Item pen = assertSuccess(service.createItem(ppn, cnPen, product4.getProduct_id(),  penPrice));
+        Item notebook = assertSuccess(service.createItem(ppn, cnNotebook, product5.getProduct_id(),
                 notebookPrice));
 
-        Order orderPens = assertSuccess(facade.createOrder(ppn, date1, date2, OrderType.Periodical));
-        facade.orderItem(orderPens.getId(), ppn, pen.getCatalogNumber(), penAmount);
+        Order orderPens = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
+        service.orderItem(orderPens.getId(), ppn, pen.getCatalogNumber(), penAmount);
 
-        Order orderNotebooks = assertSuccess(facade.createOrder(ppn, date1, date2, OrderType.Periodical));
-        facade.orderItem(orderNotebooks.getId(), ppn, notebook.getCatalogNumber(), notebookAmount);
+        Order orderNotebooks = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
+        service.orderItem(orderNotebooks.getId(), ppn, notebook.getCatalogNumber(), notebookAmount);
 
-        Order orderBoth = assertSuccess(facade.createOrder(ppn, date1, date2, OrderType.Periodical));
-        facade.orderItem(orderBoth.getId(), ppn, pen.getCatalogNumber(), penAmount);
-        facade.orderItem(orderBoth.getId(), ppn, notebook.getCatalogNumber(), notebookAmount);
+        Order orderBoth = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
+        service.orderItem(orderBoth.getId(), ppn, pen.getCatalogNumber(), penAmount);
+        service.orderItem(orderBoth.getId(), ppn, notebook.getCatalogNumber(), notebookAmount);
 
         Assertions.assertTrue(orderBoth.containsItem(pen));
         Assertions.assertTrue(orderPens.containsItem(pen));
@@ -352,9 +342,9 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
 
         // ReadOnlyitem doesn't matter, there just has to be at least one for ReadOnlyorder to create.
         initCategories();
-        Product product4 = assertSuccess(facade.addProduct("Pen", "Tnoova", 100.0, 50,
+        Product product4 = assertSuccess(service.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%"));
-        facade.createItem(ppn, 11, product4.getProduct_id(),  1);
+        service.createItem(ppn, 11, product4.getProduct_id(),  1);
 
         final Period ONE_DAY = Period.ofDays(1);
         final LocalDate
@@ -365,22 +355,22 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
                 THU = WED.plus(ONE_DAY),
                 FRI = THU.plus(ONE_DAY);
 
-        Order order = assertSuccess(facade.createOrder(ppn, MON, WED, OrderType.Periodical));
+        Order order = assertSuccess(service.createOrder(ppn, MON, WED, OrderType.Periodical));
         Assertions.assertEquals(MON, order.getOrdered());
 
-        facade.setOrderOrdered(order.getId(), SUN);
+        service.setOrderOrdered(order.getId(), SUN);
         Assertions.assertEquals(SUN, order.getOrdered());
 
-        Assertions.assertDoesNotThrow(() -> facade.setOrderOrdered(order.getId(), WED), "should support same-day delivery");
+        Assertions.assertDoesNotThrow(() -> service.setOrderOrdered(order.getId(), WED), "should support same-day delivery");
         Assertions.assertEquals(WED, order.getOrdered());
 
-        facade.setOrderOrdered(order.getId(), TUE);
+        service.setOrderOrdered(order.getId(), TUE);
         Assertions.assertEquals(TUE, order.getOrdered());
 
-        Assertions.assertFalse(facade.setOrderOrdered(order.getId(), THU).success);
+        Assertions.assertFalse(service.setOrderOrdered(order.getId(), THU).success);
         Assertions.assertEquals(TUE, order.getOrdered());
 
-        Assertions.assertFalse(facade.setOrderOrdered(order.getId(), FRI).success);
+        Assertions.assertFalse(service.setOrderOrdered(order.getId(), FRI).success);
         Assertions.assertEquals(TUE, order.getOrdered());
     }
 
@@ -390,11 +380,11 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         final int ppn = 1;
         Supplier supplier = assertSuccess(createWithPpn(ppn));
         initCategories();
-        Product product4 = assertSuccess(facade.addProduct("Pen", "Tnoova", 100.0, 50,
+        Product product4 = assertSuccess(service.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%"));
 
         // ReadOnlyitem doesn't matter, there just has to be at least one for ReadOnlyorder to create.
-        facade.createItem(ppn, 11, product4.getProduct_id(),  1);
+        service.createItem(ppn, 11, product4.getProduct_id(),  1);
 
         final Period ONE_DAY = Period.ofDays(1);
         final LocalDate
@@ -405,22 +395,22 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
                 THU = WED.plus(ONE_DAY),
                 FRI = THU.plus(ONE_DAY);
 
-        Order order = assertSuccess(facade.createOrder(ppn, TUE, FRI, OrderType.Periodical));
+        Order order = assertSuccess(service.createOrder(ppn, TUE, FRI, OrderType.Periodical));
         Assertions.assertEquals(FRI, order.getProvided());
 
-        facade.setOrderProvided(order.getId(), THU);
+        service.setOrderProvided(order.getId(), THU);
         Assertions.assertEquals(THU, order.getProvided());
 
-        Assertions.assertDoesNotThrow(() -> facade.setOrderProvided(order.getId(), TUE), "should support same-day delivery");
+        Assertions.assertDoesNotThrow(() -> service.setOrderProvided(order.getId(), TUE), "should support same-day delivery");
         Assertions.assertEquals(TUE, order.getProvided());
 
-        facade.setOrderProvided(order.getId(), WED);
+        service.setOrderProvided(order.getId(), WED);
         Assertions.assertEquals(WED, order.getProvided());
 
-        Assertions.assertFalse(facade.setOrderProvided(order.getId(), SUN).success);
+        Assertions.assertFalse(service.setOrderProvided(order.getId(), SUN).success);
         Assertions.assertEquals(WED, order.getProvided());
 
-        Assertions.assertFalse(facade.setOrderProvided(order.getId(), MON).success);
+        Assertions.assertFalse(service.setOrderProvided(order.getId(), MON).success);
         Assertions.assertEquals(WED, order.getProvided());
     }
 
@@ -433,51 +423,51 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         int ppn = 1, cnCalc = 11;
         float priceCalc = 100;
         initCategories();
-        Product product4 = assertSuccess(facade.addProduct("Calculator", "Tnoova", 100.0, 50,
+        Product product4 = assertSuccess(service.addProduct("Calculator", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%"));
 
         Supplier sup = assertSuccess(createWithPpn(ppn));
-        Item item = assertSuccess(facade.createItem(ppn, cnCalc, product4.getProduct_id(),  priceCalc));
-        Order order = assertSuccess(facade.createOrder(ppn, date1, date2, OrderType.Periodical));
+        Item item = assertSuccess(service.createItem(ppn, cnCalc, product4.getProduct_id(),  priceCalc));
+        Order order = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
 
-        facade.orderItem(order.getId(), ppn, item.getCatalogNumber(), 1);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 1);
         Assertions.assertEquals(priceCalc, order.getTotalPrice());
 
-        Facade.ResponseT<QuantityDiscount> res = facade.createDiscount(ppn, item.getCatalogNumber(), 10,
+        Facade.ResponseT<QuantityDiscount> res = service.createDiscount(ppn, item.getCatalogNumber(), 10,
                 0.01f);
         assertTrue(res.success);
         Assertions.assertEquals(priceCalc, order.getTotalPrice());
 
-        facade.orderItem(order.getId(), ppn, item.getCatalogNumber(), 9);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 9);
         Assertions.assertEquals(priceCalc * 9, order.getTotalPrice(), EPSILON);
 
-        facade.orderItem(order.getId(), ppn, item.getCatalogNumber(), 10);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 10);
         Assertions.assertEquals(priceCalc * 10 * 0.99, order.getTotalPrice(), EPSILON);
 
-        facade.orderItem(order.getId(), ppn, item.getCatalogNumber(), 11);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 11);
         Assertions.assertEquals(priceCalc * 11 * 0.99, order.getTotalPrice(), EPSILON);
 
-        res = facade.createDiscount(ppn, item.getCatalogNumber(), 100, 0.1f);
+        res = service.createDiscount(ppn, item.getCatalogNumber(), 100, 0.1f);
         assertTrue(res.success);
         Assertions.assertEquals(priceCalc * 11 * 0.99, order.getTotalPrice(), EPSILON);
 
-        facade.orderItem(order.getId(), ppn, item.getCatalogNumber(), 100);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 100);
         Assertions.assertEquals(priceCalc * 100 * 0.9, order.getTotalPrice(), EPSILON);
 
-        facade.orderItem(order.getId(), ppn, item.getCatalogNumber(), 101);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 101);
         Assertions.assertEquals(priceCalc * 101 * 0.9, order.getTotalPrice(), EPSILON);
 
-        facade.orderItem(order.getId(), ppn, item.getCatalogNumber(), 250);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 250);
         Assertions.assertEquals(priceCalc * 250 * 0.9, order.getTotalPrice(), EPSILON);
 
-        res = facade.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f);
+        res = service.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f);
         assertTrue(res.success);
         Assertions.assertEquals(priceCalc * 250 * 0.75f, order.getTotalPrice(), EPSILON);
 
-        res = facade.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f);
+        res = service.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f);
         assertFalse(res.success, "already exists such discount; shouldn't be able to create, but succeeded");
 
-        res = facade.createDiscount(ppn, item.getCatalogNumber(), 100, 0.2f);
+        res = service.createDiscount(ppn, item.getCatalogNumber(), 100, 0.2f);
         assertFalse(res.success, "already exists such discount; shouldn't be able to create, but succeeded");
     }
 
@@ -486,32 +476,32 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         int ppn = 1, cnCalc = 11;
         float priceCalc = 100;
         initCategories();
-        Product product4 = assertSuccess(facade.addProduct("Calculator", "Tnoova", 100.0, 50,
+        Product product4 = assertSuccess(service.addProduct("Calculator", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%"));
         Supplier sup = assertSuccess(createWithPpn(ppn));
 
-        Item item = assertSuccess(facade.createItem(ppn, cnCalc, product4.getProduct_id(), priceCalc));
-        Order order = assertSuccess(facade.createOrder(ppn, date1, date2, OrderType.Periodical));
+        Item item = assertSuccess(service.createItem(ppn, cnCalc, product4.getProduct_id(), priceCalc));
+        Order order = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
 
-        QuantityDiscount over10 = assertSuccess(facade.createDiscount(ppn, item.getCatalogNumber(), 10, 0.01f));
-        QuantityDiscount over50 = assertSuccess(facade.createDiscount(ppn, item.getCatalogNumber(), 50, 0.05f));
-        QuantityDiscount over100 = assertSuccess(facade.createDiscount(ppn, item.getCatalogNumber(), 100, 0.1f));
-        QuantityDiscount over200 = assertSuccess(facade.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f));
+        QuantityDiscount over10 = assertSuccess(service.createDiscount(ppn, item.getCatalogNumber(), 10, 0.01f));
+        QuantityDiscount over50 = assertSuccess(service.createDiscount(ppn, item.getCatalogNumber(), 50, 0.05f));
+        QuantityDiscount over100 = assertSuccess(service.createDiscount(ppn, item.getCatalogNumber(), 100, 0.1f));
+        QuantityDiscount over200 = assertSuccess(service.createDiscount(ppn, item.getCatalogNumber(), 200, 0.25f));
 
-        facade.orderItem(order.getId(), ppn, item.getCatalogNumber(), 250);
+        service.orderItem(order.getId(), ppn, item.getCatalogNumber(), 250);
 
         Assertions.assertEquals(priceCalc * 250 * 0.75f, order.getTotalPrice(), EPSILON);
 
-        facade.deleteDiscount(over50);
+        service.deleteDiscount(over50);
         Assertions.assertEquals(priceCalc * 250 * 0.75f, order.getTotalPrice(), EPSILON);
 
-        facade.deleteDiscount(over200);
+        service.deleteDiscount(over200);
         Assertions.assertEquals(priceCalc * 250 * 0.9f, order.getTotalPrice(), EPSILON);
 
-        facade.deleteDiscount(over100);
+        service.deleteDiscount(over100);
         Assertions.assertEquals(priceCalc * 250 * 0.99f, order.getTotalPrice(), EPSILON);
 
-        facade.deleteDiscount(over10);
+        service.deleteDiscount(over10);
         Assertions.assertEquals(priceCalc * 250, order.getTotalPrice(), EPSILON);
 
 
@@ -523,56 +513,56 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         float priceBread = 5, priceMilk = 7;
         Supplier sup = assertSuccess(createWithPpn(ppn));
         initCategories();
-        Product product4 = assertSuccess(facade.addProduct("Bread", "Tnoova", 100.0, 50,
+        Product product4 = assertSuccess(service.addProduct("Bread", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%"));
 
-        Product product5 = assertSuccess(facade.addProduct("Milk", "Tnoova", 100.0, 50,
+        Product product5 = assertSuccess(service.addProduct("Milk", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%"));
 
-        Item bread = assertSuccess(facade.createItem(ppn, cnBread, product4.getProduct_id(),  priceBread));
-        Item milk = assertSuccess(facade.createItem(ppn, cnMilk, product5.getProduct_id(),  priceMilk));
+        Item bread = assertSuccess(service.createItem(ppn, cnBread, product4.getProduct_id(),  priceBread));
+        Item milk = assertSuccess(service.createItem(ppn, cnMilk, product5.getProduct_id(),  priceMilk));
 
         final int amountBread = 10, amountMilk = 10;
 
-        Order order = assertSuccess(facade.createOrder(ppn, date1, date2, OrderType.Periodical));
-        facade.orderItem(order.getId(), ppn, bread.getCatalogNumber(), amountBread);
-        facade.orderItem(order.getId(),ppn,  milk.getCatalogNumber(), amountMilk);
+        Order order = assertSuccess(service.createOrder(ppn, date1, date2, OrderType.Periodical));
+        service.orderItem(order.getId(), ppn, bread.getCatalogNumber(), amountBread);
+        service.orderItem(order.getId(),ppn,  milk.getCatalogNumber(), amountMilk);
 
         Assertions.assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
         // I guess it's expensive organic or something
         priceBread = 10;
         priceMilk = 10;
-        facade.setPrice(ppn,bread.getCatalogNumber(), priceBread);
-        facade.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         Assertions.assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
         // wow the market sure is going crazy
         priceBread = 100;
         priceMilk = 125;
-        facade.setPrice(ppn,bread.getCatalogNumber(), priceBread);
-        facade.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         Assertions.assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
         // Ba'al HaBayit Hishtage`a
         priceBread = 0.2f;
         priceMilk = 0.5f;
-        facade.setPrice(ppn,bread.getCatalogNumber(), priceBread);
-        facade.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         Assertions.assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
 
         priceBread = 5;
         priceMilk = 7;
-        facade.setPrice(ppn,bread.getCatalogNumber(), priceBread);
-        facade.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         Assertions.assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
 
 
         priceBread = 1;
         priceMilk = 2;
-        facade.setPrice(ppn,bread.getCatalogNumber(), priceBread);
-        facade.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
+        service.setPrice(ppn,bread.getCatalogNumber(), priceBread);
+        service.setPrice(ppn,milk.getCatalogNumber(), priceMilk);
         Assertions.assertEquals(priceBread * amountBread + priceMilk * amountMilk, order.getTotalPrice(), EPSILON);
     }
 
@@ -587,16 +577,16 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
 
         initCategories();
 
-        Product product4 = assertSuccess(facade.addProduct("Pen", "Tnoova", 100.0, 50,
+        Product product4 = assertSuccess(service.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%"));
-        facade.createItem(ppn, cnPen, product4.getProduct_id(),  10);
+        service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
-        Facade.ResponseT<Order> responseWithBadDates = facade.createOrder(ppn, date2, date1, OrderType.Shortages);
+        Facade.ResponseT<Order> responseWithBadDates = service.createOrder(ppn, date2, date1, OrderType.Shortages);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        Facade.ResponseT<Order> response = facade.createOrder(ppn, date1, date2, OrderType.Shortages);
+        Facade.ResponseT<Order> response = service.createOrder(ppn, date1, date2, OrderType.Shortages);
         assertTrue(response.success);
 
     }
@@ -606,16 +596,16 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         int ppn = 1, cnPen = 11;
         Supplier sup = assertSuccess(createWithPpn(ppn));
         initCategories();
-        Product product4 = assertSuccess(facade.addProduct("Pen", "Tnoova", 100.0, 50,
+        Product product4 = assertSuccess(service.addProduct("Pen", "Tnoova", 100.0, 50,
                 10, 1200, "Store", "Shop,", "10%"));
-        facade.createItem(ppn, cnPen, product4.getProduct_id(),  10);
+        service.createItem(ppn, cnPen, product4.getProduct_id(),  10);
 
 
-        Facade.ResponseT<Order> responseWithBadDates = facade.createOrder(ppn, date2, date1, OrderType.Periodical);
+        Facade.ResponseT<Order> responseWithBadDates = service.createOrder(ppn, date2, date1, OrderType.Periodical);
         assertFalse(responseWithBadDates.success,
                 "shouldn't be able to start ReadOnlyorder if supplying date is before ordering.");
 
-        Facade.ResponseT<Order> response = facade.createOrder(ppn, date1, date2, OrderType.Periodical);
+        Facade.ResponseT<Order> response = service.createOrder(ppn, date1, date2, OrderType.Periodical);
         assertTrue(response.success);
 
 
@@ -626,7 +616,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
      */
 
     private Facade.ResponseT<Supplier> createWithPpn(int ppn) {
-        return facade.createSupplier(ppn, 111, "dummy", true,
+        return service.createSupplier(ppn, 111, "dummy", true,
                 PaymentCondition.Credit, null,
                 "John", "052-1869386", "Some 14, Ana Aref");
     }
