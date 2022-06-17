@@ -40,25 +40,28 @@ public class Facade {
     private final QuantityDiscountController discounts;
     private final SupplierController suppliers;
 
-    public Facade(PersistenceController p,
-                  EmployeesController employees,
-                  LogisticsController logistics,
-                  CategoryController categoryController,
-                  ProductController product_controller,
-                  SupplierController suppliers,
-                  ItemController items,
-                  QuantityDiscountController discounts,
-                  OrderController order,
-                  ReportController report_controller) {
-        this.employees = employees;
-        this.logistics = logistics;
-        this.category_controller = categoryController;
-        this.product_controller = product_controller;
-        this.suppliers = suppliers;
-        this.items = items;
-        this.discounts = discounts;
-        this.orders = order;
-        this.report_controller = report_controller;
+    public Facade(PersistenceController p) {
+        employees = new EmployeesController(p.getConn());
+        logistics = new LogisticsController(p.getConn());
+        category_controller = new CategoryController(p);
+        product_controller = new ProductController(p, category_controller);
+        suppliers = new SupplierController(p);
+        items = new ItemController(p, suppliers);
+        discounts = new QuantityDiscountController(p, items);
+        orders = new OrderController(p, discounts, logistics);
+    }
+
+    //just for test
+    //employee logistics facade
+    public Facade(Connection connection) {
+        employees = new EmployeesController(connection);
+        logistics = new LogisticsController(connection);
+        category_controller = null;
+        product_controller = null;
+        suppliers = null;
+        items = null;
+        discounts = null;
+        orders = null;
     }
 
     public void deleteEmployeeDB() {
@@ -590,7 +593,7 @@ public class Facade {
         });
     }
 
-    public ResponseT<List<Integer>> getReportListIds() {
+    public ResponseT<List<Integer>> getReportListNames() {
         return responseFor(report_controller::getReportListNames);
     }
 
@@ -636,8 +639,8 @@ public class Facade {
         return responseFor(() -> product_controller.confirmOrder(order_id));
     }
 
-    public SI_Response confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount) {
-        return responseForVoid(() -> product_controller.confirmOrderAmount(order_id, actual_amount, orders.get(order_id).supplier.getPpn()));
+    public SI_Response confirmOrderAmount(Map<Integer, Integer> actual_amount) {
+        return responseForVoid(() -> product_controller.confirmOrderAmount(actual_amount));
     }
 
     public ResponseT<Order> getOrder(int id) {
@@ -788,7 +791,7 @@ public class Facade {
     }
 
     public SI_Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
-        return responseForVoid(()-> orders.updateAmount(orders.get(orderID),items.get(supplier, catalogNumber), amount));
+        return null;
     }
 
     public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty) {
@@ -803,22 +806,28 @@ public class Facade {
         }
     }
 
-    public SI_Response createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
-        for (Integer product_id : productAmount.keySet()) {
-            try {
-                product_controller.productExists(product_id);
-            } catch (Exception e) {
-                return responseFor(() -> {
-                    throw e;
-                });
-            }
-        }
+    public ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
         Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
-        Tuple<Supplier, Item> supplierItemTuple = items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
-        Order order = orders.create(supplierItemTuple.first, OrderType.Periodical, LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
+        Tuple<Supplier, Item> supplierItemTuple =
+                items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
+        Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
+                LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
         orders.orderItemFromMap(order, itemsWithAmount);
-        orders.createFittingTrucking(ProductController.BRANCH_NAME, order);
-        return responseForVoid(() -> product_controller.addOrderRecord(order.getId(), productAmount));
+        orders.createFittingTrucking(order);
+        return responseFor(() -> order.getId());
+    }
+
+    public SI_Response createOrderPeriodicVoid(Map<Integer, Integer> productAmount, int weekDay) {
+        return responseForVoid(() -> {
+            Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
+            Tuple<Supplier, Item> supplierItemTuple =
+                    items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
+            Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
+                    LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
+
+            orders.orderItemFromMap(order, itemsWithAmount);
+            orders.createFittingTrucking(order);
+        });
     }
 
     protected SI_Response voidOk() {
@@ -852,14 +861,6 @@ public class Facade {
         } catch (Exception e) {
             return voidError(e.getMessage());
         }
-    }
-
-    public SI_Response addProductToOrder(int order_id, int product_id, int amount) {
-        return responseForVoid(() -> product_controller.addProductToOrder(order_id, product_id, amount));
-    }
-
-    public SI_Response addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {
-        return responseForVoid(() -> product_controller.addOrderRecord(orderId, productAmount));
     }
 
 

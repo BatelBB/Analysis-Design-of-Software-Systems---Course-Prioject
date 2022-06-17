@@ -1,61 +1,48 @@
 package groupk.shared.PresentationLayer;
 
 import groupk.shared.PresentationLayer.EmployeesLogistics.MainEmployeesAndDelivery;
-import groupk.shared.business.*;
+import groupk.shared.service.Inventory.InventoryService;
+import groupk.shared.business.Suppliers.Service.ISupplierService;
 import groupk.shared.PresentationLayer.Inventory.InventoryPresentationFacade;
 import groupk.shared.PresentationLayer.Suppliers.SupplierPresentationFacade;
 import groupk.shared.PresentationLayer.Suppliers.UserInput;
 import groupk.shared.PresentationLayer.Suppliers.UserOutput;
 import groupk.inventory_suppliers.SchemaInit;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
-import groupk.shared.service.Service;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 
 public class App {
-    public final PersistenceController dal;
-    public final SupplierPresentationFacade supplierPresentation;
-    public final InventoryPresentationFacade inventoryPresentationFacade;
-    public final Connection conn;
-    public final Facade facade;
-    public final Service service;
-    public final boolean isUnitTest;
+    private final PersistenceController dal;
+    private final ISupplierService supplierService;
+    private final SupplierPresentationFacade supplierPresentation;
+    private final InventoryPresentationFacade inventoryPresentationFacade;
+    private final InventoryService inventoryService;
+    private final Connection appConnection;
 
-    public App(String dbPath, boolean isUnitTest) {
-        this.isUnitTest = isUnitTest;
+    public App(String dbPath) {
         boolean isNew = !new java.io.File(dbPath).exists();
         boolean shouldLoadExample = false;
 
-        conn = connect(dbPath);
-        SchemaInit.init(conn);
-        if (isNew && !isUnitTest) {
+        AppContainer ioc = new AppContainer(dbPath);
+        appConnection = ioc.get(Connection.class);
+        SchemaInit.init(appConnection);
+        if (isNew) {
             UserOutput.getInstance().println(
                     "You don't have a previous database file stored, so we'll create a new one for you " +
                             "from scratch.");
             shouldLoadExample = UserInput.getInstance().nextBoolean("Would you like to start with some example data?");
         }
 
-        dal =  new PersistenceController(conn);
-        CategoryController category = new CategoryController(dal);
-        ProductController product = new ProductController(dal, category);
-        SupplierController suppliers = new SupplierController(dal);
-        ItemController items = new ItemController(dal, suppliers);
-        QuantityDiscountController discounts = new QuantityDiscountController(dal, items);
-        LogisticsController logistics = new LogisticsController(conn);
-        OrderController orders = new OrderController(dal, discounts, logistics);
-        EmployeesController employess = new EmployeesController(conn);
-        ReportController reports = new ReportController(dal, product);
-        facade = new Facade(dal, employess, logistics, category, product, suppliers,
-                items, discounts, orders, reports);
-        service = new Service(facade);
-        inventoryPresentationFacade = new InventoryPresentationFacade(service);
-        supplierPresentation = new SupplierPresentationFacade(service);
+        dal = ioc.get(PersistenceController.class);
+        inventoryPresentationFacade = ioc.get(InventoryPresentationFacade.class);
+        supplierPresentation = ioc.get(SupplierPresentationFacade.class);
+        inventoryService = ioc.get(InventoryService.class);
+        supplierService = ioc.get(ISupplierService.class);
         if (shouldLoadExample) {
-            ExampleData.loadExampleData(facade);
+            ExampleData.loadExampleData(inventoryService, supplierService);
         }
     }
 
@@ -77,7 +64,7 @@ public class App {
                     break;
                 }
                 case (3) : {
-                    MainEmployeesAndDelivery.mainEmployeesAndDelivery(new String[]{}, conn, service);
+                    MainEmployeesAndDelivery.mainEmployeesAndDelivery(new String[]{}, appConnection);
                     break;
                 }
                 case (4): {
@@ -100,24 +87,6 @@ public class App {
             inventoryPresentationFacade.execute(input);
         }
         while (!input.equals("exit"));
-        disconnect();
         System.out.println("thank you");
-    }
-
-    public void disconnect() {
-        try {
-            conn.close();
-        } catch (SQLException throwables) {
-            throw new RuntimeException(throwables);
-        }
-    }
-
-
-    private Connection connect(String dbPath) {
-        try {
-            return DriverManager.getConnection("jdbc:sqlite:"+dbPath);
-        } catch (SQLException throwables) {
-            throw new RuntimeException(throwables);
-        }
     }
 }

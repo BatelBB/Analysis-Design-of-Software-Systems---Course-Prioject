@@ -1,7 +1,10 @@
 package groupk.shared.PresentationLayer.Inventory;
 
-import groupk.shared.business.Facade;
-import groupk.shared.service.Service;
+import groupk.shared.service.Inventory.CategoryService;
+import groupk.shared.service.Inventory.ProductService;
+import groupk.shared.service.Inventory.ReportService;
+import groupk.shared.service.Inventory.InventoryService;
+import groupk.shared.service.ServiceBase;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -9,13 +12,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.function.Supplier;
 
 public class InventoryPresentationFacade {
     private String[] args;
-    private final Service facade;
+    private final InventoryService inventory_service;
+    private final CategoryService categories;
+    private final ProductService products;
+    private final ReportService reports;
 
-    public InventoryPresentationFacade(Service facade) {
-        this.facade = facade;
+    public InventoryPresentationFacade(InventoryService inventory_service, CategoryService categories, ProductService products, ReportService reports) {
+        this.inventory_service = inventory_service;
+        this.categories = categories;
+        this.products = products;
+        this.reports = reports;
     }
 
     public void execute(String input) {
@@ -121,107 +131,123 @@ public class InventoryPresentationFacade {
 
     //service callers
     private void addCategory() {
-        facade.addCategory(args[0]);
+        useService(args, 1, () -> categories.addCategory(args[0]));
     }
 
     private void removeCategory() {
-        facade.removeCategory(args[0]);
+        useService(args, 1, () -> categories.removeCategory(args[0], true));
     }
 
     private void addSubCategory() {
-        facade.addSubCategory(args[0], args[1]);
+        useService(args, 2,
+                () -> categories.addSubCategory(args[0], args[1]));
     }
 
     private void removeSubCategory() {
-        facade.removeSubCategory(args[0], args[1]);
+        useService(args, 2, () ->
+                categories.removeSubCategory(args[0], args[1], true)
+        );
     }
 
     private void addSubSubCategory() {
-
-        facade.addSubSubCategory(args[0], args[1], args[2]);
+        useService(args, 3,
+                () -> categories.addSubSubCategory(args[0], args[1], args[2])
+        );
     }
 
     private void removeSubSubCategory() {
-        facade.removeSubSubCategory(args[0], args[1], args[2]);
+        useService(args, 3,
+                () -> categories.removeSubSubCategory(args[0], args[1], args[2], true)
+        );
     }
 
     private void updateCategoryCusDiscount() {
-
-        facade.updateCategoryCusDiscount(
-                convertFloat(args[0]), convertDate(args[1]),
-                convertDate(args[2]),
-                args[3], args[4], args[5]);
+        useService(args, 6,
+                () -> products.updateCategoryCusDiscount(
+                        convertFloat(args[0]), convertDate(args[1]),
+                        convertDate(args[2]),
+                        args[3], args[4], args[5])
+        );
     }
 
     private void updateProductCusDiscount() {
-
-        facade.updateProductCusDiscount(
-                convertFloat(args[0]), convertDate(args[1]),
-                convertDate(args[2]), convertInt(args[3]));
+        useService(args, 4, () ->
+                products.updateProductCusDiscount(
+                        convertFloat(args[0]), convertDate(args[1]),
+                        convertDate(args[2]), convertInt(args[3]))
+        );
     }
 
     private void updateItemCusDiscount() {
-
-        facade.updateItemCusDiscount(
-                convertFloat(args[2]),
-                convertDate(args[3]),
-                convertDate(args[4]),
-                convertInt(args[0]),
-                convertInt(args[1])
+        useService(args, 5, () ->
+                products.updateItemCusDiscount(
+                        convertInt(args[0]),
+                        convertInt(args[1]),
+                        convertFloat(args[2]),
+                        convertDate(args[3]),
+                        convertDate(args[4])
+                )
         );
     }
 
     private void updateProductCusPrice() {
-
-        facade.updateProductCusPrice(convertInt(args[0]), convertFloat(args[1]));
+        useService(args, 2, () ->
+                products.updateProductCusPrice(convertInt(args[0]), convertFloat(args[1]))
+        );
     }
 
     private void addProduct() {
-        facade.addProduct(
+        useService(args, 9, () -> products.addProduct(
                 args[0], args[1], convertDouble(args[2]), convertFloat(args[3]),
                 convertInt(args[4]), convertInt(args[5]),
-                args[6], args[7], args[8]);
+                args[6], args[7], args[8])
+        );
     }
 
     private void removeProduct() {
-
-        facade.removeProduct(convertInt(args[0]));
+        useService(args, 1,
+                () -> products.removeProduct(convertInt(args[0])));
     }
 
     private void addItem() {
-
-        facade.addItem(
-                convertInt(args[0]), args[1], args[2],
-                convertInt(args[3]), convertDate(args[4]),
-                Objects.requireNonNull(convertBoolean(args[5]))
+        useService(args, 6,
+                () -> products.addItem(
+                        convertInt(args[0]), args[1], args[2],
+                        convertInt(args[3]), convertDate(args[4]),
+                        Objects.requireNonNull(convertBoolean(args[5]))
+                )
         );
     }
 
     private void removeItem() {
-
-        facade.removeItem(convertInt(args[0]), convertInt(args[0]));
+        useService(args, 2,
+                () -> products.removeItem(convertInt(args[0]), convertInt(args[0]))
+        );
     }
 
     private void updateItemDefect() {
-
-        facade.updateItemDefect(
-                convertInt(args[0]),
-                convertInt(args[1]),
-                convertBoolean(args[2]),
-                args[3]
+        useService(args, 4,
+                () -> products.updateItemDefect(
+                        convertInt(args[0]),
+                        convertInt(args[1]),
+                        convertBoolean(args[2]),
+                        args[3]
+                )
         );
     }
 
     private void getItemLocation() {
-        facade.getItemLocation(convertInt(args[0]), convertInt(args[0]));
+        useService(args, 2, () -> products.getItemLocation(convertInt(args[0]), convertInt(args[0])));
     }
 
     private void changeItemLocation() {
-
+        useService(
+                args, 3,
+                () -> products.changeItemLocation(convertInt(args[0]), convertInt(args[0]), args[2])
+        );
 
         if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
             try {
-                facade.setItemLocation(convertInt(args[0]), convertInt(args[0]), args[2]);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -229,58 +255,69 @@ public class InventoryPresentationFacade {
     }
 
     private void changeItemOnShelf() {
-
-        facade.setItemOnShelf(
-                convertInt(args[0]),
-                convertInt(args[1]),
-                convertBoolean(args[2])
+        useService(args, 3,
+                () -> products.changeItemOnShelf(
+                        convertInt(args[0]),
+                        convertInt(args[1]),
+                        convertBoolean(args[2])
+                )
         );
     }
 
     private void createMissingReport() {
-        facade.createMissingReport(args[0], args[1]);
+        useService(args, 2,
+                () -> reports.createMissingReport(args[0], args[1]));
     }
 
     private void createExpiredReport() {
-        facade.createExpiredReport(args[0], args[1]);
+        useService(args, 2,
+                () -> reports.createExpiredReport(args[0], args[1]));
     }
 
     private void createSurplusesReport() {
-
-        facade.createSurplusesReport(args[0], args[1]);
+        useService(args, 2,
+                () -> reports.createSurplusesReport(args[0], args[1])
+        );
     }
 
     private void createDefectiveReport() {
-        facade.createDefectiveReport(args[0], args[1]);
+        useService(args, 2, () -> reports.createDefectiveReport(args[0], args[1]));
     }
 
     private void createBySupplierReport() {
-        facade.createBySupplierReport(args[0], args[1], convertInt(args[2]));
+        useService(args, 3,
+                () -> reports.createBySupplierReport(args[0], args[1], convertInt(args[2]))
+        );
     }
 
     private void createByProductReport() {
-        facade.createByProductReport(args[0], args[1], args[2]);
+        useService(args, 3,
+                () -> reports.createByProductReport(args[0], args[1], args[2])
+        );
     }
 
     private void createByCategoryReport() {
-        facade.createByCategoryReport(args[0], args[1], args[2], args[3], args[4]);
+        useService(args, 5,
+                () -> reports.createByCategoryReport(args[0], args[1], args[2], args[3], args[4])
+        );
     }
 
     private void removeReport() {
-
-        facade.removeReport(convertInt(args[0]));
+        useService(args, 1,
+                () -> reports.removeReport(convertInt(args[0])));
     }
 
     private void getReport() {
-        facade.getReport(convertInt(args[0]));
+        useService(args, 1,
+                () -> reports.getReport(convertInt(args[0])));
     }
 
     private void createPeriodicOrder() {
-        //facade.createPeriodicOrder(convertMap(args[0]), convertInt(args[1]));
+        useService(args, 2, () -> inventory_service.createPeriodicOrder(convertMap(args[0]), convertInt(args[1])));
     }
 
     private void confirmOrder() {
-        Map<Integer, Integer> order_details = facade.confirmOrder(convertInt(args[0])).data;
+        Map<Integer, Integer> order_details = inventory_service.confirmOrder(convertInt(args[0])).data;
         System.out.println("Order details");
         for (Map.Entry<Integer, Integer> pair : order_details.entrySet()) {
             System.out.println(pair.getKey() + " - " + pair.getValue());
@@ -288,7 +325,7 @@ public class InventoryPresentationFacade {
         System.out.println("please enter actual amount delivered\n(example format: \"[id0]-[amount0]_[id1]-[amount1]\"):");
         Scanner scan = new Scanner(System.in);
         String input = scan.nextLine();
-        facade.confirmOrderAmount(0, convertMap(input)); // TODO
+        useService(args, 1, () -> inventory_service.confirmOrderAmount(convertMap(input)));
     }
 
     //converters
@@ -324,4 +361,15 @@ public class InventoryPresentationFacade {
         return Integer.parseInt(input);
     }
 
+    private void useService(String[] args, int argumentCount, Supplier<ServiceBase.Response> serviceUsage) {
+        try {
+            if (args.length != argumentCount) {
+                throw new IllegalArgumentException("Expected " + argumentCount +
+                        " arguments, but got " + args.length);
+            }
+            System.out.println(serviceUsage.get());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

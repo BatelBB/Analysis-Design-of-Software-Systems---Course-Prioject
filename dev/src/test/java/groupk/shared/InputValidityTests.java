@@ -5,12 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import groupk.shared.inputValidity.InputValidity;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-
 import javax.swing.*;
 
-import static groupk.CustomAssertions.*;
 public class InputValidityTests {
     @Test
     public void testPhoneValidator() {

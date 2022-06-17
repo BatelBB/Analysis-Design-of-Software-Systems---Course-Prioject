@@ -1,8 +1,6 @@
 package groupk.logistics;
 
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import groupk.logistics.DataLayer.TruckingDTO;
 import groupk.logistics.DataLayer.TruckingIDMap;
 import groupk.logistics.DataLayer.TruckingMapper;
@@ -30,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static groupk.CustomAssertions.*;
 public class LogisticsTests {
 
     private TruckManagerController truckManagerController ;

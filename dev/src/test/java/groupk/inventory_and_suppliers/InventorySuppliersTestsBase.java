@@ -2,27 +2,26 @@ package groupk.inventory_and_suppliers;
 
 import groupk.inventory_suppliers.SchemaInit;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
-import groupk.shared.PresentationLayer.App;
-import groupk.shared.business.Facade;
-import groupk.shared.service.Service;
+import groupk.shared.PresentationLayer.AppContainer;
+import groupk.shared.business.Suppliers.Service.ISupplierService;
+import groupk.shared.service.Inventory.InventoryService;
 import org.junit.jupiter.api.BeforeEach;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import static groupk.CustomAssertions.*;
 import java.sql.Connection;
 
 public class InventorySuppliersTestsBase {
+    protected InventoryService inventory;
+    protected ISupplierService suppliers;
     protected PersistenceController pc;
     protected Connection conn;
-    protected Service facade;
 
     @BeforeEach
     public void setService() {
-        App app = new App(":memory:", true);
-        this.conn = app.conn;
+        AppContainer ioc = new AppContainer(":memory:");
+        this.conn = ioc.get(Connection.class);
         SchemaInit.init(this.conn);
-        this.pc = app.dal;
-        this.facade = app.service;
+        this.inventory = ioc.get(InventoryService.class);
+        this.pc = ioc.get(PersistenceController.class);
+        this.suppliers = ioc.get(ISupplierService.class);
     }
 }

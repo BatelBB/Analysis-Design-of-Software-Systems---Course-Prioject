@@ -23,8 +23,8 @@ import java.util.*;
 public class Service {
     private Facade facade;
 
-    public Service(Facade facade) {
-        this.facade = facade;
+    public Service(Connection conn) {
+        facade = new Facade(conn);
     }
 
     public void deleteEmployeeDB() {
@@ -133,7 +133,7 @@ public class Service {
         return facade.setRequiredStaffInShift(subjectId, date, type, requiredStaff);
     }
 
-    public Response<List<Shift>> optionsForDeleveryWithLogisitcsAndDriversInShift(String subjectID) {
+    public Response<List<Shift>> optionsForDeleveryWithLogisitcsAndDriversInShift(String subjectID){
         return facade.optionsForDeleveryWithLogisitcsAndDriversInShift(subjectID);
     }
 
@@ -306,12 +306,7 @@ public class Service {
     public Facade.SI_Response removeItem(int product_id, int item_id) {
         Facade.ResponseT<Boolean> r = facade.removeItem(product_id, item_id);
         int min_qty = facade.getMinQty(product_id).data;
-        Facade.ResponseT<Integer> r2 = createOrderShortage(r, product_id, min_qty);
-        if (!r2.success)
-            return r2;
-        int order_id = r2.data;
-        return addProductToOrder(order_id, product_id, min_qty);
-
+        return facade.createOrderShortage(r, product_id, min_qty);
     }
 
     public Facade.SI_Response updateItemCusDiscount(float discount, LocalDate start_date, LocalDate end_date, int product_id, int item_id) {
@@ -334,11 +329,10 @@ public class Service {
         return facade.changeItemOnShelf(product_id, item_id, on_shelf);
     }
 
-    public Facade.SI_Response addProductToOrder(int order_id, int product_id, int amount) {
-        return facade.addProductToOrder(order_id, product_id, amount);
-    }
-
     //Report methods
+    public Facade.ResponseT<List<Integer>> getReportListIds() {
+        return facade.getReportListNames();
+    }
 
     public Facade.ResponseT<Report> createMissingReport(String name, String report_producer) {
         return facade.createMissingReport(name, report_producer);
@@ -378,7 +372,12 @@ public class Service {
 
     //Order methods
     public Facade.SI_Response createPeriodicOrder(Map<Integer, Integer> productAmount, int weekDay) {
-        return facade.createOrderPeriodic(productAmount, weekDay);
+        /*יוצרים הזמנה תקופתית שתגיע ביום מסוים בשבוע. הארגומנטים הם
+                                מפה של הID של המוצר והכמות עבורו. בנוסף היום בשבוע שבו נרצה שההזמנה תגיע*/
+        return facade.createOrderPeriodicVoid(productAmount, weekDay);
+//        int orderId= supplierService.createOrderPeriodic(productAmount,weekDay).data;
+//        return facade.addOrderRecord(orderId,productAmount);
+
     }
 
 
@@ -386,8 +385,8 @@ public class Service {
         return facade.confirmOrder(order_id);
     }
 
-    public Facade.SI_Response confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount) {
-        return facade.confirmOrderAmount(order_id, actual_amount);
+    public Facade.SI_Response confirmOrderAmount(Map<Integer, Integer> actual_amount) {
+        return facade.confirmOrderAmount(actual_amount);
     }
 
     //SUPPLIER METHODS
@@ -397,13 +396,13 @@ public class Service {
     }
 
     public Facade.ResponseT<Supplier> createSupplier(int ppn, int bankAccount, String name,
-                                                     boolean isDelivering, PaymentCondition paymentCondition,
-                                                     DayOfWeek regularSupplyingDays, String contactName,
-                                                     String contactPhone, String contactAddress) {
+                                                          boolean isDelivering, PaymentCondition paymentCondition,
+                                                          DayOfWeek regularSupplyingDays, String contactName,
+                                                          String contactPhone, String contactAddress) {
         return facade.createSupplier(
                 ppn, bankAccount, name, isDelivering,
-                paymentCondition, regularSupplyingDays, contactName,
-                contactPhone, contactAddress
+                paymentCondition, regularSupplyingDays, contactAddress,
+                contactName, contactPhone
         );
     }
 
@@ -416,7 +415,7 @@ public class Service {
     }
 
     public Facade.SI_Response deleteSupplier(int ppn) {
-        return facade.deleteSupplier(ppn);
+        return facade.getSupplier(ppn);
     }
 
     public Facade.ResponseT<Item> createItem(int supplierPPN, int catalogNumber, int productID, float price) {
@@ -503,18 +502,20 @@ public class Service {
     }
 
     public Facade.SI_Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
-        return facade.updateOrderAmount(orderID, supplier, catalogNumber, amount);
+        //TODO: what's this? -Michael
+        return null;
     }
 
     public Facade.ResponseT<Integer> createOrderShortage(Facade.ResponseT<Boolean> r, int product_id, int min_qty) {
         return facade.createOrderShortage(r, product_id, min_qty);
     }
 
-    public Facade.SI_Response createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
+    public Facade.ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
         return facade.createOrderPeriodic(productAmount, weekDay);
     }
 
-    public Facade.ResponseT<List<Integer>> getReportListIds() {
-        return facade.getReportListIds();
+    public Facade.SI_Response createOrderPeriodicVoid(Map<Integer, Integer> productAmount, int weekDay) {
+        return facade.createOrderPeriodicVoid(productAmount, weekDay);
     }
+
 }

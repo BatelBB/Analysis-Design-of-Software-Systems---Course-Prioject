@@ -1,10 +1,10 @@
 package groupk.shared.PresentationLayer.Suppliers;
 
-import groupk.shared.business.Facade;
+import groupk.shared.service.Inventory.InventoryService;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
+import groupk.shared.business.Suppliers.Service.ISupplierService;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
-import groupk.shared.service.Service;
 
 import static groupk.shared.service.ServiceBase.*;
 
@@ -16,11 +16,15 @@ import java.util.Scanner;
 public class SupplierPresentationFacade {
     private UserInput input = UserInput.getInstance();
     private UserOutput output = UserOutput.getInstance();
-    private final Service service;
+    private final ISupplierService service;
+    private final InventoryService inventory;
 
-    public SupplierPresentationFacade(Service facade) {
-        this.service = facade;
+    public SupplierPresentationFacade(ISupplierService supplierService, InventoryService inventory) {
+        this.service = supplierService;
+        this.inventory = inventory;
     }
+
+    static Scanner scanner = new Scanner(System.in);
 
     public void startSupplierMenu() {
         while (true) {
@@ -40,7 +44,7 @@ public class SupplierPresentationFacade {
                             String contactName = input.nextString("Enter the supplier's contact name: ");
                             String address = input.nextString("Enter the supplier's contact address: ");
                             String phoneNum = input.nextPhone("Enter the supplier's contact phone number: ");
-                            Facade.ResponseT<Supplier> supplier = service.createSupplier(ppn, bankAccount, name, isDelivering,
+                            ResponseT<Supplier> supplier = service.createSupplier(ppn, bankAccount, name, isDelivering,
                                     paymentCondition, day, contactName, phoneNum, address);
                             if (supplier.success) {
                                 output.print(supplier.data.toString());
@@ -165,6 +169,48 @@ public class SupplierPresentationFacade {
                 case (3): {
                     userInput = input.nextInt(Menu.getOrderSubmenu());
                     switch (userInput) {
+//                        case (0): { //DELETE IT
+//                            //create new order
+//                            Order order = null;
+//                            int ppn = checkPPN("Enter the supplier's ppn number: ");
+//                            LocalDate ordered = input.nextDate("What is the order date? ");
+//                            LocalDate deliver = input.nextDate("When is the order supposed to be delivered? ");
+//                            OrderType orderType = input.nextEnum("choose order type", OrderType.class);
+//                            try {
+//                                ResponseT<Order> serviceResponse = service.createOrder(
+//                                        ppn, ordered, deliver, orderType);
+//                                order = serviceResponse.data;
+//                                String err = serviceResponse.error;
+//                                if (err != null) {
+//                                    output.println(err);
+//                                    break;
+//                                }
+//
+//                            } catch (Exception e) {
+//                                output.println(e.getMessage());
+//                            }
+//                            output.println("Now it's time to add items to the order");
+//                            boolean retry = true;
+//                            int nextInt = 0;
+//                            while (retry) {
+//                                int[] arr = checkItem();
+//                                Supplier sup = checkBestSupplier(service.getItem(arr[0], arr[1]).data);
+//                                output.println("There is a better supplier that supplying this item: "
+//                                        + sup.getName() + " with the better price: " + minPrice + " instead of the price: " +
+//                                        service.getItem(arr[0], arr[1]).data.getPrice());
+//                                int amount = input.nextInt("How much of this item do you want to order? ");
+//                                service.orderItem(order.getId(),
+//                                        sup.getPpn(),
+//                                        service.getItem(arr[0], arr[1]).data.getCatalogNumber(), amount);
+//
+//                                String more = input.nextString("Do you want to add more items? n/y ");
+//                                if (more.equals("n")) {
+//                                    retry = false;
+//                                }
+//                            }
+//                            output.println(order.toString());
+//                            break;
+//                        }
                         case (1): {
                             //delete existing order
                             int ppn = checkPPN("Enter the supplier's ppn number: ");

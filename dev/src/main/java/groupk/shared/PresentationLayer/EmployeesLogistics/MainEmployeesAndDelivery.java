@@ -1,14 +1,13 @@
 package groupk.shared.PresentationLayer.EmployeesLogistics;
 
 import groupk.shared.PresentationLayer.EmployeesLogistics.command.*;
-import groupk.shared.service.Service;
 
 import java.sql.Connection;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainEmployeesAndDelivery {
-    public static void mainEmployeesAndDelivery(String[] args, Connection conn, Service service) {
+    public static void mainEmployeesAndDelivery(String[] args, Connection conn) {
         AtomicBoolean keepGoing = new AtomicBoolean(true);
         CommandRunner runner = new CommandRunner(
                 new Command[] {
@@ -42,7 +41,6 @@ public class MainEmployeesAndDelivery {
                         new GetDeliveryRequests(),
                         new ConfirmDeliveryRequest()
                 },
-                service,
                 () -> {
                         keepGoing.set(false);
                 }, conn);

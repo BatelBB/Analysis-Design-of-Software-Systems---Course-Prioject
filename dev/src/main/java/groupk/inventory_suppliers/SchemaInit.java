@@ -23,7 +23,7 @@ public class SchemaInit {
             } finally {
                 if (st != null) st.close();
             }
-        } catch (SQLException e) {
+        }catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -153,13 +153,6 @@ public class SchemaInit {
                     "\t\"type\"\tINTEGER NOT NULL,\n" +
                     "\t\"query\"\tTEXT NOT NULL,\n" +
                     "\tPRIMARY KEY(\"id\")\n" +
-                    ");\n" +
-
-                    "CREATE TABLE IF NOT EXISTS \"OrderMap\" (\n" +
-                    "\t\"OrderId\"\tINTEGER NOT NULL,\n" +
-                    "\t\"ProductId\"\tINTEGER NOT NULL,\n" +
-                    "\t\"Amount\"\tINTEGER NOT NULL,\n" +
-                    "\tPRIMARY KEY(\"OrderId\",\"ProductId\")\n" +
                     ");\n" +
                     "COMMIT;\n";
 }

@@ -2,125 +2,158 @@ package groupk.inventory_and_suppliers.Inventory;
 
 import groupk.inventory_and_suppliers.InventorySuppliersTestsBase;
 
-import groupk.shared.business.Facade;
 import groupk.shared.business.Inventory.Categories.Category;
 import groupk.shared.service.Inventory.Objects.Report;
 import groupk.shared.service.ServiceBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static groupk.CustomAssertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class InventoryServiceTest extends InventorySuppliersTestsBase {
 
     @Test
     void addCategory() {
-       Assertions.assertTrue(facade.getCategoriesNames().data.isEmpty());
-        assertSuccess(facade.addCategory("Dairy Products"));
-        Assertions.assertTrue(facade.getCategoriesNames().data.contains("Dairy Products"));
-        assertFailure(facade.addCategory("Dairy Products"));
+        try {
+            Assertions.assertTrue(inventory.getCategoriesNames().data.isEmpty());
+            inventory.addCategory("Dairy Products");
+            Assertions.assertTrue(inventory.getCategoriesNames().data.contains("Dairy Products"));
+            inventory.addCategory("Dairy Products");
+        } catch (Exception e) {
+            Assertions.assertEquals(e.getMessage(), "The categories already exists in the system");
+        }
     }
 
     @Test
     void removeCategory() {
-        facade.addCategory("Dairy Products");
-        facade.removeCategory("Dairy Products");
-        Assertions.assertFalse(facade.getCategoriesNames().data.contains("Dairy Products"));
-        assertFailure(facade.removeCategory("Dairy Products"));
-    }
-
-    @Test
-    void getCategory() {
         try {
-            Facade.SI_Response dairy_products = facade.addCategory("Dairy Products");
-            Category category = assertSuccess(facade.getCategory("Dairy Products"));
-            Assertions.assertEquals(category.getName(), "Dairy Products");
-            facade.removeCategory("Dairy Products");
-            facade.getCategory("Dairy Products");
+            inventory.addCategory("Dairy Products");
+            inventory.removeCategory("Dairy Products");
+            Assertions.assertFalse(inventory.getCategoriesNames().data.contains("Dairy Products"));
+            inventory.removeCategory("Dairy Products");
         } catch (Exception e) {
             Assertions.assertEquals(e.getMessage(), "Category doesn't exists");
         }
     }
 
     @Test
-    void addProduct() {
-            Assertions.assertTrue(facade.getProductNames().data.isEmpty());
-            initCategories();
-            facade.addProduct("Milk", "Tnova", 4, 5.9f, 350, 6,
-                    "Dairy Products","Milks","Cow Milk");
-            Assertions.assertTrue(facade.getProductNames().data.contains("Milk"));
-            assertFailure(facade.addProduct("", "Tnova", 4, 5.9f, 350, 6,
-                    "Dairy Products", "Milks", "Cow Milk"));
+    void getCategory() {
+        try {
+            ServiceBase.Response dairy_products = inventory.addCategory("Dairy Products");
+            Category category = assertSuccess(inventory.getCategory("Dairy Products"));
+            Assertions.assertEquals(category.getName(), "Dairy Products");
+            inventory.removeCategory("Dairy Products");
+            inventory.getCategory("Dairy Products");
+        } catch (Exception e) {
+            Assertions.assertEquals(e.getMessage(), "Category doesn't exists");
+        }
+    }
 
+    private <T> T assertSuccess(ServiceBase.ResponseT<T> response) {
+        assertTrue(response.success);
+        return response.data;
+    }
+
+    @Test
+    void addProduct() {
+        try {
+            Assertions.assertTrue(inventory.getProductNames().data.isEmpty());
+            initCategories();
+            inventory.addProduct("Milk", "Tnova", 4, 5.9f, 350, 6,
+                    "Dairy Products","Milks","Cow Milk");
+            Assertions.assertTrue(inventory.getProductNames().data.contains("Milk"));
+            inventory.addProduct("", "Tnova", 4, 5.9f, 350, 6,
+                    "Dairy Products","Milks","Cow Milk");
+        } catch (Exception e) {
+            Assertions.assertEquals(e.getMessage(), "product name empty");
+        }
     }
 
     private void initCategories() {
-        facade.addCategory("Dairy Products");
-        facade.addSubCategory("Dairy Products", "Milks");
-        facade.addSubSubCategory("Dairy Products", "Milks", "Cow Milk");
+        inventory.addCategory("Dairy Products");
+        inventory.addSubCategory("Dairy Products", "Milks");
+        inventory.addSubSubCategory("Dairy Products", "Milks", "Cow Milk");
     }
 
     @Test
     void removeProduct() {
+        try {
             initCategories();
-            String productName = facade.addProduct("Milk", "Tnova", 4, 5.9f,
+            String productName = inventory.addProduct("Milk", "Tnova", 4, 5.9f,
                     350, 6, "Dairy Products","Milks","Cow Milk")
                     .data.getName();
-            Assertions.assertTrue(facade.getProductNames().data.contains("Milk"));
-            facade.removeProduct(1);
-            Assertions.assertFalse(facade.getProductNames().data.contains("Milk"));
-            assertFailure(facade.removeProduct(0));
-
+            Assertions.assertTrue(inventory.getProductNames().data.contains("Milk"));
+            inventory.removeProduct(1);
+            Assertions.assertFalse(inventory.getProductNames().data.contains("Milk"));
+            inventory.removeProduct(0);
+        } catch (Exception e) {
+            Assertions.assertEquals(e.getMessage(), "product id does not exist");
+        }
     }
 
     @Test
     void removeReport() {
-        Facade.ResponseT<Report> missingReport = facade.createMissingReport("MissingReport", "Michel");
-            int reportId = assertSuccess(missingReport).getId();
-            Assertions.assertTrue(facade.getReportListIds().data.contains(reportId));
-            Assertions.assertTrue(facade.removeReport(reportId).success);
-            Assertions.assertFalse(facade.getProductNames().data.contains(reportId));
-            Assertions.assertFalse(facade.removeProduct(reportId).success);
+        ServiceBase.ResponseT<Report> missingReport = inventory.createMissingReport("MissingReport", "Michel");
+            int reportId = missingReport.data.getId();
+            Assertions.assertTrue(inventory.getReportListIds().data.contains(reportId));
+            Assertions.assertTrue(inventory.removeReport(reportId).success);
+            Assertions.assertFalse(inventory.getProductNames().data.contains(reportId));
+            Assertions.assertFalse(inventory.removeProduct(reportId).success);
     }
 
     @Test
     void getReport() {
-            Integer id = assertSuccess(
-                    facade.createMissingReport("MissingReport", "Michel")
-            ).getId();
-            Report report = assertSuccess(facade.getReport(id));
+        try {
+            Integer id = inventory.createMissingReport("MissingReport", "Michel").data.getId();
+            Report report = assertSuccess(inventory.getReport(id));
             Assertions.assertEquals(report.getName(), "MissingReport");
-            facade.removeReport(id);
-            assertFailure(facade.getReport(id));
-
+            inventory.removeReport(id);
+            inventory.getReport(id);
+        } catch (Exception e) {
+            Assertions.assertEquals(e.getMessage(), "Report id doesn't exists");
+        }
     }
 
     @Test
     void createMissingReport() {
-           facade.createMissingReport("MissingReport", "Michel");
+        try {
+            inventory.createMissingReport("MissingReport", "Michel");
             
-            Assertions.assertTrue(facade.getReportListIds().data.contains(1));
-            facade.createMissingReport("MissingReport", "Michel");
-            facade.removeReport(1);
-            assertSuccess(facade.createMissingReport("MissingReport", "Michel"));
-
+            Assertions.assertTrue(inventory.getReportListIds().data.contains(1));
+            inventory.createMissingReport("MissingReport", "Michel");
+            inventory.removeReport(1);
+            inventory.createMissingReport("MissingReport", "Michel");
+        } catch (Exception e) {
+            Assertions.assertEquals(e.getMessage(), "The ReportId already exists in the system");
+            
+        }
     }
 
     @Test
     void createExpiredReport() {
-            Integer id = facade.createExpiredReport("ExpiredReport", "Michel").data.getId();
-            Assertions.assertTrue(facade.getReportListIds().data.contains(id));
-            facade.removeReport(id);
-            assertSuccess(facade.createExpiredReport("ExpiredReport", "Michel"));
-
+        try {
+            Integer id = inventory.createExpiredReport("ExpiredReport", "Michel").data.getId();
+            Assertions.assertTrue(inventory.getReportListIds().data.contains(id));
+            inventory.removeReport(id);
+            inventory.createExpiredReport("ExpiredReport", "Michel");
+        } catch (Exception e) {
+            Assertions.assertEquals(e.getMessage(), "The ReportId already exists in the system");
+            
+        }
     }
 
     @Test
     void createBySupplierReport() {
-           assertSuccess(facade.createBySupplierReport("BySupplierReport", "Michel", 0));
-            Assertions.assertTrue(facade.getReportListIds().data.contains(1));
-            assertSuccess(facade.createBySupplierReport("MissingReport", "Michel", 0));
-            assertSuccess(facade.removeReport(1));
-            assertSuccess(facade.createBySupplierReport("ExpiredReport", "Michel", 0));
+        try {
+            inventory.createBySupplierReport("BySupplierReport", "Michel", 0);
+            
+            Assertions.assertTrue(inventory.getReportListIds().data.contains(1));
+            inventory.createBySupplierReport("MissingReport", "Michel", 0);
+            inventory.removeReport(1);
+            inventory.createBySupplierReport("ExpiredReport", "Michel", 0);
+        } catch (Exception e) {
+            Assertions.assertEquals(e.getMessage(), "The ReportId already exists in the system");
+            
+        }
     }
 }

@@ -18,10 +18,10 @@ public class CommandRunner {
     private Employee subject;
     private Service service;
 
-    public CommandRunner(Command[] commands, Service service, Runnable onStop, Connection conn) {
+    public CommandRunner(Command[] commands, Runnable onStop, Connection conn) {
         this.commands = commands;
         this.onStop = onStop;
-        this.service = service;
+        this.service = new Service(conn);
         this.service.loadEmployeeDB();
     }
 
