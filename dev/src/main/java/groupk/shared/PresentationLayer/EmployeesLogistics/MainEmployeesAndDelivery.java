@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainEmployeesAndDelivery {
-    public static void mainEmployeesAndDelivery(String[] args, Service service, Connection conn) {
+    public static void mainEmployeesAndDelivery(Service service, Connection conn) {
         AtomicBoolean keepGoing = new AtomicBoolean(true);
         CommandRunner runner = new CommandRunner(
                 new Command[] {

@@ -23,24 +23,24 @@ public class App {
     public final Connection conn;
     public final Service service;
 
-    public App(String dbPath) {
+    public App(String dbPath, boolean tests) {
         boolean isNew = !new java.io.File(dbPath).exists();
         boolean shouldLoadExample = false;
         conn = connect(dbPath);
         SchemaInit.init(conn);
-//        if (isNew) {
-//            UserOutput.getInstance().println(
-//                    "You don't have a previous database file stored, so we'll create a new one for you " +
-//                            "from scratch.");
-//            shouldLoadExample = UserInput.getInstance().nextBoolean("Would you like to start with some example data?");
-//        }
+        if (isNew && !tests) {
+            UserOutput.getInstance().println(
+                    "You don't have a previous database file stored, so we'll create a new one for you " +
+                            "from scratch.");
+            shouldLoadExample = UserInput.getInstance().nextBoolean("Would you like to start with some example data?");
+        }
         dal =  new PersistenceController(conn);
         service = new Service(dal);
         inventoryPresentationFacade = new InventoryPresentationFacade(service);
         supplierPresentation = new SupplierPresentationFacade(service);
-//        if (shouldLoadExample) {
-//            ExampleData.loadExampleData(service);
-//        }
+        if (shouldLoadExample) {
+            ExampleData.loadExampleData(service);
+        }
     }
 
     public void main() {
@@ -61,7 +61,7 @@ public class App {
                     break;
                 }
                 case (3) : {
-                    MainEmployeesAndDelivery.mainEmployeesAndDelivery(new String[]{}, service, conn);
+                    MainEmployeesAndDelivery.mainEmployeesAndDelivery(service, conn);
                     break;
                 }
                 case (4): {
@@ -86,6 +86,7 @@ public class App {
         while (!input.equals("exit"));
         System.out.println("thank you");
     }
+
 
     public void disconnect() {
         try {

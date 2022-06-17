@@ -19,7 +19,7 @@ public class InventorySuppliersTestsBase {
 
     @BeforeEach
     public void setService() {
-        App app = new App(":memory:");
+        App app = new App(":memory:", true);
         this.conn = app.conn;
         SchemaInit.init(this.conn);
         this.pc = app.dal;
