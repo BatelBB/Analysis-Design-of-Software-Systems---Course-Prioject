@@ -37,7 +37,7 @@ public class App {
         dal = ioc.get(PersistenceController.class);
         inventoryPresentationFacade = ioc.get(InventoryPresentationFacade.class);
         supplierPresentation = ioc.get(SupplierPresentationFacade.class);
-        facade = ioc.get(Facade.class);
+        facade = new Facade(dal);
         if (shouldLoadExample) {
             ExampleData.loadExampleData(facade);
         }
