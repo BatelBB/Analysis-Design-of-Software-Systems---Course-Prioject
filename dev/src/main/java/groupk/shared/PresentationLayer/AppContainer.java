@@ -3,6 +3,7 @@ package groupk.shared.PresentationLayer;
 import groupk.inventory_suppliers.shared.ioc.ServiceProvider;
 import groupk.shared.business.CategoryController;
 
+import groupk.shared.business.Facade;
 import groupk.shared.business.ProductController;
 
 import groupk.shared.PresentationLayer.Inventory.InventoryPresentationFacade;

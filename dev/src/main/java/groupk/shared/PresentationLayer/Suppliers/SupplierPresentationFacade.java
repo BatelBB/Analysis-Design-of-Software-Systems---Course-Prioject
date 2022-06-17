@@ -4,6 +4,7 @@ import groupk.shared.business.Facade;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
+import groupk.shared.service.Service;
 
 import static groupk.shared.service.ServiceBase.*;
 
@@ -15,9 +16,9 @@ import java.util.Scanner;
 public class SupplierPresentationFacade {
     private UserInput input = UserInput.getInstance();
     private UserOutput output = UserOutput.getInstance();
-    private final Facade service;
+    private final Service service;
 
-    public SupplierPresentationFacade(Facade facade) {
+    public SupplierPresentationFacade(Service facade) {
         this.service = facade;
     }
 
