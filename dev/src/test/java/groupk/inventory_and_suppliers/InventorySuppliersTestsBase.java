@@ -2,7 +2,7 @@ package groupk.inventory_and_suppliers;
 
 import groupk.inventory_suppliers.SchemaInit;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
-import groupk.shared.PresentationLayer.AppContainer;
+import groupk.shared.PresentationLayer.App;
 import groupk.shared.business.Facade;
 import groupk.shared.service.Service;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,10 +19,10 @@ public class InventorySuppliersTestsBase {
 
     @BeforeEach
     public void setService() {
-        AppContainer ioc = new AppContainer(":memory:");
-        this.conn = ioc.get(Connection.class);
+        App app = new App(":memory:");
+        this.conn = app.conn;
         SchemaInit.init(this.conn);
-        this.pc = ioc.get(PersistenceController.class);
-        this.facade = ioc.get(Service.class);
+        this.pc = app.dal;
+        this.facade = app.service;
     }
 }

@@ -1,5 +1,6 @@
 package groupk.shared.service;
 
+import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import groupk.shared.business.Facade;
@@ -26,7 +27,13 @@ public class Service {
     public Service(Connection conn) {
         facade = new Facade(conn);
     }
+    public Service(PersistenceController conn) {
+        facade = new Facade(conn);
+    }
 
+    public Service(Facade facade){
+        this.facade = facade;
+    }
     public void deleteEmployeeDB() {
         facade.deleteEmployeeDB();
     }
@@ -402,8 +409,8 @@ public class Service {
                                                      String contactPhone, String contactAddress) {
         return facade.createSupplier(
                 ppn, bankAccount, name, isDelivering,
-                paymentCondition, regularSupplyingDays, contactAddress,
-                contactName, contactPhone
+                paymentCondition, regularSupplyingDays, contactName,
+                contactPhone, contactAddress
         );
     }
 
@@ -416,7 +423,7 @@ public class Service {
     }
 
     public Facade.SI_Response deleteSupplier(int ppn) {
-        return facade.getSupplier(ppn);
+        return facade.deleteSupplier(ppn);
     }
 
     public Facade.ResponseT<Item> createItem(int supplierPPN, int catalogNumber, int productID, float price) {

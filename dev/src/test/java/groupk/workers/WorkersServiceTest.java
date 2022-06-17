@@ -3,6 +3,7 @@ package groupk.workers;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import groupk.shared.PresentationLayer.App;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
 import groupk.shared.service.Service;

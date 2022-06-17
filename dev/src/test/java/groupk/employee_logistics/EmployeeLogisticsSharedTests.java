@@ -1,5 +1,7 @@
 package groupk.employee_logistics;
+
 import groupk.logistics.business.DLicense;
+import groupk.shared.PresentationLayer.App;
 import groupk.shared.service.dto.*;
 import groupk.shared.service.*;
 
@@ -18,36 +20,17 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EmployeeLogisticsSharedTests {
-    protected Connection connection;
-
-    @BeforeEach
-    public void setService() {
-        try {
-            connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    @AfterEach
-    public void afterService() {
-        try {
-            connection.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
     @Test
-    public void optionsForDelivery(){
+    public void optionsForDelivery() {
+        App app = new App("database.db");
+        Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+        for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
         HashMap<Employee.Role, Integer> r1 = new HashMap<>();
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -103,9 +86,11 @@ public class EmployeeLogisticsSharedTests {
                 Employee.Role.TruckingManger,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
-        staff.add(SM1); staff.add(l); staff.add(d);
+        staff.add(SM1);
+        staff.add(l);
+        staff.add(d);
         Calendar date = new GregorianCalendar();
-        date.roll(Calendar.DAY_OF_MONTH,1);
+        date.roll(Calendar.DAY_OF_MONTH, 1);
         Shift shift1 = service.createShift(
                 HR.id,
                 date,
@@ -113,7 +98,7 @@ public class EmployeeLogisticsSharedTests {
                 staff,
                 r1).getValue();
         date = new GregorianCalendar();
-        date.roll(Calendar.DAY_OF_MONTH,2);
+        date.roll(Calendar.DAY_OF_MONTH, 2);
         Shift shift2 = service.createShift(
                 HR.id,
                 date,
@@ -121,7 +106,7 @@ public class EmployeeLogisticsSharedTests {
                 staff,
                 r1).getValue();
         date = new GregorianCalendar();
-        date.roll(Calendar.DAY_OF_MONTH,3);
+        date.roll(Calendar.DAY_OF_MONTH, 3);
         Shift shift3 = service.createShift(
                 HR.id,
                 date,
@@ -129,7 +114,7 @@ public class EmployeeLogisticsSharedTests {
                 staff,
                 r1).getValue();
         date = new GregorianCalendar();
-        date.roll(Calendar.DAY_OF_MONTH,4);
+        date.roll(Calendar.DAY_OF_MONTH, 4);
         Shift shift4 = service.createShift(
                 HR.id,
                 date,
@@ -137,15 +122,16 @@ public class EmployeeLogisticsSharedTests {
                 staff,
                 r1).getValue();
         date = new GregorianCalendar();
-        date.roll(Calendar.DAY_OF_MONTH,5);
+        date.roll(Calendar.DAY_OF_MONTH, 5);
         Shift shift5 = service.createShift(
                 HR.id,
                 date,
                 Shift.Type.Evening,
                 staff,
-                r1).getValue(); date.add(Calendar.DAY_OF_MONTH,1);
+                r1).getValue();
+        date.add(Calendar.DAY_OF_MONTH, 1);
         date = new GregorianCalendar();
-        date.roll(Calendar.DAY_OF_MONTH,6);
+        date.roll(Calendar.DAY_OF_MONTH, 6);
         Shift shift6 = service.createShift(
                 HR.id,
                 date,
@@ -153,7 +139,7 @@ public class EmployeeLogisticsSharedTests {
                 staff,
                 r1).getValue();
         date = new GregorianCalendar();
-        date.roll(Calendar.DAY_OF_MONTH,7);
+        date.roll(Calendar.DAY_OF_MONTH, 7);
         Shift shift7 = service.createShift(
                 HR.id,
                 date,
@@ -161,18 +147,21 @@ public class EmployeeLogisticsSharedTests {
                 staff,
                 r1).getValue();
         assertEquals(service.listShifts(HR.id).getValue().size(), 7);
-        assertEquals(service.optionsForDeleveryWithLogisitcsAndDriversInShift(HR.id).getValue().size(),7);
+        assertEquals(service.optionsForDeleveryWithLogisitcsAndDriversInShift(HR.id).getValue().size(), 7);
+        app.disconnect();
     }
+
     @Test
-    public void deleteDriverWhoHasFutureDelivery(){
+    public void deleteDriverWhoHasFutureDelivery() {
+        App app = new App("database.db");
+        Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+        for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
         HashMap<Employee.Role, Integer> r1 = new HashMap<>();
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -228,7 +217,9 @@ public class EmployeeLogisticsSharedTests {
                 Employee.Role.TruckingManger,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
-        staff.add(SM1); staff.add(l); staff.add(d);
+        staff.add(SM1);
+        staff.add(l);
+        staff.add(d);
         Shift shift1 = service.createShift(
                 HR.id,
                 new GregorianCalendar(2023, Calendar.APRIL, 21),
@@ -263,8 +254,8 @@ public class EmployeeLogisticsSharedTests {
                 orders,
                 2,
                 0);
-        assertEquals(service.listDeliveries(TM1.id).getValue().size(),1);
-        assertTrue(service.deleteEmployee(HR.id,d.id).isError());
+        assertEquals(service.listDeliveries(TM1.id).getValue().size(), 1);
+        assertTrue(service.deleteEmployee(HR.id, d.id).isError());
         service.deleteDelivery(TM1.id, 1);
         Calendar date = new GregorianCalendar();
         date.roll(Calendar.DAY_OF_MONTH, -4);
@@ -291,19 +282,21 @@ public class EmployeeLogisticsSharedTests {
                 2,
                 0);
         service.removeEmployeeFromShift(HR.id, shift1.getDate(), shift1.getType(), d.id).getValue();
-        assertFalse(service.deleteEmployee(HR.id,d.id).isError());
+        assertFalse(service.deleteEmployee(HR.id, d.id).isError());
+        app.disconnect();
     }
 
     @Test
-    public void deleteLogisticsDB(){
+    public void deleteLogisticsDB() {
+        App app = new App("database.db");
+        Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+        for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
         HashMap<Employee.Role, Integer> r1 = new HashMap<>();
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -359,7 +352,9 @@ public class EmployeeLogisticsSharedTests {
                 Employee.Role.TruckingManger,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
-        staff.add(SM1); staff.add(l); staff.add(d);
+        staff.add(SM1);
+        staff.add(l);
+        staff.add(d);
         Shift shift1 = service.createShift(
                 HR.id,
                 new GregorianCalendar(2023, Calendar.APRIL, 21),
@@ -395,7 +390,9 @@ public class EmployeeLogisticsSharedTests {
                 2,
                 0);
         service.deleteLogisticsDB();
-        service = new Service(connection);
+        app.disconnect();
+        app = new App("database.db");
+        service = app.service;
         Employee TM2 = service.createEmployee(
                 "Avi",
                 "921",
@@ -407,14 +404,16 @@ public class EmployeeLogisticsSharedTests {
                 0,
                 Employee.Role.TruckingManger,
                 shiftPreferences).getValue();
-        assertEquals(service.listDeliveries(TM2.id).getValue().size(),0);
+        assertEquals(service.listDeliveries(TM2.id).getValue().size(), 0);
+        app.disconnect();
     }
 
     @Test
-    public void deleteEmployeeDB(){
+    public void deleteEmployeeDB() {
+        App app = new App("database.db");
+        Service service = app.service;
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(connection);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -439,7 +438,7 @@ public class EmployeeLogisticsSharedTests {
                 new HashSet<>()
         ).getValue();
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime s : Employee.ShiftDateTime.values())
+        for (Employee.ShiftDateTime s : Employee.ShiftDateTime.values())
             shiftPreferences.add(s);
         Employee SM = service.createEmployee(
                 "SM",
@@ -455,12 +454,14 @@ public class EmployeeLogisticsSharedTests {
         LinkedList<Employee> em = new LinkedList<>();
         em.add(SM);
         HashMap<Employee.Role, Integer> r = new HashMap<>();
-        for(Employee.Role role : Employee.Role.values())
+        for (Employee.Role role : Employee.Role.values())
             r.put(role, 0);
         r.replace(Employee.Role.ShiftManager, 1);
-        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, em, r).getValue();
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21), Shift.Type.Evening, em, r).getValue();
         service.deleteEmployeeDB();
-        service = new Service(connection);
+        app.disconnect();
+        app = new App("database.db");
+        service = app.service;
         service.loadEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -475,18 +476,20 @@ public class EmployeeLogisticsSharedTests {
         ).getValue();
         assertEquals(service.listShifts("111111110").getValue().size(), 0);
         assertEquals(service.listEmployees("111111110").getValue().size(), 1);
+        app.disconnect();
     }
 
     @Test
-    public void loadLogisticsDB(){
+    public void loadLogisticsDB() {
+        App app = new App("database.db");
+        Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+        for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
         HashMap<Employee.Role, Integer> r1 = new HashMap<>();
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -542,7 +545,9 @@ public class EmployeeLogisticsSharedTests {
                 Employee.Role.TruckingManger,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
-        staff.add(SM1); staff.add(l); staff.add(d);
+        staff.add(SM1);
+        staff.add(l);
+        staff.add(d);
         Shift shift1 = service.createShift(
                 HR.id,
                 new GregorianCalendar(2023, Calendar.APRIL, 21),
@@ -577,16 +582,20 @@ public class EmployeeLogisticsSharedTests {
                 orders,
                 2,
                 0);
-        service = new Service(connection);
+        app.disconnect();
+        app = new App("database.db");
+        service = app.service;
         service.loadEmployeeDB();
-        assertEquals(service.listDeliveries(TM1.id).getValue().size(),1);
+        assertEquals(service.listDeliveries(TM1.id).getValue().size(), 1);
+        app.disconnect();
     }
 
     @Test
-    public void loadEmployeeDB(){
+    public void loadEmployeeDB() {
+        App app = new App("database.db");
+        Service service = app.service;
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(connection);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -611,7 +620,7 @@ public class EmployeeLogisticsSharedTests {
                 new HashSet<>()
         ).getValue();
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime s : Employee.ShiftDateTime.values())
+        for (Employee.ShiftDateTime s : Employee.ShiftDateTime.values())
             shiftPreferences.add(s);
         Employee SM = service.createEmployee(
                 "SM",
@@ -627,27 +636,31 @@ public class EmployeeLogisticsSharedTests {
         LinkedList<Employee> em = new LinkedList<>();
         em.add(SM);
         HashMap<Employee.Role, Integer> r = new HashMap<>();
-        for(Employee.Role role : Employee.Role.values())
+        for (Employee.Role role : Employee.Role.values())
             r.put(role, 0);
         r.replace(Employee.Role.ShiftManager, 1);
-        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, em, r).getValue();
-        service = new Service(connection);
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21), Shift.Type.Evening, em, r).getValue();
+        app.disconnect();
+        app = new App("database.db");
+        service = app.service;
         service.loadEmployeeDB();
         assertEquals(service.listShifts("111111110").getValue().size(), 1);
         assertEquals(service.listShifts("111111110").getValue().get(0).getDate(), shift.getDate());
         assertEquals(service.listEmployees("111111110").getValue().size(), 3);
+        app.disconnect();
     }
 
     @Test
-    public void updateLogisticsDB(){
+    public void updateLogisticsDB() {
+        App app = new App("database.db");
+        Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+        for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
         HashMap<Employee.Role, Integer> r1 = new HashMap<>();
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -703,7 +716,9 @@ public class EmployeeLogisticsSharedTests {
                 Employee.Role.TruckingManger,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
-        staff.add(SM1); staff.add(l); staff.add(d);
+        staff.add(SM1);
+        staff.add(l);
+        staff.add(d);
         Shift shift1 = service.createShift(
                 HR.id,
                 new GregorianCalendar(2023, Calendar.APRIL, 21),
@@ -752,16 +767,18 @@ public class EmployeeLogisticsSharedTests {
                 d2.id,
                 DLicense.B.name());
         service.addEmployeeToShift(HR.id, shift1.getDate(), shift1.getType(), d2.id);
-        service.updateDriverOnTrucking(TM1.id, 1 ,d2.id);
+        service.updateDriverOnTrucking(TM1.id, 1, d2.id);
         assertEquals(service.listDeliveries(TM1.id).getValue().get(0).driverID, Integer.parseInt(d2.id));
         assertTrue(service.updateDateOnTrucking(TM1.id, 1, LocalDateTime.of(2023, Month.APRIL, 20, 18, 0)).isError());
+        app.disconnect();
     }
 
     @Test
-    public void UpdateEmployeeDB(){
+    public void UpdateEmployeeDB() {
+        App app = new App("database.db");
+        Service service = app.service;
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(connection);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -786,7 +803,7 @@ public class EmployeeLogisticsSharedTests {
                 new HashSet<>()
         ).getValue();
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime s : Employee.ShiftDateTime.values())
+        for (Employee.ShiftDateTime s : Employee.ShiftDateTime.values())
             shiftPreferences.add(s);
         Employee SM = service.createEmployee(
                 "SM",
@@ -800,12 +817,13 @@ public class EmployeeLogisticsSharedTests {
                 shiftPreferences
         ).getValue();
         LinkedList<Employee> em = new LinkedList<>();
-        em.add(SM); em.add(created);
+        em.add(SM);
+        em.add(created);
         HashMap<Employee.Role, Integer> r = new HashMap<>();
-        for(Employee.Role role : Employee.Role.values())
+        for (Employee.Role role : Employee.Role.values())
             r.put(role, 0);
         r.replace(Employee.Role.ShiftManager, 1);
-        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, em, r).getValue();
+        Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21), Shift.Type.Evening, em, r).getValue();
         Employee createdUpdate = new Employee(
                 "111111111",
                 "Foo2",
@@ -818,7 +836,9 @@ public class EmployeeLogisticsSharedTests {
                 new GregorianCalendar(2022, Calendar.APRIL, 5)
         );
         service.updateEmployee(HR.id, createdUpdate);
-        service = new Service(connection);
+        app.disconnect();
+        app = new App("database.db");
+        service = app.service;
         service.loadEmployeeDB();
         assertEquals(service.readEmployee("111111110", "111111111").getValue().name, createdUpdate.name);
         assertEquals(service.readEmployee("111111110", "111111111").getValue().role, createdUpdate.role);
@@ -831,17 +851,20 @@ public class EmployeeLogisticsSharedTests {
         assertEquals(service.listShifts(HR.id).getValue().size(), 1);
         assertEquals(service.listShifts(HR.id).getValue().get(0).getStaff().size(), 2);
         service.deleteEmployee(HR.id, "11411110");
+        app.disconnect();
     }
+
     @Test
     public void testCreateDelivery() {
+        App app = new App("database.db");
+        Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+        for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
         HashMap<Employee.Role, Integer> r1 = new HashMap<>();
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -897,7 +920,9 @@ public class EmployeeLogisticsSharedTests {
                 Employee.Role.TruckingManger,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
-        staff.add(SM1); staff.add(l); staff.add(d);
+        staff.add(SM1);
+        staff.add(l);
+        staff.add(d);
         Shift shift1 = service.createShift(
                 HR.id,
                 new GregorianCalendar(2023, Calendar.APRIL, 21),
@@ -932,18 +957,21 @@ public class EmployeeLogisticsSharedTests {
                 orders,
                 2,
                 0);
-        assertEquals(service.listDeliveries(TM1.id).getValue().size(),1);
+        assertEquals(service.listDeliveries(TM1.id).getValue().size(), 1);
+        app.disconnect();
     }
+
     @Test
     public void testCreateDeliveryWithoutLogisticsEmployee() {
+        App app = new App("database.db");
+        Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+        for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
         HashMap<Employee.Role, Integer> r1 = new HashMap<>();
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -989,7 +1017,8 @@ public class EmployeeLogisticsSharedTests {
                 Employee.Role.TruckingManger,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
-        staff.add(SM1); staff.add(d);
+        staff.add(SM1);
+        staff.add(d);
         Shift shift1 = service.createShift(
                 HR.id,
                 new GregorianCalendar(2023, Calendar.APRIL, 21),
@@ -1024,18 +1053,20 @@ public class EmployeeLogisticsSharedTests {
                 orders,
                 2,
                 0).isError());
+        app.disconnect();
     }
 
     @Test
     public void testAddDriverNotWorking() {
+        App app = new App("database.db");
+        Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+        for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
         HashMap<Employee.Role, Integer> r1 = new HashMap<>();
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -1091,7 +1122,8 @@ public class EmployeeLogisticsSharedTests {
                 Employee.Role.TruckingManger,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
-        staff.add(SM1); staff.add(l);
+        staff.add(SM1);
+        staff.add(l);
         Shift shift1 = service.createShift(
                 HR.id,
                 new GregorianCalendar(2023, Calendar.APRIL, 21),
@@ -1126,18 +1158,20 @@ public class EmployeeLogisticsSharedTests {
                 orders,
                 2,
                 0).isError());
+        app.disconnect();
     }
 
     @Test
     public void testAddDriverWithWrongLisence() {
+        App app = new App("database.db");
+        Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
+        for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
         HashMap<Employee.Role, Integer> r1 = new HashMap<>();
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -1193,7 +1227,9 @@ public class EmployeeLogisticsSharedTests {
                 Employee.Role.TruckingManger,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
-        staff.add(SM1); staff.add(l); staff.add(d);
+        staff.add(SM1);
+        staff.add(l);
+        staff.add(d);
         Shift shift1 = service.createShift(
                 HR.id,
                 new GregorianCalendar(2023, Calendar.APRIL, 21),
@@ -1228,5 +1264,6 @@ public class EmployeeLogisticsSharedTests {
                 orders,
                 2,
                 0).isError());
+        app.disconnect();
     }
 }
