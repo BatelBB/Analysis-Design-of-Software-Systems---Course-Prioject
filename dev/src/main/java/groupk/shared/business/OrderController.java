@@ -133,9 +133,8 @@ public class OrderController {
         }
     }
 
-    public void createFittingTrucking(Order order) {
+    public void createFittingTrucking(String destination, Order order) {
         String source = order.supplier.getContact().getAddress();
-        String destination = "TODO inventory"; // TODO inventory
         logistics.addTruckingRequest(order.getId(), source, destination);
     }
 }

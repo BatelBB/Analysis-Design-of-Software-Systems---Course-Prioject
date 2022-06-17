@@ -820,7 +820,7 @@ public class Facade {
         Tuple<Supplier, Item> supplierItemTuple = items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
         Order order = orders.create(supplierItemTuple.first, OrderType.Periodical, LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
         orders.orderItemFromMap(order, itemsWithAmount);
-        orders.createFittingTrucking(order);
+        orders.createFittingTrucking(ProductController.BRANCH_NAME, order);
         return responseForVoid(() -> product_controller.addOrderRecord(order.getId(), productAmount));
     }
 

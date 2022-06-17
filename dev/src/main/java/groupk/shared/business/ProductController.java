@@ -14,6 +14,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProductController {
+    public static final String BRANCH_NAME = "Yavne";
+
     private Map<Integer, Product> products;
     private CategoryController category_controller;
     private PersistenceController pc;
