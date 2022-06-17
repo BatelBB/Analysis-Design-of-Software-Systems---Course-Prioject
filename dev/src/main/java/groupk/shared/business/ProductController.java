@@ -276,11 +276,11 @@ public class ProductController {
         return orders.get(order_id);
     }
 
-    public void confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount) throws Exception {
+    public void confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount, int supplier_ppn) throws Exception {
         for (Map.Entry<Integer, Integer> pair : actual_amount.entrySet()) {
             int product_id = pair.getKey(), amount = pair.getValue();
             for (int i = 0; i < amount; i++)
-                randomizeProductItem(product_id);
+                randomizeProductItem(product_id, supplier_ppn);
             if (amount < orders.get(order_id).get(product_id))
                 updateOrderAmount(order_id, product_id, orders.get(order_id).get(product_id) - amount);
             else
@@ -360,18 +360,10 @@ public class ProductController {
         return products.values().stream().collect(Collectors.toList());
     }
 
-//    public void receiveTrucking(int trucking_id) {
-//        Map<Integer,Integer> order_products = orders.get(trucking_id);
-//        for(Map.Entry<Integer, Integer> pair : order_products.entrySet()){
-//            pair.getKey()
-//        }
-//    }
-
-    private void randomizeProductItem(int product_id) throws Exception {
-        String random_location = "";
-        int random_supplier = 0;
-        LocalDate random_date = LocalDate.now();
-        boolean random_onShelf = false;
-        addItem(product_id, "Yavne", random_location, random_supplier, random_date, random_onShelf);
+    private void randomizeProductItem(int product_id, int supplier_ppn) throws Exception {
+        String random_location = "Shelf " + new Random().nextInt(10);
+        LocalDate random_date = LocalDate.now().plusDays(new Random().nextInt(14));
+        boolean random_onShelf = new Random().nextBoolean();
+        addItem(product_id, BRANCH_NAME, random_location, supplier_ppn, random_date, random_onShelf);
     }
 }

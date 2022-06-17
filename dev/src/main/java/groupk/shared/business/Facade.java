@@ -640,7 +640,7 @@ public class Facade {
     }
 
     public SI_Response confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount) {
-        return responseForVoid(() -> product_controller.confirmOrderAmount(order_id, actual_amount));
+        return responseForVoid(() -> product_controller.confirmOrderAmount(order_id, actual_amount, orders.get(order_id).supplier.getPpn()));
     }
 
     public ResponseT<Order> getOrder(int id) {
