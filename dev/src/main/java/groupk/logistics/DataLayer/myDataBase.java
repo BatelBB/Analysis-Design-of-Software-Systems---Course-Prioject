@@ -30,13 +30,13 @@ public class myDataBase {
 
     public void deleteDB() {
         LinkedList<String> tables = new LinkedList<>();
-        tables.add("DROP TABLE IF EXISTS Vehicles");
-        tables.add("DROP TABLE IF EXISTS Drivers_Licences");
-        tables.add("DROP TABLE IF EXISTS Truckings");
-        tables.add("DROP TABLE IF EXISTS Truckings_Destinations");
-        tables.add("DROP TABLE IF EXISTS Truckings_Sources");
-        tables.add("DROP TABLE IF EXISTS Truckings_Orders");
-        tables.add("DROP TABLE IF EXISTS Truckings_Requests");
+        tables.add("DELETE FROM Vehicles");
+        tables.add("DELETE FROM Drivers_Licences");
+        tables.add("DELETE FROM Truckings");
+        tables.add("DELETE FROM Truckings_Destinations");
+        tables.add("DELETE FROM Truckings_Sources");
+        tables.add("DELETE FROM Truckings_Orders");
+        tables.add("DELETE FROM Truckings_Requests");
         try (
                 Statement statement = connection.createStatement()) {
             for (String table : tables) {

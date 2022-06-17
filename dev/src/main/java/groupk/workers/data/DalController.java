@@ -115,13 +115,13 @@ public class DalController {
         shiftRepository.delete();
         employeeRepository.delete();
         LinkedList<String> tables = new LinkedList<>();
-        tables.add("DROP TABLE IF EXISTS Employee");
-        tables.add("DROP TABLE IF EXISTS RequiredStaff");
-        tables.add("DROP TABLE IF EXISTS Role");
-        tables.add("DROP TABLE IF EXISTS Shift");
-        tables.add("DROP TABLE IF EXISTS ShiftPreference");
-        tables.add("DROP TABLE IF EXISTS ShiftSlot");
-        tables.add("DROP TABLE IF EXISTS Workers");
+        tables.add("DELETE FROM Employee");
+        tables.add("DELETE FROM RequiredStaff");
+        tables.add("DELETE FROM Role");
+        tables.add("DELETE FROM Shift");
+        tables.add("DELETE FROM ShiftPreference");
+        tables.add("DELETE FROM ShiftSlot");
+        tables.add("DELETE FROM Workers");
         try (
                 Statement statement = connection.createStatement()){
             for (String table : tables) {
@@ -182,7 +182,7 @@ public class DalController {
 
     public void loadDataFromDB(){
         try {
-            PreparedStatement prepStat = connection.prepareStatement("SELECT * FROM  Employee");
+            PreparedStatement prepStat = connection.prepareStatement("SELECT * FROM Employee");
             ResultSet employees = prepStat.executeQuery();
             while(employees.next()){
                 String id = employees.getString(1);

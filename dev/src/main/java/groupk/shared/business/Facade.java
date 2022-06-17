@@ -51,6 +51,28 @@ public class Facade {
         orders = new OrderController(p, discounts, logistics);
     }
 
+    public Facade(PersistenceController p,
+                  EmployeesController employees,
+                  LogisticsController logistics,
+                  CategoryController categoryController,
+                  ProductController product_controller,
+                  SupplierController suppliers,
+                  ItemController items,
+                  QuantityDiscountController discounts,
+                  OrderController order,
+                  ReportController report_controller) {
+        this.employees = employees;
+        this.logistics = logistics;
+        this.category_controller = categoryController;
+        this.product_controller = product_controller;
+        this.suppliers = suppliers;
+        this.items = items;
+        this.discounts = discounts;
+        this.orders = order;
+        this.report_controller = report_controller;
+    }
+
+
     //just for test
     //employee logistics facade
     public Facade(Connection connection) {

@@ -18,8 +18,8 @@ public class SupplierPresentationFacade {
     private UserOutput output = UserOutput.getInstance();
     private final Service service;
 
-    public SupplierPresentationFacade(Service facade) {
-        this.service = facade;
+    public SupplierPresentationFacade(Service service) {
+        this.service = service;
     }
 
     public void startSupplierMenu() {

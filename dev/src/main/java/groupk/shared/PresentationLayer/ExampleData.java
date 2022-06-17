@@ -6,37 +6,38 @@ import groupk.shared.service.Inventory.Objects.ProductItem;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
+import groupk.shared.service.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 public class ExampleData {
-    public static void loadExampleData(Facade facade
+    public static void loadExampleData(Service service
                                        // TODO logistics & employees - add your stuff here
     ) {
-        int ppn_office = facade.createSupplier(1, 1, "OfficeLi",
+        int ppn_office = service.createSupplier(1, 1, "OfficeLi",
                 true, PaymentCondition.Credit, DayOfWeek.SUNDAY,
                 "Ofir", "054-1234567", "Pencil 12, Pencilvannia").data.getPpn();
-        int ppn_foods = facade.createSupplier(2, 2, "FoodsAreUs",
+        int ppn_foods = service.createSupplier(2, 2, "FoodsAreUs",
                 true, PaymentCondition.DirectDebit, DayOfWeek.THURSDAY,
                 "Frank", "050-1234569", "Vegetable 12, Beersheba").data.getPpn();
-        int ppn_lorem = facade.createSupplier(3, 3, "Lorem Stuff",
+        int ppn_lorem = service.createSupplier(3, 3, "Lorem Stuff",
                 true, PaymentCondition.Credit, DayOfWeek.WEDNESDAY,
                 "Lauren", "052-7654321", "Lorem 14, Ipsumia").data.getPpn();
 
-        facade.addCategory("office");
-        facade.addSubCategory("office", "writing");
-        facade.addSubSubCategory("office", "writing", "pens");
-        facade.addCategory("food");
-        facade.addSubCategory("food", "dairy");
-        facade.addSubSubCategory("food", "dairy", "10%");
-        facade.addSubSubCategory("food", "dairy", "5%");
-        facade.addSubCategory("food", "bread");
-        facade.addSubSubCategory("food", "bread", "rye");
-        facade.addSubSubCategory("food", "bread", "wheat");
+        service.addCategory("office");
+        service.addSubCategory("office", "writing");
+        service.addSubSubCategory("office", "writing", "pens");
+        service.addCategory("food");
+        service.addSubCategory("food", "dairy");
+        service.addSubSubCategory("food", "dairy", "10%");
+        service.addSubSubCategory("food", "dairy", "5%");
+        service.addSubCategory("food", "bread");
+        service.addSubSubCategory("food", "bread", "rye");
+        service.addSubSubCategory("food", "bread", "wheat");
 
         // Michael, fill some reasonable fields here
-        Product pen = facade.addProduct(
+        Product pen = service.addProduct(
                 "GelGrip Pen, 1.0mm, Blue",
                 "Pilot",
                 10,
@@ -47,7 +48,7 @@ public class ExampleData {
                 "writing",
                 "pens"
         ).data;
-        Product cheaperPen = facade.addProduct(
+        Product cheaperPen = service.addProduct(
                 "GelGrip Pen, 1.0mm, Blue",
                 "Pilot",
                 5,
@@ -58,7 +59,7 @@ public class ExampleData {
                 "writing",
                 "pens"
         ).data;
-        Product milk5 = facade.addProduct(
+        Product milk5 = service.addProduct(
                 "Mister milk",
                 "Mister Milker",
                 30,
@@ -69,7 +70,7 @@ public class ExampleData {
                 "dairy",
                 "5%"
         ).data; // same
-        Product milk10 = facade.addProduct(
+        Product milk10 = service.addProduct(
                 "Miss milk",
                 "Miss Milker",
                 30,
@@ -81,7 +82,7 @@ public class ExampleData {
                 "10%"
         ).data; // same
 
-        ProductItem milk5_0 = facade.addItem(
+        ProductItem milk5_0 = service.addItem(
                 milk5.getProduct_id(),
                 "Yavne",
                 "shelf 1",
@@ -90,7 +91,7 @@ public class ExampleData {
                 true
         ).data;
 
-        ProductItem milk5_1 = facade.addItem(
+        ProductItem milk5_1 = service.addItem(
                 milk5.getProduct_id(),
                 "Yehud",
                 "shelf 1",
@@ -99,7 +100,7 @@ public class ExampleData {
                 true
         ).data;
 
-        ProductItem milk5_2 = facade.addItem(
+        ProductItem milk5_2 = service.addItem(
                 milk5.getProduct_id(),
                 "Yeruham",
                 "shelf 1",
@@ -108,7 +109,7 @@ public class ExampleData {
                 true
         ).data;
 
-        ProductItem milk5_3 = facade.addItem(
+        ProductItem milk5_3 = service.addItem(
                 milk5.getProduct_id(),
                 "Yad Ha-Shmonah",
                 "shelf 1",
@@ -117,7 +118,7 @@ public class ExampleData {
                 true
         ).data;
 
-        ProductItem milk5_4 = facade.addItem(
+        ProductItem milk5_4 = service.addItem(
                 milk5.getProduct_id(),
                 "Yad Binyamin",
                 "shelf 1",
@@ -126,17 +127,17 @@ public class ExampleData {
                 true
         ).data;
 
-        facade.updateProductCusDiscount(0.5f, LocalDate.of(2022, 3, 10), LocalDate.of(2022, 3, 20), milk5.getProduct_id());
+        service.updateProductCusDiscount(0.5f, LocalDate.of(2022, 3, 10), LocalDate.of(2022, 3, 20), milk5.getProduct_id());
 
         // Office items
-        Item penItem = facade.createItem(
+        Item penItem = service.createItem(
                 ppn_office,
                 10,
                 pen.getProduct_id(),
                 11
         ).data;
 
-        Item cheaperPenItem = facade.createItem(
+        Item cheaperPenItem = service.createItem(
                 ppn_lorem,
                 10,
                 cheaperPen.getProduct_id(),
@@ -144,25 +145,25 @@ public class ExampleData {
         ).data;
 
         // Food items
-        Item milk5FromFoodsAreUs = facade.createItem(
+        Item milk5FromFoodsAreUs = service.createItem(
                 ppn_foods,
                 2,
                 milk5.getProduct_id(),
                 4
         ).data;
-        Item milk10FromFoodsAreUs = facade.createItem(
+        Item milk10FromFoodsAreUs = service.createItem(
                 ppn_foods,
                 3,
                 milk10.getProduct_id(),
                 5
         ).data;
-        Item milk5FromLorem = facade.createItem(
+        Item milk5FromLorem = service.createItem(
                 ppn_lorem,
                 3,
                 milk5.getProduct_id(),
                 4
         ).data;
-        Item milk10FromLorem = facade.createItem(
+        Item milk10FromLorem = service.createItem(
                 ppn_lorem,
                 5,
                 milk10.getProduct_id(),
@@ -173,7 +174,7 @@ public class ExampleData {
         float[] discountPercents = {0.01f, 0.05f, 0.1f, 0.25f};
 
         for (int i = 0; i < discountAmounts.length; i++) {
-            facade.createDiscount(ppn_office, penItem.getCatalogNumber(),
+            service.createDiscount(ppn_office, penItem.getCatalogNumber(),
                     discountAmounts[i], discountPercents[i]);
         }
 
@@ -182,17 +183,17 @@ public class ExampleData {
         LocalDate date_feb_1 = LocalDate.of(2022, 2, 1);
         LocalDate date_feb_2 = LocalDate.of(2022, 2, 2);
 
-        int order1 = facade.createOrder(ppn_office, date_jan_1, date_jan_2, OrderType.Periodical).data.getId();
-        int order2 = facade.createOrder(ppn_foods, date_jan_1, date_jan_2, OrderType.Shortages).data.getId();
-        int order3 = facade.createOrder(ppn_lorem, date_jan_1, date_jan_2, OrderType.Shortages).data.getId();
+        int order1 = service.createOrder(ppn_office, date_jan_1, date_jan_2, OrderType.Periodical).data.getId();
+        int order2 = service.createOrder(ppn_foods, date_jan_1, date_jan_2, OrderType.Shortages).data.getId();
+        int order3 = service.createOrder(ppn_lorem, date_jan_1, date_jan_2, OrderType.Shortages).data.getId();
 
         // order things
-        facade.orderItem(order1, ppn_office, penItem.getCatalogNumber(), 10);
-        facade.orderItem(order2, ppn_foods, milk5FromFoodsAreUs.getCatalogNumber(), 5);
-        facade.orderItem(order3, ppn_lorem, cheaperPenItem.getCatalogNumber(), 5);
+        service.orderItem(order1, ppn_office, penItem.getCatalogNumber(), 10);
+        service.orderItem(order2, ppn_foods, milk5FromFoodsAreUs.getCatalogNumber(), 5);
+        service.orderItem(order3, ppn_lorem, cheaperPenItem.getCatalogNumber(), 5);
         // fill other tables
-        facade.createByCategoryReport("my first report", "Naziff", "", "", "");
-        facade.createBySupplierReport("my second report", "Shariff", 2);
+        service.createByCategoryReport("my first report", "Naziff", "", "", "");
+        service.createBySupplierReport("my second report", "Shariff", 2);
 
         // TODO employees, logistics, add your things here
     }
