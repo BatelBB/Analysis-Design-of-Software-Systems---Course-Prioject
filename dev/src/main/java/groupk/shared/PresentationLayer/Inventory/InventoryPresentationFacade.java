@@ -279,18 +279,6 @@ public class InventoryPresentationFacade {
         //facade.createPeriodicOrder(convertMap(args[0]), convertInt(args[1]));
     }
 
-    private void confirmOrder() {
-        Map<Integer, Integer> order_details = facade.confirmOrder(convertInt(args[0])).data;
-        System.out.println("Order details");
-        for (Map.Entry<Integer, Integer> pair : order_details.entrySet()) {
-            System.out.println(pair.getKey() + " - " + pair.getValue());
-        }
-        System.out.println("please enter actual amount delivered\n(example format: \"[id0]-[amount0]_[id1]-[amount1]\"):");
-        Scanner scan = new Scanner(System.in);
-        String input = scan.nextLine();
-        facade.confirmOrderAmount(convertMap(input));
-    }
-
     //converters
     private Map<Integer, Integer> convertMap(String input) {
         Map<Integer, Integer> values = new HashMap<>();
