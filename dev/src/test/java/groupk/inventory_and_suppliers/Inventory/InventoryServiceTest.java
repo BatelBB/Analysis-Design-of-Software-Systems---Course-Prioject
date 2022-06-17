@@ -91,7 +91,7 @@ class InventoryServiceTest extends InventorySuppliersTestsBase {
     void removeReport() {
         Facade.ResponseT<Report> missingReport = facade.createMissingReport("MissingReport", "Michel");
             int reportId = missingReport.data.getId();
-            //Assertions.assertTrue(facade.getReportListIds().data.contains(reportId));
+            Assertions.assertTrue(facade.getReportListIds().data.contains(reportId));
             Assertions.assertTrue(facade.removeReport(reportId).success);
             Assertions.assertFalse(facade.getProductNames().data.contains(reportId));
             Assertions.assertFalse(facade.removeProduct(reportId).success);
@@ -115,7 +115,7 @@ class InventoryServiceTest extends InventorySuppliersTestsBase {
         try {
             facade.createMissingReport("MissingReport", "Michel");
             
-            //Assertions.assertTrue(facade.getReportListIds().data.contains(1));
+            Assertions.assertTrue(facade.getReportListIds().data.contains(1));
             facade.createMissingReport("MissingReport", "Michel");
             facade.removeReport(1);
             facade.createMissingReport("MissingReport", "Michel");
@@ -129,7 +129,7 @@ class InventoryServiceTest extends InventorySuppliersTestsBase {
     void createExpiredReport() {
         try {
             Integer id = facade.createExpiredReport("ExpiredReport", "Michel").data.getId();
-            //Assertions.assertTrue(facade.getReportListIds().data.contains(id));
+            Assertions.assertTrue(facade.getReportListIds().data.contains(id));
             facade.removeReport(id);
             facade.createExpiredReport("ExpiredReport", "Michel");
         } catch (Exception e) {
@@ -143,7 +143,7 @@ class InventoryServiceTest extends InventorySuppliersTestsBase {
         try {
             facade.createBySupplierReport("BySupplierReport", "Michel", 0);
             
-            //Assertions.assertTrue(facade.getReportListIds().data.contains(1));
+            Assertions.assertTrue(facade.getReportListIds().data.contains(1));
             facade.createBySupplierReport("MissingReport", "Michel", 0);
             facade.removeReport(1);
             facade.createBySupplierReport("ExpiredReport", "Michel", 0);

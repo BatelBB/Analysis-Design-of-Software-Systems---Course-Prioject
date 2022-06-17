@@ -514,4 +514,7 @@ public class Service {
         return facade.createOrderPeriodic(productAmount, weekDay);
     }
 
+    public Facade.ResponseT<List<Integer>> getReportListIds() {
+        return facade.getReportListIds();
+    }
 }

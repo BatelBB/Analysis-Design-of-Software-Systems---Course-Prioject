@@ -221,7 +221,7 @@ public class InventoryPresentationFacade {
 
         if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
             try {
-                facade.changeItemLocation(convertInt(args[0]), convertInt(args[0]), args[2]);
+                facade.setItemLocation(convertInt(args[0]), convertInt(args[0]), args[2]);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -230,7 +230,7 @@ public class InventoryPresentationFacade {
 
     private void changeItemOnShelf() {
 
-        facade.changeItemOnShelf(
+        facade.setItemOnShelf(
                 convertInt(args[0]),
                 convertInt(args[1]),
                 convertBoolean(args[2])
