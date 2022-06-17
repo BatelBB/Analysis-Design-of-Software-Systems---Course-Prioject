@@ -503,8 +503,7 @@ public class Service {
     }
 
     public Facade.SI_Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
-        //TODO: what's this? -Michael
-        return null;
+        return facade.updateOrderAmount(orderID, supplier, catalogNumber, amount);
     }
 
     public Facade.ResponseT<Integer> createOrderShortage(Facade.ResponseT<Boolean> r, int product_id, int min_qty) {
@@ -515,4 +514,7 @@ public class Service {
         return facade.createOrderPeriodic(productAmount, weekDay);
     }
 
+    public Facade.ResponseT<List<Integer>> getReportListIds() {
+        return facade.getReportListIds();
+    }
 }

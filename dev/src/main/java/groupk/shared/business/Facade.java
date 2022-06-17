@@ -791,7 +791,7 @@ public class Facade {
     }
 
     public SI_Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
-        return null;
+        return responseForVoid(()-> orders.updateAmount(orders.get(orderID),items.get(supplier, catalogNumber), amount));
     }
 
     public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty) {

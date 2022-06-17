@@ -82,9 +82,9 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
         facade.removeReport(expiredReport.getId());
         facade.removeReport(surplusesReport.getId());
         facade.removeProduct(prod.getProduct_id());
-        facade.removeSubSubCategory("Dairy", "Shop", "10%",true);
-        facade.removeSubCategory("Dairy", "Shop", true);
-        facade.removeCategory("Dairy", true);
+        facade.removeSubSubCategory("Dairy", "Shop", "10%");
+        facade.removeSubCategory("Dairy", "Shop");
+        facade.removeCategory("Dairy");
 
         runQuery();
 
@@ -473,7 +473,7 @@ public class InventorySuppliersIntegrationTests extends InventorySuppliersTestsB
                 50));
         discount = assertSuccess(facade.createDiscount(sup.getPpn(), item.getCatalogNumber(), 50, 5));
 
-        facade.updateItemCusDiscount(1, prod.getProduct_id(), pItem.getId(),LocalDate.now(), LocalDate.MAX);
+        facade.updateItemCusDiscount(1, LocalDate.now(), LocalDate.MAX, prod.getProduct_id(), pItem.getId());
 
         missingReport = assertSuccess(facade.createMissingReport("Missing", "Report1"));
         supplierReport = assertSuccess(facade.createBySupplierReport("Supplier", "Report2", sup.getPpn()));

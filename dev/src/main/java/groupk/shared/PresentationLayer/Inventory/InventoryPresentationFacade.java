@@ -1,6 +1,7 @@
 package groupk.shared.PresentationLayer.Inventory;
 
 import groupk.shared.business.Facade;
+import groupk.shared.service.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -11,9 +12,9 @@ import java.util.Scanner;
 
 public class InventoryPresentationFacade {
     private String[] args;
-    private final Facade facade;
+    private final Service facade;
 
-    public InventoryPresentationFacade(Facade facade) {
+    public InventoryPresentationFacade(Service facade) {
         this.facade = facade;
     }
 
@@ -124,7 +125,7 @@ public class InventoryPresentationFacade {
     }
 
     private void removeCategory() {
-        facade.removeCategory(args[0], true);
+        facade.removeCategory(args[0]);
     }
 
     private void addSubCategory() {
@@ -132,7 +133,7 @@ public class InventoryPresentationFacade {
     }
 
     private void removeSubCategory() {
-        facade.removeSubCategory(args[0], args[1], true);
+        facade.removeSubCategory(args[0], args[1]);
     }
 
     private void addSubSubCategory() {
@@ -141,7 +142,7 @@ public class InventoryPresentationFacade {
     }
 
     private void removeSubSubCategory() {
-        facade.removeSubSubCategory(args[0], args[1], args[2], true);
+        facade.removeSubSubCategory(args[0], args[1], args[2]);
     }
 
     private void updateCategoryCusDiscount() {
@@ -162,11 +163,11 @@ public class InventoryPresentationFacade {
     private void updateItemCusDiscount() {
 
         facade.updateItemCusDiscount(
-                convertInt(args[0]),
-                convertInt(args[1]),
                 convertFloat(args[2]),
                 convertDate(args[3]),
-                convertDate(args[4])
+                convertDate(args[4]),
+                convertInt(args[0]),
+                convertInt(args[1])
         );
     }
 
@@ -220,7 +221,7 @@ public class InventoryPresentationFacade {
 
         if (args.length == 3 && convertInt(args[0]) != -1 && convertInt(args[1]) != -1) {
             try {
-                facade.changeItemLocation(convertInt(args[0]), convertInt(args[0]), args[2]);
+                facade.setItemLocation(convertInt(args[0]), convertInt(args[0]), args[2]);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -229,7 +230,7 @@ public class InventoryPresentationFacade {
 
     private void changeItemOnShelf() {
 
-        facade.changeItemOnShelf(
+        facade.setItemOnShelf(
                 convertInt(args[0]),
                 convertInt(args[1]),
                 convertBoolean(args[2])

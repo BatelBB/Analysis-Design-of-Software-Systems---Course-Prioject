@@ -476,6 +476,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
 
     @Test
     void deleteDiscount() {
+        Facade facade = new Facade(conn);
         int ppn = 1, cnCalc = 11;
         float priceCalc = 100;
         initCategories();

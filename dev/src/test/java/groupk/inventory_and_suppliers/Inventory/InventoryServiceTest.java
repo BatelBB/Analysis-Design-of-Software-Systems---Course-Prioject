@@ -29,9 +29,9 @@ class InventoryServiceTest extends InventorySuppliersTestsBase {
     void removeCategory() {
         try {
             facade.addCategory("Dairy Products");
-            facade.removeCategory("Dairy Products", true);
+            facade.removeCategory("Dairy Products");
             Assertions.assertFalse(facade.getCategoriesNames().data.contains("Dairy Products"));
-            facade.removeCategory("Dairy Products", true);
+            facade.removeCategory("Dairy Products");
         } catch (Exception e) {
             Assertions.assertEquals(e.getMessage(), "Category doesn't exists");
         }
@@ -43,7 +43,7 @@ class InventoryServiceTest extends InventorySuppliersTestsBase {
             Facade.SI_Response dairy_products = facade.addCategory("Dairy Products");
             Category category = assertSuccess(facade.getCategory("Dairy Products"));
             Assertions.assertEquals(category.getName(), "Dairy Products");
-            facade.removeCategory("Dairy Products", true);
+            facade.removeCategory("Dairy Products");
             facade.getCategory("Dairy Products");
         } catch (Exception e) {
             Assertions.assertEquals(e.getMessage(), "Category doesn't exists");
