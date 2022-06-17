@@ -824,19 +824,6 @@ public class Facade {
         return responseForVoid(() -> product_controller.addOrderRecord(order.getId(), productAmount));
     }
 
-    public SI_Response createOrderPeriodicVoid(Map<Integer, Integer> productAmount, int weekDay) {
-        return responseForVoid(() -> {
-            Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
-            Tuple<Supplier, Item> supplierItemTuple =
-                    items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
-            Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
-                    LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
-
-            orders.orderItemFromMap(order, itemsWithAmount);
-            orders.createFittingTrucking(order);
-        });
-    }
-
     protected SI_Response voidOk() {
         return new SI_Response(true, null);
     }
