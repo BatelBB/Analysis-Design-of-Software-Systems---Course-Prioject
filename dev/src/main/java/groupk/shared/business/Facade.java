@@ -40,28 +40,25 @@ public class Facade {
     private final QuantityDiscountController discounts;
     private final SupplierController suppliers;
 
-    public Facade(PersistenceController p) {
-        employees = new EmployeesController(p.getConn());
-        logistics = new LogisticsController(p.getConn());
-        category_controller = new CategoryController(p);
-        product_controller = new ProductController(p, category_controller);
-        suppliers = new SupplierController(p);
-        items = new ItemController(p, suppliers);
-        discounts = new QuantityDiscountController(p, items);
-        orders = new OrderController(p, discounts, logistics);
-    }
-
-    //just for test
-    //employee logistics facade
-    public Facade(Connection connection) {
-        employees = new EmployeesController(connection);
-        logistics = new LogisticsController(connection);
-        category_controller = null;
-        product_controller = null;
-        suppliers = null;
-        items = null;
-        discounts = null;
-        orders = null;
+    public Facade(PersistenceController p,
+                  EmployeesController employees,
+                  LogisticsController logistics,
+                  CategoryController categoryController,
+                  ProductController product_controller,
+                  SupplierController suppliers,
+                  ItemController items,
+                  QuantityDiscountController discounts,
+                  OrderController order,
+                  ReportController report_controller) {
+        this.employees = employees;
+        this.logistics = logistics;
+        this.category_controller = categoryController;
+        this.product_controller = product_controller;
+        this.suppliers = suppliers;
+        this.items = items;
+        this.discounts = discounts;
+        this.orders = order;
+        this.report_controller = report_controller;
     }
 
     public void deleteEmployeeDB() {

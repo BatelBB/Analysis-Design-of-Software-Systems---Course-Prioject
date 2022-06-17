@@ -1,5 +1,6 @@
 package groupk.employee_logistics;
 import groupk.logistics.business.DLicense;
+import groupk.shared.PresentationLayer.App;
 import groupk.shared.service.dto.*;
 import groupk.shared.service.*;
 
@@ -19,11 +20,28 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class EmployeeLogisticsSharedTests {
     protected Connection connection;
+    protected Service service;
+
+    private void resetService() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+                App app = new App("database.db", true);
+                connection = app.conn;
+                service = app.service;
+            }
+        }catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
 
     @BeforeEach
     public void setService() {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+            App app = new App("database.db", true);
+            connection = app.conn;
+            service = app.service;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -47,7 +65,7 @@ public class EmployeeLogisticsSharedTests {
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
+        resetService();
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -172,7 +190,7 @@ public class EmployeeLogisticsSharedTests {
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
+        resetService();
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -303,7 +321,7 @@ public class EmployeeLogisticsSharedTests {
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
+        resetService();
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -395,7 +413,7 @@ public class EmployeeLogisticsSharedTests {
                 2,
                 0);
         service.deleteLogisticsDB();
-        service = new Service(connection);
+        resetService();
         Employee TM2 = service.createEmployee(
                 "Avi",
                 "921",
@@ -414,7 +432,7 @@ public class EmployeeLogisticsSharedTests {
     public void deleteEmployeeDB(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(connection);
+        resetService();
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -460,7 +478,7 @@ public class EmployeeLogisticsSharedTests {
         r.replace(Employee.Role.ShiftManager, 1);
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, em, r).getValue();
         service.deleteEmployeeDB();
-        service = new Service(connection);
+        resetService();
         service.loadEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -486,7 +504,7 @@ public class EmployeeLogisticsSharedTests {
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
+        resetService();
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -577,7 +595,7 @@ public class EmployeeLogisticsSharedTests {
                 orders,
                 2,
                 0);
-        service = new Service(connection);
+        resetService();
         service.loadEmployeeDB();
         assertEquals(service.listDeliveries(TM1.id).getValue().size(),1);
     }
@@ -586,7 +604,7 @@ public class EmployeeLogisticsSharedTests {
     public void loadEmployeeDB(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(connection);
+        resetService();
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -631,7 +649,7 @@ public class EmployeeLogisticsSharedTests {
             r.put(role, 0);
         r.replace(Employee.Role.ShiftManager, 1);
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, em, r).getValue();
-        service = new Service(connection);
+        resetService();
         service.loadEmployeeDB();
         assertEquals(service.listShifts("111111110").getValue().size(), 1);
         assertEquals(service.listShifts("111111110").getValue().get(0).getDate(), shift.getDate());
@@ -647,7 +665,7 @@ public class EmployeeLogisticsSharedTests {
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
+        resetService();
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -761,7 +779,7 @@ public class EmployeeLogisticsSharedTests {
     public void UpdateEmployeeDB(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(connection);
+        resetService();
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -818,7 +836,7 @@ public class EmployeeLogisticsSharedTests {
                 new GregorianCalendar(2022, Calendar.APRIL, 5)
         );
         service.updateEmployee(HR.id, createdUpdate);
-        service = new Service(connection);
+        resetService();
         service.loadEmployeeDB();
         assertEquals(service.readEmployee("111111110", "111111111").getValue().name, createdUpdate.name);
         assertEquals(service.readEmployee("111111110", "111111111").getValue().role, createdUpdate.role);
@@ -841,7 +859,7 @@ public class EmployeeLogisticsSharedTests {
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
+        resetService();
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -943,7 +961,7 @@ public class EmployeeLogisticsSharedTests {
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
+        resetService();
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -1035,7 +1053,7 @@ public class EmployeeLogisticsSharedTests {
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
+        resetService();
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(
@@ -1137,7 +1155,7 @@ public class EmployeeLogisticsSharedTests {
         for (Employee.Role role : Employee.Role.values())
             r1.put(role, 0);
         r1.replace(Employee.Role.ShiftManager, 1);
-        Service service = new Service(connection);
+        resetService();
         service.deleteEmployeeDB();
         service.deleteLogisticsDB();
         Employee HR = (service.createEmployee(

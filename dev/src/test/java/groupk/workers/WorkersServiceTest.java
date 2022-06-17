@@ -3,6 +3,7 @@ package groupk.workers;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import groupk.shared.PresentationLayer.App;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
 import groupk.shared.service.Service;
@@ -21,23 +22,19 @@ import static org.junit.jupiter.api.Assertions.*;
 import static groupk.CustomAssertions.*;
 public class WorkersServiceTest {
     protected Connection connection;
+    protected Service service;
+    private App app;
 
     @BeforeEach
     public void setService() {
-        try {
-            connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        app = new App("database.db", true);
+        service = app.service;
+        connection = app.conn;
     }
 
     @AfterEach
     public void afterService() {
-        try {
-            connection.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+       app.disconnect();
     }
 
     @Test
@@ -46,7 +43,6 @@ public class WorkersServiceTest {
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
-        Service service = new Service(connection);
         service.deleteEmployeeDB();
         Employee HR = (service.createEmployee(
                 "Foo",
@@ -156,7 +152,7 @@ public class WorkersServiceTest {
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee HR = service.createEmployee(
                 "Foo",
@@ -242,7 +238,7 @@ public class WorkersServiceTest {
     @Test
     public void testCreateShiftNotUnauthorized()
     {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee NotHR = service.createEmployee(
                 "Foo",
@@ -260,7 +256,7 @@ public class WorkersServiceTest {
     @Test
     public void testCreateEmployee()
     {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -281,7 +277,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testCreateEmployeeSameID() {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -311,7 +307,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testReadEmployeesUnauthorized() {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -329,7 +325,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testDeleteEmployeeByHR() {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -360,7 +356,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testDeleteEmployeeUnauthorized() {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -378,7 +374,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testReadEmployee() {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -398,7 +394,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testReadEmployeeByHR() {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -429,7 +425,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testReadEmployeeUnauthorized() {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -458,7 +454,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testUpdateEmployeeByHR() {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -490,7 +486,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testUpdateEmployeeUnauthorized() {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -519,7 +515,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testAddEmployeeShiftPreference(){
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -539,7 +535,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testAddEmployeeShiftPreferenceFromAnotherId(){
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -568,7 +564,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testDeleteEmployeeShiftPreference(){
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -588,7 +584,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testSetEmployeeShiftsPreference(){
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -612,7 +608,7 @@ public class WorkersServiceTest {
     public void testAddEmployeeToShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -662,7 +658,7 @@ public class WorkersServiceTest {
     public void testSetRequiredStaffInShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -714,7 +710,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testAddEmployeeToShiftCanNotWork() {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -764,7 +760,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testAddEmployeeToShiftNoEmployee() {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee HR = service.createEmployee(
                 "Foo",
@@ -805,7 +801,7 @@ public class WorkersServiceTest {
     public void testRemoveEmployeeFromShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -859,7 +855,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testRemoveEmployeeFromShiftNoEmployee() {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee HR = service.createEmployee(
                 "Foo",
@@ -898,7 +894,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testWhoCanWork() {
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee HR = service.createEmployee(
                 "Foo",
@@ -941,7 +937,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testNumOfShifts(){
-        Service service = new Service(connection);
+        
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",

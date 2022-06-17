@@ -2,6 +2,7 @@ package groupk.inventory_and_suppliers.Suppliers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import groupk.shared.PresentationLayer.App;
 import groupk.shared.business.Facade;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
@@ -15,10 +16,16 @@ import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import static groupk.CustomAssertions.*;
 
 import groupk.shared.service.Inventory.Objects.Product;
+import groupk.shared.service.Service;
 import groupk.shared.service.ServiceBase;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.*;
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class SupplierServiceTest extends InventorySuppliersTestsBase {
+
 
     /**
      * used for float equality
@@ -100,8 +108,7 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
         assertTrue(serviceResponse.success, "delete ReadOnlysupplier failed, but shouldn't have: " + serviceResponse.error);
 
         // getting this ReadOnlysupplier shouldn't work.
-        Assertions.assertFalse(facade.getSupplier(ppn).success,
-                "Getting deleted ReadOnlysupplier should have failed");
+        assertFailure(facade.getSupplier(ppn));
 
         // creating new one with same PPN should work.
         Facade.ResponseT<Supplier> otherResponse = facade.createSupplier(ppn, 222,
@@ -476,7 +483,6 @@ class SupplierServiceTest extends InventorySuppliersTestsBase {
 
     @Test
     void deleteDiscount() {
-        Facade facade = new Facade(conn);
         int ppn = 1, cnCalc = 11;
         float priceCalc = 100;
         initCategories();

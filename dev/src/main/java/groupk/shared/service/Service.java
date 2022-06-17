@@ -23,8 +23,8 @@ import java.util.*;
 public class Service {
     private Facade facade;
 
-    public Service(Connection conn) {
-        facade = new Facade(conn);
+    public Service(Facade facade) {
+        this.facade = facade;
     }
 
     public void deleteEmployeeDB() {
@@ -402,8 +402,8 @@ public class Service {
                                                      String contactPhone, String contactAddress) {
         return facade.createSupplier(
                 ppn, bankAccount, name, isDelivering,
-                paymentCondition, regularSupplyingDays, contactAddress,
-                contactName, contactPhone
+                paymentCondition, regularSupplyingDays, contactName,
+                contactPhone, contactAddress
         );
     }
 
@@ -416,7 +416,7 @@ public class Service {
     }
 
     public Facade.SI_Response deleteSupplier(int ppn) {
-        return facade.getSupplier(ppn);
+        return facade.deleteSupplier(ppn);
     }
 
     public Facade.ResponseT<Item> createItem(int supplierPPN, int catalogNumber, int productID, float price) {
