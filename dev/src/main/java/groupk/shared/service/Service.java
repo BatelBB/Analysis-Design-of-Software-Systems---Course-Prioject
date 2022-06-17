@@ -4,6 +4,7 @@ import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import groupk.shared.business.Facade;
 import groupk.shared.business.Inventory.Categories.Category;
+import groupk.shared.business.ProductController;
 import groupk.shared.service.Inventory.Objects.ProductItem;
 import groupk.shared.service.Inventory.Objects.Report;
 import groupk.shared.service.Inventory.Objects.SubCategory;
@@ -306,7 +307,7 @@ public class Service {
     public Facade.SI_Response removeItem(int product_id, int item_id) {
         Facade.ResponseT<Boolean> r = facade.removeItem(product_id, item_id);
         int min_qty = facade.getMinQty(product_id).data;
-        return facade.createOrderShortage(r, product_id, min_qty);
+        return facade.createOrderShortage(r, product_id, min_qty, ProductController.BRANCH_NAME);
     }
 
     public Facade.SI_Response updateItemCusDiscount(float discount, LocalDate start_date, LocalDate end_date, int product_id, int item_id) {
@@ -385,8 +386,8 @@ public class Service {
         return facade.confirmOrder(order_id);
     }
 
-    public Facade.SI_Response confirmOrderAmount(Map<Integer, Integer> actual_amount) {
-        return facade.confirmOrderAmount(actual_amount);
+    public Facade.SI_Response confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount) {
+        return facade.confirmOrderAmount(order_id, actual_amount);
     }
 
     //SUPPLIER METHODS
@@ -502,12 +503,11 @@ public class Service {
     }
 
     public Facade.SI_Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
-        //TODO: what's this? -Michael
-        return null;
+        return facade.updateOrderAmount(orderID, supplier, catalogNumber, amount);
     }
 
     public Facade.ResponseT<Integer> createOrderShortage(Facade.ResponseT<Boolean> r, int product_id, int min_qty) {
-        return facade.createOrderShortage(r, product_id, min_qty);
+        return facade.createOrderShortage(r, product_id, min_qty, ProductController.BRANCH_NAME);
     }
 
     public Facade.ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {

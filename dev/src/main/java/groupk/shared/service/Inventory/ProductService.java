@@ -114,8 +114,8 @@ public class ProductService extends ServiceBase {
         return responseFor(() -> product_controller.confirmOrder(order_id));
     }
 
-    public Response confirmOrderAmount(Map<Integer, Integer> actual_amount) {
-        return responseForVoid(() -> product_controller.confirmOrderAmount(actual_amount));
+    public Response confirmOrderAmount(int orderId, Map<Integer, Integer> actual_amount) {
+        return responseForVoid(() -> product_controller.confirmOrderAmount(actual_amount, orderId));
     }
 
 //    public Response addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {

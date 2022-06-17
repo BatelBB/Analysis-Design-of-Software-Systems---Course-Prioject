@@ -181,7 +181,7 @@ public class InventoryService extends ServiceBase {
         return product_service.confirmOrder(order_id);
     }
 
-    public Response confirmOrderAmount(Map<Integer, Integer> actual_amount) {
-        return product_service.confirmOrderAmount(actual_amount);
+    public Response confirmOrderAmount(int orderId, Map<Integer, Integer> actual_amount) {
+        return product_service.confirmOrderAmount(orderId, actual_amount);
     }
 }

@@ -105,7 +105,8 @@ public class OrderController {
         return order.getId();
     }
 
-    public int createShortage(Supplier supplier, Item item, int amountOfProd, OrderType type, LocalDate ordered, LocalDate delivered){
+    public int createShortage(Supplier supplier, Item item, int amountOfProd, OrderType type,
+                              LocalDate ordered, LocalDate delivered, String destination){
         if(ordered.isAfter(delivered)) {
             throw new BusinessLogicException("delivery date can't be before ordering date.");
         }
@@ -120,7 +121,6 @@ public class OrderController {
         orders.add(order);
 
         String source = order.supplier.getContact().getAddress();
-        String destination = "TODO inventory"; // TODO inventory
         logistics.addTruckingRequest(order.getId(), source, destination);
         return order.getId();
     }
@@ -133,9 +133,8 @@ public class OrderController {
         }
     }
 
-    public void createFittingTrucking(Order order) {
+    public void createFittingTrucking(String destination, Order order) {
         String source = order.supplier.getContact().getAddress();
-        String destination = "TODO inventory"; // TODO inventory
         logistics.addTruckingRequest(order.getId(), source, destination);
     }
 }

@@ -13,6 +13,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProductController {
+    public static final String BRANCH_NAME = "Yavne";
+
     private Map<Integer, Product> products;
     private CategoryController category_controller;
     private PersistenceController pc;
@@ -316,10 +318,10 @@ public class ProductController {
         return orders.get(order_id);
     }
 
-    public void confirmOrderAmount(Map<Integer, Integer> actual_amount) throws Exception {
+    public void confirmOrderAmount(Map<Integer, Integer> actual_amount,  int supplier_ppn) throws Exception {
         for (Map.Entry<Integer, Integer> pair : actual_amount.entrySet()) {
             for (int i = 0; i < pair.getValue(); i++) {
-                randomizeProductItem(pair.getKey());
+                randomizeProductItem(pair.getKey(), supplier_ppn);
             }
         }
     }
@@ -335,11 +337,10 @@ public class ProductController {
 //        }
 //    }
 
-    private void randomizeProductItem(int product_id) throws Exception {
-        String random_location="";
-        int random_supplier=0;
-        LocalDate random_date=LocalDate.now();
-        boolean random_onShelf=false;
-        addItem(product_id, "Yavne", random_location, random_supplier, random_date, random_onShelf);
+    private void randomizeProductItem(int product_id, int supplier_ppn) throws Exception {
+        String random_location = "Shelf " + new Random().nextInt(10);
+        LocalDate random_date = LocalDate.now().plusDays(new Random().nextInt(14));
+        boolean random_onShelf = new Random().nextBoolean();
+        addItem(product_id, BRANCH_NAME, random_location, supplier_ppn, random_date, random_onShelf);
     }
-}
+    }

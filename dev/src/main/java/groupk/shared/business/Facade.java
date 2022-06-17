@@ -639,8 +639,9 @@ public class Facade {
         return responseFor(() -> product_controller.confirmOrder(order_id));
     }
 
-    public SI_Response confirmOrderAmount(Map<Integer, Integer> actual_amount) {
-        return responseForVoid(() -> product_controller.confirmOrderAmount(actual_amount));
+    public SI_Response confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount) {
+        return responseForVoid(() -> product_controller.confirmOrderAmount(actual_amount,
+                orders.get(order_id).supplier.getPpn()));
     }
 
     public ResponseT<Order> getOrder(int id) {
@@ -791,14 +792,14 @@ public class Facade {
     }
 
     public SI_Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
-        return null;
+        return responseForVoid(()-> orders.updateAmount(orders.get(orderID),items.get(supplier, catalogNumber), amount));
     }
 
-    public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty) {
+    public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty, String destination) {
         if (r.success) {
             Tuple<Supplier, Item> supplierItemTuple = items.checkBestSupplier(product_id); //Maybe we can combine both methods and this method needs to get prodid
             return responseFor(() -> orders.createShortage(supplierItemTuple.first, supplierItemTuple.second,
-                    min_qty, OrderType.Shortages, LocalDate.now(), LocalDate.now().plusDays(7)));
+                    min_qty, OrderType.Shortages, LocalDate.now(), LocalDate.now().plusDays(7), destination));
         } else {
             return responseFor(() -> {
                 throw new BusinessLogicException("NO NEED FOR SHORTAGE ORDER!");
@@ -813,7 +814,7 @@ public class Facade {
         Order order = orders.create(supplierItemTuple.first, OrderType.Periodical,
                 LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
         orders.orderItemFromMap(order, itemsWithAmount);
-        orders.createFittingTrucking(order);
+        orders.createFittingTrucking(ProductController.BRANCH_NAME,order);
         return responseFor(() -> order.getId());
     }
 
@@ -826,7 +827,7 @@ public class Facade {
                     LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
 
             orders.orderItemFromMap(order, itemsWithAmount);
-            orders.createFittingTrucking(order);
+            orders.createFittingTrucking(ProductController.BRANCH_NAME,order);
         });
     }
 
