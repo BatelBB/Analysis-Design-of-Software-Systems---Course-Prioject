@@ -51,20 +51,6 @@ public class Facade {
         report_controller = new ReportController(p, product_controller);
     }
 
-    //just for test
-    //employee logistics facade
-    public Facade(Connection connection) {
-        employees = new EmployeesController(connection);
-        logistics = new LogisticsController(connection);
-        category_controller = null;
-        product_controller = null;
-        suppliers = null;
-        items = null;
-        discounts = null;
-        orders = null;
-        report_controller = null;
-    }
-
     public void deleteEmployeeDB() {
         employees.deleteEmployeeDB();
     }
@@ -445,7 +431,7 @@ public class Facade {
             }
             throw new BusinessLogicException("There was some problem deleting trucking order (what the truck)");
         } catch (Exception e) {
-            return new Response<Boolean>(e.getMessage());
+            return new Response<>(e.getMessage());
         }
     }
 
@@ -834,11 +820,11 @@ public class Facade {
     }
 
     protected <T> ResponseT<T> ok(T data) {
-        return new ResponseT<T>(true, null, data);
+        return new ResponseT<>(true, null, data);
     }
 
     protected <T> ResponseT<T> error(String error) {
-        return new ResponseT<T>(false, error, null);
+        return new ResponseT<>(false, error, null);
     }
 
     protected <T> ResponseT<T> responseFor(ServiceBase.ThrowingFactory<T> lambda) {

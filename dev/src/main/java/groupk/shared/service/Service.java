@@ -24,12 +24,8 @@ import java.util.*;
 public class Service {
     private Facade facade;
 
-    public Service(Connection conn) {
-        facade = new Facade(conn);
-    }//for tests
-
-    public Service(PersistenceController conn) {
-        facade = new Facade(conn);
+    public Service(PersistenceController persistenceController) {
+        facade = new Facade(persistenceController);
     }
 
     public void deleteEmployeeDB() {

@@ -3,6 +3,7 @@ package groupk.workers;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
 import groupk.shared.PresentationLayer.App;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
@@ -21,12 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import static groupk.CustomAssertions.*;
 public class WorkersServiceTest {
-    protected Connection connection;
+    protected PersistenceController prc;
 
     @BeforeEach
     public void setService() {
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+            prc = new PersistenceController(DriverManager.getConnection("jdbc:sqlite:database.db"));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -35,7 +36,7 @@ public class WorkersServiceTest {
     @AfterEach
     public void afterService() {
         try {
-            connection.close();
+            prc.getConn().close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -45,9 +46,8 @@ public class WorkersServiceTest {
     public void testCreateShiftMorning()
     {
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
-            shiftPreferences.add(shiftDateTime);
-        Service service = new Service(connection);
+        shiftPreferences.addAll(Arrays.asList(Employee.ShiftDateTime.values()));
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee HR = (service.createEmployee(
                 "Foo",
@@ -155,9 +155,8 @@ public class WorkersServiceTest {
     public void testCreateShiftEvening()
     {
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
-            shiftPreferences.add(shiftDateTime);
-        Service service = new Service(connection);
+        shiftPreferences.addAll(Arrays.asList(Employee.ShiftDateTime.values()));
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee HR = service.createEmployee(
                 "Foo",
@@ -243,7 +242,7 @@ public class WorkersServiceTest {
     @Test
     public void testCreateShiftNotUnauthorized()
     {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee NotHR = service.createEmployee(
                 "Foo",
@@ -255,13 +254,13 @@ public class WorkersServiceTest {
                 0, 0,
                 Employee.Role.Stocker,
                 new HashSet<>()).getValue();
-        assertEquals(service.createShift(NotHR.id, new GregorianCalendar(),Shift.Type.Evening, new LinkedList<>(), new LinkedHashMap<>()).isError(), true);
+        assertTrue(service.createShift(NotHR.id, new GregorianCalendar(), Shift.Type.Evening, new LinkedList<>(), new LinkedHashMap<>()).isError());
     }
 
     @Test
     public void testCreateEmployee()
     {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -282,7 +281,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testCreateEmployeeSameID() {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -295,7 +294,7 @@ public class WorkersServiceTest {
                 Employee.Role.HumanResources,
                 new HashSet<>()
         ).getValue();
-        assertEquals(service.createEmployee(
+        assertTrue(service.createEmployee(
                 "Bar",
                 "111111111",
                 "BarBank",
@@ -305,14 +304,14 @@ public class WorkersServiceTest {
                 0, 0,
                 Employee.Role.HumanResources,
                 new HashSet<>()
-        ).isError(), true);
+        ).isError());
         List<Employee> list = service.listEmployees("111111111").getValue();
         assertEquals(1, list.size());
     }
 
     @Test
     public void testReadEmployeesUnauthorized() {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -325,12 +324,12 @@ public class WorkersServiceTest {
                 Employee.Role.Stocker,
                 new HashSet<>()
         ).getValue();
-        assertEquals(service.listEmployees("111111111").isError(), true);
+        assertTrue(service.listEmployees("111111111").isError());
     }
 
     @Test
     public void testDeleteEmployeeByHR() {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -361,7 +360,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testDeleteEmployeeUnauthorized() {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -374,12 +373,12 @@ public class WorkersServiceTest {
                 Employee.Role.Stocker,
                 new HashSet<>()
         );
-        assertEquals(service.deleteEmployee("111111111", "999999999").isError(), true);
+        assertTrue(service.deleteEmployee("111111111", "999999999").isError());
     }
 
     @Test
     public void testReadEmployee() {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -399,7 +398,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testReadEmployeeByHR() {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -430,7 +429,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testReadEmployeeUnauthorized() {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -454,12 +453,12 @@ public class WorkersServiceTest {
                 Employee.Role.Cashier,
                 new HashSet<>()
         ).getValue();
-        assertEquals(service.readEmployee("222222222", "111111111").isError(), true);
+        assertTrue(service.readEmployee("222222222", "111111111").isError());
     }
 
     @Test
     public void testUpdateEmployeeByHR() {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -491,7 +490,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testUpdateEmployeeUnauthorized() {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -515,12 +514,12 @@ public class WorkersServiceTest {
                 Employee.Role.Cashier,
                 new HashSet<>()
         ).getValue();
-        assertEquals(service.updateEmployee("222222222", created).isError(), true);
+        assertTrue(service.updateEmployee("222222222", created).isError());
     }
 
     @Test
     public void testAddEmployeeShiftPreference(){
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -540,7 +539,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testAddEmployeeShiftPreferenceFromAnotherId(){
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -564,12 +563,12 @@ public class WorkersServiceTest {
                 Employee.Role.Stocker,
                 new HashSet<>()
         ).getValue();
-        assertEquals(service.addEmployeeShiftPreference(created2.id, created.id, Employee.ShiftDateTime.FridayMorning).isError(), true);
+        assertTrue(service.addEmployeeShiftPreference(created2.id, created.id, Employee.ShiftDateTime.FridayMorning).isError());
     }
 
     @Test
     public void testDeleteEmployeeShiftPreference(){
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -589,7 +588,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testSetEmployeeShiftsPreference(){
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -611,9 +610,9 @@ public class WorkersServiceTest {
 
     @Test
     public void testAddEmployeeToShift(){
-        Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
+        Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -661,9 +660,9 @@ public class WorkersServiceTest {
 
     @Test
     public void testSetRequiredStaffInShift(){
-        Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
+        Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -707,7 +706,7 @@ public class WorkersServiceTest {
         r.replace(Employee.Role.ShiftManager, 1);
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, em, r).getValue();
         r.replace(Employee.Role.Cashier, 2);
-        assertEquals(service.setRequiredStaffInShift(HR.id, shift.getDate(), shift.getType(), r).isError(), true);
+        assertTrue(service.setRequiredStaffInShift(HR.id, shift.getDate(), shift.getType(), r).isError());
         r.replace(Employee.Role.Cashier, 0);
         service.setRequiredStaffInShift(HR.id, shift.getDate(), shift.getType(), r);
         assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getValue().getRequiredStaff().get(Employee.Role.Cashier),0);
@@ -715,7 +714,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testAddEmployeeToShiftCanNotWork() {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -740,8 +739,7 @@ public class WorkersServiceTest {
                 new HashSet<>()
         ).getValue();
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
-            shiftPreferences.add(shiftDateTime);
+        shiftPreferences.addAll(Arrays.asList(Employee.ShiftDateTime.values()));
         Employee shiftM = service.createEmployee(
                 "Foo",
                 "11115170",
@@ -760,12 +758,12 @@ public class WorkersServiceTest {
             r.put(role, 0);
         r.replace(Employee.Role.ShiftManager, 1);
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, employees, r).getValue();
-        assertEquals(service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id).isError(), true);
+        assertTrue(service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id).isError());
     }
 
     @Test
     public void testAddEmployeeToShiftNoEmployee() {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee HR = service.createEmployee(
                 "Foo",
@@ -779,8 +777,7 @@ public class WorkersServiceTest {
                 new HashSet<>()
         ).getValue();
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
-            shiftPreferences.add(shiftDateTime);
+        shiftPreferences.addAll(Arrays.asList(Employee.ShiftDateTime.values()));
         Employee shiftM = service.createEmployee(
                 "Foo",
                 "11115170",
@@ -799,14 +796,14 @@ public class WorkersServiceTest {
             r.put(role, 0);
         r.replace(Employee.Role.ShiftManager, 1);
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, employees, r).getValue();
-        assertEquals(service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, "111111111").isError(), true);
+        assertTrue(service.addEmployeeToShift(HR.id, shift.getDate(), Shift.Type.Evening, "111111111").isError());
     }
 
     @Test
     public void testRemoveEmployeeFromShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -831,8 +828,7 @@ public class WorkersServiceTest {
                 new HashSet<>()
         ).getValue();
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
-            shiftPreferences.add(shiftDateTime);
+        shiftPreferences.addAll(Arrays.asList(Employee.ShiftDateTime.values()));
         Employee shiftM = service.createEmployee(
                 "Foo",
                 "11115170",
@@ -854,13 +850,13 @@ public class WorkersServiceTest {
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),
                 Shift.Type.Evening, em, r).getValue();
         assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getValue().getStaff().size(), 2);
-        assertEquals(service.removeEmployeeFromShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id).isError(), true);
+        assertTrue(service.removeEmployeeFromShift(HR.id, shift.getDate(), Shift.Type.Evening, created.id).isError());
         assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getValue().getStaff().size(), 2);
     }
 
     @Test
     public void testRemoveEmployeeFromShiftNoEmployee() {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee HR = service.createEmployee(
                 "Foo",
@@ -874,8 +870,7 @@ public class WorkersServiceTest {
                 new HashSet<>()
         ).getValue();
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
-            shiftPreferences.add(shiftDateTime);
+        shiftPreferences.addAll(Arrays.asList(Employee.ShiftDateTime.values()));
         Employee shiftM = service.createEmployee(
                 "Foo",
                 "11115170",
@@ -894,12 +889,12 @@ public class WorkersServiceTest {
         LinkedList<Employee> employees = new LinkedList<>();
         employees.add(shiftM);
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, employees, r).getValue();
-        assertEquals(service.removeEmployeeFromShift(HR.id, shift.getDate(), Shift.Type.Evening, "111111111").isError(), true);
+        assertTrue(service.removeEmployeeFromShift(HR.id, shift.getDate(), Shift.Type.Evening, "111111111").isError());
     }
 
     @Test
     public void testWhoCanWork() {
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee HR = service.createEmployee(
                 "Foo",
@@ -942,7 +937,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testNumOfShifts(){
-        Service service = new Service(connection);
+        Service service = new Service(prc);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -966,8 +961,7 @@ public class WorkersServiceTest {
                 Employee.Role.HumanResources,
                 new HashSet<>()).getValue();
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
-        for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
-            shiftPreferences.add(shiftDateTime);
+        shiftPreferences.addAll(Arrays.asList(Employee.ShiftDateTime.values()));
         Employee shiftM = service.createEmployee(
                 "Foo",
                 "11115170",

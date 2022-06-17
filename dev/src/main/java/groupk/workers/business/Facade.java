@@ -9,23 +9,23 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Facade {
-    private EmployeeController employees;
-    private ShiftController shifts;
-    private DalController dalColntroller;
+    final private EmployeeController employees;
+    final private ShiftController shifts;
+    final private DalController dalController;
 
     public Facade(Connection connection) {
-        dalColntroller = new DalController(connection);
-        employees = new EmployeeController(dalColntroller);
-        shifts = new ShiftController(dalColntroller);
+        dalController = new DalController(connection);
+        employees = new EmployeeController(dalController);
+        shifts = new ShiftController(dalController);
     }
 
     //for test use
     public void deleteDB(){
-        dalColntroller.deleteDataBase();
+        dalController.deleteDataBase();
     }
 
     public void loadDB(){
-        dalColntroller.loadDataFromDB();
+        dalController.loadDataFromDB();
     }
 
     public Employee addEmployee(
