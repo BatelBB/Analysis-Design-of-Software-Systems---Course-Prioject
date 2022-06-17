@@ -77,7 +77,7 @@ public interface ISupplierService {
 
     Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount);
 
-    Response createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty);
+    Response createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty, String destination);
 
 
     ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay);

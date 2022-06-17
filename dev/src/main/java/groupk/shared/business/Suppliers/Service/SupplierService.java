@@ -211,11 +211,11 @@ public class SupplierService extends ServiceBase implements ISupplierService {
     }
 
     @Override
-    public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty) {
+    public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty, String destination) {
         if(r.success){
             Tuple<Supplier, Item> supplierItemTuple = items.checkBestSupplier(product_id); //Maybe we can combine both methods and this method needs to get prodid
             return responseFor(()->orders.createShortage(supplierItemTuple.first, supplierItemTuple.second,
-                    min_qty, OrderType.Shortages, LocalDate.now(), LocalDate.now().plusDays(7)));
+                    min_qty, OrderType.Shortages, LocalDate.now(), LocalDate.now().plusDays(7), destination));
         }else{
             return responseFor(()-> {throw new BusinessLogicException("NO NEED FOR SHORTAGE ORDER!");});
         }

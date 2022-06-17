@@ -1,6 +1,7 @@
 package groupk.shared.service.Inventory;
 
 import groupk.shared.business.Inventory.Categories.Category;
+import groupk.shared.business.ProductController;
 import groupk.shared.service.Inventory.Objects.Product;
 import groupk.shared.service.Inventory.Objects.Report;
 import groupk.shared.service.Inventory.Objects.SubCategory;
@@ -102,7 +103,7 @@ public class InventoryService extends ServiceBase {
     public Response removeItem(int product_id, int item_id) {
         ResponseT<Boolean> r = product_service.removeItem(product_id, item_id);
         int min_qty = product_service.getMinQty(product_id).data;
-        return supplierService.createOrderShortage(r, product_id, min_qty);
+        return supplierService.createOrderShortage(r, product_id, min_qty, ProductController.BRANCH_NAME);
     }
 
     public Response updateItemCusDiscount(float discount, LocalDate start_date, LocalDate end_date, int product_id, int item_id) {
