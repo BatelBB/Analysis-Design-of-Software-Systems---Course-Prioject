@@ -28,50 +28,28 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Facade {
-    EmployeesController employees;
-    LogisticsController logistics;
 
-    ProductController product_controller;
-    CategoryController category_controller;
-    ReportController report_controller;
-
+    private final EmployeesController employees;
+    private final LogisticsController logistics;
+    private final ProductController product_controller;
+    private final CategoryController category_controller;
+    private final ReportController report_controller;
     private final ItemController items;
     private final OrderController orders;
     private final QuantityDiscountController discounts;
     private final SupplierController suppliers;
 
     public Facade(PersistenceController p) {
-        employees = new EmployeesController(p.getConn());
-        logistics = new LogisticsController(p.getConn());
         category_controller = new CategoryController(p);
         product_controller = new ProductController(p, category_controller);
         suppliers = new SupplierController(p);
         items = new ItemController(p, suppliers);
         discounts = new QuantityDiscountController(p, items);
+        logistics = new LogisticsController(p.getConn());
         orders = new OrderController(p, discounts, logistics);
+        employees = new EmployeesController(p.getConn());
+        report_controller = new ReportController(p, product_controller);
     }
-
-    public Facade(PersistenceController p,
-                  EmployeesController employees,
-                  LogisticsController logistics,
-                  CategoryController categoryController,
-                  ProductController product_controller,
-                  SupplierController suppliers,
-                  ItemController items,
-                  QuantityDiscountController discounts,
-                  OrderController order,
-                  ReportController report_controller) {
-        this.employees = employees;
-        this.logistics = logistics;
-        this.category_controller = categoryController;
-        this.product_controller = product_controller;
-        this.suppliers = suppliers;
-        this.items = items;
-        this.discounts = discounts;
-        this.orders = order;
-        this.report_controller = report_controller;
-    }
-
 
     //just for test
     //employee logistics facade
@@ -84,6 +62,7 @@ public class Facade {
         items = null;
         discounts = null;
         orders = null;
+        report_controller = null;
     }
 
     public void deleteEmployeeDB() {

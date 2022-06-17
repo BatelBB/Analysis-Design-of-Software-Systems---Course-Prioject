@@ -21,7 +21,6 @@ public class App {
     public final SupplierPresentationFacade supplierPresentation;
     public final InventoryPresentationFacade inventoryPresentationFacade;
     public final Connection conn;
-    public final Facade facade;
     public final Service service;
 
     public App(String dbPath) {
@@ -36,18 +35,7 @@ public class App {
 //            shouldLoadExample = UserInput.getInstance().nextBoolean("Would you like to start with some example data?");
 //        }
         dal =  new PersistenceController(conn);
-        CategoryController category = new CategoryController(dal);
-        ProductController product = new ProductController(dal, category);
-        SupplierController suppliers = new SupplierController(dal);
-        ItemController items = new ItemController(dal, suppliers);
-        QuantityDiscountController discounts = new QuantityDiscountController(dal, items);
-        LogisticsController logistics = new LogisticsController(conn);
-        OrderController orders = new OrderController(dal, discounts, logistics);
-        EmployeesController employess = new EmployeesController(conn);
-        ReportController reports = new ReportController(dal, product);
-        facade = new Facade(dal, employess, logistics, category, product, suppliers,
-                items, discounts, orders, reports);
-        service = new Service(facade);
+        service = new Service(dal);
         inventoryPresentationFacade = new InventoryPresentationFacade(service);
         supplierPresentation = new SupplierPresentationFacade(service);
 //        if (shouldLoadExample) {

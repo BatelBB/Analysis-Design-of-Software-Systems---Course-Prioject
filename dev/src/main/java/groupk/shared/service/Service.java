@@ -26,14 +26,12 @@ public class Service {
 
     public Service(Connection conn) {
         facade = new Facade(conn);
-    }
+    }//for tests
+
     public Service(PersistenceController conn) {
         facade = new Facade(conn);
     }
 
-    public Service(Facade facade){
-        this.facade = facade;
-    }
     public void deleteEmployeeDB() {
         facade.deleteEmployeeDB();
     }
