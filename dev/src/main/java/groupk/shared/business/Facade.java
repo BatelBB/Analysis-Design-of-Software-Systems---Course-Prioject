@@ -854,6 +854,10 @@ public class Facade {
         return responseForVoid(() -> product_controller.addOrderRecord(orderId, productAmount));
     }
 
+    public SI_Response cancelTruckingWithOrderID(int orderID) {
+        return responseForVoid(() -> orders.cancelOrder(orderID));
+    }
+
 
     public static class SI_Response {
         public final boolean success;

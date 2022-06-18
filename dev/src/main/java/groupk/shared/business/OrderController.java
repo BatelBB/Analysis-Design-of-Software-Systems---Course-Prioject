@@ -136,4 +136,8 @@ public class OrderController {
         String source = order.supplier.getContact().getAddress();
         logistics.addTruckingRequest(order.getId(), source, destination);
     }
+
+    public void cancelOrder(int orderID) {
+        //TODO - Yuval
+    }
 }

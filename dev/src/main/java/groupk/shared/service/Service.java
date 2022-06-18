@@ -520,4 +520,8 @@ public class Service {
     public Facade.ResponseT<List<Integer>> getReportListIds() {
         return facade.getReportListIds();
     }
+
+    public Facade.SI_Response cancelTruckingWithOrderID(int orderID){
+        return facade.cancelTruckingWithOrderID(orderID);
+    }
 }
