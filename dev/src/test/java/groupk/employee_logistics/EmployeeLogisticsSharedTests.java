@@ -83,7 +83,7 @@ public class EmployeeLogisticsSharedTests {
                 30,
                 0,
                 0,
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
         staff.add(SM1);
@@ -214,7 +214,7 @@ public class EmployeeLogisticsSharedTests {
                 30,
                 0,
                 0,
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
         staff.add(SM1);
@@ -349,7 +349,7 @@ public class EmployeeLogisticsSharedTests {
                 30,
                 0,
                 0,
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
         staff.add(SM1);
@@ -402,7 +402,7 @@ public class EmployeeLogisticsSharedTests {
                 30,
                 0,
                 0,
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 shiftPreferences).getValue();
         assertEquals(service.listDeliveries(TM2.id).getValue().size(), 0);
         app.disconnect();
@@ -542,7 +542,7 @@ public class EmployeeLogisticsSharedTests {
                 30,
                 0,
                 0,
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
         staff.add(SM1);
@@ -713,7 +713,7 @@ public class EmployeeLogisticsSharedTests {
                 30,
                 0,
                 0,
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
         staff.add(SM1);
@@ -827,7 +827,7 @@ public class EmployeeLogisticsSharedTests {
         Employee createdUpdate = new Employee(
                 "111111111",
                 "Foo2",
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 "FooBank2",
                 12, 12,
                 302,
@@ -917,7 +917,7 @@ public class EmployeeLogisticsSharedTests {
                 30,
                 0,
                 0,
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
         staff.add(SM1);
@@ -1014,7 +1014,7 @@ public class EmployeeLogisticsSharedTests {
                 30,
                 0,
                 0,
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
         staff.add(SM1);
@@ -1119,7 +1119,7 @@ public class EmployeeLogisticsSharedTests {
                 30,
                 0,
                 0,
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
         staff.add(SM1);
@@ -1224,7 +1224,7 @@ public class EmployeeLogisticsSharedTests {
                 30,
                 0,
                 0,
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 shiftPreferences).getValue();
         LinkedList<Employee> staff = new LinkedList<>();
         staff.add(SM1);

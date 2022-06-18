@@ -12,8 +12,7 @@ public class Employee {
         LogisticsManager,
         ShiftManager,
         Driver,
-        StoreManager,
-        TruckingManger
+        StoreManager
     }
 
     public static enum ShiftDateTime {

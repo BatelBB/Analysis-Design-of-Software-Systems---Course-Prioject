@@ -23,7 +23,7 @@ public class DeleteOrderFromDelivery implements Command {
 
     @Override
     public boolean isVisible(Employee.Role role) {
-        return role == Employee.Role.LogisticsManager || role == Employee.Role.TruckingManger;
+        return role == Employee.Role.LogisticsManager;
     }
 
     @Override
