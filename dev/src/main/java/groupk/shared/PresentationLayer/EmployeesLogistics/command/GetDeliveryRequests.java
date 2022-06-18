@@ -44,6 +44,10 @@ public class GetDeliveryRequests implements Command {
         List<String> requests = response.getValue();
         int i = 1;
         System.out.println("Delivery requests:");
+        if (requests == null | requests.size() == 0) {
+            System.out.println("[empty]");
+            return;
+        }
         for (String request : requests) {
             System.out.println(i + ". " + request);
         }
