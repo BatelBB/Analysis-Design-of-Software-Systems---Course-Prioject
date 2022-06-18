@@ -501,7 +501,7 @@ public class TruckManagerController {
         validateInt(apartment, "apartment", 0, 100);
         validateInt(houseNumber, "house number", 1, 300);
         validateString(city, "city", 2, 20);
-        validateString(city, "city", 2, 20);
+        validateString(city, "street", 2, 20);
         validateString(city, "contact guy", 2, 15);
         validatePhoneNumber(phoneNumber);
     }
