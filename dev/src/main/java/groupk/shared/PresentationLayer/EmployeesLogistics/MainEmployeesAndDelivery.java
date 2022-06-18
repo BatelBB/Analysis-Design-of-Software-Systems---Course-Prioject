@@ -25,6 +25,7 @@ public class MainEmployeesAndDelivery {
                         new AddShiftStaff(),
                         new DeleteShiftStaff(),
                         new UpdateShiftRequiredRole(),
+                        new CanWorkWithRole(),
                         new CanWork(),
                         new CreateDelivery(),
                         new DeleteDelivery(),
