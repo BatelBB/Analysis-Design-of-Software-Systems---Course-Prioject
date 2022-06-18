@@ -13,7 +13,6 @@ public class MainEmployeesAndDelivery {
         CommandRunner runner = new CommandRunner(
                 new Command[] {
                         new Quit(),
-                        new LoadSample(),
                         new Login(),
                         new CreateEmployee(),
                         new GetEmployee(),
