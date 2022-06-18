@@ -25,7 +25,7 @@ public class ListEmployees implements Command {
 
     @Override
     public boolean isVisible(Employee.Role role) {
-        return role == Employee.Role.HumanResources;
+        return role == Employee.Role.HumanResources || role == Employee.Role.StoreManager;
     }
 
     @Override
