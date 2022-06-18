@@ -29,7 +29,7 @@ public class ListDeliveries implements Command {
 
     @Override
     public boolean isVisible(Employee.Role role) {
-        return role == Employee.Role.LogisticsManager;
+        return role == Employee.Role.LogisticsManager | role == Employee.Role.Driver;
     }
 
     @Override
@@ -74,6 +74,7 @@ public class ListDeliveries implements Command {
             toReturn += "Total weight: " + trucking.totalWeight + "\n";
         else
             toReturn += "There is no data about the trucking weight\n";
+        toReturn += "\n";
         return toReturn;
     }
 
