@@ -40,7 +40,8 @@ public class App {
         service = new Service(dal);
         inventoryPresentationFacade = new InventoryPresentationFacade(service);
         supplierPresentation = new SupplierPresentationFacade(service);
-        service.loadEmployeeDB();
+        if(!tests)
+            service.loadEmployeeDB();
         if (shouldLoadExample) {
             ExampleData.loadExampleData(service);
         }

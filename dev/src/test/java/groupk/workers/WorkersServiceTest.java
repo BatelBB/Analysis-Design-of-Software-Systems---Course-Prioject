@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
-import groupk.shared.PresentationLayer.App;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
 import groupk.shared.service.Service;
@@ -12,22 +11,17 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import static groupk.CustomAssertions.*;
 public class WorkersServiceTest {
     protected PersistenceController prc;
 
     @BeforeEach
     public void setService() {
         try {
-            prc = new PersistenceController(DriverManager.getConnection("jdbc:sqlite:database.db"));
+            prc = new PersistenceController(DriverManager.getConnection("jdbc:sqlite:testdatabase.db"));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

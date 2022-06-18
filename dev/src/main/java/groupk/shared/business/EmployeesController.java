@@ -3,16 +3,16 @@ package groupk.shared.business;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
-import groupk.workers.business.Facade;
+import groupk.workers.business.WorkersFacade;
 
 import java.sql.Connection;
 import java.util.*;
 
 public class EmployeesController {
-    public Facade employeeBusiness;
+    public WorkersFacade employeeBusiness;
 
     public EmployeesController(Connection connection) {
-        employeeBusiness = new Facade(connection);
+        employeeBusiness = new WorkersFacade(connection);
     }
 
     public Response<Employee> createEmployee(
