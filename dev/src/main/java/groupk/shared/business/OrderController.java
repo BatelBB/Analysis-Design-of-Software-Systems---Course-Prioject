@@ -119,8 +119,7 @@ public class OrderController {
         orders.add(order);
 
         String source = order.supplier.getContact().getAddress();
-        String destination = "TODO inventory"; // TODO inventory
-        logistics.addTruckingRequest(order.getId(), source, destination);
+        logistics.addTruckingRequest(order.getId(), source, ProductController.BRANCH_NAME);
         return order.getId();
     }
 
