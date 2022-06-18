@@ -2,7 +2,7 @@ package groupk.workers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import groupk.workers.business.Facade;
+import groupk.workers.business.WorkersFacade;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
 import org.junit.jupiter.api.AfterEach;
@@ -23,7 +23,7 @@ public class WorkersBusinessTest {
     @BeforeEach
     public void setService() {
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:testdatabase.db");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -41,7 +41,7 @@ public class WorkersBusinessTest {
     @Test
     public void testCreateEmployee()
     {
-        Facade facade = new Facade(connection);
+        WorkersFacade facade = new WorkersFacade(connection);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
@@ -66,7 +66,7 @@ public class WorkersBusinessTest {
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
-        Facade facade = new Facade(connection);
+        WorkersFacade facade = new WorkersFacade(connection);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
@@ -180,7 +180,7 @@ public class WorkersBusinessTest {
 
     @Test
     public void testDeleteEmployeeByHR() {
-        Facade facade = new Facade(connection);
+        WorkersFacade facade = new WorkersFacade(connection);
         facade.deleteDB();
         facade.addEmployee(
                 "Foo",
@@ -213,7 +213,7 @@ public class WorkersBusinessTest {
 
     @Test
     public void testAddEmployeeShiftPreference(){
-        Facade facade = new Facade(connection);
+        WorkersFacade facade = new WorkersFacade(connection);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -235,7 +235,7 @@ public class WorkersBusinessTest {
     public void testAddEmployeeToShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Facade facade = new Facade(connection);
+        WorkersFacade facade = new WorkersFacade(connection);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -286,7 +286,7 @@ public class WorkersBusinessTest {
 
     @Test
     public void testAddEmployeeToShiftCanNotWork() {
-        Facade facade = new Facade(connection);
+        WorkersFacade facade = new WorkersFacade(connection);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -340,7 +340,7 @@ public class WorkersBusinessTest {
     public void testRemoveEmployeeFromShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Facade facade = new Facade(connection);
+        WorkersFacade facade = new WorkersFacade(connection);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -394,7 +394,7 @@ public class WorkersBusinessTest {
 
     @Test
     public void testWhoCanWork() {
-        Facade facade = new Facade(connection);
+        WorkersFacade facade = new WorkersFacade(connection);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
@@ -437,7 +437,7 @@ public class WorkersBusinessTest {
 
     @Test
     public void testAddEmployeeToShiftNoEmployee() {
-        Facade facade = new Facade(connection);
+        WorkersFacade facade = new WorkersFacade(connection);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
@@ -480,7 +480,7 @@ public class WorkersBusinessTest {
     public void testSetRequiredStaffInShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Facade facade = new Facade(connection);
+        WorkersFacade facade = new WorkersFacade(connection);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",

@@ -5,7 +5,6 @@ import groupk.shared.PresentationLayer.App;
 import groupk.shared.service.dto.*;
 import groupk.shared.service.*;
 
-import groupk.workers.business.Facade;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,9 +19,10 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EmployeeLogisticsSharedTests {
+    private String path = "testdatabase.db";
     @Test
     public void optionsForDelivery() {
-        App app = new App("database.db", true);
+        App app = new App(path, true);
         Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
@@ -153,7 +153,7 @@ public class EmployeeLogisticsSharedTests {
 
     @Test
     public void deleteDriverWhoHasFutureDelivery() {
-        App app = new App("database.db", true);
+        App app = new App(path, true);
         Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
@@ -288,7 +288,7 @@ public class EmployeeLogisticsSharedTests {
 
     @Test
     public void deleteLogisticsDB() {
-        App app = new App("database.db", true);
+        App app = new App(path, true);
         Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
@@ -391,7 +391,7 @@ public class EmployeeLogisticsSharedTests {
                 0);
         service.deleteLogisticsDB();
         app.disconnect();
-        app = new App("database.db", true);
+        app = new App(path, true);
         service = app.service;
         Employee TM2 = service.createEmployee(
                 "Avi",
@@ -410,7 +410,7 @@ public class EmployeeLogisticsSharedTests {
 
     @Test
     public void deleteEmployeeDB() {
-        App app = new App("database.db", true);
+        App app = new App(path, true);
         Service service = app.service;
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
@@ -460,7 +460,7 @@ public class EmployeeLogisticsSharedTests {
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21), Shift.Type.Evening, em, r).getValue();
         service.deleteEmployeeDB();
         app.disconnect();
-        app = new App("database.db", true);
+        app = new App(path, true);
         service = app.service;
         service.loadEmployeeDB();
         service.createEmployee(
@@ -481,7 +481,7 @@ public class EmployeeLogisticsSharedTests {
 
     @Test
     public void loadLogisticsDB() {
-        App app = new App("database.db", true);
+        App app = new App(path, true);
         Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
@@ -583,7 +583,7 @@ public class EmployeeLogisticsSharedTests {
                 2,
                 0);
         app.disconnect();
-        app = new App("database.db", true);
+        app = new App(path, true);
         service = app.service;
         service.loadEmployeeDB();
         assertEquals(service.listDeliveries(TM1.id).getValue().size(), 1);
@@ -592,7 +592,7 @@ public class EmployeeLogisticsSharedTests {
 
     @Test
     public void loadEmployeeDB() {
-        App app = new App("database.db", true);
+        App app = new App(path, true);
         Service service = app.service;
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
@@ -641,7 +641,7 @@ public class EmployeeLogisticsSharedTests {
         r.replace(Employee.Role.ShiftManager, 1);
         Shift shift = service.createShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21), Shift.Type.Evening, em, r).getValue();
         app.disconnect();
-        app = new App("database.db", true);
+        app = new App(path, true);
         service = app.service;
         service.loadEmployeeDB();
         assertEquals(service.listShifts("111111110").getValue().size(), 1);
@@ -652,7 +652,7 @@ public class EmployeeLogisticsSharedTests {
 
     @Test
     public void updateLogisticsDB() {
-        App app = new App("database.db", true);
+        App app = new App(path, true);
         Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
@@ -775,7 +775,7 @@ public class EmployeeLogisticsSharedTests {
 
     @Test
     public void UpdateEmployeeDB() {
-        App app = new App("database.db", true);
+        App app = new App(path, true);
         Service service = app.service;
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
@@ -837,7 +837,7 @@ public class EmployeeLogisticsSharedTests {
         );
         service.updateEmployee(HR.id, createdUpdate);
         app.disconnect();
-        app = new App("database.db", true);
+        app = new App(path, true);
         service = app.service;
         service.loadEmployeeDB();
         assertEquals(service.readEmployee("111111110", "111111111").getValue().name, createdUpdate.name);
@@ -856,7 +856,7 @@ public class EmployeeLogisticsSharedTests {
 
     @Test
     public void testCreateDelivery() {
-        App app = new App("database.db", true);
+        App app = new App(path, true);
         Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
@@ -963,7 +963,7 @@ public class EmployeeLogisticsSharedTests {
 
     @Test
     public void testCreateDeliveryWithoutLogisticsEmployee() {
-        App app = new App("database.db", true);
+        App app = new App(path, true);
         Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
@@ -1058,7 +1058,7 @@ public class EmployeeLogisticsSharedTests {
 
     @Test
     public void testAddDriverNotWorking() {
-        App app = new App("database.db", true);
+        App app = new App(path, true);
         Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
@@ -1163,7 +1163,7 @@ public class EmployeeLogisticsSharedTests {
 
     @Test
     public void testAddDriverWithWrongLisence() {
-        App app = new App("database.db", true);
+        App app = new App(path, true);
         Service service = app.service;
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for (Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())

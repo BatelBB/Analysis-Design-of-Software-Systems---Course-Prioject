@@ -8,12 +8,12 @@ import java.sql.Connection;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Facade {
+public class WorkersFacade {
     final private EmployeeController employees;
     final private ShiftController shifts;
     final private DalController dalController;
 
-    public Facade(Connection connection) {
+    public WorkersFacade(Connection connection) {
         dalController = new DalController(connection);
         employees = new EmployeeController(dalController);
         shifts = new ShiftController(dalController);
@@ -128,7 +128,7 @@ public class Facade {
     public List<Employee> listEmployees(String subjectID) {
         if (employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.HumanResources) || employees.isFromRole(subjectID, groupk.workers.data.Employee.Role.StoreManager)) {
             return employees.list().stream()
-                    .map(Facade::dataEmployeeToService)
+                    .map(WorkersFacade::dataEmployeeToService)
                     .collect(Collectors.toList());
         } else {
             throw new IllegalArgumentException("Subject must be authorized to read employees.");
@@ -351,7 +351,7 @@ public class Facade {
         return new groupk.shared.service.dto.Shift(
                 dataShift.getDate(),
                 dataTypeToService(dataShift.getType()),
-                dataShift.getStaff().stream().map(Facade::dataEmployeeToService).collect(Collectors.toList()),
+                dataShift.getStaff().stream().map(WorkersFacade::dataEmployeeToService).collect(Collectors.toList()),
                 dataRequiredRoleInShiftToService(dataShift.getRequiredStaff()));
     }
 
