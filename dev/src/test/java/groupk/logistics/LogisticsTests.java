@@ -156,14 +156,12 @@ public class LogisticsTests {
     public void setWeight() {
         myDataBase.deleteDB();
         setDetails();
-        //ystem.out.println(driverController.printMyTruckings(319034121));
         try {
             driverController.setWeightForTrucking(319034121,5,9);
         }
         catch (Exception e) {
             assertEquals(e.getMessage(),"There is a user already connected to the system");
         }
-        System.out.println(driverController.printMyTruckings(319034121));
         assertEquals(truckManagerController.getTruckingById(1, 5).getWeight() == 9,true);
     }
 
