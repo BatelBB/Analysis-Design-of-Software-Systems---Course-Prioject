@@ -375,6 +375,8 @@ public class TruckingMapper {
             if (n > 0 & truckingIDMap.contains(truckingIdCounter))
                 truckingIDMap.getTruckingById(truckingIdCounter).getOrders().add(orderID);
         } catch (SQLException e) {
+            if (e.getMessage().equals("[SQLITE_CONSTRAINT_PRIMARYKEY]  A PRIMARY KEY constraint failed (UNIQUE constraint failed: Truckings_Orders.orderID"))
+                throw new IllegalArgumentException("Oops, there was a problem to add order " + orderID + " into trucking " + truckingIdCounter + " because the order is already exist in another delivery");
             throw new IllegalArgumentException("Oops, there was a problem to add order " + orderID + " into trucking " + truckingIdCounter + " because, " + e.getMessage());
         }
 
