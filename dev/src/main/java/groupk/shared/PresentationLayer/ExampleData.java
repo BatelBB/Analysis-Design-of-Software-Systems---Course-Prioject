@@ -450,7 +450,7 @@ public class ExampleData {
                     30,
                     0,
                     0,
-                    Employee.Role.TruckingManger,
+                    Employee.Role.LogisticsManager,
                     all).getValue();
             Employee TM2 = service.createEmployee(
                     "Dana",
@@ -461,7 +461,7 @@ public class ExampleData {
                     30,
                     0,
                     0,
-                    Employee.Role.TruckingManger,
+                    Employee.Role.LogisticsManager,
                     all).getValue();
 
             //staff
