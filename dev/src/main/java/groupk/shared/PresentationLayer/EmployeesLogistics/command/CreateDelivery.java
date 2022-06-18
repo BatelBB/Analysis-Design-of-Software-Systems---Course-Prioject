@@ -230,6 +230,7 @@ public class CreateDelivery implements Command {
                 return false;
             tries--;
         }
+        System.out.println("Error: 5 wrong inputs. The action is canceled");
         return null;
     }
 }

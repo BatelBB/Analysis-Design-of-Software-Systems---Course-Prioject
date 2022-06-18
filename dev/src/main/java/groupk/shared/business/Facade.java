@@ -257,8 +257,6 @@ public class Facade {
         return new Response<>(output);
     }
 
-
-    // Previously removeTrucking
     public Response<Boolean> deleteDelivery(String subjectID, int deliveryID) {
         Response<Employee> subject = employees.readEmployee(subjectID, subjectID);
         if (subject.isError()) {
@@ -270,7 +268,6 @@ public class Facade {
         return logistics.deleteDelivery(Integer.parseInt(subjectID), deliveryID);
     }
 
-    // Previously printBoard
     public Response<List<Delivery>> listDeliveries(String subjectID) {
         if (isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return logistics.listDeliveries(Integer.parseInt(subjectID));
@@ -422,19 +419,9 @@ public class Facade {
     }
 
     public Response<Boolean> deleteTruckingRequest(String subjectID, int orderID) {
-        try {
-            if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue())
-                return new Response<>("You are not authorized to perform this operation");
-            Response<Boolean> truckingDeletion = logistics.deleteTruckingRequest(orderID);
-            if (!truckingDeletion.isError() && truckingDeletion.getValue()) {
-                orders.delete(orderID);
-                UserOutput.println("Order " + orderID + " was deleted.");
-                return new Response<>(true);
-            }
-            throw new BusinessLogicException("There was some problem deleting trucking order (what the truck)");
-        } catch (Exception e) {
-            return new Response<>(e.getMessage());
-        }
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue())
+            return new Response<>("You are not authorized to perform this operation");
+        return logistics.deleteTruckingRequest(orderID);
     }
 
     public Response<List<String>> getTruckingRequests(String subjectID) {
