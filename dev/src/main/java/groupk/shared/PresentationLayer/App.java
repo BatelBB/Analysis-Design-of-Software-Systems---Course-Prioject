@@ -7,7 +7,9 @@ import groupk.shared.PresentationLayer.Suppliers.UserInput;
 import groupk.shared.PresentationLayer.Suppliers.UserOutput;
 import groupk.inventory_suppliers.SchemaInit;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
+import groupk.shared.service.Response;
 import groupk.shared.service.Service;
+import groupk.shared.service.dto.Employee;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,6 +23,7 @@ public class App {
     public final InventoryPresentationFacade inventoryPresentationFacade;
     public final Connection conn;
     public final Service service;
+    private Employee subject;
 
     public App(String dbPath, boolean tests) {
         boolean isNew = !new java.io.File(dbPath).exists();
@@ -37,6 +40,7 @@ public class App {
         service = new Service(dal);
         inventoryPresentationFacade = new InventoryPresentationFacade(service);
         supplierPresentation = new SupplierPresentationFacade(service);
+        service.loadEmployeeDB();
         if (shouldLoadExample) {
             ExampleData.loadExampleData(service);
         }
@@ -49,7 +53,8 @@ public class App {
                     "1. Supplier module\n" +
                     "2. Inventory module\n" +
                     "3. Employees and Logistics modules\n" +
-                    "4. Exit\n");
+                    "4. Login or change user\n" +
+                    "5. Exit\n");
             switch (in) {
                 case (1): {
                     supplierPresentation.startSupplierMenu();
@@ -60,10 +65,21 @@ public class App {
                     break;
                 }
                 case (3) : {
-                    MainEmployeesAndDelivery.mainEmployeesAndDelivery(service, conn);
+                    MainEmployeesAndDelivery.mainEmployeesAndDelivery(service, conn, subject);
                     break;
                 }
                 case (4): {
+                    String id = UserInput.getInstance().nextString("What is your ID?\n");
+                    Response<Employee> subjectResponse = service.readEmployee(id, id);
+                    if (subjectResponse.isError()) {
+                        System.out.println("Error: Must be valid employee ID.");
+                        break;
+                    }
+                    this.subject = subjectResponse.getValue();
+                    break;
+
+                }
+                case (5): {
                     UserOutput.getInstance().println("Goodbye!");
                     return;
                 }

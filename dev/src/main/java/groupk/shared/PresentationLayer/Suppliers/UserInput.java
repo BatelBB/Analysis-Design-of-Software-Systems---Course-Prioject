@@ -65,7 +65,7 @@ public class UserInput {
         return nextBool;
     }
 
-    String nextString(String message) {
+    public String nextString(String message) {
         //goes in a loop to get String and prints the message we provided each time
         boolean retry = true;
         String nextString = "";
