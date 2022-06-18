@@ -22,7 +22,7 @@ public class UpdateDeliveryWeight implements Command {
 
     @Override
     public boolean isVisible(Employee.Role role) {
-        return role == Employee.Role.LogisticsManager;
+        return role == Employee.Role.Driver;
     }
 
     @Override
