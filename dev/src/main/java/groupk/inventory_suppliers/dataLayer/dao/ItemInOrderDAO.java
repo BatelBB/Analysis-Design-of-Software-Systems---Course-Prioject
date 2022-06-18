@@ -101,4 +101,17 @@ public class ItemInOrderDAO extends BaseDAO<ItemInOrderRecord.ItemInOrderKey, It
                 ps -> ps.setInt(3, orderId)
         );
     }
+
+    public void deleteAllInOrder(int orderID) {
+        runUpdate("DELETE FROM ItemInOrder WHERE orderId=?",
+                ps -> ps.setInt(1, orderID));
+    }
+
+    public void deleteItem(int ppn, int catalogNumber) {
+        runUpdate(
+                "DELETE FROM ItemInOrder where itemSupplierPPN=? AND itemCatalogNumber=?",
+                ps -> ps.setInt(1, ppn),
+                ps -> ps.setInt(2, catalogNumber)
+        );
+    }
 }

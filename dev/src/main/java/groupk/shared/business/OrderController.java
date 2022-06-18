@@ -137,6 +137,8 @@ public class OrderController {
     }
 
     public void cancelOrder(int orderID) {
-        //TODO - Yuval
+        dal.getItemsInOrders().deleteAllInOrder(orderID);
+        dal.getOrders().delete(orderID);
+        orders.removeIf(order -> order.getId() == orderID);
     }
 }

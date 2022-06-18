@@ -65,6 +65,10 @@ public class ItemController {
         if(!items.containsKey(key)) {
             throw new BusinessLogicException("Supplier " + ppn +" has no item with catalog number " + catalogNumber);
         }
+        ItemRecord.ItemKey itemId = new ItemRecord.ItemKey(ppn, catalogNumber);
+        dal.getItems().delete(itemId);
+        dal.getItemsInOrders().deleteItem(ppn, catalogNumber);
+        dal.getQuantityDiscounts().deleteAllForItem(itemId);
         items.remove(key);
     }
 
