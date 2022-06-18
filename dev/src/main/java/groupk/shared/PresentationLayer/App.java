@@ -1,5 +1,6 @@
 package groupk.shared.PresentationLayer;
 
+import groupk.logistics.DataLayer.myDataBase;
 import groupk.shared.PresentationLayer.EmployeesLogistics.MainEmployeesAndDelivery;
 import groupk.shared.PresentationLayer.Inventory.InventoryPresentationFacade;
 import groupk.shared.PresentationLayer.Suppliers.SupplierPresentationFacade;
@@ -10,6 +11,7 @@ import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
 import groupk.shared.service.Response;
 import groupk.shared.service.Service;
 import groupk.shared.service.dto.Employee;
+import groupk.workers.data.DalController;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -29,6 +31,8 @@ public class App {
         boolean isNew = !new java.io.File(dbPath).exists();
         boolean shouldLoadExample = false;
         conn = connect(dbPath);
+        DalController employeeDalController = new DalController(conn);
+        myDataBase logisitcsDalController = new myDataBase(conn);
         SchemaInit.init(conn);
         if (isNew && !tests) {
             UserOutput.getInstance().println(
@@ -37,7 +41,7 @@ public class App {
             shouldLoadExample = UserInput.getInstance().nextBoolean("Would you like to start with some example data?");
         }
         dal =  new PersistenceController(conn);
-        service = new Service(dal);
+        service = new Service(dal, employeeDalController, logisitcsDalController);
         inventoryPresentationFacade = new InventoryPresentationFacade(service);
         supplierPresentation = new SupplierPresentationFacade(service);
         if(!tests)

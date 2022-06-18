@@ -3,6 +3,7 @@ package groupk.shared.service;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
+import groupk.logistics.DataLayer.myDataBase;
 import groupk.shared.business.Facade;
 import groupk.shared.business.Inventory.Categories.Category;
 import groupk.shared.service.Inventory.Objects.ProductItem;
@@ -14,6 +15,7 @@ import groupk.shared.business.Suppliers.BussinessObject.Order;
 import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 import groupk.shared.service.dto.*;
+import groupk.workers.data.DalController;
 
 import java.sql.Connection;
 import java.time.DayOfWeek;
@@ -24,8 +26,8 @@ import java.util.*;
 public class Service {
     private Facade facade;
 
-    public Service(PersistenceController persistenceController) {
-        facade = new Facade(persistenceController);
+    public Service(PersistenceController persistenceController, DalController dalController, myDataBase myDataBase) {
+        facade = new Facade(persistenceController, dalController, myDataBase);
     }
 
     public void deleteEmployeeDB() {

@@ -5,6 +5,7 @@ import groupk.inventory_suppliers.dataLayer.dao.records.OrderType;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import groupk.inventory_suppliers.shared.dto.CreateSupplierDTO;
 import groupk.inventory_suppliers.shared.utils.Tuple;
+import groupk.logistics.DataLayer.myDataBase;
 import groupk.logistics.business.TruckManagerController;
 import groupk.shared.PresentationLayer.Suppliers.UserOutput;
 import groupk.shared.business.Inventory.Categories.Category;
@@ -20,6 +21,7 @@ import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.*;
 import groupk.shared.service.ServiceBase;
+import groupk.workers.data.DalController;
 
 import java.sql.Connection;
 import java.time.DayOfWeek;
@@ -39,15 +41,15 @@ public class Facade {
     private final QuantityDiscountController discounts;
     private final SupplierController suppliers;
 
-    public Facade(PersistenceController p) {
+    public Facade(PersistenceController p, DalController dalController, myDataBase myDataBase) {
         category_controller = new CategoryController(p);
         product_controller = new ProductController(p, category_controller);
         suppliers = new SupplierController(p);
         items = new ItemController(p, suppliers);
         discounts = new QuantityDiscountController(p, items);
-        logistics = new LogisticsController(p.getConn());
+        logistics = new LogisticsController(myDataBase);
         orders = new OrderController(p, discounts, logistics);
-        employees = new EmployeesController(p.getConn());
+        employees = new EmployeesController(dalController);
         report_controller = new ReportController(p, product_controller);
     }
 

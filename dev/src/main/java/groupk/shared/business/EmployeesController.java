@@ -4,6 +4,7 @@ import groupk.shared.service.Response;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
 import groupk.workers.business.WorkersFacade;
+import groupk.workers.data.DalController;
 
 import java.sql.Connection;
 import java.util.*;
@@ -11,8 +12,8 @@ import java.util.*;
 public class EmployeesController {
     public WorkersFacade employeeBusiness;
 
-    public EmployeesController(Connection connection) {
-        employeeBusiness = new WorkersFacade(connection);
+    public EmployeesController(DalController dalController) {
+        employeeBusiness = new WorkersFacade(dalController);
     }
 
     public Response<Employee> createEmployee(

@@ -13,8 +13,8 @@ public class WorkersFacade {
     final private ShiftController shifts;
     final private DalController dalController;
 
-    public WorkersFacade(Connection connection) {
-        dalController = new DalController(connection);
+    public WorkersFacade(DalController dalController) {
+        this.dalController = dalController;
         employees = new EmployeeController(dalController);
         shifts = new ShiftController(dalController);
     }

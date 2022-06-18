@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import groupk.workers.business.WorkersFacade;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
+import groupk.workers.data.DalController;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,11 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static groupk.CustomAssertions.*;
 public class WorkersBusinessTest {
     protected Connection connection;
+    protected DalController dalController;
 
     @BeforeEach
     public void setService() {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:testdatabase.db");
+            dalController = new DalController(connection);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -41,7 +44,7 @@ public class WorkersBusinessTest {
     @Test
     public void testCreateEmployee()
     {
-        WorkersFacade facade = new WorkersFacade(connection);
+        WorkersFacade facade = new WorkersFacade(dalController);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
@@ -66,7 +69,7 @@ public class WorkersBusinessTest {
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         for(Employee.ShiftDateTime shiftDateTime : Employee.ShiftDateTime.values())
             shiftPreferences.add(shiftDateTime);
-        WorkersFacade facade = new WorkersFacade(connection);
+        WorkersFacade facade = new WorkersFacade(dalController);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
@@ -180,7 +183,7 @@ public class WorkersBusinessTest {
 
     @Test
     public void testDeleteEmployeeByHR() {
-        WorkersFacade facade = new WorkersFacade(connection);
+        WorkersFacade facade = new WorkersFacade(dalController);
         facade.deleteDB();
         facade.addEmployee(
                 "Foo",
@@ -213,7 +216,7 @@ public class WorkersBusinessTest {
 
     @Test
     public void testAddEmployeeShiftPreference(){
-        WorkersFacade facade = new WorkersFacade(connection);
+        WorkersFacade facade = new WorkersFacade(dalController);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -235,7 +238,7 @@ public class WorkersBusinessTest {
     public void testAddEmployeeToShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        WorkersFacade facade = new WorkersFacade(connection);
+        WorkersFacade facade = new WorkersFacade(dalController);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -286,7 +289,7 @@ public class WorkersBusinessTest {
 
     @Test
     public void testAddEmployeeToShiftCanNotWork() {
-        WorkersFacade facade = new WorkersFacade(connection);
+        WorkersFacade facade = new WorkersFacade(dalController);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -340,7 +343,7 @@ public class WorkersBusinessTest {
     public void testRemoveEmployeeFromShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        WorkersFacade facade = new WorkersFacade(connection);
+        WorkersFacade facade = new WorkersFacade(dalController);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -394,7 +397,7 @@ public class WorkersBusinessTest {
 
     @Test
     public void testWhoCanWork() {
-        WorkersFacade facade = new WorkersFacade(connection);
+        WorkersFacade facade = new WorkersFacade(dalController);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
@@ -437,7 +440,7 @@ public class WorkersBusinessTest {
 
     @Test
     public void testAddEmployeeToShiftNoEmployee() {
-        WorkersFacade facade = new WorkersFacade(connection);
+        WorkersFacade facade = new WorkersFacade(dalController);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",
@@ -480,7 +483,7 @@ public class WorkersBusinessTest {
     public void testSetRequiredStaffInShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        WorkersFacade facade = new WorkersFacade(connection);
+        WorkersFacade facade = new WorkersFacade(dalController);
         facade.deleteDB();
         Employee HR = facade.addEmployee(
                 "Foo",

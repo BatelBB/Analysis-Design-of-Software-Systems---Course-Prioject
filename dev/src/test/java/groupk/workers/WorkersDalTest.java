@@ -3,6 +3,7 @@ import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
 import groupk.workers.business.WorkersFacade;
 
+import groupk.workers.data.DalController;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,11 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static groupk.CustomAssertions.*;
 public class WorkersDalTest {
     protected Connection connection;
+    protected DalController dalController;
 
     @BeforeEach
     public void setService() {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:testdatabase.db");
+            dalController = new DalController(connection);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -42,8 +45,7 @@ public class WorkersDalTest {
     public void loadDB(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-
-        WorkersFacade facade = new WorkersFacade(connection);
+        WorkersFacade facade = new WorkersFacade(dalController);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -88,7 +90,15 @@ public class WorkersDalTest {
             r.put(role, 0);
         r.replace(Employee.Role.ShiftManager, 1);
         Shift shift = facade.addShift(HR.id, new GregorianCalendar(2022, Calendar.APRIL, 21),Shift.Type.Evening, em, r);
-        facade = new WorkersFacade(connection);
+        try {
+            connection.close();
+            connection = DriverManager.getConnection("jdbc:sqlite:testdatabase.db");
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        dalController = new DalController(connection);
+        facade = new WorkersFacade(dalController);
         facade.loadDB();
         assertEquals(facade.listShifts("111111110").size(), 1);
         assertEquals(facade.listShifts("111111110").get(0).getDate(), shift.getDate());
@@ -99,7 +109,7 @@ public class WorkersDalTest {
     public void UpdateEmployeeDB(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<Employee.ShiftDateTime>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        WorkersFacade facade = new WorkersFacade(connection);
+        WorkersFacade facade = new WorkersFacade(dalController);
         facade.deleteDB();
         Employee created = facade.addEmployee(
                 "Foo",
@@ -156,7 +166,7 @@ public class WorkersDalTest {
                 new GregorianCalendar(2022, Calendar.APRIL, 5)
         );
         facade.updateEmployee(HR.id, createdUpdate);
-        facade = new WorkersFacade(connection);
+        facade = new WorkersFacade(dalController);
         facade.loadDB();
         assertEquals(facade.readEmployee("111111110", "111111111").name, createdUpdate.name);
         assertEquals(facade.readEmployee("111111110", "111111111").role, createdUpdate.role);

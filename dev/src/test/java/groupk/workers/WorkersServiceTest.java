@@ -3,25 +3,36 @@ package groupk.workers;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import groupk.inventory_suppliers.SchemaInit;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
+import groupk.logistics.DataLayer.myDataBase;
 import groupk.shared.service.dto.Employee;
 import groupk.shared.service.dto.Shift;
 import groupk.shared.service.Service;
+import groupk.workers.data.DalController;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.*;
 
 public class WorkersServiceTest {
-    protected PersistenceController prc;
+    protected Connection connection;
+    protected DalController dalController;
+    protected myDataBase logisitcsDalController;
+    protected PersistenceController persistenceController;
 
     @BeforeEach
     public void setService() {
         try {
-            prc = new PersistenceController(DriverManager.getConnection("jdbc:sqlite:testdatabase.db"));
+            connection = DriverManager.getConnection("jdbc:sqlite:testdatabase.db");
+            SchemaInit.init(connection);
+            persistenceController = new PersistenceController(connection);
+            dalController = new DalController(connection);
+            logisitcsDalController = new myDataBase(connection);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -30,7 +41,7 @@ public class WorkersServiceTest {
     @AfterEach
     public void afterService() {
         try {
-            prc.getConn().close();
+            connection.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -41,7 +52,7 @@ public class WorkersServiceTest {
     {
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         shiftPreferences.addAll(Arrays.asList(Employee.ShiftDateTime.values()));
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee HR = (service.createEmployee(
                 "Foo",
@@ -150,8 +161,7 @@ public class WorkersServiceTest {
     {
         Set<Employee.ShiftDateTime> shiftPreferences = new HashSet<>();
         shiftPreferences.addAll(Arrays.asList(Employee.ShiftDateTime.values()));
-        Service service = new Service(prc);
-        service.deleteEmployeeDB();
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);        service.deleteEmployeeDB();
         Employee HR = service.createEmployee(
                 "Foo",
                 "111111110",
@@ -236,7 +246,7 @@ public class WorkersServiceTest {
     @Test
     public void testCreateShiftNotUnauthorized()
     {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee NotHR = service.createEmployee(
                 "Foo",
@@ -254,7 +264,7 @@ public class WorkersServiceTest {
     @Test
     public void testCreateEmployee()
     {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -275,7 +285,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testCreateEmployeeSameID() {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -305,7 +315,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testReadEmployeesUnauthorized() {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -323,7 +333,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testDeleteEmployeeByHR() {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -354,7 +364,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testDeleteEmployeeUnauthorized() {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -372,7 +382,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testReadEmployee() {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         service.createEmployee(
                 "Foo",
@@ -392,7 +402,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testReadEmployeeByHR() {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -423,7 +433,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testReadEmployeeUnauthorized() {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -452,7 +462,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testUpdateEmployeeByHR() {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -484,7 +494,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testUpdateEmployeeUnauthorized() {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -513,7 +523,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testAddEmployeeShiftPreference(){
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -533,7 +543,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testAddEmployeeShiftPreferenceFromAnotherId(){
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -562,7 +572,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testDeleteEmployeeShiftPreference(){
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -582,7 +592,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testSetEmployeeShiftsPreference(){
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -606,7 +616,7 @@ public class WorkersServiceTest {
     public void testAddEmployeeToShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -656,7 +666,7 @@ public class WorkersServiceTest {
     public void testSetRequiredStaffInShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -708,7 +718,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testAddEmployeeToShiftCanNotWork() {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -757,7 +767,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testAddEmployeeToShiftNoEmployee() {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee HR = service.createEmployee(
                 "Foo",
@@ -797,7 +807,7 @@ public class WorkersServiceTest {
     public void testRemoveEmployeeFromShift(){
         Set<Employee.ShiftDateTime> availableShifts = new HashSet<>();
         availableShifts.add(Employee.ShiftDateTime.ThursdayEvening);
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
@@ -850,7 +860,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testRemoveEmployeeFromShiftNoEmployee() {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee HR = service.createEmployee(
                 "Foo",
@@ -888,7 +898,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testWhoCanWork() {
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee HR = service.createEmployee(
                 "Foo",
@@ -931,7 +941,7 @@ public class WorkersServiceTest {
 
     @Test
     public void testNumOfShifts(){
-        Service service = new Service(prc);
+        Service service = new Service(persistenceController, dalController, logisitcsDalController);
         service.deleteEmployeeDB();
         Employee created = service.createEmployee(
                 "Foo",
