@@ -12,7 +12,7 @@ public class MainEmployeesAndDelivery {
         AtomicBoolean keepGoing = new AtomicBoolean(true);
         CommandRunner runner = new CommandRunner(
                 new Command[] {
-                        new Quit(),
+                        new Back(),
                         new Login(),
                         new CreateEmployee(),
                         new GetEmployee(),
