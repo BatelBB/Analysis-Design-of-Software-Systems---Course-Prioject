@@ -1,40 +1,10 @@
-# ADSS Group K Employees and Deliveries Instructions
-
-## Quick Start
-
-Once the program starts, you will be greeted with a prompt for commands.
-
-For general help and command list, type the `help` command.
-For help about a specific command, type said command without arguments.
-For example, for `create employee`, input `create employee` for help.
-
-First load sample data. It might take a minute to load.
-
-```
-load sample
-```
-
-To login as a sample human resources employee:
-
-```
-login 111
-```
-
-Once logged in, you are authorized to perform commands according to your role, such as:
-
-```
-get employee 111
-```
-
-For more information on available commands, refer to the Commands section of this document.
+# Employees and Logistics Menu Instructions
 
 ## Commands
 
 The following commands are supported:
 
-* `load sample`.
-* `login`.
-* `quit`.
+* `back`.
 * `create employee`.
 * `get employee`.
 * `delete employee`.
@@ -59,50 +29,11 @@ The following commands are supported:
 * `add driver license`.
 * `update delivery weight`.
 
-All example commands should work when using the provided sample data (`load sample` command).
+All example commands should work when using the provided sample data.
 
-### Load Sample
+### Back
 
-Load sample data.
-
-May take a minute on slower drives.
-
-#### Usage
-
-```
-load sample
-```
-
-#### Example
-
-```
-load sample
-```
-
-### Login
-
-Set the currently active user.
-
-As of now, employees are authenticated only by their ID.
-Not using passwords allows to use the service with authentication methods not involving passwords, such as TOTP or hardware keys.
-
-Any user, including unauthenticated users, can perform this command.
-
-#### Usage
-
-```
-login <id>
-```
-
-#### Example
-
-```
-login 111
-```
-
-### Quit
-
-Quit the program.
+Go back to the main menu.
 
 Any user, including unauthenticated users, can perform this command.
 
@@ -189,7 +120,7 @@ List employees and their roles.
 
 Lists in CSV format for easy import to Excel, to allow incremental rollout of the new system.
 
-Only employees authenticated as HumanResources role may invoke this command.
+Only employees authenticated as HumanResources or StoreManager role may invoke this command.
 
 #### Usage
 
@@ -277,7 +208,7 @@ delete shift preference 999871163 FridayEvening
 
 Create a shift.
 
-It is recommended to use the `can work` command to pick employees for a shift before creating it.
+It is recommended to use the `can work` or `can work with role` commands to pick employees for a shift before creating it.
 
 Only employees authenticated as HumanResources role may invoke this command.
 
@@ -373,7 +304,7 @@ List all past and future shifts.
 
 Lists shifts in YAML format, for easy parsing in printing scripts. Allowing the customer to incrementally roll out the new system by partially working with paper forms.
 
-Only employees authenticated as HumanResources role may invoke this command.
+Only employees authenticated as HumanResources or StoreManager role may invoke this command.
 
 #### Usage
 
@@ -389,30 +320,87 @@ list shifts
 
 ### Can Work
 
-List employees who can work a specified shift, optionally filter employees of a certain role.
+List employees who can work a specified shift.
 
 Lists in CSV format for easy import to Excel, to allow incremental rollout of the new system.
 
-Only employees authenticated as HumanResources role may invoke this command.
+Only employees authenticated as HumanResources or StoreManager role may invoke this command.
 
 #### Usage
 
 ```
-can work <date> <type>
+can work <shift>
 ```
 
-```
-can work <date> <type> <role>
-```
+Where `shift` is one of the following:
+
+- `SundayMorning`.
+- `SundayEvening`.
+- `MondayMorning`.
+- `MondayEvening`.
+- `TuesdayMorning`.
+- `TuesdayEvening`.
+- `WednesdayMorning`.
+- `WednesdayEvening`.
+- `ThursdayMorning`.
+- `ThursdayEvening`.
+- `FridayMorning`.
+- `FridayEvening`.
+- `SaturdayMorning`.
+- `SaturdayEvening`.
 
 #### Example
 
 ```
-can work 2022-04-24 Evening
+can work MondayEvening
 ```
 
+### Can Work With Role
+
+List employees who can work at a specified shift and are of a specified role.
+
+Lists in CSV format for easy import to Excel, to allow incremental rollout of the new system.
+
+Only employees authenticated as HumanResources or StoreManager role may invoke this command.
+
+#### Usage
+
 ```
-can work 2022-04-24 Evening Logistics
+can work with role <shift> <role>
+```
+
+Where `shift` is one of the following:
+
+- `SundayMorning`.
+- `SundayEvening`.
+- `MondayMorning`.
+- `MondayEvening`.
+- `TuesdayMorning`.
+- `TuesdayEvening`.
+- `WednesdayMorning`.
+- `WednesdayEvening`.
+- `ThursdayMorning`.
+- `ThursdayEvening`.
+- `FridayMorning`.
+- `FridayEvening`.
+- `SaturdayMorning`.
+- `SaturdayEvening`.
+
+And where `role` is one of the following:
+
+- `Logistics`.
+- `HumanResources`.
+- `Stocker`.
+- `Cashier`.
+- `LogisticsManager`.
+- `ShiftManager`.
+- `Driver`.
+- `StoreManager`.
+
+#### Example
+
+```
+can work with role MondayEvening HumanResources
 ```
 
 ### Create Delivery
