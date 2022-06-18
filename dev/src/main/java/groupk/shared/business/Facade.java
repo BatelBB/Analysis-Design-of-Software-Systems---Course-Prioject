@@ -20,7 +20,6 @@ import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.*;
-import groupk.shared.service.ServiceBase;
 import groupk.workers.data.DalController;
 
 import java.sql.Connection;
@@ -28,6 +27,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Facade {
 
@@ -615,8 +615,8 @@ public class Facade {
         return responseFor(() -> product_controller.confirmOrder(order_id));
     }
 
-    public SI_Response confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount) {
-        return responseForVoid(() -> product_controller.confirmOrderAmount(order_id, actual_amount, orders.get(order_id).supplier.getPpn()));
+    public Facade.ResponseT<List<ProductItem>> confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount) {
+        return responseFor(() -> product_controller.confirmOrderAmount(order_id, actual_amount, orders.get(order_id).supplier.getPpn()).stream().map(ProductItem::new).collect(Collectors.toList()));
     }
 
     public ResponseT<Order> getOrder(int id) {
@@ -767,7 +767,7 @@ public class Facade {
     }
 
     public SI_Response updateOrderAmount(int orderID, int supplier, int catalogNumber, int amount) {
-        return responseForVoid(()-> orders.updateAmount(orders.get(orderID),items.get(supplier, catalogNumber), amount));
+        return responseForVoid(() -> orders.updateAmount(orders.get(orderID), items.get(supplier, catalogNumber), amount));
     }
 
     public ResponseT<Integer> createOrderShortage(ResponseT<Boolean> r, int product_id, int min_qty) {
@@ -782,63 +782,27 @@ public class Facade {
         }
     }
 
-    public SI_Response createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
-        for (Integer product_id : productAmount.keySet()) {
-            try {
+    public ResponseT<Integer> createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
+        try {
+            for (Integer product_id : productAmount.keySet()) {
                 product_controller.productExists(product_id);
-            } catch (Exception e) {
-                return responseFor(() -> {
-                    throw e;
-                });
             }
-        }
-        Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
-        Tuple<Supplier, Item> supplierItemTuple = items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
-        Order order = orders.create(supplierItemTuple.first, OrderType.Periodical, LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
-        orders.orderItemFromMap(order, itemsWithAmount);
-        orders.createFittingTrucking(ProductController.BRANCH_NAME, order);
-        return responseForVoid(() -> product_controller.addOrderRecord(order.getId(), productAmount));
-    }
-
-    protected SI_Response voidOk() {
-        return new SI_Response(true, null);
-    }
-
-    protected SI_Response voidError(String message) {
-        return new SI_Response(false, message);
-    }
-
-    protected <T> ResponseT<T> ok(T data) {
-        return new ResponseT<>(true, null, data);
-    }
-
-    protected <T> ResponseT<T> error(String error) {
-        return new ResponseT<>(false, error, null);
-    }
-
-    protected <T> ResponseT<T> responseFor(ServiceBase.ThrowingFactory<T> lambda) {
-        try {
-            return ok(lambda.get());
+            Map<Item, Integer> itemsWithAmount = items.getItemsWithAmount(productAmount);
+            Tuple<Supplier, Item> supplierItemTuple = items.checkBestSupplier(((Item) itemsWithAmount.keySet().toArray()[0]).getProductId());
+            Order order = orders.create(supplierItemTuple.first, OrderType.Periodical, LocalDate.now(), LocalDate.from(DayOfWeek.of(weekDay)));
+            orders.orderItemFromMap(order, itemsWithAmount);
+            orders.createFittingTrucking(ProductController.BRANCH_NAME, order);
+            product_controller.addOrderRecord(order.getId(), productAmount);
+            return responseFor(order::getId);
         } catch (Exception e) {
-            return error(e.getMessage());
-        }
-    }
-
-    protected SI_Response responseForVoid(ServiceBase.ThrowingRunnable lambda) {
-        try {
-            lambda.run();
-            return voidOk();
-        } catch (Exception e) {
-            return voidError(e.getMessage());
+            return responseFor(() -> {
+                throw e;
+            });
         }
     }
 
     public SI_Response addProductToOrder(int order_id, int product_id, int amount) {
         return responseForVoid(() -> product_controller.addProductToOrder(order_id, product_id, amount));
-    }
-
-    public SI_Response addOrderRecord(int orderId, Map<Integer, Integer> productAmount) {
-        return responseForVoid(() -> product_controller.addOrderRecord(orderId, productAmount));
     }
 
     public SI_Response cancelTruckingWithOrderID(int orderID) {
@@ -874,6 +838,39 @@ public class Facade {
         public String toString() {
             return success ? Objects.toString(data) : "Error: " + error;
         }
+    }
+
+    protected <T> ResponseT<T> responseFor(ThrowingFactory<T> lambda) {
+        try {
+            return ok(lambda.get());
+        } catch (Exception e) {
+            return error(e.getMessage());
+        }
+    }
+
+    protected SI_Response responseForVoid(ThrowingRunnable lambda) {
+        try {
+            lambda.run();
+            return voidOk();
+        } catch (Exception e) {
+            return voidError(e.getMessage());
+        }
+    }
+
+    protected SI_Response voidOk() {
+        return new SI_Response(true, null);
+    }
+
+    protected SI_Response voidError(String message) {
+        return new SI_Response(false, message);
+    }
+
+    protected <T> ResponseT<T> ok(T data) {
+        return new ResponseT<>(true, null, data);
+    }
+
+    protected <T> ResponseT<T> error(String error) {
+        return new ResponseT<>(false, error, null);
     }
 
     public static interface ThrowingFactory<T> {

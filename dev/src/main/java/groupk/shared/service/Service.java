@@ -380,16 +380,15 @@ public class Service {
     }
 
     //Order methods
-    public Facade.SI_Response createPeriodicOrder(Map<Integer, Integer> productAmount, int weekDay) {
+    public Facade.ResponseT<Integer> createPeriodicOrder(Map<Integer, Integer> productAmount, int weekDay) {
         return facade.createOrderPeriodic(productAmount, weekDay);
     }
-
 
     public Facade.ResponseT<Map<Integer, Integer>> confirmOrder(int order_id) {
         return facade.confirmOrder(order_id);
     }
 
-    public Facade.SI_Response confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount) {
+    public Facade.ResponseT<List<ProductItem>> confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount) {
         return facade.confirmOrderAmount(order_id, actual_amount);
     }
 
@@ -511,10 +510,6 @@ public class Service {
 
     public Facade.ResponseT<Integer> createOrderShortage(Facade.ResponseT<Boolean> r, int product_id, int min_qty) {
         return facade.createOrderShortage(r, product_id, min_qty);
-    }
-
-    public Facade.SI_Response createOrderPeriodic(Map<Integer, Integer> productAmount, int weekDay) {
-        return facade.createOrderPeriodic(productAmount, weekDay);
     }
 
     public Facade.ResponseT<List<Integer>> getReportListIds() {

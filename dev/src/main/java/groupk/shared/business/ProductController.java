@@ -1,7 +1,6 @@
 package groupk.shared.business;
 
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderMapRecord;
-import groupk.inventory_suppliers.dataLayer.dao.records.readonly.OrderMapData;
 import groupk.shared.business.Inventory.Product;
 import groupk.shared.business.Inventory.ProductItem;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
@@ -14,17 +13,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProductController {
-    public static final String BRANCH_NAME = "Yavne";
+    public static final String BRANCH_NAME = "Tel Aviv";
 
-    private Map<Integer, Product> products;
-    private CategoryController category_controller;
-    private PersistenceController pc;
-    private Map<Integer, Map<Integer, Integer>> orders;
+    private final Map<Integer, Product> products;
+    private final Map<Integer, Map<Integer, Integer>> orders;
+    private final CategoryController category_controller;
+    private final PersistenceController pc;
 
 
     //constructors
     public ProductController(PersistenceController pc, CategoryController category_controller) {
         products = new HashMap<>();
+        orders = new HashMap<>();
         this.pc = pc;
         this.category_controller = category_controller;
         pc.getProducts().all().forEach(this::addFromExisting);
@@ -276,16 +276,18 @@ public class ProductController {
         return orders.get(order_id);
     }
 
-    public void confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount, int supplier_ppn) throws Exception {
+    public List<ProductItem> confirmOrderAmount(int order_id, Map<Integer, Integer> actual_amount, int supplier_ppn) throws Exception {
+        List<ProductItem> items = new ArrayList<>();
         for (Map.Entry<Integer, Integer> pair : actual_amount.entrySet()) {
             int product_id = pair.getKey(), amount = pair.getValue();
             for (int i = 0; i < amount; i++)
-                randomizeProductItem(product_id, supplier_ppn);
+                items.add(randomizeProductItem(product_id, supplier_ppn));
             if (amount < orders.get(order_id).get(product_id))
                 updateOrderAmount(order_id, product_id, orders.get(order_id).get(product_id) - amount);
             else
                 deleteProductFromOrder(order_id, product_id);
         }
+        return items;
     }
 
     private void updateOrderAmount(int order_id, int product_id, int new_amount) {
@@ -339,10 +341,6 @@ public class ProductController {
         return ProductIdes;
     }
 
-    public void restart() {
-        products.clear();
-    }
-
     public int getMinAmount(String proName) {
         Product p = products.get(proName);
         return p.getMin_qty();
@@ -353,17 +351,17 @@ public class ProductController {
         for (Product p : products.values()) {
             if (p.getMin_qty() > p.getItems().size()) deficiency.put(p.getName(), p.getMin_qty());
         }
-        return (Map<String, Integer>) deficiency;
+        return deficiency;
     }
 
     public List<Product> getProducts() {
-        return products.values().stream().collect(Collectors.toList());
+        return new ArrayList<>(products.values());
     }
 
-    private void randomizeProductItem(int product_id, int supplier_ppn) throws Exception {
+    private ProductItem randomizeProductItem(int product_id, int supplier_ppn) throws Exception {
         String random_location = "Shelf " + new Random().nextInt(10);
         LocalDate random_date = LocalDate.now().plusDays(new Random().nextInt(14));
         boolean random_onShelf = new Random().nextBoolean();
-        addItem(product_id, BRANCH_NAME, random_location, supplier_ppn, random_date, random_onShelf);
+        return addItem(product_id, BRANCH_NAME, random_location, supplier_ppn, random_date, random_onShelf);
     }
 }

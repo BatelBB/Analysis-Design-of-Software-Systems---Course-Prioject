@@ -10,6 +10,7 @@ public class ProductItem {
         return id;
     }
 
+    private final int product_id;
     private final int id;
     private final String store;
     private final String location;
@@ -22,6 +23,7 @@ public class ProductItem {
 
 
     public ProductItem(groupk.shared.business.Inventory.ProductItem PItem) {
+        product_id = PItem.getProduct_id();
         id = PItem.getId();
         store = PItem.getStore();
         productName = PItem.getProductName();
@@ -30,11 +32,10 @@ public class ProductItem {
         expirationDate = PItem.getExpirationDate();
         is_defect = PItem.is_defect();
         defect_reporter = PItem.getDefect_reporter();
-        cus_discount=new ArrayList<>();
+        cus_discount = new ArrayList<>();
         List<groupk.shared.business.Inventory.DiscountPair> BusinessCus_discount = PItem.getCus_discount();
-        for (groupk.shared.business.Inventory.DiscountPair dp : BusinessCus_discount) {
+        for (groupk.shared.business.Inventory.DiscountPair dp : BusinessCus_discount)
             cus_discount.add(new DiscountPair(dp));
-        }
     }
 
     public String getProductName() {
@@ -43,5 +44,17 @@ public class ProductItem {
 
     public int getSupplier() {
         return supplier;
+    }
+
+    @Override
+    public String toString() {
+        return
+                "Product ID & Name:\t" + product_id + " | " + productName +
+                        "ID:\t" + id +
+                        "Store:\t" + store +
+                        "Location:\t" + location +
+                        "Supplier PPN:\t" + supplier +
+                        "Expiration date:\t" + expirationDate
+                ;
     }
 }
