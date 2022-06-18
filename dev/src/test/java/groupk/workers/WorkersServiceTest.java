@@ -148,7 +148,7 @@ public class WorkersServiceTest {
         em.add(SM); em.add(s); em.add(l); em.add(d); em.add(HR); em.add(shiftM); em.add(LM); em.add(c); em.add(TM);
         Shift shift = service.createShift(HR.id, new GregorianCalendar(),Shift.Type.Morning, em, new HashMap<>()).getValue();
         assertEquals(service.listShifts(HR.id).getValue().size(), 1);
-        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getValue().getRequiredStaff().size(),9);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getValue().getRequiredStaff().size(),8);
         assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getValue().getRequiredStaff().get(Employee.Role.StoreManager),1);
         assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getValue().getRequiredStaff().get(Employee.Role.LogisticsManager),1);
         assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getValue().getRequiredStaff().get(Employee.Role.HumanResources),1);
@@ -236,7 +236,7 @@ public class WorkersServiceTest {
         em.add(s); em.add(l); em.add(d); em.add(shiftM); em.add(c); em.add(TM);
         Shift shift = service.createShift(HR.id, new GregorianCalendar(),Shift.Type.Evening, em, new HashMap<>()).getValue();
         assertEquals(service.listShifts(HR.id).getValue().size(), 1);
-        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getValue().getRequiredStaff().size(),9);
+        assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getValue().getRequiredStaff().size(),8);
         assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getValue().getRequiredStaff().get(Employee.Role.StoreManager),0);
         assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getValue().getRequiredStaff().get(Employee.Role.LogisticsManager),0);
         assertEquals(service.readShift(HR.id, shift.getDate(), shift.getType()).getValue().getRequiredStaff().get(Employee.Role.HumanResources),0);

@@ -175,7 +175,7 @@ public class WorkersBusinessTest {
         em.add(SM); em.add(HR); em.add(LM); em.add(s); em.add(d); em.add(ShM); em.add(c); em.add(l); em.add(TM);
         Shift shift = facade.addShift(HR.id, new GregorianCalendar(),Shift.Type.Morning, em, new HashMap<>());
         assertEquals(facade.listShifts(HR.id).size(), 1);
-        assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().size(),9);
+        assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().size(),8);
         assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().get(Employee.Role.StoreManager),1);
         assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().get(Employee.Role.LogisticsManager),1);
         assertEquals(facade.readShift(HR.id, shift.getDate(), shift.getType()).getRequiredStaff().get(Employee.Role.HumanResources),1);
