@@ -40,7 +40,8 @@ public class MainEmployeesAndDelivery {
                         new AddDriverLicense(),
                         new GetDeliveryByOrder(),
                         new GetDeliveryRequests(),
-                        new ConfirmDeliveryRequest()
+                        new ConfirmDeliveryRequest(),
+                        new DenyDeliveryRequest()
                 }, service,
                 () -> {
                         keepGoing.set(false);
