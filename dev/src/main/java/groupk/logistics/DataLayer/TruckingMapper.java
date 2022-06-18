@@ -54,7 +54,6 @@ public class TruckingMapper {
             removeDestinationsTrucking(trucking.getId());
             throw e;
         }
-        truckingIDMap.insertTrucking(trucking);
         return toReturn;
     }
 
