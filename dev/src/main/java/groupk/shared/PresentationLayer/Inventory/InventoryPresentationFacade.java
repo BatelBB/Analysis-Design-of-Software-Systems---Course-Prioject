@@ -1,6 +1,7 @@
 package groupk.shared.PresentationLayer.Inventory;
 
 import groupk.shared.service.Service;
+import groupk.shared.service.dto.Employee;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +17,8 @@ public class InventoryPresentationFacade {
         this.service = service;
     }
 
-    public void execute(String input) {
+    public void execute(String input, Employee currentUser) {
+        // TODO Use currentUser.role to check the role of the active user, when currentUser is null no user is logged in.
         try {
             if (!input.equals("exit")) {
                 String command = input.substring(0, input.indexOf(" "));

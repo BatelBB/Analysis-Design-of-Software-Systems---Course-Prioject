@@ -5,6 +5,7 @@ import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.Supplier;
 import groupk.inventory_suppliers.dataLayer.dao.records.PaymentCondition;
 import groupk.shared.service.Service;
+import groupk.shared.service.dto.Employee;
 
 import static groupk.shared.service.ServiceBase.*;
 
@@ -22,7 +23,8 @@ public class SupplierPresentationFacade {
         this.service = service;
     }
 
-    public void startSupplierMenu() {
+    public void startSupplierMenu(Employee currentUser) {
+        // TODO Use currentUser.role to check the role of the active user, when currentUser is null no user is logged in.
         while (true) {
             int userInput = input.nextInt(Menu.getMainMenu());
             switch (userInput) {

@@ -57,11 +57,11 @@ public class App {
                     "5. Exit\n");
             switch (in) {
                 case (1): {
-                    supplierPresentation.startSupplierMenu();
+                    supplierPresentation.startSupplierMenu(subject);
                     break;
                 }
                 case (2): {
-                    startInventoryMenu();
+                    startInventoryMenu(subject);
                     break;
                 }
                 case (3) : {
@@ -91,12 +91,12 @@ public class App {
     }
 
 
-    private void startInventoryMenu() {
+    private void startInventoryMenu(Employee currentUser) {
         Scanner scan = new Scanner(System.in);
         String input = "";
         do {
             input = scan.nextLine();
-            inventoryPresentationFacade.execute(input);
+            inventoryPresentationFacade.execute(input, currentUser);
         }
         while (!input.equals("exit"));
         System.out.println("thank you");
