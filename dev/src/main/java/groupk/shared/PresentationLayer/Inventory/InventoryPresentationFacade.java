@@ -1,5 +1,6 @@
 package groupk.shared.PresentationLayer.Inventory;
 
+import groupk.shared.PresentationLayer.Suppliers.UserOutput;
 import groupk.shared.service.Service;
 import groupk.shared.service.dto.Employee;
 
@@ -25,89 +26,89 @@ public class InventoryPresentationFacade {
                 args = input.substring(input.indexOf(" ") + 1).split(",", -1);
                 switch (command) {
                     case "addCategory":
-                        addCategory();
-                        break;
+                        if (checkUserStorage(currentUser)) addCategory();
+                         break;
                     case "removeCategory":
-                        removeCategory();
-                        break;
+                        if (checkUserStorage(currentUser)) removeCategory();
+                         break;
                     case "addSubCategory":
-                        addSubCategory();
-                        break;
+                        if (checkUserStorage(currentUser)) addSubCategory();
+                         break;
                     case "removeSubCategory":
-                        removeSubCategory();
-                        break;
+                        if (checkUserStorage(currentUser)) removeSubCategory();
+                         break;
                     case "addSubSubCategory":
-                        addSubSubCategory();
-                        break;
+                        if (checkUserStorage(currentUser)) addSubSubCategory();
+                         break;
                     case "removeSubSubCategory":
-                        removeSubSubCategory();
-                        break;
+                        if (checkUserStorage(currentUser)) removeSubSubCategory();
+                         break;
                     case "updateCategoryCusDiscount":
-                        updateCategoryCusDiscount();
-                        break;
+                        if (checkUserStorage(currentUser)) updateCategoryCusDiscount();
+                         break;
                     case "updateProductCusDiscount":
-                        updateProductCusDiscount();
-                        break;
+                        if (checkUserStorage(currentUser)) updateProductCusDiscount();
+                         break;
                     case "updateItemCusDiscount":
-                        updateItemCusDiscount();
-                        break;
+                        if (checkUserStorage(currentUser)) updateItemCusDiscount();
+                         break;
                     case "updateProductCusPrice":
-                        updateProductCusPrice();
-                        break;
+                        if (checkUserStorage(currentUser)) updateProductCusPrice();
+                         break;
                     case "addProduct":
-                        addProduct();
-                        break;
+                        if (checkUserStorage(currentUser)) addProduct();
+                         break;
                     case "removeProduct":
-                        removeProduct();
-                        break;
+                        if (checkUserStorage(currentUser)) removeProduct();
+                         break;
                     case "addItem":
-                        addItem();
-                        break;
+                        if (checkUserStorage(currentUser)) addItem();
+                         break;
                     case "removeItem":
-                        removeItem();
-                        break;
+                        if (checkUserStorage(currentUser)) removeItem();
+                         break;
                     case "updateItemDefect":
-                        updateItemDefect();
-                        break;
+                        if (checkUserStorage(currentUser)) updateItemDefect();
+                         break;
                     case "getItemLocation":
-                        getItemLocation();
-                        break;
+                        if (checkUserStorage(currentUser)) getItemLocation();
+                         break;
                     case "changeItemLocation":
-                        changeItemLocation();
-                        break;
+                        if (checkUserStorage(currentUser)) changeItemLocation();
+                         break;
                     case "changeItemOnShelf":
-                        changeItemOnShelf();
-                        break;
+                        if (checkUserStorage(currentUser)) changeItemOnShelf();
+                         break;
                     case "createMissingReport":
-                        createMissingReport();
-                        break;
+                        if (checkUserStoreManager(currentUser)) createMissingReport();
+                         break;
                     case "createExpiredReport":
-                        createExpiredReport();
-                        break;
+                        if (checkUserStoreManager(currentUser)) createExpiredReport();
+                         break;
                     case "createSurplusesReport":
-                        createSurplusesReport();
-                        break;
+                        if (checkUserStoreManager(currentUser)) createSurplusesReport();
+                         break;
                     case "createDefectiveReport":
-                        createDefectiveReport();
-                        break;
+                        if (checkUserStoreManager(currentUser)) createDefectiveReport();
+                         break;
                     case "createBySupplierReport":
-                        createBySupplierReport();
-                        break;
+                        if (checkUserStoreManager(currentUser)) createBySupplierReport();
+                         break;
                     case "createByProductReport":
-                        createByProductReport();
-                        break;
+                        if (checkUserStoreManager(currentUser)) createByProductReport();
+                         break;
                     case "createByCategoryReport":
-                        createByCategoryReport();
-                        break;
+                        if (checkUserStoreManager(currentUser)) createByCategoryReport();
+                         break;
                     case "removeReport":
-                        removeReport();
-                        break;
+                        if (checkUserStoreManager(currentUser)) removeReport();
+                         break;
                     case "getReport":
-                        getReport();
-                        break;
+                        if (checkUserStoreManager(currentUser)) getReport();
+                         break;
                     case "createPeriodicOrder":
-                        createPeriodicOrder();
-                        break;
+                        if (checkUserStorage(currentUser)) createPeriodicOrder();
+                         break;
                     default:
                         System.out.println("unknown command, aborting..");
                         break;
@@ -116,6 +117,22 @@ public class InventoryPresentationFacade {
         } catch (Exception e) {
             System.out.println("Invalid syntax for inventory module command");
         }
+    }
+
+    private boolean checkUserStoreManager(Employee currentUser) {
+        if(currentUser == null || !currentUser.role.equals(Employee.Role.StoreManager)){
+            UserOutput.println("Only store manager can manage reports");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkUserStorage(Employee currentUser) {
+        if(currentUser == null || !currentUser.role.equals(Employee.Role.Stocker)){
+            UserOutput.println("Only Stocker can handle orders and items");
+            return false;
+        }
+        return true;
     }
 
 
