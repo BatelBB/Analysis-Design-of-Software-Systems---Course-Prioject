@@ -168,7 +168,7 @@ public class WorkersBusinessTest {
                 new GregorianCalendar(),
                 30,
                 0, 0,
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 shiftPreferences
         );
         LinkedList<Employee> em = new LinkedList<>();

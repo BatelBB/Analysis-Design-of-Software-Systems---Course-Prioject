@@ -142,7 +142,7 @@ public class WorkersServiceTest {
                 new GregorianCalendar(),
                 30,
                 0, 0,
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 shiftPreferences).getValue();
         LinkedList<Employee> em = new LinkedList<>();
         em.add(SM); em.add(s); em.add(l); em.add(d); em.add(HR); em.add(shiftM); em.add(LM); em.add(c); em.add(TM);
@@ -230,7 +230,7 @@ public class WorkersServiceTest {
                 new GregorianCalendar(),
                 30,
                 0, 0,
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 shiftPreferences).getValue();
         LinkedList<Employee> em = new LinkedList<>();
         em.add(s); em.add(l); em.add(d); em.add(shiftM); em.add(c); em.add(TM);
