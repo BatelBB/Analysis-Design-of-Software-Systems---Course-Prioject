@@ -68,7 +68,7 @@
             <archive>
               <manifest>
                 <addClasspath>true</addClasspath>
-                <mainClass>groupk.shared.PresentationLayer.MainInventoryAndSuppliers</mainClass>
+                <mainClass>groupk.Main</mainClass>
               </manifest>
             </archive>
           </configuration>

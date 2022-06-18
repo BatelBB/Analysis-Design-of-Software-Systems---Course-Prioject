@@ -6,6 +6,7 @@
 
 # Compiled files.
 target
+dependency-reduced-pom.xml
 
 # Database files.
 *.db
