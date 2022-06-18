@@ -29,7 +29,7 @@ public class CreateDelivery implements Command {
 
     @Override
     public boolean isVisible(Employee.Role role) {
-        return role == Employee.Role.LogisticsManager || role == Employee.Role.TruckingManger;
+        return role == Employee.Role.LogisticsManager;
     }
 
     @Override
@@ -37,13 +37,13 @@ public class CreateDelivery implements Command {
         if (command.length != 7) {
             System.out.println("Error: Wrong number of arguments.");
             System.out.println("Usage:");
-            System.out.println("> create delivery <registration> <date> <time> <driver-id> <duration-in-minutes>");
+            System.out.println("> create delivery <registration> <date> <driver-id> <duration-in-minutes>");
             return;
         }
 
         LocalDateTime datetime;
         try {
-            datetime = CommandRunner.parseLocalDateTime(command[3], command[4]);
+            datetime = CommandRunner.parseLocalDateTime(command[3] + " " + command[4]);
         } catch (IllegalArgumentException e) {
             System.out.printf("Error: date or time %s\n", e.getMessage());
             return;
@@ -143,21 +143,21 @@ public class CreateDelivery implements Command {
         try {
             houseNumber = CommandRunner.parseInt(details[5]);
         } catch (IllegalArgumentException e) {
-            System.out.printf("Error: duration in minutes %s\n", e.getMessage());
+            System.out.printf("Error: house number %s\n", e.getMessage());
             return null;
         }
         int floor;
         try {
             floor = CommandRunner.parseInt(details[6]);
         } catch (IllegalArgumentException e) {
-            System.out.printf("Error: duration in minutes %s\n", e.getMessage());
+            System.out.printf("Error: floor %s\n", e.getMessage());
             return null;
         }
         int apartment;
         try {
             apartment = CommandRunner.parseInt(details[7]);
         } catch (IllegalArgumentException e) {
-            System.out.printf("Error: duration in minutes %s\n", e.getMessage());
+            System.out.printf("Error: apartment %s\n", e.getMessage());
             return null;
         }
         Site site = new Site(details[0], details[1], details[2], details[3], details[4], houseNumber, floor, apartment);
@@ -167,16 +167,18 @@ public class CreateDelivery implements Command {
     private String[] takeDetailsOfSite() {
         System.out.println("Enter the details in the following structure:");
         System.out.println("(for address without floor and apartment, enter 0 at those details)");
-        System.out.println("> <contact-guy-name>|<contact-guy-phone>|<area>|<city>|<street>|<house_number>|<floor>|<apartment>");
+        System.out.println("> <contact-guy-name>@<contact-guy-phone>@<area>@<city>@<street>@<house_number>@<floor>@<apartment>");
         System.out.println("For cancel the all command please enter \"no\"");
         Scanner input = new Scanner(System.in);
         System.out.print("> ");
         String command = input.nextLine();
-        String[] details = command.split("|");
+        String[] details = command.split("@");
         while (details.length != 8) {
-            if (details.length == 1)
+            if (details.length == 1) {
                 if (details[0] == "no")
                     return null;
+            }
+            System.out.println("Error: Wrong number of arguments.");
             details = takeDetailsOfSite();
         }
         return details;
@@ -192,7 +194,7 @@ public class CreateDelivery implements Command {
             try {
                 orderID = CommandRunner.parseInt(orders[i]);
             } catch (IllegalArgumentException e) {
-                System.out.printf("Error: duration in minutes %s\n", e.getMessage());
+                System.out.printf("Error: order-id %s\n", e.getMessage());
                 return null;
             }
             toReturn.add(orderID);
@@ -202,13 +204,13 @@ public class CreateDelivery implements Command {
 
     private String[] takeOrdersList() {
         System.out.println("Enter the orders in the following structure:");
-        System.out.println("> <first order-id>|<second order-id>|<third order-id>...");
-        System.out.println("(with no '|' at the begin and at the end)");
+        System.out.println("> <first order-id>@<second order-id>@<third order-id>...");
+        System.out.println("(with no '@' at the begin and at the end)");
         System.out.println("For cancel the all command please enter \"no\"");
         Scanner input = new Scanner(System.in);
         System.out.print("> ");
         String command = input.nextLine();
-        String[] details = command.split("|");
+        String[] details = command.split("@");
         if (details.length == 1)
             if (details[0].equals("no"))
                 return null;

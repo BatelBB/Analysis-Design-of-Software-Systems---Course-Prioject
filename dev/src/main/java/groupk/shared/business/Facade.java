@@ -264,7 +264,7 @@ public class Facade {
         if (subject.isError()) {
             return new Response<>(subject.getErrorMessage());
         }
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("Subject must be of logistics manager role.");
         }
         return logistics.deleteDelivery(Integer.parseInt(subjectID), deliveryID);
@@ -272,7 +272,7 @@ public class Facade {
 
     // Previously printBoard
     public Response<List<Delivery>> listDeliveries(String subjectID) {
-        if (isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() || isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return logistics.listDeliveries(Integer.parseInt(subjectID));
         }
         if (isFromRole(subjectID, Employee.Role.Driver).getValue()) {
@@ -282,14 +282,14 @@ public class Facade {
     }
 
     public Response<List<String>> listVehicles(String subjectID) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
         return logistics.listVehicles();
     }
 
     public Response<List<String>[]> createDelivery(String subjectID, String registrationPlateOfVehicle, LocalDateTime date, String driverUsername, List<Site> sources, List<Site> destinations, List<Integer> orders, long hours, long minutes) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
         if (!isFromRole(driverUsername, Employee.Role.Driver).getValue()) {
@@ -304,14 +304,14 @@ public class Facade {
     }
 
     public Response<List<Delivery>> listDeliveriesWithVehicle(String subjectID, String registration) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
         return logistics.listDeliveriesWithVehicle(subjectID);
     }
 
     public Response<Boolean> createVehicle(String subjectID, String license, String registrationPlate, String model, int weight, int maxWeight) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
         return logistics.createVehicle(license, registrationPlate, model, weight, maxWeight);
@@ -325,56 +325,56 @@ public class Facade {
     }
 
     public Response<Boolean> addOrdersToTrucking(String subjectID, int truckingID, int orderID) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
         return logistics.addOrdersToTrucking(Integer.parseInt(subjectID), truckingID, orderID);
     }
 
     public Response<List<String>> updateSources(String subjectID, int truckingID, List<Site> sources) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
         return logistics.updateSources(Integer.parseInt(subjectID), truckingID, sources);
     }
 
     public Response<List<String>> updateDestination(String subjectID, int truckingID, List<Site> destinations) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
         return logistics.updateDestination(Integer.parseInt(subjectID), truckingID, destinations);
     }
 
     public Response<List<String>> addSources(String subjectID, int truckingID, List<Site> sources) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
         return logistics.addSources(Integer.parseInt(subjectID), truckingID, sources);
     }
 
     public Response<List<String>> addDestination(String subjectID, int truckingID, List<Site> destinations) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
         return logistics.addDestination(Integer.parseInt(subjectID), truckingID, destinations);
     }
 
     public Response<Boolean> moveOrdersFromTrucking(String subjectID, int truckingID, int orderID) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
         return logistics.moveOrderFromTrucking(Integer.parseInt(subjectID), truckingID, orderID);
     }
 
     public Response<Boolean> updateVehicleOnTrucking(String subjectID, int truckingID, String registrationPlate) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
         return logistics.updateVehicleOnTrucking(Integer.parseInt(subjectID), truckingID, registrationPlate);
     }
 
     public Response<Boolean> updateDriverOnTrucking(String subjectID, int truckingID, String driverUsername) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
         if (!isFromRole(driverUsername, Employee.Role.Driver).getValue()) {
@@ -389,7 +389,7 @@ public class Facade {
     }
 
     public Response<Boolean> updateDateOnTrucking(String subjectID, int truckingID, LocalDateTime newDate) {
-        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue() && !isFromRole(subjectID, Employee.Role.TruckingManger).getValue()) {
+        if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
         if (!isThereWorkerWithThisRoleInShift(subjectID, newDate, Employee.Role.Logistics))

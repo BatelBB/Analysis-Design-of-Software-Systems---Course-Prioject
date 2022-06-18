@@ -1,5 +1,6 @@
 package groupk.shared.PresentationLayer.EmployeesLogistics;
 
+import groupk.logistics.DataLayer.TruckingMapper;
 import groupk.shared.PresentationLayer.EmployeesLogistics.command.Command;
 import groupk.shared.service.Response;
 import groupk.shared.service.Service;
@@ -8,6 +9,7 @@ import groupk.shared.service.dto.Shift;
 
 import java.sql.Connection;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -156,5 +158,17 @@ public class CommandRunner {
         }
         // This introduces a bug when using the program across time zones. It is out of scope.
         return LocalDateTime.ofInstant(parsedDate.toInstant(), parsedDate.getTimeZone().toZoneId());
+    }
+
+    public static LocalDateTime parseLocalDateTime(String date) {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime toReturn;
+        try {
+            toReturn = LocalDateTime.parse(date, dateFormat);
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("must follow yyyy-MM-dd HH:mm format, for example 2022-12-31 16:59");
+        }
+        return toReturn;
     }
 }

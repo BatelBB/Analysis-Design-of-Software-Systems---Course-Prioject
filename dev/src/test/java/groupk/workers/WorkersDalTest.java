@@ -157,7 +157,7 @@ public class WorkersDalTest {
         Employee createdUpdate = new Employee(
                 "111111111",
                 "Foo2",
-                Employee.Role.TruckingManger,
+                Employee.Role.LogisticsManager,
                 "FooBank2",
                 12, 12,
                 302,
