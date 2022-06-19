@@ -22,11 +22,14 @@ public class OrderController {
     private final SupplierController suppliers;
     ArrayList<Order> orders;
     private PersistenceController dal;
+    private ItemController items;
 
     public OrderController(PersistenceController dal,
                            QuantityDiscountController discounts,
-                           LogisticsController logistics, SupplierController suppliers) {
+                           LogisticsController logistics, SupplierController suppliers,
+                           ItemController items) {
         this.dal = dal;
+        this.items = items;
         orders = new ArrayList<>();
         this.discounts = discounts;
         this.logistics = logistics;
@@ -36,7 +39,7 @@ public class OrderController {
 
     private void createFromExisting(OrderRecord orderRecord) {
         Supplier supplier = suppliers.get(orderRecord.ppn);
-        orders.add(new Order(supplier, orderRecord, dal, discounts));
+        orders.add(new Order(supplier, orderRecord, dal, discounts, items));
     }
 
     public Order get(int id) throws BusinessLogicException {
@@ -51,7 +54,7 @@ public class OrderController {
             throw new BusinessLogicException("delivery date can't be before ordering date.");
         }
         OrderData data = dal.getOrders().createOrder(supplier.getPpn(), type, ordered, delivered);
-        Order order = new Order(supplier, data, dal, discounts);
+        Order order = new Order(supplier, data, dal, discounts, items);
         orders.add(order);
         return order;
     }
@@ -119,7 +122,7 @@ public class OrderController {
         }
 
         OrderData data = dal.getOrders().createOrder(supplier.getPpn(), type, ordered, delivered);
-        Order order = new Order(supplier, data, dal, discounts);
+        Order order = new Order(supplier, data, dal, discounts, items);
 
         if(type == OrderType.Shortages){
             order.orderItem(item, amountOfProd);

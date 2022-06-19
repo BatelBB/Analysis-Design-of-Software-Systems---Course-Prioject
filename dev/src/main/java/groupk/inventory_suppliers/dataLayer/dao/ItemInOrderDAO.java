@@ -77,7 +77,7 @@ public class ItemInOrderDAO extends BaseDAO<ItemInOrderRecord.ItemInOrderKey, It
                 ps -> ps.setInt(1, amount),
                 ps -> ps.setInt(2, ppn),
                 ps -> ps.setInt(3, catalogNumber),
-                ps -> ps.setInt(4, amount)
+                ps -> ps.setInt(4, orderId)
         );
     }
 
