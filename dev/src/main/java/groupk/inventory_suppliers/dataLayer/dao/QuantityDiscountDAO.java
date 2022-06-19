@@ -2,13 +2,16 @@ package groupk.inventory_suppliers.dataLayer.dao;
 
 import groupk.inventory_suppliers.dataLayer.dao.records.ItemRecord;
 import groupk.inventory_suppliers.dataLayer.dao.records.QuantityDiscountRecord;
+import groupk.shared.PresentationLayer.Suppliers.UserOutput;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class QuantityDiscountDAO extends BaseDAO<Integer, QuantityDiscountRecord> {
@@ -81,9 +84,13 @@ public class QuantityDiscountDAO extends BaseDAO<Integer, QuantityDiscountRecord
     }
 
     public void deleteAllForItem(ItemRecord.ItemKey itemKey) {
-        all()
+        List<Integer> toDelete = all()
                 .filter(x -> x.itemKey.equals(itemKey))
                 .map(x -> x.id)
-                .forEach(this::delete);
+                .collect(Collectors.toList());
+                toDelete.forEach(x -> {
+                    UserOutput.println("deleting quantity discount, id: " + x);
+                    delete(x);
+                });
     }
 }
