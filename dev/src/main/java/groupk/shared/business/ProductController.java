@@ -98,7 +98,7 @@ public class ProductController {
         return products.get(product_id).getMin_qty();
     }
 
-    public Product addProduct(String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
+    public Product addProduct(String name, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) throws Exception {
         try {
             if (!category_controller.getCategories().containsKey(category))
                 throw new Exception("category doesn't exist");
@@ -108,9 +108,6 @@ public class ProductController {
                 throw new Exception("sub-sub-category doesn't exist");
             if (name == null || name.equals(""))
                 throw new Exception("product name empty");
-            if (manufacturer == null || manufacturer.equals(""))
-                throw new Exception("product name empty");
-            priceLegal(man_price);
             priceLegal(cus_price);
             if (min_qty < 0)
                 throw new Exception("min quantity smaller than 0");

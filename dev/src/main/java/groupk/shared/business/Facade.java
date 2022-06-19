@@ -474,10 +474,9 @@ public class Facade {
                 .updateItemDefect(product_id, item_id, is_defect, defect_reporter));
     }
 
-    public ResponseT<Product> addProduct(String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
+    public ResponseT<Product> addProduct(String name, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
         return responseFor(() -> new Product(product_controller
-                .addProduct(name, manufacturer, man_price, cus_price, min_qty,
-                        supply_time, category, sub_category, subsub_category)
+                .addProduct(name, cus_price, min_qty, supply_time, category, sub_category, subsub_category)
         ));
     }
 
@@ -620,7 +619,7 @@ public class Facade {
     }
 
     public ResponseT<Order> getOrder(int id) {
-        return responseFor(()-> orders.get(id));
+        return responseFor(() -> orders.get(id));
     }
 
     public ResponseT<Supplier> createSupplier(int ppn, int bankAccount, String name,

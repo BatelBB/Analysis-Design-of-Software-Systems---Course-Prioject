@@ -19,7 +19,6 @@ public class Product {
     private final String name;
     private int shelf_qty;
     private int storage_qty;
-    private String manufacturer;
     private float cus_price;
     private final int min_qty;
     private final Map<Integer, ProductItem> items;
@@ -155,10 +154,6 @@ public class Product {
 
     public int getStorage_qty() {
         return storage_qty;
-    }
-
-    public String getManufacturer() {
-        return manufacturer;
     }
 
     public double getCus_price() {
