@@ -42,7 +42,8 @@ public class MainEmployeesAndDelivery {
                         new GetDeliveryRequests(),
                         new ConfirmDeliveryRequest(),
                         new DenyDeliveryRequest(),
-                        new GetOptionsForDelivery()
+                        new GetOptionsForDelivery(),
+                        new ListVehcileDeliveries()
                 }, service,
                 () -> {
                         keepGoing.set(false);
