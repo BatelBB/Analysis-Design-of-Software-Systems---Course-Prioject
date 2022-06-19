@@ -159,8 +159,14 @@ public class SupplierPresentationFacade {
                             int catalog = input.nextInt("Enter the item's catalog number: ");
                             int productNumber = input.nextInt("Enter product number:");
                             float price = (float) input.nextInt("Enter the item's price: ");
-                            output.print(service.createItem(ppn, catalog, productNumber, price).data.toString());
-                            break;
+                            r = service.createItem(ppn, catalog, productNumber, price);
+                            if(!r.success){
+                                output.println(r.error);
+                                break;
+                            }else {
+                                output.print(r.toString());
+                                break;
+                            }
                         }
                         case (2): {
                             //edit price of existing item
