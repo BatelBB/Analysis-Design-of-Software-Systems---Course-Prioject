@@ -26,11 +26,11 @@ public class TruckingRequestMapper {
 
     public boolean addTruckingRequest(int orderID, LocalDateTime createDate, String sourceDetails, String destinationDetails) {
         int n = 0;
-        String query = "INSERT INTO Truckings(date,orderID,source,destination) VALUES(?,?,?,?)";
+        String query = "INSERT INTO Truckings_Requests(date,orderID,source,destination) VALUES(?,?,?,?)";
         try {
             PreparedStatement prepStat = myDataBase.connection.prepareStatement(query);
             DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-            String formattedDateTime = createDate.format(formatter);
+            String formattedDateTime = createDate.format(formatter).substring(0, 16);
             formattedDateTime = formattedDateTime.replace("T", " ");
             prepStat.setString(1, formattedDateTime);
             prepStat.setInt(2, orderID);
@@ -52,7 +52,7 @@ public class TruckingRequestMapper {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 toReturn.add("Trucking request from: " + rs.getString(1) + " of order " + rs.getInt(2) + "\n" +
-                        "  The source details: " + rs.getString(3) + "\n  The destination details: " + rs.getString(4));
+                        "   The source details: " + rs.getString(3) + "\n   The destination details: " + rs.getString(4));
             }
         } catch (SQLException e) {
             throw new IllegalArgumentException("Oops something got wrong: \n" + e.getMessage());

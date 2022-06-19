@@ -50,6 +50,7 @@ public class GetDeliveryRequests implements Command {
         }
         for (String request : requests) {
             System.out.println(i + ". " + request);
+            i++;
         }
     }
 }
