@@ -168,11 +168,6 @@ public class SupplierPresentationFacade {
                             break;
                         }
                         case (2): {
-                            //Edit catalog number of existing item
-                            output.println("[Sorry, this operation isn't available]");
-                            break;
-                        }
-                        case (3): {
                             //edit price of existing item
                             int[] arr = checkItem();
                             Item item = service.getItem(arr[0], arr[1]).data;
@@ -182,14 +177,7 @@ public class SupplierPresentationFacade {
                                 output.println(r.error);
                             break;
                         }
-                        case (4):
-                        case (5):
-                        case (6): {
-                            //edit name of existing item
-                            output.println("this option is no longer supported.");
-                            break;
-                        }
-                        case (7): {
+                        case (3): {
                             //see summery of items
                             output.println(service.getItems().toString());
                             break;
@@ -210,6 +198,10 @@ public class SupplierPresentationFacade {
                         case (1): {
                             //delete existing order
                             int id = input.nextInt("Enter order ID: ");
+                            if (!service.getOrder(id).success) {
+                                output.println(service.getOrder(id).error);
+                                break;
+                            }
                             r = service.deleteOrder(service.getOrder(id).data.getId());
                             if (!r.success)
                                 output.println(r.error);
@@ -242,7 +234,7 @@ public class SupplierPresentationFacade {
                             Item item = service.getItem(itemCoords[0], itemCoords[1]).data;
                             r = service.updateOrderAmount(id, item.getSupplier().getPpn(),
                                     item.getCatalogNumber(), input.nextInt("Enter amount to order"));
-                            if(!r.success)
+                            if (!r.success)
                                 output.println(r.error);
                             break;
                         }
@@ -372,13 +364,12 @@ public class SupplierPresentationFacade {
         boolean retry = true;
         int nextInt = 0;
         while (retry) {
-            try {
-                nextInt = input.nextInt(message);
-                service.getSupplier(nextInt);
+            nextInt = input.nextInt(message);
+            r = service.getSupplier(nextInt);
+            if (r.success)
                 retry = false;
-            } catch (Exception e) {
-                output.println("There isn't supplier with this ppn number, please try again.");
-            }
+            else
+                UserOutput.println(r.error);
         }
         return nextInt;
     }
