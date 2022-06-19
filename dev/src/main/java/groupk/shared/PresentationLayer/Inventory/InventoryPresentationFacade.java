@@ -241,7 +241,7 @@ public class InventoryPresentationFacade {
         int min_qty = convertInt(args[2]);
         int supply_time = convertInt(args[3]);
         if (args.length == 7 && cus_price != -1.0 && min_qty != -1 && supply_time != -1) {
-            r = service.addProduct(args[0], cus_price, min_qty, supply_time, args[4], args[5], args[6]);
+            r = service.addProduct(args[0], null, 0, cus_price, min_qty, supply_time, args[4], args[5], args[6]);
             if (!r.success)
                 System.out.println(r.error);
             else

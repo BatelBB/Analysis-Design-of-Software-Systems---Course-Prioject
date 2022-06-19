@@ -44,6 +44,8 @@ public class ExampleData {
         // Michael, fill some reasonable fields here
         Product pen = service.addProduct(
                 "GelGrip Pen, 1.0mm, Blue",
+                null,
+                0,
                 12,
                 10,
                 10, // Michael, fill some reasonable fields here
@@ -53,6 +55,8 @@ public class ExampleData {
         ).data;
         Product cheaperPen = service.addProduct(
                 "GelGrip Pen, 1.0mm, Blue",
+                null,
+                0,
                 6,
                 10,
                 10, // Michael, fill some reasonable fields here
@@ -62,6 +66,8 @@ public class ExampleData {
         ).data;
         Product milk5 = service.addProduct(
                 "Mister milk",
+                null,
+                0,
                 40,
                 3,
                 5,
@@ -71,6 +77,8 @@ public class ExampleData {
         ).data; // same
         Product milk10 = service.addProduct(
                 "Miss milk",
+                null,
+                0,
                 40,
                 3,
                 5,

@@ -276,7 +276,7 @@ public class Service {
     }
 
     //Product methods
-    public Facade.ResponseT<groupk.shared.service.Inventory.Objects.Product> addProduct(String name, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
+    public Facade.ResponseT<groupk.shared.service.Inventory.Objects.Product> addProduct(String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
         return facade.addProduct(name, cus_price, min_qty, supply_time, category, sub_category, subsub_category);
     }
 
