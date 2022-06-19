@@ -646,6 +646,9 @@ public class Facade {
         return responseForVoid(() -> {
             Supplier s = suppliers.get(ppn);
             orders.deleteAllFromSupplier(s);
+            items.all().
+                    stream().filter(x -> x.getSupplier().getPpn() == s.getPpn())
+                    .forEach(discounts::deleteAllFor);
             items.deleteAllFromSupplier(s);
             suppliers.delete(ppn);
         });

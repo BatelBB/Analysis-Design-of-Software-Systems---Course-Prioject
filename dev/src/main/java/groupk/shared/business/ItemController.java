@@ -18,7 +18,9 @@ public class ItemController {
     Map<String, Item> items;
     PersistenceController dal;
 
-    public ItemController(PersistenceController dal, SupplierController suppliers) {
+    public ItemController(PersistenceController dal,
+                          SupplierController suppliers,
+                          QuantityDiscountController discounts) {
         this.dal = dal;
         this.suppliers = suppliers;
         items = new HashMap<>();
@@ -68,7 +70,6 @@ public class ItemController {
         ItemRecord.ItemKey itemId = new ItemRecord.ItemKey(ppn, catalogNumber);
         dal.getItems().delete(itemId);
         dal.getItemsInOrders().deleteItem(ppn, catalogNumber);
-        dal.getQuantityDiscounts().deleteAllForItem(itemId);
         items.remove(key);
     }
 
@@ -94,9 +95,7 @@ public class ItemController {
             if(item.getSupplier().getPpn() != s.getPpn()) {
                 continue;
             }
-            items.remove(key);
-            discounts.deleteAllFor();
-            dal.getItems().delete(new ItemRecord.ItemKey(item.getSupplier().getPpn(), item.getCatalogNumber()));
+            delete(item);
         }
     }
 
