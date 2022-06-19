@@ -48,7 +48,7 @@ public class Facade {
         items = new ItemController(p, suppliers);
         discounts = new QuantityDiscountController(p, items);
         logistics = new LogisticsController(myDataBase);
-        orders = new OrderController(p, discounts, logistics);
+        orders = new OrderController(p, discounts, logistics, suppliers);
         employees = new EmployeesController(dalController);
         report_controller = new ReportController(p, product_controller);
     }

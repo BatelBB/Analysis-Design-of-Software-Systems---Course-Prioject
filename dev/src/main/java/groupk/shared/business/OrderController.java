@@ -1,5 +1,6 @@
 package groupk.shared.business;
 
+import groupk.inventory_suppliers.dataLayer.dao.records.OrderRecord;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 
@@ -18,16 +19,24 @@ import java.util.Map;
 public class OrderController {
     private final QuantityDiscountController discounts;
     private final LogisticsController logistics;
+    private final SupplierController suppliers;
     ArrayList<Order> orders;
     private PersistenceController dal;
 
     public OrderController(PersistenceController dal,
                            QuantityDiscountController discounts,
-                           LogisticsController logistics) {
+                           LogisticsController logistics, SupplierController suppliers) {
         this.dal = dal;
         orders = new ArrayList<>();
         this.discounts = discounts;
         this.logistics = logistics;
+        this.suppliers = suppliers;
+        this.dal.getOrders().all().forEach(this::createFromExisting);
+    }
+
+    private void createFromExisting(OrderRecord orderRecord) {
+        Supplier supplier = suppliers.get(orderRecord.ppn);
+        orders.add(new Order(supplier, orderRecord, dal, discounts));
     }
 
     public Order get(int id) throws BusinessLogicException {

@@ -71,7 +71,7 @@ public class OrderDAO extends BaseDAO<Integer, OrderRecord> {
                 qu.getInt("ppn"),
                 qu.getFloat("price"),
                 qu.getDate("ordered").toLocalDate(),
-                qu.getDate("delivered").toLocalDate()
+                qu.getDate("provided").toLocalDate()
         );
     }
 
