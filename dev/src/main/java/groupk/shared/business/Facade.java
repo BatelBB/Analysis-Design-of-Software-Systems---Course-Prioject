@@ -620,7 +620,7 @@ public class Facade {
     }
 
     public ResponseT<Order> getOrder(int id) {
-        return null;
+        return responseFor(()-> orders.get(id));
     }
 
     public ResponseT<Supplier> createSupplier(int ppn, int bankAccount, String name,

@@ -1,6 +1,7 @@
 package groupk.shared.PresentationLayer.EmployeesLogistics.command;
 
 import groupk.shared.PresentationLayer.EmployeesLogistics.CommandRunner;
+import groupk.shared.PresentationLayer.Suppliers.UserInput;
 import groupk.shared.business.Facade;
 import groupk.shared.service.Response;
 import groupk.shared.service.dto.Employee;
@@ -59,6 +60,9 @@ public class DenyDeliveryRequest implements Command {
             System.out.println("Do you want to delete the request anyway?");
             Boolean answer = takeYesOrNo();
             if (answer == null | !answer.booleanValue()) {
+                UserInput.getInstance().nextInt("Insert stocker ID: ");
+                UserInput.getInstance().nextInt("Insert Logistic Manager ID: ");
+                UserInput.getInstance().nextInt("Insert HR Manager ID: ");
                 System.out.println("The action is canceled");
                 return;
             }
