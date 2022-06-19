@@ -89,7 +89,6 @@ public class QuantityDiscountDAO extends BaseDAO<Integer, QuantityDiscountRecord
                 .map(x -> x.id)
                 .collect(Collectors.toList());
                 toDelete.forEach(x -> {
-                    UserOutput.println("deleting quantity discount, id: " + x);
                     delete(x);
                 });
     }

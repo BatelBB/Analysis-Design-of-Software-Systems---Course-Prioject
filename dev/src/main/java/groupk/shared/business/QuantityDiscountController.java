@@ -41,7 +41,7 @@ public class QuantityDiscountController {
                 new ItemRecord.ItemKey(item.getSupplier().getPpn(), item.getCatalogNumber())
         );
         UserOutput.println("Quantity discounts for item: supplier PPN " +  item.getSupplier().getPpn() +
-                ", catalog number " + item.getCatalogNumber() + "were deleted");
+                ", catalog number " + item.getCatalogNumber() + " were deleted");
     }
 
     public Collection<QuantityDiscount> discountsFor(Item item) {

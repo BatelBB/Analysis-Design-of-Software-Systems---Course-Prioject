@@ -50,7 +50,7 @@ public class SupplierPresentationFacade {
                             PaymentCondition paymentCondition = choosePayment("Which way will the supplier pay? ");
                             DayOfWeek day = isDelivering ? chooseDay() : null;
                             String contactName = input.nextString("Enter the supplier's contact name: ");
-                            String address = input.nextString("Enter the supplier's contact address: ");
+                            String address = input.nextAddress("Enter the supplier's contact address: ");
                             String phoneNum = input.nextPhone("Enter the supplier's contact phone number: ");
                             Facade.ResponseT<Supplier> supplier = service.createSupplier(ppn, bankAccount, name, isDelivering,
                                     paymentCondition, day, contactName, phoneNum, address);
@@ -69,11 +69,6 @@ public class SupplierPresentationFacade {
                             try {
                                 switch (edit) {
                                     case (1): {
-                                        //PPN NUMBER
-                                        output.println("[Sorry, this operation isn't available]");
-                                        break;
-                                    }
-                                    case (2): {
                                         //Edit bank account
                                         int bankAct = input.nextInt("Enter bank account: ");
                                         r = service.setSupplierBankAccount(ppn, bankAct);
@@ -81,7 +76,7 @@ public class SupplierPresentationFacade {
                                             output.println(r.error);
                                         break;
                                     }
-                                    case (3): {
+                                    case (2): {
                                         //Edit company name
                                         String newName = input.nextString("Enter name: ");
                                         r = service.setSupplierCompanyName(ppn, newName);
@@ -89,7 +84,7 @@ public class SupplierPresentationFacade {
                                             output.println(r.error);
                                         break;
                                     }
-                                    case (4): {
+                                    case (3): {
                                         //Edit delivery
                                         boolean newValue = input.nextBoolean("Is delivering?");
                                         r = service.setSupplierIsDelivering(ppn, newValue);
@@ -97,7 +92,7 @@ public class SupplierPresentationFacade {
                                             output.println(r.error);
                                         break;
                                     }
-                                    case (5): {
+                                    case (4): {
                                         //edit payment condition
                                         PaymentCondition payment = choosePayment(
                                                 "Which way will the supplier pay? ");
@@ -106,18 +101,18 @@ public class SupplierPresentationFacade {
                                             output.println(r.error);
                                         break;
                                     }
-                                    case (6): {
+                                    case (5): {
                                         //edit supplying days
                                         r = service.setSupplierRegularSupplyingDays(ppn, chooseDay());
                                         if (!r.success)
                                             output.println(r.error);
                                         break;
                                     }
-                                    case (7): {
+                                    case (6): {
                                         //Edit contact
                                         String contactName = input.nextString("Enter the supplier's contact name: ");
-                                        String address = input.nextString("Enter the supplier's contact address: ");
-                                        String phoneNum = input.nextString(
+                                        String address = input.nextAddress("Enter the supplier's contact address: ");
+                                        String phoneNum = input.nextPhone(
                                                 "Enter the supplier's contact phone number: ");
                                         r = service.setSupplierContact(ppn, contactName, phoneNum, address);
                                         if (!r.success)

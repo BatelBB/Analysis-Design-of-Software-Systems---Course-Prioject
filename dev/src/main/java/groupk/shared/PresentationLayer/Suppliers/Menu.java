@@ -44,12 +44,11 @@ public class Menu {
 
     public static String getSupplierEditSubmenu() {
         return new String(
-                "1. Edit ppn number\n" +
-                        "2. Edit bank account number\n" +
-                        "3. Edit supplier's company name\n" +
-                        "4. Edit supplier's isDelivery status\n" +
-                        "5. Edit supplier's payment condition\n" +
-                        "6. Edit supplier's day of delivery\n" +
-                        "7. Edit supplier's contact\n");
+                        "1. Edit bank account number\n" +
+                        "2. Edit supplier's company name\n" +
+                        "3. Edit supplier's isDelivery status\n" +
+                        "4. Edit supplier's payment condition\n" +
+                        "5. Edit supplier's day of delivery\n" +
+                        "6. Edit supplier's contact\n");
     }
 }
