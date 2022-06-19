@@ -39,7 +39,7 @@ public class ListVehcileDeliveries implements Command {
             return;
         }
 
-        Response<List<Delivery>> response = runner.getService().listDeliveriesWithVehicle(runner.getSubject(), command[4]);
+        Response<List<Delivery>> response = runner.getService().listDeliveriesWithVehicle(runner.getSubject(), command[3]);
         if (response.isError()) {
             System.out.printf("Error: %s\n", response.getErrorMessage());
             return;
