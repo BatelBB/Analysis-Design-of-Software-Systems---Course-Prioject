@@ -394,8 +394,7 @@ public class Service {
 
     //SUPPLIER METHODS
     public Facade.ResponseT<Order> getOrder(int id) {
-        //TODO: what's this? -Michael
-        return null;
+        return facade.getOrder(id);
     }
 
     public Facade.ResponseT<Supplier> createSupplier(int ppn, int bankAccount, String name,
