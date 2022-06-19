@@ -57,6 +57,7 @@ public class OrderController {
         OrderData data = dal.getOrders().createOrder(supplier.getPpn(), type, ordered, delivered);
         Order order = new Order(supplier, data, dal, discounts, items);
         orders.add(order);
+        createFittingTrucking(ProductController.BRANCH_NAME, order);
         return order;
     }
 
@@ -132,7 +133,6 @@ public class OrderController {
         }
 
         orders.add(order);
-
         String source = order.supplier.getContact().getAddress();
         logistics.addTruckingRequest(order.getId(), source, ProductController.BRANCH_NAME);
         return order.getId();

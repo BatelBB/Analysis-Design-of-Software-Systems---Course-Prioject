@@ -1,6 +1,7 @@
 package groupk.shared.PresentationLayer;
 
 import groupk.logistics.business.DLicense;
+import groupk.shared.business.Facade;
 import groupk.shared.service.Inventory.Objects.Product;
 import groupk.shared.service.Inventory.Objects.ProductItem;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
