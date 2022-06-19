@@ -645,9 +645,11 @@ public class Facade {
         return responseForVoid(() -> {
             Supplier s = suppliers.get(ppn);
             orders.deleteAllFromSupplier(s);
+            List<Item> toDelete =
             items.all().
                     stream().filter(x -> x.getSupplier().getPpn() == s.getPpn())
-                    .forEach(discounts::deleteAllFor);
+                    .collect(Collectors.toList());
+            toDelete.forEach(discounts::deleteAllFor);
             items.deleteAllFromSupplier(s);
             suppliers.delete(ppn);
         });
@@ -847,16 +849,16 @@ public class Facade {
         try {
             return ok(lambda.get());
         } catch (Exception e) {
-            return error(e.getMessage());
+            return error("Error: " + e.getMessage() + "(" + e.getClass().getName() + ")");
         }
     }
 
     protected SI_Response responseForVoid(ThrowingRunnable lambda) {
-        try {
+       try {
             lambda.run();
             return voidOk();
-        } catch (Exception e) {
-            return voidError(e.getMessage());
+         } catch (Exception e) {
+            return voidError("Error: " + e.getMessage() + "(" + e.getClass().getName() + ")");
         }
     }
 

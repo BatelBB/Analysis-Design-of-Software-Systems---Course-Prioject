@@ -40,7 +40,8 @@ public class QuantityDiscountController {
         dal.getQuantityDiscounts().deleteAllForItem(
                 new ItemRecord.ItemKey(item.getSupplier().getPpn(), item.getCatalogNumber())
         );
-        UserOutput.println("Quantity discount is deleted");
+        UserOutput.println("Quantity discounts for item: supplier PPN " +  item.getSupplier().getPpn() +
+                ", catalog number " + item.getCatalogNumber() + "were deleted");
     }
 
     public Collection<QuantityDiscount> discountsFor(Item item) {
