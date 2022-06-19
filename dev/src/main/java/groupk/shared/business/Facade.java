@@ -710,7 +710,8 @@ public class Facade {
     }
 
     public QuantityDiscount getDiscount(int amount, int ppn, int catalog) throws BusinessLogicException {
-        return null;
+        return discounts.getAllDiscounts().stream().filter(quantityDiscount -> quantityDiscount.quantity == amount &&
+                quantityDiscount.item == items.get(ppn, catalog)).findFirst().get();
     }
 
     public SI_Response orderItem(int orderId, int supplier, int catalogNumber, int amount) {

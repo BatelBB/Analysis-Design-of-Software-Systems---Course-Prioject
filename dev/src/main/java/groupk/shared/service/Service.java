@@ -453,8 +453,7 @@ public class Service {
     }
 
     public QuantityDiscount getDiscount(int amount, int ppn, int catalog) throws BusinessLogicException {
-        //TODO: what's this? -Michael
-        return null;
+        return facade.getDiscount(amount, ppn, catalog);
     }
 
     public Facade.SI_Response orderItem(int orderId, int supplier, int catalogNumber, int amount) {

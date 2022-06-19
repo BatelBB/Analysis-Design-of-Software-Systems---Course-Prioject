@@ -106,4 +106,5 @@ public class QuantityDiscountController {
                 .min(Comparator.comparing(e -> priceForAmount(e.getKey(), amount)))
                 .map(x -> x.getKey().getSupplier()).orElseThrow(NoSuchElementException::new);
     }
+
 }
