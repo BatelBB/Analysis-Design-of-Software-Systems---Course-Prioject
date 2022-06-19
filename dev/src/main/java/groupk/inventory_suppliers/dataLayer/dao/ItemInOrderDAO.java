@@ -93,8 +93,8 @@ public class ItemInOrderDAO extends BaseDAO<ItemInOrderRecord.ItemInOrderKey, It
         return create(
                 () -> new ItemInOrderRecord(ppn, catalogNumber, orderId, 0),
 
-                "INSERT INTO ItemInOrder(qty, itemSupplierPPN, itemCatalogNumber," +
-                        "orderId) VALUES(0, ?, ?, ?)",
+                "INSERT INTO ItemInOrder(itemSupplierPPN, itemCatalogNumber," +
+                        "orderId, qty) VALUES(?, ?, ?, 0)",
 
                 ps -> ps.setInt(1, ppn),
                 ps -> ps.setInt(2, catalogNumber),
