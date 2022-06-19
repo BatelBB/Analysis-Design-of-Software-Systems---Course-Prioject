@@ -849,7 +849,7 @@ public class Facade {
         try {
             return ok(lambda.get());
         } catch (Exception e) {
-            return error("Error: " + e.getMessage() + "(" + e.getClass().getName() + ")");
+            return error("Error: " + e.getMessage());
         }
     }
 
@@ -858,7 +858,7 @@ public class Facade {
             lambda.run();
             return voidOk();
          } catch (Exception e) {
-            return voidError("Error: " + e.getMessage() + "(" + e.getClass().getName() + ")");
+            return voidError("Error: " + e.getMessage());
         }
     }
 
