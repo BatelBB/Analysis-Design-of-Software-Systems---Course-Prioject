@@ -13,12 +13,8 @@ public class Menu {
     public static String getItemSubmenu() {
         return new String(
                 "1. Create new item\n" +
-                        "2. Edit catalog number of existing item\n" +
-                        "3. Edit price of existing item\n" +
-                        "4. Edit name of existing item\n" +
-                        "5. Edit category of existing item\n" +
-                        "6. Delete existing item\n" +
-                        "7. See summery of all items\n");
+                        "2. Edit price of existing item\n" +
+                        "3. See summery of all items\n");
     }
 
     public static String getOrderSubmenu() {

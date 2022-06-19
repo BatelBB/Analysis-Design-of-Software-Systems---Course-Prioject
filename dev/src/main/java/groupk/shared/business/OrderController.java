@@ -1,5 +1,7 @@
 package groupk.shared.business;
 
+import groupk.inventory_suppliers.dataLayer.dao.records.OrderRecord;
+import groupk.shared.PresentationLayer.Suppliers.UserOutput;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 
@@ -18,16 +20,27 @@ import java.util.Map;
 public class OrderController {
     private final QuantityDiscountController discounts;
     private final LogisticsController logistics;
+    private final SupplierController suppliers;
     ArrayList<Order> orders;
     private PersistenceController dal;
+    private ItemController items;
 
     public OrderController(PersistenceController dal,
                            QuantityDiscountController discounts,
-                           LogisticsController logistics) {
+                           LogisticsController logistics, SupplierController suppliers,
+                           ItemController items) {
         this.dal = dal;
+        this.items = items;
         orders = new ArrayList<>();
         this.discounts = discounts;
         this.logistics = logistics;
+        this.suppliers = suppliers;
+        this.dal.getOrders().all().forEach(this::createFromExisting);
+    }
+
+    private void createFromExisting(OrderRecord orderRecord) {
+        Supplier supplier = suppliers.get(orderRecord.ppn);
+        orders.add(new Order(supplier, orderRecord, dal, discounts, items));
     }
 
     public Order get(int id) throws BusinessLogicException {
@@ -42,7 +55,7 @@ public class OrderController {
             throw new BusinessLogicException("delivery date can't be before ordering date.");
         }
         OrderData data = dal.getOrders().createOrder(supplier.getPpn(), type, ordered, delivered);
-        Order order = new Order(supplier, data, dal, discounts);
+        Order order = new Order(supplier, data, dal, discounts, items);
         orders.add(order);
         return order;
     }
@@ -68,7 +81,9 @@ public class OrderController {
 
         orders.removeIf(order -> {
             if(order.supplier.getPpn() == ppn) {
+                dal.getItemsInOrders().deleteAllInOrder(order.getId());
                 dal.getOrders().delete(order.getId());
+                UserOutput.println("Order " + order.getId() +" is deleted.");
                 return true;
             }
             return false;
@@ -110,7 +125,7 @@ public class OrderController {
         }
 
         OrderData data = dal.getOrders().createOrder(supplier.getPpn(), type, ordered, delivered);
-        Order order = new Order(supplier, data, dal, discounts);
+        Order order = new Order(supplier, data, dal, discounts, items);
 
         if(type == OrderType.Shortages){
             order.orderItem(item, amountOfProd);

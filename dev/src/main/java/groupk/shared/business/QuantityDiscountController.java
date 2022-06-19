@@ -1,5 +1,6 @@
 package groupk.shared.business;
 
+import groupk.shared.PresentationLayer.Suppliers.UserOutput;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 import groupk.shared.business.Suppliers.BussinessObject.QuantityDiscount;
@@ -39,6 +40,7 @@ public class QuantityDiscountController {
         dal.getQuantityDiscounts().deleteAllForItem(
                 new ItemRecord.ItemKey(item.getSupplier().getPpn(), item.getCatalogNumber())
         );
+        UserOutput.println("Quantity discount is deleted");
     }
 
     public Collection<QuantityDiscount> discountsFor(Item item) {
@@ -106,4 +108,5 @@ public class QuantityDiscountController {
                 .min(Comparator.comparing(e -> priceForAmount(e.getKey(), amount)))
                 .map(x -> x.getKey().getSupplier()).orElseThrow(NoSuchElementException::new);
     }
+
 }

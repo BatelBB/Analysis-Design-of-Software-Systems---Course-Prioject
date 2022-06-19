@@ -48,7 +48,7 @@ public class Facade {
         items = new ItemController(p, suppliers);
         discounts = new QuantityDiscountController(p, items);
         logistics = new LogisticsController(myDataBase);
-        orders = new OrderController(p, discounts, logistics);
+        orders = new OrderController(p, discounts, logistics, suppliers, items);
         employees = new EmployeesController(dalController);
         report_controller = new ReportController(p, product_controller);
     }
@@ -304,7 +304,7 @@ public class Facade {
         if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
-        return logistics.listDeliveriesWithVehicle(subjectID);
+        return logistics.listDeliveriesWithVehicle(registration);
     }
 
     public Response<Boolean> createVehicle(String subjectID, String license, String registrationPlate, String model, int weight, int maxWeight) {
@@ -644,8 +644,11 @@ public class Facade {
     public SI_Response deleteSupplier(int ppn) {
         return responseForVoid(() -> {
             Supplier s = suppliers.get(ppn);
-            items.deleteAllFromSupplier(s);
             orders.deleteAllFromSupplier(s);
+            items.all().
+                    stream().filter(x -> x.getSupplier().getPpn() == s.getPpn())
+                    .forEach(discounts::deleteAllFor);
+            items.deleteAllFromSupplier(s);
             suppliers.delete(ppn);
         });
     }
@@ -709,7 +712,8 @@ public class Facade {
     }
 
     public QuantityDiscount getDiscount(int amount, int ppn, int catalog) throws BusinessLogicException {
-        return null;
+        return discounts.getAllDiscounts().stream().filter(quantityDiscount -> quantityDiscount.quantity == amount &&
+                quantityDiscount.item == items.get(ppn, catalog)).findFirst().get();
     }
 
     public SI_Response orderItem(int orderId, int supplier, int catalogNumber, int amount) {

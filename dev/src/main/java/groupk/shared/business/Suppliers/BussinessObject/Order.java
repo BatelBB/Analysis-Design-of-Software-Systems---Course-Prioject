@@ -1,5 +1,6 @@
 package groupk.shared.business.Suppliers.BussinessObject;
 
+import groupk.shared.business.ItemController;
 import groupk.shared.business.QuantityDiscountController;
 import groupk.inventory_suppliers.dataLayer.dao.PersistenceController;
 import groupk.inventory_suppliers.dataLayer.dao.records.ItemInOrderRecord;
@@ -16,18 +17,34 @@ import java.util.Map;
 public class Order {
     private final QuantityDiscountController discounts;
     OrderData source;
+    private ItemController itemsController;
     float totalPrice;
     Map<Item, Integer> itemsAmounts;
     public final Supplier supplier;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     private PersistenceController dal;
 
-    public Order(Supplier supplier, OrderData source, PersistenceController dal, QuantityDiscountController discounts) {
+    public Order(Supplier supplier, OrderData source,
+                 PersistenceController dal, QuantityDiscountController discounts,
+                 ItemController itemsController) {
         this.supplier = supplier;
         this.source = source;
+        this.itemsController = itemsController;
         this.itemsAmounts = new HashMap<>();
         this.dal = dal;
         this.discounts = discounts;
+        this.pullItemsFromDB();
+    }
+
+    private void pullItemsFromDB() {
+        dal.getItemsInOrders()
+                .all()
+                .filter(x -> x.getOrderId() == getId())
+                .forEach(x -> itemsAmounts.put(
+                        itemsController.get(x.getPpn(), x.getCatalogNumber()),
+                        x.getAmount()
+                    ));
+        refreshPrice();
     }
 
     public void removeItemIfExists(Item item) {
