@@ -54,6 +54,17 @@ public class TruckingMapper {
             removeDestinationsTrucking(trucking.getId());
             throw e;
         }
+        try {
+            TruckingDTO truckingToMap = getTruckingByID(trucking.getId());
+            truckingIDMap.insertTrucking(truckingToMap);
+        }
+        catch (Exception e) {
+            removeTruckingDetails(trucking.getId());
+            removeSourcesTrucking(trucking.getId());
+            removeDestinationsTrucking(trucking.getId());
+            removeTruckingOrders(trucking.getId());
+            throw new IllegalArgumentException("Oops, something got wrong with adding the trucking to the memory");
+        }
         return toReturn;
     }
 
@@ -501,8 +512,9 @@ public class TruckingMapper {
     }
 
     public List<TruckingDTO> getVehicleBoard(String regristrationPlate) {
-        if (truckingIDMap.isVehicleHasUpdatedData(regristrationPlate))
+        if (truckingIDMap.isVehicleHasUpdatedData(regristrationPlate)) {
             return truckingIDMap.getTruckingsOfVehicle(regristrationPlate);
+        }
         else {
             List<TruckingDTO> toReturn = getBoardOfUserOrVehicle("registration_plate", regristrationPlate);
             truckingIDMap.updateVehicle(regristrationPlate);

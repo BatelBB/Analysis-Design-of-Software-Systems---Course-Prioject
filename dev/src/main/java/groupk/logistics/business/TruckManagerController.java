@@ -141,14 +141,41 @@ public class TruckManagerController {
     }
 
     public List<TruckingDTO> printBoardOfVehicle(String registrationPlate) {
+        String registrationPlate_ = "";
+        try {
+            registrationPlate_ += Integer.parseInt(registrationPlate);
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("Oops, registration plate must be number");
+        }
+        if(!validateRegistationPlate(registrationPlate_))
+            throw new IllegalArgumentException("Oops, invalid registration plate");
         return truckingMapper.getVehicleBoard(registrationPlate);
     }
 
     public List<TruckingDTO> printTruckingsHistoryOfVehicle(String registrationPlate) {
+        String registrationPlate_ = "";
+        try {
+            registrationPlate_ += Integer.parseInt(registrationPlate);
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("Oops, registration plate must be number");
+        }
+        if(!validateRegistationPlate(registrationPlate_))
+            throw new IllegalArgumentException("Oops, invalid registration plate");
         return truckingMapper.getVehicleHistoryTruckings(registrationPlate);
     }
 
     public List<TruckingDTO> printFutureTruckingsOfVehicle(String registrationPlate) {
+        String registrationPlate_ = "";
+        try {
+            registrationPlate_ += Integer.parseInt(registrationPlate);
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("Oops, registration plate must be number");
+        }
+        if(!validateRegistationPlate(registrationPlate_))
+            throw new IllegalArgumentException("Oops, invalid registration plate");
         return truckingMapper.getVehicleFutureTruckings(registrationPlate);
     }
 
