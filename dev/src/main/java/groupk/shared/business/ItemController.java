@@ -19,8 +19,7 @@ public class ItemController {
     PersistenceController dal;
 
     public ItemController(PersistenceController dal,
-                          SupplierController suppliers,
-                          QuantityDiscountController discounts) {
+                          SupplierController suppliers) {
         this.dal = dal;
         this.suppliers = suppliers;
         items = new HashMap<>();
@@ -88,14 +87,13 @@ public class ItemController {
 
     public void deleteAllFromSupplier(Supplier s) {
         for(Map.Entry<String, Item> entry: items.entrySet()) {
-            UserOutput.getInstance().println("Item with catalog number: " +entry.getValue().getCatalogNumber() +
-                    " is deleted.");
-            String key = entry.getKey();
             Item item = entry.getValue();
             if(item.getSupplier().getPpn() != s.getPpn()) {
                 continue;
             }
             delete(item);
+            UserOutput.getInstance().println("Item with catalog number: " +entry.getValue().getCatalogNumber() +
+                    " is deleted.");
         }
     }
 

@@ -1,6 +1,7 @@
 package groupk.shared.business;
 
 import groupk.inventory_suppliers.dataLayer.dao.records.OrderRecord;
+import groupk.shared.PresentationLayer.Suppliers.UserOutput;
 import groupk.shared.business.Suppliers.BusinessLogicException;
 import groupk.shared.business.Suppliers.BussinessObject.Item;
 
@@ -82,6 +83,7 @@ public class OrderController {
             if(order.supplier.getPpn() == ppn) {
                 dal.getItemsInOrders().deleteAllInOrder(order.getId());
                 dal.getOrders().delete(order.getId());
+                UserOutput.println("Order " + order.getId() +" is deleted.");
                 return true;
             }
             return false;
