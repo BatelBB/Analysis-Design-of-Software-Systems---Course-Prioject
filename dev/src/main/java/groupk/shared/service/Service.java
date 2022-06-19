@@ -276,8 +276,8 @@ public class Service {
     }
 
     //Product methods
-    public Facade.ResponseT<groupk.shared.service.Inventory.Objects.Product> addProduct(String name, String manufacturer, double man_price, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
-        return facade.addProduct(name, manufacturer, man_price, cus_price, min_qty, supply_time, category, sub_category, subsub_category);
+    public Facade.ResponseT<groupk.shared.service.Inventory.Objects.Product> addProduct(String name, float cus_price, int min_qty, int supply_time, String category, String sub_category, String subsub_category) {
+        return facade.addProduct(name, cus_price, min_qty, supply_time, category, sub_category, subsub_category);
     }
 
     public Facade.SI_Response removeProduct(int id) {
@@ -314,7 +314,6 @@ public class Service {
             return r2;
         int order_id = r2.data;
         return addProductToOrder(order_id, product_id, min_qty);
-
     }
 
     public Facade.SI_Response updateItemCusDiscount(float discount, LocalDate start_date, LocalDate end_date, int product_id, int item_id) {

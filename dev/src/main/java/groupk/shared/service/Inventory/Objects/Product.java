@@ -10,7 +10,6 @@ public class Product {
     private final String name;
     private final int shelf_qty;
     private final int storage_qty;
-    private final String manufacturer;
     private final double cus_price;
     private final int min_qty;
     private final Map<Integer, ProductItem> items;
@@ -24,7 +23,6 @@ public class Product {
         name = p.getName();
         shelf_qty = p.getShelf_qty();
         storage_qty = p.getStorage_qty();
-        manufacturer = p.getManufacturer();
         cus_price = p.getCus_price();
         min_qty = p.getMin_qty();
         cat = p.getCat();
@@ -53,7 +51,7 @@ public class Product {
     public String toString() {
         StringBuilder s = new StringBuilder("product_id: " + product_id + "\n" + "product name: " + name + "\n"
                 + "category: " + cat + "\n" + "sub category: " + sub_cat + "\n" +
-                "sub sub category: " + sub_sub_cat + "\n" + "manufacturer: " + manufacturer + "\n" +
+                "sub sub category: " + sub_sub_cat + "\n" +
                 "customer price: " + cus_price + "\n" +
                 "minimum quantity: " + min_qty + "\n" +
                 "shelf quantity: " + shelf_qty + "\n" + "storage quantity: " + storage_qty + "\n" +
@@ -64,7 +62,7 @@ public class Product {
         return s.toString();
     }
 
-    public int getProduct_id(){
+    public int getProduct_id() {
         return product_id;
     }
 
