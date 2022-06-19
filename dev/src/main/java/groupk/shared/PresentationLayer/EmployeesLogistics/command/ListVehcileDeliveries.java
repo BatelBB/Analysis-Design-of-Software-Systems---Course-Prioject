@@ -45,8 +45,12 @@ public class ListVehcileDeliveries implements Command {
             return;
         }
         List<Delivery> deliveries = response.getValue();
+        if (deliveries == null) {
+            System.out.println("Error: Oops, we couldn't execute your action");
+            return;
+        }
         String toReturn = "VEHICLE'S DELIVERIES BOARD\n\n";
-        if (deliveries.size() == 0 | deliveries == null) {
+        if (deliveries.size() == 0) {
             toReturn += "[empty]";
             System.out.println(toReturn);
             return;

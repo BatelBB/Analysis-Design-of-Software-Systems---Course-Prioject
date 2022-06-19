@@ -304,7 +304,7 @@ public class Facade {
         if (!isFromRole(subjectID, Employee.Role.LogisticsManager).getValue()) {
             return new Response<>("You are not authorized to perform this operation");
         }
-        return logistics.listDeliveriesWithVehicle(subjectID);
+        return logistics.listDeliveriesWithVehicle(registration);
     }
 
     public Response<Boolean> createVehicle(String subjectID, String license, String registrationPlate, String model, int weight, int maxWeight) {
