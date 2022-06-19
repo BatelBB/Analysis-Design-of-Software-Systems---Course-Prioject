@@ -80,6 +80,7 @@ public class OrderController {
 
         orders.removeIf(order -> {
             if(order.supplier.getPpn() == ppn) {
+                dal.getItemsInOrders().deleteAllInOrder(order.getId());
                 dal.getOrders().delete(order.getId());
                 return true;
             }

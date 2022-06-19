@@ -91,7 +91,11 @@ public class ItemController {
                     " is deleted.");
             String key = entry.getKey();
             Item item = entry.getValue();
+            if(item.getSupplier().getPpn() != s.getPpn()) {
+                continue;
+            }
             items.remove(key);
+            discounts.deleteAllFor();
             dal.getItems().delete(new ItemRecord.ItemKey(item.getSupplier().getPpn(), item.getCatalogNumber()));
         }
     }

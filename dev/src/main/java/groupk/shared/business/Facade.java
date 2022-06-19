@@ -645,8 +645,8 @@ public class Facade {
     public SI_Response deleteSupplier(int ppn) {
         return responseForVoid(() -> {
             Supplier s = suppliers.get(ppn);
-            items.deleteAllFromSupplier(s);
             orders.deleteAllFromSupplier(s);
+            items.deleteAllFromSupplier(s);
             suppliers.delete(ppn);
         });
     }
