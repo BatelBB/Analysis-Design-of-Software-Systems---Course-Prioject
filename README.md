@@ -1,5 +1,7 @@
 # ADSS GROUP K Workers And Logistics Module
 
+A project that was developed during a course in the 2nd year of my Software Engineering degree.
+A team of eight people, designing and developing a system to manage a food store.
 
 ## Development
 
