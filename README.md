@@ -1,17 +1,5 @@
 # ADSS GROUP K Workers And Logistics Module
 
-## IDs
-
-| Name             | ID          |
-|------------------|-------------|
-| Batel Shkolnik   | `209153709` |
-| Yuval Dolev      | `208631051` |
-| Michael Tzahi    | `208612812` |
-| Shoham Cohen     | `207546078` |
-| Miri Volozhinsky | `207496373` |
-| Lior Kummer      | `208231027` |
-| Ido Shapira      | `319034138` |
-| Tamir Avisar     | `211498621` |
 
 ## Development
 
